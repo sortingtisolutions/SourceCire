@@ -227,7 +227,7 @@ BEGIN
 END //
 
 
---*****************************
+--***************************** FUNCION PARA TRABAJAR LOS ACCESORIOS EN BACKEND DB ****************
 DROP FUNCTION IF EXISTS `Fun_ProcessBackAccesories`;
 DELIMITER //
 CREATE FUNCTION Fun_ProcessBackAccesories(pverid INT(4), ppjtid INT(4)) RETURNS INT(2)
