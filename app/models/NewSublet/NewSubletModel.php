@@ -269,11 +269,7 @@ public function NextSkuProduct($param)
         $serie =sprintf("%03d", $srsk); // *** Ed
 
         $cant = 0;// *** Ed
-
-        
         //return "hecho";
-
-
         //PRODUCT
         /*
         $query = "SELECT COUNT(*) FROM ctt_products WHERE prd_sku = '$prod_sku'";
@@ -315,8 +311,6 @@ public function NextSkuProduct($param)
             $prdId = $this->db->insert_id;
         }
         
-       
-            
         while ($cant<$quantity){// *** Ed
             $ser = '00' . strval($serie+$cant);
             $sersku = $sku . $ser;
@@ -342,7 +336,6 @@ public function NextSkuProduct($param)
             $cant++;
         }
         
-
         return $prdId;
     }
 }

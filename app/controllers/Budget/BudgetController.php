@@ -117,7 +117,7 @@ class BudgetController extends Controller
 
     } 
 
-// Lista las casas productoras
+// LISTA LAS CASAS PRODUCTORAS
     public function listCustomersDef($request_params)
     {
         $params =  $this->session->get('user');
