@@ -144,8 +144,6 @@ class BudgetModel extends Model
     // Listado de clientes
     public function getEdosRepublic($params)
     {
-        $prd = $this->db->real_escape_string($params['prm']);
-        
         $qry = "SELECT edos_id,edos_name,edos_abrev
                 FROM ctt_estados_mex ORDER BY edos_id;";
         return $this->db->query($qry);
@@ -234,8 +232,13 @@ public function listDiscounts($params)
     {
         $word = $this->db->real_escape_string($params['word']);
         $sbc_id = $this->db->real_escape_string($params['dstr']);
-        $qry = "SELECT * from ctt_vw_list_products2
+        if ($word == '') {
+            $qry = "SELECT * from ctt_vw_list_products2
+            WHERE sbc_id = '$sbc_id';";
+        }else{
+            $qry = "SELECT * from ctt_vw_list_products2
             WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
+        }
         return $this->db->query($qry);
     } 
     // Listado de categorias
@@ -555,9 +558,9 @@ public function UpdateProject($params)
     $pjt_to_carry_out       = $this->db->real_escape_string($params['pjtToCarryOut']);
     $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
     $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
-	$edos_id                 = $this->db->real_escape_string($params['edos_id']);																																																								
+	/*$edos_id                 = $this->db->real_escape_string($params['edos_id']);	*/																																																							
 
-    $qry02 = "UPDATE    ctt_projects
+    /*$qry02 = "UPDATE    ctt_projects
                  SET    pjt_name            = '$pjt_name', 
                         pjt_date_start      = '$pjt_date_start', 
                         pjt_date_end        = '$pjt_date_end',
@@ -576,7 +579,26 @@ public function UpdateProject($params)
                         pjttc_id            = '$pjttc_id',
                         edos_id             = '$edos_id'
                 WHERE   pjt_id              =  $pjt_id;
-                ";
+                ";*/
+		$qry02 = "UPDATE    ctt_projects
+                SET    pjt_name            = '$pjt_name', 
+                       pjt_date_start      = '$pjt_date_start', 
+                       pjt_date_end        = '$pjt_date_end',
+                       pjt_time            = '$pjt_time',
+                       pjt_location        = '$pjt_location', 
+                       pjt_how_required    = '$pjt_how_required',
+                       pjt_trip_go         = '$pjt_trip_go',
+                       pjt_trip_back       = '$pjt_trip_back',
+                       pjt_to_carry_on     = '$pjt_to_carry_on',
+                       pjt_to_carry_out    = '$pjt_to_carry_out',
+                       pjt_test_tecnic     = '$pjt_test_tecnic',
+                       pjt_test_look       = '$pjt_test_look',
+                       pjttp_id            = '$pjt_type',  
+                       cuo_id              = '$cuo_id',
+                       loc_id              = '$loc_id',
+                       pjttc_id            = '$pjttc_id'
+               WHERE   pjt_id              =  $pjt_id;
+               ";								
     $this->db->query($qry02);
 
     return $pjt_id;
