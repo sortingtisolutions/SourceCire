@@ -1,6 +1,7 @@
-/****************** VISTAS  ********************************/
 
+--********** VISTAS PRINCIPALES A CREAR EN LA BASE DE DATOS **********************
 /* VISTA DE PRODUCTOS  */
+
 DROP VIEW ctt_vw_products;
 CREATE VIEW ctt_vw_products AS
 SELECT
@@ -17,7 +18,6 @@ FROM ctt_products AS pr
     INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id AND ct.cat_status = '1'
     LEFT JOIN ctt_products_documents AS dc ON dc.prd_id = pr.prd_id AND dc.dcp_source = 'P'
 WHERE pr.prd_status = 1 AND pr.prd_level IN ('A', 'P');
-
 
 
 /* VISTA DE PROJECTOS  */
@@ -90,7 +90,7 @@ SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_n
 FROM  ctt_vw_subletting;
 
 
---******* 15-ago-23 ********************
+--******* VISTAS DE APOYO PARA CONSULTAS 15-ago-23 ********************
 DROP VIEW ctt_vw_list_products;
 CREATE VIEW ctt_vw_list_products AS
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
