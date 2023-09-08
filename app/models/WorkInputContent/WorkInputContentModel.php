@@ -118,7 +118,26 @@ class WorkInputContentModel extends Model
          $this->db->query($updt);
          return $serId;
     }
+    // listar los datos de las series que coinciden
+    public function getSeries($params){
+        $serSku = $this->db->real_escape_string($params['serSku']);
+        $prjid = $this->db->real_escape_string($params['prjid']);
+        $qry = "SELECT * FROM ctt_series AS sr 
+        INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+        INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = sr.ser_id
+        INNER JOIN ctt_projects_content AS ct ON ct.pjtvr_id=pjd.pjtvr_id
+        WHERE ct.pjt_id=$prjid and pjd.ser_id>0 AND sr.ser_sku like '$serSku%';";
 
+       return $this->db->query($qry);
+    }
+    public function ActualizaSeries($params){
+        $serid		= $this->db->real_escape_string($params['serid']);
+
+        $qry = "UPDATE ctt_series SET ser_situation='D', ser_stage = 'D', pjtdt_id=0
+                WHERE ser_id=$serid;";  
+        $folio = $this->db->query($qry);
+        return $folio;
+    }
     public function regMaintenance($params)
     {
         $serId = $this->db->real_escape_string($params['serId']);
@@ -127,8 +146,8 @@ class WorkInputContentModel extends Model
         $prjid = $this->db->real_escape_string($params['prjid']);
 
         $qryins = "INSERT INTO ctt_products_maintenance 
-                                (ser_id, pjt_id, pjtcr_id, mts_id) 
-                    VALUES ( $serId, $prjid, $codmot, 1);";
+                                (pmt_date_register,ser_id, pjt_id, pjtcr_id, mts_id) 
+                    VALUES (CURRENT_TIMESTAMP, $serId, $prjid, $codmot, 1);";
         $this->db->query($qryins);
         $mainId = $this->db->insert_id;
 

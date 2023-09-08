@@ -1,6 +1,6 @@
 <?php 
-	defined('BASEPATH') or exit('No se permite acceso directo'); 
-	require ROOT . FOLDER_PATH . "/app/assets/header.php";
+	/* defined('BASEPATH') or exit('No se permite acceso directo'); 
+	require ROOT . FOLDER_PATH . "/app/assets/header.php"; */
 ?>
 <!-- CUERPO DE LA PAGINA -->
         <div class="periods_content">

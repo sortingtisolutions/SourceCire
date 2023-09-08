@@ -8,6 +8,7 @@ class BudgetController extends Controller
     private $session;
     public $model;
 
+
     public function __construct()
     {
         $this->model = new BudgetModel();
@@ -77,6 +78,7 @@ class BudgetController extends Controller
         echo $res;
     } 
 
+    
 // Lista los tipos de proyectos
     public function listProjectsType($request_params)
     {
@@ -115,7 +117,7 @@ class BudgetController extends Controller
 
     } 
 
-// Lista las casas productoras
+// LISTA LAS CASAS PRODUCTORAS
     public function listCustomersDef($request_params)
     {
         $params =  $this->session->get('user');
@@ -330,7 +332,7 @@ class BudgetController extends Controller
         echo $res;
     } 
 
-    //  ***
+    //  ***ED
     public function listSubCategories($request_params)
     {
         $params =  $this->session->get('user');
@@ -384,6 +386,7 @@ public function listProductsSub($request_params)
 } 
 
 
+   
 // Lista los relacionados al producto
 public function listProductsRelated($request_params)
 {
@@ -435,7 +438,8 @@ public function listProductsRelated($request_params)
         echo $res;
     } 
 
-// ***************** Lista los proyectos en donde se encuentra un producto
+
+// Lista los proyectos en donde se encuentra un producto
 public function stockProdcuts($request_params)
 {
     $params =  $this->session->get('user');
@@ -470,7 +474,7 @@ public function SaveLocations($request_params){
         $name = $group[2]; 
 
         $resultIns = $this->model->SaveBudget($request_params);
-        // $resReorder = $this->reOrdenList($request_params);
+        //$resReorder = $this->reOrdenList($request_params);
 
         echo $resultIns . ' | ' . $name ;
     } 
@@ -494,7 +498,8 @@ public function SaveLocations($request_params){
         echo $res;
         
     } 
-  
+
+    
 // Guarda nuevo proyecto
     public function SaveProject($request_params)
     {
@@ -520,13 +525,15 @@ public function SaveLocations($request_params){
         echo $result;
     }
 
-// **************Guarda nueva version
+      
+// Guarda nueva version
     public function SaveVersion($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->SaveVersion($request_params);
         echo $result;
     } 
+
 
 /** ==== Promueve la cotizacion a presupuesto ================================================  */
     public function PromoteProject($request_params)
@@ -571,6 +578,7 @@ public function saveBudgetList($request_params)
     $user = $group[0];
     $name = $group[2];
     
+
     $result = $this->model->saveBudgetList($request_params);
     $i = 0;
     while($row = $result->fetch_assoc()){
@@ -582,7 +590,6 @@ public function saveBudgetList($request_params)
     } else {
         $res =  '[{"prd_id":"0"}]';	
     }
-
     $dir = ROOT . FOLDER_PATH . '/app/views/Budget/BudgetFile-'. $user .'.json';
 
     if (file_exists($dir)) unlink($dir);
@@ -645,8 +652,7 @@ public function ProcessProjectProduct($request_params)
 
             $ttlqty = $prdexp == '2'? $quanty: 1;
             $quanty = $prdexp == '2'? 1: $quanty;
-            
-            if ( $bdglvl == 'P' ){
+			if ( $bdglvl == 'P' ){
                 for ($i = 1; $i<=$quanty; $i++){
                     
                     $params = array(
@@ -863,6 +869,7 @@ public function ProcessProjectProduct($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($params);
+                    
                 }
             } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
                 for ($i = 1; $i<=$quanty; $i++){
@@ -889,68 +896,17 @@ public function ProcessProjectProduct($request_params)
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
+                       
                     }
                 }
             }
         }
 
         $pjtId  = $this->model->PromoteProject($request_params);
-        $prcId  = $this->model->AddProcessCrontab($request_params);
 
-        echo $pjtId . '|' . $versId . '|' . $dtinic . '|' . $dtfinl;
+        echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
     
     } 
 
-    public function ProcessBackAccesories($request_params)
-    {  
-        $params = $this->session->get('user');        
-        $result = $this->model->GetContentDetails($request_params);
-       
-        while($row = $result->fetch_assoc()){
-            $pjtdtid = $row["pjtdt_id"];
-            $serid = $row["ser_id"];
-            $prodId = $row["prd_id"];
-            $pjtvrid = $row["pjtvr_id"];
-            $dtstar = $row["pjt_date_start"];
-            $dybase = $row["pjtcn_days_base"];
-            $dytrip = $row["pjtcn_days_trip"] / 2;
-            $dytest = $row["pjtcn_days_test"];
-           
-            $dyinic = $dytrip + $dytest;
-            $dyfinl = $dytrip + $dybase;
-            $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
-            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
-
-                $params = array(
-                    'pjtdtid' => $pjtdtid,
-                    'serid' => $serid,
-                    'prodId' => $prodId,
-                    'pjtvrid' => $pjtvrid, 
-                    'dtinic' => $dtinic, 
-                    'dtfinl' => $dtfinl,
-                    
-                );
-            $detlId = $this->model->SettingSeriesAcc($params);
-       
-        }
-        echo $pjtvrid . '|' . $dtinic . '|' . $dtfinl;
-    } 
-
-    public function ProcessFuncAccesories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->SettingSeriesFUN($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    } 
-
+    
 }

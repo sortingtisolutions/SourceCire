@@ -59,8 +59,6 @@ public function listProyects($store)
         return $this->db->query($qry);
     }
 
-
-
 // Agrega el serial del producto en subarrendo
     public function addSerie($params)
     {
