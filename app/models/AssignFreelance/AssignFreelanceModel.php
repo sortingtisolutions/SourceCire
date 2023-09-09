@@ -166,7 +166,6 @@ public function NextExchange()
         return $ass_id;
        
     }
-
     // ACTUALIZA ESTATUS DE UN FREELANCE
     public function DeleteAssignFreelance($params)
 	{

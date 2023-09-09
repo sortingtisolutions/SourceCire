@@ -241,7 +241,6 @@ public function NextSkuProduct($param)
 
         $sbl	= $this->db->real_escape_string($param['sbl']);
         $nmprv	= $this->db->real_escape_string($param['nmprv']);
-        //$quantity	= $this->db->real_escape_string($param['qty']);
         $nmprvc		= $this->db->real_escape_string($param['nmprvc']);
         $sdt	= $this->db->real_escape_string($param['sdt']);
         $edt	= $this->db->real_escape_string($param['edt']);
@@ -253,10 +252,10 @@ public function NextSkuProduct($param)
         $com    = $this->db->real_escape_string($param['com']);
 
         $sup    = $this->db->real_escape_string($param['sup']);
-        $pnm  = $this->db->real_escape_string($param['pnm']);/* 
-        $srsk    = $this->db->real_escape_string($param['srsk']); */
+        $pnm  = $this->db->real_escape_string($param['pnm']);
         $prd  = $this->db->real_escape_string($param['prd']);
         $quantity  = $this->db->real_escape_string($param['prdqty']);
+        $srsk    = $this->db->real_escape_string($param['srsk']); 
         
 
         //$exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
@@ -266,15 +265,11 @@ public function NextSkuProduct($param)
         // $ser_lonely         = '1';
         $ser_behaviour      = 'C';
 
-        $prd_level = 'S';/* 
-        $serie =sprintf("%03d", $srsk); */// *** Ed
+        $prd_level = 'S';
+        $serie =sprintf("%03d", $srsk); // *** Ed
 
         $cant = 0;// *** Ed
-
-        
         //return "hecho";
-
-
         //PRODUCT
         /*
         $query = "SELECT COUNT(*) FROM ctt_products WHERE prd_sku = '$prod_sku'";
@@ -316,10 +311,8 @@ public function NextSkuProduct($param)
             $prdId = $this->db->insert_id;
         }
         
-       
-            
         while ($cant<$quantity){// *** Ed
-            $ser = '00' . strval($cant+1);
+            $ser = '00' . strval($serie+$cant);
             $sersku = $sku . $ser;
             
             // SERIE
@@ -343,7 +336,6 @@ public function NextSkuProduct($param)
             $cant++;
         }
         
-
         return $prdId;
     }
 }
