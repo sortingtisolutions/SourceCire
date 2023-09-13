@@ -1511,9 +1511,7 @@ function putCounterPending(dt) {
         $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
         .addClass('col_quantity-led col_quantity-pending')
         .attr('title', `${word} en pendiente`);
-        /* $('[data-mice=' +dt[0].pjtvr_id+']').removeAttr('class')
-        .addClass('col_quantity-led col_quantity-pending')
-        .attr('title', `${word} en pendiente`); */
+        
     }
     purgeInterfase();
 }
