@@ -376,7 +376,7 @@ function readAceptTable() {
         let serId = $(this).attr('id');
         let serdata = $($(this).find('td')[1]).text();
         console.log("readAceptTable: ", serId, serdata);
-        //checkSerie(serId);
+        checkSerie(serId, serdata);
         setTimeout(function(){
             console.log('');
         }, 3000);

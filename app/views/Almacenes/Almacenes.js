@@ -152,12 +152,16 @@ function actionButtons() {
             strnme = ctnme;
             // console.log(strId, quant, ctnme);
             if (quant > 0) {
-                deep_loading('O');
-                var pagina = 'Almacenes/listSeries';
-                var par = `[{"strId":"${strId}"}]`;
-                var tipo = 'json';
-                var selector = putSeries;
-                fillField(pagina, par, tipo, selector);
+                // let fechaini = new Date();
+                // console.log('Hora click Stock', fechaini);
+                // deep_loading('O');
+
+                // var pagina = 'Almacenes/listSeries';
+                // var par = `[{"strId":"${strId}"}]`;
+                // var tipo = 'json';
+                // var selector = putSeries;
+                // fillField(pagina, par, tipo, selector);
+                setting_modalseries(strId);
             }
         });
 
@@ -325,17 +329,106 @@ function putDeleteStore(dt) {
 
 function putSeries(dt) {
     // console.log(dt);
-    
+    let fechaend = new Date();
+    console.log('Hora END putSeries', fechaend);
+    setting_modalseries();
+    build_modal_serie(dt);
+
+    // let title = 'Detalle de Almacen';
+    // let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    // $('#ExisteStrModal').removeClass('overlay_hide');
+    // $('#tblStrSerie').DataTable({
+    //     bdestroy: true,
+    //     order: [[1, 'asc']],
+    //     dom: 'Blfrtip',
+    //     lengthMenu: [
+    //         [200, 500, -1],
+    //         [200, 500, 'Todos'],
+    //     ],
+    //     buttons: [
+    //         {
+    //             //Botón para Excel
+    //             extend: 'excel',
+    //             footer: true,
+    //             title: title,
+    //             filename: filename,
+
+    //             //Aquí es donde generas el botón personalizado
+    //             text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+    //         },
+    //         {
+    //             //Botón para descargar PDF
+    //             extend: 'pdf',
+    //             footer: true,
+    //             title: title,
+    //             filename: filename,
+
+    //             //Aquí es donde generas el botón personalizado
+    //             text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+    //         },
+    //         // {
+    //         //     //Botón para imprimir
+    //         //     extend: 'print',
+    //         //     footer: true,
+    //         //     title: title,
+    //         //     filename: filename,
+
+    //         //     //Aquí es donde generas el botón personalizado
+    //         //     text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+    //         // },
+    //         {
+    //             text: 'Borrar seleccionados',
+    //             // className: 'btn-apply hidden-field',
+    //         },
+    //     ],
+    //     pagingType: 'simple_numbers',
+    //     language: {
+    //         url: 'app/assets/lib/dataTable/spanish.json',
+    //     },
+    //     scrollY: 'calc(100vh - 290px)',
+    //     scrollX: true,
+    //     fixedHeader: true,
+    //     // createdRow: function (nRow, aData, iDataIndex) {
+    //     //     $(nRow).attr('id', aData['subcatid']);
+    //     // },
+    //     // processing: true,
+    //     // serverSide: true,
+    //     // ajax: {url: 'Subcategories/tableSubcat???', type: 'POST'},
+    //     columns: [
+    //         {data: 'sermodif', class: 'edit'},
+    //         {data: 'produsku', class: 'sku'},
+    //         {data: 'serlnumb', class: 'product-name'},
+    //         {data: 'dateregs', class: 'sku'},
+    //     ],
+    // });
+
+    // $('#ExisteStrModal .btn_close')
+    //     .unbind('click')
+    //     .on('click', function () {
+    //         $('.overlay_background').addClass('overlay_hide');
+    //         $('#tblStrSerie').DataTable().destroy();
+    //     });
+
+    // build_modal_serie(dt);
+}
+
+function setting_modalseries(strId) {
+    // console.log(dt);
+    // let fechaini = new Date();
+    // console.log('Hora INI setting_modalseries', fechaini);
+
     let title = 'Detalle de Almacen';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    
     $('#ExisteStrModal').removeClass('overlay_hide');
+    $('.overlay_closer .title').html(`Almacen - ${strnme}`);
     $('#tblStrSerie').DataTable({
         destroy: true,
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [200, 500, -1],
+            [200, 500, 'Todos'],
         ],
         buttons: [
             {
@@ -358,16 +451,16 @@ function putSeries(dt) {
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
             },
-            {
-                //Botón para imprimir
-                extend: 'print',
-                footer: true,
-                title: title,
-                filename: filename,
+            // {
+            //     //Botón para imprimir
+            //     extend: 'print',
+            //     footer: true,
+            //     title: title,
+            //     filename: filename,
 
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-            },
+            //     //Aquí es donde generas el botón personalizado
+            //     text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            // },
             {
                 text: 'Borrar seleccionados',
                 // className: 'btn-apply hidden-field',
@@ -380,41 +473,52 @@ function putSeries(dt) {
         scrollY: 'calc(100vh - 290px)',
         scrollX: true,
         fixedHeader: true,
+        createdRow: function (nRow, aData, iDataIndex) {
+            $(nRow).attr('id', aData['serId']);
+        },
+        processing: true,
+        serverSide: true,
+        ajax: {url: 'Almacenes/listSeries', type: 'POST',data: {strId: strId} }, //, data: {strId: strId}
         columns: [
-            {data: 'sermodif', class: 'edit'},
-            {data: 'produsku', class: 'sku'},
-            {data: 'serlnumb', class: 'product-name'},
-            {data: 'dateregs', class: 'sku'},
+            {data: 'serId',     name: 'serId', class: 'edit', visible:false, searchable:false},
+            {data: 'produsku', name: 'produsku', class: 'sku'},
+            {data: 'serlnumb', name: 'serlnumb', class: 'product-name'},
+            {data: 'dateregs', name: 'dateregs', class: 'sku'},
         ],
-    });
+    }); 
 
     $('#ExisteStrModal .btn_close')
         .unbind('click')
         .on('click', function () {
             $('.overlay_background').addClass('overlay_hide');
+            $('#tblStrSerie').DataTable().destroy;
         });
 
-    build_modal_serie(dt);
+    // build_modal_serie(dt);
 }
-
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
+    let fechaini = new Date();
+    console.log('Hora click build_modal_serie', fechaini);
+
     let tabla = $('#tblStrSerie').DataTable();
     $('.overlay_closer .title').html(`Almacen - ${strnme}`);
     tabla.rows().remove().draw();
+    
     $.each(dt, function (v, u) {
         tabla.row
             .add({
                 sermodif: `<i></i>`,
-                // produsku: `${u.prd_sku.slice(0, 7)}-${u.prd_sku.slice(7, 11)}`,
                 produsku: `${u.prd_sku}`,
                 serlnumb: u.prd_name,
                 dateregs: u.cantidad,
-            })
+            }) 
             .draw();
         $(`#E${u.prd_sku}`).parents('tr').attr('data-product', u.prd_sku);
-        deep_loading('C');
+        // deep_loading('C');
     });
+    let fechaend = new Date();
+    console.log('Hora END build_modal_serie', fechaend);
 }
 
 function get_quantity(strId) {
