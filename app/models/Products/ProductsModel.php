@@ -50,7 +50,8 @@ class ProductsModel extends Model
 // Listado de facturas
 public function listInvoice()
 {
-    $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN (1,4,5) order by doc_name;";
+    $qry = "SELECT doc_id, doc_name FROM ctt_documents 
+            WHERE dot_id IN (1,4,5) ORDER BY doc_name;";
     return $this->db->query($qry);
 }
 
@@ -298,6 +299,7 @@ public function saveEdtSeries($params)
     $serCi = $this->db->real_escape_string($params['serCi']);
     $serNe = $this->db->real_escape_string($params['serNe']);
     $serDc = $this->db->real_escape_string($params['serDc']);
+    $serCost = $this->db->real_escape_string($params['serCost']);
    
     $qry = "UPDATE ctt_series
             SET ser_serial_number   = UPPER('$serSr'),
@@ -306,7 +308,8 @@ public function saveEdtSeries($params)
                 ser_import_petition = UPPER('$serNp'),
                 ser_cost_import     = UPPER('$serCi'),
                 ser_no_econo        = UPPER('$serNe'),
-                ser_comments        = UPPER('$serCm')
+                ser_comments        = UPPER('$serCm'),
+                ser_cost            ='$serCost'
             WHERE ser_id  = '$serId';";
     $this->db->query($qry);
 

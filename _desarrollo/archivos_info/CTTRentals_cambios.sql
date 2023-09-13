@@ -1,3 +1,4 @@
+-- ARCHIVO INICIAL DE CAMBIOS
 -- Actualizacion del 11 de ENERO 2022
 ALTER TABLE
   ctt_series DROP COLUMN ser_reserve_start;

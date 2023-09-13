@@ -580,6 +580,8 @@ function putCategories(dt) {
             $('#txtSubCategory').html('');
             $('#txtSubCategory').val('Selecciona la subategoria');
             
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
@@ -605,6 +607,10 @@ function putSubCategories(dt) {
         getProducts(word,dt[0].sbc_id);
         $('#txtSubCategory').on('change', function () {
             let subcatId = $(this).val();
+            
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
+            
             getProducts(word,subcatId);
            
         });
@@ -1141,7 +1147,9 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        $(`#listProductsTable table tbody`).html('');
+        
+        getProducts('',sub_id);
+        //$(`#listProductsTable table tbody`).html('');
         rowCurr.addClass('oculto');
     }
 }
@@ -1472,24 +1480,37 @@ function fillBudgetProds(jsn, days, stus) {
     expandCollapseSection();
     activeInputSelector();
 
-    if (pds.comments > 0) { // Agregado por Edna
-        $(`#bdg${pds.prd_id} .col_quantity-led`)
+    if (pds.comments > 0) { // Agregado por Edna // *** Edna V1
+        //console.log($(`#bdg${pds.prd_id}`).attr('data-mice'));
+        if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
+            $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
             .attr('title', 'Comentarios al producto');
+        }
+        
+        /* $(`#bdg${pds.prd_id} .col_quantity-led`)
+            .removeAttr('class')
+            .addClass('col_quantity-led col_quantity-comment')
+            .attr('title', 'Comentarios al producto');  */
+       
     }
 
     getCounterPending(pds.pjtvr_id, pds.prd_id);
 }
 
 function putCounterPending(dt) {
+    //console.log(dt[0].counter);
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        $(`#bdg${dt[0].prd_id} .col_quantity-led`)
+        /* $(`#bdg${dt[0].prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`);
+            .attr('title', `${word} en pendiente`);  */
+        $('[data-mice=' +dt[0].pjtvr_id+']').removeAttr('class')
+        .addClass('col_quantity-led col_quantity-pending')
+        .attr('title', `${word} en pendiente`);
     }
     purgeInterfase();
 }
@@ -1623,18 +1644,19 @@ function activeInputSelector() {
 
     $('.invoice__menu-products ul li')
         .unbind('click')
-        .on('click', function () {
+        .on('click', function () { // *** Edna V1
             let event = $(this).attr('class');
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
+            let pjtv = id.parents('tr').attr('data-mice');
 			let nameProd = id.parents('tr').find('th').eq(0).find('.elipsis').text();																															  
             console.log('Sec->',sec);
              if (type != 'K' && sec =='1') {
 
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec);// *** Ed
@@ -1662,7 +1684,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1690,7 +1712,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1717,7 +1739,7 @@ function activeInputSelector() {
 }
 
 // Elimina el registro de la cotizacion
-function killProduct(bdgId) {
+function killProduct(pjtv) {
     console.log('INICIA KILL');
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de borrar este producto?</p>
@@ -1732,21 +1754,26 @@ function killProduct(bdgId) {
         .on('click', function () {
             let obj = $(this);
             let resp = obj.attr('id');
+
             if (resp == 'killYes') {
-                $('#' + bdgId).fadeOut(500, function () {
-                    
+
+                //$('#' + bdgId).fadeOut(500, function () {
+                $('[data-mice=' + pjtv+']').fadeOut(500, function () {
                     let pjtId = $('.version_current').attr('data-project');
+                    let bdgId = $(this).attr('id');
                     let section = $(this)
                         .parents('tbody')
                         .attr('id')
                         .substring(2, 5);
                     let pid = bdgId.substring(3, 10);
+                    
                     updateTotals();
                     showButtonVersion('S');
                     showButtonToPrint('H');
                     showButtonToSave('H');
+                    //console.log($(this).attr('id'));
                     updateMice(pjtId, pid, 'pjtvr_quantity_ant', 0, section, 'D');
-                    $('#' + bdgId).remove();
+                    $('[data-mice=' + pjtv+']').remove(); 
                 });
             }
             obj.parent().remove();
@@ -1765,15 +1792,15 @@ function infoProduct(bdgId, type,sec) {
     );
     closeModals();
     setTimeout(() => {
-        let verId = $('.version_current').data('version');
-        // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
+        let verId = $('.version_current').attr('data-version');
+        console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
 
 function infoPackage(bdgId, type, sec) {
     setTimeout(() => {
-        let verId = $('.version_current').data('version');
+        let verId = $('.version_current').attr('data-version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelatedPk(bdgId.substring(3, 20), type, verId, sec);
     }, 500);
@@ -3190,8 +3217,8 @@ function getDataMice() {
  * @param {*} sc Numero de la sección
  * @param {*} ac Accion a realizar
  */
-function updateMice(pj, pd, fl, dt, sc, ac) {
-    //  console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
+function updateMice(pj, pd, fl, dt, sc, ac) { // *** Edna V1
+   // console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{
@@ -3205,7 +3232,7 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
     var pagina = 'ProjectPlans/updateMice';
     var tipo = 'html';
     var selector = receiveResponseMice;
-    fillField(pagina, par, tipo, selector);
+    fillField(pagina, par, tipo, selector); 
 }
 function receiveResponseMice(dt) {
     console.log(dt);
@@ -3304,7 +3331,7 @@ function findIndex(id, dt) {
 
 function subaccion() {
     let pjtId = $('.version_current').data('project');
-    let verId = $('.version_current').data('version');
+    let verId = $('.version_current').attr('data-version');
 
     getBudgets(pjtId, verId);
 }

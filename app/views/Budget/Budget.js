@@ -429,6 +429,9 @@ function putSubCategories(dt) {
             //let word = $('txtProductFinder').val();
 
             //console.log(word);
+			showButtonToCharge('S');
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');										 
             getProducts(word,subcatId);
             
         });
@@ -563,7 +566,9 @@ function putCategories(dt) {
             let catId = $(this).val();
             $('#txtSubCategory').html('');
             $('#txtSubCategory').val('Selecciona la subategoria');
-            
+            showButtonToCharge('S');
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
@@ -1043,7 +1048,7 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 2) {
-            // $('.invoice_button .toCharge').show();
+            $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {
                 // console.log('Normal');
@@ -1097,7 +1102,7 @@ function putProducts(dt) {
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_category">${u.cat_name}</td>
-                <td class="col_category">${u.prd_price}</td>
+                <td class="col_type">${u.prd_price}</td>
                 <td class="col_type">${u.prd_level}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);

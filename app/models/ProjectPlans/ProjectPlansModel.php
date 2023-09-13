@@ -118,12 +118,12 @@ class ProjectPlansModel extends Model
 							INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
 							INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id = pjd.pjtvr_id
 							where ser.prd_id = pc.prd_id AND pjv.pjt_id=pj.pjt_id AND pjv.ver_id=pc.ver_id AND ser.ser_comments!='' AND pjv.pjtvr_section = pc.pjtvr_section
-							ORDER BY ser.prd_id) as comments
+							ORDER BY ser.prd_id) as comments, pc.pjtvr_id 
                 FROM ctt_projects_version AS pc
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;"; 
+                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;"; // *** Edna V1
 
         return $this->db->query($qry5); //**modificado por ed */
     } 
@@ -1057,8 +1057,13 @@ class ProjectPlansModel extends Model
     {
         $word = $this->db->real_escape_string($params['word']);
         $sbc_id = $this->db->real_escape_string($params['dstr']);
-        $qry = "SELECT * from ctt_vw_list_products2
+        if ($word == '') {
+            $qry = "SELECT * from ctt_vw_list_products2
+            WHERE sbc_id = '$sbc_id';";
+        }else{
+            $qry = "SELECT * from ctt_vw_list_products2
             WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
+        }
         return $this->db->query($qry);
     } 
     // Listado de categorias

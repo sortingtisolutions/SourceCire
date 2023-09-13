@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
+require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class AlmacenesModel extends Model
 {
@@ -93,7 +94,7 @@ class AlmacenesModel extends Model
 		return $lista;
 	}
 	
-	public function listSeries($params)
+	public function listSeries_old($params)
     {
         $prodId = $this->db->real_escape_string($params['strId']);
         /* $qry = "SELECT  se.ser_id, se.ser_sku, se.ser_serial_number, 
@@ -103,11 +104,11 @@ class AlmacenesModel extends Model
 				LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
 				WHERE sp.str_id IN ($prodId) AND sp.stp_quantity > 0
 				ORDER BY se.ser_sku;"; */
-			$qry = "SELECT prd.prd_sku, prd.prd_name, sum(sp.stp_quantity) as cantidad, prd.prd_level
+			$qry = "SELECT prd.prd_sku, prd.prd_name, prd.prd_level, sum(sp.stp_quantity) as cantidad
 			FROM ctt_products as prd
 			INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
-			where sp.str_id IN ($prodId) and se.ser_status=1
+			where sp.str_id IN ($prodId) and se.ser_status=1 AND sp.stp_quantity>0
 			group by prd.prd_sku, prd.prd_name, prd.prd_level
 			ORDER BY se.ser_sku;";
         return $this->db->query($qry);
@@ -119,8 +120,56 @@ class AlmacenesModel extends Model
         $qry = "SELECT sp.str_id, ifnull(sum(sp.stp_quantity),0) AS cantidad
 				FROM  ctt_stores_products AS sp
 				INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
-				WHERE sp.str_id = $strId AND sr.pjtdt_id = 0;";
+				WHERE sp.str_id = $strId AND (sr.pjtdt_id = 0 OR ISNULL(sr.pjtdt_id)) AND sp.stp_quantity>0;";
         return $this->db->query($qry);
     }
 
+	public function listSeries($params)
+    {
+        // $strId = $this->db->real_escape_string($params['strId']); where sp.str_id IN (3) and se.ser_status=1 AND sp.stp_quantity>0
+
+		// $table = "SELECT se.ser_id as serid, prd.prd_sku as produsku, prd.prd_name as serlnumb, sum(sp.stp_quantity) as dateregs
+		// 			FROM ctt_products as prd
+		// 			INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
+		// 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
+		// 			WHERE sp.str_id IN (3) and se.ser_status=1 AND sp.stp_quantity>0
+		// 			group by prd.prd_sku, prd.prd_name, prd.prd_level
+		// 			ORDER BY se.ser_sku;";  
+	
+		$table = 'ctt_vw_stores_regiter';  
+					
+		$strId= $this->db->real_escape_string($params['strId']);
+		
+		$where =  "strId =" . $strId . ";";
+
+        $primaryKey = 'serId';
+        $columns = array(
+            // array( 'db' => 'strId', 'dt' => 'strId' ),
+			array( 'db' => 'serId', 'dt' => 'serId' ),
+            array( 'db' => 'produsku', 'dt' => 'produsku' ),
+            array( 'db' => 'serlnumb', 'dt' => 'serlnumb' ),
+            array( 'db' => 'dateregs', 'dt' => 'dateregs' ),
+        );
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+			SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, null, $where )
+            // SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+        );
+
+		// 	$qry = "SELECT prd.prd_sku, prd.prd_name, prd.prd_level, sum(sp.stp_quantity) as cantidad
+		// 	FROM ctt_products as prd
+		// 	INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
+		// 	INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
+		// 	where sp.str_id IN ($strId) and se.ser_status=1 AND sp.stp_quantity>0
+		// 	group by prd.prd_sku, prd.prd_name, prd.prd_level
+		// 	ORDER BY se.ser_sku;";
+        // return $this->db->query($qry);
+    }
 }
