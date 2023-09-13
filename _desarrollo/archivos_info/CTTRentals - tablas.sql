@@ -1,7 +1,7 @@
 -- CREATE DATABASE 'cttapp_cire'
 
 /* ACCESORIOS */
-
+/* Comentario prueba de clonacion en git - Edna*/
 DROP TABLE IF EXISTS `ctt_accesories`;
 CREATE TABLE IF NOT EXISTS `ctt_accesories` (
     `acr_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'ID del accesorio',
