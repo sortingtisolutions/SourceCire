@@ -208,10 +208,10 @@ public function NextSkuProduct($param)
             // SERIE
             $qry1 = "INSERT INTO ctt_series (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
                         ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
-                        ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments) 
+                        ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments, pjtdt_id) 
                     VALUES ('$sku', '$serie', '$prc', '$ser_status', '$ser_situation', 
                     '$ser_stage', '$ser_behaviour', '$prd', '$idsup', '1', '', '', '',
-                    '', '','','$com');";
+                    '', '','','$com', 0);";
 
             $this->db->query($qry1);
             $serId = $this->db->insert_id;
@@ -301,11 +301,11 @@ public function NextSkuProduct($param)
             $qry = "INSERT INTO ctt_products (
                 prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
                 prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                prd_insured, sbc_id, srv_id, cin_id, prd_status) 
+                prd_insured, sbc_id, srv_id, cin_id, prd_status, prd_stock) 
             VALUES (
                 '$sku', UPPER('$pnm'), '', '', UPPER('$sup'), 
                 '', '$prc', '1', UPPER('$com'), '$prd_level', 
-                '', '', '$sbctg', '', '1', '1'
+                '', '', '$sbctg', '1', '1', '1', $quantity
             );";
             $this->db->query($qry);
             $prdId = $this->db->insert_id;
@@ -318,10 +318,10 @@ public function NextSkuProduct($param)
             // SERIE
             $qry1 = "INSERT INTO ctt_series (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
             ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
-            ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments) 
+            ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments, pjtdt_id) 
             VALUES ('$sersku', '$ser', '$prc', '$ser_status', '$ser_situation', 
             '$ser_stage', '$ser_behaviour', '$prdId', '$idsup', '1', '', '', '',
-            '', '','','$com');";
+            '', '','','$com', 0);";
 
             $this->db->query($qry1);
             $serId = $this->db->insert_id;
