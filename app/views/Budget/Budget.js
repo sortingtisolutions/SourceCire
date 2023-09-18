@@ -26,7 +26,7 @@ function inicial() {
     getProjectTypeCalled();
     discountInsuredEvent();
     getLocationType();
-    getCategories();
+    //getCategories();
     confirm_alert();
 
     }else {
@@ -392,10 +392,10 @@ function getBudgets() {
     fillField(pagina, par, tipo, selector);
 }
 // ** Ed
-function getCategories() {
+function getCategories(op) {
     //console.log('categos');
     var pagina = 'Budget/listCategories';
-    var par = `[{"store":""}]`;
+    var par = `[{"op":"${op}"}]`;
     var tipo = 'json';
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
@@ -412,7 +412,7 @@ function getSubCategories(catId) {
 // ** Ed
 function putSubCategories(dt) {
     //console.log('putSubCategories',dt);
-    
+    $('#txtSubCategory').html('');
     $('#txtSubCategory').append('');
     if (dt[0].sbc_id != 0) {
         let word = $('#txtProductFinder').val();
@@ -561,11 +561,12 @@ function putCategories(dt) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
+        getSubCategories(1); // *** Edna V2
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
-            $('#txtSubCategory').html('');
-            $('#txtSubCategory').val('Selecciona la subategoria');
+            
+            //$('#txtSubCategory').val('Selecciona la subategoria');
             showButtonToCharge('S');
             $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');
@@ -574,6 +575,7 @@ function putCategories(dt) {
             getSubCategories(catId);
         });
     }
+    
 }
 /******************* LLENA DE DATOS **********************/
 
@@ -1001,7 +1003,12 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
-    
+    $('#txtCategory').html('');
+    if (glbSec != 4) {
+        getCategories(1);
+    }else{
+        getCategories(2);
+    }
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -1499,6 +1506,7 @@ function killProduct(bdgId) {
 
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
+    console.log('type: *', bdgId.substring(3, 20));
     getProductsRelated(bdgId.substring(3, 20), type);
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -1525,7 +1533,13 @@ function infoDetallePkt(lcatsub) {
 // Muestra la información de productos relacionados
 function putProductsRelated(dt) {
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let levelProduct;
+        // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        if (u.prd_level == 'P' || u.prd_level == 'S') {
+            levelProduct = 'class="levelProd"';
+        }else{
+            levelProduct = '';
+        }
         let H = `
             <tr ${levelProduct}>
                 <td>${u.prd_sku}</td>

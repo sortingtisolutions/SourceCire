@@ -672,7 +672,7 @@ public function updateOrder($request_params)
                     $serie = $this->model->SettingSeries($params);
 
                 }
-            } else if ( $bdglvl == 'P' ){
+            } else if ( $bdglvl == 'P' || $bdglvl == 'S'){
                 for ($i = 1; $i<=$quanty; $i++){
 
                     $params = array(
@@ -938,7 +938,7 @@ public function updateOrder($request_params)
                 );
                 $serie = $this->model->SettingSeries($param);
 
-            } elseif($prdLvl == 'P'){
+            } elseif($prdLvl == 'P' || $prdLvl == 'S'){
 
                 $prdparam = array(
                     'prodId' => $prodId,

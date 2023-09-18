@@ -283,7 +283,7 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
-                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
+                WHERE  pr.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
                 ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";// ***Modificado por Ed
 
         return $this->db->query($qry);
@@ -1067,10 +1067,17 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
     } 
     // Listado de categorias
-    public function listCategories()
+    public function listCategories($params)
     {
-        $qry = "SELECT * FROM ctt_categories 
-                WHERE cat_status  = 1 ";
+        $opc = $this->db->real_escape_string($params['op']);
+        
+        if ($opc == 1) {
+            $qry = "SELECT * FROM ctt_categories 
+                WHERE cat_status  = 1 and cat_id <> 30";
+        }else{
+            $qry = "SELECT * FROM ctt_categories 
+            WHERE cat_status  = 1 ";
+        }
         return $this->db->query($qry);
     }
     // Listado de subcategoria
