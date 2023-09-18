@@ -541,7 +541,7 @@ public function getNewProdChg($request_params)
             $opt1='Opcion2';
         }
 
-        echo $verId . '|'. $pjtId . '|'. $opt1;
+        echo $verId . '|'. $pjtId . '|'. $opt1 . '|'. $response;
 
     }
 
@@ -604,7 +604,7 @@ public function getNewProdChg($request_params)
                     $serie = $this->model->SettingSeries($params);
                     // echo $serie . ' - ' ;
                 }
-            } else if ( $bdglvl == 'P' ){
+            } else if ( $bdglvl == 'P' || $bdglvl == 'S' ){
                 for ($i = 1; $i<=$quanty; $i++){
                     
                     $params = array(
@@ -846,9 +846,9 @@ public function getNewProdChg($request_params)
         $result         = $this->model->getProjectVersion($pjtId);
         $response       = $this->setSeries($result);
         $dateproject    = $this->model->saveDateProject($pjtId);  // comentado por jjr
-        $resReorder = $this->reOrdenList($pjtId);
+        $resReorder = $this->reOrdenList($verId); // *** Edna V2
         // echo $verId . '|'. $pjtId . '|'. $user . '|'. $name . '|'. $otrov . '|-Paso '. $Locpaso;
-        echo $verId . '|'. $pjtId . '|'. $dateproject;
+        echo $verId . '|'. $pjtId . '|'. $dateproject . '|'. $response;
 
     } 
 
@@ -874,7 +874,7 @@ public function getNewProdChg($request_params)
                 );
                 $serie = $this->model->SettingSeries($param);
                 
-            } elseif($prdLvl == 'P'){
+            } elseif($prdLvl == 'P' || $prdLvl == 'S'){
                 
                 $prdparam = array(
                     'prodId' => $prodId, 

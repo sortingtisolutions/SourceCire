@@ -27,7 +27,7 @@ function inicial() {
     discountInsuredEvent();
     getLocationType();
     getEdosRepublic();
-    getCategories();
+    // getCategories();
     
     confirm_alert();
     }else {
@@ -534,10 +534,10 @@ function getLocationsEdos(prj_id){
     fillField(pagina, par, tipo, selector);
 }
 // ** Ed
-function getCategories() {
+function getCategories(op) {
     //console.log('categos');
     var pagina = 'ProjectDetails/listCategories';
-    var par = `[{"store":""}]`;
+    var par = `[{"op":"${op}"}]`;
     var tipo = 'json';
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
@@ -572,11 +572,12 @@ function putCategories(dt) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
+        getSubCategories(1); // *** Edna V2
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
-            $('#txtSubCategory').html('');
-            $('#txtSubCategory').val('Selecciona la subategoria');
+            //$('#txtSubCategory').html('');
+           /*  $('#txtSubCategory').val('Selecciona la subategoria'); */
             
             $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');
@@ -591,7 +592,7 @@ function putCategories(dt) {
 // ** Ed
 function putSubCategories(dt) {
     //console.log('putSubCategories',dt);
-    
+    $('#txtSubCategory').html('');
     $('#txtSubCategory').append('');
     if (dt[0].sbc_id != 0) {
         let word = $('#txtProductFinder').val();
@@ -1073,7 +1074,12 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
-   
+    $('#txtCategory').html('');
+    if (glbSec != 4) {
+        getCategories(1);
+    }else{
+        getCategories(2);
+    }
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -1489,10 +1495,16 @@ function fillBudgetProds(jsn, days, stus) {
 
     /******************** Comentarios en la seccion de subarrendos *********************/
     if (pds.comments > 0) { // Agregado por Edna
-        $(`#bdg${pds.prd_id} .col_quantity-led`)
+        if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
+            $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
-            .attr('title', 'Comentarios al producto');
+            .attr('title', 'Comentarios al producto');// ***Edna V2
+        }
+        /* $(`#bdg${pds.prd_id} .col_quantity-led`)
+            .removeAttr('class')
+            .addClass('col_quantity-led col_quantity-comment')
+            .attr('title', 'Comentarios al producto'); */
     }
 
     getCounterPending(pds.pjtvr_id, pds.prd_id);
@@ -1502,10 +1514,13 @@ function putCounterPending(dt) {
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        $(`#bdg${dt[0].prd_id} .col_quantity-led`)
+        /* $(`#bdg${dt[0].prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`);
+            .attr('title', `${word} en pendiente`); */
+        $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
+        .addClass('col_quantity-led col_quantity-pending')
+        .attr('title', `${word} en pendiente`); // ***Edna V2
     }
     purgeInterfase();
 }
@@ -1651,12 +1666,13 @@ function activeInputSelector() {
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
+            let pjtv = id.parents('tr').attr('data-mice');
 			let nameProd = id.parents('tr').find('th').eq(0).find('.elipsis').text();// *** Agregado por Ed
             console.log('Sec->',sec,bdgId,type);
             if (type != 'K' && sec =='1') {
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec);// *** Ed
@@ -1684,7 +1700,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1711,7 +1727,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1737,7 +1753,7 @@ function activeInputSelector() {
 }
 
 // Elimina el registro de la cotizacion
-function killProduct(bdgId) {
+function killProduct(pjtv) {
     // console.log('INICIA KILL');
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de borrar este producto?</p>
@@ -1753,8 +1769,10 @@ function killProduct(bdgId) {
             let obj = $(this);
             let resp = obj.attr('id');
             if (resp == 'killYes') {
-                $('#' + bdgId).fadeOut(500, function () {
+                //$('#' + bdgId).fadeOut(500, function () {
+                $('[data-mice=' + pjtv+']').fadeOut(500, function () { // ***Edna V2
                     let pjtId = $('.version_current').attr('data-project');
+                    let bdgId = $(this).attr('id');
                     let section = $(this)
                         .parents('tbody')
                         .attr('id')
@@ -1765,7 +1783,8 @@ function killProduct(bdgId) {
                     // showButtonToPrint('H');
                     // showButtonToSave('H');
                     updateMice( pjtId, pid, 'pjtvr_quantity_ant', 0, section,  'D' );
-                    $('#' + bdgId).remove();
+                    // $('#' + bdgId).remove();
+                    $('[data-mice=' + pjtv+']').remove(); // ***Edna V2
                 });
             }
             obj.parent().remove();
@@ -1812,7 +1831,12 @@ function putProductsRelated(dt) {
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
         if(u.prd_id != '0'){
-            let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+            // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+            if (u.prd_level == 'P' || u.prd_level == 'S') {
+                levelProduct = 'class="levelProd"';
+            }else{
+                levelProduct = '';
+            }
             let prodSku =
                 u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
             let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
