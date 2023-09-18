@@ -89,5 +89,13 @@ class ProjectClosedModel extends Model
         return  $prdId;
     }
 
+    // Añadido por Edna V3
+    public function totalMantenimiento($param)
+    {
+        $pjtId = $this->db->real_escape_string($param['pjtId']);
+        $qry = "SELECT ifnull(SUM(pmt_price),0) as maintenance FROM ctt_products_maintenance WHERE pjt_id = $pjtId";
+        
+        return $this->db->query($qry);
+    }
 
 }

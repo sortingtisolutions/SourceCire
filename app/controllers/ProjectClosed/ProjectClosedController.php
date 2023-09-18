@@ -102,6 +102,21 @@ class ProjectClosedController extends Controller
         echo $res;
 
     }
-
+    // Añadido por Edna v3
+    public function totalMantenimiento($request_params)
+    {
+        $result = $this->model->totalMantenimiento($request_params);	  
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    }
 
 }
