@@ -27,7 +27,7 @@ function inicial() {
     getCalendarPeriods();
     discountInsuredEvent();
     getLocationType();
-    getCategories();
+    // getCategories();
     
     getEdosRepublic();
     confirm_alert();
@@ -528,10 +528,10 @@ function getEdosRepublic() {
     fillField(pagina, par, tipo, selector);
 }
 // ** Ed
-function getCategories() {
+function getCategories(op) {
     //console.log('categos');
     var pagina = 'ProjectPlans/listCategories';
-    var par = `[{"store":""}]`;
+    var par = `[{"op":"${op}"}]`;
     var tipo = 'json';
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
@@ -574,12 +574,13 @@ function putCategories(dt) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
+        getSubCategories(1); // *** Edna V2
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
-            $('#txtSubCategory').html('');
-            $('#txtSubCategory').val('Selecciona la subategoria');
-            
+            //$('#txtSubCategory').html('');
+            /* $('#txtSubCategory').val('Selecciona la subategoria');
+             */
             $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
@@ -593,7 +594,7 @@ function putCategories(dt) {
 // ** Ed
 function putSubCategories(dt) {
     //console.log('putSubCategories',dt);
-    
+    $('#txtSubCategory').html('');
     $('#txtSubCategory').append('');
     if (dt[0].sbc_id != 0) {
         let word = $('#txtProductFinder').val();
@@ -1076,6 +1077,12 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
+    $('#txtCategory').html('');
+    if (glbSec != 4) {
+        getCategories(1);
+    }else{
+        getCategories(2);
+    }
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -1482,17 +1489,17 @@ function fillBudgetProds(jsn, days, stus) {
 
     if (pds.comments > 0) { // Agregado por Edna // *** Edna V1
         //console.log($(`#bdg${pds.prd_id}`).attr('data-mice'));
-        if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
+       /* if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
             $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
             .attr('title', 'Comentarios al producto');
-        }
-        
-        /* $(`#bdg${pds.prd_id} .col_quantity-led`)
+        } */
+         
+        $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
-            .attr('title', 'Comentarios al producto');  */
+            .attr('title', 'Comentarios al producto'); 
        
     }
 
@@ -1504,13 +1511,14 @@ function putCounterPending(dt) {
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        /* $(`#bdg${dt[0].prd_id} .col_quantity-led`)
+        /*  $(`#bdg${dt[0].prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`);  */
-        $('[data-mice=' +dt[0].pjtvr_id+']').removeAttr('class')
+            .attr('title', `${word} en pendiente`);  */ 
+        $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
         .addClass('col_quantity-led col_quantity-pending')
         .attr('title', `${word} en pendiente`);
+        
     }
     purgeInterfase();
 }
@@ -1793,7 +1801,7 @@ function infoProduct(bdgId, type,sec) {
     closeModals();
     setTimeout(() => {
         let verId = $('.version_current').attr('data-version');
-        console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
+        // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
@@ -1819,7 +1827,12 @@ function putProductsRelated(dt) {
     console.log('putProductsRelated',dt);
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        if (u.prd_level == 'P' || u.prd_level == 'S') {
+            levelProduct = 'class="levelProd"';
+        }else{
+            levelProduct = '';
+        }
         let prodSku =
             u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
         let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
@@ -3084,6 +3097,9 @@ function getDataMice() {
             .children('td.quantityBase')
             .children('.input_invoice')
             .attr('data-real', quantity_act);
+
+        console.log(section);
+
         if (quantity_act != quantity_ant) {
             updateMice(pjtId, pid, 'pjtvr_quantity', quantity_act, section, 'U');
         }
@@ -3218,7 +3234,7 @@ function getDataMice() {
  * @param {*} ac Accion a realizar
  */
 function updateMice(pj, pd, fl, dt, sc, ac) { // *** Edna V1
-   // console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
+   console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{

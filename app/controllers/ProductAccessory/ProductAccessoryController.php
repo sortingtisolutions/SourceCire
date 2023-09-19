@@ -165,7 +165,7 @@ public function listProductsById($request_params)
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"prd_id":""}]';	
+            $res =  '[{"ser_id":"0"}]';	
         }
         echo $res;
     }

@@ -242,10 +242,17 @@ public function listDiscounts($params)
         return $this->db->query($qry);
     } 
     // Listado de categorias
-    public function listCategories()
+    public function listCategories($params)
     {
-        $qry = "SELECT * FROM ctt_categories 
-                WHERE cat_status  = 1 ";
+        $opc = $this->db->real_escape_string($params['op']);
+        
+        if ($opc == 1) {
+            $qry = "SELECT * FROM ctt_categories 
+                WHERE cat_status  = 1 and cat_id <> 30";
+        }else{
+            $qry = "SELECT * FROM ctt_categories 
+            WHERE cat_status  = 1 ";
+        }
         return $this->db->query($qry);
     }
     // Listado de subcategoria
@@ -317,7 +324,7 @@ public function listProductsRelated($params)
                 WHERE pk.prd_parent = $prdId AND pr.prd_status = 1 AND sc.sbc_status = 1 AND ct.cat_status = 1;";
         return $this->db->query($qry);
         // cambio ac.prd_id por prd_parent
-    } else if($type == 'P') {
+    } else if($type == 'P' || $type == 'S' ) {
         $qry = "SELECT pr.*, sc.sbc_name, ct.cat_name 
                 FROM ctt_products AS pr
                 INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
@@ -332,7 +339,7 @@ public function listProductsRelated($params)
                 WHERE ac.prd_parent = $prdId AND pr.prd_status = 1 AND sc.sbc_status = 1 AND ct.cat_status = 1;";
         return $this->db->query($qry);
 
-    } else {
+    }else {
         $qry = "SELECT * FROM ctt_products WHERE prd_id = $prdId";
         return $this->db->query($qry);
     }
@@ -731,17 +738,17 @@ public function saveBudgetList($params)
             $sersku  = $series->ser_sku;
             $ser_reserve_count  = $series->ser_reserve_count; 
 
-            $qry2 = "INSERT INTO ctt_projects_detail (
+           $qry2 = "INSERT INTO ctt_projects_detail (
                 pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
                 VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
                 ); ";
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
-
+            
             $qry1 = "UPDATE ctt_series SET ser_situation = 'EA', ser_stage = 'R',
                         ser_reserve_count = $ser_reserve_count,
                         pjtdt_id = '$pjtdtId'
-                    WHERE ser_id = $serie;";
+                    WHERE ser_id = $serie;"; 
             $this->db->query($qry1);
 
         } else {
