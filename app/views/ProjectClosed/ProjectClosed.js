@@ -101,7 +101,8 @@ function getProjects() {
 
         activaCampos(pjtId);
         findExpenda(pjtId);
-        findMaintenance(pjtId);
+        // findMaintenance(pjtId);
+        getTotalMantenance(pjtId);
         findExtraDiesel(pjtId);
         findDiscount(pjtId);
 
@@ -219,9 +220,33 @@ function resSaveClosure(dt) {
     /* $('#CustomerModal .btn_close').trigger('click');
     activeIcons(); */
 }
+function getTotalMantenance(pjtId){
+    console.log(pjtId);
+    var pagina = 'ProjectClosed/totalMantenimiento';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putTotalMaintenance;
+    fillField(pagina, par, tipo, selector); 
+}
+function findMaintenance(dt) {
+    //let cfr = 0;
+    
+    /* man.unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        totman.html(fnm(val, 2, '.', ','));
+        updateTotals();
+    }); */  // Modificado por Edna - v3
 
-function findMaintenance(pjtId) {
+}
+function putTotalMaintenance(dt){
+    console.log(dt);
     let cfr = 0;
+    man.val(fnm(dt[0].maintenance, 2, '.', ','));
+    totman.html(fnm(dt[0].maintenance, 2, '.', ','));
+
     man.unbind('keyup').on('keyup', function () {
         let val = $(this).val();
         if (val == '') {
@@ -229,7 +254,7 @@ function findMaintenance(pjtId) {
         }
         totman.html(fnm(val, 2, '.', ','));
         updateTotals();
-    });
+    }); 
 }
 
 function findDiscount(pjtId) {

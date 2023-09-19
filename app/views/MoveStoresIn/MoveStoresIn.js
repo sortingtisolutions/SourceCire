@@ -506,7 +506,7 @@ function exchange_apply() {
     let sercosttot = $('#txtCostTot').val();
     let sernumeco = $('#txtNoEco').val();
 
-    serie++;
+    
     console.log(prdName);
     mthseries=quantity;
     if (quantity > 1) {
@@ -538,6 +538,7 @@ function exchange_apply() {
             fill_table(par);
         }
     } else {
+        serie++;
         let par = `
         [{
             "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",

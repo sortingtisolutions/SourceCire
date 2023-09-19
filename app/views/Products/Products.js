@@ -921,6 +921,8 @@ function saveNewProduct() {
         let prdNp = $('#txtPrdNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
+        
+        prdVs = !prdVs ? 1 : prdVs;
         let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
         prdLv = prdLv == '1' ? 'A' : 'P';
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
@@ -954,7 +956,6 @@ function saveNewProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
-        /*  console.log(par); */
         var pagina = 'Products/saveNewProduct';
         var tipo = 'html';
         var selector = resNewProduct;
@@ -1165,7 +1166,8 @@ function putSelectSerie(dt) {
     // console.log(dt);
     /* getInvoice(); */
     $('#txtSerIdSerie').val(dt[0].ser_id);
-    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + '-' + dt[0].ser_sku.slice(10, 15));
+    // $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + '-' + dt[0].ser_sku.slice(10, 15)); //*** Edna */
+    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + dt[0].ser_sku.slice(10, 15)); //*** Edna */
     $('#txtSerSerialNumber').val(dt[0].ser_serial_number);
     $('#txtSerDateRegistry').val(dt[0].ser_date_registry);
     $('#txtSerCost').val(dt[0].ser_cost);
