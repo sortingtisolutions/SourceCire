@@ -204,7 +204,7 @@ function selProductsSub(dt) {
         // let id = $(this).val();
         let id = $(this).val();
         lsbc_id = id;
-        console.log('GET SERIES-',id);
+        //console.log('GET SERIES-',id);
         getSeriesProd(id);
     });
 }

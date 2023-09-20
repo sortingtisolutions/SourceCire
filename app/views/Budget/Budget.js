@@ -4,7 +4,7 @@ let theredaytrip=0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
 let add = 0;
-
+let subCtg =0; // *** Edna
 $('document').ready(function () {
     url = getAbsolutePath();
     verifica_usuario();
@@ -375,6 +375,16 @@ function getProducts(word, dstr, dend) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
+
+/**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
+function getProductsInput(word, dstr, dend) {
+    var pagina = 'Budget/listProducts2';
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de productos de Subarrendo */
 function getProductsSub(word, dstr, dend) {
     var pagina = 'Budget/listProductsSub';
@@ -422,7 +432,9 @@ function putSubCategories(dt) {
             $('#txtSubCategory').append(H);
             
         });
-        console.log(dt[0].sbc_id);
+        //console.log(dt[0].sbc_id);
+        
+        subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
         $('#txtSubCategory').on('change', function () {
             let subcatId = $(this).val();
@@ -433,7 +445,7 @@ function putSubCategories(dt) {
             $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');										 
             getProducts(word,subcatId);
-            
+            subCtg = subcatId;
         });
     }
 }
@@ -555,13 +567,13 @@ function putExistTrip(dt) {
 // ** Ed
 function putCategories(dt) {
     
-    $('#txtCategory').append('');
+    $('#txtCategory').append('<option value="0"> Categoria... </option>');
     if (dt[0].cat_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
-        getSubCategories(1); // *** Edna V2
+        //getSubCategories(1); // *** Edna V2
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
@@ -1042,6 +1054,7 @@ function limpiar_form(){
     $('#txtCategory').val(0);
     $('#txtSubCategory').val(0);
     getProducts('', 0);
+    subCtg =0;
     
 }
 /** ++++++ Selecciona los productos del listado */
@@ -1051,20 +1064,34 @@ function selProduct(res) {
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
     let sub_id = $('#txtSubCategory').val();
-    if (res.length > 1) {
+    if (res.length > 3) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 2) {
+        if (res.length == 4) {
             $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');  //jjr
-            if (glbSec != 4) {
-                // console.log('Normal');
-                getProducts(res.toUpperCase(), sub_id);
+            if (subCtg>0) {
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    getProducts(res.toUpperCase(), sub_id);
+                    
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    
+                }
             } else {
-                // console.log('Subarrendo');
-                getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
-                //getProducts(res.toUpperCase(), sub_id);
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    //getProducts(res.toUpperCase(), sub_id);
+                    getProductsInput(res.toUpperCase());
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    //getProducts(res.toUpperCase(), sub_id);
+                }
             }
+            
         } else {
             rowCurr.css({ display: 'none' });
             rowCurr.each(function (index) {

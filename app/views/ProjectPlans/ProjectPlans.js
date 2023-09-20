@@ -6,7 +6,7 @@ let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
 let product_name=''; // Ed			  
-
+let subCtg =0; // *** Edna
 $('document').ready(function () {
     url = getAbsolutePath();
     verifica_usuario();
@@ -380,6 +380,17 @@ function getProductsSub(word, dstr, dend) {
     fillField(pagina, par, tipo, selector);
 }
 
+
+/**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
+function getProductsInput(word, dstr, dend) {
+    var pagina = 'Budget/listProducts2';
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
+
 /**  Obtiene el listado de proyectos padre */
 function getProjectsParents() {
     swpjt = 0;
@@ -568,13 +579,13 @@ function putEdosRepublic(dt) {
 // ** Ed
 function putCategories(dt) {
     
-    $('#txtCategory').append('');
+    $('#txtCategory').append('<option value="0"> Categorias...</option>');
     if (dt[0].cat_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
-        getSubCategories(1); // *** Edna V2
+        // getSubCategories(1); // *** Edna V2
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
@@ -605,13 +616,14 @@ function putSubCategories(dt) {
             
         });
         console.log(dt[0].sbc_id);
+        subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
         $('#txtSubCategory').on('change', function () {
             let subcatId = $(this).val();
             
             $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');
-            
+            subCtg = subcatId;
             getProducts(word,subcatId);
            
         });
@@ -1129,13 +1141,34 @@ function selProduct(res) {
         let dend = 0;
         if (res.length == 1) {
             $('.toCharge').removeClass('hide-items');  //jjr
-            if (glbSec != 4) {  //IF agragado por jjr
+            /* if (glbSec != 4) {  //IF agragado por jjr
                 // console.log('Normal');
                 //getProducts(res.toUpperCase(), dstr, dend);
                 getProducts(res.toUpperCase(), sub_id);
             } else {
                 console.log('Subarrendo');
                 getProductsSub(res.toUpperCase(), dstr, dend);
+            } */
+            if (subCtg>0) {
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    getProducts(res.toUpperCase(), sub_id);
+                    
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    
+                }
+            } else {
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    //getProducts(res.toUpperCase(), sub_id);
+                    getProductsInput(res.toUpperCase());
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    //getProducts(res.toUpperCase(), sub_id);
+                }
             }
         } else {
             rowCurr.css({ display: 'none' });
