@@ -248,7 +248,7 @@ function putProductsList(dt) {
     });
 
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}|${u.prd_sku}">${u.prd_name}</div>`;
+        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}|${u.prd_sku}|${u.sbc_id}|${u.srv_id}">${u.prd_name}</div>`;
         $('#listProduct .list-items').append(H);
     });
 
@@ -282,7 +282,9 @@ function putProductsList(dt) {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
         let prdsku = $(this).attr('data_complement').split('|')[2];
-        MaxAccesorio(prdsku,prdNm,prdId);
+        let sbcId = $(this).attr('data_complement').split('|')[3];
+        let svrId = $(this).attr('data_complement').split('|')[4];
+        MaxAccesorio(prdsku,prdNm,prdId,sbcId,svrId);
         // let newprdsku = prdsku + 'XXX';
         //console.log('selecciona elemento', prdId,'---', prdNm, '** ', prdsku);
         // $('#txtProducts').val(prdNm);
@@ -293,17 +295,23 @@ function putProductsList(dt) {
     });
 }
 
-function MaxAccesorio(prdsku,prdNm,prdId,) {
+function MaxAccesorio(prdsku,prdNm,prdId,sbcId, svrId) {
         // console.log('MaxAccesorio',prdNm,prdId,prdsku);
     if (maxacc == undefined) {
         getMaxAccesorio(prdsku,prdNm,prdId);
         
     } else {
-        // console.log('Regreso a MaxAccesorio',prdNm,prdId,prdsku);
+        
         let newprdsku = prdsku + 'XXX' + maxacc;
         $('#txtProducts').val(prdNm);
         $('#txtIdProducts').val(prdId);
         $('#txtPrdSku').val(newprdsku);
+
+        $('#txtCatId').val(parseInt(prdsku.slice(0,2)));
+        $('#txtSbcId').val(sbcId);
+
+        $('#txtSrvId').val(svrId);
+        $('#txtSrvId').attr('disabled', false);
         $('#listProduct').slideUp(100);
     }
 }
@@ -685,7 +693,9 @@ function putSelectProduct(dt) {
     $('#txtPrdInsured').html(ass);
 
     // console.log('Carga-P ', dt);
-
+    if (prdLevel == 'A') {
+        $('#txtProducts').attr('disabled', false);
+    }
     $('#tblEditProduct .checkbox i')
         .unbind('click')
         .on('click', function () {
@@ -818,6 +828,7 @@ function createNewProduct() {
 
     $(`#txtCatId`).attr('disabled', false);
     $(`#txtSbcId`).attr('disabled', false);
+    $('#txtProducts').attr('disabled',true);
     $('#ProductModal').removeClass('overlay_hide');
     $('#txtPrdVisibility').html('<i class="fas fa-check-square"></i>');
     $('.overlay_closer .title').html(prdNm);
@@ -921,6 +932,8 @@ function saveNewProduct() {
         let prdNp = $('#txtPrdNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
+        
+        prdVs = !prdVs ? 1 : prdVs;
         let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
         prdLv = prdLv == '1' ? 'A' : 'P';
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
@@ -954,7 +967,6 @@ function saveNewProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
-        /*  console.log(par); */
         var pagina = 'Products/saveNewProduct';
         var tipo = 'html';
         var selector = resNewProduct;
@@ -986,8 +998,8 @@ function validatorProductsFields() {
             ky = 1;
             $(this).addClass('fail').parent().children('.fail_note').removeClass('hide');
         }
-    }); */
-    inactiveFocus();
+    });
+    inactiveFocus(); */
     return ky;
 }
 
@@ -1165,7 +1177,8 @@ function putSelectSerie(dt) {
     // console.log(dt);
     /* getInvoice(); */
     $('#txtSerIdSerie').val(dt[0].ser_id);
-    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + '-' + dt[0].ser_sku.slice(10, 15));
+    // $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + '-' + dt[0].ser_sku.slice(10, 15)); //*** Edna */
+    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + dt[0].ser_sku.slice(10, 15)); //*** Edna */
     $('#txtSerSerialNumber').val(dt[0].ser_serial_number);
     $('#txtSerDateRegistry').val(dt[0].ser_date_registry);
     $('#txtSerCost').val(dt[0].ser_cost);

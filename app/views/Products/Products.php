@@ -206,7 +206,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de servicio:</td>
                         <td class="data">
-                            <select id="txtSrvId" name="txtSrvId" class="textbox required" style="width:260px">
+                            <select id="txtSrvId" name="txtSrvId" class="textbox" style="width:260px">
                                 <option value="0">Selecciona el tipo de servicio</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>

@@ -84,7 +84,8 @@ public function listSeriesProd($params)
     $qry = "SELECT ser.ser_id, ser.ser_sku,ser.ser_serial_number,prd.prd_name 
             FROM ctt_series AS ser
             INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-            WHERE prd.prd_id=$prdId";
+            LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = ser.ser_id
+            WHERE prd.prd_id=$prdId AND sp.stp_quantity > 0";
     return $this->db->query($qry);
 }
 
@@ -93,9 +94,10 @@ public function getAccesoriesById($params)
 {
     $prdId = $this->db->real_escape_string($params['prdId']);
 
-    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name  
+    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name, IFNULL(sp.stp_quantity,0) AS stp_quantity
             FROM ctt_products AS prd 
-            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' and prd.prd_level='A' and prd.prd_status = 1
+            LEFT JOIN ctt_stores_products AS sp ON sp.prd_id= prd.prd_id
+            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' AND prd.prd_level='A' AND prd.prd_status = 1 AND sp.stp_quantity > 0
             GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 
     return $this->db->query($qry);

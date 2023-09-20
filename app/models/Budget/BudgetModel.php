@@ -223,7 +223,7 @@ public function listDiscounts($params)
     public function listProducts2($params)
     {
         $word = $this->db->real_escape_string($params['word']);
-        $qry = "SELECT * from ctt_vw_list_products
+        $qry = "SELECT * from ctt_vw_list_products2
             WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%');";
         return $this->db->query($qry);
     } 

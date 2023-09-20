@@ -52,7 +52,7 @@ class CategoriasModel extends Model
 		$qry = "UPDATE ctt_categories
 				SET cat_name = UPPER('$cat_name'),
 					str_id = '$str_id',
-					are_id = '$areId',
+					are_id = '$areId'
 				WHERE cat_id = $cat_id;";
 		return 	$this->db->query($qry);	
 	}
