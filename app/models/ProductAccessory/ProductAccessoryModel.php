@@ -77,11 +77,11 @@ public function listProductsPack($params)
     // return $this->db->query($qry);
 }
 
-public function listSeriesProd($params)
+public function listSeriesProd($params) // Edna
 {
     $prdId = $this->db->real_escape_string($params);
 
-    $qry = "SELECT ser.ser_id, ser.ser_sku,ser.ser_serial_number,prd.prd_name 
+    $qry = "SELECT ser.ser_id, ser.ser_sku,ser.ser_serial_number,prd.prd_name, prd.prd_id  
             FROM ctt_series AS ser
             INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
             LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = ser.ser_id
@@ -94,10 +94,9 @@ public function getAccesoriesById($params)
 {
     $prdId = $this->db->real_escape_string($params['prdId']);
 
-    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name, IFNULL(sp.stp_quantity,0) AS stp_quantity
+    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name, prd.prd_stock
             FROM ctt_products AS prd 
-            LEFT JOIN ctt_stores_products AS sp ON sp.prd_id= prd.prd_id
-            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' AND prd.prd_level='A' AND prd.prd_status = 1 AND sp.stp_quantity > 0
+            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
             GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 
     return $this->db->query($qry);
@@ -114,12 +113,12 @@ public function getAccesoriesById($params)
 }
 
 // Listado de accesorios
-public function listAccesorios($param)
+public function listAccesorios($param) // Edna
 {
     //$prd_id       = $this->db->real_escape_string($param['prdId']);
-    $qry = "SELECT prd_id, prd_name, prd_sku 
+    $qry = "SELECT prd_id, prd_name, prd_sku, prd_stock 
             FROM ctt_products 
-            WHERE prd_level = 'A' AND substr(prd_sku,8,3) = 'XXX';";
+            WHERE prd_level = 'A' AND substr(prd_sku,8,3) = 'XXX' AND prd_stock>0;";
     return $this->db->query($qry);
 }
 

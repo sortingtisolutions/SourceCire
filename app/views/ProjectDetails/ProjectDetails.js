@@ -417,14 +417,7 @@ function getVersion(pjtId) {
     var selector = putVersion;
     fillField(pagina, par, tipo, selector);
 }
-/**  Obtiene el listado de productos */
-/* function getProducts(word, dstr, dend) {
-    var pagina = 'ProjectDetails/listProducts';
-    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
-} */
+
 
 /**  Obtiene el listado de cotizaciones */
 function getBudgets(pjtId, verId) {
@@ -585,13 +578,7 @@ function putCategories(dt) {
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
-            //$('#txtSubCategory').html('');
-           /*  $('#txtSubCategory').val('Selecciona la subategoria'); */
             
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
             
            
@@ -612,16 +599,19 @@ function putSubCategories(dt) {
             
         });
         console.log(dt[0].sbc_id);
+        modalLoading('S');
         subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
-        $('#txtSubCategory').on('change', function () {
-            let subcatId = $(this).val();
+        $('#txtSubCategory')
+            .unbind('change')
+            .on('change', function () {
+                let subcatId = $(this).val();
+                modalLoading('S');
+                /* $('.invoice_button .toCharge').show();
+                $('.toCharge').removeClass('hide-items'); */
+                subCtg = subcatId;
+                getProducts(word,subcatId);
             
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            subCtg = subcatId;
-            getProducts(word,subcatId);
-           
         });
     }
 }
@@ -758,10 +748,7 @@ function putDiscounts(dt) {
 
 function putLocationType(dt) {
     loct =dt;
-/* 
-    $('#txtTypeLocationEdt').on('change', function () {
-        validator();
-    }); */
+
 }
 
 /**  Llena el listado de versiones */
@@ -1122,7 +1109,9 @@ function limpiar_form(){
     $('#txtProductFinder').val('');
     $('#txtCategory').val(0);
     $('#txtSubCategory').val(0);
-    getProducts('', 0);
+    
+    
+    $('#listProductsTable table tbody').html('');
 }
 
 /** ++++++ Selecciona los productos del listado */
@@ -1137,15 +1126,8 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 1) {
-            $('.toCharge').removeClass('hide-items');  //jjr
-            /* if (glbSec != 4) {  //IF agragado por jjr
-                // console.log('Normal');
-                //getProducts(res.toUpperCase(), dstr, dend);
-                getProducts(res.toUpperCase(), sub_id);
-            } else {
-                console.log('Subarrendo');
-                getProductsSub(res.toUpperCase(), dstr, dend);
-            } */
+            modalLoading('S');
+            
             if (subCtg>0) {
                 if (glbSec != 4) {
                     // console.log('Normal');
@@ -1164,7 +1146,7 @@ function selProduct(res) {
                 } else {
                     // console.log('Subarrendo');
                     getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
-                    //getProducts(res.toUpperCase(), sub_id);
+                    
                 }
             }
         } else {
@@ -1184,9 +1166,9 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        //$(`#listProductsTable table tbody`).html('');
+        $(`#listProductsTable table tbody`).html('');
         
-        getProducts('',sub_id);
+        /* getProducts('',sub_id); */
         rowCurr.addClass('oculto');
     }
 }
@@ -1218,8 +1200,8 @@ function putProducts(dt) {
         $('#listProductsTable table tbody').append(H);
     });
     }
-    $('.toCharge').addClass('hide-items');   //jjr
-
+    /* $('.toCharge').addClass('hide-items');   //jjr */
+    modalLoading('H');
     $('#listProductsTable table tbody tr')
         // .unbind('click')
         .on('click', function () {

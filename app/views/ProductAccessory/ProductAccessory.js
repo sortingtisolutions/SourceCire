@@ -194,6 +194,7 @@ function putAccesoriesById(dt) {
 // Llena el selector de subcategorias
 function selProductsSub(dt) {
     console.log('selProductsSub',dt);
+    $('#txtProductSubCat').html(''); // Edna 
     if (dt[0].prd_id != 0) {
         $.each(dt, function (v, u) {
                 let H = `<option value="${u.prd_id}" data-content="${u.prd_id}|${u.sbc_id}|${u.prd_sku}">${u.prd_sku} - ${u.prd_name}</option>`;
