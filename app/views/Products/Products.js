@@ -6,7 +6,7 @@ let num = 0,
     flt = 0,
     btn = '';
 let cats, subs, sku1, sku2, sku3, sku4, glbPkt;
-
+let prodNm,prodId, subcId, servId;
 $(document).ready(function () {
     if (verifica_usuario()) {
         inicial();
@@ -277,14 +277,21 @@ function putProductsList(dt) {
         
     });
 
-    $('#listProduct .list-item').on('click', function () {
+    $('#listProduct .list-item')
+    .unbind('click')
+    .on('click', function () {
         // console.log('AQUI escoges');
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
         let prdsku = $(this).attr('data_complement').split('|')[2];
         let sbcId = $(this).attr('data_complement').split('|')[3];
         let svrId = $(this).attr('data_complement').split('|')[4];
-        MaxAccesorio(prdsku,prdNm,prdId,sbcId,svrId);
+        console.log(prdsku,prdNm,prdId,sbcId,svrId);
+        prodNm = prdNm;
+        prodId = prdId;
+        subcId = sbcId;
+        servId = svrId;
+        MaxAccesorio(prdsku);
         // let newprdsku = prdsku + 'XXX';
         //console.log('selecciona elemento', prdId,'---', prdNm, '** ', prdsku);
         // $('#txtProducts').val(prdNm);
@@ -295,23 +302,24 @@ function putProductsList(dt) {
     });
 }
 
-function MaxAccesorio(prdsku,prdNm,prdId,sbcId, svrId) {
-        // console.log('MaxAccesorio',prdNm,prdId,prdsku);
+function MaxAccesorio(prdsku) {
+       
     if (maxacc == undefined) {
-        getMaxAccesorio(prdsku,prdNm,prdId);
+        getMaxAccesorio(prdsku);
         
     } else {
-        
         let newprdsku = prdsku + 'XXX' + maxacc;
-        $('#txtProducts').val(prdNm);
-        $('#txtIdProducts').val(prdId);
+        $('#txtProducts').val(prodNm);
+        $('#txtIdProducts').val(prodId);
         $('#txtPrdSku').val(newprdsku);
+        
+        $('#txtSbcId').val(subcId);
+        $('#txtSrvId').val(servId);
+
+        $('#txtSrvId').attr('disabled', false);
 
         $('#txtCatId').val(parseInt(prdsku.slice(0,2)));
-        $('#txtSbcId').val(sbcId);
 
-        $('#txtSrvId').val(svrId);
-        $('#txtSrvId').attr('disabled', false);
         $('#listProduct').slideUp(100);
     }
 }
@@ -829,6 +837,7 @@ function createNewProduct() {
     $(`#txtCatId`).attr('disabled', false);
     $(`#txtSbcId`).attr('disabled', false);
     $('#txtProducts').attr('disabled',true);
+    $('#txtProducts').val('');
     $('#ProductModal').removeClass('overlay_hide');
     $('#txtPrdVisibility').html('<i class="fas fa-check-square"></i>');
     $('.overlay_closer .title').html(prdNm);
@@ -1068,7 +1077,8 @@ function build_modal_serie(dt) {
         if (glbPkt=='P'){
             lprdsku=u.ser_sku.slice(0, 10);
         }else{
-            lprdsku=u.ser_sku.slice(0, 10) + '-' + u.ser_sku.slice(10, 15);
+            /* lprdsku=u.ser_sku.slice(0, 10) + '-' + u.ser_sku.slice(10, 15); */
+            lprdsku=u.ser_sku.slice(0, 15);
         }
 
         let docInvo = `<span class="invoiceViewSer" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
