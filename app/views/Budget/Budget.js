@@ -28,7 +28,7 @@ function inicial() {
     getLocationType();
     //getCategories();
     confirm_alert();
-
+    
     }else {
         setTimeout(() => {
             inicial();
@@ -182,37 +182,37 @@ function eventsAction() {
     $('.version__button')
         .unbind('click')
         .on('click', function () {
-            
-            let nRows = $(
-                '.invoice__box-table table tbody tr.budgetRow'
-            ).length;
-            if (nRows > 0) {
-                modalLoading('S');
-                let pjtId = $('.version_current').attr('data-project');
-                let verCurr = $(
-                    '.sidebar__versions .version__list ul li:first'
-                ).attr('data-code');
-                if (verCurr == undefined) {
-                    verCurr = 'V0';
+            if ($('.version__button .invoice_button').attr('data-visible') == 'true') {
+                let nRows = $(
+                    '.invoice__box-table table tbody tr.budgetRow'
+                ).length;
+                if (nRows > 0) {
+                    modalLoading('S');
+                    let pjtId = $('.version_current').attr('data-project');
+                    let verCurr = $(
+                        '.sidebar__versions .version__list ul li:first'
+                    ).attr('data-code');
+                    if (verCurr == undefined) {
+                        verCurr = 'V0';
+                    }
+                    let vr = parseInt(verCurr.substring(1, 10));
+                    let verNext = 'C' + refil(vr + 1, 4);
+                    let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
+    
+                    let par = `
+                    [{
+                        "pjtId"           : "${pjtId}",
+                        "verCode"         : "${verNext}",
+                        "discount"        : "${discount}"
+                    }]`;
+    
+                    var pagina = 'Budget/SaveVersion';
+                    var tipo = 'html';
+                    var selector = saveBudget;
+                    fillField(pagina, par, tipo, selector);
                 }
-                let vr = parseInt(verCurr.substring(1, 10));
-                let verNext = 'C' + refil(vr + 1, 4);
-                let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-
-                let par = `
-                [{
-                    "pjtId"           : "${pjtId}",
-                    "verCode"         : "${verNext}",
-                    "discount"        : "${discount}"
-                }]`;
-
-                var pagina = 'Budget/SaveVersion';
-                var tipo = 'html';
-                var selector = saveBudget;
-                fillField(pagina, par, tipo, selector);
+                modalLoading('H');
             }
-            modalLoading('H');
-
         });
 
     // Edita los datos del proyecto
@@ -421,8 +421,8 @@ function getSubCategories(catId) {
 }
 // ** Ed
 function putSubCategories(dt) {
-    //console.log('putSubCategories',dt);
     $('#txtSubCategory').html('');
+    
     $('#txtSubCategory').append('');
     if (dt[0].sbc_id != 0) {
         let word = $('#txtProductFinder').val();
@@ -432,20 +432,19 @@ function putSubCategories(dt) {
             $('#txtSubCategory').append(H);
             
         });
-        //console.log(dt[0].sbc_id);
         
+        modalLoading('S');
         subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
-        $('#txtSubCategory').on('change', function () {
-            let subcatId = $(this).val();
-            //let word = $('txtProductFinder').val();
-
-            //console.log(word);
-			showButtonToCharge('S');
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');										 
-            getProducts(word,subcatId);
-            subCtg = subcatId;
+        
+        $('#txtSubCategory')
+            .unbind('change')
+            .on('change', function () {
+                let subcatId = $(this).val();
+                console.log('cambiar subcat');
+                modalLoading('S');										 
+                getProducts(word,subcatId); // AQUI al cambiar subcategoria
+                subCtg = subcatId;
         });
     }
 }
@@ -578,12 +577,6 @@ function putCategories(dt) {
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
             
-            //$('#txtSubCategory').val('Selecciona la subategoria');
-            showButtonToCharge('S');
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
         });
     }
@@ -1030,6 +1023,7 @@ function showListProducts(item) {
     $('#txtProductFinder')
         .unbind('keyup')
         .on('keyup', function () {
+            
             let text = $(this).val().toUpperCase();
             //showButtonToCharge('S');
             selProduct(text);
@@ -1039,7 +1033,7 @@ function showListProducts(item) {
         $('.invoice__section-products').fadeOut(400, function () {
             $('#listProductsTable table tbody').html('');
             $('#txtProductFinder').val('');
-            showButtonToCharge('S');
+            /* showButtonToCharge('S'); */
             limpiar_form();
         });
     });
@@ -1052,14 +1046,16 @@ function showListProducts(item) {
 function limpiar_form(){
     $('#txtProductFinder').val('');
     $('#txtCategory').val(0);
-    $('#txtSubCategory').val(0);
-    getProducts('', 0);
+    $('#txtSubCategory').html('');
+    $('#txtSubCategory').append('Selecciona la subactegoria');
+    
+    $('#listProductsTable table tbody').html('');
     subCtg =0;
     
 }
 /** ++++++ Selecciona los productos del listado */
 function selProduct(res) {
-
+    
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
@@ -1067,13 +1063,14 @@ function selProduct(res) {
     if (res.length > 3) {
         let dstr = 0;
         let dend = 0;
+        console.log(res);
         if (res.length == 4) {
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');  //jjr
+            modalLoading('S');
             if (subCtg>0) {
+                
                 if (glbSec != 4) {
-                    // console.log('Normal');
-                    getProducts(res.toUpperCase(), sub_id);
+                    console.log('Por categoria');
+                    getProducts(res.toUpperCase(), sub_id); // aqui llena por subcategoria
                     
                 } else {
                     // console.log('Subarrendo');
@@ -1081,17 +1078,18 @@ function selProduct(res) {
                     
                 }
             } else {
+               
                 if (glbSec != 4) {
-                    // console.log('Normal');
+                    console.log('por palabra');
                     //getProducts(res.toUpperCase(), sub_id);
-                    getProductsInput(res.toUpperCase());
+                    getProductsInput(res.toUpperCase()); // aqui llena buscando por palabra
                 } else {
                     // console.log('Subarrendo');
                     getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
                     //getProducts(res.toUpperCase(), sub_id);
                 }
             }
-            
+           
         } else {
             rowCurr.css({ display: 'none' });
             rowCurr.each(function (index) {
@@ -1109,7 +1107,7 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        //$(`#listProductsTable table tbody`).html('');
+        $(`#listProductsTable table tbody`).html('');
         rowCurr.addClass('oculto');
     }
 }
@@ -1142,6 +1140,7 @@ function putProducts(dt) {
         $('#listProductsTable table tbody').append(H);
     });
     }
+    modalLoading('H');
     $('.toCharge').addClass('hide-items');   //jjr
 
     $('#listProductsTable table tbody tr')
@@ -2811,7 +2810,11 @@ function showButtonVersion(acc) {
     elm = $('.version__button .invoice_button');
     acc == 'S'
         ? elm.css({ visibility: 'visible' })
-        : elm.css({ visibility: 'hidden' });
+        : elm.css({ visibility: 'hidden' }); 
+    acc == 'S'
+        ? elm.attr("data-visible", true)
+        : elm.attr("data-visible", false);
+    
 }
 function showButtonToPrint(acc) {
     elm = $('.invoice_controlPanel .toPrint');
