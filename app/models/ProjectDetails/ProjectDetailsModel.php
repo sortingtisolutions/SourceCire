@@ -149,7 +149,7 @@ class ProjectDetailsModel extends Model
     public function listDiscounts($params)
     {
         $level = $this->db->real_escape_string($params['level']);
-        $qry = "SELECT * FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
+        $qry = "SELECT *, dis_discount*100 AS dis_porcentaje FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
         return $this->db->query($qry);
     }    
 
@@ -856,8 +856,8 @@ public function promoteToProject($params)
         // Busca serie que se encuentre disponible y obtiene el id
         $qry1 = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count 
                  FROM ctt_series WHERE prd_id = $prodId 
-                 AND pjtdt_id = 0
-                 ORDER BY ser_reserve_count asc LIMIT 1;";
+                 AND (pjtdt_id = 0 OR ISNULL(pjtdt_id))
+                 ORDER BY ser_reserve_count asc LIMIT 1;"; // Cambiado por Edna
         $result =  $this->db->query($qry1);
         
         $series = $result->fetch_object();
