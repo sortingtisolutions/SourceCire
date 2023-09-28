@@ -1,4 +1,4 @@
-let pjts = null;
+let pjtgbl,verIdgbl,cusgbl,prdCmgbl;
 
 const pjs = $('#txtProjects');
 const exp = $('#txtExpendab');
@@ -22,7 +22,7 @@ const size = [
     { s: 70 },
     { s: 70 },
     { s: 90 },
-    { s: 600 },
+    { s: 500 },
 ];
 
 $('document').ready(function () {
@@ -34,6 +34,7 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
+       
         getProjects();
         widthTable(tblprod);
         listChgStatus();
@@ -41,11 +42,9 @@ function inicial() {
         $('#GuardarClosure').on('click', function () {
             let locID = $(this);
             let pjtid = locID.parents('tr').attr('id');
-
             //console.log('Paso ToWork..', pjtid);
             confirm_to_Closure(pjtid);
-            saveDocumentClosure();
-        
+           
          });
       
          $('#PrintClosure').on('click', function () {
@@ -71,46 +70,49 @@ function listChgStatus() {
 
 // Obtiene el listado de los proyectos en etapa de pryecto
 function getProjects() {
-    let data = [
-        {
-            pjtId: '',
-        },
-    ];
+    let data = [{  pjtId: '', }, ];
 
     var pagina = 'ProjectClosed/listProjects';
     var par = JSON.stringify(data);
     var tipo = 'JSON';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
-
-    function putProjects(dt) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.pjt_id}">${u.pjt_name}</option>`;
-            pjs.append(H);
-        });
-
-        pjs.unbind('change').on('change', function () {
-            deep_loading('O');
-            let pjtId = $(this).val();
-            activeProjectsFunctions(pjtId);
-        });
-    }
-
-    function activeProjectsFunctions(pjtId) {
-        deep_loading('C');
-
-        activaCampos(pjtId);
-        findExpenda(pjtId);
-        // findMaintenance(pjtId);
-        getTotalMantenance(pjtId);
-        findExtraDiesel(pjtId);
-        findDiscount(pjtId);
-
-        setTimeout(() => {
-            updateTotals();
-        }, 2000);
-    }
 }
+
+function putProjects(dt) {
+    
+    $.each(dt, function (v, u) {
+        let H = `<option value="${u.pjt_id}|${u.cus_id}">${u.pjt_name}</option>`;
+        pjs.append(H);
+    });
+    $('#txtExpendab').val('0.00');
+
+    pjs.unbind('change').on('change', function () {
+        deep_loading('P');
+        // console.log('VAL-', $(this).val());
+        let pjtId = $(this).val().split('|')[0];
+        let cusId = $(this).val().split('|')[1];
+        pjtgbl=pjtId;
+        cusgbl=cusId;
+        // console.log('Variables',pjtgbl, cusgbl);
+        $('#txtExpendab').html('0.00');
+        activeProjectsFunctions(pjtId);
+    });
+}
+
+function activeProjectsFunctions(pjtId) {
+    findExpenda(pjtId);
+    getTotalMantenance(pjtId);
+    findExtraDiesel(pjtId);
+    findDiscount(pjtId);
+    activaCampos(pjtId);
+
+    setTimeout(() => {
+        updateTotals();
+    }, 1000);
+    deep_loading('C');
+}
+
 
 function activaCampos(pjtId) {
     $('.list-finder').removeClass('hide-items');
@@ -127,122 +129,97 @@ function getProjectContent(pjtId) {
     var tipo = 'JSON';
     var selector = putProjectContent;
     fillField(pagina, par, tipo, selector);
-    }
+}
 
-    function putProjectContent(dt) {
-        console.log(dt);
-        if (dt[0].pjtdt_id!=''){
-            /* <td class="lf">${u.ser_comments}</td> 
-                <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.ser_id}" value="">${u.ser_comments}</td> */
-            tblprod.find('tbody').html('');
-            $.each(dt, function (v, u) {
+function putProjectContent(dt) {
+    // console.log(dt);
+    if (dt[0].pjtdt_id!=''){
+        /* <td class="lf">${u.ser_comments}</td> 
+            <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.ser_id}" value="">${u.ser_comments}</td> */
+        tblprod.find('tbody').html('');
+        verIdgbl=dt[0].ver_id;
+        $.each(dt, function (v, u) {
+            let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
+                        <td class="cn"><i class='fas fa-pen modif'></i></td>
+                        <td class="lf">${u.pjtdt_prod_sku}</td>
+                        <td class="lf">${u.pjtcn_prod_name}</td>
+                        <td class="cn">1</td>
+                        <td class="cn">${u.ser_situation}</td>
+                        <td class="rg">${fnm(u.costo, 2, '.', ',')}</td>
+                        <td class="lf">${u.ser_comments}</td>
+                    </tr>`;
+            tblprod.append(H);
+        });
+    }    
+    widthTable(tblprod);
 
-                let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
-                            <td class="cn"><i class='fas fa-pen modif'></i></td>
-                            <td class="lf">${u.pjtdt_prod_sku}</td>
-                            <td class="lf">${u.pjtcn_prod_name}</td>
-                            <td class="cn">1</td>
-                            <td class="cn">${u.ser_situation}</td>
-                            <td class="rg">${fnm(u.costo, 2, '.', ',')}</td>
-                            <td class="lf">${u.ser_comments}</td>
-                        </tr>`;
-                tblprod.append(H);
-            });
-        }    
-        widthTable(tblprod);
+    let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo), 0);
+    totprj.html(fnm(tot, 2, '.', ','));
+    // console.log(tot);
+    activeIcons();
+}
 
-        let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo), 0);
-        totprj.html(fnm(tot, 2, '.', ','));
-        console.log(tot);
-        activeIcons();
-    }
+function activeIcons() {
+    // console.log('Activa Iconos');
+    $('.modif')
+        .unbind('click')
+        .on('click', function () {
+            console.log('Click Iconos');
+            let sltor = $(this);
+            let prdId = sltor.parents('tr').attr('id'); 
+            let Lname = sltor.parents('tr').attr('iname');
+            let prdNm = 'Anexo de comentarios a: ' + Lname ; //+ '-' + Lname
+            console.log('Click Iconos',prdId, Lname);
+            // $('#txtPrdName').val(Lname);
+
+            $('#ProductModal').removeClass('overlay_hide');
+            $('.overlay_closer .title').html(prdNm);
+            putSelectProduct(prdId);
+
+            $('#ProductModal .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    $('.overlay_background').addClass('overlay_hide');
+                });
+        });
+
+}
 
 function findExpenda(pjtId) {
     let data = [
         { pjtId: pjtId, },
     ];
-
     var pagina = 'ProjectClosed/saleExpendab';
     var par = JSON.stringify(data);
     var tipo = 'JSON';
     var selector = putSaleExpendab;
     fillField(pagina, par, tipo, selector);
-
-    function putSaleExpendab(dt) {
-        let cfr = dt[0].expendables;
-        totexp.html(fnm(cfr, 2, '.', ','));
-        exp.unbind('keyup').on('keyup', function () {
-            let val = $(this).val();
-            if (val == '') {
-                val = cfr;
-            }
-            totexp.html(fnm(val, 2, '.', ','));
-            updateTotals();
-        });
-    }
 }
 
-function saveDocumentClosure() {
-        let cloTotProy = $('#totProject').val();
-        let cloTotMaint = $('#totMaintenance').val();
-        let cloTotExpen = $('#totExpendab').val();
-        let cloTotCombu = $('#totDiesel').val();
-        let cloTotDisco = $('#totDiscount').val();
-        let cloCommen = $(`#txtComments`).val();
-        let cusId = 1;
-        let pjtid = 1;
-        let usrid = 1;
-        let verid = 1;
-
-        var par = `
-            [{
-                "cloTotProy" : "${cloTotProy}",
-                "cloTotMaint" : "${cloTotMaint}",
-                "cloTotExpen" : "${cloTotExpen}",
-                "cloTotCombu" : "${cloTotCombu}",
-                "cloTotDisco" : "${cloTotDisco}",
-                "cloCommen" : " ${cloCommen}",
-                "cusId" :   "${cusId}",
-                "pjtid" : "${pjtid}",
-                "usrid" : "${usrid}",
-                "verid" : "${verid}"
-            }]
-        `;
-        console.log('EDITA ',par);
-        var pagina = 'ProjectClosed/saveDocumentClosure';
-        var tipo = 'html';
-        var selector = resSaveClosure;
-        fillField(pagina, par, tipo, selector);
+function putSaleExpendab(dt) {
+    let cfr = dt[0].expendables;
+    exp.val(fnm(dt[0].expendables, 2, '.', ','));
+    totexp.html(fnm(cfr, 2, '.', ','));
+    exp.unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        totexp.html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
 }
 
-function resSaveClosure(dt) {
-    console.log(dt);
-    /* $('#CustomerModal .btn_close').trigger('click');
-    activeIcons(); */
-}
 function getTotalMantenance(pjtId){
-    console.log(pjtId);
     var pagina = 'ProjectClosed/totalMantenimiento';
     var par = `[{"pjtId":"${pjtId}"}]`;
     var tipo = 'json';
     var selector = putTotalMaintenance;
     fillField(pagina, par, tipo, selector); 
 }
-function findMaintenance(dt) {
-    //let cfr = 0;
-    
-    /* man.unbind('keyup').on('keyup', function () {
-        let val = $(this).val();
-        if (val == '') {
-            val = cfr;
-        }
-        totman.html(fnm(val, 2, '.', ','));
-        updateTotals();
-    }); */  // Modificado por Edna - v3
 
-}
 function putTotalMaintenance(dt){
-    console.log(dt);
+    // console.log(dt);
     let cfr = 0;
     man.val(fnm(dt[0].maintenance, 2, '.', ','));
     totman.html(fnm(dt[0].maintenance, 2, '.', ','));
@@ -259,6 +236,7 @@ function putTotalMaintenance(dt){
 
 function findDiscount(pjtId) {
     let cfr = 0;
+    dis.val("0.00", 2, '.', ',');
     dis.unbind('keyup').on('keyup', function () {
         let val = $(this).val();
         if (val == '') {
@@ -271,6 +249,7 @@ function findDiscount(pjtId) {
 
 function findExtraDiesel(pjtId) {
     let cfr = 0;
+    extd.val("0.00", 2, '.', ',');
     extd.unbind('keyup').on('keyup', function () {
         let val = $(this).val();
         if (val == '') {
@@ -282,20 +261,24 @@ function findExtraDiesel(pjtId) {
 }
 
 function updateTotals() {
-    let total = parseFloat(totprj.html().replace(',', ''));
-    total += parseFloat(totexp.html().replace(',', ''));
-    total += parseFloat(totman.html().replace(',', ''));
-    total += parseFloat(totdie.html().replace(',', ''));
-    total -= parseFloat(totdis.html().replace(',', ''));
-    // console.log(total);
+    let total = parseFloat(totprj.html().replace(/,/g, ''));
+    // console.log('2--',total);
+    // totals.html(fnm(total, 2, ',', '.'));
+    // let totalexp = parseFloat(totexp.html().replace(/,/g, ''));
+    total += parseFloat(totexp.html().replace(/,/g, ''));
+    total += parseFloat(totman.html().replace(/,/g, ''));
+    total += parseFloat(totdie.html().replace(/,/g, ''));
+    total -= parseFloat(totdis.html().replace(/,/g, ''));
+    // console.log('3--',total);
     // totals.html(total);
-    totals.html(fnm(total, 2, ',', '.'));
+    totals.html(fnm(total, 2, '.', ','));
 }
 
 function widthTable(tbl) {
     $.each(size, (i, v) => {
         let thcel = tbl.find('thead tr').children('th').eq(i);
         let tdcel = tbl.find('tbody tr').children('td').eq(i);
+        // console.log('tdcel-',tdcel);
         thcel.css({ width: v.s + 'px' });
         tdcel.css({ width: v.s + 'px' });
     });
@@ -305,52 +288,62 @@ function widthTable(tbl) {
     tbl.sticky({ top: 'thead tr:first-child' });
 }
 
+function saveDocumentClosure() {
+    let user = Cookies.get('user').split('|');
+    let u = user[0];
+    let n = user[2];
+   
+    parseFloat(totprj.html().replace(/,/g, ''));
+    let cloTotProy = parseFloat(totprj.html().replace(/,/g, ''));
+    let cloTotMaint =parseFloat(totman.html().replace(/,/g, ''));
+    let cloTotExpen = parseFloat(totexp.html().replace(/,/g, ''));
+    let cloTotCombu =parseFloat(totdie.html().replace(/,/g, ''));
+    let cloTotDisco = parseFloat(totdis.html().replace(/,/g, ''));
+    let cloCommen = $(`#txtComments`).val();
+    let pjtId = pjtgbl;
+    let usrid = u;
+    let verid = verIdgbl;
+    let cusId = cusgbl;
+
+    var par = `
+        [{  "cloTotProy" : "${cloTotProy}",
+            "cloTotMaint" : "${cloTotMaint}",
+            "cloTotExpen" : "${cloTotExpen}",
+            "cloTotCombu" : "${cloTotCombu}",
+            "cloTotDisco" : "${cloTotDisco}",
+            "cloCommen" : " ${cloCommen}",
+            "cusId" :   "${cusId}",
+            "pjtid" : "${pjtId}",
+            "usrid" : "${usrid}",
+            "verid" : "${verid}"
+        }] `;
+    console.log('Save-',par);
+    var pagina = 'ProjectClosed/saveDocumentClosure';
+    var tipo = 'html';
+    var selector = resSaveClosure;
+    fillField(pagina, par, tipo, selector);
+}
+
+function resSaveClosure(dt) {
+    console.log('resSaveClosure',dt);
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+    
+}
+
 function confirm_to_Closure(pjtid) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
-    //borra paquete +
     $('#btnClosure').on('click', function () {
-        /* let Id = $('#txtIdClosure').val();
-        let tabla = $('#tblProducts').DataTable(); */
-        $('#starClosure').modal('hide');
-
-        //console.log('Datos',pjtid,Id);
-        /* var pagina = 'WhOutputs/UpdateSeriesToWork';
-        var par = `[{"pjtid":"${pjtid}"}]`;
-        var tipo = 'json';
-        var selector = putToWork;
-        fillField(pagina, par, tipo, selector); */
+    $('#starClosure').modal('hide');
+    saveDocumentClosure();
     });
 }
 
-function putToWork(dt){
-    console.log(dt)
-}
-
-function activeIcons() {
-    console.log('Activa Iconos');
-    $('.modif')
-        .unbind('click')
-        .on('click', function () {
-            console.log('Click Iconos');
-            let sltor = $(this);
-            let prdId = sltor.parents('tr').attr('id'); 
-            let Lname = sltor.parents('tr').attr('iname');
-            let prdNm = 'Modifica producto' ; //+ '-' + Lname
-            console.log('Click Iconos',prdId, Lname);
-            $('#txtPrdName').val(Lname);
-
-            $('#ProductModal').removeClass('overlay_hide');
-            $('.overlay_closer .title').html(prdNm);
-            putSelectProduct(prdId);
-            $('#ProductModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                });
-        });
-
-}
+// function putToWork(dt){
+//     console.log(dt)
+// }
 
 function putChgStatus(dt) {
     if (dt[0].cin_id != '0') {
@@ -362,37 +355,45 @@ function putChgStatus(dt) {
     }
 }
 
-function saveEditProduct() {
-    
-    let prdId = $('#txtPrdId').val();
-    let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-    let prdCn = $(`#txtCinId option:selected`).val() == 0 ? '' : $(`#txtCinId option:selected`).text().split('-')[0];
-    let prdNp = $('#txtPrdNameProvider').val();
+function putSelectProduct(prdId) {
+    // listChgStatus();
 
-    var par = `
-            [{
-                "prdId" : "${prdId}",
-                "prdNm" : "${prdNm}",
-                "prdCn" : "${prdCn}",
-                "prdNp" : "${prdNp}"
-            }] `;
-    console.log(par);
+    $('#btn_save')
+        .unbind('click')
+        .on('click', function () {
+        // PASA LOS VALORES DEL COMENTARIO A LA TABLA PRINCIPAL
+            let prdCmgbl = $('#txtCommentPrd').val().toUpperCase();
+            let tbl = $(`#tblProducts tr[id="${prdId}"]`);
+            $(tbl.find('td')[6]).text(prdCmgbl);
+            $('#ProductModal .btn_close').trigger('click');
+        //LIMPIA EL CAMPO DEL MODAL
+            $('#txtCommentPrd').val('');
+            // saveEditProduct(prdId);
+        });
+}
+
+function saveEditProduct(prdId) {
+    
+    // let prdId = $('#txtPrdId').val();
+    // let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
+    // let prdCn = $(`#txtCinId option:selected`).val() == 0 ? '' : $(`#txtCinId option:selected`).text().split('-')[0];
+    // let prdNp = $('#txtCommentPrd').val();
+
+    // var par = `
+    //         [{
+    //             "prdId" : "${prdId}",
+    //             "prdNm" : "${prdNm}",
+    //             "prdCn" : "${prdCn}",
+    //             "prdNp" : "${prdNp}"
+    //         }] `;
+    // console.log(par);
    /*  var pagina = 'Products/saveEdtProduct';
     var tipo = 'html';
     var selector = resEdtProduct;
     fillField(pagina, par, tipo, selector); */
-    resEdtProduct(prdId);
+    // resEdtProduct(prdId);
 }
 
-function putSelectProduct(dt) {
-    // listChgStatus();
-    $('#btn_save')
-        .unbind('click')
-        .on('click', function () {
-            $('#txtCinId').val('');
-            saveEditProduct();
-        });
-}
 
 function resEdtProduct(dt) {
     $('#txtCinId').val('');

@@ -92,16 +92,17 @@ class ProjectClosedController extends Controller
     {
 
         $result = $this->model->saveDocumentClosure($request_params);
-        $i = 0;
-        while ($row = $result->fetCh_assoc())
-        {
-            $rowdata[$i] = $row;
-            $i++;
-        } 
-        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"clo_id":"0"}]';	
-        echo $res;
+        // $i = 0;
+        // while ($row = $result->fetCh_assoc())
+        // {
+        //     $rowdata[$i] = $row;
+        //     $i++;
+        // } 
+        // $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"clo_id":"0"}]';	
+        echo $result;
 
     }
+    
     // Añadido por Edna v3
     public function totalMantenimiento($request_params)
     {

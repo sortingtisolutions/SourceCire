@@ -189,7 +189,7 @@ class BudgetModel extends Model
 public function listDiscounts($params)
 {
     $level = $this->db->real_escape_string($params['level']);
-    $qry = "SELECT * FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
+    $qry = "SELECT *, dis_discount*100 AS dis_porcentaje FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
     return $this->db->query($qry);
 }    
 
