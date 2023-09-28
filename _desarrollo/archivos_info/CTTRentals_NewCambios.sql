@@ -304,3 +304,12 @@ CREATE TABLE `prc_into_crontab` (
 COMMENT='Tabla que registra los procesos a ejecutar en crontab para accesorios'
 COLLATE='utf8mb4_general_ci'
 ;
+
+--************** 26 sep 23 *****************
+ALTER TABLE `ctt_documents_closure`
+	CHANGE COLUMN `clo_total_proyects` `clo_total_proyects` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Suma total de la renta del proyecto' AFTER `clo_id`,
+	CHANGE COLUMN `clo_total_maintenance` `clo_total_maintenance` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Captura del costo de mantenimiento' AFTER `clo_total_proyects`,
+	CHANGE COLUMN `clo_total_expendables` `clo_total_expendables` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Captura del Costo de la venta de expendables' AFTER `clo_total_maintenance`,
+	CHANGE COLUMN `clo_total_diesel` `clo_total_diesel` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Captura del costo del Combustible' AFTER `clo_total_expendables`,
+	CHANGE COLUMN `clo_total_discounts` `clo_total_discounts` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Monto total del descuento a aplicar' AFTER `clo_total_diesel`,
+	CHANGE COLUMN `clo_comentarios` `clo_comentarios` VARCHAR(300) NULL DEFAULT '' COMMENT 'Comentarios al cierre' COLLATE 'utf8mb4_general_ci' AFTER `clo_fecha_cierre`;
