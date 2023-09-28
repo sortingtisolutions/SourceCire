@@ -187,7 +187,7 @@ function eventsAction() {
                     '.invoice__box-table table tbody tr.budgetRow'
                 ).length;
                 if (nRows > 0) {
-                    modalLoading('S');
+                    modalLoading('G');
                     let pjtId = $('.version_current').attr('data-project');
                     let verCurr = $(
                         '.sidebar__versions .version__list ul li:first'
@@ -433,7 +433,7 @@ function putSubCategories(dt) {
             
         });
         
-        modalLoading('S');
+        modalLoading('B');
         subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
         
@@ -442,7 +442,7 @@ function putSubCategories(dt) {
             .on('change', function () {
                 let subcatId = $(this).val();
                 console.log('cambiar subcat');
-                modalLoading('S');										 
+                modalLoading('B');										 
                 getProducts(word,subcatId); // AQUI al cambiar subcategoria
                 subCtg = subcatId;
         });
@@ -694,9 +694,7 @@ function putDiscounts(dt) {
     $('#selDiscount').html('');
     $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${
-            u.dis_discount * 100
-        }%</option>`;
+        let H = `<option value="${u.dis_discount}">${ parseInt(u.dis_porcentaje) }%</option>`;
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
@@ -744,7 +742,7 @@ function putVersion(dt) {
                 .attr('data-versionCode', versionCode);
 
             $('#insuDesctoPrc').html(discount * 100 + '<small>%</small>');
-
+            modalLoading('V');
             getBudgets();
             showButtonVersion('H');
             showButtonComments('S');
@@ -753,6 +751,8 @@ function putVersion(dt) {
         });
 
         $('#V' + firstVersion).trigger('click');
+    }else{
+        modalLoading('H');
     }
 }
 
@@ -824,6 +824,8 @@ function selectorProjects(pjId) {
             showButtonVersion('H');
             showButtonToPrint('H');
             showButtonToSave('H');
+            
+            modalLoading('B');
             actionSelProject($(this));
             $('.projectfinder').trigger('click');
         });
@@ -1065,7 +1067,7 @@ function selProduct(res) {
         let dend = 0;
         console.log(res);
         if (res.length == 4) {
-            modalLoading('S');
+            modalLoading('B');
             if (subCtg>0) {
                 
                 if (glbSec != 4) {
@@ -1246,6 +1248,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
+    modalLoading('H');
     $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -2908,17 +2911,50 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-    if (acc == 'S') {
+    /* if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');
         $('.invoice__loading')
             .slideDown('slow')
             .css({ 'z-index': 401, display: 'flex' });
+        $('#loadingText').text('BUSCANDO...');
     } else {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
         });
+    } */
+
+    if (acc == 'H') {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    } else {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+        if (acc == 'S') {
+            $('#loadingText').text('Promoviendo Cotización');
+            $('#texto_extra').text('La cotización se encuentra en proceso de ser promovida a presupuesto, este proceso puede tardar varios minutos');
+        } else {
+            if (acc == 'B') {
+                $('#loadingText').text('Buscando...');
+                $('#texto_extra').text('')
+            } else{
+                if (acc == 'V') {
+                    $('#loadingText').text('Cargando Version...');
+                    $('#texto_extra').text('')
+                }
+                if( acc == 'G'){
+                    $('#loadingText').text('Guardando Version...');
+                    $('#texto_extra').text('')
+                }
+            }
+        }
+        
     }
 }
+
+
 
 /**  +++ Oculta los elementos del listado que no cumplen con la cadena  */
 function sel_items(txt, obj) {

@@ -621,12 +621,11 @@
 
 <!-- loading -->
     <div class="invoice__loading modalLoading">
-        <div class="box_loading">
-            <p class="text_loading">
-                Promoviendo cotización<br>
-                <i class="fas fa-spinner spin"></i> 
-                </p>
-            <p>La cotización se encuentra en proceso de ser promovida a presupuesto, este proceso puede tardar varios minutos</p>
+        <div class="box_loading" style='width: 370px; height: 200px;'>
+            <p class="text_loading"><div id='loadingText' style='font-size: 1.5rem; text-transform: capitalize;'></div>
+                <i class="fas fa-spinner spin" style='color: hsl(200, 85%, 50%); font-size: 4em; padding: 0.5rem; animation: rotar 2s infinite;'></i> 
+            </p>
+            <p id='texto_extra'></p>
         </div>
     </div>
 

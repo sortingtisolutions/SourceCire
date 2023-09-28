@@ -12,6 +12,7 @@ function inicial() {
     getPerfilesUsuario();
     getPuestos();
     getUserReport();
+    getAreas();
 
     //Modal - lista - Permisos *
     $('#listDisponible').on('click', 'a', function () {
@@ -79,7 +80,28 @@ function addZeroNumber(number, length) {
     }
     return my_string;
 }
+// Enlista las areas
+function getAreas() {
+    var pagina = 'Usuarios/listAreas';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = putAreas;
+    fillField(pagina, par, tipo, selector);
+}
+function putAreas(dt) {
+    
+    if (dt[0].area_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.are_id}"> ${u.are_name}</option>`;
+            $('#AreaEmpUsuario').append(H);
+        });
 
+        $('#AreaEmpUsuario').on('change', function () {
+            let catId = $(this).val();
+            console.log($(this).val());
+        });
+    }
+}
 // Optiene los perfiles disponibles *
 function getIdModuluesPerfiles(idPerfil) {
     var location = 'perfilUser/getIdModuluesPerfiles';
@@ -110,7 +132,7 @@ function getPerfilesUsuario(idPerfil) {
             console.log('Perf-',respuesta);
             var renglon = "<option id='0'  value=''>Seleccione un perfil...</option> ";
             respuesta.forEach(function (row, index) {
-                renglon += '<option id=' + row.prf_id + 'value="">' + row.prf_name + '</option> ';
+                renglon += '<option id="' + row.prf_id + '" value="'+ row.prf_id +'">' + row.prf_name + '</option> ';
             });
             $('#selectPerfilUsuario').append(renglon);
 
@@ -127,16 +149,27 @@ function validaFormulario() {
     var valor = 1;
     var forms = document.querySelectorAll('.needs-validation');
     Array.prototype.slice.call(forms).forEach(function (form) {
+        console.log(form);
         if (!form.checkValidity()) {
             form.classList.add('was-validated');
             valor = 0;
         }
     });
-    if ($('#listAsignado').find('a').length == 0) {
+    
+   /*  if ($('#listAsignado').find('a').length == 0) {
         valor = 0;
+    } */
+    if ($('#IdUsuario').val()=='') {
+        if ($('#PassUsuario').val().length == 0) {
+            $('#PassUsuario').addClass('fail');
+            valor = 0;
+        }
     }
-    return valor;
+    // console.log($('#PassUsuario').val().length);
+    return valor; 
+
 }
+
 
 //Edita el Usuario *
 function EditUsuario(id, idPerfil) {
@@ -150,20 +183,21 @@ function EditUsuario(id, idPerfil) {
         data: {id: id},
         url: location,
         success: function (respuesta) {
-            //console.log(respuesta);
+            console.log(respuesta);
             $('#IdUsuario').val(respuesta.usr_id);
             $('#NomUsuario').val(respuesta.emp_fullname);
             $('#UserNameUsuario').val(respuesta.usr_username);
 
-            $('#PassUsuario').val(respuesta.usr_password);
+            // $('#PassUsuario').val(respuesta.usr_password);
             // $("#PassUsuarioRow").attr("hidden",true);
-
-            $('#AreaEmpUsuario').val(respuesta.emp_area);
+            // $('#PassUsuario').attr("placeholder", "Cambiar Contraseña");
+            $('#AreaEmpUsuario').val(respuesta.are_id);
             $('#NumEmpUsuario').val(respuesta.emp_number);
 
             $('#lastDate').val(respuesta.usr_dt_last_access);
             $('#userRegistry').val(respuesta.usr_dt_registry);
-
+            $('#EmpIdUsuario').val(respuesta.emp_id);
+            
             getPerfilesUsuario(idPerfil);
             getUserReport(respuesta.emp_report_to);
             getPuestos(respuesta.pos_id);
@@ -245,14 +279,15 @@ function SaveUsuario() {
     var NomUsuario = $('#NomUsuario').val().trim();
     var UserNameUsuario = $('#UserNameUsuario').val().trim();
     var PassUsuario = $('#PassUsuario').val().trim();
-    var AreaEmpUsuario = $('#AreaEmpUsuario').val().trim();
+    let AreaEmpUsuario = $('#AreaEmpUsuario').val();
+    let AreaNombre = $('#AreaEmpUsuario option:selected').text();
     var NumEmpUsuario = $('#NumEmpUsuario').val().trim();
     var EmpIdUsuario = $('#EmpIdUsuario').val().trim();
 
-    var idPerfil = $('#selectPerfilUsuario option:selected').attr('id');
+    var idPerfil = $('#selectPerfilUsuario').val();
     var idUserReport = $('#selectRowUserReporta option:selected').attr('id');
 
-    var idPuesto = $('#selectRowPuestos option:selected').attr('id');
+    var idPuesto = $('#selectRowPuestos').val();
     var NomPuesto = $('#selectRowPuestos option:selected').text();
 
     var modulesAsig = '';
@@ -262,7 +297,7 @@ function SaveUsuario() {
             modulesAsig += $(this).attr('id') + ',';
         });
     modulesAsig = modulesAsig.slice(0, -1);
-
+    console.log(AreaNombre);
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -278,6 +313,7 @@ function SaveUsuario() {
             idPerfil: idPerfil,
             idUserReport: idUserReport,
             idPuesto: idPuesto,
+            areaNombre: AreaNombre,
         },
         url: location,
         success: function (respuesta) {
@@ -338,6 +374,8 @@ function LimpiaModal() {
     $('#AreaEmpUsuario').val('');
     $('#NumEmpUsuario').val('');
     $('#selectPerfilUsuario').html('');
+    $('#selectRowUserReporta').val(0);
+    $('#selectRowPuestos').val(0);
     $('#listDisponible').html('');
     $('#listAsignado').html('');
     $('#formUsuario').removeClass('was-validated');
