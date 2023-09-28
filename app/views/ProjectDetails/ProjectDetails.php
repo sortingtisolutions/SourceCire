@@ -326,7 +326,7 @@
 <!-- Buscador de clientes y proyectos -->
 
 <!-- Listado de productos -->
-    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute; top:2px; left:250px;right:10px;bottom:80px;">
+    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute; top:2px; left:250px;right:10px;bottom:80px;z-index:200;">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
             <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide-items" style="color:#008000">Cargando....</span></div>
@@ -692,12 +692,18 @@
 </div>
      <!-- loading -->
     <div class="invoice__loading modalLoading">
-        <div class="box_loading">
+        <!-- <div class="box_loading">
             <p class="text_loading">
                 Guardando documento<br>
                 <i class="fas fa-spinner spin"></i> 
                 </p>
             <p>Este proceso puede tardar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
+        </div> -->
+        <div class="box_loading" style='width: 370px; height: 200px;'>
+            <p class="text_loading"><div id='loadingText' style='font-size: 1.5rem; text-transform: capitalize;'></div>
+                <i class="fas fa-spinner spin" style='color: hsl(200, 85%, 50%); font-size: 4em; padding: 0.5rem; animation: rotar 2s infinite;'></i> 
+            </p>
+            <p id='texto_extra'></p>
         </div>
      </div>
 <!-- Plantilla de tablas modales -->

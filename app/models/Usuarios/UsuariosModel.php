@@ -13,7 +13,7 @@ class UsuariosModel extends Model
 	public function GetUsuarios()
 	{
 		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, 
-				p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id 
+				p.prf_name, u.usr_dt_registry, u.usr_dt_last_access, p.prf_id
 				FROM ctt_users as u
 				INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
 				LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
@@ -35,7 +35,7 @@ class UsuariosModel extends Model
 		$modulesAsing = substr($modulesAsing, 0, -1);
 
 		$qry = "SELECT 
-					u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id , e.emp_area, e.emp_id , e.emp_report_to , e.pos_id, u.usr_password
+					u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id , e.emp_area, e.emp_id , e.emp_report_to , e.pos_id, u.usr_password, e.are_id
 				FROM ctt_users AS u
 				INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
 		        LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
@@ -55,6 +55,7 @@ class UsuariosModel extends Model
 			"emp_report_to"=>$row[10],	
 			"pos_id"=>$row[11],
 			"usr_password"=>$row[12],
+			"are_id"=>$row[13],
 			"modulesAsing"=>$modulesAsing);
 		}
 		return $item;
@@ -67,39 +68,48 @@ class UsuariosModel extends Model
 			try {
 
 				$pass = password_hash($this->db->real_escape_string($params['PassUsuario']), PASSWORD_DEFAULT);
+				$NumEmpUsuario = $this->db->real_escape_string($params['NumEmpUsuario']);
+				$NomUsuario = $this->db->real_escape_string($params['NomUsuario']);
+				$AreaEmpUsuario = $this->db->real_escape_string($params['AreaEmpUsuario']);
 
+				$IdUsuario = $this->db->real_escape_string($params['IdUsuario']);
+				$idPuesto = $this->db->real_escape_string($params['idPuesto']);
+				$EmpIdUsuario = $this->db->real_escape_string($params['EmpIdUsuario']);
 
+				$NumEmpUsuario = $this->db->real_escape_string($params['NumEmpUsuario']);
+				$UserNameUsuario = $this->db->real_escape_string($params['UserNameUsuario']);
+				$idPerfil = $this->db->real_escape_string($params['idPerfil']);
+				$idUserReport = $this->db->real_escape_string($params['idUserReport']);
+
+				$areaNombre = $this->db->real_escape_string($params['areaNombre']);
 				//Inserta Usuario-Empleado
 				$qry = "INSERT into ctt_employees(emp_number, emp_fullname, emp_area, emp_status, pos_id, emp_report_to,are_id) 
-				values(".$params['NumEmpUsuario'].",'".$params['NomUsuario']."', '".$params['AreaEmpUsuario']."',1,".$params['idPuesto'].",".$params['idUserReport'].",'".$params['AreaEmpUsuario']."');";
+				values('$NumEmpUsuario','$NomUsuario', '$areaNombre',1,'$idPuesto','$idUserReport','$AreaEmpUsuario');";
 				$this->db->query($qry);
 
 				//optiene id de Usuario insertado
-				$qry = "SELECT MAX(emp_id) AS id FROM ctt_employees;";
-				$result = $this->db->query($qry);
-				if ($row = $result->fetch_row()) {
-					$lastid = trim($row[0]);
-				}
+				$lastid = $this->db->insert_id;
+				
 
 				//Inserta Usuario
 				$qry = "INSERT into ctt_users (usr_username, usr_password, usr_dt_registry, emp_id, prf_id,usr_status) 
-				      values('".$params['UserNameUsuario']."','".$pass."',NOW(),".$lastid.", ".$params['idPerfil'].",1 ) ;";
+				      values('$UserNameUsuario','$pass',NOW(),'$lastid', '$idPerfil' ,1);";
 				$this->db->query($qry);
 
 				//optiene id de Usuario insertado
-				$qry = "SELECT MAX(usr_id) AS id FROM ctt_users;";
+				/* $qry = "SELECT MAX(usr_id) AS id FROM ctt_users;";
 				$result = $this->db->query($qry);
 				if ($row = $result->fetch_row()) {
 					$lastid = trim($row[0]);
 				}
-
+ */				$lastidUser = $this->db->insert_id;
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
-					$qry = "INSERT into ctt_users_modules (usr_id,mod_id) values (".$lastid.",".$id.");";
+					$qry = "INSERT into ctt_users_modules (usr_id,mod_id) values ('$lastidUser','$id');";
 					$this->db->query($qry);
 				}
-				$estatus = $lastid;
+				$estatus = $lastidUser;
 			} catch (Exception $e) {
 				$estatus = 0;
 				//echo 'Excepción capturada: ',  $e->getMessage(), "\n";
@@ -111,7 +121,18 @@ class UsuariosModel extends Model
 	{
         $estatus = 0;
 			try {
-				$qry = "SELECT usr_password FROM ctt_users WHERE usr_id = ".$params['IdUsuario'].";";
+				$IdUsuario = $this->db->real_escape_string($params['IdUsuario']);
+				$UserNameUsuario = $this->db->real_escape_string($params['UserNameUsuario']);
+				$idPerfil = $this->db->real_escape_string($params['idPerfil']);
+				$PassUsuario = $this->db->real_escape_string($params['PassUsuario']);
+
+				$NumEmpUsuario = $this->db->real_escape_string($params['NumEmpUsuario']);
+				$NomUsuario = $this->db->real_escape_string($params['NomUsuario']);
+				$AreaEmpUsuario = $this->db->real_escape_string($params['AreaEmpUsuario']);
+				$EmpIdUsuario = $this->db->real_escape_string($params['EmpIdUsuario']);
+				$areaNombre = $this->db->real_escape_string($params['areaNombre']);
+
+				$qry = "SELECT usr_password FROM ctt_users WHERE usr_id = $IdUsuario;";
 
 				$result = $this->db->query($qry);
 				if ($row = $result->fetch_row()) {
@@ -119,41 +140,56 @@ class UsuariosModel extends Model
 				}
 
 				$password = "";
+				if ($PassUsuario!='') {
 
-				if($pass == $params['PassUsuario']){
-					$password = $params['PassUsuario'];
-				}else{
-					$password = password_hash($this->db->real_escape_string($params['PassUsuario']), PASSWORD_DEFAULT);
+					if($pass == $PassUsuario){
+						$password = $PassUsuario;
+					}else{
+						$password = password_hash($this->db->real_escape_string($params['PassUsuario']), PASSWORD_DEFAULT);
+					}
+	
+					//Actualiza Usuario
+					$qry = "UPDATE ctt_users 
+							SET usr_username = '$UserNameUsuario',
+							usr_password = '$password',
+							usr_dt_change_pwd = now(),
+							prf_id = '$idPerfil'
+							WHERE usr_id =$IdUsuario;";
+					$this->db->query($qry);
+	
+				} else {
+					
+					//Actualiza Usuario
+					$qry = "UPDATE ctt_users 
+							SET usr_username = '$UserNameUsuario',
+							usr_dt_change_pwd = now(),
+							prf_id = '$idPerfil'
+							WHERE usr_id =$IdUsuario;";
+					$this->db->query($qry);
+	
 				}
-
-				//Actualiza Usuario
-				$qry = "UPDATE ctt_users 
-						SET usr_username = '".$params['UserNameUsuario']."'
-						,usr_password = '".$password."'
-						,usr_dt_change_pwd = now()
-						,prf_id = '".$params['idPerfil']."'
-						WHERE usr_id =".$params['IdUsuario'].";";
-				$this->db->query($qry);
-
+				
+				
 				//Actualiza Empledo
 				$qry = "UPDATE ctt_employees
-						SET emp_number = '".$params['NumEmpUsuario']."'
-						,emp_fullname = '".$params['NomUsuario']."'
-						,emp_area = '".$params['AreaEmpUsuario']."'
-						WHERE emp_id = ".$params['EmpIdUsuario'].";";
+						SET emp_number = '$NumEmpUsuario',
+						emp_fullname = '$NomUsuario',
+						emp_area = '$areaNombre', 
+						are_id = '$AreaEmpUsuario'
+						WHERE emp_id = $EmpIdUsuario";
 				$this->db->query($qry);
 
 				//Borra los modulos asignados anteriormente al usuario 
-				$qry = "DELETE FROM ctt_users_modules WHERE usr_id ='".$params['IdUsuario']."'";
+				$qry = "DELETE FROM ctt_users_modules WHERE usr_id ='$IdUsuario'";
 				$result = $this->db->query($qry);
 
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
-					$qry = "INSERT into ctt_users_modules (usr_id,mod_id) values (".$params['IdUsuario'].",".$id.");";
+					$qry = "INSERT into ctt_users_modules (usr_id,mod_id) values ($IdUsuario,$id);";
 					$this->db->query($qry);
 				}
-				$estatus = $params['IdUsuario'];
+				$estatus = $IdUsuario;
 			} catch (Exception $e) {
 				$estatus = 0;
 				//echo 'Excepción capturada: ',  $e->getMessage(), "\n";
@@ -179,5 +215,10 @@ class UsuariosModel extends Model
 		return $estatus;
 	}
 
-
+	// Listado de Areas
+    public function listAreas()
+    {
+        $qry = "SELECT * FROM ctt_areas;";
+        return $this->db->query($qry);
+    }
 }

@@ -142,12 +142,14 @@ public function listInvoice()
                 LEFT JOIN ctt_documents 			AS dt ON dt.doc_id = dc.doc_id AND dt.dot_id = 2  
                 WHERE prd_status = 1 AND p.prd_level IN ('A', 'P') AND ct.cat_id = $catId AND p.prd_visibility=1
                 GROUP BY p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, p.prd_price, p.prd_coin_type, p.prd_english_name 
-                ORDER BY p.prd_sku ;";
+                ORDER BY p.prd_sku;";
         return $this->db->query($qry);
     }
     public function listProducts2()
     {
-        $qry = "SELECT prd_id,prd_sku,prd_name 
+        /* $qry = "SELECT prd_id,prd_sku,prd_name
+                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';"; */
+        $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
                 FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';";
         return $this->db->query($qry);
     }

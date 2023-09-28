@@ -118,12 +118,12 @@ class ProjectDetailsModel extends Model
 							INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
 							INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id = pjd.pjtvr_id
 							where ser.prd_id = pc.prd_id AND pjv.pjt_id=pj.pjt_id AND pjv.ver_id=pc.ver_id AND ser.ser_comments!='' AND pjv.pjtvr_section = pc.pjtvr_section
-							ORDER BY ser.prd_id) as comments
+							ORDER BY ser.prd_id) as comments, pc.pjtvr_id
                 FROM ctt_projects_version AS pc
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;";
+                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;"; // *** Edna V2
         return $this->db->query($qry5);
     } 
     
@@ -149,7 +149,7 @@ class ProjectDetailsModel extends Model
     public function listDiscounts($params)
     {
         $level = $this->db->real_escape_string($params['level']);
-        $qry = "SELECT * FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
+        $qry = "SELECT *, dis_discount*100 AS dis_porcentaje FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
         return $this->db->query($qry);
     }    
 
@@ -856,8 +856,8 @@ public function promoteToProject($params)
         // Busca serie que se encuentre disponible y obtiene el id
         $qry1 = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count 
                  FROM ctt_series WHERE prd_id = $prodId 
-                 AND pjtdt_id = 0
-                 ORDER BY ser_reserve_count asc LIMIT 1;";
+                 AND (pjtdt_id = 0 OR ISNULL(pjtdt_id))
+                 ORDER BY ser_reserve_count asc LIMIT 1;"; // Cambiado por Edna
         $result =  $this->db->query($qry1);
         
         $series = $result->fetch_object();
@@ -988,10 +988,17 @@ public function promoteToProject($params)
         return $this->db->query($qry);
     } 
     // Listado de categorias
-    public function listCategories()
+    public function listCategories($params)
     {
-        $qry = "SELECT * FROM ctt_categories 
-                WHERE cat_status  = 1 ";
+        $opc = $this->db->real_escape_string($params['op']);
+        
+        if ($opc == 1) {
+            $qry = "SELECT * FROM ctt_categories 
+                WHERE cat_status  = 1 and cat_id <> 30";
+        }else{
+            $qry = "SELECT * FROM ctt_categories 
+            WHERE cat_status  = 1 ";
+        }
         return $this->db->query($qry);
     }
     // Listado de subcategoria

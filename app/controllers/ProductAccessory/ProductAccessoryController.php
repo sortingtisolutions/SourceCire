@@ -165,7 +165,7 @@ public function listProductsById($request_params)
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"prd_id":""}]';	
+            $res =  '[{"ser_id":"0"}]';	
         }
         echo $res;
     }
@@ -174,7 +174,7 @@ public function listProductsById($request_params)
 public function listAccesorios($request_params)
 {
     $params =  $this->session->get('user');
-    $result = $this->model->listAccesorios($request_params['prdId']);
+    $result = $this->model->listAccesorios($request_params);
     $i = 0;
     while($row = $result->fetch_assoc()){
         $rowdata[$i] = $row;

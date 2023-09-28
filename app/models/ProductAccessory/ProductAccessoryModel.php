@@ -77,14 +77,15 @@ public function listProductsPack($params)
     // return $this->db->query($qry);
 }
 
-public function listSeriesProd($params)
+public function listSeriesProd($params) // Edna
 {
     $prdId = $this->db->real_escape_string($params);
 
-    $qry = "SELECT ser.ser_id, ser.ser_sku,ser.ser_serial_number,prd.prd_name 
+    $qry = "SELECT ser.ser_id, ser.ser_sku,ser.ser_serial_number,prd.prd_name, prd.prd_id  
             FROM ctt_series AS ser
             INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-            WHERE prd.prd_id=$prdId";
+            LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = ser.ser_id
+            WHERE prd.prd_id=$prdId AND sp.stp_quantity > 0";
     return $this->db->query($qry);
 }
 
@@ -93,9 +94,9 @@ public function getAccesoriesById($params)
 {
     $prdId = $this->db->real_escape_string($params['prdId']);
 
-    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name  
+    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name, prd.prd_stock
             FROM ctt_products AS prd 
-            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' and prd.prd_level='A' and prd.prd_status = 1
+            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
             GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 
     return $this->db->query($qry);
@@ -112,12 +113,12 @@ public function getAccesoriesById($params)
 }
 
 // Listado de accesorios
-public function listAccesorios($param)
+public function listAccesorios($param) // Edna
 {
     //$prd_id       = $this->db->real_escape_string($param['prdId']);
-    $qry = "SELECT prd_id, prd_name, prd_sku 
+    $qry = "SELECT prd_id, prd_name, prd_sku, prd_stock 
             FROM ctt_products 
-            WHERE prd_level = 'A' AND substr(prd_sku,8,3) = 'XXX';";
+            WHERE prd_level = 'A' AND substr(prd_sku,8,3) = 'XXX' AND prd_stock>0;";
     return $this->db->query($qry);
 }
 
@@ -151,7 +152,8 @@ public function saveAccesorioByProducto($param)
         $prd_parent_Sku =  $prd_parent_Sku."A".str_pad($acConsecutivo, 3, "0", STR_PAD_LEFT);
         //print_r($prd_parent_Sku);
         //exit();
-        $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' , sbc_id= '$sbc_id' WHERE prd_id = $prd_id";
+        /* $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' , sbc_id= '$sbc_id' WHERE prd_id = $prd_id"; */
+        $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' WHERE prd_id = $prd_id";
         $this->db->query($qry);
 
 /*         print_r($qry);
@@ -220,7 +222,7 @@ public function saveAccesorioByProducto($param)
         $this->db->query($qry);
 
 
-        $qry = "UPDATE ctt_products SET prd_sku = substr(prd_sku,1,4), sbc_id=152 WHERE prd_id = ".$prd_id."";
+        $qry = "UPDATE ctt_products SET prd_sku = CONCAT(substr(prd_sku,1,7),'XXX') WHERE prd_id = ".$prd_id.""; // Modificado por edna
         $this->db->query($qry);
         
 

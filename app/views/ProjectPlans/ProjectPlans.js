@@ -6,7 +6,7 @@ let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
 let product_name=''; // Ed			  
-
+let subCtg =0; // *** Edna
 $('document').ready(function () {
     url = getAbsolutePath();
     verifica_usuario();
@@ -27,7 +27,7 @@ function inicial() {
     getCalendarPeriods();
     discountInsuredEvent();
     getLocationType();
-    getCategories();
+    // getCategories();
     
     getEdosRepublic();
     confirm_alert();
@@ -209,7 +209,7 @@ function eventsAction() {
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
 
                 if (verId != undefined){
-                    modalLoading('S');
+                    modalLoading('G');
                     let par = `
                     [{
                         "pjtId"     : "${pjtId}",
@@ -249,7 +249,7 @@ function eventsAction() {
                 let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  //agregado por jjr
                 //console.log('FECHA- ', lastmov);
                 if (vr != undefined){    //agregado por jjr
-                    modalLoading('S');
+                    modalLoading('V');
                     let par = `
                     [{
                         "pjtId"           : "${pjtId}",
@@ -379,6 +379,17 @@ function getProductsSub(word, dstr, dend) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
+
+
+/**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
+function getProductsInput(word, dstr, dend) {
+    var pagina = 'Budget/listProducts2';
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
 
 /**  Obtiene el listado de proyectos padre */
 function getProjectsParents() {
@@ -528,10 +539,10 @@ function getEdosRepublic() {
     fillField(pagina, par, tipo, selector);
 }
 // ** Ed
-function getCategories() {
+function getCategories(op) {
     //console.log('categos');
     var pagina = 'ProjectPlans/listCategories';
-    var par = `[{"store":""}]`;
+    var par = `[{"op":"${op}"}]`;
     var tipo = 'json';
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
@@ -568,22 +579,16 @@ function putEdosRepublic(dt) {
 // ** Ed
 function putCategories(dt) {
     
-    $('#txtCategory').append('');
+    $('#txtCategory').append('<option value="0"> Categorias...</option>');
     if (dt[0].cat_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
+        // getSubCategories(1); // *** Edna V2
 
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
-            $('#txtSubCategory').html('');
-            $('#txtSubCategory').val('Selecciona la subategoria');
-            
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
             
            
@@ -593,7 +598,7 @@ function putCategories(dt) {
 // ** Ed
 function putSubCategories(dt) {
     //console.log('putSubCategories',dt);
-    
+    $('#txtSubCategory').html('');
     $('#txtSubCategory').append('');
     if (dt[0].sbc_id != 0) {
         let word = $('#txtProductFinder').val();
@@ -604,14 +609,19 @@ function putSubCategories(dt) {
             
         });
         console.log(dt[0].sbc_id);
+        modalLoading('B');
+        subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
-        $('#txtSubCategory').on('change', function () {
-            let subcatId = $(this).val();
-            
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            
-            getProducts(word,subcatId);
+        $('#txtSubCategory')
+            .unbind('change')
+            .on('change', function () {
+                let subcatId = $(this).val();
+                
+                /* $('.invoice_button .toCharge').show();
+                $('.toCharge').removeClass('hide-items'); */
+                modalLoading('B');
+                subCtg = subcatId;
+                getProducts(word,subcatId);
            
         });
     }
@@ -685,7 +695,7 @@ function putDiscounts(dt) {
     $('#selDiscount').html('');
     $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
+        let H = `<option value="${u.dis_discount}">${parseInt(u.dis_porcentaje)}%</option>`;
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
@@ -744,7 +754,7 @@ function putVersion(dt) {
                     .attr('data-active', versionActive);
 
                 $('#insuDesctoPrc').html(discount * 100 + '<small>%</small>');
-
+                modalLoading('V');
                 getBudgets(pjtId, versionId);
                 showButtonVersion('H');
                 showButtonComments('S');
@@ -758,6 +768,8 @@ function putVersion(dt) {
             });
 
         $('#V' + firstVersion).trigger('click');
+    }else{
+        modalLoading('H');
     }
 }
 
@@ -898,6 +910,7 @@ function selectorProjects(pjId) {
             showButtonToPrint('H');
             showButtonToSave('H');
             actionSelProject($(this));
+            modalLoading('B');
             $('.projectfinder').trigger('click');
         });
 
@@ -1076,6 +1089,12 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
+    $('#txtCategory').html('');
+    if (glbSec != 4) {
+        getCategories(1);
+    }else{
+        getCategories(2);
+    }
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -1107,7 +1126,8 @@ function limpiar_form(){
     $('#txtProductFinder').val('');
     $('#txtCategory').val(0);
     $('#txtSubCategory').val(0);
-    getProducts('', 0);
+    
+    $('#listProductsTable table tbody').html('');
 }
 
 /** ++++++ Selecciona los productos del listado */
@@ -1121,14 +1141,28 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 1) {
-            $('.toCharge').removeClass('hide-items');  //jjr
-            if (glbSec != 4) {  //IF agragado por jjr
-                // console.log('Normal');
-                //getProducts(res.toUpperCase(), dstr, dend);
-                getProducts(res.toUpperCase(), sub_id);
+            modalLoading('B');
+            
+            if (subCtg>0) {
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    getProducts(res.toUpperCase(), sub_id);
+                    
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    
+                }
             } else {
-                console.log('Subarrendo');
-                getProductsSub(res.toUpperCase(), dstr, dend);
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    //getProducts(res.toUpperCase(), sub_id);
+                    getProductsInput(res.toUpperCase());
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    //getProducts(res.toUpperCase(), sub_id);
+                }
             }
         } else {
             rowCurr.css({ display: 'none' });
@@ -1148,8 +1182,8 @@ function selProduct(res) {
         // rowCurr.show();
     } else {
         
-        getProducts('',sub_id);
-        //$(`#listProductsTable table tbody`).html('');
+        
+        $(`#listProductsTable table tbody`).html('');
         rowCurr.addClass('oculto');
     }
 }
@@ -1165,7 +1199,7 @@ function omitirAcentos(text) {
 }
 
 function putProducts(dt) {
-    // console.log(dt);
+    
     prod = dt;
     $('#listProductsTable table tbody').html('');
     if (dt[0].prd_id>0){  // agregado por jjr
@@ -1182,8 +1216,8 @@ function putProducts(dt) {
         $('#listProductsTable table tbody').append(H);
     });
     }
-    $('.toCharge').addClass('hide-items');   //jjr
-
+    
+    modalLoading('H');
     $('#listProductsTable table tbody tr')
         .unbind('click')
         .on('click', function () {
@@ -1301,7 +1335,7 @@ function putBudgets(dt) {
     expandCollapseSection();
     updateTotals();
     sectionShowHide();
-
+    modalLoading('H');
     /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1480,24 +1514,38 @@ function fillBudgetProds(jsn, days, stus) {
     expandCollapseSection();
     activeInputSelector();
 
-    if (pds.comments > 0) { // Agregado por Edna
-        $(`#bdg${pds.prd_id} .col_quantity-led`)
+    if (pds.comments > 0) { // Agregado por Edna // *** Edna V1
+        //console.log($(`#bdg${pds.prd_id}`).attr('data-mice'));
+       /* if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
+            $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
             .attr('title', 'Comentarios al producto');
+        } */
+         
+        $(`#bdg${pds.prd_id} .col_quantity-led`)
+            .removeAttr('class')
+            .addClass('col_quantity-led col_quantity-comment')
+            .attr('title', 'Comentarios al producto'); 
+       
     }
 
     getCounterPending(pds.pjtvr_id, pds.prd_id);
 }
 
 function putCounterPending(dt) {
+    //console.log(dt[0].counter);
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        $(`#bdg${dt[0].prd_id} .col_quantity-led`)
+        /*  $(`#bdg${dt[0].prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`);
+            .attr('title', `${word} en pendiente`);  */ 
+        $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
+        .addClass('col_quantity-led col_quantity-pending')
+        .attr('title', `${word} en pendiente`);
+        
     }
     purgeInterfase();
 }
@@ -1631,18 +1679,19 @@ function activeInputSelector() {
 
     $('.invoice__menu-products ul li')
         .unbind('click')
-        .on('click', function () {
+        .on('click', function () { // *** Edna V1
             let event = $(this).attr('class');
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
+            let pjtv = id.parents('tr').attr('data-mice');
 			let nameProd = id.parents('tr').find('th').eq(0).find('.elipsis').text();																															  
             console.log('Sec->',sec);
              if (type != 'K' && sec =='1') {
 
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec);// *** Ed
@@ -1670,7 +1719,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1698,7 +1747,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1725,7 +1774,7 @@ function activeInputSelector() {
 }
 
 // Elimina el registro de la cotizacion
-function killProduct(bdgId) {
+function killProduct(pjtv) {
     console.log('INICIA KILL');
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de borrar este producto?</p>
@@ -1740,21 +1789,26 @@ function killProduct(bdgId) {
         .on('click', function () {
             let obj = $(this);
             let resp = obj.attr('id');
+
             if (resp == 'killYes') {
-                $('#' + bdgId).fadeOut(500, function () {
-                    
+
+                //$('#' + bdgId).fadeOut(500, function () {
+                $('[data-mice=' + pjtv+']').fadeOut(500, function () {
                     let pjtId = $('.version_current').attr('data-project');
+                    let bdgId = $(this).attr('id');
                     let section = $(this)
                         .parents('tbody')
                         .attr('id')
                         .substring(2, 5);
                     let pid = bdgId.substring(3, 10);
+                    
                     updateTotals();
                     showButtonVersion('S');
                     showButtonToPrint('H');
                     showButtonToSave('H');
+                    //console.log($(this).attr('id'));
                     updateMice(pjtId, pid, 'pjtvr_quantity_ant', 0, section, 'D');
-                    $('#' + bdgId).remove();
+                    $('[data-mice=' + pjtv+']').remove(); 
                 });
             }
             obj.parent().remove();
@@ -1774,7 +1828,7 @@ function infoProduct(bdgId, type,sec) {
     closeModals();
     setTimeout(() => {
         let verId = $('.version_current').attr('data-version');
-        console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
+        // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
@@ -1800,7 +1854,12 @@ function putProductsRelated(dt) {
     console.log('putProductsRelated',dt);
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        if (u.prd_level == 'P' || u.prd_level == 'S') {
+            levelProduct = 'class="levelProd"';
+        }else{
+            levelProduct = '';
+        }
         let prodSku =
             u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
         let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
@@ -2973,7 +3032,7 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-    if (acc == 'S') {
+    /* if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');
         $('.invoice__loading')
             .slideDown('slow')
@@ -2982,6 +3041,35 @@ function modalLoading(acc) {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
         });
+    } */
+    if (acc == 'H') {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    } else {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+        if (acc == 'S') {
+            $('#loadingText').text('Promoviendo Presupuesto');
+            $('#texto_extra').text('Este proceso puede tardar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.');
+        } else {
+            if (acc == 'B') {
+                $('#loadingText').text('Buscando...');
+                $('#texto_extra').text('')
+            } else{
+                if (acc == 'V') {
+                    $('#loadingText').text('Cargando Version...');
+                    $('#texto_extra').text('')
+                }
+                if( acc == 'G'){
+                    $('#loadingText').text('Guardando Version...');
+                    $('#texto_extra').text('')
+                }
+            }
+        }
+        
     }
 }
 
@@ -3065,6 +3153,9 @@ function getDataMice() {
             .children('td.quantityBase')
             .children('.input_invoice')
             .attr('data-real', quantity_act);
+
+        console.log(section);
+
         if (quantity_act != quantity_ant) {
             updateMice(pjtId, pid, 'pjtvr_quantity', quantity_act, section, 'U');
         }
@@ -3198,8 +3289,8 @@ function getDataMice() {
  * @param {*} sc Numero de la sección
  * @param {*} ac Accion a realizar
  */
-function updateMice(pj, pd, fl, dt, sc, ac) {
-    //  console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
+function updateMice(pj, pd, fl, dt, sc, ac) { // *** Edna V1
+   console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{
@@ -3213,7 +3304,7 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
     var pagina = 'ProjectPlans/updateMice';
     var tipo = 'html';
     var selector = receiveResponseMice;
-    fillField(pagina, par, tipo, selector);
+    fillField(pagina, par, tipo, selector); 
 }
 function receiveResponseMice(dt) {
     console.log(dt);
@@ -3314,5 +3405,5 @@ function subaccion() {
     let pjtId = $('.version_current').data('project');
     let verId = $('.version_current').attr('data-version');
 
-    getBudgets(pjtId, verId);
+    /* getBudgets(pjtId, verId); */
 }

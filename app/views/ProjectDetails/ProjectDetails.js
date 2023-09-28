@@ -5,7 +5,7 @@ let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
 let product_name=''; // Ed
-
+let subCtg =0; // *** Edna
 $('document').ready(function () {
     url = getAbsolutePath();
     verifica_usuario();
@@ -27,7 +27,7 @@ function inicial() {
     discountInsuredEvent();
     getLocationType();
     getEdosRepublic();
-    getCategories();
+    // getCategories();
     
     confirm_alert();
     }else {
@@ -211,7 +211,7 @@ function eventsAction() {
                 let verId = $('.version_current').attr('data-version');
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 if (verId != undefined){
-                    modalLoading('S');
+                    modalLoading('G');
                     let par = `
                     [{
                         "pjtId"     : "${pjtId}",
@@ -250,7 +250,7 @@ function eventsAction() {
                 let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
                 // console.log('FECHA- ', lastmov);
                 if (vr != undefined){   //agregado por jjr
-                    modalLoading('S');
+                    modalLoading('V');
                     let par = `
                     [{
                         "pjtId"           : "${pjtId}",
@@ -375,6 +375,15 @@ function getProductsSub(word, dstr, dend) {
     fillField(pagina, par, tipo, selector);
 }
 
+/**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
+function getProductsInput(word, dstr, dend) {
+    var pagina = 'Budget/listProducts2';
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de proyectos padre */
 function getProjectsParents() {
     swpjt = 0;
@@ -408,14 +417,7 @@ function getVersion(pjtId) {
     var selector = putVersion;
     fillField(pagina, par, tipo, selector);
 }
-/**  Obtiene el listado de productos */
-/* function getProducts(word, dstr, dend) {
-    var pagina = 'ProjectDetails/listProducts';
-    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
-} */
+
 
 /**  Obtiene el listado de cotizaciones */
 function getBudgets(pjtId, verId) {
@@ -534,10 +536,10 @@ function getLocationsEdos(prj_id){
     fillField(pagina, par, tipo, selector);
 }
 // ** Ed
-function getCategories() {
+function getCategories(op) {
     //console.log('categos');
     var pagina = 'ProjectDetails/listCategories';
-    var par = `[{"store":""}]`;
+    var par = `[{"op":"${op}"}]`;
     var tipo = 'json';
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
@@ -566,32 +568,27 @@ function getProducts(word, dstr, dend) {
 // ** Ed
 function putCategories(dt) {
     
-    $('#txtCategory').append('');
+    $('#txtCategory').append('<option value="0"> Categorias...</option>');
     if (dt[0].cat_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
             $('#txtCategory').append(H);
         });
+        // getSubCategories(1); // *** Edna V2
 
-        $('#txtCategory').on('change', function () {
-            let catId = $(this).val();
-            $('#txtSubCategory').html('');
-            $('#txtSubCategory').val('Selecciona la subategoria');
-            
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // $('#txtProducts').val('     Cargando Informacion . . . .');
-            getSubCategories(catId);
-            
-           
+        $('#txtCategory')
+            .unbind('change')
+            .on('change', function () {
+                let catId = $(this).val();
+                
+                getSubCategories(catId);
         });
     }
 }
 // ** Ed
 function putSubCategories(dt) {
     //console.log('putSubCategories',dt);
-    
+    $('#txtSubCategory').html('');
     $('#txtSubCategory').append('');
     if (dt[0].sbc_id != 0) {
         let word = $('#txtProductFinder').val();
@@ -601,16 +598,20 @@ function putSubCategories(dt) {
             $('#txtSubCategory').append(H);
             
         });
-        console.log(dt[0].sbc_id);
+
+        modalLoading('B');
+        subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
-        $('#txtSubCategory').on('change', function () {
-            let subcatId = $(this).val();
+
+        $('#txtSubCategory')
+            .unbind('change')
+            .on('change', function () {
+                let subcatId = $(this).val();
+                modalLoading('B');
+                
+                subCtg = subcatId;
+                getProducts(word,subcatId);
             
-            $('.invoice_button .toCharge').show();
-            $('.toCharge').removeClass('hide-items');
-            
-            getProducts(word,subcatId);
-           
         });
     }
 }
@@ -739,7 +740,7 @@ function putDiscounts(dt) {
     $('#selDiscount').html('');
     $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
+        let H = `<option value="${u.dis_discount}">${parseInt(u.dis_porcentaje)}%</option>`;
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
@@ -747,10 +748,7 @@ function putDiscounts(dt) {
 
 function putLocationType(dt) {
     loct =dt;
-/* 
-    $('#txtTypeLocationEdt').on('change', function () {
-        validator();
-    }); */
+
 }
 
 /**  Llena el listado de versiones */
@@ -786,12 +784,13 @@ function putVersion(dt) {
 
             $('.version__list ul').append(H);
         });
-
+        
         $('.version__list ul li')
             .unbind('click')
             .on('click', function () {
                 let version = $(this).attr('id').substring(1, 100);
 
+                
                 let pjtId = $(this).attr('data-project');
                 vers = version;
 
@@ -810,7 +809,7 @@ function putVersion(dt) {
                     .attr('data-insured', discount);
 
                 $('#insuDesctoPrc').html(discount * 100 + '<small>%</small>');
-
+                modalLoading('V');
                 getBudgets(pjtId, versionId);
                 showButtonVersion('H');
                 showButtonComments('S');
@@ -824,6 +823,8 @@ function putVersion(dt) {
             });
 
         $('#V' + firstVersion).trigger('click');
+    }else{
+        modalLoading('H');
     }
 }
 
@@ -897,6 +898,8 @@ function selectorProjects(pjId) {
             // showButtonToPrint('H');
             // showButtonToSave('H');
             actionSelProject($(this));
+            
+            modalLoading('B');
             $('.projectfinder').trigger('click');
         });
 
@@ -1073,7 +1076,12 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
-   
+    $('#txtCategory').html('');
+    if (glbSec != 4) {
+        getCategories(1);
+    }else{
+        getCategories(2);
+    }
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -1106,7 +1114,9 @@ function limpiar_form(){
     $('#txtProductFinder').val('');
     $('#txtCategory').val(0);
     $('#txtSubCategory').val(0);
-    getProducts('', 0);
+    
+    
+    $('#listProductsTable table tbody').html('');
 }
 
 /** ++++++ Selecciona los productos del listado */
@@ -1121,14 +1131,28 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 1) {
-            $('.toCharge').removeClass('hide-items');  //jjr
-            if (glbSec != 4) {  //IF agragado por jjr
-                // console.log('Normal');
-                //getProducts(res.toUpperCase(), dstr, dend);
-                getProducts(res.toUpperCase(), sub_id);
+            modalLoading('B');
+            
+            if (subCtg>0) {
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    getProducts(res.toUpperCase(), sub_id);
+                    
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    
+                }
             } else {
-                console.log('Subarrendo');
-                getProductsSub(res.toUpperCase(), dstr, dend);
+                if (glbSec != 4) {
+                    // console.log('Normal');
+                    //getProducts(res.toUpperCase(), sub_id);
+                    getProductsInput(res.toUpperCase());
+                } else {
+                    // console.log('Subarrendo');
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    
+                }
             }
         } else {
             rowCurr.css({ display: 'none' });
@@ -1147,9 +1171,9 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        //$(`#listProductsTable table tbody`).html('');
+        $(`#listProductsTable table tbody`).html('');
         
-        getProducts('',sub_id);
+        /* getProducts('',sub_id); */
         rowCurr.addClass('oculto');
     }
 }
@@ -1181,8 +1205,8 @@ function putProducts(dt) {
         $('#listProductsTable table tbody').append(H);
     });
     }
-    $('.toCharge').addClass('hide-items');   //jjr
-
+    /* $('.toCharge').addClass('hide-items');   //jjr */
+    modalLoading('H');
     $('#listProductsTable table tbody tr')
         // .unbind('click')
         .on('click', function () {
@@ -1305,6 +1329,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
+    modalLoading('H');
     /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1489,10 +1514,16 @@ function fillBudgetProds(jsn, days, stus) {
 
     /******************** Comentarios en la seccion de subarrendos *********************/
     if (pds.comments > 0) { // Agregado por Edna
-        $(`#bdg${pds.prd_id} .col_quantity-led`)
+        if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
+            $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
-            .attr('title', 'Comentarios al producto');
+            .attr('title', 'Comentarios al producto');// ***Edna V2
+        }
+        /* $(`#bdg${pds.prd_id} .col_quantity-led`)
+            .removeAttr('class')
+            .addClass('col_quantity-led col_quantity-comment')
+            .attr('title', 'Comentarios al producto'); */
     }
 
     getCounterPending(pds.pjtvr_id, pds.prd_id);
@@ -1502,10 +1533,13 @@ function putCounterPending(dt) {
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        $(`#bdg${dt[0].prd_id} .col_quantity-led`)
+        /* $(`#bdg${dt[0].prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`);
+            .attr('title', `${word} en pendiente`); */
+        $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
+        .addClass('col_quantity-led col_quantity-pending')
+        .attr('title', `${word} en pendiente`); // ***Edna V2
     }
     purgeInterfase();
 }
@@ -1651,12 +1685,13 @@ function activeInputSelector() {
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
+            let pjtv = id.parents('tr').attr('data-mice');
 			let nameProd = id.parents('tr').find('th').eq(0).find('.elipsis').text();// *** Agregado por Ed
             console.log('Sec->',sec,bdgId,type);
             if (type != 'K' && sec =='1') {
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec);// *** Ed
@@ -1684,7 +1719,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1711,7 +1746,7 @@ function activeInputSelector() {
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
-                        killProduct(bdgId);
+                        killProduct(pjtv);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec); // *** Ed
@@ -1737,7 +1772,7 @@ function activeInputSelector() {
 }
 
 // Elimina el registro de la cotizacion
-function killProduct(bdgId) {
+function killProduct(pjtv) {
     // console.log('INICIA KILL');
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de borrar este producto?</p>
@@ -1753,8 +1788,10 @@ function killProduct(bdgId) {
             let obj = $(this);
             let resp = obj.attr('id');
             if (resp == 'killYes') {
-                $('#' + bdgId).fadeOut(500, function () {
+                //$('#' + bdgId).fadeOut(500, function () {
+                $('[data-mice=' + pjtv+']').fadeOut(500, function () { // ***Edna V2
                     let pjtId = $('.version_current').attr('data-project');
+                    let bdgId = $(this).attr('id');
                     let section = $(this)
                         .parents('tbody')
                         .attr('id')
@@ -1765,7 +1802,8 @@ function killProduct(bdgId) {
                     // showButtonToPrint('H');
                     // showButtonToSave('H');
                     updateMice( pjtId, pid, 'pjtvr_quantity_ant', 0, section,  'D' );
-                    $('#' + bdgId).remove();
+                    // $('#' + bdgId).remove();
+                    $('[data-mice=' + pjtv+']').remove(); // ***Edna V2
                 });
             }
             obj.parent().remove();
@@ -1812,7 +1850,12 @@ function putProductsRelated(dt) {
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
         if(u.prd_id != '0'){
-            let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+            // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+            if (u.prd_level == 'P' || u.prd_level == 'S') {
+                levelProduct = 'class="levelProd"';
+            }else{
+                levelProduct = '';
+            }
             let prodSku =
                 u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
             let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
@@ -2980,7 +3023,7 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-    if (acc == 'S') {
+    /* if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');
         $('.invoice__loading')
             .slideDown('slow')
@@ -2989,6 +3032,35 @@ function modalLoading(acc) {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
         });
+    } */
+    if (acc == 'H') {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    } else {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+        if (acc == 'S') {
+            $('#loadingText').text('Promoviendo Proyecto');
+            $('#texto_extra').text('El proyecto se encuentra en proceso de ser promovida a presupuesto, este proceso puede tardar varios minutos.');
+        } else {
+            if (acc == 'B') {
+                $('#loadingText').text('Buscando...');
+                $('#texto_extra').text('')
+            } else{
+                if (acc == 'V') {
+                    $('#loadingText').text('Cargando Version...');
+                    $('#texto_extra').text('')
+                }
+                if( acc == 'G'){
+                    $('#loadingText').text('Guardando Version...');
+                    $('#texto_extra').text('')
+                }
+            }
+        }
+        
     }
 }
 
@@ -3351,5 +3423,5 @@ function subaccion() {
     let pjtId = $('.version_current').data('project');
     let verId = $('.version_current').attr('data-version');
 
-    getBudgets(pjtId, verId);
+    /* getBudgets(pjtId, verId); */
 }
