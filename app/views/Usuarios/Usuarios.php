@@ -41,7 +41,7 @@
 
                     		 <div class="row" id="PassUsuarioRow">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="PassUsuario" name="Pato" type="text" class="form-control form-control-sm"  autocomplete="off" required >
+									<input id="PassUsuario" name="Pato" type="password" class="form-control form-control-sm" autocomplete="off" >
 									<label for="PassUsuario">Password </label>
 								</div>
 							</div>
@@ -49,8 +49,8 @@
 
                      		<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="AreaEmpUsuario" name="AreaEmpUsuario" type="text" class="form-control form-control-sm"  autocomplete="off" required >
-									<label for="AreaEmpUsuario">Area </label>
+									<select id="AreaEmpUsuario" class="form-select form-select-sm"><option value="0" selected>Selecciona el area</option></select>
+									<label for="AreaEmpUsuario">Area</label>
 								</div>
 							</div>
 

@@ -339,6 +339,7 @@ function selSubcategoryProduct(id) {
 }
 
 function saveAccesoryId(prdId) {
+    console.log(lsbc_id);
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
     var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}"}]`;
     var tipo = 'json';

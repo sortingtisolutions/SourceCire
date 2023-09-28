@@ -211,7 +211,7 @@ function eventsAction() {
                 let verId = $('.version_current').attr('data-version');
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 if (verId != undefined){
-                    modalLoading('S');
+                    modalLoading('G');
                     let par = `
                     [{
                         "pjtId"     : "${pjtId}",
@@ -250,7 +250,7 @@ function eventsAction() {
                 let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
                 // console.log('FECHA- ', lastmov);
                 if (vr != undefined){   //agregado por jjr
-                    modalLoading('S');
+                    modalLoading('V');
                     let par = `
                     [{
                         "pjtId"           : "${pjtId}",
@@ -576,12 +576,12 @@ function putCategories(dt) {
         });
         // getSubCategories(1); // *** Edna V2
 
-        $('#txtCategory').on('change', function () {
-            let catId = $(this).val();
-            
-            getSubCategories(catId);
-            
-           
+        $('#txtCategory')
+            .unbind('change')
+            .on('change', function () {
+                let catId = $(this).val();
+                
+                getSubCategories(catId);
         });
     }
 }
@@ -598,17 +598,17 @@ function putSubCategories(dt) {
             $('#txtSubCategory').append(H);
             
         });
-        console.log(dt[0].sbc_id);
-        modalLoading('S');
+
+        modalLoading('B');
         subCtg = dt[0].sbc_id;
         getProducts(word,dt[0].sbc_id);
+
         $('#txtSubCategory')
             .unbind('change')
             .on('change', function () {
                 let subcatId = $(this).val();
-                modalLoading('S');
-                /* $('.invoice_button .toCharge').show();
-                $('.toCharge').removeClass('hide-items'); */
+                modalLoading('B');
+                
                 subCtg = subcatId;
                 getProducts(word,subcatId);
             
@@ -740,7 +740,7 @@ function putDiscounts(dt) {
     $('#selDiscount').html('');
     $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
+        let H = `<option value="${u.dis_discount}">${parseInt(u.dis_porcentaje)}%</option>`;
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
@@ -784,12 +784,13 @@ function putVersion(dt) {
 
             $('.version__list ul').append(H);
         });
-
+        
         $('.version__list ul li')
             .unbind('click')
             .on('click', function () {
                 let version = $(this).attr('id').substring(1, 100);
 
+                
                 let pjtId = $(this).attr('data-project');
                 vers = version;
 
@@ -808,7 +809,7 @@ function putVersion(dt) {
                     .attr('data-insured', discount);
 
                 $('#insuDesctoPrc').html(discount * 100 + '<small>%</small>');
-
+                modalLoading('V');
                 getBudgets(pjtId, versionId);
                 showButtonVersion('H');
                 showButtonComments('S');
@@ -822,6 +823,8 @@ function putVersion(dt) {
             });
 
         $('#V' + firstVersion).trigger('click');
+    }else{
+        modalLoading('H');
     }
 }
 
@@ -895,6 +898,8 @@ function selectorProjects(pjId) {
             // showButtonToPrint('H');
             // showButtonToSave('H');
             actionSelProject($(this));
+            
+            modalLoading('B');
             $('.projectfinder').trigger('click');
         });
 
@@ -1126,7 +1131,7 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 1) {
-            modalLoading('S');
+            modalLoading('B');
             
             if (subCtg>0) {
                 if (glbSec != 4) {
@@ -1324,6 +1329,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
+    modalLoading('H');
     /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -3017,7 +3023,7 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-    if (acc == 'S') {
+    /* if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');
         $('.invoice__loading')
             .slideDown('slow')
@@ -3026,6 +3032,35 @@ function modalLoading(acc) {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
         });
+    } */
+    if (acc == 'H') {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    } else {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+        if (acc == 'S') {
+            $('#loadingText').text('Promoviendo Proyecto');
+            $('#texto_extra').text('El proyecto se encuentra en proceso de ser promovida a presupuesto, este proceso puede tardar varios minutos.');
+        } else {
+            if (acc == 'B') {
+                $('#loadingText').text('Buscando...');
+                $('#texto_extra').text('')
+            } else{
+                if (acc == 'V') {
+                    $('#loadingText').text('Cargando Version...');
+                    $('#texto_extra').text('')
+                }
+                if( acc == 'G'){
+                    $('#loadingText').text('Guardando Version...');
+                    $('#texto_extra').text('')
+                }
+            }
+        }
+        
     }
 }
 
@@ -3388,5 +3423,5 @@ function subaccion() {
     let pjtId = $('.version_current').data('project');
     let verId = $('.version_current').attr('data-version');
 
-    getBudgets(pjtId, verId);
+    /* getBudgets(pjtId, verId); */
 }

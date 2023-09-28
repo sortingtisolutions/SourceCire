@@ -317,11 +317,11 @@ $html = '
                 }
                 $html .= '
                 <!-- Start Tabla de totales  -->
-                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                <table autosize="1" style="page-break-inside:void" class="table-data" style="margin-top:0px">
                     <thead>
                         <tr>
-                            <th class="tit-figure" colspan="9">&nbsp;</th>
-                            <th class="tit-figure amou" >&nbsp;</th>
+                            <th class="" colspan="9" style="padding: 2mm 0;">&nbsp;</th>
+                            <th class=" amou" >&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -456,14 +456,14 @@ $html = '
         }
         $html .= '
         <!-- Start Tabla de totales  -->
-        <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
-            <thead>
-                <tr>
-                    <th class="tit-figure" colspan="9">&nbsp;</th>
-                    <th class="tit-figure amou" >&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>';
+        <table autosize="1" style="page-break-inside:void" class="table-data" style="margin-top:0px">
+                    <thead>
+                        <tr>
+                            <th class="" colspan="9" style="padding: 2mm 0;">&nbsp;</th>
+                            <th class=" amou" >&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
      
 // Total
 $html .= '
@@ -592,14 +592,14 @@ $html .= '
     }
     $html .= '
     <!-- Start Tabla de totales  -->
-    <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
-        <thead>
-            <tr>
-                <th class="tit-figure" colspan="9">&nbsp;</th>
-                <th class="tit-figure amou" >&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>';
+    <table autosize="1" style="page-break-inside:void" class="table-data" style="margin-top:0px">
+                    <thead>
+                        <tr>
+                            <th class="" colspan="9" style="padding: 2mm 0;">&nbsp;</th>
+                            <th class=" amou" >&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
  
 // Total
 $html .= '
@@ -731,14 +731,14 @@ $html .= '
 
         $html .= '
         <!-- Start Tabla de totales  -->
-        <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
-            <thead>
-                <tr>
-                    <th class="tit-figure" colspan="9">&nbsp;</th>
-                    <th class="tit-figure amou" >&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>';
+        <table autosize="1" style="page-break-inside:void" class="table-data" style="margin-top:0px">
+                    <thead>
+                        <tr>
+                            <th class="" colspan="9" style="padding: 2mm 0;">&nbsp;</th>
+                            <th class=" amou" >&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
      
 // Total
 $html .= '
@@ -826,35 +826,34 @@ $html .= '
 
 
 /* Tabla terminos y condiciones --------------------  */
-$html .= '
+$html1 = '
+
+<section>
+<div class="container"> 
 <!-- Start Tabla de terminos  -->
 <div style="height:40px;"></div>
 <section>
-<div class="container name-report bline-d" style="background-color: #e2e8f8">
-    <table autosize="1"  >
+<div class="container name-report bline-d" style="background-color: #e2e8f8; page-break-inside:void">
+    <table autosize="1" style="page-break-inside:void" >
         <thead>
             <tr border="1">
                 <th class="tit-figure amou">TERMINOS IMPORTANTES:</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody >
             <tr>
-                <td class="prod" style="font-size: 0.9em;">La disponibilidad del equipo y personal en las fechas aqui indicadas, solo será garantizada con el pago del monto cotizado previamente a la realización del servicio</td>
+                <td class="prod" style="font-size: 1em;">La disponibilidad del equipo y personal en las fechas aqui indicadas, solo será garantizada con el pago del monto cotizado previamente a la realización del servicio</td>
             </tr>
             <tr>
-                <td class="prod" style="font-size: 0.9em;">El 100% del monto cotizado debera de ser cubierto previamente a la salida del equipo y personal cotizado</td>
+                <td class="prod" style="font-size: 1em;">El 100% del monto cotizado debera de ser cubierto previamente a la salida del equipo y personal cotizado</td>
             </tr>
         </tbody>
     </table>
 </div>
-</section>
-<!-- End Tabla de terminos  -->';
 
-$html .= '
-<!-- Start Tabla de importantes para el cliente  -->
 <div style="height:5px;"></div>
-<section>
-<div class="container name-report bline-d" style="background-color: #e2e8f8">
+
+<div class="container name-report bline-d" style="background-color: #e2e8f8; page-break-inside:void">
     <table autosize="1"  >
         <thead>
             <tr border="1">
@@ -864,9 +863,9 @@ $html .= '
         <tbody>
             <tr>
                 <td>
-                <ul style="font-size: 0.9em;">
-                    <li>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
-                    <li>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
+                <ul style="font-size: 1em;">
+                    <li style="font-size: 1em;>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
+                    <li style="font-size: 1em;>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
                     <li> Los montos referidos en esta cotización tienen una vigencia de 30 dias a partir de la fecha del envio de la misma al cliente. Posteriormente a este periodo de tiempo los montos pueden variar</li>
                     <li>Las cancelaciones deberán hacerse al menos 48 horas antes de la entrega del equipo. De lo contrario, se cobrará el 30% del monto total del equipo solicitado.</li>
                     <li>La alimentacion del personal técnico cotizado durante el horario de trabajo contratado corre por cuenta del cliente</li>
@@ -885,12 +884,13 @@ $html .= '
     </table>
 </div>
 </section>
-<!-- End Tabla de importantes para el cliente  -->';
+<!-- End Tabla de costo equipo subarrendo  -->';
 
 /* Tabla Terminos y condiciones -------------------------  */
 /* Tabla firmas -------------------------  */
-$html .= '
-<!-- Start Tabla de firma  -->
+$html1 .= '
+
+<!-- Start Tabla de terminos  -->
 <div style="height:3px;"></div>
 <section>
 <div class="container name-report bline-d">
@@ -901,7 +901,7 @@ $html .= '
                 <td style="width:25mm; height:60px; margin: 3mm 2.5mm 0 2.5mm;"><span>&nbsp; </span> </td>
                 <td style="width:25mm; height:60px; margin: 3mm 2.5mm 0 2.5mm;"><span>&nbsp; </span> </td>
             </tr>
-            <tr class="tline-d" style="font-size: 1.1em;" align="center">
+            <tr class="tline-d" style="font-size: 1.1em; text-align: center">
                 <td class="prod" > Nombre Persona que acepta los Terminos </td>
                 <td class="prod" >Firma </td>
                 <td class="prod" >Razon Social de la empresa</td>
@@ -911,7 +911,9 @@ $html .= '
     </table>
 </div>
 </section>
-<!-- End Tabla de firma  -->';
+<!-- End Tabla de costo equipo subarrendo  -->
+</div>
+<section>';
 /* Tabla firmas -------------------------  */
 
 
@@ -988,8 +990,12 @@ $mpdf= new \Mpdf\Mpdf([
 $mpdf->shrink_tables_to_fit = 1;
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetHTMLFooter($foot);
+$mpdf->AddPage();
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+$mpdf->AddPage();
+$mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+$mpdf->WriteHTML($html1,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
     "Presupuesto.pdf",
     \Mpdf\Output\Destination::INLINE

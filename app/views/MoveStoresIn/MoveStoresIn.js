@@ -289,9 +289,12 @@ function putProducts(dt) {
     });
 
     $('#listProducts .list-item').on('click', function () {
+        console.log($(this).text().split('-')[0].slice(10,11), $(this).text().split('-')[0].slice(7,10));
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         let serie = $(this).attr('data_serie');
+        let accesorio = $(this).text().split('-')[0].slice(7,10);
+        
         $('#txtProducts').val(prdNm);
         $('#txtIdProducts').val(prdId);
         $('#txtNextSerie').val(serie);
@@ -300,6 +303,11 @@ function putProducts(dt) {
         $('#listProducts').slideUp(100);
         validator();
         $(`#txtCoin option[value = "1"]`).attr('selected', 'selected');
+        if (accesorio == 'XXX') {
+            $('#txtQuantity').attr('disabled',true);
+        } else{
+            $('#txtQuantity').attr('disabled',false);
+        }
     });
 }
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
@@ -647,7 +655,10 @@ function clean_selectors() {
     //$('#txtStoreSource').val(0);
     //$('#txtStoreTarget').val(0);
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
-    $('#txtQuantity').val('');
+    $('#txtProducts').val('');
+    $('#txtIdProducts').val(0);
+    $('#txtQuantity').val('1');
+    $('#txtQuantity').attr('disabled',false);
     $('#txtSerie').attr('disabled', false);
     $('#txtSerie').val('');
     $('#txtNoEco').attr('disabled', false);

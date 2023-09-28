@@ -152,7 +152,8 @@ public function saveAccesorioByProducto($param)
         $prd_parent_Sku =  $prd_parent_Sku."A".str_pad($acConsecutivo, 3, "0", STR_PAD_LEFT);
         //print_r($prd_parent_Sku);
         //exit();
-        $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' , sbc_id= '$sbc_id' WHERE prd_id = $prd_id";
+        /* $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' , sbc_id= '$sbc_id' WHERE prd_id = $prd_id"; */
+        $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' WHERE prd_id = $prd_id";
         $this->db->query($qry);
 
 /*         print_r($qry);
@@ -221,7 +222,7 @@ public function saveAccesorioByProducto($param)
         $this->db->query($qry);
 
 
-        $qry = "UPDATE ctt_products SET prd_sku = substr(prd_sku,1,4), sbc_id=152 WHERE prd_id = ".$prd_id."";
+        $qry = "UPDATE ctt_products SET prd_sku = CONCAT(substr(prd_sku,1,7),'XXX') WHERE prd_id = ".$prd_id.""; // Modificado por edna
         $this->db->query($qry);
         
 
