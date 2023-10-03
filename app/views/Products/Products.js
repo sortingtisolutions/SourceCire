@@ -359,8 +359,8 @@ function settingTable(catId) {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [400, 800, -1],
+            [400, 800, 'Todos'],
             [ -1],
            /*  ['Todos'], */
         ],

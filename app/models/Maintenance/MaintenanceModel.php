@@ -161,26 +161,13 @@ public function listEstatusMantenimiento($params)
 // Actualizala cantidad de productos en un almacen destino
     public function UpdateProducts($param)
     {
-        // $idPrd 			= $this->db->real_escape_string($param['ser']);
-        // $idStrSrc 		= $this->db->real_escape_string($param['sti']);
-        // $quantity 		= $this->db->real_escape_string($param['qty']);
-
-        // $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} WHERE str_id = {$idStrSrc} and  ser_id = {$idPrd};";
-        // return $this->db->query($qry);
+        
     }
 
 // Agrega el registro de relación almacen producto
     public function InsertProducts($param)
      {
-    //     $idPrd 			= $this->db->real_escape_string($param['ser']);
-    //     $idStrSrc 		= $this->db->real_escape_string($param['sti']);
-    //     $quantity 		= $this->db->real_escape_string($param['qty']);
-
-    //     $qry = "INSERT INTO ctt_stores_products 
-    //                 (stp_quantity, str_id, ser_id) 
-    //             VALUES 
-    //                 ($quantity, $idStrSrc, $idPrd);";
-    //     return $this->db->query($qry);
+    
     }
 
 // Proceso de subarrendo

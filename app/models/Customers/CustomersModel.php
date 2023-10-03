@@ -202,16 +202,7 @@ public function listScores()
 // Guarda nuevo producto
     public function deleteSerie($params)
     {
-        // $serId = $this->db->real_escape_string($params['serId']);
-        // $prdId = $this->db->real_escape_string($params['prdId']);
-
-        // $qry1 = "UPDATE ctt_series SET ser_status = '0' WHERE ser_id = $serId;";
-        // $this->db->query($qry1);
-
-        // $qry2 = "UPDATE ctt_stores_products SET stp_quantity = 0 WHERE ser_id = $serId;";
-        // $this->db->query($qry2);
-
-        // return $serId.'|'.$prdId;
+        
     }
 }
 
