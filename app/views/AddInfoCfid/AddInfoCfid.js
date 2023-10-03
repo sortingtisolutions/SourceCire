@@ -41,7 +41,7 @@ function getProjectsCfdi() {
 }
 
 function saveExtraCfdi(pr) {
-   // console.log('PR-',pr);
+   
    var pagina = 'AddInfoCfid/saveExtraCfdi';
    var par = pr;
    var tipo = 'html';
