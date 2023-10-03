@@ -80,12 +80,13 @@ class CodeBarModel extends Model
 // Registra los movimientos entre almacenes origen
 	public function UpdateStoresSource($param)
 	{
-		$idPrd 			= $this->db->real_escape_string($param['prd']);
-		$idStrSrc 		= $this->db->real_escape_string($param['str']);
-		$quantity 		= $this->db->real_escape_string($param['qty']);
+	// 	$idPrd 			= $this->db->real_escape_string($param['prd']);
+	// 	$idStrSrc 		= $this->db->real_escape_string($param['str']);
+	// 	$quantity 		= $this->db->real_escape_string($param['qty']);
 
-		$qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $quantity WHERE str_id = $idStrSrc and  ser_id = $idPrd;";
-		return $this->db->query($qry);
+	// 	$qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $quantity 
+	// 	WHERE str_id = $idStrSrc and  ser_id = $idPrd;";
+	// 	return $this->db->query($qry);
 	}
 // Busca si existe asignado un almacen con este producto
 	public function SechingProducts($param)
@@ -99,12 +100,13 @@ class CodeBarModel extends Model
 // Actualizala cantidad de productos en un almacen destino
 	public function UpdateProducts($param)
 	{
-		$idPrd 			= $this->db->real_escape_string($param['prd']);
-		$idStrSrc 		= $this->db->real_escape_string($param['str']);
-		$quantity 		= $this->db->real_escape_string($param['qty']);
+		// $idPrd 			= $this->db->real_escape_string($param['prd']);
+		// $idStrSrc 		= $this->db->real_escape_string($param['str']);
+		// $quantity 		= $this->db->real_escape_string($param['qty']);
 
-		$qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} WHERE str_id = {$idStrSrc} and  prd_id = {$idPrd};";
-		return $this->db->query($qry);
+		// $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} 
+		// WHERE str_id = {$idStrSrc} and  prd_id = {$idPrd};";
+		// return $this->db->query($qry);
 	}
 
 // Agrega el registro de relación almacen producto

@@ -357,7 +357,7 @@ function putProjects(dt) {
     
     tabla.rows().remove().draw();
     let cn = 0;
-    if(dt[0].prj_id!=0){
+    if(dt[0].pjt_id!=0){
         $.each(pd, function (v, u) {
             /*
             let datestart = u.sub_date_start;

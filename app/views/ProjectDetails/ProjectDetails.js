@@ -1127,10 +1127,10 @@ function selProduct(res) {
     
     let sub_id = $('#txtSubCategory').val();
 
-    if (res.length > 0) {
+    if (res.length > 3) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 1) {
+        if (res.length == 4) {
             modalLoading('B');
             
             if (subCtg>0) {

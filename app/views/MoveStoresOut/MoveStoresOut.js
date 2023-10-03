@@ -444,14 +444,16 @@ function read_exchange_table() {
 
             let exchstruc1 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeSource}|${comments}|${codeTypeExchangeSource}|${idTypeExchangeSource}`;
             let exchstruc2 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeTarget}|${comments}|${codeTypeExchangeTarget}|${idTypeExchangeTarget}`;
-            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}`;
-            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}`;
+
+            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}|${storeIdTarget}`;
+            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}|${storeIdSource}`;
 
             if (codeTypeExchangeSource != '') { 
                 build_data_structure(exchstruc1);
                 build_update_store_data(`${exchupda1}|S`);   // source store
             }
             if (codeTypeExchangeTarget != '') {  
+                console.log('Traslado Entre Almacenes');
                 build_data_structure(exchstruc2);
                 build_update_store_data(`${exchupda2}|T`);   // target store
             }
@@ -492,7 +494,8 @@ function build_update_store_data(pr) {
         "qty"   :  "${el[1]}",
         "strid" :  "${el[2]}",
         "prdid" :  "${el[3]}",
-        "mov"   :  "${el[4]}"
+        "stridT" : "${el[4]}",
+        "mov"   :  "${el[5]}"
     }]`;
     console.log('STORE-DATA',par);
     update_store(par);
@@ -510,6 +513,7 @@ function save_exchange(pr) {
 
 function exchange_result(dt) {
     // console.log(dt);
+
     $('.resFolio').text(refil(folio, 7));
 
     $('#MoveFolioModal').modal('show');
@@ -532,7 +536,7 @@ function update_store(ap) {
 }
 
 function putUpdatedstores(dt) {
-    // console.log('putUpdatedstores', dt);
+    console.log('putUpdatedstores', dt);
 
     $('.resFolio').text(refil(folio, 7));
 
@@ -651,7 +655,7 @@ function eventsAction() {
         .unbind('keyup')
         .on('keyup', function () {
             let text = $(this).val().toUpperCase();
-            console.log(text);
+            // console.log(text);
             sel_products(text);
         });
 }

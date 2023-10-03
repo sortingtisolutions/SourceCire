@@ -45,8 +45,6 @@ class ProductsSalablesListModel extends Model
 // Guarda la devolución
     public function SaveReturn($params, $user)
     {
-
-
         $userdt         = explode("|",$user);
         $usrNme         = $this->db->real_escape_string($userdt[2]);
         $usrNme         = strtoupper($usrNme);
