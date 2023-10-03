@@ -25,15 +25,15 @@
 
                     <div class="row list-finder pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtExpendab" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
+                                <input id="txtExpendab" type="text" class="form-control form-control-sm " autocomplete="off">
                                 <label for="txtExpendab">Monto expendables</label>
                         </div>
                     </div>
 
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtMaintenance" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtMaintenance">Monto mantenimiento</label>                    
+                                <input id="txtMaintenance" type="text" class="form-control form-control-sm " autocomplete="off">
+                                <label for="txtMaintenance">Monto mantenimiento</label>                    
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -41,8 +41,8 @@
                     </div>
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtDiscount" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtDiscount">Descuento despues de Entrada</label>                    
+                                <input id="txtDiscount" type="text" class="form-control form-control-sm " autocomplete="off">
+                                <label for="txtDiscount">Descuento despues de Entrada</label>                    
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -51,7 +51,7 @@
 
                     <div class="row list-finder pos3 hide-items"> 
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating ">   <!-- pos5 hide-items -->
-                        <input id="txtDiesel" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                        <input id="txtDiesel" type="text" class="form-control form-control-sm text number" >
                             <label for="txtDiesel">Extras Diesel</label>
                         </div>
                      
@@ -72,11 +72,12 @@
                     <div style="height:20px;"></div>
                     <div class="row">
                         <div class="col-6">
-                            <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="GuardarClosure">Cerrar Proyecto</button>
+                            <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="PrintClosure">Imprimir Cierre</button>
                         </div>
                         <div class="col-6">
-                            <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="PrintClosure">Imprimir Resumen</button>
+                            <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="GuardarClosure">Cerrar Proyecto</button>
                         </div>
+                       
 					</div>
             </div>
         <!-- Sidebar -->
@@ -167,7 +168,7 @@
 </div>
 
 <!-- Start Ventana modal AGREGA O MODIFICA PRODUCTO -->
-<div class="overlay_background overlay_hide"id="ProductModal" style="width: 60%" >
+<div class="overlay_background overlay_hide"id="ProductModal" style="width:55%; left:25%; height:70%;">
     <div class="overlay_modal">
         <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
         <div class="formButtons">
@@ -175,17 +176,16 @@
         </div>
         <div class="formContent">
             <table id="tblEditProduct">
-                <tr>
-                    <td class="concept"><span class="reqsign"></span> Nombre del producto:</td>
+               <!--  <tr>
+                    <td class="concept"><span class="reqsign"></span> Nombre producto:</td>
                     <td class="data">
-                        <input id="txtPrdId" name="txtPrdId" autocomplete="off" >
-                        <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase" autocomplete="off">
+                        <input type="text" id="txtPrdName" name="txtPrdName" class="textbox" style="width:300px; text-transform:uppercase" autocomplete="off">
                         <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                        <span class="intructions">&nbsp;</span>
+                        <span class="intructions">Comentario individual al Producto seleccionado</span>
                     </td>
-                </tr>
+                </tr> -->
                 
-                <tr>
+               <!--  <tr>
                     <td class="concept"><span class="reqsign">&nbsp;</span>Motivo mantenimiento:</td>
                     <td class="data">
                         <select id="txtCinId" name="txtCinId" class="textbox required" style="width:250px">
@@ -194,17 +194,21 @@
                         <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                         <span class="intructions">&nbsp;</span>
                     </td>
-                </tr>
-                
+                </tr> -->
                 <tr>
                     <td class="concept"><span class="reqsign">&nbsp;</span> Comentario al producto:</td>
                     <td class="data">
-                        <input type="text" id="txtPrdNameProvider" name="txtPrdCodeProvider" class="textbox" style="width:300px; text-transform:uppercase">
+                        <input type="text" id="txtCommentPrd" name="txtPrdCodeProvider" class="textbox" style="width:300px; text-transform:uppercase">
                         <span class="fail_note hide"></span>
-                        <span class="intructions">Nombre descriptivo segun el proveedor</span>
+                        <span class="intructions">Comentario individual al Producto seleccionado</span>
                     </td>
                 </tr>
-                
+                <!-- <tr>
+                    <td class="concept"><span class="reqsign">&nbsp;</span> Comentario al producto:</td>
+                    <td class="data">
+                    <textarea class="form-control form-control-sm" id="txtCommentPrd" style="height:90px; background-color: #FFFAFF" autocomplete="off" rows="5"></textarea>
+                    </td>
+                </tr> -->
             </table>
         </div>
     </div>
