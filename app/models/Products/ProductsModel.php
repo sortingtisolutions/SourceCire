@@ -13,7 +13,9 @@ class ProductsModel extends Model
 // Listado de categorias  ****
     public function listCategories()
     {
-        $qry = "SELECT cat_id, cat_name FROM ctt_categories WHERE cat_status = 1;";
+        $qry = "SELECT cat_id, cat_name FROM ctt_categories 
+            WHERE cat_status = 1 AND cat_id NOT IN (18,19);";
+            
         return $this->db->query($qry);
     }
 
@@ -90,7 +92,7 @@ public function listInvoice()
             array( 'db' => 'subcateg', 'dt' => 'subcateg' ),
             array( 'db' => 'categori', 'dt' => 'categori' ),
             array( 'db' => 'prodengl', 'dt' => 'prodengl' ),
-            array( 'db' => 'prdcomme', 'dt' => 'prdcomme' )
+            array( 'db' => 'prdprv', 'dt' => 'prdprv' )
         );
 
         $sql_details = array(
@@ -130,7 +132,7 @@ public function listInvoice()
                         ELSE 0 
                     END AS quantity, 
                     p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, IFNULL(dt.doc_id, 0) AS doc_id, dt.doc_name, ct.cat_id,
-                    sv.srv_name, p.prd_comments
+                    sv.srv_name, p.prd_comments, p.prd_name_provider
                 FROM  ctt_products AS p
                 INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id   AND sc.sbc_status = 1
                 INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id  AND ct.cat_status = 1
@@ -171,7 +173,7 @@ public function listInvoice()
                 LEFT JOIN ctt_stores As st ON st.str_id = sp.str_id 
                 LEFT JOIN ctt_products_documents AS dt ON dt.prd_id = se.ser_id
                 LEFT JOIN ctt_documents AS dc ON dc.doc_id = dt.doc_id
-                WHERE se.prd_id IN ($prodId) AND sp.stp_quantity > 0
+                WHERE se.prd_id IN ($prodId) AND sp.stp_quantity > 0 GROUP BY ser_id
                 ORDER BY se.prd_id, se.ser_sku;";
         return $this->db->query($qry);
     }
