@@ -74,7 +74,7 @@ class AddInfoCfidModel extends Model
 
 	public function CheckExist($params)
 	{
-		$pjtId      	= $this->db->real_escape_string($params['pjtId']);
+		$pjtId = $this->db->real_escape_string($params['pjtId']);
 
 		$qry = "SELECT IF( EXISTS(SELECT pjt_id FROM ctt_infocfdi
 				WHERE pjt_id = $pjtId), 1, 0) as resexis;";
@@ -82,25 +82,5 @@ class AddInfoCfidModel extends Model
 		return $this->db->query($qry);
 	}
 
-    public function GetProveedor($params)
-	{
-	
-	}
-
-    public function ActualizaProveedor($params)
-	{
-     
-	}
-
-    //borra proveedor
-	public function DeleteProveedores($params)
-	{
-
-	}
-
-	public function GetTipoProveedores()
-	{
-
-	}
 
 }
