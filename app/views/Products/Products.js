@@ -440,7 +440,7 @@ function settingTable(catId) {
             {data: 'subcateg', name: 'subcateg', class: 'subcateg catalog'},
             {data: 'categori', name: 'categori', class: 'categori catalog'},
             {data: 'prodengl', name: 'prodengl', class: 'prodengl catalog'},
-            {data: 'prdcomme', name: 'prdcomme', class: 'prdcomme catalog'},
+            {data: 'prdprv', name: 'prdprv', class: 'prdcomme catalog'},
         ],
     });
     
@@ -493,7 +493,7 @@ function fillProducts(ft) {
                         subcateg: u.sbc_name,
                         categori: u.cat_name,
                         prodengl: u.prd_english_name,
-                        prdcomme: u.prd_comments,
+                        prdcomme: u.prd_name_provider,
                     })
                     .draw();
                     $(`#${u.prd_id}`).parents('tr').attr('id', u.prd_id);
@@ -650,6 +650,7 @@ function putDocument(dt) {
 }
 
 function putSelectProduct(dt) {
+    console.log(dt);
     cleanProductsFields();
     let prdId = dt[0].prd_id;
     let prdName = dt[0].prd_name;
@@ -976,6 +977,7 @@ function saveNewProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
+            console.log(par);
         var pagina = 'Products/saveNewProduct';
         var tipo = 'html';
         var selector = resNewProduct;

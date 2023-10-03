@@ -138,28 +138,33 @@ class MoveStoresOutController extends Controller
 	public function UpdateStoresSource($request_params)
 	{
 		echo $request_params['mov'] ;
+
 		if ($request_params['mov'] == 'S' ){
+			
 			$params =  $this->session->get('user');
 			$result = $this->model->UpdateStoresSource($request_params);
 			$res = $result;
 			echo $res;
 		}
+
 		if ($request_params['mov'] == 'T' ){
 			$params =  $this->session->get('user');
 			$item = $this->model->SechingProducts($request_params);
+
 			$num_items = $item->fetch_object();
-			if ($num_items->items > 0){
-				// echo 'update';
+
+			if ($num_items->exist > 0){
+				echo 'update';
 				// actualiza la cantidad en el almacen destino
 				$result = $this->model->UpdateProducts($request_params);
 				
 			} else {
-				// echo 'insert';
+				echo 'insert';
 				//agrega la relación almacen - producto
 				$result = $this->model->InsertProducts($request_params);
 			}
 			$res = $result;
-			echo $res;
+			echo $num_items->exist; //$res;
 		}
 	} 
 }

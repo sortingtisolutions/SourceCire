@@ -192,9 +192,12 @@ function putCategories(dt) {
         $('#txtCategoryList').on('change', function () {
             let id = $(this).val();
             let catName = $(`#txtCategoryList option[value="${id}"]`).val();
+            let tabla =  $('#tblPriceList').DataTable();
             num = 0;
             console.log(catName);
-            $('#tblPriceList_filter input').val(catName).trigger('keyup');
+            // $('#tblPriceList_filter input').val(catName).trigger('keyup');
+            tabla.column(8).search(catName).draw();
+            
         });
     }
 }

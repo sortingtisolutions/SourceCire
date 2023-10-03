@@ -283,7 +283,7 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
-                WHERE  pr.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
+                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
                 ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";// ***Modificado por Ed
 
         return $this->db->query($qry);
@@ -1059,10 +1059,10 @@ class ProjectPlansModel extends Model
         $sbc_id = $this->db->real_escape_string($params['dstr']);
         if ($word == '') {
             $qry = "SELECT * from ctt_vw_list_products2
-            WHERE sbc_id = '$sbc_id';";
+            WHERE sbc_id = '$sbc_id' AND prd_level IN('P','K');";
         }else{
             $qry = "SELECT * from ctt_vw_list_products2
-            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
+            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id' AND prd_level IN('P','K');";
         }
         return $this->db->query($qry);
     } 

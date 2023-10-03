@@ -1137,10 +1137,10 @@ function selProduct(res) {
     let hearCnt = $('#listProductsTable table tbody tr th');
 
     let sub_id = $('#txtSubCategory').val();
-    if (res.length > 0) {
+    if (res.length > 3) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 1) {
+        if (res.length == 4) {
             modalLoading('B');
             
             if (subCtg>0) {
@@ -2783,7 +2783,7 @@ function putsaveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
     // console.log('Ambos-',pjtId, verId);
-    getBudgets(pjtId, verId);
+    // getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();
     updateActiveVersion(verId);

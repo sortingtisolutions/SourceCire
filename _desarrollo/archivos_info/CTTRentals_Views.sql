@@ -10,7 +10,7 @@ SELECT
     CONCAT('<span class="toLink">', prd_stock, '</span> ') AS prodqtty,
     pr.prd_level AS prodtype, sv.srv_name AS typeserv, cn.cin_code AS prodcoin,
     CONCAT('<i class="fas fa-file-invoice" id="', dc.doc_id, '"></i> ') AS prddocum,
-    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme,  ct.cat_id
+    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme, pr.prd_name_provider AS prdprv,  ct.cat_id
 FROM ctt_products AS pr
     INNER JOIN ctt_coins AS cn ON cn.cin_id = pr.cin_id
     INNER JOIN ctt_services AS sv ON sv.srv_id = pr.srv_id AND sv.srv_status = '1'

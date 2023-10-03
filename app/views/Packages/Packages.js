@@ -8,11 +8,13 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
+    if (altr == 1) {
     setting_table_products();
     setting_table_packages();
     getCategory();
     getSubcategory();
     getProducts();
+    deep_loading('O');
     getPackages(0);
     //console.log('PASO 1');
     $('#txtPackageName').on('change', function () {
@@ -34,6 +36,11 @@ function inicial() {
     $('#btn_packages_cancel').on('click', function () {
         active_params();
     });
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 // Configura la tabla de paquetes
 function setting_table_packages() {
@@ -178,6 +185,7 @@ function putCategory(dt) {
 
     $('#txtCategoryList').on('change', function () {
         let catId = $(this).val();
+        deep_loading('O');
         getPackages(catId);
     });
 }
@@ -249,6 +257,7 @@ function putPackages(dt) {
         });
         action_selected_packages();
     }
+    deep_loading('C');
 }
 // Llena el selector de subcategorias
 function selSubcategoryPack(id) {
