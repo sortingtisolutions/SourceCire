@@ -153,7 +153,7 @@ function actionButtons() {
 
 function CancelProyect(pjtId) {
     let H = `<div class="emergent__warning">
-        <p>¿Realmente requieres cancelar este Proyecto?</p>
+        <p>Se borraran todos los productos ¿Realmente requieres cancelar este Proyecto?</p>
         <button id="killYes" class="btn btn-primary">Si</button>  
         <button id="killNo" class="btn btn-danger">No</button>  
         </div>`;

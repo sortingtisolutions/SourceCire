@@ -110,7 +110,9 @@ class ProductsSalablesModel extends Model
                         ('$sldSku', '$sldName', '$sldPrice', '$sldQuantity', '$salId', '$serId', '$serSt');";
             $this->db->query($qry);
             
-            $qry1 = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $sldQuantity WHERE ser_id = $serId AND str_id = $strId;";
+            $qry1 = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $sldQuantity 
+                    WHERE ser_id = $serId AND str_id = $strId;";
+                    
             $this->db->query($qry1);
 
             $qry2 = "INSERT INTO ctt_stores_exchange 

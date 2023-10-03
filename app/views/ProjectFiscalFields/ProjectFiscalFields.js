@@ -115,7 +115,7 @@ function activeIcons() {
             } else {
                 toggleIcon.removeAttr('class').addClass('fas fa-toggle-on toggle-icon');
                 toggleIcon.attr('title', 'bloqueado');
-                pjtStatus = 5;
+                pjtStatus = 3;
             }
 
         freeProject(pjtId, pjtStatus);
