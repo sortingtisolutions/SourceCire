@@ -122,9 +122,9 @@ class MoveStoresOutModel extends Model
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 		$prdid 		= $this->db->real_escape_string($param['prdid']);
 
-		$qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
+		/* $qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
 		$resultfun = $this->db->query($qry);
-
+ */
 		/* $qry1 = "UPDATE ctt_series SET ser_status=0 
 				 WHERE ser_id=$idSer;";
         $resultup = $this->db->query($qry1);  */
@@ -140,9 +140,9 @@ class MoveStoresOutModel extends Model
 	public function SechingProducts($param)
 	{
 		$idSer = $this->db->real_escape_string($param['serid']);
-		$storId = $this->db->real_escape_string($param['strid']);
+		$storId = $this->db->real_escape_string($param['stridT']);
 
-		$qry = "SELECT count(*) as items 
+		$qry = "SELECT COUNT(*) as exist 
 				FROM ctt_stores_products 
 				WHERE ser_id = $idSer AND str_id = $storId;";
 		return $this->db->query($qry);
@@ -154,12 +154,11 @@ class MoveStoresOutModel extends Model
 		$idSer 			= $this->db->real_escape_string($param['serid']);
 		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
-
-		
+		$idStrTrg 		= $this->db->real_escape_string($param['stridT']);
 
 		$qry = "UPDATE ctt_stores_products 
-				SET stp_quantity = stp_quantity + {$quantity} 
-				WHERE str_id = {$idStrSrc} and  ser_id = {$idSer};";
+				SET stp_quantity = stp_quantity + {$quantity} , str_id=$idStrSrc
+				WHERE str_id = {$idStrTrg} and  ser_id = {$idSer};";
 		return $this->db->query($qry);
 	}
 
@@ -170,7 +169,6 @@ class MoveStoresOutModel extends Model
 		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 		$prd_id		= $this->db->real_escape_string($param['prdid']);
-
 
 		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id, prd_id ) 
 				VALUES ($quantity, $idStrSrc, $idSer, $prd_id);";

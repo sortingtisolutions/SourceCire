@@ -21,17 +21,17 @@ class ProjectCancelModel extends Model
 		LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
 		LEFT JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
 		INNER JOIN ctt_projects_status AS ps ON ps.pjs_status=pj.pjt_status
-		WHERE pj.pjt_status in (2,4,40,6);";
+		WHERE pj.pjt_status in (4, 40, 6, 5);";
         return $this->db->query($qry);
 
     }
 /** Habilita el projecto                                                           ====  */    
     public function EnableProject($params)
     {
-        /* Actualiza el estado en 3, status de proyecto   */
+        /* Actualiza el estado en 4, status de proyecto   */
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qr1 = "UPDATE ctt_projects
-                SET pjt_status = '3'
+                SET pjt_status = '4'
                 WHERE pjt_id = $pjtId;";
         
         $this->db->query($qr1);

@@ -25,14 +25,33 @@ function inicial() {
     });
 
     $('#txtCost').on('blur', function () {
+        let costo_import =parseFloat($('#txtCostImp').val());
+        let cant = parseInt($('#txtQuantity').val());
+        let costo_uni = parseFloat($('#txtCost').val());
+        let costoTotal = costo_import + costo_uni;
         validator();
+        $('#txtCostTot').val(costo_uni*cant);
+        console.log($('#txtCostImp').val(), costo_uni);
+    });
+    $('#txtCostImp').on('blur', function () {
+        let costo_import = parseInt($('#txtCostImp').val());
+        let cant = parseInt($('txtQuantity').val());
+        let costo_uni = parseInt($('#txtCost').val());
+        let costoTotal = costo_import + cant + costo_uni;
+        
+        $('txtCostTot').val(costoTotal);
     });
     $('#txtSerie').on('blur', function () {
         validator();
     });
 
     $('#txtQuantity').on('blur', function () {
+        let costo_import =parseFloat($('#txtCostImp').val());
+        let cant = parseInt($('#txtQuantity').val());
+        let costo_uni = parseFloat($('#txtCost').val());
+        let costoTotal = costo_import + costo_uni;
         validator();
+        $('#txtCostTot').val(costo_uni*cant);
     });
 }
 // Setea de la tabla
@@ -43,6 +62,10 @@ function setting_table() {
     $('#tblExchanges').DataTable({
         order: [[0, 'desc']],
         dom: 'Blfrtip',
+        lengthMenu: [
+            [200, 400, -1],
+            [200, 400, 'Todos'],
+        ],
         buttons: [
         {
             //Botón para Excel
@@ -491,7 +514,7 @@ function exchange_apply() {
     let prdSku = $('#txtIdProducts').val().split('|')[1];
     let prdName = $('#txtIdProducts').val().split('|')[2];
     let serie = parseInt($('#txtNextSerie').val());
-    let sersku = prdSku + refil(serie, 3);
+    let sersku;
     let serser = $('#txtSerie').val();
     let prodpeti = $('#txtPedimento').val();
     let prodimpo = $('#txtCostImp').val();
@@ -514,12 +537,25 @@ function exchange_apply() {
     let sercosttot = $('#txtCostTot').val();
     let sernumeco = $('#txtNoEco').val();
 
+    /* if(prdSku.length==7){
+        sersku= prdSku + refil(serie, 3);
+    }else{
+        
+        sersku = prdSku + refil(serie, 2);
+        console.log(sersku);
+    } */
+     // Modificar para el caso de accesorios a base de la longitud de los sku
     
-    console.log(prdName);
     mthseries=quantity;
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
-            sersku = prdSku + refil(serie++, 3);
+            // sersku = prdSku + refil(serie++, 3);
+            if(prdSku.length==7){
+                sersku= prdSku + refil(serie++, 3);
+            }else{
+                sersku = prdSku + refil(serie++, 2);
+                console.log(sersku);
+            }
             update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
             let par = `
             [{
@@ -542,10 +578,17 @@ function exchange_apply() {
                 "sercosttot"    : "${sercosttot}",
                 "sernumeco"     : "${sernumeco}"
             }]`;
-            // console.log(par);
-            fill_table(par);
+            fill_table(par); 
         }
     } else {
+        
+        if(prdSku.length==7){
+            sersku= prdSku + refil(serie, 3);
+        }else{
+            
+            sersku = prdSku + refil(serie, 2);
+            console.log(sersku);
+        }
         serie++;
         let par = `
         [{
@@ -584,7 +627,7 @@ function fill_table(par) {
         tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill"></i>`,
-            prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
+            prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 16)}`,
             prodname: par[0].prodnme,
             prodcant: `<span>${par[0].prodqty}</span>`,
             prodcost: par[0].sercost, 
@@ -607,7 +650,7 @@ function fill_table(par) {
         tabla.row
             .add({
                 editable: `<i class="fas fa-times-circle kill"></i>`,
-                prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
+                prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 16)}`,
                 prodname: par[0].prodnme,
                 prodcant: `<span>${par[0].prodqty}</span>`,
                 prodcost: par[0].sercost, 
@@ -633,6 +676,12 @@ function fill_table(par) {
     $('.edit')
         .unbind('click')
         .on('click', function () {
+            
+            /* let prodId= $(this).parent('tr').attr('data-content').split('|')[0];
+            let ser = parseInt($(`#P-${prodId}`).attr('data_serie'));
+            $(`#P-${prodId}`).attr('data_serie', ser-1);
+            console.log(ser); */
+            
             tabla.row($(this).parent('tr')).remove().draw();
             btn_apply_appears();
         });

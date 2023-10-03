@@ -55,7 +55,7 @@ class FathersReportsController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"prd_id":"0"}]';	
+            $res =  '[{"pjt_id":"0"}]';	
         }
         echo $res;
     } 

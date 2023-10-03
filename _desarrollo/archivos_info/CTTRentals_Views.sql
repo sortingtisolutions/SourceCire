@@ -10,7 +10,7 @@ SELECT
     CONCAT('<span class="toLink">', prd_stock, '</span> ') AS prodqtty,
     pr.prd_level AS prodtype, sv.srv_name AS typeserv, cn.cin_code AS prodcoin,
     CONCAT('<i class="fas fa-file-invoice" id="', dc.doc_id, '"></i> ') AS prddocum,
-    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme,  ct.cat_id
+    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme, pr.prd_name_provider AS prdprv,  ct.cat_id
 FROM ctt_products AS pr
     INNER JOIN ctt_coins AS cn ON cn.cin_id = pr.cin_id
     INNER JOIN ctt_services AS sv ON sv.srv_id = pr.srv_id AND sv.srv_status = '1'
@@ -36,13 +36,14 @@ SELECT
     CASE    WHEN pj.pjt_status = '2' THEN concat('<i class="fas fa-toggle-off toggle-icon" title="liberado" id="', pj.pjt_id,'"></i>')
             WHEN pj.pjt_status = '3' THEN concat('<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="', pj.pjt_id,'"></i>')
             WHEN pj.pjt_status = '4' THEN concat('<i class="fas fa-toggle-off toggle-icon" title="liberado" id="', pj.pjt_id,'"></i>')
+            WHEN pj.pjt_status = '5' THEN concat('<i class="fas fa-toggle-off toggle-icon" title="liberado" id="', pj.pjt_id,'"></i>')
     ELSE '' END AS smarlock,
     pj.pjt_id AS projecid, pj.pjt_number AS projnumb, pj.pjt_name AS projname, pj.pjt_location AS projloca, date_format(pj.pjt_date_start, '%Y/%m/%d') AS dateinit,
     date_format(pj.pjt_date_end, '%Y/%m/%d') AS datefnal, cu.cus_name AS custname
 FROM    ctt_projects AS pj
     INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
     INNER JOIN ctt_customers as cu ON cu.cus_id = co.cus_id
-WHERE pj.pjt_status IN (2, 3, 4);
+WHERE pj.pjt_status IN (2, 3, 4, 5);
 
 
 
