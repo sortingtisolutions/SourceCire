@@ -66,7 +66,6 @@ function setting_table_packages() {
         scrollY: 'calc(100vh - 240px)',
         scrollX: true,
         fixedHeader: true,
-        processing: true,
         columns: [
             {data: 'editable', class: 'edit'},
             {data: 'pack_sku', class: 'sel sku'},
