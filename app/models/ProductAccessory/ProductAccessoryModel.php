@@ -156,6 +156,8 @@ public function saveAccesorioByProducto($param)
         $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' WHERE prd_id = $prd_id";
         $this->db->query($qry);
 
+        // Cambiar la serie
+        // $qry = "UPDATE ctt_series AS ser SET ser.ser_sku = CONCAT('010A008002A',substr(ser.ser_sku,13,15)) WHERE ser.ser_id=37147";
 /*         print_r($qry);
         exit(); */
 

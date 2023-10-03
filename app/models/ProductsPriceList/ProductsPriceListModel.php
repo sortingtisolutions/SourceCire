@@ -21,29 +21,89 @@ public function listProducts($params)
         $catId = $this->db->real_escape_string($params['catId']);
         $grp = $this->db->real_escape_string($params['grp']);
         $num = $this->db->real_escape_string($params['num']);
-
-        $qry = "SELECT 
-                    p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
-                    p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
-                    p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, 
-                    IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id
-                FROM  ctt_products AS p
-                INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
-                INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
-                INNER JOIN ctt_services             AS sv ON sv.srv_id = p.srv_id 	AND sv.srv_status = 1
-                LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id   AND sr.ser_situation='D'
-                LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
-                LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id   AND dc.dcp_source = 'P'
-                WHERE prd_status = 1 AND p.prd_visibility = 1 
-                GROUP BY 
-                    p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
-                    p.prd_price, p.prd_coin_type, p.prd_english_name 
-                ORDER BY p.prd_sku;";
+        if ($catId !=0) {
+            $qry = "SELECT 
+                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
+                p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
+                p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, 
+                IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
+            FROM  ctt_products AS p
+            INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
+            INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
+            INNER JOIN ctt_services             AS sv ON sv.srv_id = p.srv_id 	AND sv.srv_status = 1
+            LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id   AND sr.ser_situation='D'
+            LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
+            LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id   AND dc.dcp_source = 'P'
+            WHERE prd_status = 1 AND p.prd_visibility = 1 AND ct.cat_id=$catId AND p.prd_level IN ('P','K')
+            GROUP BY 
+                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
+                p.prd_price, p.prd_coin_type, p.prd_english_name 
+            ORDER BY p.prd_sku;";
+        } else {
+            $qry = "SELECT 
+                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
+                p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
+                p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, 
+                IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
+            FROM  ctt_products AS p
+            INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
+            INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
+            INNER JOIN ctt_services             AS sv ON sv.srv_id = p.srv_id 	AND sv.srv_status = 1
+            LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id   AND sr.ser_situation='D'
+            LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
+            LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id   AND dc.dcp_source = 'P'
+            WHERE prd_status = 1 AND p.prd_visibility = 1 AND p.prd_level IN ('P','K')
+            GROUP BY 
+                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
+                p.prd_price, p.prd_coin_type, p.prd_english_name 
+            ORDER BY p.prd_sku;";
+        }
 
         return $this->db->query($qry);
     }
 
+// Obtiene la lista de productos
+public function tableProducts($params)
+{
 
+    $table = 'ctt_vw_listproducts';  
+    $primaryKey = 'prd_id';
+    $catId= $this->db->real_escape_string($params['catId']);
+    $filter = $this->db->real_escape_string($params['filter']) == '0' ? "'P','A','K'" : "'P'";
+    // writeToConsole($table);
+
+    /* $where =  "cat_id =" . $catId . " AND prodtype in (" . $filter . ")";  */
+    $where =  "cat_id =" . $catId; 
+
+    $columns = array(
+        array( 'db' => 'prd_id', 'dt' => 'prd_id' ),
+        array( 'db' => 'prd_sku', 'dt' => 'prd_sku' ),
+        array( 'db' => 'prd_name', 'dt' => 'prd_name' ),
+        array( 'db' => 'cat_name', 'dt' => 'cat_name' ),
+        array( 'db' => 'sbc_name', 'dt' => 'sbc_name' ),
+        array( 'db' => 'srv_name', 'dt' => 'srv_name' ),
+        array( 'db' => 'prd_stock', 'dt' => 'prd_stock' ),
+        array( 'db' => 'prd_reserved', 'dt' => 'prd_reserved' ),
+        array( 'db' => 'prd_price', 'dt' => 'prd_price' ),
+        array( 'db' => 'prd_coin_type', 'dt' => 'prd_coin_type' ),
+        array( 'db' => 'prd_english_name', 'dt' => 'prd_english_name' ),
+        array( 'db' => 'prd_level', 'dt' => 'prd_level' ),
+        array( 'db' => 'doc_id', 'dt' => 'doc_id' ),
+        array( 'db' => 'cat_id', 'dt' => 'cat_id' )
+    );
+
+    $sql_details = array(
+        'user' => USER,
+        'pass' => PASSWORD,
+        'db'   => DB_NAME,
+        'host' => HOST,
+        'charset' => 'utf8',
+    );
+
+    return json_encode(
+        SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, null, $where )
+    );
+}
 // Listado de Documentos
     public function listDocuments($params)
     {
