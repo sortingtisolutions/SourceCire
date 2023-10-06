@@ -325,12 +325,12 @@ function putProducts(dt) {
         $('#txtCoinType').val($(this).attr('data_complement').split('|')[4]);
         $('#listProducts').slideUp(100);
         validator();
-        $(`#txtCoin option[value = "1"]`).attr('selected', 'selected');
+        /* $(`#txtCoin option[value = "1"]`).attr('selected', 'selected');
         if (accesorio == 'XXX') {
             $('#txtQuantity').attr('disabled',true);
         } else{
             $('#txtQuantity').attr('disabled',false);
-        }
+        } */
     });
 }
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
@@ -757,6 +757,15 @@ function read_exchange_table() {
                 numecono = $($(u).find('td')[14]).children('.serecono').val();
                 costpeti= $($(u).find('td')[7]).children('.sercpet').val();
                 console.log(serienum, numecono, costpeti);
+                if (!serienum) {
+                    serienum='';
+                }
+                if (!numecono) {
+                    numecono='';
+                }
+                if (!costpeti) {
+                    costpeti='';
+                }
             }
             
             //let serienum = $('.serprod').val();

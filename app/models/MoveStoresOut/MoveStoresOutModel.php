@@ -24,8 +24,7 @@ class MoveStoresOutModel extends Model
     public function listStores()
     {
 		$qry = "SELECT * FROM ctt_stores 
-				WHERE str_name  NOT LIKE 'SUBARRENDO%'
-				AND str_name NOT IN ('SERVICIOS','EXPENDABLES')";
+				WHERE str_name  NOT LIKE 'SUBARRENDO%'";
 		return $this->db->query($qry);
     }
 
@@ -122,12 +121,58 @@ class MoveStoresOutModel extends Model
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 		$prdid 		= $this->db->real_escape_string($param['prdid']);
 
-		/* $qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
+		$qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
 		$resultfun = $this->db->query($qry);
- */
+
+		$qry1 = "UPDATE ctt_series SET ser_status=0 
+				 WHERE ser_id=$idSer;";
+        $resultup = $this->db->query($qry1);
+				
+		$qry2 = "UPDATE ctt_stores_products 
+				SET stp_quantity = stp_quantity - $quantity 
+				WHERE str_id = $idStrSrc and ser_id = $idSer;";
+
+		return $this->db->query($qry2);
+	}
+	// Registra los movimientos entre almacenes origen cuando se trata de Translado de almacen
+	public function UpdateStoresSourceT($param)
+	{
+		$idSer 			= $this->db->real_escape_string($param['serid']);
+		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
+		$quantity 		= $this->db->real_escape_string($param['qty']);
+		$prdid 		    = $this->db->real_escape_string($param['prdid']);
+
+		/* $qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
+		$resultfun = $this->db->query($qry); */
+		
 		/* $qry1 = "UPDATE ctt_series SET ser_status=0 
 				 WHERE ser_id=$idSer;";
-        $resultup = $this->db->query($qry1);  */
+        $resultup = $this->db->query($qry1); */
+				
+		$qry2 = "UPDATE ctt_stores_products 
+				SET stp_quantity = stp_quantity - $quantity 
+				WHERE str_id = $idStrSrc and ser_id = $idSer;";
+
+		return $this->db->query($qry2);
+		
+	}
+	// Registra los movimientos entre almacenes origen cuando se trata de un Expandable
+	public function UpdateStoresSourceE($param)
+	{
+		$idSer 			= $this->db->real_escape_string($param['serid']);
+		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
+		$quantity 		= $this->db->real_escape_string($param['qty']);
+		$prdid 		    = $this->db->real_escape_string($param['prdid']);
+
+		// $qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
+
+		$qry = "UPDATE ctt_products SET prd_stock=prd_stock-$quantity WHERE prd_id=$prdid";
+
+		$resultfun = $this->db->query($qry); 
+		
+		/* $qry1 = "UPDATE ctt_series SET ser_status=0 
+				 WHERE ser_id=$idSer;";
+        $resultup = $this->db->query($qry1); */
 				
 		$qry2 = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity - $quantity 
@@ -144,7 +189,7 @@ class MoveStoresOutModel extends Model
 
 		$qry = "SELECT COUNT(*) as exist 
 				FROM ctt_stores_products 
-				WHERE ser_id = $idSer AND str_id = $storId;";
+				WHERE ser_id = $idSer AND str_id = $storId;;";
 		return $this->db->query($qry);
 	}
 	
@@ -159,7 +204,10 @@ class MoveStoresOutModel extends Model
 		$qry = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity + {$quantity} , str_id=$idStrSrc
 				WHERE str_id = {$idStrTrg} and  ser_id = {$idSer};";
-		return $this->db->query($qry);
+		$result = $this->db->query($qry);
+
+		
+		return $result;
 	}
 
 // Agrega el registro de relación almacen producto
@@ -172,6 +220,44 @@ class MoveStoresOutModel extends Model
 
 		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id, prd_id ) 
 				VALUES ($quantity, $idStrSrc, $idSer, $prd_id);";
+		return $this->db->query($qry);
+	}
+
+	public function getAccesories($param){
+		$prd_sku		= $this->db->real_escape_string($param['sku']);
+		$qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sp.str_id, sp.stp_quantity
+			FROM ctt_products AS prd 
+			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
+			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
+			WHERE SUBSTR(sr.ser_sku,1,10)='$prd_sku' AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
+			GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
+
+		return $this->db->query($qry);
+	}
+	public function getNumAccesories($param){
+		$prd_sku		= $this->db->real_escape_string($param['sku']);
+		$qry = "SELECT Count(*) as cant FROM ctt_products AS prd 
+			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
+			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
+			WHERE SUBSTR(prd.prd_sku,1,10)='$prd_sku' AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
+			GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
+		return $this->db->query($qry);
+	}
+
+	public function getExistences($param)
+	{
+		$prd_id		= $this->db->real_escape_string($param['prdid']);
+
+		$qry    = "SELECT prd_stock FROM ctt_products where prd_id = $prd_id limit 1";
+		return $this->db->query($qry);
+	}
+
+	public function getExistencesPerExplendable($param)
+	{
+		$prd_id		= $this->db->real_escape_string($param['prdid']);
+
+		$qry    = "SELECT SUM(sp.stp_quantity) FROM ctt_products AS prd 
+		Inner Join ctt_stores_products AS sp ON sp.prd_id = prd.prd_id where prd.prd_id = $prd_id";
 		return $this->db->query($qry);
 	}
 

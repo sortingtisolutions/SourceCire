@@ -167,6 +167,12 @@ function putTypeExchange(dt) {
             $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});
         }
         $('#txtStoreTarget').val(0);
+        
+        if ($(`#txtTypeExchange`).val() == 3 && $('#txtStoreSource').val() == 30) {
+            $('#txtQuantity').parents('.list-finder').removeClass('hide-items');
+        }else{
+            $('#txtQuantity').parents('.list-finder').addClass('hide-items');
+        }
     });
 }
 
@@ -184,11 +190,18 @@ function putStores(dt) {
     $('#txtStoreSource').on('change', function () {
         // $('#boxProducts').parents('.list-finder').addClass('hide-items');
         $('#boxProducts').parents('.list-finder').removeClass('hide-items');
+        // 
         let id = $(this).val();
         idstr=id;
         console.log(idstr);
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
+
+        if ($(`#txtTypeExchange`).val() == 3 && $('#txtStoreSource').val() == 30) {
+            $('#txtQuantity').parents('.list-finder').removeClass('hide-items');
+        }else{
+            $('#txtQuantity').parents('.list-finder').addClass('hide-items');
+        }
        //console.log('ID Almacen', id);
         // modalLoading('S');
         // getProducts(id);
@@ -302,6 +315,7 @@ function exchange_apply(prId) {
         let storeNameTarget = $('#txtStoreTarget option:selected').text();
         let storeIdSource = $('#txtStoreSource option:selected').val();
         let storeIdTarget = $('#txtStoreTarget option:selected').val();
+        let cant = $('#txtQuantity').val();
 
         if (link == 'null' || link == '') {
             typeExchangeCodeTarget = '';
@@ -314,6 +328,9 @@ function exchange_apply(prId) {
         let productName = prod[4];
         //let productQuantity = prId.children().children('.quantity').text();
         let productQuantity = '1';
+        if(cant > 1){
+            productQuantity=cant;
+        }
         let productSerie = prod[3];
         let prdId = prod[7];
 
@@ -445,8 +462,8 @@ function read_exchange_table() {
             let exchstruc1 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeSource}|${comments}|${codeTypeExchangeSource}|${idTypeExchangeSource}`;
             let exchstruc2 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeTarget}|${comments}|${codeTypeExchangeTarget}|${idTypeExchangeTarget}`;
 
-            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}|${storeIdTarget}`;
-            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}|${storeIdSource}`;
+            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}|${storeIdTarget}|${idTypeExchangeSource}|${sku}`;
+            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}|${storeIdSource}|${idTypeExchangeSource}|${sku}`;
 
             if (codeTypeExchangeSource != '') { 
                 build_data_structure(exchstruc1);
@@ -495,7 +512,9 @@ function build_update_store_data(pr) {
         "strid" :  "${el[2]}",
         "prdid" :  "${el[3]}",
         "stridT" : "${el[4]}",
-        "mov"   :  "${el[5]}"
+        "typeExch" : "${el[5]}",
+        "sku" : "${el[6]}",
+        "mov"   :  "${el[7]}"
     }]`;
     console.log('STORE-DATA',par);
     update_store(par);
@@ -537,18 +556,26 @@ function update_store(ap) {
 
 function putUpdatedstores(dt) {
     console.log('putUpdatedstores', dt);
+    
+    if (dt == 0) {
+        $('#SinExistenciasModal').modal('show');
+        $('#btnCloseModal').on('click', function () {
+            window.location = 'MoveStoresOut';
+        });
+    }else{
+        $('.resFolio').text(refil(folio, 7));
 
-    $('.resFolio').text(refil(folio, 7));
-
-    $('#MoveFolioModal').modal('show');
-    $('#btnHideModal').on('click', function () {
-        window.location = 'MoveStoresOut';
-    });
-
-    $('#btnPrintReport').on('click', function () {
-        // console.log('Lanza Print Update', folio);
-        printInfoGetOut(folio);
-    });
+        $('#MoveFolioModal').modal('show');
+        $('#btnHideModal').on('click', function () {
+            window.location = 'MoveStoresOut';
+        });
+    
+        $('#btnPrintReport').on('click', function () {
+            // console.log('Lanza Print Update', folio);
+            printInfoGetOut(folio);
+        });
+    }
+   
 }
 
 /* Generación del folio  */

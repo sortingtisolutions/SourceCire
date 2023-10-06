@@ -49,11 +49,25 @@
                             <div class="list-items" ></div>
                         </div>
                     </div>
+                    <div class="row list-finder hide-items">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <input id="txtQuantity" type="text" class="form-control form-control-sm required" data-mesage="" >
+                                <label for="txtQuantity">Cantidad</label> 
+                        </div>
+                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <input id="boxProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
+                                <label for="boxProducts">Productos</label>
+                                <input type="hidden" id="boxIdProducts" name="boxIdProducts">
+                            </div>
+                        <div id="listProducts" class="list-group list-hide">
+                            <div class="list-items" ></div> -->
+                        
+                    </div>
                     
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <textarea class="form-control form-control-sm" id="txtComments" style="height: 120px" rows="3"></textarea>
-                            <label for="txtComments">Comentarios</label>
+                            <label for="txtComments">Comentarios al producto</label>
                         </div>
                     </div>
                     
@@ -114,6 +128,27 @@
     </div>
 </div>
 
+<!-- Modal Borrar -->
+<div class="modal fade" id="SinExistenciasModal" tabindex="-1" aria-labelledby="SinExistenciasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="SinExistenciasLabel">No se cuenta con Existencias suficientes para procesar</span>
+                </div>
+            </div>
+
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCloseModal">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
 <!-- Fondo obscuro -->
 <div class="invoice__modalBackgound"></div>
 
