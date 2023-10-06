@@ -78,6 +78,7 @@ class ProveedoresModel extends Model
 //Guarda proveedor
 public function SaveProveedores($params)
 {
+	$nameSup 		= $this->db->real_escape_string($params['NomProveedor']);
 	$estatus = 0;
 		try {
 			/* $qry = "INSERT INTO ctt_suppliers (sup_business_name, sup_contact, sup_rfc, sup_email, sup_phone,sup_status, sut_id)
@@ -88,7 +89,7 @@ public function SaveProveedores($params)
 					sup_rfc, sup_email, sup_phone, sup_phone_extension, sup_status, sup_credit, sup_credit_days, 
 					sup_balance, sup_money_advance, sup_advance_amount, sut_id, sup_proof_tax_situation, 
 					sup_id_international_supplier, sup_description_id_is, sup_way_pay, sup_bank, sup_clabe) 
-					VALUES ('".$params['NomProveedor']."','".$params['NomComercial']."','".$params['ContactoProveedor']."',
+					VALUES ('$nameSup','".$params['NomComercial']."','".$params['ContactoProveedor']."',
 					'".$params['RfcProveedor']."','".$params['EmailProveedor']."','".$params['PhoneProveedor']."',
 					'".$params['PhoneAdicional']."', '1', '".$params['selectCredito']."','".$params['DiasCredito']."',
 					'".$params['MontoCredito']."','".$params['selectAnticipo']."','".$params['MontoAnticipo']."',
@@ -107,10 +108,12 @@ public function SaveProveedores($params)
 		} catch (Exception $e) {
 			$estatus = 0;
 		}
-	return $estatus;
+	return $nameSup;
 }
     public function ActualizaProveedor($params)
 	{
+		//$nameSup 		= $this->db->real_escape_string($params['NomProveedor']);
+		$nameSup   = str_replace('-','&',$params['NomProveedor']);
         $estatus = 0;
 			try {
                 /* $qry = " UPDATE ctt_suppliers
@@ -123,7 +126,7 @@ public function SaveProveedores($params)
                 WHERE Sup_id = ".$params['IdProveedor'].";"; */
 
 				$qry = " UPDATE ctt_suppliers
-                SET sup_business_name = '".$params['NomProveedor']."'
+                SET sup_business_name = '".$nameSup."'
                 ,sup_trade_name = '".$params['NomComercial']."'
 				,sup_contact = '".$params['ContactoProveedor']."'
 				,sup_rfc = '".$params['RfcProveedor']."'
@@ -150,7 +153,7 @@ public function SaveProveedores($params)
 			} catch (Exception $e) {
 				$estatus = 0;
 			}
-		return $estatus;
+		return $nameSup;
 	}
 
     //borra proveedor

@@ -1059,10 +1059,10 @@ class ProjectPlansModel extends Model
         $sbc_id = $this->db->real_escape_string($params['dstr']);
         if ($word == '') {
             $qry = "SELECT * from ctt_vw_list_products2
-            WHERE sbc_id = '$sbc_id' AND prd_level IN('P','K');";
+            WHERE sbc_id = '$sbc_id';";
         }else{
             $qry = "SELECT * from ctt_vw_list_products2
-            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id' AND prd_level IN('P','K');";
+            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
         }
         return $this->db->query($qry);
     } 
