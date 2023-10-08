@@ -319,10 +319,11 @@ function put_Proyectos(dt) {
     });
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
+        $('#txtIdProject').val($(this).val());
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
         $('.objet').addClass('objHidden');
-        get_products(pj[px].pjt_id);
+        get_products($(this).val());
+        console.log('Value',$(this).val());
     });
 }
 function put_status_mant(dt) {
@@ -601,7 +602,7 @@ function updating_serie(acc) {
     else {
        var pagina = 'Maintenance/changeMaintain';
     }
-
+    console.log(par);
     var tipo = 'json';
     var selector = put_save_subleting;
     fillField(pagina, par, tipo, selector);
@@ -612,7 +613,7 @@ function put_save_subleting(dt) {
     /* $('#txtIdSerie').val(0);
     $('#txtIdStatus').val(0);
     $('#txtIdMaintain').val(0); */
-    $('#txtIdProject').val('');
+    // $('#txtIdProject').val('');
     $('#txtComments').val('');
     $('#txtDays').val('');
     $('#txtHrs').val('');

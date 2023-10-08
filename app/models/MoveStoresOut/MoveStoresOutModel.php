@@ -229,7 +229,7 @@ class MoveStoresOutModel extends Model
 			FROM ctt_products AS prd 
 			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
-			WHERE SUBSTR(sr.ser_sku,1,10)='$prd_sku' AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
+			WHERE SUBSTR(prd.prd_sku,1,7)=SUBSTR('$prd_sku',1,7) AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
 			GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 
 		return $this->db->query($qry);
@@ -239,7 +239,7 @@ class MoveStoresOutModel extends Model
 		$qry = "SELECT Count(*) as cant FROM ctt_products AS prd 
 			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
-			WHERE SUBSTR(prd.prd_sku,1,10)='$prd_sku' AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
+			WHERE SUBSTR(prd.prd_sku,1,7)=SUBSTR('$prd_sku',1,7) AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
 			GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 		return $this->db->query($qry);
 	}

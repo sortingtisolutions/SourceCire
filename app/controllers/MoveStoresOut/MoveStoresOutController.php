@@ -196,7 +196,6 @@ class MoveStoresOutController extends Controller
 			$response =  $this->setAccesories($request_params);
 			$var = 1;
 		}
-		echo "Resultado final";
 		echo $var;
 		
 		/* if ($request_params['mov'] == 'T' ){
@@ -271,7 +270,7 @@ class MoveStoresOutController extends Controller
 						echo $num_items->exist; //$res;
 					}
 				}else{
-					if ($typeExch == 3 &&  $strid ==30){
+					if ($typeExch == 3 &&  $strid1 == 30){
 					
 						$params =  $this->session->get('user');
 						$result = $this->model->UpdateStoresSourceE($paramsacc);
@@ -283,7 +282,6 @@ class MoveStoresOutController extends Controller
 							$params =  $this->session->get('user');
 							$result = $this->model->UpdateStoresSource($paramsacc);
 							$res = $result;
-							echo "mov-Source";
 						}
 					}
 					
