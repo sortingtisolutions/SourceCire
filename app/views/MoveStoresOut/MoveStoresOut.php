@@ -76,6 +76,11 @@
                             <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                         </div>
                     </div>
+                    <div class="sidebar__comments"> 
+                        <span class="invoice_button toComment" id="toComment">
+                            <i class="far fa-comment-alt"></i> Comentarios
+                        </span> 
+                    </div> <!--- 11-10-23 -->
                 </div>
             </div>
 
@@ -163,9 +168,33 @@
         </div>
 </div>
 <!-- end -->
+<!-- Modal General  -->
+<div class="invoice__modal-general invoice-border modalTable">
+        <div class="modal__header invoice-border">
+            <div class="modal__header-concept" style="font-weight: 700">&nbsp;Listados de productos</div>
+            <i class="far fa-window-close closeModal"></i>
+        </div>
+        <div class="modal__body">
+        </div>
+    </div>
+
+<!-- formulario de comentarios -->
+<div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box">
+            <!-- Lista de comentarios -->
+            <div class="comments__list"></div>
+            <!-- Captura de cumentario -->
+                <div class="comments__addNew">
+                    <label for="txtComment">Escribe comentario</label><br>
+                    <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
+                    <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
+                </div>
+        </div>
+    </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'MoveStoresOut/MoveStoresOut.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

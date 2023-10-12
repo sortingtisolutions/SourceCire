@@ -15,22 +15,24 @@ $conkey = decodificar($_GET['h']) ;
 $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-
+// 11-10-23
 if ($empid == '1'){
     $qry = "SELECT pcn.pjtcn_prod_name, pcn.pjtcn_prod_sku, pcn.pjtcn_quantity,
-            pj.pjt_number, pj.pjt_name, pj.pjt_date_start 
+            pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments  
             FROM ctt_projects_content AS pcn
             INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id=pcn.prd_id
             WHERE pj.pjt_id=$prdId 
             ORDER BY pcn.pjtcn_prod_sku;";
 } else{
     $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
                     pjc.pjt_id, pjtcn_order, pjc.pjtcn_section,
-                    pj.pjt_number, pj.pjt_name, pj.pjt_date_start
+                    pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments 
             FROM ctt_projects_content AS pjc
             INNER JOIN ctt_projects AS pj ON pj.pjt_id=pjc.pjt_id
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id=pcn.prd_id
             WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid
             ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }
@@ -119,14 +121,15 @@ $html = '
                                 $prodname     = $items[$i]['pjtcn_prod_name'] ;  //  ------------
                                 $prodsku      = $items[$i]['pjtcn_prod_sku'] ; //  ------------
                                 $quantity     = $items[$i]['pjtcn_quantity'] ;  //  ------------
+                                $comment       = $items[$i]['prd_comments'] ;  // 11-10-23
                                 
         $html .= '
                             <tr>
                                 <td class="dat-figure prod" style="font-size: 1.2em;">' . $prodname     . '</td>
                                 <td class="dat-figure sku">'   . $prodsku     . '</td>
                                 <td class="dat-figure sku">'   . $quantity    . '</td>
-                                <td class="dat-figure prod"> </td>
-                            </tr> ';
+                                <td class="dat-figure prod">'. $comment               .' </td>
+                            </tr> '; // 11-10-23
                             }
                         }
         $html .= '

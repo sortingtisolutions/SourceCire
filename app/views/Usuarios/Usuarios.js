@@ -114,7 +114,7 @@ function getIdModuluesPerfiles(idPerfil) {
             if (respuesta != '') {
                 getModulesList(respuesta, 'Asig'); //Asignados
             }
-            getModulesList(respuesta, 'Disp'); //Disponibles
+            getModulesList(respuesta, 'Disp'); //Disponibles 
         },
         error: function () {},
     }).done(function () {});
@@ -206,7 +206,7 @@ function EditUsuario(id, idPerfil) {
                 getModulesList(respuesta.modulesAsing, 'Asig'); //Asignados
             }
             getModulesList(respuesta.modulesAsing, 'Disp'); //Disponibles
-
+            
             $('#UsuariosModal').modal('show');
         },
         error: function (EX) {

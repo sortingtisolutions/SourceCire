@@ -8,7 +8,7 @@ class WhOutputContentModel extends Model
       parent::__construct();
     }
 
-    // Listado de proyectos    ******
+    // Listado de proyectos    ****** // 11-10-23
     public function listProjects($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
@@ -17,13 +17,16 @@ class WhOutputContentModel extends Model
                 DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
                 DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
                 DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
-                pj.pjt_location, cus.cus_name, pj.pjt_id
+                pj.pjt_location, cus.cus_name, pj.pjt_id, free.free_id, wap.emp_id, wap.emp_fullname
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
+                LEFT JOIN ctt_assign_proyect AS asp ON asp.pjt_id= pj.pjt_id
+                LEFT JOIN ctt_freelances AS free ON free.free_id = asp.free_id
+                LEFT JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
+                WHERE pj.pjt_id=$pjt_id AND wap.are_id=1 ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 

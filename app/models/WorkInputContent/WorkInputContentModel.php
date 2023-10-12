@@ -8,27 +8,30 @@ class WorkInputContentModel extends Model
       parent::__construct();
     }
 
-    // Listado de proyectos    ******
+    // Listado de proyectos    ****** // 11-10-23
     public function listProjects($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
 
         $qry = "SELECT pt.pjttp_name, pj.pjt_name, pj.pjt_number,
-                DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
-                DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
-                DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
-                pj.pjt_location, cus.cus_name, pj.pjt_id
-                FROM ctt_projects AS pj 
-                LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
-                LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
-                LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
-                LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
+        DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
+        DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
+        DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
+        pj.pjt_location, cus.cus_name, pj.pjt_id, free.free_id, wap.emp_id, wap.emp_fullname
+        FROM ctt_projects AS pj 
+        LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
+        LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
+        LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
+        LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
+        LEFT JOIN ctt_assign_proyect AS asp ON asp.pjt_id= pj.pjt_id
+        LEFT JOIN ctt_freelances AS free ON free.free_id = asp.free_id
+        LEFT JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
+        WHERE pj.pjt_id=$pjt_id AND wap.are_id=1 ORDER BY pjt_date_start ASC;";
 
         return $this->db->query($qry);
     }
 
-// Listado de Productos de Proyecto asigando
+// Listado de Productos de Proyecto asigando // 11-10-23
     public function listDetailProds($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
@@ -36,17 +39,30 @@ class WorkInputContentModel extends Model
 
         if ($empid==1){
             $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
-            FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order, 
+             case 
+                 when pjtcn_section=1 then 'Base'
+                 when pjtcn_section=2 then 'Extra'
+                 when pjtcn_section=3 then 'Por dia'
+                 else 'Subarrendo'
+                 END AS section
+            FROM ctt_projects_content 
+            WHERE pjt_id=$pjt_id ORDER BY pjtcn_section, pjtcn_prod_sku ASC;";
         }
         else{
             $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order,SUBSTR(pjc.pjtcn_prod_sku,1,2)
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order, SUBSTR(pjc.pjtcn_prod_sku,1,2), 
+            case 
+                 when pjtcn_section=1 then 'Base'
+                 when pjtcn_section=2 then 'Extra'
+                 when pjtcn_section=3 then 'Por dia'
+                 else 'Subarrendo'
+                 END AS section
             FROM ctt_projects_content AS pjc
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
             WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid
-            ORDER BY pjc.pjtcn_order;";
+            ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
         }
         return $this->db->query($qry);
     }
@@ -184,5 +200,50 @@ class WorkInputContentModel extends Model
          return $prjid;
         
     }
+
+    // Agrega Comentario // 11-10-23
+    public function InsertComment($params, $userParam)
+    {
+        $group = explode('|',$userParam);
+    
+        $user   = $group[2];
+        $pjtId  = $this->db->real_escape_string($params['pjtId']);
+        $comSrc = $this->db->real_escape_string($params['comSrc']);
+        $comComment  = $this->db->real_escape_string($params['comComment']);
+
+        $qry1 = "INSERT INTO ctt_comments (
+                        com_source_section, 
+                        com_action_id, 
+                        com_user, 
+                        com_comment, 
+                        com_status
+                ) VALUES (
+                        '$comSrc', 
+                        $pjtId, 
+                        '$user',
+                        '$comComment',
+                        1
+                );";
+        $this->db->query($qry1);
+        $comId = $this->db->insert_id;
+
+        $qry2 = "   SELECT com_id, com_date, com_user, com_comment 
+                    FROM ctt_comments 
+                    WHERE com_id = $comId;";
+        return $this->db->query($qry2);
+
+    }
+    // Listado los comentarios del proyecto
+    public function listComments($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['pjId']);
+
+        $qry = "SELECT com_id, com_date,com_user, com_comment 
+                FROM ctt_comments 
+                WHERE com_source_section = 'projects' 
+                AND com_action_id = $pjtId
+                ORDER BY com_date ASC;";
+        return $this->db->query($qry);
+    } 
 
 }

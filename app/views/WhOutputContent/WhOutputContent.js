@@ -23,7 +23,7 @@ function inicial() {
 
     setting_table_AsignedProd();
     getProjects(prjid);
-    getComments(prjid);
+    getComments_text(prjid);
     getDetailProds(prjid,em);
     getFreelances(prjid);
 
@@ -36,7 +36,116 @@ function inicial() {
      $('#printOutPut').on('click', function () {
         printOutPut(prjid);
      });
+      // Abre el modal de comentarios // 11-10-23
+    $('.sidebar__comments .toComment')
+    .unbind('click')
+    .on('click', function () {
+        showModalComments();
+        
+    });
+    
 }
+
+
+function showModalComments() {
+    let template = $('#commentsTemplates');
+    // let pjtId = $('.version_current').attr('data-project');
+
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Comentarios');
+    closeModals();
+    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
+
+    console.log( $('#txtComment').val()); */
+    //console.log(prjid);
+    fillComments(prjid);
+}
+/** ***** CIERRA MODALES ******* */
+function closeModals(table) {
+    $('.invoice__modal-general .modal__header .closeModal')
+        .unbind('click')
+        .on('click', function () {
+            automaticCloseModal();
+            
+        });
+}
+function automaticCloseModal() {
+    
+    $('.invoice__modal-general').slideUp(400, function () {
+        $('.invoice__modalBackgound').fadeOut(400);
+        $('.invoice__modal-general .modal__body').html('');
+        $('#listLocationsTable').DataTable().destroy; 
+        let tabla=$('#listLocationsTable').DataTable();
+        tabla.rows().remove().draw();
+        
+    });
+}
+
+function fillComments(pjtId) {
+    console.log(pjtId);
+    
+    // Agrega nuevo comentario
+    $('.comments__addNew .invoice_button')
+        .unbind('click')
+        .on('click', function () {
+            
+            //let pjtId = $('.version_current').attr('data-project');
+
+            let comSrc = 'projects';
+            let comComment = $('#txtComment').val();
+
+            console.log(comComment);
+            if (comComment.length > 3) {
+                let par = `
+                    [{
+                        "comSrc"        : "${comSrc}",
+                        "comComment"    : "${comComment}",
+                        "pjtId"         : "${prjid}"
+                    }]
+                    `;
+                var pagina = 'WorkInputContent/InsertComment';
+                var tipo = 'json';
+                console.log(par);
+                var selector = addComment;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+
+    getComments(pjtId);
+}
+
+function putComments(dt) {
+    $('.comments__list').html('');
+    if (dt[0].com_id > 0) {
+        $.each(dt, function (v, u) {
+            console.log(u);
+            fillCommnetElements(u);
+        });
+    }
+    
+}
+
+function fillCommnetElements(u) {
+    console.log(u.com_comment);
+    let H = `
+        <div class="comment__group" style="border-bottom: 1px solid var(--br-gray-soft); padding: 0.2rem; width: 100%;">
+            <div class="comment__box comment__box-date" style="width: 100%;text-align: right; font-size: 0.9em; color: var(--in-oxford);"><i class="far fa-clock" style="padding: 0 0.5rem;"></i>${u.com_date}</div>
+            <div class="comment__box comment__box-text">${u.com_comment}</div>
+            <div class="comment__box comment__box-user" style="text-align: left; font-size: 0.9em; color: var(--in-oxford);">${u.com_user}</div>
+        </div>
+    `;
+
+    $('.comments__list').prepend(H);
+    getComments_text(prjid);
+}
+
+function addComment(dt) {
+    console.log(dt[0]);
+    fillCommnetElements(dt[0]);
+    $('#txtComment').val('');
+}//********** */
 
 // Solicita los paquetes  OK
 function getProjects(prjid) {
@@ -85,13 +194,21 @@ function getSerieDetail(serid, serorg) {
     fillField(pagina, par, tipo, selector);
 }
 
-// Solicita los comentarios al proyecto
-function getComments(prjid) {
+// Solicita los comentarios al proyecto // 11-10-23
+function getComments_text(prjid) {
     //console.log(prjid)
     var pagina = 'WhOutputContent/listComments';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
     var selector = puComments;
+    fillField(pagina, par, tipo, selector);
+}
+/** Obtiene el listado de los comentarios del proyecto */ // 11-10-23
+function getComments(pjtId) {
+    var pagina = 'WorkInputContent/listComments';
+    var par = `[{"pjId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putComments;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -200,8 +317,8 @@ function putProjects(dt) {
     $('#txtEndDate').val(dt[0].pjt_date_end);
     $('#txtLocation').val(dt[0].pjt_location);
     $('#txtCustomer').val(dt[0].cus_name);
-    $('#txtAnalyst').val(usrname);
-    // $('#txtFreelance').val(dt[0].freelance);
+    $('#txtAnalyst').val(dt[0].emp_fullname); // 11-10-23
+    $('#txtFreelance').val(dt[0].free_id); // 11-10-23
 }
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
@@ -250,6 +367,7 @@ function putFreelances(dt) {
             let H = `<option value="${u.free_id}"> ${u.free_name} - ${u.are_name}</option>`;
             $('#txtFreelance').append(H);
         });
+        $('#txtFreelance').val(dt[0].free_id); // 11-10-23
     }
 }
 // ***************** se agregan los comentarios del proyecto jjr ***************
@@ -258,7 +376,7 @@ function puComments(dt) {
     {
         let valConcat=''
         $.each(dt, function (v, u){
-            valConcat=valConcat + u.com_user + ': ' + u.com_comment;
+            valConcat=valConcat + u.com_user + ': ' + u.com_comment+'\n'; // 11-10-23
         });
     $('#txtComments').text(valConcat);
     }

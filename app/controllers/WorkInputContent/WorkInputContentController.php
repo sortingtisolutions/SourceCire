@@ -59,6 +59,24 @@ class WorkInputContentController extends Controller
         }
         echo $res;
     }
+    // Lista los comentarios del proyecto // 11-10-23
+    public function listComments($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listComments($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"com_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    // ************************ //
 
     public function listSeries($request_params)
     {
@@ -76,7 +94,26 @@ class WorkInputContentController extends Controller
         }
         echo $res;
     }
+    // Guarda el comentario // 11-10-23
+    public function InsertComment($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->InsertComment($request_params, $params);
 
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"com_id":"0"}]';	
+        }
+        echo $res;
+        // **************************** //
+        
+    } 
         // Lista las series
     public function listReason($request_params)
     {
