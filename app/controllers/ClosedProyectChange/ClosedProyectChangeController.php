@@ -25,10 +25,10 @@ class ClosedProyectChangeController extends Controller
     }
 
     // LISTA LOS ALMACENES
-        public function listStores($request_params)
+        public function getMontos($request_params)
         {
             $params =  $this->session->get('user');
-            $result = $this->model->listStores($request_params);
+            $result = $this->model->getMontos($request_params);
             $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -37,7 +37,7 @@ class ClosedProyectChangeController extends Controller
             if ($i>0){
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
-                $res =  '[{"str_id":"0"}]';	
+                $res =  '[{"pjt_id":"0"}]';	
             }
             echo $res;
         } 
@@ -77,6 +77,24 @@ class ClosedProyectChangeController extends Controller
             }
             echo $res;
         } 
+
+        public function listDataProjects($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->listDataProjects($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"pjt_id":"0"}]';	
+            }
+            echo $res;
+        } 
+
 // Guarda la venta
         public function NextExchange($request_params)
         {

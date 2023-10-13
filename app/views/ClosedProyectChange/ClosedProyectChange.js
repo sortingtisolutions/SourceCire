@@ -12,10 +12,10 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-        get_stores();
+        // get_stores();
         get_projects();
         fill_dinamic_table();
-        get_products(5);
+        // get_products(5);
 
         $('#lstPayForm')
             .unbind('change')
@@ -54,12 +54,30 @@ function inicial() {
 /** OBTENCION DE DATOS */
 
 /**  Obtiene el listado de almacenes */
-function get_stores() {
-    var pagina = 'ClosedProyectChange/listStores';
+function get_projects() {
+    var pagina = 'ClosedProyectChange/listProjects';
     var par = `[{"strId":""}]`;
     var tipo = 'json';
-    var selector = put_stores;
-    caching_events('get_stores');
+    var selector = put_projects;
+    caching_events('get_projects');
+    fillField(pagina, par, tipo, selector);
+}
+
+function getDataProjects(pjtId) {
+    var pagina = 'ClosedProyectChange/listDataProjects';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putdataprojects;
+    caching_events('get_projects');
+    fillField(pagina, par, tipo, selector);
+}
+
+function get_montos(pjtId) {
+    var pagina = 'ClosedProyectChange/getMontos';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = fill_purchase;
+    caching_events('get_montos');
     fillField(pagina, par, tipo, selector);
 }
 
@@ -74,14 +92,8 @@ function get_products(strId) {
 }
 
 /**  Obtiene el listado de proyectos */
-function get_projects() {
-    var pagina = 'ClosedProyectChange/listProjects';
-    var par = `[{"strId":""}]`;
-    var tipo = 'json';
-    var selector = put_projects;
-    caching_events('get_projects');
-    fillField(pagina, par, tipo, selector);
-}
+
+
 
 function put_nextNumber(dt) {
     console.log(dt);
@@ -109,9 +121,13 @@ function put_projects(dt) {
     proj = dt;
     if (dt[0].pjt_id > 0) {
         $.each(proj, function (v, u) {
-            let H = ` <option value="${v + 1}">${u.pjt_number}</option>`;
+            let H = `<option value="${u.pjt_id}" >${u.pjt_number}-${u.pjt_name}</option>`;
             $('#lstProject').append(H);
         });
+        // $.each(proj, function (v, u) {
+        //     let H = `<option value="${v + 1}" data="${u.pjt_id}" >${u.pjt_number}-${u.pjt_name}</option>`;
+        //     $('#lstProject').append(H);
+        // });
     } else {
         $('#lstProject').html('');
     }
@@ -119,47 +135,116 @@ function put_projects(dt) {
     $('#lstProject')
         .unbind('change')
         .on('change', function () {
-            console.log($(this).val());
+            console.log('Change Proj',$(this).val());
             var ix = $(this).val();
-            if (ix > 0) {
-                $('#txtProject').parents('div.form_group').removeClass('hide');
-                $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
-                $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
-            } else {
-                $('#txtProject').parents('div.form_group').addClass('hide');
-                $('#txtProject').val('');
-                $('#txtCustomer').val('');
-            }
+            // let lpjt =  $(this).attr('data');
+            let lpjt = $(this).val();
+            console.log('PJTID-',lpjt);
+            getDataProjects(lpjt);
+            get_montos(lpjt);
+            // if (ix > 0) {
+            //     $('#txtProject').parents('div.form_group').removeClass('hide');
+            //     $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
+            //     $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
+            //     $('#txtDateStar').val(proj[ix - 1].pjt_date_start.toUpperCase());
+            //     $('#txtDateEnd').val(proj[ix - 1].pjt_date_end.toUpperCase());
+            //     $('#txtRepresen').val(proj[ix - 1].cus_legal_representative.toUpperCase());
+            //     $('#txtAdress').val(proj[ix - 1].cus_address.toUpperCase());
+            //     $('#txtRespProg').val(proj[ix - 1].emp_fullname.toUpperCase());
+
+            // } else {
+            //     $('#txtProject').parents('div.form_group').addClass('hide');
+            //     $('#txtProject').val('');
+            //     $('#txtCustomer').val('');
+            //     $('#txtDateStar').val('');
+            //     $('#txtDateEnd').val('');
+            //     $('#txtRepresen').val('');
+            //     $('#txtAdress').val('');
+            //     $('#txtRespProg').val('');
+            // }
+            
         });
+}
+
+function putdataprojects(dt) {
+    proj = dt;
+    if (dt[0].pjt_id > 0) {
+        $.each(proj, function (v, u) {
+                // $('#txtProject').parents('div.form_group').removeClass('hide');
+                $('#txtProject').val(u.pjt_name.toUpperCase());
+                $('#txtCustomer').val(u.cus_name.toUpperCase());
+                $('#txtDateStar').val(u.pjt_date_start.toUpperCase());
+                $('#txtDateEnd').val(u.pjt_date_end.toUpperCase());
+                $('#txtRepresen').val(u.cus_legal_representative.toUpperCase());
+                $('#txtAdress').val(u.cus_address.toUpperCase());
+                $('#txtRespProg').val(u.emp_fullname.toUpperCase());
+        });
+        
+    } else {
+        $('#lstProject').html('');
+    }
+
+    /* $('#lstProject')
+        .unbind('change')
+        .on('change', function () {
+            console.log('Change Proj',$(this).val());
+            var ix = $(this).val();
+            // let lpjt =  $(this).attr('data');
+            let lpjt = $(this).val();
+            console.log('PJTID-',lpjt);
+
+            get_montos(lpjt);
+            // if (ix > 0) {
+            //     $('#txtProject').parents('div.form_group').removeClass('hide');
+            //     $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
+            //     $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
+            //     $('#txtDateStar').val(proj[ix - 1].pjt_date_start.toUpperCase());
+            //     $('#txtDateEnd').val(proj[ix - 1].pjt_date_end.toUpperCase());
+            //     $('#txtRepresen').val(proj[ix - 1].cus_legal_representative.toUpperCase());
+            //     $('#txtAdress').val(proj[ix - 1].cus_address.toUpperCase());
+            //     $('#txtRespProg').val(proj[ix - 1].emp_fullname.toUpperCase());
+
+            // } else {
+            //     $('#txtProject').parents('div.form_group').addClass('hide');
+            //     $('#txtProject').val('');
+            //     $('#txtCustomer').val('');
+            //     $('#txtDateStar').val('');
+            //     $('#txtDateEnd').val('');
+            //     $('#txtRepresen').val('');
+            //     $('#txtAdress').val('');
+            //     $('#txtRespProg').val('');
+            // }
+            
+        }); */
 }
 
 function put_products(dt) {
     console.log(dt);
-    $('.list_products ul').html('');
-    if (dt[0].ser_id > 0) {
-        prod = dt;
-        let H = '';
-        $.each(dt, function (v, u) {
-            H = `
-                <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
-                    <div class="prodLevel">${u.ser_sku}</div>
-                    <div class="prodName">${u.prd_name}</div>
-                    <div class="prodLevel">${u.prd_price}</div>
-                    <div class="prodStock">${u.stock}</div>
-                </li> `;
+    // $('.list_products ul').html('');
+    // if (dt[0].ser_id > 0) {
+    //     prod = dt;
+    //     let H = '';
+    //     $.each(dt, function (v, u) {
+    //         H = `
+    //             <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
+    //                 <div class="prodLevel">${u.ser_sku}</div>
+    //                 <div class="prodName">${u.prd_name}</div>
+    //                 <div class="prodLevel">${u.prd_price}</div>
+    //                 <div class="prodStock">${u.stock}</div>
+    //             </li> `;
 
-            $('.list_products ul').append(H);
-        });
+    //         $('.list_products ul').append(H);
+    //     });
 
-        $('.list_products ul li')
-            .unbind('click')
-            .on('click', function () {
-                let inx = $(this).attr('data_indx');
-                if (prod[inx].stock > 0) {
-                    fill_purchase(prod[inx], inx);
-                }
-            });
-    }
+    //     $('.list_products ul li')
+    //         .unbind('click')
+    //         .on('click', function () {
+    //             let inx = $(this).attr('data_indx');
+    //             if (prod[inx].stock > 0) {
+    //                fill_purchase(prod[inx], inx);
+    //             }
+    //         });
+    // }
 }
 
 /**  +++++   Arma el escenario de la cotizacion  */
@@ -168,16 +253,15 @@ function fill_dinamic_table() {
     let H = `
         <table class="table_control" id="tblControl" style="width: 900px;">
             <thead>
-                <tr>
-                    <th rowspan="2" class="w5 fix product">CODIGO</th>
-                    <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
-                </tr>
                 <tr class="headrow">
-                    <th class="w4 zone_01" >CANTIDAD </th>
-                    <th class="w3 zone_01" >DESCRIPCION </th>
-                    <th class="w3 zone_03" >PRECIO</th>
-                    <th class="w3 zone_03" >DESCUENTO</th>
-                    <th class="w3 zone_03" >TOTAL</th>
+                    <th class="w4 zone_01" ></th>
+                    <th class="w4 zone_01" >VERSION </th>
+                    <th class="w3 zone_01" >TOTAL PROYECTO </th>
+                    <th class="w3 zone_01" >TOTAL MANTENIMIENTO </th>
+                    <th class="w3 zone_03" >TOTAL EXPENDABLES</th>
+                    <th class="w3 zone_03" >TOTAL DIESEL</th>
+                    <th class="w3 zone_03" >MONTO DESCUENTO</th>
+                    <th class="w3 zone_03" >TOTAL COBRO</th>
                 </tr>
             </thead>
             <tbody>
@@ -188,10 +272,12 @@ function fill_dinamic_table() {
     $('#tbl_dynamic').html(H);
     tbldynamic('tbl_dynamic');
     add_boton();
+    
+    // fill_purchase(prod[inx], inx);
 }
 
 function add_boton() {
-    let H = `<br><button class="btn-add" id="addProduct">+ agregar producto</button>`;
+    let H = `<br><button class="btn-add" id="addProduct">+ modificar montos</button>`;
     $('.frame_fix_top #tblControl thead th.product').append(H);
 
     $('.frame_fix_top #addProduct').on('click', function (e) {
@@ -236,58 +322,76 @@ function add_boton() {
 }
 
 /**  +++++ Guarda el producto en la cotización +++++ */
-function fill_purchase(pr, ix) {
-    caching_events('fill_purchase');
+function fill_purchase(dt) {
+    console.log('fill_purchase',dt);
     // console.log(pr);
     // console.log(ix);
 
-    $('#Products .sel_product').text('');
+    // $('#Products .sel_product').text('');
 
     //  let prdName = pr.prod_name.replace(/°/g, '"');
-
-    let ky = registered_product(pr.ser_id);
-    if (ky == 0) {
+    // proj = dt;
+    // if (dt[0].pjt_id > 0) {
+    //     $.each(proj, function (v, u) {
+    //         let H = `<option value="${v + 1}">${u.pjt_number}-${u.pjt_name}</option>`;
+    //         $('#lstProject').append(H);
+    //     });
+    // } else {
+    //     $('#lstProject').html('');
+    // }
+    // let ky = registered_product(pr.ser_id);
+    // if (ky == 0) {
+        if (dt[0].clo_id > 0) {
+        $.each(dt, function (v, u) {
         let H = `
-        <tr id="${pr.ser_id}" data_index="${ix}">
-            <td class="product"><i class="fas fa-times-circle kill"></i>${pr.prd_sku} - ${pr.prd_name}</td>
-            <td class="quantity" data_quantity="${pr.stock}">1</td>
-            <td class="price">${pr.prd_price}</td>
-            <td class="cost">0</td>
-        </tr>
-    `;
-
+        <tr id="${u.clo_id}" data_index="${u.clo_id}">
+            <td><i class="fas fa-pen kill"></i></td>
+            <td class="cost" >${u.clo_ver_closed}</td>
+            <td class="cost" >${mkn(u.clo_total_proyects,'n')}</td>
+            <td class="cost" >${mkn(u.clo_total_maintenance,'n')}</td>
+            <td class="cost" >${mkn(u.clo_total_expendables,'n')}</td>
+            <td class="cost" >${mkn(u.clo_total_diesel,'n')}</td>
+            <td class="cost" >${mkn(u.clo_total_discounts,'n')}</td>
+            <td class="cost" >${mkn(u.clo_total_proyects,'n')}</td>
+        </tr> `;
         $('#tbl_dynamic tbody').append(H);
-        $(`.frame_content #tblControl tbody #${pr.ser_id} td.quantity`).attr({contenteditable: 'true'});
+
+        $(`.frame_content #tblControl tbody #${u.clo_id} td.quantity`).attr({contenteditable: 'true'});
+    });
     }
 
-    rgcnt = 1;
-    update_totals();
+    // rgcnt = 1;
+    // update_totals();
 
-    $('td.quantity')
-        .unbind('blur')
-        .on('blur', function () {
-            let qty = parseInt($(this).text());
-            let qtydef = parseInt($(this).attr('data_quantity'));
-            if (qty < 1) {
-                $(this).text(1);
-            } else if (qty > qtydef) {
-                $(this).text(qtydef);
-            }
-            rgcnt = 1;
-            update_totals();
-        });
+    // $('td.quantity')
+    //     .unbind('blur')
+    //     .on('blur', function () {
+    //         let qty = parseInt($(this).text());
+    //         let qtydef = parseInt($(this).attr('data_quantity'));
+    //         if (qty < 1) {
+    //             $(this).text(1);
+    //         } else if (qty > qtydef) {
+    //             $(this).text(qtydef);
+    //         }
+    //         rgcnt = 1;
+    //         update_totals();
+    //     });
 
     $('.kill')
         .unbind('click')
         .on('click', function () {
             let id = $(this).parents('tr').attr('id');
             console.log(id);
-            $('.frame_content #' + id).remove();
-            $('.frame_fix_row #' + id).remove();
-            $('.frame_fix_col #' + id).remove();
-            $('.frame_fix_top #' + id).remove();
-            rgcnt = 1;
-            update_totals();
+            let prdNm="Modificacion a los valores iniciales"
+            $('#newValuesModal').removeClass('overlay_hide');
+            $('.overlay_closer .title').html(prdNm);
+
+        });
+
+    $('#newValuesModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
         });
 }
 
