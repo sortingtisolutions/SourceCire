@@ -26,6 +26,7 @@ function inicial() {
     getComments_text(prjid);
     getDetailProds(prjid,em);
     getFreelances(prjid);
+    getAnalysts(prjid)
 
     // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
@@ -154,6 +155,16 @@ function getProjects(prjid) {
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
     var selector = putProjects;
+    fillField(pagina, par, tipo, selector);
+}
+
+// Solicita los analistas  
+function getAnalysts(prjid) {
+    //console.log(prjid)
+    var pagina = 'WhOutputContent/listAnalysts';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = putAnalysts;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -317,17 +328,30 @@ function putProjects(dt) {
     $('#txtEndDate').val(dt[0].pjt_date_end);
     $('#txtLocation').val(dt[0].pjt_location);
     $('#txtCustomer').val(dt[0].cus_name);
-    $('#txtAnalyst').val(dt[0].emp_fullname); // 11-10-23
-    $('#txtFreelance').val(dt[0].free_id); // 11-10-23
+    //$('#txtAnalyst').val(dt[0].emp_fullname); // 11-10-23
+    //$('#txtFreelance').val(dt[0].free_id); // 11-10-23
+}
+function putAnalysts(dt) {
+    if (dt[0].emp_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.emp_id}"> ${u.emp_fullname} - ${u.are_name}</option>`;
+            $('#txtAnalyst').append(H);
+        });
+        $('#txtAnalyst').val(dt[0].emp_id); // 11-10-23
+    }
+    
+    
 }
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 function putDetailsProds(dt) {
-    console.log(dt);
+    let tabla = $('#tblAsignedProd').DataTable();
+    tabla.rows().remove().draw();
     if (dt[0].pjtpd_id != '0')
     {
         let valstage='';
         let locsecc='';
+        let icon = '';
         
         let tabla = $('#tblAsignedProd').DataTable();
         // $('#tblAsignedProd table tbody').html('');
@@ -337,13 +361,18 @@ function putDetailsProds(dt) {
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
             else { valstage='#e2f8f2'; }
+            if (u.pjtcn_quantity == u.cant_ser) {
+                icon = 'fas fa-regular fa-thumbs-up';
+            } else{
+                icon ='fas fa-edit';
+            }
 
             //console.log(valstage);
             let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
 
             var rownode=tabla.row
                 .add({
-                    editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
+                    editable: `<i class="${icon} toLink" id="${u.pjtcn_id}"></i>`,
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
@@ -353,9 +382,11 @@ function putDetailsProds(dt) {
                     /* pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
                 })
                 .draw().node();
-            $(rownode).css("background-color", valstage)
+            $(rownode).css("background-color", valstage);
+           
             // $("tr").css("background-color", valstage);
-            $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+            //$(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+            /* */  
         });
         activeIcons();
     }
@@ -588,10 +619,13 @@ function checkSerie(pjtcnid) {
 
 function myCheck(dt){
     //console.log(dt);
+    let sku = $('#'+dt).find('.toChange').attr('data-content').split('|')[0];
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
+    getDetailProds(prjid,em);
+    //console.log($);
     /* $('#'+dt).attr("id",NuevoSku).children("td.nombreclase").text(NuevoSku);
     $('#'+dt).attr("id",sernumber).children("td.nombreclase").text(sernumber);
     $('#'+dt).attr("id",sertype).children("td.nombreclase").text(NuevoSku); */
@@ -692,7 +726,7 @@ function activeIconsNewSerie() {
         // console.log("New Serie", serIdSel, serIdOrg );
 
         $('#'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
-        // $('#'+serIdOrig).children(".claseElemento").css({"color":"#CC0000"});
+        // $('#'+serIdOrig).children(".claseElemento").cssmyCheck({"color":"#CC0000"});
         changeSerieNew(serIdSel, serIdOrg); 
     });
 }

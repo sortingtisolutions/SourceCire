@@ -57,9 +57,15 @@
                                 <label for="txtCustomer">Nombre Cliente</label>
                             </div>
                         </div>
-						<div class="row">
+						<!-- <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtAnalyst" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
+                                <label for="txtAnalyst">Analista de Programación</label>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
                                 <label for="txtAnalyst">Analista de Programación</label>
                             </div>
                         </div>
@@ -136,15 +142,16 @@
 
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
-                <div class="mvst_list tblProdMaster">
-                        <h1>Asignacion de Productos</h1>
+                <div class=" tblProdMaster">
+                        <h1>Asignacion de Salida de Productos</h1>
                         <!--- 11-10-23 -->
-                        <div class="sidebar__comments"> 
+                        <div class="sidebar__comments" style="position: absolute;right: 15px;"> 
                             <span class="invoice_button toComment">
-                                <i class="far fa-comment-alt"></i> Comentarios
+                                <i class="far fa-comment-alt"></i> Comentarios al proyecto
                             </span> 
                         </div>
                         <!--- *********** -->
+                        <div style="height:30px;"></div><!--- Agrega espacio -->
                         <table class="display compact nowrap"  id="tblAsignedProd" style="width:95%">
                             <thead>
                                 <tr>

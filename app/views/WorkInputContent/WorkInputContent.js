@@ -26,6 +26,7 @@ function inicial() {
     getFreelances(prjid);
     getReason();
     getComments_text(prjid); // 11-10-23
+    getAnalysts(prjid);
     
     $('#recordInPut').on('click', function () {
         alert('Actualizar Registros');
@@ -232,6 +233,16 @@ function getSerieDetail(serid, serorg) {
     fillField(pagina, par, tipo, selector);
 }
 
+// Solicita los analistas  
+function getAnalysts(prjid) {
+    //console.log(prjid)
+    var pagina = 'WorkInputContent/listAnalysts';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = putAnalysts;
+    fillField(pagina, par, tipo, selector);
+}
+
 function createTblRespaldo(prjid,prjnum) {
     console.log('createTblRespaldo', prjid,prjnum)
     var pagina = 'WorkInputContent/createTblResp';
@@ -239,6 +250,19 @@ function createTblRespaldo(prjid,prjnum) {
     var tipo = 'json';
     var selector = putCreateTbl;
     fillField(pagina, par, tipo, selector);
+}
+
+// Listar analistas
+function putAnalysts(dt) {
+    if (dt[0].emp_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.emp_id}"> ${u.emp_fullname} - ${u.are_name}</option>`;
+            $('#txtAnalyst').append(H);
+        });
+        $('#txtAnalyst').val(dt[0].emp_id); // 11-10-23
+    }
+    
+    
 }
 
 //**************  NIVEL 1 DE DATOS *****************************************
@@ -292,8 +316,8 @@ function putProjects(dt) {
     glbprjnum=dt[0].pjt_number;
     $('#txtTipoProject').val(dt[0].pjttp_name);
     $('#txtEndDate').val(dt[0].pjt_date_end);
-    $('#txtAnalyst').val(dt[0].emp_fullname);// 11-10-23
-    $('#txtFreelance').val(dt[0].free_id);// 11-10-23
+    /* $('#txtAnalyst').val(dt[0].emp_fullname);// 11-10-23
+    $('#txtFreelance').val(dt[0].free_id);// 11-10-23 */
 }
 
 function putFreelances(dt) {
@@ -309,6 +333,9 @@ function putFreelances(dt) {
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 
 function putDetailsProds(dt) {
+    let tabla = $('#tblAsigInput').DataTable();
+    tabla.rows().remove().draw();
+    if (dt[0].pjtpd_id != '0')
     if (dt[0].pjtpd_id != '0')
     {
         let valstage='';// 11-10-23
@@ -321,13 +348,18 @@ function putDetailsProds(dt) {
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
             else { valstage='#e2f8f2'; }
+            if (u.pjtcn_quantity == u.cant_ser) {
+                icon = 'fas fa-regular fa-thumbs-up';
+            } else{
+                icon ='fas fa-edit';
+            }
             //****** */
             // let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
             let skufull = u.pjtcn_prod_sku;
             // 11-10-23
             var rownode=tabla.row
                 .add({
-                    editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
+                    editable: `<i class="${icon} toLink" id="${u.pjtcn_id}"></i>`,
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
@@ -336,7 +368,9 @@ function putDetailsProds(dt) {
                     packstatus: valcontent,
                 })
                 .draw().node();
-                $(rownode).css("background-color", valstage)
+            $(rownode).css("background-color", valstage);
+                
+            //$(rownode).find('td').eq(0).find('.toLink').css("color", color);
             $(`#SKU-${u.pjtcn_prod_sku}`).parent('tr').attr('id', u.pjtcn_id).addClass('indicator');
         });
         //********** */
@@ -520,6 +554,7 @@ function myCheck(dt){
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).find('.toAcept').css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+    getDetailProds(prjid,em);
 }
 
 function readAceptTable() {

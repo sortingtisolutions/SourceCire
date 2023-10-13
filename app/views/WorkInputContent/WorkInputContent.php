@@ -57,9 +57,15 @@
                                 <label for="txtCustomer">Nombre Cliente</label>
                             </div>
                         </div> -->
-						<div class="row">
+						<!-- <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtAnalyst" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
+                                <label for="txtAnalyst">Analista de Programación</label>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
                                 <label for="txtAnalyst">Analista de Programación</label>
                             </div>
                         </div>
@@ -121,16 +127,17 @@
             <!-- Tabla principal -->
             <div class="mvst_table">
                 <div class="tblProdMaster">
-                        <h3>Registro de Entrada de Productos</h3>
+                        <h1>Registro de Entrada de Productos</h1>
                         <!--- 11-10-23 -->
                         <!-- Boton de comentarios -->
                         <div class="sidebar__comments"> 
-                            <span class="invoice_button toComment">
-                                <i class="far fa-comment-alt"></i> Comentarios
+                            <span class="invoice_button toComment" style="position: absolute;right: 15px;">
+                                <i class="far fa-comment-alt"></i> Comentarios al proyecto
                             </span> 
                         </div>
                         <!--- ********** -->
-                        <table class="display nowrap"  id="tblAsigInput" style="width:100%">
+                        <div style="height:30px;"></div> <!--- Agrega espacio -->
+                        <table class="display compact nowrap"  id="tblAsigInput" style="width:95%">
                             <thead>
                                 <tr>
                                     <th style="width:  20px"></th>

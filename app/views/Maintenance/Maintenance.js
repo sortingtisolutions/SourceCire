@@ -164,6 +164,7 @@ function setting_table() {
         fixedHeader: true,
         columns: [
             { data: 'editable', class: 'edit objHidden' },
+            { data: 'sku', class: 'sku' },
             { data: 'prodname', class: 'product-name' },
             { data: 'cost', class: 'sku' },
             { data: 'days', class: 'sku' },
@@ -430,6 +431,7 @@ function put_Products(dt) {
             tabla.row
                 .add({
                     editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,
+                    sku: u.prd_sku,
                     prodname: u.prd_name,
                     cost: u.pmt_price,
                     days: u.pmt_days,
@@ -467,18 +469,18 @@ function put_Products(dt) {
                 $('.objet').removeClass('objHidden');
                 let rw = $(this);
                 let ix = rw[0].attributes[2].value;
-
-                let prodname = rw[0].cells[1].outerText;
-                let costo = rw[0].cells[2].outerText;
-                let days = rw[0].cells[3].outerText;
-                let hours = rw[0].cells[4].outerText;
-                let datestar = rw[0].cells[5].outerText;
-                let dateend = rw[0].cells[6].outerText;
-                let no_econo = rw[0].cells[7].outerText;
-                let comments = rw[0].cells[8].outerText;
+                let prodsku = rw[0].cells[1].outerText;
+                let prodname = rw[0].cells[2].outerText;
+                let costo = rw[0].cells[3].outerText;
+                let days = rw[0].cells[4].outerText;
+                let hours = rw[0].cells[5].outerText;
+                let datestar = rw[0].cells[6].outerText;
+                let dateend = rw[0].cells[7].outerText;
+                let no_econo = rw[0].cells[8].outerText;
+                let comments = rw[0].cells[9].outerText;
                 
-                let situation = rw[0].cells[10].outerText;
-                let status = rw[0].cells[11].outerText;
+                let situation = rw[0].cells[11].outerText;
+                let status = rw[0].cells[12].outerText;
                 //let no_serie = rw[0].cells[12].outerText;
 
 
@@ -650,7 +652,7 @@ function validator() {
     // console.log(msg);
 }
 function view_report(){
-    title= 'Generar reporte';
+    title= 'Rango de Fecha de alta en Mantenimiento';
     $('.overlay_closer .title').html(title);
 
     $('#ReportModal').removeClass('overlay_hide');
