@@ -132,6 +132,8 @@ class UsuariosModel extends Model
 				$EmpIdUsuario = $this->db->real_escape_string($params['EmpIdUsuario']);
 				$areaNombre = $this->db->real_escape_string($params['areaNombre']);
 
+				$idPuesto = $this->db->real_escape_string($params['idPuesto']); // 11-10-23
+
 				$qry = "SELECT usr_password FROM ctt_users WHERE usr_id = $IdUsuario;";
 
 				$result = $this->db->query($qry);
@@ -162,7 +164,6 @@ class UsuariosModel extends Model
 					//Actualiza Usuario
 					$qry = "UPDATE ctt_users 
 							SET usr_username = '$UserNameUsuario',
-							usr_dt_change_pwd = now(),
 							prf_id = '$idPerfil'
 							WHERE usr_id =$IdUsuario;";
 					$this->db->query($qry);
@@ -175,9 +176,10 @@ class UsuariosModel extends Model
 						SET emp_number = '$NumEmpUsuario',
 						emp_fullname = '$NomUsuario',
 						emp_area = '$areaNombre', 
+						pos_id = '$idPuesto',
 						are_id = '$AreaEmpUsuario'
 						WHERE emp_id = $EmpIdUsuario";
-				$this->db->query($qry);
+				$this->db->query($qry); // 11-10-23
 
 				//Borra los modulos asignados anteriormente al usuario 
 				$qry = "DELETE FROM ctt_users_modules WHERE usr_id ='$IdUsuario'";

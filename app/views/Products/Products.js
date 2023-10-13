@@ -1003,14 +1003,15 @@ function cleanProductsFields() {
 
 function validatorProductsFields() {
     let ky = 0;
-    // comentado para probar el flujo
-    /* $('.required').each(function () {
+    // comentado para probar el flujo // 11-10-23
+    $('.required').each(function () {
         if ($(this).val() == '' || $(this).val() == 0) {
             ky = 1;
             $(this).addClass('fail').parent().children('.fail_note').removeClass('hide');
         }
+        console.log(ky);
     });
-    inactiveFocus(); */
+    inactiveFocus();  
     return ky;
 }
 
@@ -1021,6 +1022,7 @@ function inactiveFocus() {
             $(this).removeClass('fail').parent().children('.fail_note').addClass('hide');
         });
 }
+
 
 /** +++++  Abre el modal y coloca los seriales de cada producto */
 function putSeries(dt) {

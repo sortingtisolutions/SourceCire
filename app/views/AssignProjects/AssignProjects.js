@@ -190,6 +190,7 @@ function putDetailsProds(dt) {
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putUsersP(dt) {
+    console.log(dt);
     if (dt[0].usr_id != '0') {
         let cinId = dt[0].usr_id;
         $.each(dt, function (v, u) {
@@ -244,7 +245,7 @@ function editProject(pjtid,pjtnm) {
 }
 
 function putUsersOnProject(dt) {
-    // console.log('putUsersOnProject', dt);
+    console.log('putUsersOnProject', dt);
     if (dt[0].whoatd_id != '0') {
         // let cinId = dt[0].usr_id;
         $.each(dt, function (v, u) {
@@ -260,6 +261,10 @@ function putUsersOnProject(dt) {
                 case '3':
                     let locselA = document.querySelector('#selUsrA');
                     locselA.value = u.emp_id;
+                    break;
+                case '5':
+                    let locselUP = document.querySelector('#selUsrP');
+                    locselUP.value = u.emp_id;
                     break;
                 default:
             }

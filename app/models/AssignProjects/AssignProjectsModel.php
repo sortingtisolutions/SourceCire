@@ -17,7 +17,7 @@ class AssignProjectsModel extends Model
                 FROM ctt_users AS usr
                 RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
                 WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
-                AND are_id in (1);";
+                AND are_id in (1,5);";
 
         return $this->db->query($qry);
     }
@@ -60,7 +60,7 @@ class AssignProjectsModel extends Model
                 pj.pjt_location, pj.pjt_status,pj.pjt_id, pj.pjt_whomake, pj.pjt_whoattend
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-                WHERE pj.pjt_status in ('4','7','8')
+                WHERE pj.pjt_status in ('2','4','7')
                 ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }

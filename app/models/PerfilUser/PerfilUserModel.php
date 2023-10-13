@@ -21,8 +21,8 @@ class PerfilUserModel extends Model
 				$qry = "SELECT mdl.mod_id,mdl.mod_code,mdl.mod_name,mdl.mod_description 
 					FROM ctt_modules AS mdl
 					INNER JOIN ctt_menu AS mnu ON mdl.mod_id=mnu.mod_id 
-					where mod_id in (".$params['ModUser'].") 
-					ORDER BY mnu.mnu_parent,mdl.mod_id;"; //Asignados
+					where mdl.mod_id in (".$params['ModUser'].") 
+					ORDER BY mnu.mnu_parent,mdl.mod_id;"; //Asignados // 11-10-23
 			}else{
 				$qry = "SELECT mod_id,mod_code,mod_name,mod_description from ctt_modules 
 				where mod_id not in (".$params['ModUser'].") ORDER BY mod_item;"; // Disponibles
