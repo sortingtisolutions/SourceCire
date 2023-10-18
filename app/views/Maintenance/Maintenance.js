@@ -164,6 +164,7 @@ function setting_table() {
         fixedHeader: true,
         columns: [
             { data: 'editable', class: 'edit objHidden' },
+            { data: 'sku', class: 'sku' },
             { data: 'prodname', class: 'product-name' },
             { data: 'cost', class: 'sku' },
             { data: 'days', class: 'sku' },
@@ -319,10 +320,11 @@ function put_Proyectos(dt) {
     });
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
+        $('#txtIdProject').val($(this).val());
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
         $('.objet').addClass('objHidden');
-        get_products(pj[px].pjt_id);
+        get_products($(this).val());
+        console.log('Value',$(this).val());
     });
 }
 function put_status_mant(dt) {
@@ -429,6 +431,7 @@ function put_Products(dt) {
             tabla.row
                 .add({
                     editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,
+                    sku: u.prd_sku,
                     prodname: u.prd_name,
                     cost: u.pmt_price,
                     days: u.pmt_days,
@@ -466,18 +469,18 @@ function put_Products(dt) {
                 $('.objet').removeClass('objHidden');
                 let rw = $(this);
                 let ix = rw[0].attributes[2].value;
-
-                let prodname = rw[0].cells[1].outerText;
-                let costo = rw[0].cells[2].outerText;
-                let days = rw[0].cells[3].outerText;
-                let hours = rw[0].cells[4].outerText;
-                let datestar = rw[0].cells[5].outerText;
-                let dateend = rw[0].cells[6].outerText;
-                let no_econo = rw[0].cells[7].outerText;
-                let comments = rw[0].cells[8].outerText;
+                let prodsku = rw[0].cells[1].outerText;
+                let prodname = rw[0].cells[2].outerText;
+                let costo = rw[0].cells[3].outerText;
+                let days = rw[0].cells[4].outerText;
+                let hours = rw[0].cells[5].outerText;
+                let datestar = rw[0].cells[6].outerText;
+                let dateend = rw[0].cells[7].outerText;
+                let no_econo = rw[0].cells[8].outerText;
+                let comments = rw[0].cells[9].outerText;
                 
-                let situation = rw[0].cells[10].outerText;
-                let status = rw[0].cells[11].outerText;
+                let situation = rw[0].cells[11].outerText;
+                let status = rw[0].cells[12].outerText;
                 //let no_serie = rw[0].cells[12].outerText;
 
 
@@ -601,7 +604,7 @@ function updating_serie(acc) {
     else {
        var pagina = 'Maintenance/changeMaintain';
     }
-
+    console.log(par);
     var tipo = 'json';
     var selector = put_save_subleting;
     fillField(pagina, par, tipo, selector);
@@ -612,7 +615,7 @@ function put_save_subleting(dt) {
     /* $('#txtIdSerie').val(0);
     $('#txtIdStatus').val(0);
     $('#txtIdMaintain').val(0); */
-    $('#txtIdProject').val('');
+    // $('#txtIdProject').val('');
     $('#txtComments').val('');
     $('#txtDays').val('');
     $('#txtHrs').val('');
@@ -649,7 +652,7 @@ function validator() {
     // console.log(msg);
 }
 function view_report(){
-    title= 'Generar reporte';
+    title= 'Rango de Fecha de alta en Mantenimiento';
     $('.overlay_closer .title').html(title);
 
     $('#ReportModal').removeClass('overlay_hide');

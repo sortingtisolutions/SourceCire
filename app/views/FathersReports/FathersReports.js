@@ -275,10 +275,13 @@ function get_change_reasons(pd) {
 function put_Proyectos(dt) {
     pj = dt;
     console.log(pj);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
-        $('#txtProject').append(H);
-    });
+    if (dt[0].pjt_id!=0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+            $('#txtProject').append(H);
+        });
+    }
+    
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
         $('#txtIdProject').val(pj[px].pjt_id);

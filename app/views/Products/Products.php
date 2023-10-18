@@ -110,7 +110,7 @@
                         <td class="">
                             <div class="row list-finder pos2 ">
                                 <div class="data">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" style="font-size: 0.8em;" data-mesage="Debes seleccionar un proveedor" autocomplete="off" disabled>
+                                    <input id="txtProducts" type="text" class="form-control form-control-sm " style="font-size: 0.8em;" data-mesage="Debes seleccionar un proveedor" autocomplete="off" disabled><!--- 11-10-23 -->
                                     <input type="hidden" id="txtIdProducts" name="txtIdProducts">
                                 </div>
                                 <div id="listProduct" class="list-group list-hide">
@@ -276,7 +276,7 @@
                         <td class="concept"><span class="reqsign"></span> SKU:</td>
                         <td class="data">
                             <input type="hidden" id="txtSerIdSerie" name="txtSerIdSerie" >
-                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox" style="width:200px" disabled>
+                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox requiredEdt" style="width:200px" disabled><!--- 11-10-23 -->
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Código del producto</span>
                         </td>
@@ -309,7 +309,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Moneda:</td>
                         <td class="data">
-                            <select id="txtSerCinId" name="txtSerCinId" class="textbox required" style="width:200px">
+                            <select id="txtSerCinId" name="txtSerCinId" class="textbox" style="width:200px"><!--- 11-10-23 -->
                                 <option value="0">Selecciona moneda</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>

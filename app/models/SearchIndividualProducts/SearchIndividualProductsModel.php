@@ -152,13 +152,7 @@ public function listProyects($store)
 // Actualizala cantidad de productos en un almacen destino
     public function UpdateProducts($param)
     {
-        // $idPrd 			= $this->db->real_escape_string($param['ser']);
-        // $idStrSrc 		= $this->db->real_escape_string($param['sti']);
-        // $quantity 		= $this->db->real_escape_string($param['qty']);
-
-        // $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} 
-        // WHERE str_id = {$idStrSrc} and  ser_id = {$idPrd};";
-        // return $this->db->query($qry);
+        
     }
 
 // Agrega el registro de relación almacen producto
@@ -271,43 +265,7 @@ public function listProyects($store)
 
     public function changeSubletting($params)
     {
-        // $pjDetail 		= $this->db->real_escape_string($params['pjDetail']);
-        // $producId 		= $this->db->real_escape_string($params['producId']);
-        // $produSku 		= $this->db->real_escape_string($params['produSku']);
-        // $seriCost 		= $this->db->real_escape_string($params['seriCost']);
-        // $dtResIni 		= $this->db->real_escape_string($params['dtResIni']);
-        // $dtResFin 		= $this->db->real_escape_string($params['dtResFin']);
-        // $comments 		= $this->db->real_escape_string($params['comments']);
-        // $supplier 		= $this->db->real_escape_string($params['supplier']);
-        // $tpCoinId 		= $this->db->real_escape_string($params['tpCoinId']);
-        // $projecId 		= $this->db->real_escape_string($params['projecId']);
-        // $storesId 		= $this->db->real_escape_string($params['storesId']);
-        // $seriesId 		= $this->db->real_escape_string($params['seriesId']);
-
-        // $qry1 = "UPDATE ctt_series 
-        //             SET 
-        //                 cin_id = '$tpCoinId', 
-        //                 ser_cost = '$seriCost'
-        //             WHERE ser_id = '$seriesId';";
-        // $this->db->query($qry1);
-
-        // $qry2 = "UPDATE ctt_subletting
-        //             SET 
-        //                 sub_price = '$seriCost',
-        //                 sub_comments = '$comments',
-        //                 cin_id = '$tpCoinId',
-        //                 sub_date_start = '$dtResIni',
-        //                 sub_date_end = '$dtResFin'
-        //             WHERE ser_id = '$seriesId' AND prj_id ='$projecId';";
-        // $this->db->query($qry2);
-
-        // $qry3 = "UPDATE ctt_stores_products
-        //             SET 
-        //                 str_id = '$storesId'
-        //             WHERE ser_id = '$seriesId';";
-        // $this->db->query($qry3);
-
-        // return $pjDetail;
+       
     }
 
 // Lista el productomodificado

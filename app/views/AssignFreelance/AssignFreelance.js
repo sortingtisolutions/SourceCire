@@ -453,7 +453,7 @@ function put_Freelances(dt) {
     
             var row= tabla.row
             .add({
-                editable: `<i class="fas fa-pen modif" id ="md${u.free_id}"></i><i class="fas fa-times-circle kill"></i>`,
+                editable: `<i class="fas fa-times-circle kill" id ="md${u.free_id}"></i>`,
                 proyname:u.pjt_name,
                 freename: u.free_name,
                 area:u.are_name,

@@ -313,7 +313,7 @@ function SaveProveedores() {
 
    var IdProveedor = $('#IdProveedor').val();
 
-   var NomProveedor = $('#NomProveedor').val().toUpperCase();
+   var NomProveedor = $('#NomProveedor').val().toUpperCase().replace('&','-');
    var NomComercial = $('#NomComercial').val().toUpperCase();
    var ContactoProveedor = $('#ContactoProveedor').val().toUpperCase();
    var RfcProveedor = $('#RfcProveedor').val().toUpperCase();
@@ -366,8 +366,8 @@ function SaveProveedores() {
    fillField(pagina, par, tipo, selector);
 }
 
-function putSaveProveedor(){
-   //console.log('Put SaveNew');
+function putSaveProveedor(dt){
+   console.log('Put SaveNew', dt);
    LimpiaModal();
    getProveedoresTable();
    getTipoProveedor();
@@ -549,4 +549,13 @@ function getOptionYesNo(id) {
    $('#selectFormaPago').append(renglon);
    renglon = "<option id='0'  value='No'>No</option> ";
    $('#selectFormaPago').append(renglon);
+}
+/**  ++++ Omite acentos para su facil consulta */
+function omitirCaracteresEspecial(text) {
+   var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
+   var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
+   for (var i = 0; i < acentos.length; i++) {
+       text = text.replace(acentos.charAt(i), original.charAt(i));
+   }
+   return text;
 }

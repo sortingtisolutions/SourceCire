@@ -76,6 +76,23 @@ class WhOutputContentController extends Controller
         }
         echo $res;
     }
+
+    public function listAnalysts($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listAnalysts($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"emp_id":"0"}]';
+        }
+        echo $res;
+    }
         // Lista las series
     public function listSeries($request_params)
     {

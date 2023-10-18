@@ -15,12 +15,22 @@ $(document).ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
+    if (altr == 1) {
+        
     setTimeout(() => {
+        deep_loading('O');
         getCustomers();
         getScores();
         getCustType();
         getOptionYesNo();
     }, 100);
+    
+    
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 // Solicita las categorias
@@ -73,6 +83,7 @@ function putCustomers(dt) {
     //console.log(dt);
     prds = dt;
     fillCustomers('0');
+    deep_loading('C');
 }
 
 /** +++++  configura la table de productos */

@@ -13,6 +13,7 @@ const totexp = $('#totExpendab');
 const totman = $('#totMaintenance');
 const totdie = $('#totDiesel');
 const totdis = $('#totDiscount');
+const totdoc = $('#totals');
 const totals = $('#totals');
 
 const size = [
@@ -299,6 +300,7 @@ function saveDocumentClosure() {
     let cloTotExpen = parseFloat(totexp.html().replace(/,/g, ''));
     let cloTotCombu =parseFloat(totdie.html().replace(/,/g, ''));
     let cloTotDisco = parseFloat(totdis.html().replace(/,/g, ''));
+    let cloTotDocum = parseFloat(totals.html().replace(/,/g, ''));
     let cloCommen = $(`#txtComments`).val();
     let pjtId = pjtgbl;
     let usrid = u;
@@ -311,6 +313,7 @@ function saveDocumentClosure() {
             "cloTotExpen" : "${cloTotExpen}",
             "cloTotCombu" : "${cloTotCombu}",
             "cloTotDisco" : "${cloTotDisco}",
+            "cloTotDocum" : "${cloTotDocum}",
             "cloCommen" : " ${cloCommen}",
             "cusId" :   "${cusId}",
             "pjtid" : "${pjtId}",

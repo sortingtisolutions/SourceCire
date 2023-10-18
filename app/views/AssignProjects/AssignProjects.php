@@ -15,7 +15,7 @@
             <div class="mvst_panel" style="width:280px; background-color: #e2edf3">
                 <div class="form-group">
                     <div class="form_primary">
-                        <h4 class="mainTitle">Usuarios de los Proyectos</h4>
+                        <h4 class="mainTitle">Responsables del Proyecto</h4>
 
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

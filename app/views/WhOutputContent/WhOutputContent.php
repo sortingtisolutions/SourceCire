@@ -57,9 +57,15 @@
                                 <label for="txtCustomer">Nombre Cliente</label>
                             </div>
                         </div>
-						<div class="row">
+						<!-- <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtAnalyst" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
+                                <label for="txtAnalyst">Analista de Programación</label>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
                                 <label for="txtAnalyst">Analista de Programación</label>
                             </div>
                         </div>
@@ -136,8 +142,16 @@
 
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
-                <div class="mvst_list tblProdMaster">
-                        <h1>Asignacion de Productos</h1>
+                <div class=" tblProdMaster">
+                        <h1>Asignacion de Salida de Productos</h1>
+                        <!--- 11-10-23 -->
+                        <div class="sidebar__comments" style="position: absolute;right: 15px;"> 
+                            <span class="invoice_button toComment">
+                                <i class="far fa-comment-alt"></i> Comentarios al proyecto
+                            </span> 
+                        </div>
+                        <!--- *********** -->
+                        <div style="height:30px;"></div><!--- Agrega espacio -->
                         <table class="display compact nowrap"  id="tblAsignedProd" style="width:95%">
                             <thead>
                                 <tr>
@@ -156,7 +170,15 @@
         </div>
     </div>
 </div>
-
+<!-- Modal General  -->
+<div class="invoice__modal-general invoice-border modalTable">
+        <div class="modal__header invoice-border">
+            <div class="modal__header-concept" style="font-weight: 700">&nbsp;Listados de productos</div>
+            <i class="far fa-window-close closeModal"></i>
+        </div>
+        <div class="modal__body">
+        </div>
+    </div>
 <!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
 <div class="overlay_background overlay_hide" id="SerieModal" style="width: 65%; left:15%;">
         <div class="overlay_modal">
@@ -264,9 +286,24 @@
     </div>
 <!-- end -->
 
+<!-- formulario de comentarios -->
+    <div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box">
+            <!-- Lista de comentarios -->
+            <div class="comments__list" style="border: 1px solid var(--br-gray-soft); border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.5rem; overflow-y: scroll;"></div>
+            <!-- Captura de cumentario -->
+                <div class="comments__addNew" style="background-color: var(--br-gray-soft); padding: 0.5rem;">
+                    <label for="txtComment">Escribe comentario</label><br>
+                    <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput" ></textarea><br>
+                    <span class="invoice_button" id="newComment" style="background-color: var(--in-white) !important;"><i class="fas fa-plus"></i>guardar comentario</span>
+                </div>
+        </div>
+    </div>
+
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'WhOutputContent/WhOutputContent.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
