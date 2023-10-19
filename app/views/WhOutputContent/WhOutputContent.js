@@ -367,6 +367,9 @@ function putDetailsProds(dt) {
                 icon ='fas fa-edit';
             }
 
+            /* if(u.pjtcn_prod_level=='K'){
+                icon = 'fas fa-regular fa-thumbs-up';
+            } */
             //console.log(valstage);
             let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
 

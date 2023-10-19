@@ -66,7 +66,7 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
-                                <label for="txtAnalyst">Analista de Programación</label>
+                                <label for="txtAnalyst">Responsables</label>
                             </div>
                         </div>
                         <div class="row">
@@ -83,7 +83,7 @@
                         </div> -->
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <textarea class="form-control form-control-sm" id="txtComments" style="height:70px; background-color: #FFFAFF" autocomplete="off" rows="5" disabled></textarea>
+                                <textarea class="form-control form-control-sm" id="txtComments" style="height:100px; background-color: #FFFAFF" autocomplete="off" rows="5" disabled></textarea>
                                 <label for="txtComments">Comentarios de Programación</label>
                             </div>
                         </div>

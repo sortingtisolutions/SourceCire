@@ -1,5 +1,5 @@
 let pj, px, pd;
-
+let user,v,u,n,em;
 $(document).ready(function () {
     if (verifica_usuario()) {
         inicial();
@@ -7,6 +7,11 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
+    user = Cookies.get('user').split('|');
+    u = user[0];
+    n = user[2];
+    em = user[3];
+
     folio = getFolio();
     setting_table();
     get_Proyectos();
@@ -268,10 +273,10 @@ function get_changes() {
     fillField(pagina, par, tipo, selector);
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
-function get_products(pj) {
+function get_products(pj, em) {
     console.log(pj);
     var pagina = 'Maintenance/listProducts';
-    var par = `[{"pjtId":"${pj}"}]`;
+    var par = `[{"pjtId":"${pj}","em":"${em}"}]`;
     var tipo = 'json';
     var selector = put_Products;
     fillField(pagina, par, tipo, selector);
@@ -323,7 +328,7 @@ function put_Proyectos(dt) {
         $('#txtIdProject').val($(this).val());
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
         $('.objet').addClass('objHidden');
-        get_products($(this).val());
+        get_products($(this).val(), em);
         console.log('Value',$(this).val());
     });
 }
@@ -611,7 +616,7 @@ function updating_serie(acc) {
 }
 function put_save_subleting(dt) { 
     console.log(dt);
-    get_products(dt);
+    get_products(dt,em);
     /* $('#txtIdSerie').val(0);
     $('#txtIdStatus').val(0);
     $('#txtIdMaintain').val(0); */

@@ -8,7 +8,7 @@ require_once '../../../vendor/autoload.php';
 $prdId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
-$empid = $_GET['u'];
+$empid = $_GET['em'];
 
 $conkey = decodificar($_GET['h']) ;
 
@@ -32,7 +32,7 @@ if ($empid == '1'){
             INNER JOIN ctt_projects AS pj ON pj.pjt_id=pjc.pjt_id
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
-            INNER JOIN ctt_products AS pd ON pd.prd_id=pcn.prd_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id=pjc.prd_id
             WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid
             ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }

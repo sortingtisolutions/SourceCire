@@ -44,22 +44,67 @@ class WhOutputContentModel extends Model
                  when prcn.pjtcn_section=2 then 'Extra'
                  when prcn.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
-                 END AS section, (SELECT COUNT(*) FROM ctt_series AS ser 
-INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
-INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=prcn.pjtcn_id) AS cant_ser
+                 END AS section, 
+                 case 
+					  when prcn.pjtcn_prod_level='k' then 
+					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
+                INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
+                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=prcn.pjtcn_id) 
+                = 
+                (SELECT COUNT(*)
+                FROM ctt_projects_content AS pcn
+                    INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
+                    INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
+                    INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
+                    LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
+                    WHERE pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A'
+                    ORDER BY pdt.pjtdt_prod_sku) then prcn.pjtcn_quantity
+                else'0'
+                END 
+					  ELSE (SELECT COUNT(*) FROM ctt_series AS ser 
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
+                INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
+                LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
+                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                END AS cant_ser
             FROM ctt_projects_content AS prcn
             WHERE prcn.pjt_id=$pjt_id ORDER BY prcn.pjtcn_section, prcn.pjtcn_prod_sku ASC";
         }
         else{
-            $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order, SUBSTR(pjc.pjtcn_prod_sku,1,2), 
+            $qry = "SELECT pjc.pjtcn_id, pjc.pjtcn_prod_sku, pjc.pjtcn_prod_name, pjc.pjtcn_quantity, 
+            pjc.pjtcn_prod_level, pjc.pjt_id, pjc.pjtcn_status, pjc.pjtcn_order, SUBSTR(pjc.pjtcn_prod_sku,1,2), 
             case 
-                 when pjtcn_section=1 then 'Base'
-                 when pjtcn_section=2 then 'Extra'
-                 when pjtcn_section=3 then 'Por dia'
+                 when pjc.pjtcn_section=1 then 'Base'
+                 when pjc.pjtcn_section=2 then 'Extra'
+                 when pjc.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
-                 END AS section
-            FROM ctt_projects_content AS pjc
+                 END AS section,
+                 case 
+					  when pjc.pjtcn_prod_level='k' then 
+					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
+                INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
+                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=pjc.pjtcn_id) 
+                = 
+                (SELECT COUNT(*)
+                FROM ctt_projects_content AS pcn
+                    INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
+                    INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
+                    INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
+                    LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
+                    WHERE pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A'
+                    ORDER BY pdt.pjtdt_prod_sku) then pjc.pjtcn_quantity
+                else'0'
+                END 
+                ELSE 
+                (SELECT COUNT(*) FROM ctt_series AS ser 
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
+                INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
+                LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
+                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A')
+                END AS cant_ser
+            FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
             WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid

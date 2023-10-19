@@ -44,7 +44,8 @@ class PerfilUserModel extends Model
 // Optiene los Perfiles existentes
 	public function GetPerfiles()
 	{
-		$qry = "SELECT prf_id,prf_code, prf_name, prf_description from ctt_profiles where prf_status = 1;";
+		$qry = "SELECT prf_id,prf_code, prf_name, prf_description 
+		from ctt_profiles where prf_status = 1;";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){

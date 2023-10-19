@@ -26,10 +26,10 @@ class ClosedProyectChangeModel extends Model
             $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end,
                             cu.cus_name, cu.cus_legal_representative, cu.cus_address, emp_fullname
                     FROM ctt_projects AS pj
-                    INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-                    INNER JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
-                    INNER JOIN ctt_who_attend_projects AS wt ON wt.pjt_id=pj.pjt_id
-                    WHERE pj.pjt_id=$pjtId ORDER BY pj.pjt_number;";
+                    LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                    LEFT JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
+                    LEFT JOIN ctt_who_attend_projects AS wt ON wt.pjt_id=pj.pjt_id
+                    WHERE pj.pjt_id=$pjtId AND wt.are_id=1 ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 
@@ -38,7 +38,7 @@ class ClosedProyectChangeModel extends Model
             $pjtId = $this->db->real_escape_string($params['pjtId']);
 
             $qry = "SELECT clo_id,clo_ver_closed,clo_total_proyects,clo_total_maintenance,
-                            clo_total_expendables, clo_total_diesel,clo_total_discounts	 
+                            clo_total_expendables, clo_total_diesel,clo_total_discounts,clo_total_document	 
                     FROM ctt_documents_closure WHERE pjt_id=$pjtId;";
             return $this->db->query($qry);
         }    
