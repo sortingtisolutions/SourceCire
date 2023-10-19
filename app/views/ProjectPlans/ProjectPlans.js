@@ -1743,7 +1743,7 @@ function activeInputSelector() {
                     default:
                 }
             }
-            else if(type == 'K' && sec == '1' )
+            else if(type == 'K'  )
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
@@ -1756,7 +1756,8 @@ function activeInputSelector() {
                         
                         break; 
                     case 'event_StokProduct':
-                        stockProduct(bdgId,nameProd);
+                        // stockProduct(bdgId,nameProd);
+                        alert('NO SE PUEDE MOSTRAR LA INFORMACION DE UN PAQUETE');
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
@@ -3368,6 +3369,7 @@ function periodProduct(prd, nameProd) {
 function putPeriods(dt) {
     console.log(dt);
     $('#periodBox').html(dt);
+    
 }
 
 function purgeInterfase() {
@@ -3405,5 +3407,5 @@ function subaccion() {
     let pjtId = $('.version_current').data('project');
     let verId = $('.version_current').attr('data-version');
 
-    /* getBudgets(pjtId, verId); */
+    getBudgets(pjtId, verId); 
 }

@@ -635,7 +635,7 @@ public function getNewProdChg($request_params)
                         'serId' => $serId,
                     );
                     // echo $serId . ' - Prod ' . $prodId ;
-                    $accesory = $this->model->GetAccesories($paramacc);  //jjr
+                   /*  $accesory = $this->model->GetAccesories($paramacc);  //jjr
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -665,7 +665,7 @@ public function getNewProdChg($request_params)
                         );
                         $serie = $this->model->SettingSeries($accparams);
                         // echo $serId . ' - SER-ACC ' . $prodId ;
-                    }
+                    } */
 
                 }
             } else if ( $bdglvl == 'K' ){
@@ -705,7 +705,7 @@ public function getNewProdChg($request_params)
                             'prodId' => $pkpdId, 
                             'serId' => $serId,
                         );
-                        $accesory = $this->model->GetAccesories($paramaccpk);
+                        /* $accesory = $this->model->GetAccesories($paramaccpk);
                         // echo 'Paso GetAccesories';
                         while($acc = $accesory->fetch_assoc()){
     
@@ -736,7 +736,7 @@ public function getNewProdChg($request_params)
                             );
                             $serie = $this->model->SettingSeries($accparams);
                             // echo 'Paso SettingSeries de un ACCESORIO';
-                        }
+                        } */
                     }
                 }
             }
@@ -890,7 +890,7 @@ public function getNewProdChg($request_params)
                         'prodId' => $prodId, 
                         'serId' => $serId,
                     );
-                $accesory = $this->model->GetAccesories($paramacc);
+                /* $accesory = $this->model->GetAccesories($paramacc);
                 while($acc = $accesory->fetch_assoc()){
 
                     $aprodId = $acc["prd_id"];
@@ -904,7 +904,7 @@ public function getNewProdChg($request_params)
                         'detlId' => $detlId,
                     );
                     $serie = $this->model->SettingSeries($accparams);
-                }
+                } */
                
             } elseif($prdLvl == 'K'){
                 $products = $this->model->GetProducts($prodId);
@@ -926,7 +926,7 @@ public function getNewProdChg($request_params)
                         'prodId' => $kprodId, 
                         'serId' => $serId,
                     );
-                    $accesory = $this->model->GetAccesories($paramaccpk);
+                    /* $accesory = $this->model->GetAccesories($paramaccpk);
                     while($acc = $accesory->fetch_assoc()){
 
                         $aprodId = $acc["prd_id"];
@@ -940,7 +940,7 @@ public function getNewProdChg($request_params)
                             'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
-                    }
+                    } */
                 }
             }
 

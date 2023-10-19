@@ -1491,7 +1491,13 @@ function activeInputSelector() {
                             infoProduct(bdgId, type);
                             break;
                         case 'event_StokProduct':
-                            stockProduct(bdgId);
+                            if(type=='K'){
+                                alert('NO SE PUEDE MOSTRAR LA INFORMACION DE UN PAQUETE');
+                            }else{
+                                stockProduct(bdgId);
+                                // console.log('ESTE SI ES UN PAQUETE');
+                            }
+                            
                             break;
                         case 'event_ChangePakt':
                             if(type!='K'){

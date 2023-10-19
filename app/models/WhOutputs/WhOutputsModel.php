@@ -25,7 +25,8 @@ class WhOutputsModel extends Model
                 DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, 
                 DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
                 DATE_FORMAT(pj.pjt_date_last_motion,'%d/%m/%Y %H:%i ') AS pjt_date_project, 
-                pj.pjt_location, pj.pjt_status,pj.pjt_id
+                pj.pjt_location, pj.pjt_status,pj.pjt_id, (SELECT MAX(vr.ver_id) FROM ctt_version AS vr 
+					 WHERE vr.pjt_id = pj.pjt_id) AS ver_id
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
@@ -46,20 +47,25 @@ class WhOutputsModel extends Model
     public function UpdateSeriesToWork($params)
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
+        $verid = $this->db->real_escape_string($params['verid']);
 
         $qry2 = "UPDATE ctt_projects SET pjt_status='7'
                 WHERE pjt_id=$pjtid AND pjt_status='4';";
 
         $chprj = $this->db->query($qry2);
 
-        $qry = "UPDATE ctt_series AS ser
+        /* $qry = "UPDATE ctt_series AS ser
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id=pjd.pjtvr_id
                 INNER JOIN ctt_version AS ver ON ver.ver_id=pjv.ver_id
                 INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pjv.pjt_id
                 SET ser.ser_stage='TA'
-                WHERE pjt.pjt_id=$pjtid AND pjt.pjt_status='4';";
-        return $this->db->query($qry);
+                WHERE pjt.pjt_id=$pjtid AND pjt.pjt_status='4';"; */
+
+        $qry = "SELECT fun_RegistraAccesorios('$verid', '$pjtid') as bandsucess
+                FROM DUAL;";  // solo trae un registro
+        $result =  $this->db->query($qry);
+        return 1;
 
     }
 

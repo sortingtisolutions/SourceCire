@@ -137,7 +137,7 @@ function putProjects(dt) {
         // settingTable();
         activeIcons();
     } else {
-        settingTable();
+        //settingTable();
     }
 }
 

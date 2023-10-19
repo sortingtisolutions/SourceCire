@@ -207,7 +207,7 @@ function getSeries(pjtcnid) {
 
 function getFreelances(prjid) {
     //console.log(prjid)
-    var pagina = 'WhOutputContent/listFreelances';
+    var pagina = 'WorkInputContent/listFreelances';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
     var selector = putFreelances;

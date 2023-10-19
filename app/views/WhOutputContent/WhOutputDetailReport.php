@@ -26,7 +26,7 @@ $qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_
         WHERE pcn.pjt_id=$prdId AND substr(pdt.pjtdt_prod_sku,11,1)!='A' 
         ORDER BY pdt.pjtdt_prod_sku;";
 } else{
-$qry = "SELECT pjtcn_prod_name, pjtdt_prod_sku, pjtcn_quantity, 
+$qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity, 
         pjc.pjt_id, '1' AS dt_cantidad, pjtcn_order, pjc.pjtcn_section,
         sr.ser_serial_number,sr.ser_no_econo,
             pj.pjt_number, pj.pjt_name, pj.pjt_date_start, sr.ser_comments
@@ -36,6 +36,7 @@ $qry = "SELECT pjtcn_prod_name, pjtdt_prod_sku, pjtcn_quantity,
         INNER JOIN ctt_projects AS pj ON pj.pjt_id=pjc.pjt_id
         INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
         INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+        INNER JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
         WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid AND substr(pdt.pjtdt_prod_sku,11,1)!='A'
         ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }
@@ -117,7 +118,7 @@ if ($equipoBase == '1'){
                             $section     = 1;
 
                             if ($section == '1') {
-                                $prodname     = $items[$i]['pjtcn_prod_name'] ;  //  ------------
+                                $prodname     = $items[$i]['prd_name'] ;  //  ------------
                                 $prodsku      = $items[$i]['pjtdt_prod_sku'] ; //  ------------
                                 $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
                                 $sernum       = $items[$i]['ser_no_econo'] ; //  -------- 
