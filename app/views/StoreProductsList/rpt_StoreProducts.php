@@ -9,6 +9,7 @@ require_once '../../../vendor/autoload.php';
     $dir = '../../assets/filesupport/listProducts.txt';
     $file = fopen($dir, "r") or die ('problema al abrir archivo');
 
+    
     while (!feof($file)){
         $getFile = fgets($file);
     }

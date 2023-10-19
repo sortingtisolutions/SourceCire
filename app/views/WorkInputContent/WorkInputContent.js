@@ -7,8 +7,7 @@ let user,v,u,n,em;  //datos de usuaria para impresion
 let aux=0;
 $(document).ready(function () {
     if (verifica_usuario()) {
-        // let temporal=Cookies.get('user');
-        // console.log(temporal);
+        
         prjid=Cookies.get('pjtid');
         inicial();
     }
@@ -58,10 +57,7 @@ function showModalComments() {
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
-    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
-
-    console.log( $('#txtComment').val()); */
-    //console.log(prjid);
+   
     fillComments(prjid);
 }
 /** ***** CIERRA MODALES ******* */
@@ -92,9 +88,7 @@ function fillComments(pjtId) {
     $('.comments__addNew .invoice_button')
         .unbind('click')
         .on('click', function () {
-            
-            //let pjtId = $('.version_current').attr('data-project');
-
+           
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
 
@@ -261,7 +255,6 @@ function putAnalysts(dt) {
         });
         $('#txtAnalyst').val(dt[0].emp_id); // 11-10-23
     }
-    
     
 }
 

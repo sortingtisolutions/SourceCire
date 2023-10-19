@@ -130,7 +130,6 @@ class MaintenanceController extends Controller
         echo $res;
     } 	 
 
-
 // Lista los monedas
     public function listStores($request_params)
     {
@@ -221,37 +220,12 @@ class MaintenanceController extends Controller
 
         $result = $this->model->getPjtDetail($pjtId);
 
-        /* $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"pjdt_id_id":"0"}]';	
-            }
-            
-        echo $res; */
         echo $pjtId;
     }
 
     function saveMaintain($request_params){
         $params =  $this->session->get('user');
         $result = $this->model->saveMaintain($request_params);
-
-        //$result = $this->model->getPjtDetail($pjtId);
-        /*
-        $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"pjdt_id_id":"0"}]';	
-            }*/
             
         echo $result;
     }

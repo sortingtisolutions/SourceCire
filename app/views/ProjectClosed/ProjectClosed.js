@@ -135,8 +135,7 @@ function getProjectContent(pjtId) {
 function putProjectContent(dt) {
     // console.log(dt);
     if (dt[0].pjtdt_id!=''){
-        /* <td class="lf">${u.ser_comments}</td> 
-            <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.ser_id}" value="">${u.ser_comments}</td> */
+       
         tblprod.find('tbody').html('');
         verIdgbl=dt[0].ver_id;
         $.each(dt, function (v, u) {
@@ -263,15 +262,12 @@ function findExtraDiesel(pjtId) {
 
 function updateTotals() {
     let total = parseFloat(totprj.html().replace(/,/g, ''));
-    // console.log('2--',total);
-    // totals.html(fnm(total, 2, ',', '.'));
-    // let totalexp = parseFloat(totexp.html().replace(/,/g, ''));
+
     total += parseFloat(totexp.html().replace(/,/g, ''));
     total += parseFloat(totman.html().replace(/,/g, ''));
     total += parseFloat(totdie.html().replace(/,/g, ''));
     total -= parseFloat(totdis.html().replace(/,/g, ''));
-    // console.log('3--',total);
-    // totals.html(total);
+
     totals.html(fnm(total, 2, '.', ','));
 }
 
@@ -344,10 +340,6 @@ function confirm_to_Closure(pjtid) {
     });
 }
 
-// function putToWork(dt){
-//     console.log(dt)
-// }
-
 function putChgStatus(dt) {
     if (dt[0].cin_id != '0') {
         let cinId = dt[0].cin_id;
@@ -373,28 +365,6 @@ function putSelectProduct(prdId) {
             $('#txtCommentPrd').val('');
             // saveEditProduct(prdId);
         });
-}
-
-function saveEditProduct(prdId) {
-    
-    // let prdId = $('#txtPrdId').val();
-    // let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-    // let prdCn = $(`#txtCinId option:selected`).val() == 0 ? '' : $(`#txtCinId option:selected`).text().split('-')[0];
-    // let prdNp = $('#txtCommentPrd').val();
-
-    // var par = `
-    //         [{
-    //             "prdId" : "${prdId}",
-    //             "prdNm" : "${prdNm}",
-    //             "prdCn" : "${prdCn}",
-    //             "prdNp" : "${prdNp}"
-    //         }] `;
-    // console.log(par);
-   /*  var pagina = 'Products/saveEdtProduct';
-    var tipo = 'html';
-    var selector = resEdtProduct;
-    fillField(pagina, par, tipo, selector); */
-    // resEdtProduct(prdId);
 }
 
 

@@ -214,19 +214,6 @@ function activaCheck() {
         $('input[type="checkbox"]').attr('checked', $('#checkIsAll').is(':checked'));
     });
 
-   /*  $('#checkIsAll')
-        .unbind('click')
-        .on('click', function () {
-            let itm = $(this).val(x);
-            console.log('Aqui',itm);
-            if (itm == 1) {
-                $('#checkBack').val()='1';
-                //$('input[type="checkbox"]').attr('check', 'checked');
-            } else {
-                console.log('0');
-                $('input[type="checkbox"]').attr('checked', $('#checkIsAll').is(':checked'));
-            }
-        }) */
 }
 
 
@@ -273,27 +260,7 @@ function printReport() {
     );
 }
 
-function findMaintenance(pjtId) {
-  
-}
-
-function findDiscount(pjtId) {
-   
-}
-
-function updateTotals() {
-   
-}
 
 function widthTable(tbl) {
-    /* $.each(size, (i, v) => {
-        let thcel = tbl.find('thead tr').children('th').eq(i);
-        let tdcel = tbl.find('tbody tr').children('td').eq(i);
-        thcel.css({ width: v.s + 'px' });
-        tdcel.css({ width: v.s + 'px' });
-    });
-
-    let wdt = size.reduce((acc, sz) => acc + sz.s, 0);
-    tbl.css({ width: wdt + 'px' });
-    tbl.sticky({ top: 'thead tr:first-child' }); */
+    
 }

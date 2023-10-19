@@ -175,35 +175,9 @@ function activeIcons() {
             // settingTable();
             getSubcategories();
             getlistProjects();
-            // $('#txtIdSubcategory').val('');
-            // $('#txtWtpCve').val('');
-            // $('#txtWtpStatus').val('');
+            
         });
 
-    /**  ---- Habilita los iconos de control de la tabla ----- */
-    /* $('#tblPymApplied tbody tr td.edit i')
-        .unbind('click')
-        .on('click', function () {
-            let acc = $(this).attr('class').split(' ')[2];
-            let sbcId = $(this).closest('tr').attr('id');
-
-            switch (acc) {
-                case 'modif':
-                    editSubcategory(sbcId);
-                    break;
-                case 'kill':
-                    deleteSubcategory(sbcId);
-                    break;
-                default:
-            }
-        }); */
-
-    /**  ---- Habilita el bullet de cantidad para consulta de existencias ----- */
-   /*  $('#tblPymApplied tbody tr td.quantity .toLink')
-        .unbind('click')
-        .on('click', function () {
-            selectSeries($(this));
-        }); */
 }
 
 /** -------------------------------------------------------------------------- */

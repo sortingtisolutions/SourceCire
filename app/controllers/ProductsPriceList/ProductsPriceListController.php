@@ -42,8 +42,6 @@ public function listCategories($request_params)
     echo $res;
 }
 
-
-
 // Lista los productos
 	public function listProducts($request_params)
 	{
@@ -98,8 +96,6 @@ public function listCategories($request_params)
         }
         echo $res;
     }   
-
-
 
 // Lista los documentos
     public function listSeries($request_params)

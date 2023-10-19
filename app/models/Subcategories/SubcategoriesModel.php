@@ -9,8 +9,6 @@ class SubcategoriesModel extends Model
 		parent::__construct();
 	}
 
-
-
 // Obtiene el listado de las subcategorias activas   *****
     public function listCategories($params)
     {
@@ -115,15 +113,8 @@ class SubcategoriesModel extends Model
 
         $this->db->query($qry);	
 
-        /* $qry2 = "UPDATE ctt_subcategories
-        SET   sbc_name  = REPLACE(sbc_name,'\°','\"')
-        WHERE sbc_id    = '$sbcId';";
-
-        $this->db->query($qry2);	
- */
         return $sbcId;
     }
-//UPPER('$sbcName'),
 
 // Actualiza el status de la subcategorias a eliminar
     public function DeleteSubcategory($params)

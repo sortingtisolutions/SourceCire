@@ -131,7 +131,6 @@
     </div>
 <!-- end -->
 
-
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ProductsPriceList/ProductsPriceList.js?v=1.0.0.0' ?>"></script>

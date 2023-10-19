@@ -101,11 +101,6 @@ function get_products(strId) {
 /**  Obtiene el listado de proyectos */
 
 
-
-function put_nextNumber(dt) {
-    console.log(dt);
-}
-
 function put_stores(dt) {
     if (dt[0].str_id > 0) {
         $.each(dt, function (v, u) {
@@ -149,26 +144,6 @@ function put_projects(dt) {
             console.log('PJTID-',lpjt);
             getDataProjects(lpjt);
             get_montos(lpjt);
-            // if (ix > 0) {
-            //     $('#txtProject').parents('div.form_group').removeClass('hide');
-            //     $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
-            //     $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
-            //     $('#txtDateStar').val(proj[ix - 1].pjt_date_start.toUpperCase());
-            //     $('#txtDateEnd').val(proj[ix - 1].pjt_date_end.toUpperCase());
-            //     $('#txtRepresen').val(proj[ix - 1].cus_legal_representative.toUpperCase());
-            //     $('#txtAdress').val(proj[ix - 1].cus_address.toUpperCase());
-            //     $('#txtRespProg').val(proj[ix - 1].emp_fullname.toUpperCase());
-
-            // } else {
-            //     $('#txtProject').parents('div.form_group').addClass('hide');
-            //     $('#txtProject').val('');
-            //     $('#txtCustomer').val('');
-            //     $('#txtDateStar').val('');
-            //     $('#txtDateEnd').val('');
-            //     $('#txtRepresen').val('');
-            //     $('#txtAdress').val('');
-            //     $('#txtRespProg').val('');
-            // }
             
         });
 }
@@ -191,67 +166,11 @@ function putdataprojects(dt) {
         $('#lstProject').html('');
     }
 
-    /* $('#lstProject')
-        .unbind('change')
-        .on('change', function () {
-            console.log('Change Proj',$(this).val());
-            var ix = $(this).val();
-            // let lpjt =  $(this).attr('data');
-            let lpjt = $(this).val();
-            console.log('PJTID-',lpjt);
-
-            get_montos(lpjt);
-            // if (ix > 0) {
-            //     $('#txtProject').parents('div.form_group').removeClass('hide');
-            //     $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
-            //     $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
-            //     $('#txtDateStar').val(proj[ix - 1].pjt_date_start.toUpperCase());
-            //     $('#txtDateEnd').val(proj[ix - 1].pjt_date_end.toUpperCase());
-            //     $('#txtRepresen').val(proj[ix - 1].cus_legal_representative.toUpperCase());
-            //     $('#txtAdress').val(proj[ix - 1].cus_address.toUpperCase());
-            //     $('#txtRespProg').val(proj[ix - 1].emp_fullname.toUpperCase());
-
-            // } else {
-            //     $('#txtProject').parents('div.form_group').addClass('hide');
-            //     $('#txtProject').val('');
-            //     $('#txtCustomer').val('');
-            //     $('#txtDateStar').val('');
-            //     $('#txtDateEnd').val('');
-            //     $('#txtRepresen').val('');
-            //     $('#txtAdress').val('');
-            //     $('#txtRespProg').val('');
-            // }
-            
-        }); */
 }
 
 function put_products(dt) {
     console.log(dt);
-    // $('.list_products ul').html('');
-    // if (dt[0].ser_id > 0) {
-    //     prod = dt;
-    //     let H = '';
-    //     $.each(dt, function (v, u) {
-    //         H = `
-    //             <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
-    //                 <div class="prodLevel">${u.ser_sku}</div>
-    //                 <div class="prodName">${u.prd_name}</div>
-    //                 <div class="prodLevel">${u.prd_price}</div>
-    //                 <div class="prodStock">${u.stock}</div>
-    //             </li> `;
-
-    //         $('.list_products ul').append(H);
-    //     });
-
-    //     $('.list_products ul li')
-    //         .unbind('click')
-    //         .on('click', function () {
-    //             let inx = $(this).attr('data_indx');
-    //             if (prod[inx].stock > 0) {
-    //                fill_purchase(prod[inx], inx);
-    //             }
-    //         });
-    // }
+   
 }
 
 /**  +++++   Arma el escenario de la cotizacion  */
@@ -331,23 +250,7 @@ function add_boton() {
 /**  +++++ Guarda el producto en la cotización +++++ */
 function fill_purchase(dt) {
     console.log('fill_purchase',dt);
-    // console.log(pr);
-    // console.log(ix);
-
-    // $('#Products .sel_product').text('');
-
-    //  let prdName = pr.prod_name.replace(/°/g, '"');
-    // proj = dt;
-    // if (dt[0].pjt_id > 0) {
-    //     $.each(proj, function (v, u) {
-    //         let H = `<option value="${v + 1}">${u.pjt_number}-${u.pjt_name}</option>`;
-    //         $('#lstProject').append(H);
-    //     });
-    // } else {
-    //     $('#lstProject').html('');
-    // }
-    // let ky = registered_product(pr.ser_id);
-    // if (ky == 0) {
+    
         if (dt[0].clo_id > 0) {
         $.each(dt, function (v, u) {
         let H = `
@@ -366,23 +269,6 @@ function fill_purchase(dt) {
         $(`.frame_content #tblControl tbody #${u.clo_id} td.quantity`).attr({contenteditable: 'true'});
     });
     }
-
-    // rgcnt = 1;
-    // update_totals();
-
-    // $('td.quantity')
-    //     .unbind('blur')
-    //     .on('blur', function () {
-    //         let qty = parseInt($(this).text());
-    //         let qtydef = parseInt($(this).attr('data_quantity'));
-    //         if (qty < 1) {
-    //             $(this).text(1);
-    //         } else if (qty > qtydef) {
-    //             $(this).text(qtydef);
-    //         }
-    //         rgcnt = 1;
-    //         update_totals();
-    //     });
 
     $('.kill')
         .unbind('click')
@@ -546,6 +432,7 @@ function saleApply() {
         }
     }
 }
+
 
 function putNextExchangeNumber(dt) {
     console.log(dt);

@@ -14,6 +14,7 @@ $(document).ready(function () {
         inicial();
     }
 });
+
 //INICIO DE PROCESOS
 function inicial() {
     getStores();
@@ -26,6 +27,7 @@ function inicial() {
         $('#txtComments').val('');
     });
 }
+
 
 function setting_table() {
     let title = 'Salidas de Almacen';
@@ -201,29 +203,6 @@ function sel_products(res) {
         }
     });
 }
-
-// Dibuja los productos del almacen seleccionado
-// function drawProducts(str) {
-//     $('.list-item').addClass('hide-items');
-//     $(`.list-item[data-store^="${str}"]`).removeClass('hide-items');
-
-//     var ps = $('#boxProducts').offset();
-//     $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});
-//     $('.box-items-list i').removeClass('rotate');
-//     $('#boxProducts')
-//         .unbind('click')
-//         .on('click', function () {
-//             $('.list-group').slideToggle('slow');
-//             $('.box-items-list i').toggleClass('rotate');
-//         });
-
-//     $('.list-item .items-just i')
-//         .unbind('click')
-//         .on('click', function () {
-//             let id = $(this).parents('.list-item');
-//             exchange_apply(id);
-//         });
-// }
 
 // Valida los campos
 function validator() {

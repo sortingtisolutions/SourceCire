@@ -51,22 +51,6 @@ class MoveStoresOutModel extends Model
 			AND st.str_id=$strId AND (upper(pr.prd_name) LIKE '%$word%' OR upper(pr.prd_sku) LIKE '%$word%') 
 			ORDER BY pr.prd_sku;";
 
-		/* $qry = "SELECT * FROM ctt_products AS pr
-					INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
-					INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
-				WHERE sr.ser_status = 1 AND st.stp_quantity > 0
-				AND st.str_id='$strId' 
-				order by st.str_id;";  */
-
-	/*	$qry = "SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
-		pd.prd_name,pd.prd_coin_type 
-		FROM ctt_products AS pd 
-		INNER JOIN ctt_series AS sr ON sr.prd_id = pd.prd_id
-		INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
-		INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-		INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-		WHERE sr.ser_status = 1 AND ct.cat_id = $catId;"; */
-
 		return $this->db->query($qry);
 	}	
 // Listado de Movimientos
@@ -142,12 +126,6 @@ class MoveStoresOutModel extends Model
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 		$prdid 		    = $this->db->real_escape_string($param['prdid']);
 
-		/* $qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
-		$resultfun = $this->db->query($qry); */
-		
-		/* $qry1 = "UPDATE ctt_series SET ser_status=0 
-				 WHERE ser_id=$idSer;";
-        $resultup = $this->db->query($qry1); */
 				
 		$qry2 = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity - $quantity 
@@ -169,11 +147,7 @@ class MoveStoresOutModel extends Model
 		$qry = "UPDATE ctt_products SET prd_stock=prd_stock-$quantity WHERE prd_id=$prdid";
 
 		$resultfun = $this->db->query($qry); 
-		
-		/* $qry1 = "UPDATE ctt_series SET ser_status=0 
-				 WHERE ser_id=$idSer;";
-        $resultup = $this->db->query($qry1); */
-				
+
 		$qry2 = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity - $quantity 
 				WHERE str_id = $idStrSrc and ser_id = $idSer;";

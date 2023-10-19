@@ -335,10 +335,7 @@ function getDocumentosTable() {
                   },
                },
             ],
-            // columnDefs: [
-            //    { responsivePriority: 1, targets: 0 },
-            //    { responsivePriority: 2, targets: -1 },
-            // ],
+
             scrollY: 'calc(100vh - 260px)',
             scrollX: true,
             // scrollCollapse: true,

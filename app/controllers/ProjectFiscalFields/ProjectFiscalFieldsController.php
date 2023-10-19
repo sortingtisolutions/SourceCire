@@ -23,7 +23,6 @@ class ProjectFiscalFieldsController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
     // OBTIENE LA LISTA DE PROYECTOS
     public function tableProjects($request_params)
     {

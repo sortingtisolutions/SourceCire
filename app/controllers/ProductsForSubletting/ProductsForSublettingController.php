@@ -96,7 +96,6 @@ class ProductsForSublettingController extends Controller
         echo $res;
     } 	 
 
-
 // Lista los monedas
     public function listStores($request_params)
     {
@@ -124,7 +123,6 @@ class ProductsForSublettingController extends Controller
         
     } 	
 
-
 // Agrega los productos subarrendados
     public function addSubletting($request_params)
     {
@@ -151,7 +149,6 @@ class ProductsForSublettingController extends Controller
         echo $res;
     } 	
     
-
 // Proceso de series de subarrendos    
     public function saveSubletting($request_params)
     {

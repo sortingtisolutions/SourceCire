@@ -5,7 +5,6 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
 <!-- comentario prueba -->
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">

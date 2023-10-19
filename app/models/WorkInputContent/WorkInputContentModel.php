@@ -179,7 +179,6 @@ class WorkInputContentModel extends Model
        return $this->db->query($qry);
    }
 
-
     // check de Productos
     public function checkSeries($params)
     {

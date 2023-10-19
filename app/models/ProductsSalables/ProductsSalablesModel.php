@@ -79,9 +79,6 @@ class ProductsSalablesModel extends Model
             $qr2 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
             $this->db->query($qr2);
 
-            // $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
-            // $this->db->query($qr3);
-
             return $salId;
         }    
 

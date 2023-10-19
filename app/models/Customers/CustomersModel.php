@@ -101,31 +101,6 @@ public function listScores()
                         WHERE cus_id ='$cusId';";
         $this->db->query($qry);
         return $cusId;
-       
-            /* if ($prdDi == '0'&& $prdDc > '0' ){
-                $qry1 = "INSERT INTO ctt_products_documents 
-                            (dcp_source, prd_id, doc_id) 
-                        VALUES
-                            ('P', '$prdId', '$prdDc')
-                        ";
-                        $this->db->query($qry1);
-                        $prdDc = $this->db->insert_id;
-
-            } elseif($prdDi > '0' && $prdDc > '0'){
-                $qry1 = "UPDATE ctt_products_documents 
-                         SET  doc_id = '$prdDc'
-                         WHERE dcp_id = '$prdDi';
-                        ";
-                        $this->db->query($qry1);
-
-            } elseif ($prdDi > '0' && $prdDc == '0'){
-                $qry1 = "DELETE FROM ctt_products_documents 
-                         WHERE dcp_id = '$prdDi';
-                        ";
-                        $this->db->query($qry1);
-            } 
-            
- */
     }
 
 
@@ -152,20 +127,14 @@ public function listScores()
         $cusContPhone = $this->db->real_escape_string($params['cusContPhone']);
         $cusWorkC = $this->db->real_escape_string($params['cusWorkC']);
         $cusInvoi = $this->db->real_escape_string($params['cusInvoi']);
-      
-        /* $qry="INSERT INTO ctt_customers(cus_id, cus_name, cus_contact, cus_address, cus_email, cus_rfc, 
-                cus_phone, cus_phone_2, cus_internal_code, cus_qualification, cus_prospect, cus_sponsored, 
-                cus_legal_representative, cus_legal_act, cus_contract, cut_id, cus_status) 
-                VALUES ('', UPPER('$cusName'),UPPER('$cusCont'),UPPER('$cusAdrr'),'$cusEmail',UPPER('$cusRFC'),
-                '$cusPhone','$cusPhone2',UPPER('$cusICod'),'$cusQualy','$cusProsp','$cusSpon',
-                '$cusLegRepre','$cusLegalA','$cusContr','$typeProd','$cusStat') ;"; */
-            $qry="INSERT INTO ctt_customers( cus_cve_cliente, cus_code_sat, cus_name, cus_email, cus_phone, 
-                            cus_address, cus_rfc, cus_qualification, cus_status, cus_legal_director, 
-                            cus_legal_representative, cus_legal_email, cus_lega_phone, cus_contact_name, 
-                            cus_contact_phone, cus_contact_email, cus_work_ctt, cus_last_invoice, cut_id) 
-                VALUES ('$cusICod','$cusSatC',UPPER('$cusName'),'$cusEmail','$cusPhone',UPPER('$cusAdrr'),UPPER('$cusRFC'),
-                        UPPER('$cusQualy'),$cusStat,UPPER('$cusDirector'),UPPER('$cusLegRepre'),'$cusLegEmail','$cusLegPhone',
-                        UPPER('$cusCont'),'$cusContPhone',  '$cusContEmail','$cusWorkC','$cusInvoi',$typeProd);";
+
+        $qry="INSERT INTO ctt_customers( cus_cve_cliente, cus_code_sat, cus_name, cus_email, cus_phone, 
+                        cus_address, cus_rfc, cus_qualification, cus_status, cus_legal_director, 
+                        cus_legal_representative, cus_legal_email, cus_lega_phone, cus_contact_name, 
+                        cus_contact_phone, cus_contact_email, cus_work_ctt, cus_last_invoice, cut_id) 
+            VALUES ('$cusICod','$cusSatC',UPPER('$cusName'),'$cusEmail','$cusPhone',UPPER('$cusAdrr'),UPPER('$cusRFC'),
+                    UPPER('$cusQualy'),$cusStat,UPPER('$cusDirector'),UPPER('$cusLegRepre'),'$cusLegEmail','$cusLegPhone',
+                    UPPER('$cusCont'),'$cusContPhone',  '$cusContEmail','$cusWorkC','$cusInvoi',$typeProd);";
 
         $this->db->query($qry);
         $prdId = $this->db->insert_id;

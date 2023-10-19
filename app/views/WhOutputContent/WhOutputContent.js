@@ -7,8 +7,7 @@ let user,v,u,n,em;  //datos de usuaria para impresion
 let aux=0;
 $(document).ready(function () {
     if (verifica_usuario()) {
-        // let temporal=Cookies.get('user');
-        // console.log(temporal);
+
         prjid=Cookies.get('pjtid');
         inicial();
     }
@@ -258,16 +257,7 @@ function setting_table_AsignedProd() {
                     //Aquí es donde generas el botón personalizado
                     text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
                 },
-               /*  {
-                    //Botón para imprimir
-                    extend: 'print',
-                    footer: true,
-                    title: title,
-                    filename: filename,
-    
-                    //Aquí es donde generas el botón personalizado
-                    text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-                }, */
+            
                 {
                     // Boton imprimir contenido jjr
                     text: 'Print Contenido',
@@ -381,15 +371,11 @@ function putDetailsProds(dt) {
                     packcount: u.pjtcn_quantity,
                     packstatus: u.section,
                     packlevel: u.pjtcn_prod_level,
-                    /* '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">' */
-                    /* pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
+                   
                 })
                 .draw().node();
             $(rownode).css("background-color", valstage);
-           
-            // $("tr").css("background-color", valstage);
-            //$(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
-            /* */  
+ 
         });
         activeIcons();
     }
@@ -508,39 +494,14 @@ function readAceptTable() {
         let serdata = $(this).attr('data');
         console.log("readAceptTable: ", serId);
         checkSerie(serId);
-        /* let tabla = $('#tblSerie').DataTable();
-        let numRows = tabla.rows().count();
-        aux++;
-        if (numRows==1 || aux==numRows) {
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
-            $('#tblSerie').DataTable().destroy;
-            aux=0;
-        }else{
-            console.log(numRows, aux);
-        } */
+        
         setTimeout(function(){
             console.log('');
         }, 3000);
-        /* $('.overlay_background').addClass('overlay_hide');
-        $('.overlay_closer .title').html('');
-        $('#tblSerie').DataTable().destroy; */
+        
     });
 }
-/* function checkSerie(serId) {
-    // console.log('ID-Producto-Check', pjtcnid);
-    var pagina = 'WorkOutputContent/checkSeries';
-    var par = `[{"serId":"${serId}"}]`;
-    var tipo = 'html';
-    var selector = myCheck; 
-    fillField(pagina, par, tipo, selector);
-}
 
-function myCheck(dt){
-    // console.log('myCheck', dt);
-    $('#'+dt).css({"color":"#CC0000"});
-    $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
-} */
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
 function build_modal_serie_old(dt) {
         //  console.log('build_modal_serie_old',dt);
@@ -628,10 +589,7 @@ function myCheck(dt){
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
     getDetailProds(prjid,em);
-    //console.log($);
-    /* $('#'+dt).attr("id",NuevoSku).children("td.nombreclase").text(NuevoSku);
-    $('#'+dt).attr("id",sernumber).children("td.nombreclase").text(sernumber);
-    $('#'+dt).attr("id",sertype).children("td.nombreclase").text(NuevoSku); */
+    
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
@@ -702,11 +660,9 @@ function putSerieDetails(dt){
                     // serchoose: '<input class="serprod fieldIn" type="checkbox" id="CH-' + u.ser_id + '" value="'+'">',
                     /* serchange: `<i class='fas fa-edit toEdit' "></i> <i class='fas fa-check-circle toStop' "></i>`, */
                     serchange: `<i class='fas fa-check-circle toChangeSer' id="${u.ser_id}" seridorg="${u.id_orig}"></i>`,
-                    /* serdetsku: u.ser_sku,
-                    serdetname: u.prd_name, */
                     serdetnumber: u.ser_serial_number,
                     serdetsitu: u.ser_no_econo
-                    /* serdetstag: u.ser_stage */
+     
                 })
                 .draw();
             //$(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);

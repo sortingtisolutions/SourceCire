@@ -25,8 +25,7 @@
                                 <th style="width: 100px">Tipo Proyecto</th>
                                 <th style="width:  40px">Fecha Inicio</th>
                                 <th style="width:  40px">Fecha Final</th>
-                                <!-- <th style="width:  60px">Hora <br>ultimo cambio</th>
-                                <th style="width: 150px">Locacion</th> -->
+                                
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -34,12 +33,10 @@
 
                 </div>
             </div>
-<!--            <div class="deep_loading">
-                <div class="flash_loading"> Cargando datos...</div>
-            </div>-->
+
         </div>
     </div>
-<!-- End Contenedor Listado de PRODUCTOS  -->
+
 
 <!-- End Ventana modal Iniciar Proceso de Atencion -->
 <div class="modal fade" id="starToWork" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

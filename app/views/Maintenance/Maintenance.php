@@ -23,9 +23,7 @@
 						<hr>
 						<h6	class="nameProduct objet objHidden" style="font-size: 1rem; font-weight: bold; text-align: center">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
-						<!-- <input type="hidden" id="txtIdProduct" class="form-control"> -->
-						<!-- <input type="hidden" id="txtIdProjectChange" class="form-control"> -->
-						<!-- <input type="hidden" id="txtSkuSerie" class="form-control"> -->
+
 						<input type="hidden" id="txtIdSerie" class="form-control">
 						<input type="hidden" id="txtIdStatus" class="form-control">
 						<input type="hidden" id="txtIdMaintain" class="form-control">
@@ -80,39 +78,7 @@
 								<label for="txtMotivo">Motivo de Mantenimiento</label>
 							</div>
 						</div>
-						<!-- <div class="row objet objHidden">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtStatus" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
-									<option value="0" selected>Selecciona el estatus</option>
-									<option value="1">Por revisar</option>
-									<option value="2">Atendiendose</option>
-									<option value="3">Concluido</option>
-								</select>
-								<label for="txtStatus">Estatus</label>
-							</div>
-						</div> -->
-<!--
 						
-	
-						<div class="row objet objHidden">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtSupplier" class="form-select form-select-sm required" aria-label="Floating label select"  data-mesage="Debes seleccionar un proveedor">
-									<option value="0" selected>Selecciona el proveedor</option>
-								</select>
-								<label for="txtSupplier">Proveedor</label>
-							</div>
-						</div>
-
-						<div class="row objet objHidden">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtStoreSource" class="form-select form-select-sm required"aria-label="Floating label select"  data-mesage="Debes seleccionar un almacen">
-									<option value="0" selected>Selecciona almacen</option></select>
-								<label for="txtStoreSource" class="form-label">Almacen</label>
-							</div>
-						</div>-->
-
-						
-
 						<div class="row objet objHidden">
 							<div class="col-md-8 mb-5">
 								<button type="button" class="btn btn-sm btn-primary disabled" data_accion="add" id="btn_subletting">Agregar</button>

@@ -52,6 +52,7 @@ INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id
 INNER JOIN ctt_projects_version AS bg on bg.prd_id = pd.prd_id 
 WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bg.pjtvr_section";
 $res2 = $conn->query($query);
+
 $categories=array();
 $rr = 0;
 

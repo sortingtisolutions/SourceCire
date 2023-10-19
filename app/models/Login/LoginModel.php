@@ -1,5 +1,5 @@
 <?php 
-/**
+/** v.1.2.2
 */
 class LoginModel extends Model
 {

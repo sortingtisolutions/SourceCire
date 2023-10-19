@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
-/**
+/** v.1.2.2
 */
 class ErrorPageController extends Controller
 {

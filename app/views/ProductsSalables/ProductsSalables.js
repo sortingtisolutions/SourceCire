@@ -488,12 +488,6 @@ function setSaleDetailApply(dt) {
     console.log(dt);
     deep_loading('C');
 
-    // let sal = dt.split('|')[0];
-    // let usr = dt.split('|')[1];
-    // let nme = dt.split('|')[2];
-    // let hst = localStorage.getItem('host');
-    // window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
-    // window.location = 'ProductsSalables';
 }
 
 function validator() {

@@ -10,12 +10,12 @@
         $getFile = fgets($file);  
     }
     //INICIO DE PROCESOS
+    
     $numProject = '';
     $nameProject = '';
     $version = '';
     $freelance = '';
     $date = '';
-
     $dato = explode('@', $getFile);
     //  var_dump(  $dato1 );
   

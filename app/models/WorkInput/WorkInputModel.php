@@ -63,4 +63,5 @@ class WorkInputModel extends Model
         return $this->db->query($qry2);
     }
 
+    
 }

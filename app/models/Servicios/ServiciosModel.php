@@ -40,12 +40,7 @@ class ServiciosModel extends Model
                         "srv_description" =>$row[2]);
 			array_push($lista, $item);
 		}
-		/* while ($row = $result->fetch_row()){
-			$item = array("srv_id" =>$row[0],
-						"srv_name" =>utf8_decode($row[1]),
-                        "srv_description" =>utf8_decode($row[2]));
-			array_push($lista, $item);
-		} */
+		
 		return $lista;
 	}
 

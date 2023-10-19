@@ -6,7 +6,6 @@
 
 	class UsuariosController extends Controller
 	{
-
 		private $session;
 		public $model;
 		public $modelActions;

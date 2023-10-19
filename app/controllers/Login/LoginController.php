@@ -49,7 +49,7 @@ class LoginController extends Controller
 
     $page = $result->prf_mod_start;
 
-//    $params = array('usuario' => $this->session->get('usuario'));
+//$params = array('usuario' => $this->session->get('usuario'));
 
     setcookie("user", $user, time()+18000,'/');
 
@@ -62,7 +62,6 @@ class LoginController extends Controller
     }
 
   //$params =  $this->session->get('usuario');
-
   }
 
   private function verify($request_params)
@@ -77,7 +76,6 @@ class LoginController extends Controller
     $params = array('error_message' => $message);
     $this->render(__CLASS__, $params);
   }
-
 
   private function verify_code($codeReq, $usuarioId, $codeReg)
   {

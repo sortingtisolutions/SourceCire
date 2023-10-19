@@ -8,7 +8,6 @@ class ClosedProyectChangeModel extends Model
         parent::__construct();
     }
 
-
 // Listado de almacenes  ****
         public function listProjects($params)
         {
@@ -58,10 +57,6 @@ class ClosedProyectChangeModel extends Model
             return $this->db->query($qry);
         }    
 
-
-// Listado de proyectos
-        
-
 // Guarda la venta
         public function SaveSale($params, $user)
         {
@@ -100,7 +95,6 @@ public function NextExchange()
     $this->db->query($qry);
     return $this->db->insert_id;
 }
-
 
 // Guarda detalle de la venta
         public function SaveSaleDetail($params, $user)
@@ -166,8 +160,6 @@ public function NextExchange()
             
         }    
 
-
-
 // Guarda comentario
     public function SaveComments($params, $user)
     {
@@ -186,6 +178,5 @@ public function NextExchange()
 
         return $comId;
     }    
-
 
 }

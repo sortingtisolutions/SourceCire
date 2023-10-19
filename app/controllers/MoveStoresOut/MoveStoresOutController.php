@@ -198,25 +198,6 @@ class MoveStoresOutController extends Controller
 		}
 		echo $var;
 		
-		/* if ($request_params['mov'] == 'T' ){
-			$params =  $this->session->get('user');
-			$item = $this->model->SechingProducts($request_params);
-
-			$num_items = $item->fetch_object();
-
-			if ($num_items->exist > 0){
-				echo 'update';
-				// actualiza la cantidad en el almacen destino
-				$result = $this->model->UpdateProducts($request_params);
-				
-			} else {
-				echo 'insert';
-				//agrega la relación almacen - producto
-				$result = $this->model->InsertProducts($request_params);
-			}
-			$res = $result;
-			echo $num_items->exist; //$res; 
-		}*/
 	} 
 	public function setAccesories($param)
 	{
@@ -228,7 +209,7 @@ class MoveStoresOutController extends Controller
 		$mov = $param['mov'];
 		$qty = $param['qty'];
 		$prdsku = $param['sku'];
-		//if ($cant->cant > 0) {
+
 			while($row = $resultado->fetch_assoc()){
 				
 				$prd_id = $row["prd_id"];
@@ -287,7 +268,5 @@ class MoveStoresOutController extends Controller
 					
 				}
 			}
-		//}
-		
 	}
 }

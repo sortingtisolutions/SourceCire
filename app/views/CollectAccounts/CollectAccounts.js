@@ -12,8 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //deep_loading('O');
-        //console.log('UNO');
+
         $('.tblProdMaster').css({display: 'none'});
         // setting_table();
         getProjects(0);
@@ -149,15 +148,7 @@ function activeIcons() {
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            /* console.log('Pasando siguiente ventana...');
-            let sltor = $(this);
-            let pjtid = sltor.parents('tr').attr('id');
-            let prdNm = 'Modifica proyecto';
-
-            console.log(pjtid);
-            Cookies.set('pjtid', pjtid, {expires:1});
-
-            window.location = 'WhOutputContent'; */
+            
         });
 
 }
@@ -183,41 +174,3 @@ function confirm_to_work(pjtid) {
 function putToWork(dt){
     console.log(dt)
 }
-/*
-function putSelectProject(dt) {
-    cleanProductsFields();
-    console.log(dt);
-    let prdId = dt[0].pjtcn_id;
-    let prdName = dt[0].pjtcn_prod_sku;
-    let prdSku = dt[0].pjtcn_prod_name;
-    let prdModel = dt[0].pjtcn_quantity;
-    let prdPrice = dt[0].pjtcn_prod_level;
-    let prdEnglishName = dt[0].pjt_date_project;
-    let prdCodeProvider = dt[0].pjt_location;
-    let prdNameProvider = dt[0].pjt_status;
-    let prdComments = dt[0].pjt_id;
-
-    $('#txtPrdId').val(prdId);
-    $('#txtPrdName').val(prdName);
-    $('#txtPrdSku').val(prdSku);
-    $('#txtPrdModel').val(prdModel);
-    $('#txtPrdPrice').val(prdPrice);
-    $('#txtPrdEnglishName').val(prdEnglishName);
-    $('#txtPrdCodeProvider').val(prdCodeProvider);
-    $('#txtPrdNameProvider').val(prdNameProvider);
-    $('#txtPrdComments').val(prdComments);
-
-    $('#btn_save')
-        .unbind('click')
-        .on('click', function () {
-            saveEditProduct();
-        });
-
-    function cleanProductsFields() {
-        $('.textbox').val('');
-        $('td.data select').val(0);
-        $('td.data .checkbox').html('<i class="far fa-square" data_val="0"></i>');
-        $('.required').removeClass('fail').parent().children('.fail_note').addClass('hide');
-    }
-}
-*/

@@ -23,23 +23,6 @@
                         </div>
                     </div>
 
-                  <!--   <div class="row list-finder pos3 hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtExpendab" type="text" class="form-control form-control-sm " autocomplete="off">
-                                <label for="txtExpendab">Monto expendables</label>
-                        </div>
-                    </div>
-
-                    <div class="row list-finder pos3 hide-items">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtMaintenance" type="text" class="form-control form-control-sm " autocomplete="off">
-                                <label for="txtMaintenance">Monto mantenimiento</label>                    
-                            </div>
-                            <div id="listInvoice" class="list-group list-hide">
-                                <div class="list-items" ></div>
-                            </div>
-                    </div> -->
-                    
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtDiscount" type="text" class="form-control form-control-sm " autocomplete="off">
@@ -177,25 +160,6 @@
         </div>
         <div class="formContent">
             <table id="tblEditProduct">
-               <!--  <tr>
-                    <td class="concept"><span class="reqsign"></span> Nombre producto:</td>
-                    <td class="data">
-                        <input type="text" id="txtPrdName" name="txtPrdName" class="textbox" style="width:300px; text-transform:uppercase" autocomplete="off">
-                        <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                        <span class="intructions">Comentario individual al Producto seleccionado</span>
-                    </td>
-                </tr> -->
-                
-               <!--  <tr>
-                    <td class="concept"><span class="reqsign">&nbsp;</span>Motivo mantenimiento:</td>
-                    <td class="data">
-                        <select id="txtCinId" name="txtCinId" class="textbox required" style="width:250px">
-                            <option value="0">Selecciona motivo</option>
-                        </select>
-                        <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                        <span class="intructions">&nbsp;</span>
-                    </td>
-                </tr> -->
                 <tr>
                     <td class="concept"><span class="reqsign">&nbsp;</span> Comentario al producto:</td>
                     <td class="data">
@@ -204,12 +168,7 @@
                         <span class="intructions">Comentario individual al Producto seleccionado</span>
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td class="concept"><span class="reqsign">&nbsp;</span> Comentario al producto:</td>
-                    <td class="data">
-                    <textarea class="form-control form-control-sm" id="txtCommentPrd" style="height:90px; background-color: #FFFAFF" autocomplete="off" rows="5"></textarea>
-                    </td>
-                </tr> -->
+
             </table>
         </div>
     </div>

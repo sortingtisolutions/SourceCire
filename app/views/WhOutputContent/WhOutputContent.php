@@ -7,6 +7,7 @@
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
@@ -75,12 +76,7 @@
                                 <label for="txtFreelance">Freelances Asignados</label>
                             </div>
                         </div>
-						<!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtFreelance" type="text" class="form-control form-control-sm" >
-                                <label for="txtFreelance">Freelance Asignado</label>
-                            </div>
-                        </div> -->
+						
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <textarea class="form-control form-control-sm" id="txtComments" style="height:100px; background-color: #FFFAFF" autocomplete="off" rows="5" disabled></textarea>
@@ -89,13 +85,6 @@
                         </div>
                     </div>
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
-
-                    <!-- BOTON PARA REGISTRAR LA SALIDA -->
-                    <!-- <div class="row">
-                            <div class="col">
-                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="printdetails">Imprime Detalles</button>
-                            </div>
-                    </div> -->
 
 
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->

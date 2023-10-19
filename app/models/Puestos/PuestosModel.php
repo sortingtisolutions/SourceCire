@@ -50,9 +50,6 @@ class PuestosModel extends Model
 		$this->db->query($qry2);
         $result2 = $this->db->insert_id;
         
-	/* 	$contavar = $contavar + 1; */
-
-		/* return $result . '|' . $result2; */
 		return $lista;
 	}
 	
@@ -73,10 +70,10 @@ class PuestosModel extends Model
 
     public function GetPuesto($params)
 	{
-		/* $qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position WHERE pos_id = ".$params['id'].";"; */
-		
+			
 		$qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position;";
 		$result = $this->db->query($qry);
+		
 		return $result;
 	}
 
@@ -86,9 +83,9 @@ class PuestosModel extends Model
         $estatus = 0;
 			try {
 				$qry = "UPDATE ctt_position 
-				SET pos_name = '".$params['NomPuesto']."'
-				,pos_description = '".$params['DesPuesto']."'
-				WHERE  pos_id = ".$params['IdPuesto'].";";
+						SET pos_name = '".$params['NomPuesto']."'
+						,pos_description = '".$params['DesPuesto']."'
+						WHERE pos_id = ".$params['IdPuesto'].";";
 
 				$this->db->query($qry);	
 				$estatus = $params['IdPuesto'];

@@ -15,8 +15,8 @@ class Model
   */
   public function __construct()
   {
-    $this->db = new Mysqli(HOST, USER, PASSWORD, DB_NAME);
-    $this->db->set_charset("utf8");
+      $this->db = new Mysqli(HOST, USER, PASSWORD, DB_NAME);
+      $this->db->set_charset("utf8");
   }
 
   /**
@@ -24,7 +24,7 @@ class Model
   */
   public function __destruct()
   {
-    $this->db->close();
+     $this->db->close();
   }
 
 

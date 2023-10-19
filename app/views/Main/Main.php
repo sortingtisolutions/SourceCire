@@ -32,6 +32,7 @@
     <?php !empty($show_edit_form) ? require 'app/views/Main/edit_form.php' : '' ?>
     <?php !empty($show_clients_list) ? require 'app/views/Main/clients_list.php' : '' ?>
   </div>
+  
   <!-- Jquery  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 

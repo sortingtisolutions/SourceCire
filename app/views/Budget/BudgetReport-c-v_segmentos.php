@@ -42,6 +42,7 @@ LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
 LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
 WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section;";
 $res = $conn->query($qry);
+
 //$conn->close();
 
 while($row = $res->fetch_assoc()){

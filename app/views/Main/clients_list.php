@@ -15,6 +15,7 @@
       
       <tbody>
         <?php
+        
         while ($row = $clients->fetch_assoc())
         {
           echo '<tr>';

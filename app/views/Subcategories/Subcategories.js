@@ -192,8 +192,6 @@ function activeActions() {
             }
         });
 
-    /**  ---- Habilita el bullet de cantidad para consulta de existencias ----- */
-    // $('#tblSubcategory tbody tr td.quantity .toLink')
     $('.toLink')
         .unbind('click')
         .on('click', function () {
@@ -325,9 +323,6 @@ function putDeleteSubcategory(dt) {
         .draw();
     $('#confirmModal').modal('hide');
 }
-/** ---- End ELIMINA SUBCATEGORIA ---- */
-
-/** ---- Start LISTADO DE SERIES ---- */
 /** ---- Obtiene las series de la subcategoria seleccionada ---- */
 function selectSeries(reg) {
     let sbcId = reg.parents('tr').attr('id');
@@ -346,103 +341,10 @@ function selectSeries(reg) {
 
 function putSeries_old(dt) {
     
-    /* $('#tblStock tbody').html('');
-    $.each(dt, function (v, u) {
-        let H = `
-            <tr>
-                <td>${u.ser_sku}</td>
-                <td>${u.prd_name}</td>
-                <td>${u.ser_serial_number}</td>
-                <td>${u.ser_date_registry}</td>
-                <td>${u.ser_cost}</td>
-                <td>${u.ser_situation}</td>
-                <td>${u.ser_stage}</td>
-                <td>${u.ser_comments}</td>
-            </tr>
-        `;
-        $('#tblStock tbody').append(H);
-    });
-
-    settindStockTbl(); */
-    
 }
 
 function settindStockTbl_old() {
-    /* let title = 'Detalle de Subcategoria';
-    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    $('.overlay_closer .title').html(`Subcategorias - ${subnme}`);
-    $('#ShowSerieModal').removeClass('overlay_hide');
-    $('#tblStock').DataTable({
-        destroy: true,
-        order: [[1, 'asc']],
-        dom: 'Blfrtip',
-        lengthMenu: [
-            [50, 100, 200, -1],
-            [50, 100, 200, 'Todos'],
-        ],
-        buttons: [
-            {
-                //Botón para Excel
-                extend: 'excel',
-                footer: true,
-                title: title,
-                filename: filename,
-
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-            },
-            {
-                //Botón para descargar PDF
-                extend: 'pdf',
-                footer: true,
-                title: title,
-                filename: filename,
-
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-            },
-            {
-                //Botón para imprimir
-                extend: 'print',
-                footer: true,
-                title: title,
-                filename: filename,
-
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-            },
-            {
-                text: 'Borrar seleccionados',
-                // className: 'btn-apply hidden-field',
-            },
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 290px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'produsku', class: 'sku'},
-            {data: 'prodname', class: 'productName'},
-            {data: 'serlnumb', class: 'serieNumber'},
-            {data: 'dateregs', class: 'dateRegs'},
-            {data: 'servcost', class: 'quantity'},
-            {data: 'cvstatus', class: 'code-type_s'},
-            {data: 'cvestage', class: 'code-type_s'},
-            {data: 'comments', class: 'comments'},
-        ],
-    });
-
-    $('#ShowSerieModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            // $('#tblStock').DataTable().destroy();
-            $('.overlay_background').addClass('overlay_hide');
-            let Dtable=$('#tblStock').DataTable().row().remove().draw();
-            Dtable.destroy();
-        }); */
+  
 }
 
 function putSeries(dt) {
@@ -533,9 +435,6 @@ function build_modal_serie(dt) {
     $.each(dt, function (v, u) {
         tabla.row
             .add({
-                /*sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,*/
-                // sermodif: `<i></i>`,
-                // produsku: `${u.ser_sku.slice(0, 10)}-${u.ser_sku.slice(7, 11)}`,
                 produsku: u.ser_sku,
                 prodname: u.prd_name,
                 serlnumb: u.ser_serial_number,

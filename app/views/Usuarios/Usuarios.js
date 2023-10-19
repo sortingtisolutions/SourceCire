@@ -156,9 +156,6 @@ function validaFormulario() {
         }
     });
     
-   /*  if ($('#listAsignado').find('a').length == 0) {
-        valor = 0;
-    } */
     if ($('#IdUsuario').val()=='') {
         if ($('#PassUsuario').val().length == 0) {
             $('#PassUsuario').addClass('fail');
@@ -169,7 +166,6 @@ function validaFormulario() {
     return valor; 
 
 }
-
 
 //Edita el Usuario *
 function EditUsuario(id, idPerfil) {

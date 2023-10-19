@@ -16,10 +16,6 @@
                     <div class="row rowTop">
                         <h1>Listado de Clientes con un Proyecto</h1>
                         
-                        <!-- <select id="txtCategoryList" class="topList">
-                            <option value="0">SELECCIONA CATÁLOGO</option>
-                        </select> -->
-                        
                     </div>
                     <div id="dvProducts"></div>
                     <table class="display nowrap"  id="tblFreelances" style="min-width: 1700px; font-size: 0.7rem">
@@ -178,7 +174,6 @@
         </div>
     </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
-
 
 <!-- Start Ventana modal ELIMINA PRODUCTO -->
     <div class="modal fade" id="delProdModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

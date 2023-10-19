@@ -8,7 +8,6 @@ class ProjectClosedModel extends Model
         parent::__construct();
     }
 
-
 /* -- Listado de proyectos  ------------------------------------- */    
     public function listProjects($params)
     {
@@ -56,7 +55,6 @@ class ProjectClosedModel extends Model
 
     }
     
-
 /* -- Listado ventas de expendables  --------------------------------------------------------- */
     public function saleExpendab($params)
     {
@@ -84,12 +82,12 @@ class ProjectClosedModel extends Model
         $cusId          = $this->db->real_escape_string($params['cusId']);
       
             $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
-                clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
-                clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
-                cus_id, pjt_id, usr_id, ver_id)
-            VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
-            ' $cloTotDocum', Now(), '0', '$cloCommen','1',
-            '$cusId','$pjtid','$usrid','$verid');";
+                    clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                    clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
+                    cus_id, pjt_id, usr_id, ver_id)
+                VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+                ' $cloTotDocum', Now(), '0', '$cloCommen','1',
+                '$cusId','$pjtid','$usrid','$verid');";
 
         $this->db->query($qry);
         $ducloId = $this->db->insert_id;

@@ -66,26 +66,18 @@ class MoveStoresInModel extends Model
     {
         $catId = $this->db->real_escape_string($param['catId']);
         
-        /* $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, (
-                    SELECT ifnull(max(convert(substring(ser_sku,8,3), signed integer)),0) + 1 
-                    FROM ctt_series WHERE prd_id = pd.prd_id) as serNext, 
+        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, (
+                                SELECT CASE when substring(ser_sku,11,1) ='A' 
+                then ifnull(max(convert(substring(ser_sku,14,4), signed integer)),0) + 1
+                else
+                ifnull(max(convert(substring(ser_sku,8,3), signed integer)),0) + 1
+                    END AS result
+                    FROM ctt_series ser WHERE ser.prd_id =pd.prd_id) as serNext, 
                     sb.sbc_name, ct.cat_name
                 FROM ctt_products AS pd 
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id = $catId;"; */
-            $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, (
-                                    SELECT CASE when substring(ser_sku,11,1) ='A' 
-                    then ifnull(max(convert(substring(ser_sku,14,4), signed integer)),0) + 1
-                    else
-                    ifnull(max(convert(substring(ser_sku,8,3), signed integer)),0) + 1
-                    END AS result
-                    FROM ctt_series ser WHERE ser.prd_id =pd.prd_id) as serNext, 
-                                    sb.sbc_name, ct.cat_name
-                                FROM ctt_products AS pd 
-                                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                                INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-                                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id = $catId;";
+                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id = $catId;";
         return $this->db->query($qry);
     }	
 

@@ -5,21 +5,21 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 */
 abstract class Controller
 {
-  /**
-   * @var object
-   */
-  private $view;
+    /**
+     * @var object
+     */
+    private $view;
 
-  /**
-   * Inicializa la vista
-   */
-  public function render($controller_name = '', $params = array())
-  {
-    $this->view = new View($controller_name, $params);
-  }
+    /**
+     * Inicializa la vista
+     */
+    public function render($controller_name = '', $params = array())
+    {
+      $this->view = new View($controller_name, $params);
+    }
 
-  /**
-   * Metodo est&acute;ndar
-   */
-  abstract public function exec();
+    /**
+     * Metodo est&acute;ndar
+     */
+    abstract public function exec();
 }

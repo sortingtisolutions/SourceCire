@@ -59,10 +59,6 @@ public function listProductsById($request_params)
             WHERE prd_status = 1 and sbc_id = $sbc_id and 
             prd_level <> 'A' order by prd_sku;";
     
-   /*  $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
-             FROM ctt_products 
-             WHERE substr($sbc_id,1,7) AND prd_level = 'A' AND prd_status = 1
-              order by prd_sku;"; */
     return $this->db->query($qry);
 }
 
@@ -101,15 +97,6 @@ public function getAccesoriesById($params)
 
     return $this->db->query($qry);
 
-    // $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name 
-    //         FROM ctt_accesories as acc
-    //         INNER JOIN ctt_products AS prd on prd.prd_id = acc.prd_id
-    //         WHERE acc.prd_parent = $prdId and acc.acr_status = 1 order by prd.prd_sku;";
-
-    /* $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name  
-            FROM ctt_products AS prd 
-            WHERE SUBSTR(prd.prd_sku,1,7)='$prdId' and prd.prd_level='A' and prd.prd_status = 1
-            GROUP BY prd.prd_id , prd.prd_sku, prd_name;"; */
 }
 
 // Listado de accesorios
@@ -150,14 +137,12 @@ public function saveAccesorioByProducto($param)
         }
 
         $prd_parent_Sku =  $prd_parent_Sku."A".str_pad($acConsecutivo, 3, "0", STR_PAD_LEFT);
-        //print_r($prd_parent_Sku);
-        //exit();
-        /* $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' , sbc_id= '$sbc_id' WHERE prd_id = $prd_id"; */
+        
         $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' WHERE prd_id = $prd_id";
         $this->db->query($qry);
 
         $qry = "INSERT INTO ctt_accesories(prd_parent,acr_status,prd_id)
-        VALUES ($prd_parent_id,1,$prd_id)";
+                VALUES ($prd_parent_id,1,$prd_id)";
         $this->db->query($qry);
 
         $result = $prd_parent_Sku;
@@ -214,15 +199,11 @@ public function saveAccesorioByProducto($param)
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
         $qry =  "DELETE FROM ctt_accesories WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
-/*         print_r($qry );
-        exit(); */
         $this->db->query($qry);
-
 
         $qry = "UPDATE ctt_products SET prd_sku = CONCAT(substr(prd_sku,1,7),'XXX') WHERE prd_id = ".$prd_id.""; // Modificado por edna
         $this->db->query($qry);
         
-
         return $prd_id;
     }    
 }

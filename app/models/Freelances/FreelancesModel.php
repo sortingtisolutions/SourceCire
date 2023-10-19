@@ -110,12 +110,6 @@ public function listScores()
         $freeClaUnidad = $this->db->real_escape_string($params['freeClaUnidad']);
         $freeAnUnidad = $this->db->real_escape_string($params['freeAnUnidad']);
       
-        /* $qry="INSERT INTO ctt_customers(cus_id, cus_name, cus_contact, cus_address, cus_email, cus_rfc, 
-                cus_phone, cus_phone_2, cus_internal_code, cus_qualification, cus_prospect, cus_sponsored, 
-                cus_legal_representative, cus_legal_act, cus_contract, cut_id, cus_status) 
-                VALUES ('', UPPER('$cusName'),UPPER('$cusCont'),UPPER('$cusAdrr'),'$cusEmail',UPPER('$cusRFC'),
-                '$cusPhone','$cusPhone2',UPPER('$cusICod'),'$cusQualy','$cusProsp','$cusSpon',
-                '$cusLegRepre','$cusLegalA','$cusContr','$typeProd','$cusStat') ;"; */
         $qry="INSERT INTO ctt_freelances( free_cve, free_name, free_area_id, free_rfc, 
                             free_address, free_phone, free_email, free_unit, free_plates, 
                             free_license, free_fed_perm, free_clase, free_año) 
@@ -125,21 +119,6 @@ public function listScores()
 
         $this->db->query($qry);
         $freeId = $this->db->insert_id;
-/*
-        $cusId = $prdId;
-
-        $qr2 = "UPDATE ctt_customers SET cus_fill = (
-            WITH fields AS (
-                SELECT 'cus_name' as concepto,    coalesce(LENGTH(cus_name)     < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
-                SELECT 'cus_address' as concepto, coalesce(LENGTH(cus_address)  < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
-                SELECT 'cus_email' as concepto,   coalesce(LENGTH(cus_email)    < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
-                SELECT 'cus_rfc' as concepto,     coalesce(LENGTH(cus_rfc)      < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
-                SELECT 'cus_phone' as concepto,   coalesce(LENGTH(cus_phone)    < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
-                SELECT 'cus_legal_representative' as concepto, coalesce(LENGTH(cus_legal_representative) < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId
-            )
-            SELECT (1-sum(emptyField)/6)*100 AS perc FROM fields )
-        WHERE cus_id = $cusId";
-        $this->db->query($qr2);*/
 
         return  $freeId;
     }

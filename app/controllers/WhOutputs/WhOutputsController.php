@@ -23,7 +23,6 @@ class WhOutputsController extends Controller
 		$this->render(__CLASS__, $params);
 	}
 
-
 	// Lista los proyectos
 	public function listProjects($request_params)
 	{

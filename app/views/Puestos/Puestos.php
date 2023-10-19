@@ -99,8 +99,6 @@
 					 </div>
 				</div>
 		</div>
-
-
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

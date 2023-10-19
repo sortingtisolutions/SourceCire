@@ -356,7 +356,6 @@ function printOutPutContent(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-
     // console.log('Datos', v, u, n, h);
     window.open(
         `${url}app/views/AssignProjects/AssignProjectsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,

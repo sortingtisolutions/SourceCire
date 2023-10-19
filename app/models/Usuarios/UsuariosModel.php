@@ -96,13 +96,7 @@ class UsuariosModel extends Model
 				      values('$UserNameUsuario','$pass',NOW(),'$lastid', '$idPerfil' ,1);";
 				$this->db->query($qry);
 
-				//optiene id de Usuario insertado
-				/* $qry = "SELECT MAX(usr_id) AS id FROM ctt_users;";
-				$result = $this->db->query($qry);
-				if ($row = $result->fetch_row()) {
-					$lastid = trim($row[0]);
-				}
- */				$lastidUser = $this->db->insert_id;
+				$lastidUser = $this->db->insert_id;
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
@@ -160,7 +154,6 @@ class UsuariosModel extends Model
 					$this->db->query($qry);
 	
 				} else {
-					
 					//Actualiza Usuario
 					$qry = "UPDATE ctt_users 
 							SET usr_username = '$UserNameUsuario',
@@ -169,8 +162,6 @@ class UsuariosModel extends Model
 					$this->db->query($qry);
 	
 				}
-				
-				
 				//Actualiza Empledo
 				$qry = "UPDATE ctt_employees
 						SET emp_number = '$NumEmpUsuario',

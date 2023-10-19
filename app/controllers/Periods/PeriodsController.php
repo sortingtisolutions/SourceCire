@@ -23,7 +23,6 @@ class PeriodsController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
 /** ====== OBTIENE EL PERIODO TOTAL DEL PROYECTO   =============================  */
     public function getPeriodProject($request_params)
     {
@@ -40,7 +39,6 @@ class PeriodsController extends Controller
             $res =  '[{"pjt_date_start":"0"}]';	
         }
         echo $res;
-    
     }
 
 /** ====== Obtiene los periodos de las series  ===============================================  */    
@@ -60,7 +58,6 @@ class PeriodsController extends Controller
         }
         echo $res;
     }
-
 
 /** ==== Elimina los registros de los periodos correspondientes ==============================  */
     public function deletePeriods($request_params)

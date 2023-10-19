@@ -6,6 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido ">
@@ -60,20 +61,6 @@
                                             <label for="txtRespProg">Analista Programacion:</label> 
                                             <input id="txtRespProg" name="txtRespProg" type="text" class="textbox required">
                                         </div>
-
-                                        <!-- <div class="form_group">
-                                            <label for="lstPayForm">tipo de pago:</label> 
-                                            <select id="lstPayForm" name="lstPayForm" class="required">
-                                                <option value="">Selecciona...</option>
-                                                <option value="EFECTIVO">EFECTIVO</option>
-                                                <option value="TARJETA DE CREDITO">TARJETA DE CREDITO</option>
-                                            </select>
-                                        </div> -->
-
-                                       <!--  <div class="form_group hide">
-                                            <label for="txtProject">Proyecto:</label> 
-                                            <input id="txtProject" name="txtProject" type="text" class="textbox">
-                                        </div> -->
                                         
                                         <div class="form_group hide">
                                             <label for="txtInvoice">Num Factura:</label> 
@@ -99,43 +86,6 @@
                 </div>
 
             </div>
-
-            <!-- <div class="block_02">
-                <div class="blocks">
-                    <button class="btn-add" id="newQuote"> + nueva venta</button>
-                </div>
-                <hr>
-                <div class="blocks total">
-                    <div class="half left concepto">Subtotal</div>
-                    <div class="half right total dato" id="total">0</div>
-                </div>
-                <div class="blocks total">
-                    <div class="half left concepto">IVA</div>
-                    <div class="half right total dato" id="total">0</div>
-                </div>
-                <div class="blocks total">
-                    <div class="half left concepto">Total</div>
-                    <div class="half right total dato" id="total">0</div>
-                </div>
-                <div class="blocks total">
-                    <div class="half left concepto">&nbsp;</div>
-                    <div class="half right total dato" >&nbsp;</div>
-                </div>
-                <div class="blocks">
-                    <div class="half left concepto">Num. productos</div>
-                    <div class="half right dato" id="ttlproducts">0</div>
-                </div>
-
-                <div class="blocks">
-                    <div class="full text_center">
-                        <button class="bn enable" id="addPurchase"> Guardar Cambio</button>
-                    </div>
-                </div>
-                <div class="blocks">
-                    <button class="btn-add" id="newComment"> + agregar observaciones</button>
-                </div>
-                <hr>
-            </div> -->
         </div>
     </div>
 </div>
@@ -160,13 +110,6 @@
                                     <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                                     <span class="intructions">Nombre correspondiente al producto</span>
                                 </td>
-<!--                                 <div id="listProduct" class="list-group list-hide">
-                                    <div class="list-items" ></div>
-                                </div>
-                            </div> -->
-                            <!-- <span class="fail_note hide"></span>
-                            <span style="font-size: 0.7em; color: #999999; margin-bottom: 10px;	margin-top: 2px;" >Listado de productos para crear un accesorio</span> -->
-                        <!-- </td> -->
                     </tr>
 
                     <tr>
