@@ -17,8 +17,8 @@ class ProjectClosedModel extends Model
 
         $qry = "SELECT pj.pjt_id, pj.pjt_name, ifnull(cus.cus_id , '0') as cus_id
                 FROM ctt_projects AS pj
-                INNER JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
-                INNER JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
+                LEFT JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
+                LEFT JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
                 WHERE pjt_status IN (8,9);";
 
         return $this->db->query($qry);
@@ -88,7 +88,7 @@ class ProjectClosedModel extends Model
                 clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
                 cus_id, pjt_id, usr_id, ver_id)
             VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
-            ' $cloTotDocum' CURRENT_TIMESTAMP(), '0', '$cloCommen','1',
+            ' $cloTotDocum', Now(), '0', '$cloCommen','1',
             '$cusId','$pjtid','$usrid','$verid');";
 
         $this->db->query($qry);

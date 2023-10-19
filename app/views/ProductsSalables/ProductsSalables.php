@@ -52,12 +52,12 @@
                                         
                                         <div class="form_group">
                                             <label for="txtCustomer">Cliente:</label> 
-                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox">
+                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox" autocomplete="off">
                                         </div>
 
                                         <div class="form_group hide">
                                             <label for="txtInvoice">Num Factura:</label> 
-                                            <input id="txtInvoice" name="txtInvoice" type="text" class="textbox">
+                                            <input id="txtInvoice" name="txtInvoice" type="text" class="textbox" autocomplete="off">
                                         </div>
                                     </form>
                                 </td>

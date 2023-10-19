@@ -17,6 +17,13 @@ function inicial() {
         fill_dinamic_table();
         // get_products(5);
 
+        let max=6;
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+          }
+
+        console.log(getRandomInt(3));
+
         $('#lstPayForm')
             .unbind('change')
             .on('change', function () {
@@ -172,11 +179,11 @@ function putdataprojects(dt) {
         $.each(proj, function (v, u) {
                 // $('#txtProject').parents('div.form_group').removeClass('hide');
                 $('#txtProject').val(u.pjt_name.toUpperCase());
-                $('#txtCustomer').val(u.cus_name.toUpperCase());
+                $('#txtCustomer').val(u.cus_name());
                 $('#txtDateStar').val(u.pjt_date_start.toUpperCase());
                 $('#txtDateEnd').val(u.pjt_date_end.toUpperCase());
-                $('#txtRepresen').val(u.cus_legal_representative.toUpperCase());
-                $('#txtAdress').val(u.cus_address.toUpperCase());
+                $('#txtRepresen').val(u.cus_legal_representative());
+                $('#txtAdress').val(u.cus_address());
                 $('#txtRespProg').val(u.emp_fullname.toUpperCase());
         });
         
@@ -352,7 +359,7 @@ function fill_purchase(dt) {
             <td class="cost" >${mkn(u.clo_total_expendables,'n')}</td>
             <td class="cost" >${mkn(u.clo_total_diesel,'n')}</td>
             <td class="cost" >${mkn(u.clo_total_discounts,'n')}</td>
-            <td class="cost" >${mkn(u.clo_total_proyects,'n')}</td>
+            <td class="cost" >${mkn(u.clo_total_document,'n')}</td>
         </tr> `;
         $('#tbl_dynamic tbody').append(H);
 
