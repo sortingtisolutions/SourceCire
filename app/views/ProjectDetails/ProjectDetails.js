@@ -1755,7 +1755,8 @@ function activeInputSelector() {
                         /* periodProduct(bdgId);*/
                         break; 
                     case 'event_StokProduct':
-                        stockProduct(bdgId,nameProd);
+                        //stockProduct(bdgId,nameProd);
+                        alert('NO SE PUEDE MOSTRAR LA INFORMACION DE UN PAQUETE');
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
@@ -3423,5 +3424,5 @@ function subaccion() {
     let pjtId = $('.version_current').data('project');
     let verId = $('.version_current').attr('data-version');
 
-    /* getBudgets(pjtId, verId); */
+    getBudgets(pjtId, verId); 
 }

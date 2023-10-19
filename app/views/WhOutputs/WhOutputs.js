@@ -126,7 +126,7 @@ function putProducts(dt) {
             //let valstage = u.pjt_status == 4 ? 'color:#008000' : 'color:#CC0000';
             // <td class="sku"><i class='fa fa-solid fa-dolly detail' title="Edita detalles del proyecto"></i><i class='fa fa-cog toWork'></i></td>
             var H = `
-                <tr id="${u.pjt_id}" style='${valstage}'>
+                <tr id="${u.pjt_id}" style='${valstage}' data-version='${u.ver_id}'>
                     <td class="sku"><i class="${valicon}"></i></td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
@@ -152,9 +152,10 @@ function activeIcons() {
         .on('click', function () {
             let locID = $(this);
             let pjtid = locID.parents('tr').attr('id');
+            let verid = locID.parents('tr').attr('data-version');
 
-            //console.log('Paso ToWork..', pjtid);
-            confirm_to_work(pjtid);
+            // console.log('Paso ToWork..', pjtid, verid);
+            confirm_to_work(pjtid, verid);
         });
 
     $('.detail')
@@ -171,7 +172,7 @@ function activeIcons() {
         });
 }
 
-function confirm_to_work(pjtid) {
+function confirm_to_work(pjtid, verid) {
     $('#starToWork').modal('show');
     $('#txtIdProductPack').val(pjtid);
     //borra paquete +
@@ -183,7 +184,7 @@ function confirm_to_work(pjtid) {
         modalLoading('S');
 
         var pagina = 'WhOutputs/UpdateSeriesToWork';
-        var par = `[{"pjtid":"${pjtid}"}]`;
+        var par = `[{"pjtid":"${pjtid}","verid":"${verid}"}]`;
         var tipo = 'json';
         var selector = putToWork;
         fillField(pagina, par, tipo, selector);

@@ -683,7 +683,7 @@ public function ProcessProjectProduct($request_params)
                         'serId' => $serId,
                     );
                     //echo 'VAR_ '. $prodId . ' - ' . $serId . 'END ';
-                    $accesory = $this->model->GetAccesories($paramacc); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
+                    /* $accesory = $this->model->GetAccesories($paramacc); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -712,7 +712,7 @@ public function ProcessProjectProduct($request_params)
                             'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
-                    }
+                    } */
                 }
             } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
                 for ($i = 1; $i<=$quanty; $i++){
@@ -750,7 +750,7 @@ public function ProcessProjectProduct($request_params)
                             'prodId' => $pkpdId, 
                             'serId' => $serId,
                         );
-                        $accesory = $this->model->GetAccesories($paramaccpk);
+                        /* $accesory = $this->model->GetAccesories($paramaccpk);
                         while($acc = $accesory->fetch_assoc()){
     
                             $acceId =  $acc["prd_id"];
@@ -779,7 +779,7 @@ public function ProcessProjectProduct($request_params)
                                 'detlId' => $detlId,
                             );
                             $serie = $this->model->SettingSeries($accparams);
-                        }
+                        } */
                     }
                 }
             }
@@ -879,23 +879,46 @@ public function ProcessProjectProduct($request_params)
                         $pkpdId =  $acc["prd_id"];
                         $pkpdNm =  $acc["prd_name"];
                         $pkpdPc =  $acc["prd_price"];
+                        $pkqty =  $acc["pck_quantity"];
 
-                        $prodparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $pkpdId, 
-                            'dtinic' => $dtinic, 
-                            'dtfinl' => $dtfinl,
-                            'bdgnme' => $pkpdNm,
-                            'bdgprc' => $pkpdPc,
-                            'bdglvl' => 'P',
-                            'bdgqty' => $ttlqty,
-                            'dybase' => $dybase,
-                            'dytrip' => $dytrip,
-                            'dytest' => $dytest,
-                            'versId' => $versId,
-                            'detlId' => 0,
-                        );
-                        $detlId = $this->model->SettingSeries($prodparams);
+                        if($pkqty>0){
+                            for ($i=0; $i < $pkqty; $i++) { 
+                                $prodparams = array(
+                                    'pjetId' => $pjetId, 
+                                    'prodId' => $pkpdId, 
+                                    'dtinic' => $dtinic, 
+                                    'dtfinl' => $dtfinl,
+                                    'bdgnme' => $pkpdNm,
+                                    'bdgprc' => $pkpdPc,
+                                    'bdglvl' => 'P',
+                                    'bdgqty' => $ttlqty,
+                                    'dybase' => $dybase,
+                                    'dytrip' => $dytrip,
+                                    'dytest' => $dytest,
+                                    'versId' => $versId,
+                                    'detlId' => 0,
+                                );
+                                $detlId = $this->model->SettingSeries($prodparams);
+                            }
+                        }/* else{
+                            $prodparams = array(
+                                'pjetId' => $pjetId, 
+                                'prodId' => $pkpdId, 
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'bdgnme' => $pkpdNm,
+                                'bdgprc' => $pkpdPc,
+                                'bdglvl' => 'P',
+                                'bdgqty' => $ttlqty,
+                                'dybase' => $dybase,
+                                'dytrip' => $dytrip,
+                                'dytest' => $dytest,
+                                'versId' => $versId,
+                                'detlId' => 0,
+                            );
+                            $detlId = $this->model->SettingSeries($prodparams);
+                        } */
+                        
                        
                     }
                 }

@@ -23,7 +23,22 @@ class WorkInputContentController extends Controller
 		$this->render(__CLASS__, $params);
     }
 
-
+    public function listFreelances($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listFreelances($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"free_id":"0"}]';
+        }
+        echo $res;
+    }
     // Lista los proyectos
     public function listProjects($request_params)
     {
@@ -55,7 +70,7 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjt_id":"0"}]';
+            $res =  '[{"pjtpd_id":"0"}]';
         }
         echo $res;
     }

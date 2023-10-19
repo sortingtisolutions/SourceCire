@@ -28,16 +28,34 @@ public function listEstatusMantenimiento($params)
     public function listProducts($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
-        $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.ser_serial_number, ser.ser_status, ser.ser_situation, ser.ser_stage, 
-        pj.pjt_name, pj.pjt_id, pj.pjt_date_start, pj.pjt_date_end, ifnull(pdm.pmt_id,0) as pmt_id, ifnull(pdm.pmt_days,0) AS pmt_days, ifnull(pdm.pmt_hours,0) AS pmt_hours, ifnull(pdm.pmt_date_start,'') AS pmt_date_start, ifnull(pdm.pmt_date_end,'') AS pmt_date_end, ifnull(pdm.pmt_comments,'') AS pmt_comments, ifnull(pdm.pjtcr_id,0) AS pjtcr_id, ifnull(mts.mts_description,'') AS mts_description, ifnull(pdm.mts_id,0) AS mts_id,
-        ifnull(pdm.pmt_price,0) AS pmt_price, ser.ser_sku, ser.ser_serial_number, ser.ser_no_econo, ifnull(pjcr.pjtcr_id,0) as pjtcr_id, ifnull(pjcr.pjtcr_definition,'') as pjtcr_definition
-        from ctt_products as pd 
-        INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
-        INNER JOIN ctt_products_maintenance AS pdm ON pdm.ser_id = ser.ser_id
-        INNER JOIN ctt_maintenance_status AS mts ON mts.mts_id = pdm.mts_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = pdm.pjt_id
-        LEFT JOIN ctt_project_change_reason AS pjcr ON pjcr.pjtcr_id= pdm.pjtcr_id
-        WHERE pj.pjt_id='$pjtId' AND ser.ser_situation='M'";
+        $em = $this->db->real_escape_string($params['em']);
+        if ($em == 1) {
+            $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.ser_serial_number, ser.ser_status, ser.ser_situation, ser.ser_stage, 
+                pj.pjt_name, pj.pjt_id, pj.pjt_date_start, pj.pjt_date_end, ifnull(pdm.pmt_id,0) as pmt_id, ifnull(pdm.pmt_days,0) AS pmt_days, ifnull(pdm.pmt_hours,0) AS pmt_hours, ifnull(pdm.pmt_date_start,'') AS pmt_date_start, ifnull(pdm.pmt_date_end,'') AS pmt_date_end, ifnull(pdm.pmt_comments,'') AS pmt_comments, ifnull(pdm.pjtcr_id,0) AS pjtcr_id, ifnull(mts.mts_description,'') AS mts_description, ifnull(pdm.mts_id,0) AS mts_id,
+                ifnull(pdm.pmt_price,0) AS pmt_price, ser.ser_sku, ser.ser_serial_number, ser.ser_no_econo, ifnull(pjcr.pjtcr_id,0) as pjtcr_id, ifnull(pjcr.pjtcr_definition,'') as pjtcr_definition
+                from ctt_products as pd 
+                INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
+                INNER JOIN ctt_products_maintenance AS pdm ON pdm.ser_id = ser.ser_id
+                INNER JOIN ctt_maintenance_status AS mts ON mts.mts_id = pdm.mts_id
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id = pdm.pjt_id
+                LEFT JOIN ctt_project_change_reason AS pjcr ON pjcr.pjtcr_id= pdm.pjtcr_id
+                WHERE pj.pjt_id='$pjtId' AND ser.ser_situation='M'";
+        }else{
+            $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.ser_serial_number, ser.ser_status, ser.ser_situation, ser.ser_stage, 
+            pj.pjt_name, pj.pjt_id, pj.pjt_date_start, pj.pjt_date_end, ifnull(pdm.pmt_id,0) as pmt_id, ifnull(pdm.pmt_days,0) AS pmt_days, ifnull(pdm.pmt_hours,0) AS pmt_hours, ifnull(pdm.pmt_date_start,'') AS pmt_date_start, ifnull(pdm.pmt_date_end,'') AS pmt_date_end, ifnull(pdm.pmt_comments,'') AS pmt_comments, ifnull(pdm.pjtcr_id,0) AS pjtcr_id, ifnull(mts.mts_description,'') AS mts_description, ifnull(pdm.mts_id,0) AS mts_id,
+            ifnull(pdm.pmt_price,0) AS pmt_price, ser.ser_sku, ser.ser_serial_number, ser.ser_no_econo, ifnull(pjcr.pjtcr_id,0) as pjtcr_id, ifnull(pjcr.pjtcr_definition,'') as pjtcr_definition
+            from ctt_products as pd 
+            INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
+            INNER JOIN ctt_products_maintenance AS pdm ON pdm.ser_id = ser.ser_id
+            INNER JOIN ctt_maintenance_status AS mts ON mts.mts_id = pdm.mts_id
+            INNER JOIN ctt_projects AS pj ON pj.pjt_id = pdm.pjt_id
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id= pd.sbc_id
+            INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
+            INNER JOIN ctt_employees AS em ON em.are_id = ct.are_id
+            LEFT JOIN ctt_project_change_reason AS pjcr ON pjcr.pjtcr_id= pdm.pjtcr_id
+            WHERE pj.pjt_id='$pjtId' AND ser.ser_situation='M' AND em.emp_id = $em";
+        }
+        
         //
         
         return $this->db->query($qry);
