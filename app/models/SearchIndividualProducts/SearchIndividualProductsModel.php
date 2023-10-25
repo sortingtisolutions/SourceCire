@@ -36,6 +36,14 @@ public function listProyects($store)
         return $this->db->query($qry);
     }    
 
+// Listar los productos2
+public function listProducts2()
+{
+    $qry = "SELECT * FROM ctt_products A 
+            WHERE A.prd_visibility=1 AND A.prd_level='P'
+            ORDER BY prd_name;";
+    return $this->db->query($qry);
+}
 
 // Busca si existe asignado un almacen con este producto
     public function SechingProducts($param)

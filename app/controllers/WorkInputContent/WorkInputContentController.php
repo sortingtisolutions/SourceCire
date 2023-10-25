@@ -218,5 +218,12 @@ class WorkInputContentController extends Controller
         echo $result;
     }
 
+    public function RegisterGetIn($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->GetInProject($request_params);
+            
+            echo $result;
+        }
  
 }

@@ -133,19 +133,21 @@ function getProjectContent(pjtId) {
 }
 
 function putProjectContent(dt) {
-    // console.log(dt);
+    console.log(dt);
     if (dt[0].pjtdt_id!=''){
        
         tblprod.find('tbody').html('');
         verIdgbl=dt[0].ver_id;
         $.each(dt, function (v, u) {
+            let costins=parseFloat(u.costo) + parseFloat(u.seguro);
+            // console.log(costins);
             let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
                         <td class="cn"><i class='fas fa-pen modif'></i></td>
                         <td class="lf">${u.pjtdt_prod_sku}</td>
                         <td class="lf">${u.pjtcn_prod_name}</td>
                         <td class="cn">1</td>
                         <td class="cn">${u.ser_situation}</td>
-                        <td class="rg">${fnm(u.costo, 2, '.', ',')}</td>
+                        <td class="rg">${fnm(costins, 2, '.', ',')}</td>
                         <td class="lf">${u.ser_comments}</td>
                     </tr>`;
             tblprod.append(H);
@@ -153,7 +155,9 @@ function putProjectContent(dt) {
     }    
     widthTable(tblprod);
 
-    let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo), 0);
+    let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo) + parseFloat(pc.seguro), 0);
+    let liva=tot*(0.16)+parseFloat(tot);
+    tot=liva;
     totprj.html(fnm(tot, 2, '.', ','));
     // console.log(tot);
     activeIcons();

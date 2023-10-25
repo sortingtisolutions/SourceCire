@@ -73,8 +73,8 @@ function settingTable() {
         ],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
+            [300, 500, -1],
+            [300, 500, 'Todos'],
         ],
         buttons: [
             {

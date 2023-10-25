@@ -14,7 +14,7 @@
             <div class="row mvst_group">
                 <div class="mvst_list tblProdMaster">                   
                     <div class="row rowTop">
-                        <h1>Listado de Clientes con un Proyecto</h1>
+                        <h1>Catalogo de Freelances disponibles</h1>
                         
                     </div>
                     <div id="dvProducts"></div>

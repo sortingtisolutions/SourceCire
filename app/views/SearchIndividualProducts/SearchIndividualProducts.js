@@ -7,7 +7,7 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    folio = getFolio();
+    // folio = getFolio();
     setting_table();
     getListProducts();
 
@@ -23,7 +23,7 @@ function inicial() {
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 
 function getListProducts() {
-    var pagina = '/listProducts2';
+    var pagina = 'SearchIndividualProducts/listProducts2';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putProductsList;

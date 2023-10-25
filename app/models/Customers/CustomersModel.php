@@ -41,7 +41,8 @@ public function listCustType()
 // Listado de facturas
 public function listScores()
 {
-    $qry = "SELECT scr_id, scr_values, scr_description FROM ctt_scores;";
+    $qry = "SELECT scr_id, scr_values, scr_description 
+            FROM ctt_scores;";
     return $this->db->query($qry);
 }
 

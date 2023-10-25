@@ -22,7 +22,6 @@ public function getSelectFreelance($params)
 {
     $prdId = $this->db->real_escape_string($params['prdId']);
     $qry = "SELECT * FROM ctt_freelances AS free
-            
             WHERE free.free_id = $prdId limit 1;";
 
     return $this->db->query($qry);

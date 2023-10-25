@@ -13,7 +13,7 @@
         <div class="row mvst_group">
 
         <!-- Sidebar -->
-            <div class="mvst_panel" style="width:250px; background-color: fffffff">
+            <div class="mvst_panel" style="width:280px; background-color: #EAFC98">
                 <div class="form-group" >
                     
                     <div class="row">

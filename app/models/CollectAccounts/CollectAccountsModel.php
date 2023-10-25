@@ -34,7 +34,7 @@ class CollectAccountsModel extends Model
         /* $prdId = $this->db->real_escape_string($params['prdId']); */
         $qry = "SELECT pjtcn_id,pjtcn_prod_sku,pjtcn_prod_name,pjtcn_quantity,pjtcn_prod_level
                 FROM ctt_projects_content AS pj
-                WHERE pj.pjt_id IN ('8','9') limit 1;";
+                WHERE pj.pjt_id IN ('9') limit 1;";
 
         return $this->db->query($qry);
     }

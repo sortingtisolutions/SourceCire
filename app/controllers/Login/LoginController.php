@@ -26,7 +26,7 @@ class LoginController extends Controller
 
   public function signin($request_params)
   {
-
+    /* $locUser=$UseUser; */
     if($this->verify($request_params))
       return $this->renderErrorMessage('El usuario y password son obligatorios');
 
@@ -46,7 +46,8 @@ class LoginController extends Controller
     
     $this->session->init();
     $this->session->add('user', $user);
-
+   
+    $regist = $this->model->registerAcces($result->emp_number,USEDUSER);
     $page = $result->prf_mod_start;
 
 //$params = array('usuario' => $this->session->get('usuario'));

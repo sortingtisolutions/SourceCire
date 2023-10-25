@@ -11,7 +11,7 @@
 	<div class="contenido">
 		<div class="row mvst_group">
 				<!-- Start área de formularios -->
-				<div class="mvst_panel" style="width:280px; background-color: #f3e8e8"> 
+				<div class="mvst_panel" style="width:280px; background-color: #e2edf3"> 
 					<div class="form-group">
 						<h5 id="titulo">Datos Complementarios</h4>  
 						<form id="formProveedor" class="row g-3 needs-validation" novalidate>

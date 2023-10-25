@@ -222,6 +222,7 @@ function fillCustomers(ft) {
 
 /** +++++  coloca los tipos de calificacion */
 function putScores(dt) {
+    console.log('putScores',dt);
     if (dt[0].scr_id != '0') {
         let cinId = dt[0].scr_id;
         $.each(dt, function (v, u) {
@@ -400,11 +401,17 @@ function saveEditCustomer() {
         let cusPhone = $('#txtCusPhone').val();
         let cusAdrr = $('#txtCusAdrr').val();
         let cusRFC = $('#txtCusRFC').val();
-        let TypeProd = $(`#txtTypeProd`).val();
+        let TypeProd = $(`#txtTypeProd option:selected`).val() == 0
+            ? '' : $(`#txtTypeProd option:selected`).text().split('-')[0];
+        let TypeProdT = $(`#txtTypeProd option:selected`).val() == 0
+            ? '' : $(`#txtTypeProd option:selected`).text().split('-')[1];
+
         let cusQualy =
             $(`#txtQualy option:selected`).val() == 0
-                ? ''
-                : $(`#txtQualy option:selected`).text().split('-')[0];
+                ? '' : $(`#txtQualy option:selected`).text().split('-')[0];
+        // let cusQualyT =
+        //         $(`#txtQualy option:selected`).val() == 0
+        //         ? '' : $(`#txtQualy option:selected`).text().split('-')[1];
         
         let cusStat = $('#txtCusStat').children('i').attr('data_val');
         let cusICod = $('#txtCusCodI').val();
@@ -418,7 +425,9 @@ function saveEditCustomer() {
         let cusCont = $(`#txtCusCont`).val();
         let cusContEmail = $('#txtContEmail').val();
         let cusContPhone = $(`#txtContPhone`).val();
-        let cusWorkC = $(`#txtWorkC`).val();
+        let cusWorkC = $(`#txtWorkC option:selected`).val() == 0
+                ? '' : $(`#txtWorkC option:selected`).text().split('-')[0];
+
         let cusInvoi = $(`#txtInvoi`).val();
 
         var par = `
@@ -445,24 +454,26 @@ function saveEditCustomer() {
                     "cusInvoi" :    "${cusInvoi}"
                 }]
             `;
+            console.log('par',par);
                 // ACTUALIZA EL REGISTRO DE LA TABLA QUE SE MODIFICO
             let el = $(`#tblCustomers tr[id="${cusId}"]`);
                 $(el.find('td')[1]).text(cusName);
                 $(el.find('td')[2]).text(cusEmail);
                 $(el.find('td')[3]).text(cusPhone);
-                $(el.find('td')[5]).text(cusAdrr);
-                $(el.find('td')[6]).text(cusRFC);
-                $(el.find('td')[7]).text(TypeProd);
-                $(el.find('td')[8]).text(cusQualy);
-                $(el.find('td')[9]).text(cusStat);
-                $(el.find('td')[10]).text(cusICod);
-                $(el.find('td')[11]).text(cusSatC);
-                $(el.find('td')[12]).text(cusDirector);
-                $(el.find('td')[13]).text(cusLegRepre);
-                $(el.find('td')[14]).text(cusLegPhone);
-                $(el.find('td')[15]).text(cusLegEmail);
-                $(el.find('td')[16]).text(cusContEmail);
-                $(el.find('td')[17]).text(cusContPhone);
+                $(el.find('td')[4]).text(cusAdrr);
+                $(el.find('td')[5]).text(cusRFC);  //5
+                $(el.find('td')[6]).text(cusQualy);
+                $(el.find('td')[7]).text(TypeProdT);
+                $(el.find('td')[8]).text(cusICod);
+                $(el.find('td')[9]).text(cusSatC);
+                $(el.find('td')[10]).text(cusStat);  //10
+                $(el.find('td')[11]).text(cusDirector);
+                $(el.find('td')[12]).text(cusLegRepre);
+                $(el.find('td')[13]).text(cusLegEmail);
+                $(el.find('td')[14]).text(cusLegPhone); 
+                $(el.find('td')[15]).text(cusCont);  //15
+                $(el.find('td')[16]).text(cusContPhone);
+                $(el.find('td')[17]).text(cusContEmail);
                 $(el.find('td')[18]).text(cusWorkC);
                 $(el.find('td')[19]).text(cusInvoi);
 

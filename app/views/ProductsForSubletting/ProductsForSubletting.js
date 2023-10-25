@@ -7,7 +7,7 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    folio = getFolio();
+    // folio = getFolio();
     setting_table();
     get_Proyectos();
     get_coins();

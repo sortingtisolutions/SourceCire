@@ -119,10 +119,10 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Calificación del Cliente: </td>
                         <td class="data">
-                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:200px">
+                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:300px">
                                 <option value="0">Selecciona Calificación</option>
                             </select>
-                            <span class="fail_note hide"><!-- <i class="fas fa-arrow-left"></i> --> Campo requerido</span>
+                            <span class="fail_note hide"> Campo requerido</span>
                             <span class="intructions">Calificacion segun historial del cliente</span>
                         </td>
                     </tr>

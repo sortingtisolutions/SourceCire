@@ -356,12 +356,8 @@ function putDetailsProds(dt) {
             } else{
                 icon ='fas fa-edit';
             }
-
-            /* if(u.pjtcn_prod_level=='K'){
-                icon = 'fas fa-regular fa-thumbs-up';
-            } */
             //console.log(valstage);
-            let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+            let skufull = String(u.pjtcn_prod_sku).slice(7, 11) == '' ? String(u.pjtcn_prod_sku).slice(0, 7) : String(u.pjtcn_prod_sku).slice(0, 7) + '-' + String(u.pjtcn_prod_sku).slice(7, 11);
 
             var rownode=tabla.row
                 .add({
@@ -510,9 +506,9 @@ function build_modal_serie_old(dt) {
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
          tabla.rows().remove().draw();
          $.each(dt, function (v, u){
-             let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + u.pjtdt_prod_sku.slice(7, 11);
-             let sku = u.pjtdt_prod_sku.slice(0, 7);
-             let acc = u.pjtdt_prod_sku.slice(7,8) == 'A' ? skufull : sku;
+             let skufull = String(u.pjtdt_prod_sku).slice(7, 11) == '' ? String(u.pjtdt_prod_sku).slice(0, 7) : String(u.pjtdt_prod_sku).slice(0, 7) + String(u.pjtdt_prod_sku).slice(7, 11);
+             let sku = String(u.pjtdt_prod_sku).slice(0, 7);
+             let acc = String(u.pjtdt_prod_sku).slice(7,8) == 'A' ? skufull : sku;
              let valstage = u.ser_stage == 'TR' ? 'color:#CC0000' : 'color:#3c5777';
              let level;
              if(u.pjtvr_section == 4){
@@ -593,8 +589,6 @@ function myCheck(dt){
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
-
-// *****************  CONFIGURACION TABLA CAMBIO DE SERIES **************
 function settingChangeSerie(){
     // console.log('setting');
     $('#ChangeSerieModal').removeClass('overlay_hide');

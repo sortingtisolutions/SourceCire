@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <div class="contenido">
         <div class="row mvst_group">
-            <div class="mvst_panel">
+            <div class="mvst_panel" style="background-color: #e2edf3">
 
                 <div class="form-group">
                 <div>

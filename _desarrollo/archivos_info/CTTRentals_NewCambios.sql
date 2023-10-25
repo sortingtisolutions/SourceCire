@@ -317,3 +317,16 @@ ALTER TABLE `ctt_documents_closure`
 
 ALTER TABLE `ctt_documents_closure`
 	ADD COLUMN `clo_ver_closed` INT(11) NULL DEFAULT 0 COMMENT 'Version del documento de cierre' AFTER `clo_comentarios`;
+
+
+--*************** 20 Oct 23 *****************
+CREATE TABLE `Register_aplication_access` (
+	`regacc_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id_del registro de acceso',
+	`reg_user_app` INT NOT NULL DEFAULT 0 COMMENT 'Id del empleado',
+	`reg_user_db` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Usuario de la base de datos',
+	`reg_date_in` DATETIME NULL DEFAULT NOW() COMMENT 'Fecha y hora del acceso',
+	PRIMARY KEY (`regacc_id`)
+)
+COMMENT='Registro de los acceso a la aplicacion'
+COLLATE='utf8mb4_general_ci'
+;

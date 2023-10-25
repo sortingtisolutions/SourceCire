@@ -136,7 +136,7 @@ public function saveAccesorioByProducto($param)
             $acConsecutivo = trim($row[0]);
         }
 
-        $prd_parent_Sku =  $prd_parent_Sku."A".str_pad($acConsecutivo, 3, "0", STR_PAD_LEFT);
+        $prd_parent_Sku =  $prd_parent_Sku."A".str_pad($acConsecutivo, 2, "0", STR_PAD_LEFT);
         
         $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' WHERE prd_id = $prd_id";
         $this->db->query($qry);

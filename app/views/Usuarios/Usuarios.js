@@ -83,13 +83,13 @@ function addZeroNumber(number, length) {
 // Enlista las areas
 function getAreas() {
     var pagina = 'Usuarios/listAreas';
-    var par = `[{"store":""}]`;
+    var par = `[{"":""}]`;
     var tipo = 'json';
     var selector = putAreas;
     fillField(pagina, par, tipo, selector);
 }
 function putAreas(dt) {
-    
+    // console.log('putAreas',dt);
     if (dt[0].area_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.are_id}"> ${u.are_name}</option>`;
@@ -122,14 +122,14 @@ function getIdModuluesPerfiles(idPerfil) {
 
 // Optiene los perfiles disponibles *
 function getPerfilesUsuario(idPerfil) {
-    console.log('MOD-getPerfilesUsuario');
+    // console.log('getPerfilesUsuario',idPerfil);
     var location = 'PerfilUser/GetPerfiles';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: location,
         success: function (respuesta) {
-            console.log('Perf-',respuesta);
+            // console.log('Perf-',respuesta);
             var renglon = "<option id='0'  value=''>Seleccione un perfil...</option> ";
             respuesta.forEach(function (row, index) {
                 renglon += '<option id="' + row.prf_id + '" value="'+ row.prf_id +'">' + row.prf_name + '</option> ';
@@ -395,11 +395,11 @@ function getUsuariosTable() {
 
     $.ajax({
         type: 'POST',
-        dataType: 'JSON',
+        dataType: 'json',
         url: location,
         _success: function (respuesta) {
             var renglon = '';
-            console.log(respuesta);
+            // console.log(respuesta);
             respuesta.forEach(function (row, index) {
                 renglon =
                     '<tr>' +
@@ -489,12 +489,12 @@ function getUsuariosTable() {
                 },
             });
         },
-        get success() {
-            return this._success;
-        },
-        set success(value) {
-            this._success = value;
-        },
+            get success() {
+                return this._success;
+            },
+            set success(value) {
+                this._success = value;
+            },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR, textStatus, errorThrown);
         },

@@ -77,6 +77,12 @@ class ClosedProyectChangeController extends Controller
         echo $res;
     } 
 
+    public function saveDocumentClosure($request_params)
+    {
+        $result = $this->model->saveDocumentClosure($request_params);
+        echo $result;
+    }
+    
 // Lista los productos
     public function listProducts($request_params)
     {

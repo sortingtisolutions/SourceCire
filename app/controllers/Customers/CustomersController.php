@@ -41,23 +41,23 @@ class CustomersController extends Controller
 		echo $res;
 	}
 
-// Lista los tipos de monedas
-	// public function listScores($request_params)
-	// {
-	// 	$params =  $this->session->get('user');
-	// 	$result = $this->model->listScores($request_params);
-	// 	$i = 0;
-	// 	while($row = $result->fetch_assoc()){
-	// 		$rowdata[$i] = $row;
-	// 		$i++;
-	// 	}
-	// 	if ($i>0){
-	// 		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-	// 	} else {
-	// 		$res =  '[{"cin_id":"0"}]';	
-	// 	}
-	// 	echo $res;
-	// }
+// Lista los tipos de calificacion
+	public function listScores($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->listScores($request_params);
+		$i = 0;
+		while($row = $result->fetch_assoc()){
+			$rowdata[$i] = $row;
+			$i++;
+		}
+		if ($i>0){
+			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		} else {
+			$res =  '[{"cin_id":"0"}]';	
+		}
+		echo $res;
+	}
 
 // Lista los documentos de fichas técnicas
 	public function listCustType($request_params)

@@ -10,7 +10,7 @@
 <div class="container-fluid">
 		<div class="contenido ">
 			<div class="row mvst_group">
-				<div class="mvst_panel" style="background-color: #e2edf3">
+				<div class="mvst_panel" style="background-color: #EDD2F5">
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

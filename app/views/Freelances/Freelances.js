@@ -17,7 +17,7 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getFreelances();
-        getScores();
+        // getScores();
         getCustType();
         getOptionYesNo();
         
@@ -34,13 +34,13 @@ function getFreelances() {
 }
 
 // Solicita las monedas
-function getScores() {
-    var pagina = 'Freelances/listScores';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putScores;
-    fillField(pagina, par, tipo, selector);
-}
+// function getScores() {
+//     var pagina = 'Freelances/listScores';
+//     var par = '[{"parm":""}]';
+//     var tipo = 'json';
+//     var selector = putScores;
+//     fillField(pagina, par, tipo, selector);
+// }
 
 // Solicita las monedas
 function getCustType() {
@@ -53,7 +53,7 @@ function getCustType() {
 
 /** +++++  Obtiene el cliente seleccionado */
 function getSelectFreelance(prdId) {
-    console.log('getSelectFreelance',prdId);
+    // console.log('getSelectFreelance',prdId);
     var pagina = 'Freelances/getSelectFreelance';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
@@ -63,7 +63,6 @@ function getSelectFreelance(prdId) {
 
 function getSelectFreelanceNew(prdId) {
     //console.log(prdId);
-    
     var pagina = 'Freelances/getSelectFreelance';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
@@ -164,9 +163,8 @@ function settingTable() {
 
 function fillFreelances(ft) {
     $('#tblFreelances tbody').html('');
-
     var cod = ft == '1' ? 'A' : '';
-    console.log(prds);
+    // console.log(prds);
     if (prds[0].free_id != '0') {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
@@ -177,7 +175,7 @@ function fillFreelances(ft) {
                     <td class="supply" data-content="${u.free_name}">${u.free_name}</td>
                     <td class="supply">${u.free_email}</td>
                     <td class="supply">${u.free_phone}</td>
-                    <td class="supply">${u.free_adress}</td>
+                    <td class="supply">${u.free_address}</td>
                     <td class="supply" style="text-align:center">${u.free_rfc}</td>
                     <td class="supply" style="text-align:center">${u.free_unit}</td>
                     <td class="supply" style="text-align:center">${u.free_plates}</td>
@@ -193,21 +191,20 @@ function fillFreelances(ft) {
         activeIcons();
     } else {
         settingTable();
-        
     }
 }
 
 
 /** +++++  coloca los tipos de calificacion */
-function putScores(dt) {
-    if (dt[0].scr_id != '0') {
-        let cinId = dt[0].scr_id;
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.scr_values}">${u.scr_values} - ${u.scr_description}</option>`;
-            $('#txtQualy').append(H);
-        });
-    }
-}
+// function putScores(dt) {
+//     if (dt[0].scr_id != '0') {
+//         let cinId = dt[0].scr_id;
+//         $.each(dt, function (v, u) {
+//             var H = `<option value="${u.scr_values}">${u.scr_values} - ${u.scr_description}</option>`;
+//             $('#txtQualy').append(H);
+//         });
+//     }
+// }
 /** +++++  coloca los tipo productor */
 function putCustType(dt) {
     if (dt[0].are_id != '0') {
@@ -596,18 +593,19 @@ function inactiveFocus() {
         });
 }
 
-function putInvoice(dt) {
-    if (dt[0].doc_id != '0') {
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
-            $('#txtDocIdSerie').append(H);
-        });
-    }
-}
+// function putInvoice(dt) {
+//     if (dt[0].doc_id != '0') {
+//         $.each(dt, function (v, u) {
+//             var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
+//             $('#txtDocIdSerie').append(H);
+//         });
+//     }
+// }
 
-function putInvoiceList(dt) {
-    //console.log(dt);
-}
+// function putInvoiceList(dt) {
+//     //console.log(dt);
+// }
+
 function omitirAcentos(text) {
     var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
     var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';

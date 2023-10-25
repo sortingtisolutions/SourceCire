@@ -86,9 +86,9 @@ function settingTable() {
             {data: 'clt_create',    class: 'date'},
             {data: 'clt_namecli',    class: 'supply'},
             {data: 'clt_namepjt',   class: 'supply'},
-            {data: 'clt_payall',    class: 'supply'},
-            {data: 'clt_paid',      class: 'supply'},
-            {data: 'clt_pending',   class: 'supply'},
+            {data: 'clt_payall',    class: 'sku'},
+            {data: 'clt_paid',      class: 'sku'},
+            {data: 'clt_pending',   class: 'sku'},
             {data: 'clt_limitpay',  class: 'date'},
             {data: 'clt_lastpay',   class: 'date'},
         ],
@@ -110,17 +110,18 @@ function putProducts(dt) {
     if (dt[0].clt_id != '0') {
         //var catId = dt[0].cat_id;
         //console.log('444',dt);
+        //<i class='fas fa-edit detail'>
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.clt_id}">
-                    <td><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
+                    <td></i><i class='fas fa-door-open toWork'></i></td> 
                     <td class="supply">${u.clt_folio}</td>
                     <td class="date">${u.clt_date_generated}</td>
                     <td class="supply">${u.cus_name}</td>
                     <td class="supply">${u.pjt_name}</td>
-                    <td class="supply">${u.ctl_amount_payable}</td>
-                    <td class="supply">${u.ctl_amount_payable}</td>
-                    <td class="supply">${u.ctl_amount_payable}</td>
+                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td> 
+                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td>
+                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td>
                     <td class="date">${u.clt_deadline}</td>
                     <td class="date">${u.clt_deadline}</td>
                 </tr>`;
@@ -173,4 +174,18 @@ function confirm_to_work(pjtid) {
 
 function putToWork(dt){
     console.log(dt)
+}
+
+function mkn(cf, tp) {
+    let nm = cf;
+    switch (tp) {
+        case 'n':
+            nm = formato_numero(cf, '2', '.', ',');
+            break;
+        case 'p':
+            nm = formato_numero(cf, '1', '.', ',');
+            break;
+        default:
+    }
+    return nm;
 }

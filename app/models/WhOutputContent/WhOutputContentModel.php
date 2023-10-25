@@ -319,7 +319,7 @@ class WhOutputContentModel extends Model
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
         
-        $updt = "UPDATE ctt_projects SET pjt_status = '9' 
+        $updt = "UPDATE ctt_projects SET pjt_status = '8' 
                 WHERE pjt_id = '$pjtid' ";
 
          /* $this->db->query($updt); */

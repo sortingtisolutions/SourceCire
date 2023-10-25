@@ -50,8 +50,7 @@ function inicial() {
             }
             
         }
-        
-        console.log($('#txtCostImp').val(), costo_uni);
+        // console.log($('#txtCostImp').val(), costo_uni);
     });
     $('#txtCostImp').on('blur', function () {
         let costo_import = parseInt($('#txtCostImp').val());
@@ -70,9 +69,7 @@ function inicial() {
                 }
                 if (!costo_import) {
                     $('#txtCostTot').val((costo_uni)*cant);
-                }
-                
-                
+                } 
             }
         } else {
             if (costo_uni) {
@@ -353,7 +350,7 @@ function putProducts(dt) {
     });
 
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}">${u.prd_sku}-${u.prd_name}</div>`;
+        let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id_acc}">${u.prd_sku}-${u.prd_name}</div>`;
         $('#listProducts .list-items').append(H);
     });
 
@@ -380,11 +377,13 @@ function putProducts(dt) {
     });
 
     $('#listProducts .list-item').on('click', function () {
-        console.log($(this).text().split('-')[0].slice(10,11), $(this).text().split('-')[0].slice(7,10));
+        console.log('SELECC-',$(this).text().split('-')[0].slice(10,11), $(this).text().split('-')[0].slice(7,10));
+        console.log('data_complement-',$(this).attr('data_complement'))
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         let serie = $(this).attr('data_serie');
         let accesorio = $(this).text().split('-')[0].slice(7,10);
+        console.log('prdId-',prdId)
         
         $('#txtProducts').val(prdNm);
         $('#txtIdProducts').val(prdId);
@@ -576,6 +575,8 @@ function exchange_apply() {
     let prdId = $('#txtIdProducts').val().split('|')[0].substring(2, 100);
     let prdSku = $('#txtIdProducts').val().split('|')[1];
     let prdName = $('#txtIdProducts').val().split('|')[2];
+    let prdidacc = $('#txtIdProducts').val().split('|')[3];
+    console.log('ID-ACC',prdidacc);
     let serie = parseInt($('#txtNextSerie').val());
     let sersku;
     let serser = $('#txtSerie').val();
@@ -615,7 +616,7 @@ function exchange_apply() {
             update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
             let par = `
             [{
-                "support"       : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+                "support"       : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}|${prdidacc}",
                 "sersku"        : "${sersku}",
                 "prodser"       : "${serser.toUpperCase()}",
                 "prodpeti"      : "${prodpeti}",
@@ -643,12 +644,12 @@ function exchange_apply() {
         }else{
             
             sersku = prdSku + refil(serie, 2);
-            console.log(sersku);
+            // console.log(sersku);
         }
         serie++;
         let par = `
         [{
-            "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+            "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}|${prdidacc}",
             "sersku"   : "${sersku}",
             "prodser"  : "${serser.toUpperCase()}",
             "sercost"  : "${sercost}",
@@ -660,8 +661,8 @@ function exchange_apply() {
             "factname" : "${docinvoicenm}",
             "comment"  : "${comment}",
             "serbran"  : "${serbran}",
-            "sercostimp"  : "${sercostimp}",
-            "serpetimp"  : "${serpetimp}",
+            "sercostimp"    : "${sercostimp}",
+            "serpetimp"     : "${serpetimp}",
             "sercosttot"    : "${sercosttot}",
             "sernumeco"     : "${sernumeco}"
         }]`;
@@ -815,12 +816,10 @@ function read_exchange_table() {
             }
             //let serienum = $('.serprod').val();
             let petition = $($(u).find('td')[6]).text();
-            
             let costtota = $($(u).find('td')[8]).text();
             let codeexch = $($(u).find('td')[9]).text();
             let storname = $($(u).find('td')[10]).text();
             let serbrand = $($(u).find('td')[13]).text();
-            
             let comments = $($(u).find('td')[15]).text();
            
             let producid = $(this).attr('data-content').split('|')[0];
@@ -829,8 +828,9 @@ function read_exchange_table() {
             let sericoin = $(this).attr('data-content').split('|')[4];
             let suppliid = $(this).attr('data-content').split('|')[5];
             let docinvoi = $(this).attr('data-content').split('|')[6];
+            let prdidacc = $(this).attr('data-content').split('|')[7];
 
-            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}|${costtota}|${numecono}`;
+            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}|${costtota}|${numecono}|${prdidacc}`;
             console.log(truk);
             build_data_structure(truk);
         });
@@ -867,7 +867,8 @@ function build_data_structure(pr) {
         "cpe" :  "${el[16]}",
         "bra" :  "${el[17]}",
         "cto" :  "${el[18]}",
-        "nec" :  "${el[19]}"
+        "nec" :  "${el[19]}",
+        "acc" :  "${el[20]}"
     }]`;
     console.log(' Antes de Insertar', par);
     save_exchange(par);

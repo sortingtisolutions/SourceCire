@@ -10,14 +10,14 @@ class UsuariosModel extends Model
 
 
 // Optiene los Usuaios existentes *****
-	public function GetUsuarios()
+	public function GetUsuarios($params)
 	{
 		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, 
 				p.prf_name, u.usr_dt_registry, u.usr_dt_last_access, p.prf_id
 				FROM ctt_users as u
-				INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
+				LEFT JOIN ctt_employees as e on e.emp_id = u.emp_id
 				LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
-				WHERE u.usr_status = '1' and u.emp_id>1;";
+				WHERE u.usr_status = '1' and u.emp_id > '1';";
 		return $this->db->query($qry);
 	}
 
@@ -200,6 +200,9 @@ class UsuariosModel extends Model
 						SET usr_status = 0
 						WHERE usr_id in (".$params['IdUsuario'].");";
 				$this->db->query($qry);
+
+				
+
 				$estatus = 1;
 			} catch (Exception $e) {
 				$estatus = 0;

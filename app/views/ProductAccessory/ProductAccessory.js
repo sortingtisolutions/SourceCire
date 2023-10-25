@@ -338,6 +338,7 @@ function selSubcategoryProduct(id) {
         });
 }
 
+
 function saveAccesoryId(prdId) {
     console.log(lsbc_id);
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
