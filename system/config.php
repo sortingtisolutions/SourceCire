@@ -53,7 +53,20 @@ define('USER', 'root');
 define('PASSWORD', '');
 define('DB_NAME', 'cttapp_cire');
 
+define('HOST1', 'localhost');
+define('USER1', 'cttapp_user_qry1');
+define('PASSWORD1', '');
+define('DB_NAME1', 'cttapp_cire');
 
+define('HOST2', 'localhost');
+define('USER2', 'cttapp_user_qry2');
+define('PASSWORD2', '');
+define('DB_NAME2', 'cttapp_cire');
+
+define('HOST3', 'localhost');
+define('USER3', 'cttapp_user_qry3');
+define('PASSWORD3', '');
+define('DB_NAME3', 'cttapp_cire');
 
 
 //////////////////////////////////////

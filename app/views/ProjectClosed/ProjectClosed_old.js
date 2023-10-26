@@ -48,9 +48,7 @@ function inicial() {
          });
       
          $('#PrintClosure').on('click', function () {
-            /* LimpiaModal();
-            getTipoProveedor();
-            getOptionYesNo(); */
+           
          });
 
     } else {

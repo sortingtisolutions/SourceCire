@@ -188,20 +188,12 @@ class WhOutputContentModel extends Model
     public function checkSeries($params)
     {
         $pjtcnid = $this->db->real_escape_string($params['serId']);
-        /* $updt = "update ctt_series set ser_situation = 'TA', ser_stage = 'TA' 
-                where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
- */
+
         $updt = "UPDATE ctt_series set ser_stage = 'TR' 
                 where ser_id = '$pjtcnid' and ser_situation = 'EA'";
 
          $this->db->query($updt);
          return $pjtcnid;
-
-        /*$qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
-       pr.prd_status,pd.ser_id,pd.pjtcn_id
-       FROM ctt_projects_detail pd INNER JOIN ctt_products pr
-       ON pd.pjtcn_id=$pjtcnid and pd.prd_id=pr.prd_id order by 2 desc;";
-        return $this->db->query($qry);*/
         
     }
 
@@ -259,13 +251,6 @@ class WhOutputContentModel extends Model
     public function ActualizaSeries($params)
     {
         $serid		= $this->db->real_escape_string($params['serid']);
-
-       /*  $qry = "UPDATE ctt_series AS ser
-                INNER JOIN ctt_projects_detail pjd ON pjd.ser_id=ser.ser_id
-                INNER JOIN ctt_projects_content AS ct ON ct.ver_id=pjd.pjtvr_id
-                INNER JOIN ctt_projects AS pj ON pj.pjt_id=ct.pjt_id
-                SET ser.ser_stage='UP'
-                WHERE pj.pjt_id=$pjtid;"; */
 
         $qry = "UPDATE ctt_series SET ser_stage='UP'
                 WHERE ser_id=$serid ;";  
@@ -334,7 +319,7 @@ class WhOutputContentModel extends Model
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
         
-        $updt = "UPDATE ctt_projects SET pjt_status = '9' 
+        $updt = "UPDATE ctt_projects SET pjt_status = '8' 
                 WHERE pjt_id = '$pjtid' ";
 
          /* $this->db->query($updt); */

@@ -37,7 +37,6 @@ class PerfilUserModel extends Model
 						  "mod_description"=>$row[3]);
 			array_push($lista, $item);
 		}
-		//print_r($lista);
 		return $lista;
 	}
 
@@ -72,7 +71,6 @@ class PerfilUserModel extends Model
 		return $modulesAsing;
 	}
 
-	
 //Guarda perfil
 	public function SavePerfil($params)
 	{
@@ -136,8 +134,6 @@ class PerfilUserModel extends Model
 		return $estatus;
 	}
 
-
-
 	//borra perfil
 	public function DeletePerfil($params)
 	{
@@ -155,8 +151,6 @@ class PerfilUserModel extends Model
 			}
 		return $estatus;
 	}
-
-
 
 	public function GetDataPerfil($params)
 	{

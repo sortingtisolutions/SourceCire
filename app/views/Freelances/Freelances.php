@@ -14,11 +14,7 @@
             <div class="row mvst_group">
                 <div class="mvst_list tblProdMaster">                   
                     <div class="row rowTop">
-                        <h1>Listado de Clientes con un Proyecto</h1>
-                        
-                        <!-- <select id="txtCategoryList" class="topList">
-                            <option value="0">SELECCIONA CATÁLOGO</option>
-                        </select> -->
+                        <h1>Catalogo de Freelances disponibles</h1>
                         
                     </div>
                     <div id="dvProducts"></div>
@@ -178,7 +174,6 @@
         </div>
     </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
-
 
 <!-- Start Ventana modal ELIMINA PRODUCTO -->
     <div class="modal fade" id="delProdModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

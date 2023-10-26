@@ -39,6 +39,7 @@ $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date
         WHERE bg.ver_id = $verId order by  bg.pjtvr_section, bg.pjtvr_order;";
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){

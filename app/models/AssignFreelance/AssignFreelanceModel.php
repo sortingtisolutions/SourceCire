@@ -50,6 +50,7 @@ class AssignFreelanceModel extends Model
                 ) GROUP BY free_id;";
         return $this->db->query($qry);
     }
+
     public function listFreelance2($param)
     {
         $catId = $this->db->real_escape_string($param['catId']);
@@ -82,12 +83,12 @@ class AssignFreelanceModel extends Model
     }	
 
 // Registra los movimientos entre almacenes
-public function NextExchange()
-{
-    $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
-    $this->db->query($qry);
-    return $this->db->insert_id;
-}
+    public function NextExchange()
+    {
+        $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
+        $this->db->query($qry);
+        return $this->db->insert_id;
+    }
 
 // Registra los movimientos entre almacenes
     public function SaveFreelanceProy($param, $user)

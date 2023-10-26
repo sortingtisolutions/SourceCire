@@ -402,8 +402,6 @@ function build_modal_serie(dt) {
         lcskuhi = u.ser_sku.slice(7, 11);
         tabla.row
             .add({
-                // produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
-                /* produsku: `<span class="hide-support">${u.ser_id}</span>${lcskush}${lcskuhi}`, */
                 produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku}`,
                 serlnumb: u.ser_serial_number,
                 dateregs: u.ser_date_registry,

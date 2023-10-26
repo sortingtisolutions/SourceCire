@@ -9,7 +9,6 @@ class ProductsModel extends Model
         parent::__construct();
     }
 
-
 // Listado de categorias  ****
     public function listCategories()
     {
@@ -149,8 +148,6 @@ public function listInvoice()
     }
     public function listProducts2()
     {
-        /* $qry = "SELECT prd_id,prd_sku,prd_name
-                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';"; */
         $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
                 FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';";
         return $this->db->query($qry);
@@ -287,7 +284,6 @@ public function listInvoice()
             
         return $prdId .'|'. $prdDc;
     }
-
 
 
 // Guarda los cambios de una serie

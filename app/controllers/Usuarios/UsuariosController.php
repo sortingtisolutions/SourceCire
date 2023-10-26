@@ -1,20 +1,19 @@
 <?php
 	defined('BASEPATH') or exit('No se permite acceso directo');
 	require_once ROOT . FOLDER_PATH . '/app/models/Usuarios/UsuariosModel.php';
-	require_once ROOT . FOLDER_PATH . '/app/models/Actions/ActionsModel.php';
+	// require_once ROOT . FOLDER_PATH . '/app/models/Actions/ActionsModel.php';
 	require_once LIBS_ROUTE . 'Session.php';
 
 	class UsuariosController extends Controller
 	{
-
 		private $session;
 		public $model;
-		public $modelActions;
+		// public $modelActions;
 
 		public function __construct()
 		{
 			$this->model = new UsuariosModel();
-			$this->modelActions = new ActionsModel();
+			// $this->modelActions = new ActionsModel();
 
 			$this->session= new Session();
 			$this->session->init();
@@ -28,9 +27,9 @@
 		}
 
 		//OBTIENE LOS USUARIOS
-		public function GetUsuarios()
+		public function GetUsuarios($request_params)
 		{
-	      $result = $this->model->GetUsuarios();
+	      $result = $this->model->GetUsuarios($request_params);
 		  $i = 0;
 			while($row = $result->fetch_assoc()){
 				$rowdata[$i] = $row;
@@ -71,7 +70,7 @@
 		public function listAreas($request_params)
 		{
 			$params =  $this->session->get('user');
-			$result = $this->model->listAreas();
+			$result = $this->model->listAreas($request_params);
 				$i = 0;
 				while($row = $result->fetch_assoc()){
 					$rowdata[$i] = $row;
@@ -80,7 +79,7 @@
 				if ($i>0){
 					$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
 				} else {
-					$res =  '[{"cat_id":"0"}]';	
+					$res =  '[{"are_id":"0"}]';	
 				}
 				echo $res;
 		}    

@@ -12,8 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //deep_loading('O');
-        //console.log('UNO');
+
         $('.tblProdMaster').css({display: 'none'});
         // setting_table();
         getProjects(0);
@@ -87,9 +86,9 @@ function settingTable() {
             {data: 'clt_create',    class: 'date'},
             {data: 'clt_namecli',    class: 'supply'},
             {data: 'clt_namepjt',   class: 'supply'},
-            {data: 'clt_payall',    class: 'supply'},
-            {data: 'clt_paid',      class: 'supply'},
-            {data: 'clt_pending',   class: 'supply'},
+            {data: 'clt_payall',    class: 'sku'},
+            {data: 'clt_paid',      class: 'sku'},
+            {data: 'clt_pending',   class: 'sku'},
             {data: 'clt_limitpay',  class: 'date'},
             {data: 'clt_lastpay',   class: 'date'},
         ],
@@ -111,17 +110,18 @@ function putProducts(dt) {
     if (dt[0].clt_id != '0') {
         //var catId = dt[0].cat_id;
         //console.log('444',dt);
+        //<i class='fas fa-edit detail'>
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.clt_id}">
-                    <td><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
+                    <td></i><i class='fas fa-door-open toWork'></i></td> 
                     <td class="supply">${u.clt_folio}</td>
                     <td class="date">${u.clt_date_generated}</td>
                     <td class="supply">${u.cus_name}</td>
                     <td class="supply">${u.pjt_name}</td>
-                    <td class="supply">${u.ctl_amount_payable}</td>
-                    <td class="supply">${u.ctl_amount_payable}</td>
-                    <td class="supply">${u.ctl_amount_payable}</td>
+                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td> 
+                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td>
+                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td>
                     <td class="date">${u.clt_deadline}</td>
                     <td class="date">${u.clt_deadline}</td>
                 </tr>`;
@@ -149,15 +149,7 @@ function activeIcons() {
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            /* console.log('Pasando siguiente ventana...');
-            let sltor = $(this);
-            let pjtid = sltor.parents('tr').attr('id');
-            let prdNm = 'Modifica proyecto';
-
-            console.log(pjtid);
-            Cookies.set('pjtid', pjtid, {expires:1});
-
-            window.location = 'WhOutputContent'; */
+            
         });
 
 }
@@ -183,41 +175,17 @@ function confirm_to_work(pjtid) {
 function putToWork(dt){
     console.log(dt)
 }
-/*
-function putSelectProject(dt) {
-    cleanProductsFields();
-    console.log(dt);
-    let prdId = dt[0].pjtcn_id;
-    let prdName = dt[0].pjtcn_prod_sku;
-    let prdSku = dt[0].pjtcn_prod_name;
-    let prdModel = dt[0].pjtcn_quantity;
-    let prdPrice = dt[0].pjtcn_prod_level;
-    let prdEnglishName = dt[0].pjt_date_project;
-    let prdCodeProvider = dt[0].pjt_location;
-    let prdNameProvider = dt[0].pjt_status;
-    let prdComments = dt[0].pjt_id;
 
-    $('#txtPrdId').val(prdId);
-    $('#txtPrdName').val(prdName);
-    $('#txtPrdSku').val(prdSku);
-    $('#txtPrdModel').val(prdModel);
-    $('#txtPrdPrice').val(prdPrice);
-    $('#txtPrdEnglishName').val(prdEnglishName);
-    $('#txtPrdCodeProvider').val(prdCodeProvider);
-    $('#txtPrdNameProvider').val(prdNameProvider);
-    $('#txtPrdComments').val(prdComments);
-
-    $('#btn_save')
-        .unbind('click')
-        .on('click', function () {
-            saveEditProduct();
-        });
-
-    function cleanProductsFields() {
-        $('.textbox').val('');
-        $('td.data select').val(0);
-        $('td.data .checkbox').html('<i class="far fa-square" data_val="0"></i>');
-        $('.required').removeClass('fail').parent().children('.fail_note').addClass('hide');
+function mkn(cf, tp) {
+    let nm = cf;
+    switch (tp) {
+        case 'n':
+            nm = formato_numero(cf, '2', '.', ',');
+            break;
+        case 'p':
+            nm = formato_numero(cf, '1', '.', ',');
+            break;
+        default:
     }
+    return nm;
 }
-*/

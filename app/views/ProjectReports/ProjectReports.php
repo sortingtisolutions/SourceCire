@@ -19,13 +19,6 @@
                         <label for="txtProjects"></label>
                     </div>
                     
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtProjects" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el proyecto</option></select>
-                            <label for="txtProjects">Lista de proyectos</label>
-                        </div>
-                    </div> -->
-
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <input id="fechaInitial" name="fechaInitial" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
@@ -138,72 +131,7 @@
                 </div>
             </div>
         </div>
-        <!-- contenido de operación -->
-            <!-- <div class="mvst_table projectClosed">
-                <h1>Seleccionar nivel de detalles</h1> -->
 
-                <!-- caja de totales del reporte -->
-                <!-- <div class="totales">
-                    
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Todos</div>
-                        <div><input class="form-check-input" type="checkbox" value="1" id="checkIsPaquete" checked ></div>
-                        
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Cotizaciones</div>
-                        <div><input class="form-check-input" type="checkbox" value="0" id="checkIsPaquete" ></div>
-                        
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Presupuestos</div>
-                        <div><input class="form-check" type="checkbox" value="0" id="checkIsPaquete" ></div>
-                       
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Proyectos</div>
-                        <div><input class="form-check" type="checkbox" value="0" id="checkIsPaquete" ></div>
-                        
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">En Llamado</div>
-                        <div><input class="form-check-input" type="checkbox" value="0" id="checkIsPaquete" ></div>
-                        
-                    </div>
-                    
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Entradas</div>
-                        <div><input class="form-check-input" type="checkbox" value="0" id="checkIsPaquete" ></div>
-                        
-                    </div>
-                        
-                </div> -->
-                <!-- caja de totales del reporte -->
-                <!-- Tabla de productos del proyecto -->
-            <!--         <div class="tabla__contenedor">
-                        <table  id="tblProducts">
-                            <thead>
-                                <tr>
-                                    <th style="width:  30px"  class="cn"></th>
-                                    <th style="width:  250px" class="lf">Nombre</th>
-                                    <th style="width:  250px" class="cn">Clasificacion</th>
-                                    <th style="width:  80"    class="cn">Costo Total</th>
-                                    <th style="width:  80px"  class="cn">Forma de Pago</th>
-                                    <th style="width:  100px" class="rg">Cliente</th>
-                                    <th style="width:  500px" class="lf">Comentarios</th>
-                                </tr>
-                            </thead>
-                            <tbody><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tbody>
-                        </table>
-                    </div> -->
-                <!-- Tabla de productos del proyecto -->
-                
-           <!--  </div>      -->   
-        <!-- contenido de operación -->
         </div>
     </div>
     

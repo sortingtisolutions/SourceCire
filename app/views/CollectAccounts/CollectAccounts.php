@@ -6,7 +6,6 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
 <!-- CUERPO DE LA PAGINA -->
 <!-- Start Contenedor Listado de PRODUCTOS  -->
     <div class="container-fluid">
@@ -34,19 +33,19 @@
                                     </tr>
                                 </table>
                         </div> -->
-                        <table class="display compact nowrap"  id="tblCollets" style="min-width: 1400px">
+                        <table class="display compact nowrap"  id="tblCollets" style="min-width: 1200px">
                             <thead>
                                 <tr>
                                     <th style="width:  30px">Acciones</th>
-                                    <th style="width:  80px">Folio</th>
+                                    <th style="width:  40px">Folio</th>
                                     <th style="width:  80px">Fecha de<br>generación</th>
                                     <th style="width: 200px">Nombre Cliente</th>
                                     <th style="width: 200px">Nombre Proyecto</th>
-                                    <th style="width: 100px">Total a pagar</th>
-                                    <th style="width: 100px">Total Pagado</th>
-                                    <th style="width: 100px">Saldo Pendiente</th>
-                                    <th style="width:  80px">Fecha limite<br>de pago</th>
-                                    <th style="width:  80px">Fecha<br>Ultimo pago</th>
+                                    <th style="width: 80px">Total a pagar</th>
+                                    <th style="width: 80px">Total Pagado</th>
+                                    <th style="width: 80px">Saldo Pendiente</th>
+                                    <th style="width: 80px">Fecha limite<br>de pago</th>
+                                    <th style="width: 80px">Fecha<br>Ultimo pago</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

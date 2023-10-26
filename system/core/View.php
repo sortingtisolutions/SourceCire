@@ -18,6 +18,7 @@ class View
   /**
    * array
    */
+  
   protected $params;
   
   /**

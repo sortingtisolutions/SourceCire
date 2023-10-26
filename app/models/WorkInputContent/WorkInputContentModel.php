@@ -175,10 +175,8 @@ class WorkInputContentModel extends Model
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        
         $qry = "SELECT * FROM ctt_project_change_reason;";
-
-       return $this->db->query($qry);
+        return $this->db->query($qry);
    }
-
 
     // check de Productos
     public function checkSeries($params)
@@ -259,6 +257,15 @@ class WorkInputContentModel extends Model
         
     }
 
+    public function GetInProject($params)
+    {
+        $pjtid = $this->db->real_escape_string($params['pjtid']);
+        
+        $updt = "UPDATE ctt_projects SET pjt_status = '9' 
+                WHERE pjt_id = '$pjtid' ";
+         return $this->db->query($updt);
+        
+    }
     // Agrega Comentario // 11-10-23
     public function InsertComment($params, $userParam)
     {

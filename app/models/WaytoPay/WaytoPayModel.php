@@ -57,7 +57,6 @@ class WaytoPayModel extends Model
         return $this->db->query($qry);
     }
 
-    
 // Obtiene el listado de las subcategorias activas
     public function SaveSubcategory($params)
     {

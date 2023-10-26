@@ -11,12 +11,7 @@ class ProveedoresModel extends Model
 // Obtiene los proveedores existentes  ****
 	public function GetProveedores()
 	{
-		/* $qry = "SELECT sp.sup_id, sp.sup_business_name, sp.sup_contact, sp.sup_rfc, sp.sup_email, sp.sup_phone , 
-				sp.sut_id, ts.sut_name
-				FROM ctt_suppliers AS sp
-				LEFT JOIN ctt_suppliers_type AS ts on ts.sut_id = sp.sut_id
-				WHERE sp.sup_status = 1;"; */
-
+		
 		$qry = "SELECT sup_id, sup_business_name, sup_trade_name, sup_contact, sup_rfc, sup_email, 
 				sup_phone, sup_phone_extension, sup_status, sup_credit, sup_credit_days, sup_balance, 
 				sup_money_advance, sup_advance_amount, sup_comments, sp.sut_id, sup_proof_tax_situation, 
@@ -42,14 +37,6 @@ class ProveedoresModel extends Model
 
 		if($row = $result->fetch_row()){
 			$item = array("sup_id" =>$row[0],
-			/* "sup_business_name" =>$row[1],
-			"sup_contact"=>$row[2],
-			"sup_rfc"=>$row[3],
-			"sup_email"=>$row[4],
-			"sup_phone"=>$row[5],
-			"sut_id"=>$row[6]);
-			"sup_id",  */
-
 			"sup_business_name" =>$row[1], 
 			"sup_trade_name" =>$row[2], 
 			"sup_contact" =>$row[3], 
@@ -81,9 +68,6 @@ public function SaveProveedores($params)
 	$nameSup 		= $this->db->real_escape_string($params['NomProveedor']);
 	$estatus = 0;
 		try {
-			/* $qry = "INSERT INTO ctt_suppliers (sup_business_name, sup_contact, sup_rfc, sup_email, sup_phone,sup_status, sut_id)
-			VALUES('".$params['NomProveedor']."','".$params['ContactoProveedor']."','".$params['RfcProveedor']."','".$params['EmailProveedor']."','".$params['PhoneProveedor']."',1,'".$params['tipoProveedorId']."');";
-			$this->db->query($qry);	 */
 
 			$qry = "INSERT INTO ctt_suppliers (sup_business_name, sup_trade_name, sup_contact, 
 					sup_rfc, sup_email, sup_phone, sup_phone_extension, sup_status, sup_credit, sup_credit_days, 
@@ -116,15 +100,7 @@ public function SaveProveedores($params)
 		$nameSup   = str_replace('-','&',$params['NomProveedor']);
         $estatus = 0;
 			try {
-                /* $qry = " UPDATE ctt_suppliers
-                SET sup_business_name = '".$params['NomProveedor']."'
-                ,sup_contact = '".$params['ContactoProveedor']."'
-                ,sup_rfc = '".$params['RfcProveedor']."' 
-                ,sup_email = '".$params['EmailProveedor']."'
-				,sut_id = '".$params['tipoProveedorId']."'
-                ,sup_phone = '".$params['PhoneProveedor']."'
-                WHERE Sup_id = ".$params['IdProveedor'].";"; */
-
+            
 				$qry = " UPDATE ctt_suppliers
                 SET sup_business_name = '".$nameSup."'
                 ,sup_trade_name = '".$params['NomComercial']."'

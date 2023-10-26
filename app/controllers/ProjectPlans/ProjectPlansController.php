@@ -818,8 +818,6 @@ public function getNewProdChg($request_params)
         $response       = $this->setSeries($result);
 
         echo $verId . '|'. $pjtId;
-
-
     } 
 
 

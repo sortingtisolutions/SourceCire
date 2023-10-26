@@ -6,6 +6,7 @@
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">    
@@ -54,14 +55,6 @@
                                 <input id="txtQuantity" type="text" class="form-control form-control-sm required" data-mesage="" >
                                 <label for="txtQuantity">Cantidad</label> 
                         </div>
-                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="boxProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
-                                <label for="boxProducts">Productos</label>
-                                <input type="hidden" id="boxIdProducts" name="boxIdProducts">
-                            </div>
-                        <div id="listProducts" class="list-group list-hide">
-                            <div class="list-items" ></div> -->
-                        
                     </div>
                     
                     <div class="row">

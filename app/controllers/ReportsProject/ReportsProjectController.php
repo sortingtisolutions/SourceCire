@@ -39,9 +39,6 @@ class ReportsProjectController extends Controller
                 $res =  '[{"ext_id":"0"}]';	
             }
             echo $res;
-
-          // $params = array('unidad' => $res);
-          // $this->render(__CLASS__, $params);
     }
 
 // Lista los almacenes 
@@ -97,7 +94,6 @@ class ReportsProjectController extends Controller
         }
         echo $res;
     } 
-
 
 // Guarda lista de productos en json 
     public function saveList($request_params)

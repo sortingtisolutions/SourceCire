@@ -209,4 +209,5 @@ function modalLoading(acc, msg) {
             $('.invoice__loading .text_loading > span').html('');
         });
     }
+    
 }

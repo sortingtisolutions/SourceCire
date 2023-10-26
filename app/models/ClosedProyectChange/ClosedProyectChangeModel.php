@@ -8,7 +8,6 @@ class ClosedProyectChangeModel extends Model
         parent::__construct();
     }
 
-
 // Listado de almacenes  ****
         public function listProjects($params)
         {
@@ -43,6 +42,17 @@ class ClosedProyectChangeModel extends Model
             return $this->db->query($qry);
         }    
 
+        public function getValuesDoc($params)
+        {
+            $cloid = $this->db->real_escape_string($params['pjtId']);
+
+            $qry = "SELECT clo_id,clo_ver_closed,clo_total_proyects,clo_total_maintenance,
+                            clo_total_expendables, clo_total_diesel,clo_total_discounts,clo_total_document	 
+                    FROM ctt_documents_closure WHERE clo_id=$cloid;";
+            return $this->db->query($qry);
+        }    
+
+
 // Listado de productos
         public function listProducts($params)
         {
@@ -57,10 +67,6 @@ class ClosedProyectChangeModel extends Model
                     ORDER BY pd.prd_name ASC;";
             return $this->db->query($qry);
         }    
-
-
-// Listado de proyectos
-        
 
 // Guarda la venta
         public function SaveSale($params, $user)
@@ -101,7 +107,6 @@ public function NextExchange()
     return $this->db->insert_id;
 }
 
-
 // Guarda detalle de la venta
         public function SaveSaleDetail($params, $user)
         {
@@ -130,12 +135,13 @@ public function NextExchange()
             $this->db->query($qry1);
 
             $qry2 = "INSERT INTO ctt_stores_exchange 
-                                (exc_sku_product, exc_product_name, exc_quantity, exc_serie_product, exc_store, exc_comments, exc_proyect, exc_employee_name, ext_code, con_id, ext_id, cin_id)
+                                (exc_sku_product, exc_product_name, exc_quantity, exc_serie_product, 
+                                exc_store, exc_comments, exc_proyect, exc_employee_name, ext_code, 
+                                con_id, ext_id, cin_id)
                     SELECT sr.ser_sku AS exc_sku_product, pr.prd_name AS exc_product_name, 
                         '$sldQuantity' as exc_quantity, sr.ser_id AS exc_serie_product,
                         st.str_name AS sxc_store, 'VENTA DIRECTA EN MOSTRADOR' AS exc_comments, (
-                            SELECT ucase(pjt_name) FROM ctt_projects WHERE pjt_id = $pjtId
-                        ) AS exc_proyect,
+                            SELECT ucase(pjt_name) FROM ctt_projects WHERE pjt_id = $pjtId) AS exc_proyect,
                         '$usrName' AS exc_employee_name,
                         'SCI' AS ext_code,
                         '$folio' AS con_id,
@@ -152,7 +158,6 @@ public function NextExchange()
 // Guarda archivo detalle de la venta
         public function saveSaleList($params)
         {
-            
             $salId = $this->db->real_escape_string($params['salId']);
 
             $qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
@@ -163,10 +168,7 @@ public function NextExchange()
                     WHERE sl.sal_id = $salId;";
 
             return $this->db->query($qry);
-            
         }    
-
-
 
 // Guarda comentario
     public function SaveComments($params, $user)
@@ -187,5 +189,28 @@ public function NextExchange()
         return $comId;
     }    
 
+    public function saveDocumentClosure($params)
+    {
+        $cloTotProy     =  $this->db->real_escape_string($params['cloTotProy']);
+        $cloTotMaint    = $this->db->real_escape_string($params['cloTotMaint']);
+        $cloTotExpen    = $this->db->real_escape_string($params['cloTotExpen']);
+        $cloTotCombu    =  $this->db->real_escape_string($params['cloTotCombu']);
+        $cloTotDisco    =  $this->db->real_escape_string($params['cloTotDisco']);
+        $cloTotDocum    =  $this->db->real_escape_string($params['cloTotDocum']);
+        $pjtid          = $this->db->real_escape_string($params['pjtid']);
+        $usrid          = $this->db->real_escape_string($params['usrid']);
+      
+            $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
+                    clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                    clo_fecha_cierre,clo_flag_send,  cus_id, pjt_id, usr_id, ver_id)
+                SELECT '$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+                    '$cloTotDocum',Now(),'0', cus_id, pjt_id, '$usrid', ver_id 
+                FROM ctt_documents_closure
+                WHERE clo_id=$pjtid;";
 
+        $this->db->query($qry);
+        $ducloId = $this->db->insert_id;
+
+        return $ducloId;
+    }
 }

@@ -375,18 +375,6 @@
                         </td>
                     </tr>
 
-                    <!-- Doc para una serie --> <!-- Asignacion para una serie -->
-                    <!-- <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Factura:</td>   
-                        <td class="data" style="position:relative;">
-                            <input id="txtDocIdSerie" name="txtDocIdSerie" class="textbox" style="width:300px">
-                            <input type="hidden" id="txtDcpIdSerie" name="txtDcpIdSerie">
-                        <div id="listInvoice" class="list-group list-hide">
-                                <div class="list-items" ></div>
-                        </div>
-                        </td>
-                    </tr> -->
-
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Descripción:</td>
                         <td class="data">

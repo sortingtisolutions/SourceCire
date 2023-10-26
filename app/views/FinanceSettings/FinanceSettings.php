@@ -40,21 +40,19 @@
 								<table id="DocumentosTable" class="display  display compact nowrap" style="width:100%">         
 										<thead>
 											<tr>
-													<th style="width: 30px"></th>
-													<th style="width: 20px" hidden>Id</th>
-													<th style="width: 200px">Nombre</th>
-
-													<th style="width: 100px" hidden>id Tipo Documento</th>
-
-													<th style="width: 100px">Tipo Documento</th>
-													<th style="width: 200px">Codigo</th>
-													<th style="width: 100px">Tipo</th>
-													<th style="width: 100px">Fecha Admision</th>
+												<th style="width: 30px"></th>
+												<th style="width: 20px" hidden>Id</th>
+												<th style="width: 200px">Nombre</th>
+												<th style="width: 100px" hidden>id Tipo Documento</th>
+												<th style="width: 100px">Tipo Documento</th>
+												<th style="width: 200px">Codigo</th>
+												<th style="width: 100px">Tipo</th>
+												<th style="width: 100px">Fecha Admision</th>
 											</tr>
 										</thead>
-										<tbody id="tablaDocumentosRow">
-										</tbody>
-									</table>
+									<tbody id="tablaDocumentosRow">
+									</tbody>
+								</table>
 							</div>
 					</div>
 				</div>
@@ -72,7 +70,6 @@
 					 </div>
 					 <div class="modal-body" style="padding: 0px !important;">
 
-
 					 <div class="row">
 						  <input hidden type="text" class="form-control" id="IdDocumentoBorrar" aria-describedby="basic-addon3">
 						  <div class="col-12 text-center">
@@ -88,7 +85,6 @@
 					 </div>
 				</div>
 		</div>
-
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="filtroDocumentoModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
@@ -113,8 +109,6 @@
 					 </div>
 				</div>
 		</div>
-
-
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/bs-custom-file-input.min.js' ?>"></script>

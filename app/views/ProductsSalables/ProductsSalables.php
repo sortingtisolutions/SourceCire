@@ -6,6 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido ">
@@ -120,6 +121,25 @@
 </div>
 <!-- End Lista de productos -->
 
+<div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Desea registrar la Venta? </span>
+                </div>
+            </div>  
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnyes">Si</button>
+                    <button type="button" class="btn btn-secondary" id="btnno">No</button>
+                </div>
+            </div>
+    </div>
+</div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ProductsSalables/ProductsSalables.js?v=1.0.0.0' ?>"></script>

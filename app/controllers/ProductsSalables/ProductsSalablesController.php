@@ -76,6 +76,7 @@ class ProductsSalablesController extends Controller
             }
             echo $res;
         } 
+
 // Guarda la venta
         public function NextExchange($request_params)
         {
@@ -84,6 +85,7 @@ class ProductsSalablesController extends Controller
             $res = $result;
             echo $res;
         } 
+
 // Guarda la venta
         public function SaveSale($request_params)
         {
@@ -96,6 +98,7 @@ class ProductsSalablesController extends Controller
             $res = $result;
             echo $res;
         } 
+
 // Guarda detalle de la venta
         public function SaveSaleDetail($request_params)
         {
@@ -104,6 +107,7 @@ class ProductsSalablesController extends Controller
             $res = $result;
             echo $res;
         } 
+
 // Guarda Comentario
         public function SaveComments($request_params)
         {
@@ -115,6 +119,7 @@ class ProductsSalablesController extends Controller
             $res = $result;
             echo $res;
         } 
+        
 // Guarda el archivo de venta
         public function saveSaleList($request_params)
         {

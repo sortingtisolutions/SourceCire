@@ -10,19 +10,12 @@
 <div class="container-fluid">
     <div class="contenido">
         <div class="row mvst_group">
-            <div class="mvst_panel">
+            <div class="mvst_panel" style="background-color: #EDD2F5">
 
                 <div class="form-group">
                 <div>
                     <h1>PRODUCTO A REGISTRAR</h1>
                 </div>
-                
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtTypeExchange" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el Proyecto</option></select>
-                            <label for="txtTypeExchange">Proyecto relacionado</label>
-                        </div>
-                    </div> -->
 
                     <!-- Almacen posición 1 -->
                     <div class="row pos1 ">
@@ -32,39 +25,6 @@
                         </div>
                     </div>
 
-                    <!-- Proveedores posición 2 
-                    <div class="row pos2 ">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtSuppliers" class="form-select form-select-sm"><option value="0" selected>Selecciona proveedor</option></select>
-                            <label for="txtSuppliers">Proveedores</label>
-                        </div>
-                    </div> -->
-
-                    
-
-
-                    <!-- Factura posición 3 
-                    <div class="row pos3 ">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtInvoice" class="form-select form-select-sm"><option value="0" selected>Selecciona factura</option></select>
-                            <label for="txtInvoice">Factura</label>
-                        </div>
-                    </div> -->
-
-                    <!-- Factura posición 3 -->
-                    <!-- <div class="row list-finder pos3 ">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtInvoice">Factura</label>
-                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
-                    
-                            </div>
-                            <div id="listInvoice" class="list-group list-hide">
-                                <div class="list-items" ></div>
-                            </div>
-                            <input type="text" id="txtIdInvoices" name="txtIdInvoices">
-                    </div>
- -->
                     <!-- Categoria posición 4 -->
                     <div class="row pos1">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -78,22 +38,7 @@
                             <label for="txtSubCategory">Subcategorias</label>
                         </div>
                     </div>
-                    <!-- Productos posición 4 -->
-                   <!--  <div class="row list-finder pos1">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" autocomplete="off">
-                                    <label for="txtProducts">Productos</label>
-                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
-                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie">
-                            </div>
-                            <div id="listProducts" class="list-group list-hide">
-                                <div class="list-items"></div>
-                            </div>
-                    </div> -->
-
-                     <!-- Moneda posición 5 -->
-                    
-
+                  
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div class="row list-finder pos2">
                             <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
@@ -125,13 +70,6 @@
                             <label for="txtOffer">Precio de subarrendo</label>
                         </div>
                         
-                        <!-- <div class="pos6">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
-                                <label for="txtCoin">Moneda</label>
-                            </div>
-                        </div> -->
-                        
                     </div>
 
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
@@ -139,52 +77,9 @@
                         <h1>DATOS DE LA SERIE</h1>
                     </div>
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
-                    <!--
-                    <div class="box_template">
-                        <div class="project_data-box">
-                            <div class="project_data-table">
-                                <table  id="">
-                                    <tr>
-                                        <td>
-                                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos4 ">
-                                                <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-                                                <label for="txtCost">Num. Serie</label>
-                                            </div>
-                                        </td>
-                                        <td >
-                                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 ">
-                                                <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
-                                                <label for="txtMarca">Marca</label>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        
-                                        <td>
-                                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 ">
-                                                <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
-                                                
-                                                <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
-                                                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>-->
-                    
-                    <!-- Marca 6 -->
                     
                     <!-- Proveedores posición 2 -->
                     <div class="row list-finder pos2 ">
-                        <!-- <div class="col-md-9 col-lg-9 col-xl-9 mb-2 form-floating form__modal-group" >
-                            <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="form-control form-control-sm text-center" autocomplete="off" style="width:200px; height:38px">
-                            <label for="txtPeriodo">Periodo</label>
-                            <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
-                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
-                        </div> -->
                         <!-- <div style="height:18px;"></div> --> <!-- Agregar un espacio -->
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
@@ -216,32 +111,14 @@
                         </div>
                         
                     </div>
-                    <!-- Costo Importacion,Pedimento 5,4  -->
-                    <!--<div class="row pos3 ">-->
-                        
-                        
-                        <!--<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
-								<input id="txtPeriod" type="text" class="form-control form-control-sm text-center"  data-mesage="Debes elegir un periodo">
-								<label for="txtPeriod" >Periodo</label>
-						</div> -->
-                        <!-- <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos5 form-floating ">
-                            <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
-                            <label for="txtPedimento">F. Fin Subarrendo</label>
-                        </div> -->
-                    <!--</div>-->
-
-                   <!-- Costo Importacion,Pedimento 5,4  -->
-                   
+                    
                    <div class="row pos3 ">
                         
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 ">
                             <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" value=1>
                             <label for="txtQuantity">Cantidad</label>
                         </div>
-                        <!-- <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6">
-                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off" >
-                            <label for="txtSerie">Serie</label>
-                        </div> -->
+        
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 ">
                             <input id="txtLocation" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" style="text-transform:uppercase" >
                             <label for="txtLocation">Ubicacion del proveedor</label>

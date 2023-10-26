@@ -214,12 +214,9 @@ function putSaveSubcategory(dt) {
         }, 100);
     }
 }
-/** ---- End GRABA NUEVA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
 /** -------------------------------------------------------------------------- */
-/** ---- Start EDITA SUBCATEGORIA ---- */
-/** ---- Llena los campos del formulario para editar ---- */
+
 function editSubcategory(sbcId) {
     let ix = goThroughSubcategory(sbcId);
     $('#txtWtpDescription').val(subs[ix].sbc_name);
@@ -262,12 +259,9 @@ function putUpdateSubcategory(dt) {
         }, 100);
     }
 }
-/** ---- End EDITA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
 /** -------------------------------------------------------------------------- */
-/** ---- Start ELIMINA SUBCATEGORIA ---- */
-/** ---- Borra la subcategorias ---- */
+
 function deleteSubcategory(sbcId) {
     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
 

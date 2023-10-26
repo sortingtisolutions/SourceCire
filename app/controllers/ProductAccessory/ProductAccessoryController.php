@@ -62,37 +62,13 @@ class ProductAccessoryController extends Controller
 // Lista de paquetes
     public function listPackages()
     {
-       /*  $params =  $this->session->get('user');
-        $result = $this->model->listPackages();
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res; */
+      
     }
 
 // Obtiene el Id correspondiente al paquete nuevo 
     public function lastIdSubcategory($request_params)
     {
-       /*  $params =  $this->session->get('user');
-        $result = $this->model->lastIdSubcategory($request_params['sbcId']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"nextId":""}]';	
-        }
-        echo $res; */
+      
     }
 
     
@@ -137,19 +113,7 @@ public function listProductsById($request_params)
 // Lista los productos relacionados al paquete
     public function listProductsPack($request_params)
     {
-        /* $params =  $this->session->get('user');
-        $result = $this->model->listProductsPack($request_params['prdId']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":""}]';	
-        }
-        echo $res; */
+       
     }
 
 // Lista los productos relacionados al paquete
@@ -206,15 +170,6 @@ public function getAccesoriesById($request_params)
     echo $res;
 }
 
-    // Guarda el paquete
-    /* public function savePack($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->savePack($request_params);
-        $res = $result;
-        echo $res;
-    }	
- */
     public function saveAccesorioByProducto($request_params)
     {
         $params =  $this->session->get('user');
@@ -222,8 +177,6 @@ public function getAccesoriesById($request_params)
         $res = json_encode($result,JSON_UNESCAPED_UNICODE) ;
         echo $res;
     }	
-
-
 
 // Guarda producto del paquete
     public function SaveProduct($request_params)

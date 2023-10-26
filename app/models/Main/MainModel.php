@@ -20,19 +20,22 @@ class MainModel extends Model
     	$email = $this->db->real_escape_string($params['email']);
     	$address = $this->db->real_escape_string($params['address']);
     	$sql = "INSERT INTO clients (name, email, address) VALUES ('$name', '$email', '$address')";
-    	return $this->db->query($sql);
+    	
+		return $this->db->query($sql);
   	}
 
 // Listado de clientes
 	public function clientsList()
 	{
 		$sql = 'SELECT * FROM clients';
+		
 		return $this->db->query($sql);
 	}
 // Detalle del cliente
 	public function clientList($id)
 	{
 		$sql = "SELECT * FROM clients WHERE id='{$id}'";
+		
 		return $this->db->query($sql);
 	}
 
@@ -40,7 +43,8 @@ class MainModel extends Model
 	public function removeClient($id)
   	{
     	$sql = "DELETE FROM clients WHERE id={$id}";
-    	return $this->db->query($sql);
+    	
+		return $this->db->query($sql);
   	}
 
 // Actualiza datos del cliente
@@ -51,6 +55,7 @@ class MainModel extends Model
     	$address = $this->db->real_escape_string($params['address']);
     	$id = $this->db->real_escape_string($params['id']);
     	$sql = "UPDATE clients SET name='{$name}', email='{$email}', address='{$address}' WHERE id='{$id}'";
-    	return $this->db->query($sql);
+    	
+		return $this->db->query($sql);
   	}
 }

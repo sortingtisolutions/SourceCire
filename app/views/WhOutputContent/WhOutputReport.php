@@ -36,6 +36,7 @@ $qry = "SELECT pjd.pjtdt_prod_sku, ser.ser_serial_number, prd.prd_sku, prd.prd_n
         WHERE pjt.pjt_id=2 ORDER BY pjc.pjtcn_section, pjc.pjtcn_order;";
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){

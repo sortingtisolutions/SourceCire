@@ -99,7 +99,4 @@ class ProjectReportsModel extends Model
 
     }
 
-
-
-
 }

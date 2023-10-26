@@ -163,5 +163,4 @@ public function listProducts($params)
 
     }
 
-
 }

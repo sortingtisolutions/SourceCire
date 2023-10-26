@@ -7,6 +7,7 @@ require_once '../../../vendor/autoload.php';
    require_once '../../assets/reports/header-001.php';
    require_once '../../assets/reports/footer-001.php';
     //INICIO DE PROCESOS
+    
     $dir = '../../assets/filesupport/listProducts.txt';
     $file = fopen($dir, "r") or die ('problema al abrir archivo');
 
@@ -17,6 +18,7 @@ require_once '../../../vendor/autoload.php';
     $html = getTemplate($getFile); 
     $head = getHeader(); 
     $foot = getFooter(); 
+    
 
     $css = file_get_contents('../../assets/css/reports.css');
     

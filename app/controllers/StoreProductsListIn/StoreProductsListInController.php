@@ -23,27 +23,6 @@ class StoreProductsListInController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-    // Lista los tipos de movimiento   ******
-   /*  public function listExchange()
-    {
-        $params =  $this->session->get('user'); 
-        $result = $this->model->listExchange(); //todas las respuestas del modelo
-          $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE); //interpreta el JSON y transforma
-            } else {
-                $res =  '[{"ext_id":"0"}]';	
-            }
-            echo $res;
-
-          // $params = array('unidad' => $res);
-          // $this->render(__CLASS__, $params);
-    } */
-
 // Lista los almacenes 
     public function listStores($request_params)
     {
