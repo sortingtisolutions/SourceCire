@@ -45,6 +45,7 @@
 		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
 		}
 
+		// Valida existencia de proyecto en CFDI
 		public function CheckExist($request_params)
 		{
 	      $result = $this->model->CheckExist($request_params);

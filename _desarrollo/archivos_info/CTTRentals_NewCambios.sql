@@ -313,3 +313,6 @@ ALTER TABLE `ctt_documents_closure`
 	CHANGE COLUMN `clo_total_diesel` `clo_total_diesel` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Captura del costo del Combustible' AFTER `clo_total_expendables`,
 	CHANGE COLUMN `clo_total_discounts` `clo_total_discounts` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Monto total del descuento a aplicar' AFTER `clo_total_diesel`,
 	CHANGE COLUMN `clo_comentarios` `clo_comentarios` VARCHAR(300) NULL DEFAULT '' COMMENT 'Comentarios al cierre' COLLATE 'utf8mb4_general_ci' AFTER `clo_fecha_cierre`;
+
+ALTER TABLE `ctt_documents_closure`
+	ADD COLUMN `clo_ver_closed` INT(11) NULL DEFAULT 0 COMMENT 'Version del documento de cierre' AFTER `clo_comentarios`;

@@ -127,6 +127,7 @@
 						<thead>
 							<tr>
 								<th style="width:  30px"></th>
+								<th style="width: 120px">Sku</th>
 								<th style="width: 120px">Producto</th>
 								<th style="width:  30px">Costo</th>
 								<th style="width:  30px">Dias <br>Reparacion</th>

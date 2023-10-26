@@ -23,7 +23,7 @@
                         </div>
                     </div>
 
-                    <div class="row list-finder pos3 hide-items">
+                  <!--   <div class="row list-finder pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtExpendab" type="text" class="form-control form-control-sm " autocomplete="off">
                                 <label for="txtExpendab">Monto expendables</label>
@@ -38,7 +38,8 @@
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
                             </div>
-                    </div>
+                    </div> -->
+                    
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtDiscount" type="text" class="form-control form-control-sm " autocomplete="off">

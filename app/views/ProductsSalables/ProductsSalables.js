@@ -1,7 +1,4 @@
-let prod,
-    proj,
-    folio,
-    comids = [];
+let prod, proj, folio, comids = [], gblStr;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -14,8 +11,7 @@ function inicial() {
     if (altr == 1) {
         get_stores();
         get_projects();
-        fill_dinamic_table();
-        get_products(30);
+        fill_dinamic_table();     
 
         $('#lstPayForm')
             .unbind('change')
@@ -89,12 +85,17 @@ function put_nextNumber(dt) {
 function put_stores(dt) {
     if (dt[0].str_id > 0) {
         $.each(dt, function (v, u) {
+            if (u.str_name == 'EXPENDABLES'){
+                gblStr =  u.str_id;
+            }
             let H = ` <option value="${u.str_id}">${u.str_name}</option>`;
             $('#lstStore').append(H);
         });
     } else {
         $('#lstStore').html('');
     }
+    // console.log('Store In-', gblStr);
+    get_products(gblStr);
 
     $('#lstStore')
         .unbind('change')
@@ -106,7 +107,7 @@ function put_stores(dt) {
 }
 
 function put_projects(dt) {
-    console.log('put_projects',dt);
+    // console.log('put_projects',dt);
     proj = dt;
     if (dt[0].pjt_id > 0) {
         $.each(proj, function (v, u) {

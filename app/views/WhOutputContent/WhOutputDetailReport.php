@@ -13,11 +13,11 @@ $empid = $_GET['em'];
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
-
+// 11-10-23
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 if ($empid == '1'){
 $qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt_number, 
-        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo
+        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments
         FROM ctt_projects_content AS pcn
         INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
         INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
@@ -26,16 +26,17 @@ $qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_
         WHERE pcn.pjt_id=$prdId AND substr(pdt.pjtdt_prod_sku,11,1)!='A' 
         ORDER BY pdt.pjtdt_prod_sku;";
 } else{
-$qry = "SELECT pjtcn_prod_name, pjtdt_prod_sku, pjtcn_quantity, 
+$qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity, 
         pjc.pjt_id, '1' AS dt_cantidad, pjtcn_order, pjc.pjtcn_section,
         sr.ser_serial_number,sr.ser_no_econo,
-            pj.pjt_number, pj.pjt_name, pj.pjt_date_start
+            pj.pjt_number, pj.pjt_name, pj.pjt_date_start, sr.ser_comments
         FROM ctt_projects_content AS pjc
         INNER JOIN ctt_projects_detail AS pdt ON pdt.pjtvr_id=pjc.pjtvr_id
         INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id=pjc.pjt_id
         INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
         INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+        INNER JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
         WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid AND substr(pdt.pjtdt_prod_sku,11,1)!='A'
         ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }
@@ -117,20 +118,20 @@ if ($equipoBase == '1'){
                             $section     = 1;
 
                             if ($section == '1') {
-                                $prodname     = $items[$i]['pjtcn_prod_name'] ;  //  ------------
+                                $prodname     = $items[$i]['prd_name'] ;  //  ------------
                                 $prodsku      = $items[$i]['pjtdt_prod_sku'] ; //  ------------
                                 $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
                                 $sernum       = $items[$i]['ser_no_econo'] ; //  -------- 
-                              
+                                $comment       = $items[$i]['ser_comments'] ; // 11-10-23
         $html .= '
                             <tr>
                                 <td class="dat-figure supply">' . $prodname . '</td>
                                 <td class="dat-figure sku">' . $prodsku  . '</td>
                                 <td class="dat-figure qnty">' . $quantity  . '</td>
                                 <td class="dat-figure days">' . $sernum . '</td>
-                                <td class="dat-figure prod"> </td>
+                                <td class="dat-figure prod"> '. $comment               .'</td>
                             </tr>
-                            ';
+                            '; // 11-10-23
                             }
                         }
         $html .= '

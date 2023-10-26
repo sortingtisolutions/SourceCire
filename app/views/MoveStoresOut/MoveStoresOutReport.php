@@ -186,7 +186,7 @@ $mpdf= new \Mpdf\Mpdf([
     'margin_bottom' => 30,
     'margin_header' => 0,
     'margin_footer' => 0, 
-    'orientation' => 'P'
+    'orientation' => 'L'
     ]);
 
 $mpdf->shrink_tables_to_fit = 1;

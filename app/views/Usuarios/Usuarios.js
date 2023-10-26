@@ -104,7 +104,7 @@ function putAreas(dt) {
 }
 // Optiene los perfiles disponibles *
 function getIdModuluesPerfiles(idPerfil) {
-    var location = 'perfilUser/getIdModuluesPerfiles';
+    var location = 'PerfilUser/getIdModuluesPerfiles';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -114,7 +114,7 @@ function getIdModuluesPerfiles(idPerfil) {
             if (respuesta != '') {
                 getModulesList(respuesta, 'Asig'); //Asignados
             }
-            getModulesList(respuesta, 'Disp'); //Disponibles
+            getModulesList(respuesta, 'Disp'); //Disponibles 
         },
         error: function () {},
     }).done(function () {});
@@ -123,7 +123,7 @@ function getIdModuluesPerfiles(idPerfil) {
 // Optiene los perfiles disponibles *
 function getPerfilesUsuario(idPerfil) {
     console.log('MOD-getPerfilesUsuario');
-    var location = 'perfilUser/GetPerfiles';
+    var location = 'PerfilUser/GetPerfiles';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -206,7 +206,7 @@ function EditUsuario(id, idPerfil) {
                 getModulesList(respuesta.modulesAsing, 'Asig'); //Asignados
             }
             getModulesList(respuesta.modulesAsing, 'Disp'); //Disponibles
-
+            
             $('#UsuariosModal').modal('show');
         },
         error: function (EX) {
@@ -552,7 +552,7 @@ function getPuestos(id) {
 
 //Optiene los modulos Para el Usuario *
 function getModulesList(ModUser, tipeModul) {
-    var location = 'perfilUser/GetModules';
+    var location = 'PerfilUser/GetModules';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',

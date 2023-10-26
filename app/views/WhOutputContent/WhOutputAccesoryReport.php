@@ -9,23 +9,39 @@ $prdId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
 
+$empid = $_GET['em'];
 
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-$qry = "SELECT prd.prd_name, prd.prd_level, pjtcn_prod_name, pdt.pjtdt_prod_sku, 
+if ($empid == '1'){
+    $qry = "SELECT prd.prd_name, prd.prd_level, pjtcn_prod_name, pdt.pjtdt_prod_sku, 
+            sr.ser_serial_number, pj.pjt_number, 
+            pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments
+            FROM ctt_projects_content AS pcn
+            INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
+            INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
+            INNER JOIN ctt_products AS prd ON prd.prd_id=sr.prd_id
+            INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
+            WHERE pcn.pjt_id=$prdId 
+            ORDER BY pdt.pjtdt_prod_sku;"; // 11-10-23
+}
+else{
+    $qry = "SELECT prd.prd_name, prd.prd_level, pjtcn_prod_name, pdt.pjtdt_prod_sku, 
         sr.ser_serial_number, pj.pjt_number, 
-        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo
+        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments
         FROM ctt_projects_content AS pcn
         INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
         INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
         INNER JOIN ctt_products AS prd ON prd.prd_id=sr.prd_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
-        WHERE pcn.pjt_id=$prdId 
-        ORDER BY pdt.pjtdt_prod_sku;";
-
+        INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pcn.pjtcn_prod_sku,1,2)
+        INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+        WHERE pcn.pjt_id=$prdId AND em.emp_id=$empid AND substr(pdt.pjtdt_prod_sku,11,1)!='A'
+        ORDER BY pdt.pjtdt_prod_sku;"; // 11-10-23
+}
 $res = $conn->query($qry);
 $conn->close();
 
@@ -108,7 +124,7 @@ if ($equipoBase == '1'){
                                 $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
                                 $sernum       = $items[$i]['ser_no_econo'] ; //  -------- 
                                 $typeprd       = $items[$i]['prd_level'] ; //  --------
-
+                                $comment       = $items[$i]['ser_comments'];
                                 if ($typeprd == 'P') {
                               
         $html .= '
@@ -117,7 +133,7 @@ if ($equipoBase == '1'){
                                 <td class="dat-figure sku">' . $prodsku  . '</td>
                                 <td class="dat-figure qnty">' . $quantity  . '</td>
                                 <td class="dat-figure days">' . $sernum . '</td>
-                                <td class="dat-figure prod"> </td>
+                                <td class="dat-figure prod">'. $comment               .' </td>
                             </tr>
                             ';
                                 }

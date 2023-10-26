@@ -1,5 +1,5 @@
 let pj, px, pd;
-
+let user,v,u,n,em;
 $(document).ready(function () {
     if (verifica_usuario()) {
         inicial();
@@ -7,6 +7,11 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
+    user = Cookies.get('user').split('|');
+    u = user[0];
+    n = user[2];
+    em = user[3];
+
     folio = getFolio();
     setting_table();
     get_Proyectos();
@@ -164,6 +169,7 @@ function setting_table() {
         fixedHeader: true,
         columns: [
             { data: 'editable', class: 'edit objHidden' },
+            { data: 'sku', class: 'sku' },
             { data: 'prodname', class: 'product-name' },
             { data: 'cost', class: 'sku' },
             { data: 'days', class: 'sku' },
@@ -267,10 +273,10 @@ function get_changes() {
     fillField(pagina, par, tipo, selector);
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
-function get_products(pj) {
+function get_products(pj, em) {
     console.log(pj);
     var pagina = 'Maintenance/listProducts';
-    var par = `[{"pjtId":"${pj}"}]`;
+    var par = `[{"pjtId":"${pj}","em":"${em}"}]`;
     var tipo = 'json';
     var selector = put_Products;
     fillField(pagina, par, tipo, selector);
@@ -319,10 +325,11 @@ function put_Proyectos(dt) {
     });
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
+        $('#txtIdProject').val($(this).val());
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
         $('.objet').addClass('objHidden');
-        get_products(pj[px].pjt_id);
+        get_products($(this).val(), em);
+        console.log('Value',$(this).val());
     });
 }
 function put_status_mant(dt) {
@@ -429,6 +436,7 @@ function put_Products(dt) {
             tabla.row
                 .add({
                     editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,
+                    sku: u.prd_sku,
                     prodname: u.prd_name,
                     cost: u.pmt_price,
                     days: u.pmt_days,
@@ -466,18 +474,18 @@ function put_Products(dt) {
                 $('.objet').removeClass('objHidden');
                 let rw = $(this);
                 let ix = rw[0].attributes[2].value;
-
-                let prodname = rw[0].cells[1].outerText;
-                let costo = rw[0].cells[2].outerText;
-                let days = rw[0].cells[3].outerText;
-                let hours = rw[0].cells[4].outerText;
-                let datestar = rw[0].cells[5].outerText;
-                let dateend = rw[0].cells[6].outerText;
-                let no_econo = rw[0].cells[7].outerText;
-                let comments = rw[0].cells[8].outerText;
+                let prodsku = rw[0].cells[1].outerText;
+                let prodname = rw[0].cells[2].outerText;
+                let costo = rw[0].cells[3].outerText;
+                let days = rw[0].cells[4].outerText;
+                let hours = rw[0].cells[5].outerText;
+                let datestar = rw[0].cells[6].outerText;
+                let dateend = rw[0].cells[7].outerText;
+                let no_econo = rw[0].cells[8].outerText;
+                let comments = rw[0].cells[9].outerText;
                 
-                let situation = rw[0].cells[10].outerText;
-                let status = rw[0].cells[11].outerText;
+                let situation = rw[0].cells[11].outerText;
+                let status = rw[0].cells[12].outerText;
                 //let no_serie = rw[0].cells[12].outerText;
 
 
@@ -601,18 +609,18 @@ function updating_serie(acc) {
     else {
        var pagina = 'Maintenance/changeMaintain';
     }
-
+    console.log(par);
     var tipo = 'json';
     var selector = put_save_subleting;
     fillField(pagina, par, tipo, selector);
 }
 function put_save_subleting(dt) { 
     console.log(dt);
-    get_products(dt);
+    get_products(dt,em);
     /* $('#txtIdSerie').val(0);
     $('#txtIdStatus').val(0);
     $('#txtIdMaintain').val(0); */
-    $('#txtIdProject').val('');
+    // $('#txtIdProject').val('');
     $('#txtComments').val('');
     $('#txtDays').val('');
     $('#txtHrs').val('');
@@ -649,7 +657,7 @@ function validator() {
     // console.log(msg);
 }
 function view_report(){
-    title= 'Generar reporte';
+    title= 'Rango de Fecha de alta en Mantenimiento';
     $('.overlay_closer .title').html(title);
 
     $('#ReportModal').removeClass('overlay_hide');

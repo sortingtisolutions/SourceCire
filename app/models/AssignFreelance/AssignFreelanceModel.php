@@ -47,7 +47,7 @@ class AssignFreelanceModel extends Model
                 WHERE free.free_area_id= '$catId' AND NOT EXISTS (SELECT 1
                 FROM ctt_assign_proyect AS assi
                 WHERE assi.free_id = free.free_id AND assi.ass_status = 1
-                );";
+                ) GROUP BY free_id;";
         return $this->db->query($qry);
     }
     public function listFreelance2($param)

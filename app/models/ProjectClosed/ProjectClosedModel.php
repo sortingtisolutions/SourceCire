@@ -17,8 +17,8 @@ class ProjectClosedModel extends Model
 
         $qry = "SELECT pj.pjt_id, pj.pjt_name, ifnull(cus.cus_id , '0') as cus_id
                 FROM ctt_projects AS pj
-                INNER JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
-                INNER JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
+                LEFT JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
+                LEFT JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
                 WHERE pjt_status IN (8,9);";
 
         return $this->db->query($qry);
@@ -76,6 +76,7 @@ class ProjectClosedModel extends Model
         $cloTotExpen    = $this->db->real_escape_string($params['cloTotExpen']);
         $cloTotCombu    =  $this->db->real_escape_string($params['cloTotCombu']);
         $cloTotDisco    =  $this->db->real_escape_string($params['cloTotDisco']);
+        $cloTotDocum    =  $this->db->real_escape_string($params['cloTotDocum']);
         $cloCommen      = $this->db->real_escape_string($params['cloCommen']);
         $pjtid          = $this->db->real_escape_string($params['pjtid']);
         $usrid          = $this->db->real_escape_string($params['usrid']);
@@ -83,10 +84,12 @@ class ProjectClosedModel extends Model
         $cusId          = $this->db->real_escape_string($params['cusId']);
       
             $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
-                clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_fecha_cierre,
-				clo_flag_send,clo_comentarios, cus_id, pjt_id, usr_id, ver_id)
-            VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu',
-                    '$cloTotDisco',CURRENT_TIMESTAMP(), '0', '$cloCommen','$cusId','$pjtid','$usrid','$verid');";
+                clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
+                cus_id, pjt_id, usr_id, ver_id)
+            VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+            ' $cloTotDocum', Now(), '0', '$cloCommen','1',
+            '$cusId','$pjtid','$usrid','$verid');";
 
         $this->db->query($qry);
         $ducloId = $this->db->insert_id;

@@ -28,18 +28,63 @@ function inicial() {
         let costo_import =parseFloat($('#txtCostImp').val());
         let cant = parseInt($('#txtQuantity').val());
         let costo_uni = parseFloat($('#txtCost').val());
-        let costoTotal = costo_import + costo_uni;
+        
         validator();
-        $('#txtCostTot').val(costo_uni*cant);
+        
+        if (costo_import) {
+            //$('#txtCostTot').val((costo_import+costo_uni)*cant);
+            if (costo_uni && costo_import) {
+                $('#txtCostTot').val((costo_import+costo_uni)*cant);
+            }else{
+                if(!costo_uni){
+                    $('#txtCostTot').val((costo_import)*cant);
+                }
+                if (!costo_import) {
+                    $('#txtCostTot').val((costo_uni)*cant);
+                }
+                
+            }
+        } else {
+            if (costo_uni) {
+                $('#txtCostTot').val(costo_uni*cant);
+            }else{
+                $('#txtCostTot').val(0);
+            }
+            
+        }
+        
         console.log($('#txtCostImp').val(), costo_uni);
     });
     $('#txtCostImp').on('blur', function () {
         let costo_import = parseInt($('#txtCostImp').val());
-        let cant = parseInt($('txtQuantity').val());
+        let cant = parseInt($('#txtQuantity').val());
         let costo_uni = parseInt($('#txtCost').val());
         let costoTotal = costo_import + cant + costo_uni;
         
-        $('txtCostTot').val(costoTotal);
+        if (costo_import) {
+            
+            if (costo_uni && costo_import) {
+                console.log(cant);
+                $('#txtCostTot').val((costo_import+costo_uni)*cant);
+            }else{
+                if(!costo_uni){
+                    $('#txtCostTot').val((costo_import)*cant);
+                }
+                if (!costo_import) {
+                    $('#txtCostTot').val((costo_uni)*cant);
+                }
+                
+                
+            }
+        } else {
+            if (costo_uni) {
+                $('#txtCostTot').val(costo_uni*cant);
+            }else{
+                $('#txtCostTot').val(0);
+            }
+            
+        }
+        
     });
     $('#txtSerie').on('blur', function () {
         validator();
@@ -51,7 +96,28 @@ function inicial() {
         let costo_uni = parseFloat($('#txtCost').val());
         let costoTotal = costo_import + costo_uni;
         validator();
-        $('#txtCostTot').val(costo_uni*cant);
+       // $('#txtCostTot').val(costo_uni*cant);
+       if (costo_import) {
+            //$('#txtCostTot').val((costo_import+costo_uni)*cant);
+            if (costo_uni && costo_import) {
+                $('#txtCostTot').val((costo_import+costo_uni)*cant);
+            }else{
+                if(!costo_uni){
+                    $('#txtCostTot').val((costo_import)*cant);
+                }
+                if (!costo_import) {
+                    $('#txtCostTot').val((costo_uni)*cant);
+                }
+                
+            }
+        } else {
+            if (costo_uni) {
+                $('#txtCostTot').val(costo_uni*cant);
+            }else{
+                $('#txtCostTot').val(0);
+            }
+            
+        }
     });
 }
 // Setea de la tabla
@@ -216,6 +282,10 @@ function putTypeExchange(dt) {
         setting_interface(code,id);
         relocation_products();
         validator();
+
+        $('#txtCostImp').val(0);
+        $('#txtCost').val(0);
+        $('#txtCostTot').val(0);
     });
 }
 /**  ++++++  configura la interfasede inputs requeridos */
@@ -325,12 +395,12 @@ function putProducts(dt) {
         $('#txtCoinType').val($(this).attr('data_complement').split('|')[4]);
         $('#listProducts').slideUp(100);
         validator();
-        $(`#txtCoin option[value = "1"]`).attr('selected', 'selected');
+        /* $(`#txtCoin option[value = "1"]`).attr('selected', 'selected');
         if (accesorio == 'XXX') {
             $('#txtQuantity').attr('disabled',true);
         } else{
             $('#txtQuantity').attr('disabled',false);
-        }
+        } */
     });
 }
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
@@ -757,6 +827,15 @@ function read_exchange_table() {
                 numecono = $($(u).find('td')[14]).children('.serecono').val();
                 costpeti= $($(u).find('td')[7]).children('.sercpet').val();
                 console.log(serienum, numecono, costpeti);
+                if (!serienum) {
+                    serienum='';
+                }
+                if (!numecono) {
+                    numecono='';
+                }
+                if (!costpeti) {
+                    costpeti='';
+                }
             }
             
             //let serienum = $('.serprod').val();

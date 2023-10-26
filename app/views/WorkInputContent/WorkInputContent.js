@@ -25,6 +25,8 @@ function inicial() {
     getDetailProds(prjid,em);
     getFreelances(prjid);
     getReason();
+    getComments_text(prjid); // 11-10-23
+    getAnalysts(prjid);
     
     $('#recordInPut').on('click', function () {
         alert('Actualizar Registros');
@@ -36,8 +38,145 @@ function inicial() {
         printOutPutContent(prjid);
     
      });
+      // Abre el modal de comentarios // 11-10-23
+    $('.sidebar__comments .toComment')
+    .unbind('click')
+    .on('click', function () {
+        showModalComments();
+        
+    });
+    
 }
 
+
+function showModalComments() {
+    let template = $('#commentsTemplates');
+    // let pjtId = $('.version_current').attr('data-project');
+
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Comentarios');
+    closeModals();
+    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
+
+    console.log( $('#txtComment').val()); */
+    //console.log(prjid);
+    fillComments(prjid);
+}
+/** ***** CIERRA MODALES ******* */
+function closeModals(table) {
+    $('.invoice__modal-general .modal__header .closeModal')
+        .unbind('click')
+        .on('click', function () {
+            automaticCloseModal();
+            
+        });
+}
+function automaticCloseModal() {
+    
+    $('.invoice__modal-general').slideUp(400, function () {
+        $('.invoice__modalBackgound').fadeOut(400);
+        $('.invoice__modal-general .modal__body').html('');
+        $('#listLocationsTable').DataTable().destroy; 
+        let tabla=$('#listLocationsTable').DataTable();
+        tabla.rows().remove().draw();
+        
+    });
+}
+
+function fillComments(pjtId) {
+    console.log(pjtId);
+    
+    // Agrega nuevo comentario
+    $('.comments__addNew .invoice_button')
+        .unbind('click')
+        .on('click', function () {
+            
+            //let pjtId = $('.version_current').attr('data-project');
+
+            let comSrc = 'projects';
+            let comComment = $('#txtComment').val();
+
+            console.log(comComment);
+            if (comComment.length > 3) {
+                let par = `
+                    [{
+                        "comSrc"        : "${comSrc}",
+                        "comComment"    : "${comComment}",
+                        "pjtId"         : "${prjid}"
+                    }]
+                    `;
+                var pagina = 'WorkInputContent/InsertComment';
+                var tipo = 'json';
+                console.log(par);
+                var selector = addComment;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+
+    getComments(pjtId);
+}
+
+function putComments(dt) {
+    $('.comments__list').html('');
+    if (dt[0].com_id > 0) {
+        $.each(dt, function (v, u) {
+            console.log(u);
+            fillCommnetElements(u);
+        });
+    }
+    
+}
+// ***************** se agregan los comentarios del proyecto jjr ***************
+function puComments(dt) {
+    if (dt[0].com_id != '0')
+    {
+        let valConcat=''
+        $.each(dt, function (v, u){
+            valConcat=valConcat + u.com_user + ': ' + u.com_comment+'\n';
+        });
+    $('#txtComments').text(valConcat);
+    }
+}
+function fillCommnetElements(u) {
+    console.log(u.com_comment);
+    let H = `
+        <div class="comment__group" style="border-bottom: 1px solid var(--br-gray-soft); padding: 0.2rem; width: 100%;">
+            <div class="comment__box comment__box-date" style="width: 100%;text-align: right; font-size: 0.9em; color: var(--in-oxford);"><i class="far fa-clock" style="padding: 0 0.5rem;"></i>${u.com_date}</div>
+            <div class="comment__box comment__box-text">${u.com_comment}</div>
+            <div class="comment__box comment__box-user" style="text-align: left; font-size: 0.9em; color: var(--in-oxford);">${u.com_user}</div>
+        </div>
+    `;
+
+    $('.comments__list').prepend(H);
+    getComments_text(prjid);
+}
+
+function addComment(dt) {
+    console.log(dt[0]);
+    fillCommnetElements(dt[0]);
+    $('#txtComment').val('');
+}
+
+
+// Solicita los comentarios al proyecto
+function getComments_text(prjid) {
+    //console.log(prjid)
+    var pagina = 'WhOutputContent/listComments';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = puComments;
+    fillField(pagina, par, tipo, selector);
+}
+/** Obtiene el listado de los comentarios del proyecto */
+function getComments(pjtId) {
+    var pagina = 'WorkInputContent/listComments';
+    var par = `[{"pjId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putComments;
+    fillField(pagina, par, tipo, selector);
+} //************* */
 // Solicita los paquetes  OK
 function getProjects(prjid) {
     // console.log(prjid)
@@ -68,7 +207,7 @@ function getSeries(pjtcnid) {
 
 function getFreelances(prjid) {
     //console.log(prjid)
-    var pagina = 'WhOutputContent/listFreelances';
+    var pagina = 'WorkInputContent/listFreelances';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
     var selector = putFreelances;
@@ -94,6 +233,16 @@ function getSerieDetail(serid, serorg) {
     fillField(pagina, par, tipo, selector);
 }
 
+// Solicita los analistas  
+function getAnalysts(prjid) {
+    //console.log(prjid)
+    var pagina = 'WorkInputContent/listAnalysts';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = putAnalysts;
+    fillField(pagina, par, tipo, selector);
+}
+
 function createTblRespaldo(prjid,prjnum) {
     console.log('createTblRespaldo', prjid,prjnum)
     var pagina = 'WorkInputContent/createTblResp';
@@ -103,13 +252,26 @@ function createTblRespaldo(prjid,prjnum) {
     fillField(pagina, par, tipo, selector);
 }
 
+// Listar analistas
+function putAnalysts(dt) {
+    if (dt[0].emp_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.emp_id}"> ${u.emp_fullname} - ${u.are_name}</option>`;
+            $('#txtAnalyst').append(H);
+        });
+        $('#txtAnalyst').val(dt[0].emp_id); // 11-10-23
+    }
+    
+    
+}
+
 //**************  NIVEL 1 DE DATOS *****************************************
 // Configura la tabla de productos del proyecto
 function setting_table_AsignedProd() {
     
     let tabla = $('#tblAsigInput').DataTable({
         bDestroy: true,
-        order: [[1, 'asc']],
+        /* order: [[1, 'asc']], */
         dom: 'Blfrtip',
         lengthMenu: [
                 [100, 200, -1],
@@ -138,8 +300,10 @@ function setting_table_AsignedProd() {
             {data: 'packname', class: 'sel supply'},
             {data: 'packcount', class: 'sel sku'},
             {data: 'packlevel', class: 'sel sku'},
+            {data: 'packEquip', class: 'sel sku'},   
             {data: 'packstatus', class: 'sel supply'},
-        ],
+            
+        ],// 11-10-23
     });
 }
 
@@ -152,7 +316,8 @@ function putProjects(dt) {
     glbprjnum=dt[0].pjt_number;
     $('#txtTipoProject').val(dt[0].pjttp_name);
     $('#txtEndDate').val(dt[0].pjt_date_end);
-    $('#txtAnalyst').val(usrname);
+    /* $('#txtAnalyst').val(dt[0].emp_fullname);// 11-10-23
+    $('#txtFreelance').val(dt[0].free_id);// 11-10-23 */
 }
 
 function putFreelances(dt) {
@@ -161,32 +326,54 @@ function putFreelances(dt) {
             let H = `<option value="${u.free_id}"> ${u.free_name} - ${u.are_name}</option>`;
             $('#txtFreelance').append(H);
         });
+        $('#txtFreelance').val(dt[0].free_id);// 11-10-23
     }
 }
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 
 function putDetailsProds(dt) {
+    let tabla = $('#tblAsigInput').DataTable();
+    tabla.rows().remove().draw();
+    if (dt[0].pjtpd_id != '0')
     if (dt[0].pjtpd_id != '0')
     {
+        let valstage='';// 11-10-23
         let tabla = $('#tblAsigInput').DataTable();
         let valcontent='';
 
         $.each(dt, function (v, u)         {
-        // let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
-        let skufull = u.pjtcn_prod_sku;
-            tabla.row
+            // 11-10-23
+            if (u.section == 'Base') { valstage='#e2e8f8'; }
+            else if (u.section == 'Extra') { valstage='#f8e2e8'; }
+            else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
+            else { valstage='#e2f8f2'; }
+            if (u.pjtcn_quantity == u.cant_ser) {
+                icon = 'fas fa-regular fa-thumbs-up';
+            } else{
+                icon ='fas fa-edit';
+            }
+            //****** */
+            // let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+            let skufull = u.pjtcn_prod_sku;
+            // 11-10-23
+            var rownode=tabla.row
                 .add({
-                    editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
+                    editable: `<i class="${icon} toLink" id="${u.pjtcn_id}"></i>`,
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
                     packlevel: u.pjtcn_prod_level,
+                    packEquip: u.section,
                     packstatus: valcontent,
                 })
-                .draw();
+                .draw().node();
+            $(rownode).css("background-color", valstage);
+                
+            //$(rownode).find('td').eq(0).find('.toLink').css("color", color);
             $(`#SKU-${u.pjtcn_prod_sku}`).parent('tr').attr('id', u.pjtcn_id).addClass('indicator');
         });
+        //********** */
         activeIcons();
     }
 }
@@ -367,6 +554,7 @@ function myCheck(dt){
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).find('.toAcept').css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+    getDetailProds(prjid,em);
 }
 
 function readAceptTable() {

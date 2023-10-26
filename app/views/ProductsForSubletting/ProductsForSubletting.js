@@ -386,15 +386,15 @@ function updating_serie(acc) {
         "projecId"  :   "${projecId}",
         "projContId"  :   "${projContId}"
     }]`;
-    console.log(acc);
-    if (acc == 'add') {
+    //console.log(par);
+     if (acc == 'add') {
         var pagina = 'ProductsForSubletting/saveSubletting';
     } else {
         var pagina = 'ProductsForSubletting/changeSubletting';
     }
     var tipo = 'json';
     var selector = put_save_subleting;
-    fillField(pagina, par, tipo, selector);
+    fillField(pagina, par, tipo, selector); 
 }
 function put_save_subleting(dt) {
     console.log(dt);
