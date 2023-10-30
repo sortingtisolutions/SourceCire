@@ -618,6 +618,128 @@ class BudgetController extends Controller
 /** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
 
 // PROCESO POR PRODUCTO
+// Lista los comentarios del proyecto
+public function listChangeProd($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listChangeProd($request_params);
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"catsub":"0"}]';	
+    }
+    echo $res;
+} 
+
+public function reOrdenList($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listReordering($request_params);
+
+    $valnew=1;
+    while($row = $result->fetch_assoc())
+    {
+        $prdsku = $row["bdg_prod_sku"];
+        $docsec = $row["bdg_section"];
+        $bdg_id = $row["bdg_id"];
+        $docord = $row["bdg_order"];
+
+        $paramup = array(
+            'valnew' => $valnew,
+            'bdg_id' => $bdg_id,
+        );
+        $bandReOrder = $this->model->upReorderingProducts($paramup);
+        $valnew=$valnew + 1;
+    }
+    // echo $bandReOrder ; 
+} 
+
+public function ProcessProjectProductFAST($request_params)
+{  
+    $params = $this->session->get('user');
+    // $pjtId  = $this->model->PromoteProject($request_params);
+    $versin = $this->model->PromoteVersion($request_params);
+    $pjtcnt = $this->model->SaveProjectContent($request_params);
+    $result = $this->model->GetProjectContent($request_params);
+   
+    while($row = $result->fetch_assoc()){
+        $dtstar = $row["pjt_date_start"];
+        $dybase = $row["pjtcn_days_base"];
+        $dytrip = $row["pjtcn_days_trip"] / 2;
+        $dytest = $row["pjtcn_days_test"];
+        $quanty = $row["pjtcn_quantity"];
+        $prodId = $row["prd_id"];
+        $pjetId = $row["pjtvr_id"];
+        $dyinic = $dytrip + $dytest;
+        $dyfinl = $dytrip + $dybase;
+        $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
+        $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
+
+        $bdglvl = $row["pjtcn_prod_level"];
+        $prdexp = $row["srv_id"];
+        $versId = $row["ver_id"];
+
+        $ttlqty = $prdexp == '2'? $quanty: 1;
+        $quanty = $prdexp == '2'? 1: $quanty;
+        if ( $bdglvl == 'P' ){
+            for ($i = 1; $i<=$quanty; $i++){
+                
+                $params = array(
+                    'pjetId' => $pjetId, 
+                    'prodId' => $prodId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl,
+                    'versId' => $versId,
+                    'detlId' => 0,
+                );
+                $detlId = $this->model->SettingSeries($params);
+                
+            }
+        } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
+            for ($i = 1; $i<=$quanty; $i++){
+                $products = $this->model->GetProducts($prodId);
+                while($acc = $products->fetch_assoc()){
+
+                    $pkpdId =  $acc["prd_id"];
+                    $pkpdNm =  $acc["prd_name"];
+                    $pkpdPc =  $acc["prd_price"];
+                    $pkqty =  $acc["pck_quantity"];
+
+                    if($pkqty>0){
+                        for ($i=0; $i < $pkqty; $i++) { 
+                            $prodparams = array(
+                                'pjetId' => $pjetId, 
+                                'prodId' => $pkpdId, 
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'bdgnme' => $pkpdNm,
+                                'bdgprc' => $pkpdPc,
+                                'bdglvl' => 'P',
+                                'bdgqty' => $ttlqty,
+                                'dybase' => $dybase,
+                                'dytrip' => $dytrip,
+                                'dytest' => $dytest,
+                                'versId' => $versId,
+                                'detlId' => 0,
+                            );
+                            $detlId = $this->model->SettingSeries($prodparams);
+                        }
+                    } 
+                }
+            }
+        }
+    }
+
+    $pjtId  = $this->model->PromoteProject($request_params);
+
+    echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
+
+} 
 
 // public function ProcessProjectProduct($request_params)
 //     {  
@@ -792,127 +914,6 @@ class BudgetController extends Controller
     
 //     } 
 
-// Lista los comentarios del proyecto
-    public function listChangeProd($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listChangeProd($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"catsub":"0"}]';	
-        }
-        echo $res;
-    } 
 
-    public function reOrdenList($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listReordering($request_params);
-
-        $valnew=1;
-        while($row = $result->fetch_assoc())
-        {
-            $prdsku = $row["bdg_prod_sku"];
-            $docsec = $row["bdg_section"];
-            $bdg_id = $row["bdg_id"];
-            $docord = $row["bdg_order"];
-
-            $paramup = array(
-                'valnew' => $valnew,
-                'bdg_id' => $bdg_id,
-            );
-            $bandReOrder = $this->model->upReorderingProducts($paramup);
-            $valnew=$valnew + 1;
-        }
-        // echo $bandReOrder ; 
-    } 
-
-    public function ProcessProjectProductFAST($request_params)
-    {  
-        $params = $this->session->get('user');
-        // $pjtId  = $this->model->PromoteProject($request_params);
-        $versin = $this->model->PromoteVersion($request_params);
-        $pjtcnt = $this->model->SaveProjectContent($request_params);
-        $result = $this->model->GetProjectContent($request_params);
-       
-        while($row = $result->fetch_assoc()){
-            $dtstar = $row["pjt_date_start"];
-            $dybase = $row["pjtcn_days_base"];
-            $dytrip = $row["pjtcn_days_trip"] / 2;
-            $dytest = $row["pjtcn_days_test"];
-            $quanty = $row["pjtcn_quantity"];
-            $prodId = $row["prd_id"];
-            $pjetId = $row["pjtvr_id"];
-            $dyinic = $dytrip + $dytest;
-            $dyfinl = $dytrip + $dybase;
-            $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
-            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
-
-            $bdglvl = $row["pjtcn_prod_level"];
-            $prdexp = $row["srv_id"];
-            $versId = $row["ver_id"];
-
-            $ttlqty = $prdexp == '2'? $quanty: 1;
-            $quanty = $prdexp == '2'? 1: $quanty;
-            if ( $bdglvl == 'P' ){
-                for ($i = 1; $i<=$quanty; $i++){
-                    
-                    $params = array(
-                        'pjetId' => $pjetId, 
-                        'prodId' => $prodId, 
-                        'dtinic' => $dtinic, 
-                        'dtfinl' => $dtfinl,
-                        'versId' => $versId,
-                        'detlId' => 0,
-                    );
-                    $detlId = $this->model->SettingSeries($params);
-                    
-                }
-            } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
-                for ($i = 1; $i<=$quanty; $i++){
-                    $products = $this->model->GetProducts($prodId);
-                    while($acc = $products->fetch_assoc()){
-
-                        $pkpdId =  $acc["prd_id"];
-                        $pkpdNm =  $acc["prd_name"];
-                        $pkpdPc =  $acc["prd_price"];
-                        $pkqty =  $acc["pck_quantity"];
-
-                        if($pkqty>0){
-                            for ($i=0; $i < $pkqty; $i++) { 
-                                $prodparams = array(
-                                    'pjetId' => $pjetId, 
-                                    'prodId' => $pkpdId, 
-                                    'dtinic' => $dtinic, 
-                                    'dtfinl' => $dtfinl,
-                                    'bdgnme' => $pkpdNm,
-                                    'bdgprc' => $pkpdPc,
-                                    'bdglvl' => 'P',
-                                    'bdgqty' => $ttlqty,
-                                    'dybase' => $dybase,
-                                    'dytrip' => $dytrip,
-                                    'dytest' => $dytest,
-                                    'versId' => $versId,
-                                    'detlId' => 0,
-                                );
-                                $detlId = $this->model->SettingSeries($prodparams);
-                            }
-                        } 
-                    }
-                }
-            }
-        }
-
-        $pjtId  = $this->model->PromoteProject($request_params);
-
-        echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
-    
-    } 
 
 }

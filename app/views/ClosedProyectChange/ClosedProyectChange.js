@@ -9,36 +9,8 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-        // get_stores();
         get_projects();
         fill_dinamic_table();
-        
-        // $('#lstPayForm')
-        //     .unbind('change')
-        //     .on('change', function () {
-        //         var tp = $(this).val();
-        //         if (tp == 'TARJETA DE CREDITO') {
-        //             $('#txtInvoice').addClass('required').parents('div.form_group').removeClass('hide');
-        //         } else {
-        //             $('#txtInvoice').removeClass('required').parents('div.form_group').addClass('hide');
-        //         }
-        //     });
-
-        // $('#addPurchase').on('click', function () {
-        //     saleApply();
-        // });
-
-        // $('#newQuote').on('click', function () {
-        //     window.location = 'ProductsSalables';
-        // });
-        // $('#newComment').on('click', function () {
-        //     addComments('sales', '');
-        // });
-
-        $('.required').on('focus', function () {
-            $(this).removeClass('forValid');
-            $(this).parent().children('.novalid').remove();
-        });
         confirm_alert();
     } else {
         setTimeout(() => {
@@ -48,7 +20,6 @@ function inicial() {
 }
 
 /** OBTENCION DE DATOS */
-
 /**  Obtiene el listado de almacenes */
 function get_projects() {
     var pagina = 'ClosedProyectChange/listProjects';
@@ -88,8 +59,6 @@ function get_products(strId) {
 }
 
 /**  Obtiene el listado de proyectos */
-
-
 function put_projects(dt) {
     proj = dt;
     if (dt[0].pjt_id > 0) {
@@ -97,24 +66,17 @@ function put_projects(dt) {
             let H = `<option value="${u.pjt_id}" >${u.pjt_number}-${u.pjt_name}</option>`;
             $('#lstProject').append(H);
         });
-
-    } else {
-        $('#lstProject').html('');
-    }
+    } else { $('#lstProject').html('');  }
 
     $('#lstProject')
         .unbind('change')
         .on('change', function () {
             fill_dinamic_table();
-            // console.log('Change Proj',$(this).val());
-            // var ix = $(this).val();
-            // let lpjt =  $(this).attr('data');
-
             let lpjt = $(this).val();
-            let glbpjtid=lpjt;
+            glbpjtid=lpjt;
             getDataProjects(lpjt);
             get_montos(lpjt);
-            
+
         });
 }
 
@@ -131,10 +93,7 @@ function putdataprojects(dt) {
                 $('#txtAdress').val(u.cus_address);
                 $('#txtRespProg').val(u.emp_fullname.toUpperCase());
         });
-        
-    } else {
-        $('#lstProject').html('');
-    }
+    } else { $('#lstProject').html(''); }
 
     $('#txtProject').on('change', function () {
         let id = $(this).val();
@@ -143,19 +102,17 @@ function putdataprojects(dt) {
         getDataProjects(lpjt);
         // get_montos(lpjt);
     });
-
 }
 
 function put_products(dt) {
     console.log(dt);
-   
 }
 
-/**  +++++   Arma el escenario de la cotizacion  */
+/** *****  Arma el escenario de la cotizacion  */
 function fill_dinamic_table() {
     caching_events('fill_dinamic_table');
     let H = `
-        <table class="table_control" id="tblControl" style="width: 1000px;">
+        <table class="table_control" id="tblControl" style="width: 1100px;">
             <thead>
                 <tr class="headrow">
                     <th class="w4 zone_01" ></th>
@@ -169,52 +126,44 @@ function fill_dinamic_table() {
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
     `;
     $('#tbl_dynamic').html(H);
     tbldynamic('tbl_dynamic');
-    // add_boton();
-    
-    // fill_purchase(prod[inx], inx);
 }
 
-
-/**  +++++ Guarda el producto en la cotización +++++ */
+/**  ***** Guarda el producto en la cotización ***** */
 function fill_purchase(dt) {
-        // console.log('fill_purchase',dt);
-
-        if (dt[0].clo_id > 0) {
+    // console.log('fill_purchase',dt);
+    if (dt[0].clo_id > 0) {
         $.each(dt, function (v, u) {
         let H = `
-        <tr id="${u.clo_id}" data_index="${u.clo_id}">
-            <td><i class="fas fa-penfa-solid fa-chart-pie segment"></i><i class="fas fa-solid fa-money-check addData"></i></td>
-            <td class="cost" >${u.clo_id}</td>
-            <td class="cost" >${mkn(u.clo_total_proyects,'n')}</td>
-            <td class="cost" >${mkn(u.clo_total_maintenance,'n')}</td>
-            <td class="cost" >${mkn(u.clo_total_expendables,'n')}</td>
-            <td class="cost" >${mkn(u.clo_total_diesel,'n')}</td>
-            <td class="cost" >${mkn(u.clo_total_discounts,'n')}</td>
-            <td class="cost" >${mkn(u.clo_total_document,'n')}</td>
-        </tr> `;
-        $('#tbl_dynamic tbody').append(H);
-
-        $(`.frame_content #tblControl tbody #${u.clo_id} td.quantity`).attr({contenteditable: 'true'});
-    });
+            <tr id="${u.clo_id}" data_index="${u.clo_id}">
+                <td><i class="fas fa-penfa-solid fa-chart-pie segment"></i><i class="fas fa-solid fa-money-check addData"></i></td>
+                <td class="cost" >${u.clo_id}</td>
+                <td class="cost" >${mkn(u.clo_total_proyects,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_maintenance,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_expendables,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_diesel,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_discounts,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_document,'n')}</td>
+            </tr> `;
+            $('#tbl_dynamic tbody').append(H);
+            $(`.frame_content #tblControl tbody #${u.clo_id} td.quantity`).attr({contenteditable: 'true'});
+        });
     }
-
 
     $('.addData')
     .unbind('click')
     .on('click', function () {
-        // updateTotals();
-        let locid = $(this).parents('tr').attr('id');
-        gblcloid=locid;
-        // console.log('addData',locid);
-        let prdNm="Agrega nuevos valores de cierre";
 
-        let el = $(`#tbl_dynamic tr[id="${locid}"]`);
+        let cloid = $(this).parents('tr').attr('id');
+        let nomproy = $(`#lstProject option[value="${glbpjtid}"]`).text().split('-')[1];
+        gblcloid=cloid;
+        console.log('addData',nomproy);
+        let el = $(`#tbl_dynamic tr[id="${cloid}"]`);
             $('#txtProject').val($('#txtProject').val());
             let montproy=$(el.find('td')[2]).text();
             let montmant=$(el.find('td')[3]).text();
@@ -230,92 +179,147 @@ function fill_purchase(dt) {
             $('#txtMontoDies').val(montdies);
             $('#txtMontoDesc').val(montdesc);
             $('#txtMontoTotal').val(monttota);
-            
+        let prdNm="Agrega nuevos valores de cierre al proyecto: " + {$nomproy}
         $('#newValuesModal').removeClass('overlay_hide');
         $('.overlay_closer .title').html(prdNm);
-
-    // setTimeout(() => {
-    //     updateTotals();
-    // }, 100);
+        activeProjectsFunctions();
 
     });
 
     $('.segment')
         .unbind('click')
         .on('click', function () {
-            let locid = $(this).parents('tr').attr('id');
-            gblcloid=locid;
-            let el = $(`#tbl_dynamic tr[id="${locid}"]`);
-            // $('#txtProject').val($('#txtProject').val());
-            // let montproy=$(el.find('td')[2]).text();
-            // let montmant=$(el.find('td')[3]).text();
-            // let montexpe=$(el.find('td')[4]).text();
-            // let montdies=$(el.find('td')[5]).text();
-            // let montdesc=$(el.find('td')[6]).text();
+            let cloid = $(this).parents('tr').attr('id');
+            gblcloid=cloid;
+            let el = $(`#tbl_dynamic tr[id="${cloid}"]`);
             let monttota=$(el.find('td')[7]).text();
-            settingTableSeg();
+            settingTableSeg(gblcloid);
             let id = $(this).parents('tr').attr('id');
-            console.log('segment',id);
+            // console.log('segment',id);
             // let prdNm="Segmenta valores para cobrar"
             $('#txtMontoTotSeg').val(monttota);
             $('#addSegmentModal').removeClass('overlay_hide');
             $('.overlay_closer .title').html('');
-
-            // settingChangeSerie();
-            // let id = $(this).parents('tr').attr('id');
-            // console.log('segment',id);
-            // let prdNm="Segmenta valores para cobrar"
-            
-            // $('#toSegmentModal').removeClass('overlay_hide');
-            // $('.overlay_closer .title').html(prdNm);
-
+            fillContent();
         });
-    
-    
+
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
-            // console.log('BOTON SAVE O GUARDAR');
             confirm_to_Save(gblcloid);
         });
 
     $('#newValuesModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            // console.log('BOTON close O cerrar');
             $('.overlay_background').addClass('overlay_hide');
         });
 
     $('#toSegmentModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            // console.log('BOTON close O cerrar');
             $('.overlay_background').addClass('overlay_hide');
         });
 }
 
-function updateTotals() {
-    let total = parseFloat($('#txtMontoProy').html().replace(/,/g, ''));
-        total += parseFloat($('#txtMontoexpe').html().replace(/,/g, ''));
-        total += parseFloat($('#txtMontoMant').html().replace(/,/g, ''));
-        total += parseFloat($('#txtMontoDies').html().replace(/,/g, ''));
-        total -= parseFloat( $('#txtMontoDesc').html().replace(/,/g, ''));
+function activeProjectsFunctions() {
+    console.log('ACTIVA');
+    putSaleExpendab();
+    putTotalMaintenance();
+    findExtraDiesel();
+    findDiscount();
 
-    $('#txtMontoTotal').html(fnm(total, 2, '.', ','));
+    setTimeout(() => {
+        updateTotals();
+    }, 100);
+
 }
 
+
+function putSaleExpendab() {
+    let cfr = 0;
+    $('#txtMontoexpe').html(fnm($('#txtMontoexpe').val(), 2, '.', ','));
+    $('#txtMontoexpe').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoexpe').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
+}
+
+function putTotalMaintenance(){
+    let cfr = 0;
+    $('#txtMontoMant').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoMant').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    }); 
+}
+
+function findDiscount() {
+    let cfr = 0;
+    $('#txtMontoDesc').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoDesc').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
+}
+
+function findExtraDiesel() {
+    let cfr = 0;
+    $('#txtMontoDies').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoDies').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
+}
+
+function updateTotals() {
+    let total = parseFloat($('#txtMontoProy').val().replace(/,/g, ''));
+        total += parseFloat($('#txtMontoexpe').val().replace(/,/g, ''));
+        total += parseFloat($('#txtMontoMant').val().replace(/,/g, ''));
+        total += parseFloat($('#txtMontoDies').val().replace(/,/g, ''));
+        total -= parseFloat($('#txtMontoDesc').val().replace(/,/g, ''));
+
+        $('#txtMontoTotal').val(fnm(total, 2, '.', ','));
+}
+
+ /** */
+ function confirm_to_Save(pjtid) {
+    $('#starClosure').modal('show');
+    $('#txtIdClosure').val(pjtid);
+
+    $('#btnClosure').on('click', function () {
+        $('#starClosure').modal('hide');
+        // console.log('Valor CloID',pjtid);
+         saveNewDocument(pjtid);
+    });
+}
+/*** */
 function saveNewDocument(dt) {
     let user = Cookies.get('user').split('|');
     let u = user[0];
     let n = user[2];
-    
+    let em = user[3];
+
     let cloTotProy = parseFloat($('#txtMontoProy').val().replace(/,/g, ''));
     let cloTotMaint =parseFloat($('#txtMontoMant').val().replace(/,/g, ''));
     let cloTotExpen = parseFloat($('#txtMontoexpe').val().replace(/,/g, ''));
     let cloTotCombu =parseFloat($('#txtMontoDies').val().replace(/,/g, ''));
     let cloTotDisco = parseFloat($('#txtMontoDesc').val().replace(/,/g, ''));
     let cloTotDocum = parseFloat($('#txtMontoTotal').val().replace(/,/g, ''));
-    let pjtId = gblcloid;
+    let cloId = gblcloid;
     let usrid = u;
 
     var par = `
@@ -325,10 +329,10 @@ function saveNewDocument(dt) {
             "cloTotCombu" : "${cloTotCombu}",
             "cloTotDisco" : "${cloTotDisco}",
             "cloTotDocum" : "${cloTotDocum}",
-            "pjtid" : "${pjtId}",
+            "cloId" : "${cloId}",
             "usrid" : "${usrid}"
         }] `;
-    console.log('Save Doc-',par);
+    // console.log('Save Doc-',par);
     var pagina = 'ClosedProyectChange/saveDocumentClosure';
     var tipo = 'html';
     var selector = putToWork;
@@ -336,49 +340,16 @@ function saveNewDocument(dt) {
     // putToWork('45');
 }
 
-function setReport(dt) {
-    console.log(dt);
-    deep_loading('C');
-
-    let sal = dt.split('|')[0];
-    let usr = dt.split('|')[1];
-    let nme = dt.split('|')[2];
-    let hst = localStorage.getItem('host');
-    window.open(url + 'app/views/ClosedProyectChange/ClosedProyectChangeReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
-    window.location = 'ClosedProyectChange';
-}
-
-function confirm_to_Save(pjtid) {
-    $('#starClosure').modal('show');
-    $('#txtIdClosure').val(pjtid);
-
-    $('#btnClosure').on('click', function () {
-        $('#starClosure').modal('hide');
-
-        console.log('Valor CloID',pjtid);
-        //  modalLoading('S');
-         saveNewDocument(pjtid);
-    });
-}
-
 function putToWork(dt){
-    console.log('TERMINO ACTUALIZAR ', dt);
+    console.log('putToWork ', dt);
     let folio=dt;
-    $('#recordOutPut').hide();
-    $('.bprint').removeClass('hide-items');
-    $('.resFolio').text(refil(folio, 7));
-    $('#MoveFolioModal').modal('show');
-    $('#btnHideModal').on('click', function () {
-        // window.location = 'WhOutputs';
-        $('#MoveFolioModal').modal('hide');
 
-    });
+    // $('#lstProject').html('');
     $('#newValuesModal .btn_close').trigger('click');
-        fill_dinamic_table();
-        // getDataProjects(lpjt);
-        // get_montos(glbpjtid);
-        // modalLoading('H');
-        window.location.reload();
+    // inicial();
+    // get_projects();
+    // fill_dinamic_table();
+    window.location.reload();
 }
 
 function modalLoading(acc) {
@@ -394,17 +365,183 @@ function modalLoading(acc) {
     }
 }
 
-/**  ++++ Omite acentos para su facil consulta */
-function omitirAcentos(text) {
-    var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
-    var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
-    for (var i = 0; i < acentos.length; i++) {
-        text = text.replace(acentos.charAt(i), original.charAt(i));
+/** Configuracion de la tabla para segmentar*/
+function settingTableSeg(cloid){
+    let numcloid=cloid;
+    $('#addSegmentModal').removeClass('overlay_hide');
+    $('#listTable').DataTable ({
+        bDestroy: true,
+        dom: 'Brti',
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            { data: 'editable',  class: 'edit' },
+            { data: 'numpay',    class: 'sku' },
+            { data: 'frepay',    class: 'sku' },
+            { data: 'cantpay',   class: 'sku' },
+            { data: 'datepay',   class: 'date' },
+        ],
+    });
+
+    $('#addButtonSegm')
+        .unbind('click')
+        .on('click', function () {
+            // console.log('Agregar a TBL');
+            putSegments();
+        });
+
+    $('#btn_saveSegment')
+    .unbind('click')
+    .on('click', function (){
+        let user = Cookies.get('user').split('|');
+        let em = user[3];
+        $('#listTable tbody tr').each(function (v, u) {
+            let lnumpay=$($(u).find('td')[1]).text();
+            let lfrecpay=$($(u).find('td')[2]).text();
+            let lcantpay=$($(u).find('td')[3]).text();
+            let ldatepay=$($(u).find('td')[4]).text();
+
+            let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
+            console.log('TRUK ',truk);
+            build_data_structure(truk);
+        });
+    });
+
+    $('#addSegmentModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('#addSegmentModal').addClass('overlay_hide');
+
+    });
+}
+/**Agrega los datos segmentado en la tabla */
+function putSegments(){ 
+    let MontoTot=parseFloat($('#txtMontoTotSeg').val().replace(/,/g, ''));
+    let cantFrec =$('#txtFrecuency').val();
+    let cantSegm =$('#txtSegment').val();
+    let frecDesc =$(`#txtFrecuency option[value="${cantFrec}"]`).text();
+    let cantDesc =$(`#txtSegment option[value="${cantSegm}"]`).text();
+    let numpedido;
+    let montoInd= parseFloat(MontoTot) / parseFloat(cantSegm);
+    montoInd =montoInd.toFixed(2);
+
+    let unittime='';
+    switch (cantFrec) {
+        case '01':
+            unittime='w';
+            break;
+        case '2':
+            unittime='M';
+            break;
+        case '3':
+            unittime='Q';
+            break;
+        case '4':
+            unittime='y';
+            break;
+        default:
     }
-    return text;
+    // let hoy=moment(Date()).format('DD/MM/YYYY');
+    let Period = $('#txtPeriodPayed').val();
+    let DateStart = moment(Period,'DD/MM/YYYY').format('YYYY-MM-DD');
+
+    for (var i = 0; i < cantSegm; i++){
+        numpedido=parseFloat(i) + 1;
+        fechapago=moment([DateStart],'YYYY-MM-DD').add(numpedido, unittime).format('YYYY-MM-DD');
+        par = ` [{
+                    "montind"   : "${montoInd}",
+                    "numpay"    : "${numpedido}",
+                    "valfrec"   : "${frecDesc}",
+                    "datepay"   : "${fechapago}"
+                }]`;
+
+        // console.log(par);
+        fill_table(par);
+    }
 }
 
-/**  +++++ Cachando eventos   */
+function fill_table(par) { //** AGREGO ED */
+
+    par = JSON.parse(par);
+    let tabla = $('#listTable').DataTable();
+    tabla.row
+        .add({
+            editable: `<i class="fas fa-times-circle kill" id ="md${par[0].numpay}"></i>`,
+            numpay:     par[0].numpay,
+            frepay:     par[0].valfrec,
+            cantpay:    par[0].montind,
+            datepay:    par[0].datepay,
+        })
+        .draw();
+
+    $('#md' + par[0].numpay).parents('tr').attr('id', par[0].numpay).attr('data-content', 1);
+
+    $('.kill')
+        .unbind('click')
+        .on('click', function () {
+            tabla.row($(this).parent('tr')).remove().draw();
+    });
+}
+
+/** Guarda los datos de la tabla ***** */
+function build_data_structure(pr) {
+    // console.log(pr);
+    let el = pr.split('|');
+    let folid =  el[0];
+    let deadpay =  el[1];
+    let amoupay= el[2];
+    let pjtId =  el[3];
+    let cloid =  el[4];
+    let empid =  el[5];
+    let cusid =  '';
+    
+    par = `
+        [{  "folid" :  "${folid}",
+            "cusid" :  "${cusid}",
+            "amoupay" :  "${amoupay}",
+            "pjtId" : "${pjtId}",
+            "cloid" :  "${cloid}",
+            "empid" : "${empid}",
+            "deadpay" : "${deadpay}"
+        }]`;
+    // console.log(' Antes de Insertar', par);
+    save_exchange(par);
+}
+
+function save_exchange(pr) {
+    // console.log(pr);
+    var pagina = 'ClosedProyectChange/insertCollectPays';
+    var par = pr;
+    var tipo = 'html';
+    var selector = exchange_result;
+    fillField(pagina, par, tipo, selector);
+}
+
+function exchange_result(dt) {
+    // console.log('exchange_result',dt);
+    $('#listTable').DataTable().destroy; 
+    $('#addSegmentModal').addClass('overlay_hide');
+    
+}
+
+function setReport(dt) {
+    console.log(dt);
+    deep_loading('C');
+
+    let sal = dt.split('|')[0];
+    let usr = dt.split('|')[1];
+    let nme = dt.split('|')[2];
+    let hst = localStorage.getItem('host');
+    window.open(url + 'app/views/ClosedProyectChange/ClosedProyectChangeReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
+    window.location = 'ClosedProyectChange';
+}
+
+/**  ****** Cachando eventos   */
 function caching_events(ev) {
     // console.log(ev);
 }
@@ -423,343 +560,44 @@ function mkn(cf, tp) {
     return nm;
 }
 
-function settingChangeSerie(){
-    // console.log('setting');
-    $('#toSegmentModal').removeClass('overlay_hide');
-    $('#tblSegmentVal').DataTable({
-        // retrieve: true,
-        bDestroy: true,
-        // dom: 'Blfrtip',
-        order: [[2, 'asc']],
-        lengthMenu: [
-            [-1],
-            ['Todos'],
-        ],
-        buttons: [
-            {
-                // Boton imprimir contenido jjr
-                text: 'Select All OK',
-                className: 'btn-apply',
-                action: function (e, dt, node, config) {
-                    // printContent(prjid);
-                },
+function fillContent() {
+    let restdate='';
+    restdate= moment(Date())/* .subtract(1, 'days'); */
+    let fecha = moment(restdate).format('DD/MM/YYYY');
+    // let hoy=moment(Date()).format('DD/MM/YYYY');
+    $('#calendar').daterangepicker(
+        {
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+                ],
+                firstDay: 1,
             },
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
+            showCustomRangeLabel: false,
+            singleDatePicker: true,
+            startDate: fecha,
+            endDate: fecha,
+            minDate: fecha,
+            // maxDate:hoy,
         },
-        scrollY: 'calc(100vh - 290px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'serchange', class: 'edit'},
-            {data: 'serdetnumber', class: 'supply'},
-            {data: 'serdetsitu', class: 'sku'},
-        ],
-    });
-
-    $('#toSegmentModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
-            $('#tblSegmentVal').DataTable().destroy;
-        });
-}
-
-function settingTableSeg(){
-
-    $('#addSegmentModal').removeClass('overlay_hide');
-    $('#listTable').DataTable ({
-        bDestroy: true,
-        dom: 'Brti',
-        lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 200px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            { data: 'editable', class: 'edit' },
-            { data: 'loc',      class: 'product-name' },
-            { data: 'edoRep',   class: 'sku' },
-            { data: 'edo',      class: 'sku' },
-        ],
-    });
-    
-    $('#addRowTbl')
-        .unbind('click')
-        .on('click', function () {
-            putLocations();
-        });
-
-    $('#addSegmentModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            $('#addSegmentModal').addClass('overlay_hide');
-
-        }); 
-
-    $('#btn_save_locations')
-    .unbind('click')
-    .on('click', function (){
-        $('#listTable tbody tr').each(function (v, u) {
-            let loc=$($(u).find('td')[1]).text();
-            let edo =$(this).attr('id');
-            let  aux = $(this).attr('data-content');
-            let truk = `${loc}|${edo}`;
-            //console.log(truk);
-            console.log(aux);
-            if(aux == 1){
-                build_data_structure(truk);
-            }
-        });
-    });
+        function (start, end, label) {
+            $('#txtPeriodPayed').val(
+                // start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
+                start.format('DD/MM/YYYY') 
+            );
+            looseAlert($('#txtPeriodPayed').parent());
+        }
+    );
 
 }
-
-function putLocations(){ //** AGREGO ED */
-    let loc=$('#txtLocationExtra').val();
-    let edo =$('#txtEdosRepublic_2').val();
-    let name_edo =$(`#txtEdosRepublic_2 option[value="${edo}"]`).text(); // por alguna razon cada que se cierra el modal principal, y se reabre para generar un nuevo proyecto se genera una repeticion de datos
-    
-    par = `
-            [{
-                "support"  : "${edo}",
-                "loc"       : "${loc}",
-                "edoRep"       : "${name_edo}"
-            }]`;
-    
-    console.log(par);
-        
-        fill_table(par);
-        clean_selectors();
-    
-}
-
-function fill_table(par) { //** AGREGO ED */
-    // let largo = $('#listTable tbody tr td').html();
-    // largo == 'Ningún dato disponible en esta tabla' ? $('#listTable tbody tr').remove() : '';
-    par = JSON.parse(par);
-    let tabla = $('#listTable').DataTable();
-    tabla.row
-        .add({
-            editable: `<i class="fas fa-times-circle kill" id ="md${par[0].support}"></i>`,
-            loc:par[0].loc,
-            edoRep: par[0].edoRep,
-            edoRep: par[0].edoRep,
-        })
-        .draw();
-
-    $('#md' + par[0].support)
-        .parents('tr')
-        .attr('id', par[0].support)
-        .attr('data-content', 1);
-
-    $('.edit')
-    .unbind('click')
-    .on('click', function () {
-        tabla.row($(this).parent('tr')).remove().draw();
-    });
-
-}
-
-// function put_stores(dt) {
-//     if (dt[0].str_id > 0) {
-//         $.each(dt, function (v, u) {
-//             let H = ` <option value="${u.str_id}">${u.str_name}</option>`;
-//             $('#lstStore').append(H);
-//         });
-//     } else {
-//         $('#lstStore').html('');
-//     }
-
-//     $('#lstStore')
-//         .unbind('change')
-//         .on('change', function () {
-//             let strId = $(this).val();
-//             get_products(strId);
-//         });
-// }
-
-
-// function add_boton() {
-//     let H = `<br><button class="btn-add" id="addProduct">+ modificar montos</button>`;
-//     $('.frame_fix_top #tblControl thead th.product').append(H);
-
-//     $('.frame_fix_top #addProduct').on('click', function (e) {
-//         var posLeft = $('.frame_fix_top #addProduct').offset().left;
-//         var posTop = $('.frame_fix_top #addProduct').offset().top;
-
-//         let hg = parseFloat($('.frame_fix_top').css('height'));
-//         let pt = $('.frame_fix_top').offset().top;
-//         let pb = hg + pt;
-//         let lm = (pb / 4) * 3;
-
-//         let h1 = parseFloat($('.box_list_products').css('height'));
-
-//         if (posTop > lm) {
-//             posTop = posTop - (h1 - 20);
-//             $('.list_products').css({bottom: '26px'});
-//             $('.sel_product').css({top: h1 - 26 + 'px'});
-//         } else {
-//             $('.list_products').css({top: '20px'});
-//             $('.sel_product').css({top: 0});
-//         }
-
-//         $('.box_list_products')
-//             .css({top: posTop + 'px', left: posLeft + 'px'})
-//             .slideDown(200);
-//         $(`.list_products`).css({display: 'none'});
-
-//         $('.box_list_products')
-//             .unbind('mouseleave')
-//             .on('mouseleave', function () {
-//                 $('.box_list_products').slideUp(200);
-//                 $('.sel_product').text('');
-//             });
-
-//         $('#Products .sel_product')
-//             .unbind('keyup')
-//             .on('keyup', function () {
-//                 let text = $(this).text().toUpperCase();
-//                 sel_product(text);
-//             });
-//     });
-// }
-
-
-/** Actualiza los totales */
-// function update_totals() {
-//     let ttlrws = $('.frame_content').find('tbody tr').length;
-//     if (rgcnt == 1) {
-//         rgcnt = 0;
-//         caching_events('update_totals');
-
-//         let total = 0;
-//         $('.frame_content #tblControl tbody tr').each(function (v) {
-//             let pid = $(this).attr('id');
-//             if ($(this).children('td.quantity').html() != undefined) {
-//                 qtybs = parseInt(pure_num($(this).children('td.quantity').text()));
-//                 prcbs = parseFloat(pure_num($(this).children('td.price').text()));
-//                 costs = qtybs * prcbs;
-
-//                 $('#' + pid)
-//                     .children('td.cost')
-//                     .html(mkn(costs, 'n'));
-
-//                 total += costs;
-//             }
-//         });
-//         $('#total').html(mkn(total, 'n'));
-//         $('#ttlproducts').html(ttlrws);
-//     }
-// }
-
-// function saleApply() {
-//     deep_loading('O');
-
-//     if (folio == undefined) {
-//         var pagina = 'ClosedProyectChange/NextExchange';
-//         var par = '[{"par":""}]';
-//         var tipo = 'html';
-//         var selector = putNextExchangeNumber;
-//         fillField(pagina, par, tipo, selector);
-//     } else {
-//         let ky = validator();
-//         if (ky == 1) {
-//             let pix = $('#lstProject').val();
-//             console.log(pix);
-//             let payForm = $('#lstPayForm').val();
-//             let invoice = $('#txtInvoice').val();
-//             let customer = $('#txtCustomer').val().toUpperCase();
-//             let pjtName = pix == '' ? '' : proj[pix - 1].pjt_name.toUpperCase();
-//             let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
-//             let strId = $('#lstStore').val();
-
-//             let par = `
-//             [{
-//                 "salPayForm"        : "${payForm}",
-//                 "salNumberInvoice"  : "${invoice}",
-//                 "salCustomerName"   : "${customer}",
-//                 "pjtName"           : "${pjtName}",
-//                 "strId"             : "${strId}",
-//                 "pjtId"             : "${pjtId}",
-//                 "comId"             : "${comids}"
-//             }]`;
-
-//             console.log(par);
-
-//             // console.log(par);
-//             clean_required();
-//             let rws = $('.frame_content #tblControl tbody tr').length;
-//             if (rws > 0) {
-//                 var pagina = 'ProductsSalables/SaveSale';
-//                 var tipo = 'html';
-//                 var selector = saleDetailApply;
-//                 fillField(pagina, par, tipo, selector);
-//             } else {
-//                 alert('Tabla vacia');
-//                 deep_loading('C');
-//             }
-//         } else {
-//             deep_loading('C');
-//         }
-//     }
-// }
-
-
-// function putNextExchangeNumber(dt) {
-//     console.log(dt);
-//     folio = dt;
-//     saleApply();
-// }
-
-
-
-// function validator() {
-//     var vl = 1;
-
-//     var form = $('#formSales .required');
-
-//     form.each(function () {
-//         var k = $(this).val();
-//         if (k == '') {
-//             $(this).addClass('forValid');
-//             $(this).parent().append('<i class="fas fa-times-circle novalid"></i>');
-//             vl = 0;
-//         }
-//     });
-
-//     return vl;
-// }
-
-// function clean_required() {
-//     $('.required').removeClass('forValid');
-//     $('.required').parent().children('.novalid').remove();
-// }
-
-// function saveComment(scc, mid, cmm) {
-//     let par = `
-//     [{
-//         "section"       : "${scc}",
-//         "sectnId"       : "${mid}",
-//         "comment"       : "${cmm}"
-//     }]`;
-
-//     var pagina = 'ClosedProyectChange/SaveComments';
-//     var tipo = 'html';
-//     var selector = setSaveComment;
-//     fillField(pagina, par, tipo, selector);
-// }
-
-// function setSaveComment(dt) {
-//     comids.push(dt);
-// }
 
