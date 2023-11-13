@@ -673,7 +673,7 @@ public function promoteToProject($params)
         $qry1 = "SELECT * FROM ctt_projects_content AS pc 
                  INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                  INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                 WHERE pj.pjt_id = $pjtId;";
+                 WHERE pj.pjt_id = $pjtId AND pd.srv_id IN (1,4);";
         return $this->db->query($qry1);
        
      }

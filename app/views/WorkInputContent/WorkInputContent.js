@@ -326,7 +326,7 @@ function putFreelances(dt) {
 function putDetailsProds(dt) {
     let tabla = $('#tblAsigInput').DataTable();
     tabla.rows().remove().draw();
-    if (dt[0].pjtpd_id != '0')
+    
     if (dt[0].pjtpd_id != '0')
     {
         let valstage='';// 11-10-23

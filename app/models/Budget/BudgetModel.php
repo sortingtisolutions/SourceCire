@@ -676,15 +676,15 @@ public function saveBudgetList($params)
 /** ==== Obtiene el contenido del proyecto =============================================================  */
     public function GetProjectContent($params)
     {
-        $pjtId        = $this->db->real_escape_string($params['pjtId']);
-        $verId        = $this->db->real_escape_string($params['verId']);
+        $pjtId   = $this->db->real_escape_string($params['pjtId']);
+        $verId   = $this->db->real_escape_string($params['verId']);
 
         $qry = "SELECT *               
             FROM ctt_projects_content AS pc
             INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
             INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
             INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-            WHERE pc.ver_id = $verId;";
+            WHERE pc.ver_id = $verId AND pd.srv_id IN (1,4);";
         return $this->db->query($qry);
     }
 

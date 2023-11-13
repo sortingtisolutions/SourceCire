@@ -132,6 +132,34 @@
             </div>
         </div>
 
+
+        <div class="container-fluid ">
+            <div class="contenido">
+                <div class="row mvst_group">
+                    <div class="mvst_list projectClosed">
+                        <div class="row rowTop objHidden">
+                        <h1>Resultado de la segunda consulta</h1>
+                        </div>
+                        <table class="display compact nowrap"  id="tblsegundo" style="min-width: 1480px">
+                            <thead>
+                                <tr>
+                                    <th style="width:  30px"    class="cn"></th>
+                                    <th style="width:  250px"   class="lf">Nombre</th>
+                                    <th style="width:  250px"   class="lf">Clasificacion</th>
+                                    <th style="width:  100px"   class="cn">Costo Total</th>
+                                    <th style="width:  100px"   class="cn">Forma de Pago</th>
+                                    <th style="width:  200px"   class="lf">Cliente</th>
+                                    <th style="width:  300px"   class="lf">Comentarios</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         </div>
     </div>
     

@@ -373,6 +373,7 @@ function putDetailsProds(dt) {
             $(rownode).css("background-color", valstage);
  
         });
+        // tabla.row('.selected');
         activeIcons();
     }
 }
@@ -484,7 +485,6 @@ function settingSeries(dt){
 }
 function readAceptTable() {
     $('#tblSerie tbody tr').each(function (v, u) {
-        
         // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
         let serId = $(this).attr('id');
         let serdata = $(this).attr('data');
@@ -494,8 +494,8 @@ function readAceptTable() {
         setTimeout(function(){
             console.log('');
         }, 3000);
-        
     });
+    getDetailProds(prjid,em);
 }
 
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
@@ -564,7 +564,7 @@ function activeIconsSerie() {
                 $('#tblSerie').DataTable().destroy;
                 aux=0;
             }
-               
+            getDetailProds(prjid,em);     
         });
 }
 
@@ -584,7 +584,7 @@ function myCheck(dt){
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
-    getDetailProds(prjid,em);
+    // getDetailProds(prjid,em);
     
 }
 

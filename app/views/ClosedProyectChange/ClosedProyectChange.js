@@ -179,7 +179,7 @@ function fill_purchase(dt) {
             $('#txtMontoDies').val(montdies);
             $('#txtMontoDesc').val(montdesc);
             $('#txtMontoTotal').val(monttota);
-        let prdNm="Agrega nuevos valores de cierre al proyecto: " + {$nomproy}
+        let prdNm="Agrega nuevos valores de cierre al proyecto: " + nomproy + "";
         $('#newValuesModal').removeClass('overlay_hide');
         $('.overlay_closer .title').html(prdNm);
         activeProjectsFunctions();
