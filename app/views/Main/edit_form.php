@@ -21,6 +21,7 @@
       <input type="hidden" name="id" value="<?= $info_client->id ?>">
       <button type="submit" class="btn btn-primary">Submit</button>
       <a class="btn btn-default" href="<?= FOLDER_PATH . '/main/clientsList' ?>" role="button">Cancel</a>
+      
     </form>
   </div>
 </div>

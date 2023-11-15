@@ -37,14 +37,14 @@ class PerfilUserModel extends Model
 						  "mod_description"=>$row[3]);
 			array_push($lista, $item);
 		}
-		//print_r($lista);
 		return $lista;
 	}
 
 // Optiene los Perfiles existentes
 	public function GetPerfiles()
 	{
-		$qry = "SELECT prf_id,prf_code, prf_name, prf_description from ctt_profiles where prf_status = 1;";
+		$qry = "SELECT prf_id,prf_code, prf_name, prf_description 
+		from ctt_profiles where prf_status = 1;";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -71,7 +71,6 @@ class PerfilUserModel extends Model
 		return $modulesAsing;
 	}
 
-	
 //Guarda perfil
 	public function SavePerfil($params)
 	{
@@ -135,8 +134,6 @@ class PerfilUserModel extends Model
 		return $estatus;
 	}
 
-
-
 	//borra perfil
 	public function DeletePerfil($params)
 	{
@@ -154,8 +151,6 @@ class PerfilUserModel extends Model
 			}
 		return $estatus;
 	}
-
-
 
 	public function GetDataPerfil($params)
 	{

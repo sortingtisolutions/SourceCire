@@ -3024,16 +3024,7 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-    /* if (acc == 'S') {
-        $('.invoice__modalBackgound').fadeIn('slow');
-        $('.invoice__loading')
-            .slideDown('slow')
-            .css({ 'z-index': 401, display: 'flex' });
-    } else {
-        $('.invoice__loading').slideUp('slow', function () {
-            $('.invoice__modalBackgound').fadeOut('slow');
-        });
-    } */
+   
     if (acc == 'H') {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
@@ -3146,7 +3137,6 @@ function cleanFormat() {
     cleanVersionList();
     cleanTotalsArea();
 }
-
 
 function getDataMice() {
     let pjtId = $('.version_current').attr('data-project');
@@ -3366,7 +3356,6 @@ function OrderMice(m) {
 /* DEFINE LOS PERIODOS DE CADA SERIE DEL PRODUCTO SELECCIONADO              */
 /* ************************************************************************ */
 
-/* ==== Define los periodos de cada serie ======================== */
 function periodProduct(prd,nameProd) {
     let prdId = prd.substring(3, 10);
     let pjtId = $('.version_current').attr('data-project');

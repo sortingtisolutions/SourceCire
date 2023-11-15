@@ -186,11 +186,7 @@ function fillCustomers(ft) {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
             if (u.prd_level != cod) {
-               /*  pack = u.prd_level == 'K' ? 'fas' : 'far';
-                let docInvo = `<span class="invoiceView" id="F${u.cus_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
-                let invoice = u.cus_id == 0 ? '' : docInvo;
-                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11); */
-/// agregar boton de elimniar
+              
                 var H = `
                 <tr id="${u.cus_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
@@ -226,6 +222,7 @@ function fillCustomers(ft) {
 
 /** +++++  coloca los tipos de calificacion */
 function putScores(dt) {
+    console.log('putScores',dt);
     if (dt[0].scr_id != '0') {
         let cinId = dt[0].scr_id;
         $.each(dt, function (v, u) {
@@ -247,18 +244,7 @@ function putCustType(dt) {
 
 /** +++++  Activa los iconos */
 function activeIcons() {
-    /*  $('.toLink')
-        .unbind('click')
-        .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
-            let qty = $(this).parent().attr('data-content').split('|')[2];
-            let pkt = $(this).parent().attr('data-content').split('|')[3];
-            let pkn = $(this).parent().attr('data-content').split('|')[1];
-            if (qty > 0) {
-                getSeries(prd);
-            }
-        });
- */
+    
     $('.modif')
         .unbind('click')
         .on('click', function () {
@@ -415,11 +401,17 @@ function saveEditCustomer() {
         let cusPhone = $('#txtCusPhone').val();
         let cusAdrr = $('#txtCusAdrr').val();
         let cusRFC = $('#txtCusRFC').val();
-        let TypeProd = $(`#txtTypeProd`).val();
+        let TypeProd = $(`#txtTypeProd option:selected`).val() == 0
+            ? '' : $(`#txtTypeProd option:selected`).text().split('-')[0];
+        let TypeProdT = $(`#txtTypeProd option:selected`).val() == 0
+            ? '' : $(`#txtTypeProd option:selected`).text().split('-')[1];
+
         let cusQualy =
             $(`#txtQualy option:selected`).val() == 0
-                ? ''
-                : $(`#txtQualy option:selected`).text().split('-')[0];
+                ? '' : $(`#txtQualy option:selected`).text().split('-')[0];
+        // let cusQualyT =
+        //         $(`#txtQualy option:selected`).val() == 0
+        //         ? '' : $(`#txtQualy option:selected`).text().split('-')[1];
         
         let cusStat = $('#txtCusStat').children('i').attr('data_val');
         let cusICod = $('#txtCusCodI').val();
@@ -433,7 +425,9 @@ function saveEditCustomer() {
         let cusCont = $(`#txtCusCont`).val();
         let cusContEmail = $('#txtContEmail').val();
         let cusContPhone = $(`#txtContPhone`).val();
-        let cusWorkC = $(`#txtWorkC`).val();
+        let cusWorkC = $(`#txtWorkC option:selected`).val() == 0
+                ? '' : $(`#txtWorkC option:selected`).text().split('-')[0];
+
         let cusInvoi = $(`#txtInvoi`).val();
 
         var par = `
@@ -460,24 +454,26 @@ function saveEditCustomer() {
                     "cusInvoi" :    "${cusInvoi}"
                 }]
             `;
+            console.log('par',par);
                 // ACTUALIZA EL REGISTRO DE LA TABLA QUE SE MODIFICO
             let el = $(`#tblCustomers tr[id="${cusId}"]`);
                 $(el.find('td')[1]).text(cusName);
                 $(el.find('td')[2]).text(cusEmail);
                 $(el.find('td')[3]).text(cusPhone);
-                $(el.find('td')[5]).text(cusAdrr);
-                $(el.find('td')[6]).text(cusRFC);
-                $(el.find('td')[7]).text(TypeProd);
-                $(el.find('td')[8]).text(cusQualy);
-                $(el.find('td')[9]).text(cusStat);
-                $(el.find('td')[10]).text(cusICod);
-                $(el.find('td')[11]).text(cusSatC);
-                $(el.find('td')[12]).text(cusDirector);
-                $(el.find('td')[13]).text(cusLegRepre);
-                $(el.find('td')[14]).text(cusLegPhone);
-                $(el.find('td')[15]).text(cusLegEmail);
-                $(el.find('td')[16]).text(cusContEmail);
-                $(el.find('td')[17]).text(cusContPhone);
+                $(el.find('td')[4]).text(cusAdrr);
+                $(el.find('td')[5]).text(cusRFC);  //5
+                $(el.find('td')[6]).text(cusQualy);
+                $(el.find('td')[7]).text(TypeProdT);
+                $(el.find('td')[8]).text(cusICod);
+                $(el.find('td')[9]).text(cusSatC);
+                $(el.find('td')[10]).text(cusStat);  //10
+                $(el.find('td')[11]).text(cusDirector);
+                $(el.find('td')[12]).text(cusLegRepre);
+                $(el.find('td')[13]).text(cusLegEmail);
+                $(el.find('td')[14]).text(cusLegPhone); 
+                $(el.find('td')[15]).text(cusCont);  //15
+                $(el.find('td')[16]).text(cusContPhone);
+                $(el.find('td')[17]).text(cusContEmail);
                 $(el.find('td')[18]).text(cusWorkC);
                 $(el.find('td')[19]).text(cusInvoi);
 
@@ -712,45 +708,8 @@ function putInvoice(dt) {
 }
 
 function putInvoiceList(dt) {
-    /* //console.log(dt);
-    var fc = $('#txtDocIdSerie').offset();
-    $('#listInvoice .list-items').html('');
-    $('#listInvoice').slideUp('100', function () {
-        $('#listInvoice .list-items').html('');
-    });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.doc_id}" data_serie="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
-        $('#listInvoice .list-items').append(H);
-    });
-
-    $('#txtDocIdSerie').on('focus', function () {
-        $('#listInvoice').slideDown('slow');
-    });
-
-    $('#listInvoice').on('mouseleave', function () {
-        $('#listInvoice').slideUp('slow');
-    });
-
-    $('#txtDocIdSerie').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
-            $('#listInvoice').slideUp(100);
-        } else {
-            $('#listInvoice').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_invoice(res);
-    });
-
-    $('#listInvoice .list-item').on('click', function () {
-        let prdNm = $(this).html();
-        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
-        $('#txtDocIdSerie').val(prdNm);
-        $('#txtIdInvoices').val(prdId);
-        $('#listInvoice').slideUp(100);
-        //validator();
-    }); */
+    console.log(dt);
+   
 }
 function omitirAcentos(text) {
     var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
@@ -793,27 +752,4 @@ function getOptionYesNo() {
     renglon = "<option id='2' value='2'>No</option> ";
     $('#txtWorkC').append(renglon);
  
-    /* $('#selectAnticipo').html("");
-    renglon = "<option id='2'  value=''></option> ";
-    $('#selectAnticipo').append(renglon);
-    renglon = "<option id='1'  value='Si'>Si</option> ";
-    $('#selectAnticipo').append(renglon);
-    renglon = "<option id='0'  value='No'>No</option> ";
-    $('#selectAnticipo').append(renglon);
- 
-    $('#selectCredito').html("");
-    renglon = "<option id='2'  value=''></option> ";
-    $('#selectCredito').append(renglon);
-    renglon = "<option id='1'  value='Si'>Si</option> ";
-    $('#selectCredito').append(renglon);
-    renglon = "<option id='0'  value='No'>No</option> ";
-    $('#selectCredito').append(renglon);
- 
-    $('#selectFormaPago').html("");
-    renglon = "<option id='2'  value=''></option> ";
-    $('#selectFormaPago').append(renglon);
-    renglon = "<option id='1'  value='Si'>Si</option> ";
-    $('#selectFormaPago').append(renglon);
-    renglon = "<option id='0'  value='No'>No</option> ";
-    $('#selectFormaPago').append(renglon); */
  }

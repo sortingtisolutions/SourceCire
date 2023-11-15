@@ -23,7 +23,23 @@ class CollectAccountsController extends Controller
 		$this->render(__CLASS__, $params);
 	}
 
+	public function getWayToPay($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getWayToPay($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"wtp_id":"0"}]';	
+        }
+        echo $res;
 
+    } 
 	// Lista los proyectos
 	public function listProjects($request_params)
 	{
@@ -68,4 +84,14 @@ class CollectAccountsController extends Controller
 		$res = $result;
 		echo $res;
     }
+
+	public function insertPayAplied($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->insertPayAplied($request_params, $params);
+        $res = $result;
+        // $pjtId  = $this->model->PromoteProject($request_params);
+
+        echo $res;
+    } 
 }

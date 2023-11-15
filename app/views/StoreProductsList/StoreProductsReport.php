@@ -20,17 +20,17 @@
     $dato = explode('@', $getFile);
     //  var_dump(  $dato1 );
   
-          foreach ($dato as $dt){
-            //  echo $dt . '<br>';
-              $el = explode('|', $dt);
+        foreach ($dato as $dt){
+        //  echo $dt . '<br>';
+            $el = explode('|', $dt);
 
-              $numProject = $el[1];
-              $nameProject = $el[2];
-              $version = $el[4];
-              $freelance = $el[5];
-              $date = $el[3];
-  
-          }
+            $numProject = $el[1];
+            $nameProject = $el[2];
+            $version = $el[4];
+            $freelance = $el[5];
+            $date = $el[3];
+
+        }
 
     $html = '
     <header>

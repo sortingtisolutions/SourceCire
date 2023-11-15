@@ -7,7 +7,7 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    //folio = getFolio();
+    // folio = getFolio();
     setting_table();
     get_Proyectos();
     get_coins();
@@ -97,7 +97,7 @@ function setting_datepicket(sl, di, df) {
     );
 }
 
-/** ++++  Setea la tabla ++++++ */
+/** ******  Setea la tabla ****** */
 function setting_table() {
     let title = 'Productos en subarrendo';
     let filename =

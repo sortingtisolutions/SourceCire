@@ -41,12 +41,8 @@
               $res =  '[{"mnu_id":"0"}]';	
           }
 
-          // $params = array('unidad' => $res);
-          // $this->render(__CLASS__, $params);
-
           echo $res;
     }
-
 
   // Listado de elementos del menu
     public function lista_menu($request_params)

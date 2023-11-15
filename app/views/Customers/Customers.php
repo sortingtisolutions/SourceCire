@@ -17,9 +17,7 @@
                     
                     <div class="row rowTop">
                         <h1>Listado de Clientes con un Proyecto</h1>
-                        <!-- <select id="txtCategoryList" class="topList">
-                            <option value="0">SELECCIONA CATÁLOGO</option>
-                        </select> -->
+
                     </div>
                     <div id="dvProducts"></div>
                     <table class="display nowrap"  id="tblCustomers" style="min-width: 1700px; font-size: 0.7rem">
@@ -121,10 +119,10 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Calificación del Cliente: </td>
                         <td class="data">
-                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:200px">
+                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:300px">
                                 <option value="0">Selecciona Calificación</option>
                             </select>
-                            <span class="fail_note hide"><!-- <i class="fas fa-arrow-left"></i> --> Campo requerido</span>
+                            <span class="fail_note hide"> Campo requerido</span>
                             <span class="intructions">Calificacion segun historial del cliente</span>
                         </td>
                     </tr>
@@ -228,41 +226,6 @@
                             <span class="intructions">Datos de la ultima Factura</span>
                         </td>
                     </tr>
-                    
-                    <!-- <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Cliente o Prospecto: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:50px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">P - Prospecto / C - Cliente con Proyecto</span>
-                        </td>
-                    </tr> -->
-                    
-                    
-                    <!-- <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Representante Legal: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusLegalR" name="txtcusLegalR" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Representante Legal</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Acta Legal: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusLegalA" name="txtcusLegalA" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Nombre del documento legal</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Contrato: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusContr" name="txtcusContr" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Numero de contrato</span>
-                        </td>
-                    </tr> -->
                 </table>
             </div>
         </div>

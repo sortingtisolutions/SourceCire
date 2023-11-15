@@ -183,12 +183,6 @@ class WorkInputContentController extends Controller
             $ActSeries = $this->model->ActualizaSeries($paramsdet);
             
         }
-       /*  if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"ser_id":"0"}]';
-        } */
-        //echo $result; 
         echo $serie;
     }
 
@@ -224,23 +218,12 @@ class WorkInputContentController extends Controller
         echo $result;
     }
 
-    // Obtiene datos del producto seleccionado
-   /*  public function getSelectSerie($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->getSelectSerie($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
+    public function RegisterGetIn($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->GetInProject($request_params);
+            
+            echo $result;
         }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"ser_id":"0"}]';
-        }
-        echo $res;
-    } */
-
-
+ 
 }

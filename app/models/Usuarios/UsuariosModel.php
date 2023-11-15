@@ -10,14 +10,14 @@ class UsuariosModel extends Model
 
 
 // Optiene los Usuaios existentes *****
-	public function GetUsuarios()
+	public function GetUsuarios($params)
 	{
 		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, 
 				p.prf_name, u.usr_dt_registry, u.usr_dt_last_access, p.prf_id
 				FROM ctt_users as u
-				INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
+				LEFT JOIN ctt_employees as e on e.emp_id = u.emp_id
 				LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
-				WHERE u.usr_status = '1' and u.emp_id>1;";
+				WHERE u.usr_status = '1' and u.emp_id > '1';";
 		return $this->db->query($qry);
 	}
 
@@ -96,13 +96,7 @@ class UsuariosModel extends Model
 				      values('$UserNameUsuario','$pass',NOW(),'$lastid', '$idPerfil' ,1);";
 				$this->db->query($qry);
 
-				//optiene id de Usuario insertado
-				/* $qry = "SELECT MAX(usr_id) AS id FROM ctt_users;";
-				$result = $this->db->query($qry);
-				if ($row = $result->fetch_row()) {
-					$lastid = trim($row[0]);
-				}
- */				$lastidUser = $this->db->insert_id;
+				$lastidUser = $this->db->insert_id;
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
@@ -160,7 +154,6 @@ class UsuariosModel extends Model
 					$this->db->query($qry);
 	
 				} else {
-					
 					//Actualiza Usuario
 					$qry = "UPDATE ctt_users 
 							SET usr_username = '$UserNameUsuario',
@@ -169,8 +162,6 @@ class UsuariosModel extends Model
 					$this->db->query($qry);
 	
 				}
-				
-				
 				//Actualiza Empledo
 				$qry = "UPDATE ctt_employees
 						SET emp_number = '$NumEmpUsuario',
@@ -209,6 +200,9 @@ class UsuariosModel extends Model
 						SET usr_status = 0
 						WHERE usr_id in (".$params['IdUsuario'].");";
 				$this->db->query($qry);
+
+				
+
 				$estatus = 1;
 			} catch (Exception $e) {
 				$estatus = 0;

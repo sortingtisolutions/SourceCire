@@ -152,15 +152,6 @@ function actionButtons() {
             strnme = ctnme;
             // console.log(strId, quant, ctnme);
             if (quant > 0) {
-                // let fechaini = new Date();
-                // console.log('Hora click Stock', fechaini);
-                // deep_loading('O');
-
-                // var pagina = 'Almacenes/listSeries';
-                // var par = `[{"strId":"${strId}"}]`;
-                // var tipo = 'json';
-                // var selector = putSeries;
-                // fillField(pagina, par, tipo, selector);
                 setting_modalseries(strId);
             }
         });
@@ -334,82 +325,6 @@ function putSeries(dt) {
     setting_modalseries();
     build_modal_serie(dt);
 
-    // let title = 'Detalle de Almacen';
-    // let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    // $('#ExisteStrModal').removeClass('overlay_hide');
-    // $('#tblStrSerie').DataTable({
-    //     bdestroy: true,
-    //     order: [[1, 'asc']],
-    //     dom: 'Blfrtip',
-    //     lengthMenu: [
-    //         [200, 500, -1],
-    //         [200, 500, 'Todos'],
-    //     ],
-    //     buttons: [
-    //         {
-    //             //Botón para Excel
-    //             extend: 'excel',
-    //             footer: true,
-    //             title: title,
-    //             filename: filename,
-
-    //             //Aquí es donde generas el botón personalizado
-    //             text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-    //         },
-    //         {
-    //             //Botón para descargar PDF
-    //             extend: 'pdf',
-    //             footer: true,
-    //             title: title,
-    //             filename: filename,
-
-    //             //Aquí es donde generas el botón personalizado
-    //             text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-    //         },
-    //         // {
-    //         //     //Botón para imprimir
-    //         //     extend: 'print',
-    //         //     footer: true,
-    //         //     title: title,
-    //         //     filename: filename,
-
-    //         //     //Aquí es donde generas el botón personalizado
-    //         //     text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-    //         // },
-    //         {
-    //             text: 'Borrar seleccionados',
-    //             // className: 'btn-apply hidden-field',
-    //         },
-    //     ],
-    //     pagingType: 'simple_numbers',
-    //     language: {
-    //         url: 'app/assets/lib/dataTable/spanish.json',
-    //     },
-    //     scrollY: 'calc(100vh - 290px)',
-    //     scrollX: true,
-    //     fixedHeader: true,
-    //     // createdRow: function (nRow, aData, iDataIndex) {
-    //     //     $(nRow).attr('id', aData['subcatid']);
-    //     // },
-    //     // processing: true,
-    //     // serverSide: true,
-    //     // ajax: {url: 'Subcategories/tableSubcat???', type: 'POST'},
-    //     columns: [
-    //         {data: 'sermodif', class: 'edit'},
-    //         {data: 'produsku', class: 'sku'},
-    //         {data: 'serlnumb', class: 'product-name'},
-    //         {data: 'dateregs', class: 'sku'},
-    //     ],
-    // });
-
-    // $('#ExisteStrModal .btn_close')
-    //     .unbind('click')
-    //     .on('click', function () {
-    //         $('.overlay_background').addClass('overlay_hide');
-    //         $('#tblStrSerie').DataTable().destroy();
-    //     });
-
-    // build_modal_serie(dt);
 }
 
 function setting_modalseries(strId) {
@@ -451,16 +366,6 @@ function setting_modalseries(strId) {
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
             },
-            // {
-            //     //Botón para imprimir
-            //     extend: 'print',
-            //     footer: true,
-            //     title: title,
-            //     filename: filename,
-
-            //     //Aquí es donde generas el botón personalizado
-            //     text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-            // },
             {
                 text: 'Borrar seleccionados',
                 // className: 'btn-apply hidden-field',

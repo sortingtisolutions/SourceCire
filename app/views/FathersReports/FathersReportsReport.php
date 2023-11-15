@@ -32,8 +32,6 @@ $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
 
-
-
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 
 $qry2 = "SELECT * FROM ctt_projects WHERE pjt_id='$proj_id'";

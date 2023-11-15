@@ -8,17 +8,6 @@ class StoreProductsListInModel extends Model
       parent::__construct();
     }
 
-// Listado de Tipos de movimientos
-/* 	public function listExchange()
-	{
-		$qry = "SELECT ex1.ext_id, ex1.ext_code, ex1.ext_type, ex1.ext_description, ex1.ext_link,
-						ex2.ext_id as ext_id_a, ex2.ext_code as ext_code_a, ex2.ext_type as ext_type_a, ex2.ext_description as ext_description_a
-				FROM ctt_type_exchange AS ex1
-				LEFT JOIN ctt_type_exchange AS ex2 ON ex2.ext_link = ex1.ext_id 
-				WHERE ex1.ext_type = 'S';";
-		return $this->db->query($qry);
-	} */
-
 // Listado de Almacenes ****
     public function listStores()
     {
@@ -54,19 +43,6 @@ class StoreProductsListInModel extends Model
 		return $this->db->query($qry);
 	}
 
-// Actualizala cantidad de productos en un almacen destino
-	public function UpdateProducts($param)
-	{
-		// $idPrd 			= $this->db->real_escape_string($param['prd']);
-		// $idStrSrc 		= $this->db->real_escape_string($param['str']);
-		// $quantity 		= $this->db->real_escape_string($param['qty']);
-
-		// $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} 
-		// WHERE str_id = {$idStrSrc} and  ser_id = {$idPrd};";
-		// return $this->db->query($qry);
-	}
-
-
 // Agrega el registro de relación almacen producto
 	public function InsertProducts($param)
 	{
@@ -74,7 +50,8 @@ class StoreProductsListInModel extends Model
 		$idStrSrc 		= $this->db->real_escape_string($param['str']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 
-		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) VALUES ($quantity, $idStrSrc, $idPrd);";
+		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) 
+		VALUES ($quantity, $idStrSrc, $idPrd);";
 		return $this->db->query($qry);
 	}
 

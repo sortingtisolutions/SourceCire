@@ -5,12 +5,13 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
 	<div class="contenido">
 		<div class="row mvst_group">
 				<!-- Start área de formularios -->
-				<div class="mvst_panel">
+				<div class="mvst_panel" style="background-color: #E8DC9F">
 					<div class="form-group">
 						<h4 id="titulo">Nuevo Usuario</h4> 
 						 

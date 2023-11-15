@@ -25,6 +25,7 @@ class ProjectCancelModel extends Model
         return $this->db->query($qry);
 
     }
+    
 /** Habilita el projecto                                                           ====  */    
     public function EnableProject($params)
     {
@@ -50,7 +51,6 @@ class ProjectCancelModel extends Model
         return $this->db->query($qry);
     }
 
-    
 /** Restaura las series del proyecto a productos disponibles                       ====  */
     public function restoreSeries($params)
     {

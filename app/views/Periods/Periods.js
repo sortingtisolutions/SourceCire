@@ -342,12 +342,14 @@ function getFullProjectRangePeriod() {
     var selector = putFullProjectRangePeriod;
     fillField(pagina, par, tipo, selector);
 }
+
 function putFullProjectRangePeriod(dt) {
     fechaInicial = dt[0].pjt_date_start;
     fechaFinal = dt[0].pjt_date_end;
 
     getSerieRangePeriod();
 }
+
 function getSerieRangePeriod() {
     let pjtId = $('#periodBox').attr('data-project');
     let prdId = $('#periodBox').attr('data-product');

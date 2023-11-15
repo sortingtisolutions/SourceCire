@@ -5,7 +5,6 @@
 
 	class ProveedoresController extends Controller
 	{
-
 		private $session;
 		public $model;
 

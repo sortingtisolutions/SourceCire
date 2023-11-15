@@ -21,8 +21,11 @@ $qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
         INNER JOIN ctt_stores AS st ON st.str_id = sl.str_id
         LEFT JOIN ctt_projects As pj ON pj.pjt_id = sl.pjt_id
         WHERE sl.sal_id = $SalId;";
+
 $res = $conn->query($qry);
+
 $conn->close();
+
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }

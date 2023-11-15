@@ -8,7 +8,6 @@ class AssignProjectsController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new AssignProjectsModel();
@@ -93,7 +92,7 @@ class AssignProjectsController extends Controller
         echo $res;
     }
     
-    // Lista los proyectos
+    // Lista los usuarion en los proyectos
     public function listUsersOnProj($request_params)
     {
         $params =  $this->session->get('user');

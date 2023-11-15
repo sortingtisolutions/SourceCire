@@ -97,13 +97,7 @@ class AlmacenesModel extends Model
 	public function listSeries_old($params)
     {
         $prodId = $this->db->real_escape_string($params['strId']);
-        /* $qry = "SELECT  se.ser_id, se.ser_sku, se.ser_serial_number, 
-						date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
-						se.ser_cost, se.ser_situation, se.ser_stage, se.ser_status,se.ser_comments
-				FROM ctt_series as se 
-				LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
-				WHERE sp.str_id IN ($prodId) AND sp.stp_quantity > 0
-				ORDER BY se.ser_sku;"; */
+        
 			$qry = "SELECT prd.prd_sku, prd.prd_name, prd.prd_level, sum(sp.stp_quantity) as cantidad
 			FROM ctt_products as prd
 			INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
@@ -126,15 +120,6 @@ class AlmacenesModel extends Model
 
 	public function listSeries($params)
     {
-        // $strId = $this->db->real_escape_string($params['strId']); where sp.str_id IN (3) and se.ser_status=1 AND sp.stp_quantity>0
-
-		// $table = "SELECT se.ser_id as serid, prd.prd_sku as produsku, prd.prd_name as serlnumb, sum(sp.stp_quantity) as dateregs
-		// 			FROM ctt_products as prd
-		// 			INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
-		// 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
-		// 			WHERE sp.str_id IN (3) and se.ser_status=1 AND sp.stp_quantity>0
-		// 			group by prd.prd_sku, prd.prd_name, prd.prd_level
-		// 			ORDER BY se.ser_sku;";  
 	
 		$table = 'ctt_vw_stores_regiter';  
 					

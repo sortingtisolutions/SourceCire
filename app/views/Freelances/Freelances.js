@@ -17,7 +17,7 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getFreelances();
-        getScores();
+        // getScores();
         getCustType();
         getOptionYesNo();
         
@@ -34,13 +34,13 @@ function getFreelances() {
 }
 
 // Solicita las monedas
-function getScores() {
-    var pagina = 'Freelances/listScores';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putScores;
-    fillField(pagina, par, tipo, selector);
-}
+// function getScores() {
+//     var pagina = 'Freelances/listScores';
+//     var par = '[{"parm":""}]';
+//     var tipo = 'json';
+//     var selector = putScores;
+//     fillField(pagina, par, tipo, selector);
+// }
 
 // Solicita las monedas
 function getCustType() {
@@ -53,7 +53,7 @@ function getCustType() {
 
 /** +++++  Obtiene el cliente seleccionado */
 function getSelectFreelance(prdId) {
-    console.log('getSelectFreelance',prdId);
+    // console.log('getSelectFreelance',prdId);
     var pagina = 'Freelances/getSelectFreelance';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
@@ -63,7 +63,6 @@ function getSelectFreelance(prdId) {
 
 function getSelectFreelanceNew(prdId) {
     //console.log(prdId);
-    
     var pagina = 'Freelances/getSelectFreelance';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
@@ -164,18 +163,11 @@ function settingTable() {
 
 function fillFreelances(ft) {
     $('#tblFreelances tbody').html('');
-
     var cod = ft == '1' ? 'A' : '';
-    console.log(prds);
+    // console.log(prds);
     if (prds[0].free_id != '0') {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
-            //if (u.prd_level != cod) {
-               /*  pack = u.prd_level == 'K' ? 'fas' : 'far';
-                let docInvo = `<span class="invoiceView" id="F${u.cus_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
-                let invoice = u.cus_id == 0 ? '' : docInvo;
-                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11); */
-/// agregar boton de elimniar
                 var H = `
                 <tr id="${u.free_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td> 
@@ -183,7 +175,7 @@ function fillFreelances(ft) {
                     <td class="supply" data-content="${u.free_name}">${u.free_name}</td>
                     <td class="supply">${u.free_email}</td>
                     <td class="supply">${u.free_phone}</td>
-                    <td class="supply">${u.free_adress}</td>
+                    <td class="supply">${u.free_address}</td>
                     <td class="supply" style="text-align:center">${u.free_rfc}</td>
                     <td class="supply" style="text-align:center">${u.free_unit}</td>
                     <td class="supply" style="text-align:center">${u.free_plates}</td>
@@ -199,21 +191,20 @@ function fillFreelances(ft) {
         activeIcons();
     } else {
         settingTable();
-        
     }
 }
 
 
 /** +++++  coloca los tipos de calificacion */
-function putScores(dt) {
-    if (dt[0].scr_id != '0') {
-        let cinId = dt[0].scr_id;
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.scr_values}">${u.scr_values} - ${u.scr_description}</option>`;
-            $('#txtQualy').append(H);
-        });
-    }
-}
+// function putScores(dt) {
+//     if (dt[0].scr_id != '0') {
+//         let cinId = dt[0].scr_id;
+//         $.each(dt, function (v, u) {
+//             var H = `<option value="${u.scr_values}">${u.scr_values} - ${u.scr_description}</option>`;
+//             $('#txtQualy').append(H);
+//         });
+//     }
+// }
 /** +++++  coloca los tipo productor */
 function putCustType(dt) {
     if (dt[0].are_id != '0') {
@@ -226,26 +217,13 @@ function putCustType(dt) {
 }
 /** +++++  Activa los iconos */
 function activeIcons() {
-    /*  $('.toLink')
-        .unbind('click')
-        .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
-            let qty = $(this).parent().attr('data-content').split('|')[2];
-            let pkt = $(this).parent().attr('data-content').split('|')[3];
-            let pkn = $(this).parent().attr('data-content').split('|')[1];
-            if (qty > 0) {
-                getSeries(prd);
-            }
-        });
- */
+    
     $('.modif')
         .unbind('click')
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            //let cusNm = $(sltor.find('td')[2]).text();
-            //find('td')[2]).text(prdNm);
-            //(sltor.find('td')[1]).children('.data-content');
+
             if (prdId != undefined){
                 let prdNm = 'Modifica datos del Cliente';
                 console.log('Dato:', prdId);
@@ -504,20 +482,7 @@ function saveNewFreelance() {
         let freePerFederal = $(`#txtPerFederal`).val();
         let freeClaUnidad = $(`#txtClaUnidad`).val();
         let freeAnUnidad = $(`#txtAnUnidad`).val();
-/*
-        let typeProd =
-            $(`#txtArea option:selected`).val() == 0
-                ? ''
-                : $(`#txtArea option:selected`).text().split('-')[0];
-        let cusQualy =
-            $(`#txtQualy option:selected`).val() == 0
-                ? ''
-                : $(`#txtQualy option:selected`).text().split('-')[0];*/
-        //let cusQualy = $(`#txtQualy option:selected`).text().split('-')[0];
-        
-        /*if (cusStat == undefined) {
-            cusStat = 1;
-        }*/
+
         var par = `
             [{
                 "freeId" :   "${freeId}",
@@ -545,9 +510,7 @@ function saveNewFreelance() {
     }
 }
 function resNewProduct(dt) {
-    // console.log('Regreso-',dt, 'PAR-', newpar);
-    //$('#txtCategoryList').val(dt).trigger('change');
-    
+        
     console.log(dt);
     $('#FreelanceModal .btn_close').trigger('click');
     cusIdNew=dt;
@@ -561,13 +524,10 @@ function putFreelancesNew(dt) {
     let tabla = $('#tblFreelances').DataTable();
 
     if (cusIdNew != '0') {
-        // console.log('PASO IF',cusIdNew);
-        // var catId = prds[0].cat_id;
         $.each(dt, function (v, u) {
             var row= tabla.row
             .add({
                 //sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,
-
                 editable: `<i class="fas fa-pen modif" id=${cusIdNew}></i><i class="fas fa-times-circle kill" id=${cusIdNew}></i>`,
                 namefree: u.free_name,
                 clavefree: u.free_cve,
@@ -586,7 +546,7 @@ function putFreelancesNew(dt) {
             $(row.node()).attr('id', u.free_id);
         });
         // settingTable();
-        // console.log('AGREGO row');
+        
         activeIcons();
     } else {
         settingTable();
@@ -633,56 +593,19 @@ function inactiveFocus() {
         });
 }
 
-function putInvoice(dt) {
-    if (dt[0].doc_id != '0') {
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
-            $('#txtDocIdSerie').append(H);
-        });
-    }
-}
+// function putInvoice(dt) {
+//     if (dt[0].doc_id != '0') {
+//         $.each(dt, function (v, u) {
+//             var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
+//             $('#txtDocIdSerie').append(H);
+//         });
+//     }
+// }
 
-function putInvoiceList(dt) {
-    /* //console.log(dt);
-    var fc = $('#txtDocIdSerie').offset();
-    $('#listInvoice .list-items').html('');
-    $('#listInvoice').slideUp('100', function () {
-        $('#listInvoice .list-items').html('');
-    });
+// function putInvoiceList(dt) {
+//     //console.log(dt);
+// }
 
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.doc_id}" data_serie="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
-        $('#listInvoice .list-items').append(H);
-    });
-
-    $('#txtDocIdSerie').on('focus', function () {
-        $('#listInvoice').slideDown('slow');
-    });
-
-    $('#listInvoice').on('mouseleave', function () {
-        $('#listInvoice').slideUp('slow');
-    });
-
-    $('#txtDocIdSerie').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
-            $('#listInvoice').slideUp(100);
-        } else {
-            $('#listInvoice').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_invoice(res);
-    });
-
-    $('#listInvoice .list-item').on('click', function () {
-        let prdNm = $(this).html();
-        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
-        $('#txtDocIdSerie').val(prdNm);
-        $('#txtIdInvoices').val(prdId);
-        $('#listInvoice').slideUp(100);
-        //validator();
-    }); */
-}
 function omitirAcentos(text) {
     var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
     var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
@@ -723,28 +646,4 @@ function getOptionYesNo() {
     $('#txtWorkC').append(renglon);
     renglon = "<option id='2' value='2'>No</option> ";
     $('#txtWorkC').append(renglon);
- 
-    /* $('#selectAnticipo').html("");
-    renglon = "<option id='2'  value=''></option> ";
-    $('#selectAnticipo').append(renglon);
-    renglon = "<option id='1'  value='Si'>Si</option> ";
-    $('#selectAnticipo').append(renglon);
-    renglon = "<option id='0'  value='No'>No</option> ";
-    $('#selectAnticipo').append(renglon);
- 
-    $('#selectCredito').html("");
-    renglon = "<option id='2'  value=''></option> ";
-    $('#selectCredito').append(renglon);
-    renglon = "<option id='1'  value='Si'>Si</option> ";
-    $('#selectCredito').append(renglon);
-    renglon = "<option id='0'  value='No'>No</option> ";
-    $('#selectCredito').append(renglon);
- 
-    $('#selectFormaPago').html("");
-    renglon = "<option id='2'  value=''></option> ";
-    $('#selectFormaPago').append(renglon);
-    renglon = "<option id='1'  value='Si'>Si</option> ";
-    $('#selectFormaPago').append(renglon);
-    renglon = "<option id='0'  value='No'>No</option> ";
-    $('#selectFormaPago').append(renglon); */
  }

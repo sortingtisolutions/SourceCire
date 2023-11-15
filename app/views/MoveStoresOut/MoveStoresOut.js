@@ -202,27 +202,8 @@ function putStores(dt) {
         }else{
             $('#txtQuantity').parents('.list-finder').addClass('hide-items');
         }
-       //console.log('ID Almacen', id);
-        // modalLoading('S');
-        // getProducts(id);
-        //drawProducts(id);
     });
 }
-
-/*function putCategories(dt) {
-    if (dt[0].cat_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
-            $('#txtCategory').append(H);
-        });
-
-        $('#txtCategory').on('change', function () {
-            let catId = $(this).val();
-            console.log(catId);
-            getProducts(catId);
-        });
-    }
-}*/
 
 function putProducts(dt) {
     // console.log('putProducts',dt);
@@ -413,12 +394,7 @@ function btn_apply_appears() {
 
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
-    // $('#txtTypeExchange').val(0);
-    // $('#txtStoreSource').val(0);
     $('#txtStoreTarget').val(0);
-    // $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
-    // $('#txtQuantity').val('');
-    // $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
     $('#boxProducts').val('');
     $('#boxIdProducts').val('');
@@ -677,7 +653,6 @@ function printInfoGetOut(verId) {
 }
 
 function eventsAction() {
-
         $('#boxProducts')
         .unbind('keyup')
         .on('keyup', function () {

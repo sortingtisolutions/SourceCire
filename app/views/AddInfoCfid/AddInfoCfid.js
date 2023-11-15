@@ -41,7 +41,7 @@ function getProjectsCfdi() {
 }
 
 function saveExtraCfdi(pr) {
-   // console.log('PR-',pr);
+   
    var pagina = 'AddInfoCfid/saveExtraCfdi';
    var par = pr;
    var tipo = 'html';
@@ -266,15 +266,15 @@ function fill_table(par) {
 
 }
 
-$('#transporteCtt').on('change', function () {
-   let valop = $(this).val();
-   // console.log(valop);
-   if (valop=='Si'){
-      $('.pos1').removeClass('hide-items');
-      // valop == 'Si' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
-      // valop == 'No' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
-   } else { $('.pos1').addClass('hide-items')  }
-});
+   $('#transporteCtt').on('change', function () {
+      let valop = $(this).val();
+      // console.log(valop);
+      if (valop=='Si'){
+         $('.pos1').removeClass('hide-items');
+         // valop == 'Si' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
+         // valop == 'No' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
+      } else { $('.pos1').addClass('hide-items')  }
+   });
 
 function read_exchange_table() {
        $('#tblProjectCfdi tbody tr').each(function (v, u) {

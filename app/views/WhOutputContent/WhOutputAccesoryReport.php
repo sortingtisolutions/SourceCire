@@ -43,6 +43,7 @@ else{
         ORDER BY pdt.pjtdt_prod_sku;"; // 11-10-23
 }
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){

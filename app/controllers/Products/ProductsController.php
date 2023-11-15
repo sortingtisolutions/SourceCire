@@ -41,8 +41,6 @@ class ProductsController extends Controller
 		echo $res;
 	}
 
-
-
 // Lista las subcategorias
 	public function listSubcategories($request_params)
 	{
@@ -79,7 +77,6 @@ class ProductsController extends Controller
 		}
 		echo $res;
 	}
-
 
 // Lista los tipos de monedas
 	public function listCoins($request_params)

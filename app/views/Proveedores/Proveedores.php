@@ -5,6 +5,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
 	<div class="contenido">
@@ -68,12 +69,6 @@
 									<label for="PhoneAdicional">Telefono Adicional</label>
 								</div>
 							</div>
-					 <!-- <div class="row">
-								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="PhoneProveedor" name="PhoneProveedor" type="text" class="form-control form-control-sm" maxlength="13" required>
-									<label for="PhoneProveedor">Telefono Adicional</label>
-								</div>
-							</div> -->
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

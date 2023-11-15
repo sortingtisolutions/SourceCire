@@ -30,6 +30,7 @@ function inicial() {
     /*$('txtProject').on('blur', function () {
         validator();
     });*/
+
     $('#txtArea').on('blur', function () {
         validator();
     });
@@ -144,14 +145,6 @@ function getFreelance(catId) {
     var selector = putFreelance;
     fillField(pagina, par, tipo, selector);
 }
-/* function getFreelance2(catId) {
-    //console.log(catId);
-    var pagina = 'AssignFreelance/listFreelance2';
-    var par = `[{"catId":"${catId}"}]`;
-    var tipo = 'json';
-    var selector = putFreelance2;
-    fillField(pagina, par, tipo, selector);
-} */
 function getAssign() {
     //console.log(catId);
     var pagina = 'AssignFreelance/listAssign';
@@ -182,11 +175,6 @@ function putProject(dt) {
     }
  
     $('#txtProject').on('change', function () {
-        /*
-        px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-        $('.objet').addClass('objHidden');*/
         let id = $(this).val();
         link = $(`#txtProject option[value="${id}"]`).attr('data-content').split('|')[2];
         code = $(`#txtProject option[value="${id}"]`).attr('data-content').split('|')[5];
@@ -605,15 +593,8 @@ function putUpdateStore(dt) {
         //let ix = goThroughStore(dt);
         var id_proj= $('#txtProject').val();
         get_Freelances(id_proj);
-        // console.log(strs[ix].str_id);
-        // console.log($(`#${strs[ix].str_id}`).children('td.store-name').html());
-        /*
-        $(`#${assigns[ix].str_id}`).children('td.store-name').html(assigns[ix].str_name);
-        $(`#${assigns[ix].str_id}`).children('td.store-owner').html(assigns[ix].emp_fullname);
-        $(`#${assigns[ix].str_id}`).children('td.store-type').html(assigns[ix].str_type);*/
         clean_selectors();
-        // putQuantity(strs[ix].str_id);
-        // $('#LimpiarFormulario').trigger('click');
+
     } else {
         setTimeout(() => {
             putUpdateStore(dt);
@@ -639,8 +620,6 @@ function deletefreelance(strId) {
         $('#confirmButton').html('Borrar asignacion').css({display: 'inline'});
         $('#Id').val(strId);
         console.log(strId);
-        //   $('#BorrarAlmacenModal').modal('show');
-        //$('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
             var pagina = 'AssignFreelance/DeleteAssignFreelance';

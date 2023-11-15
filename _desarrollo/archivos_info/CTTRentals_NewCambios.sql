@@ -1,3 +1,4 @@
+/* v_1.2.2 */
 ALTER TABLE `ctt_subletting`
 	ADD COLUMN `prd_id` INT(11) NULL DEFAULT NULL COMMENT 'ID del producto relacion con ctt_products' AFTER `cin_id`;
 
@@ -313,3 +314,19 @@ ALTER TABLE `ctt_documents_closure`
 	CHANGE COLUMN `clo_total_diesel` `clo_total_diesel` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Captura del costo del Combustible' AFTER `clo_total_expendables`,
 	CHANGE COLUMN `clo_total_discounts` `clo_total_discounts` DOUBLE UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Monto total del descuento a aplicar' AFTER `clo_total_diesel`,
 	CHANGE COLUMN `clo_comentarios` `clo_comentarios` VARCHAR(300) NULL DEFAULT '' COMMENT 'Comentarios al cierre' COLLATE 'utf8mb4_general_ci' AFTER `clo_fecha_cierre`;
+
+ALTER TABLE `ctt_documents_closure`
+	ADD COLUMN `clo_ver_closed` INT(11) NULL DEFAULT 0 COMMENT 'Version del documento de cierre' AFTER `clo_comentarios`;
+
+
+--*************** 20 Oct 23 *****************
+CREATE TABLE `Register_aplication_access` (
+	`regacc_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id_del registro de acceso',
+	`reg_user_app` INT NOT NULL DEFAULT 0 COMMENT 'Id del empleado',
+	`reg_user_db` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Usuario de la base de datos',
+	`reg_date_in` DATETIME NULL DEFAULT NOW() COMMENT 'Fecha y hora del acceso',
+	PRIMARY KEY (`regacc_id`)
+)
+COMMENT='Registro de los acceso a la aplicacion'
+COLLATE='utf8mb4_general_ci'
+;

@@ -54,14 +54,6 @@ class WhOutputsModel extends Model
 
         $chprj = $this->db->query($qry2);
 
-        /* $qry = "UPDATE ctt_series AS ser
-                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
-                INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id=pjd.pjtvr_id
-                INNER JOIN ctt_version AS ver ON ver.ver_id=pjv.ver_id
-                INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pjv.pjt_id
-                SET ser.ser_stage='TA'
-                WHERE pjt.pjt_id=$pjtid AND pjt.pjt_status='4';"; */
-
         $qry = "SELECT fun_RegistraAccesorios('$verid', '$pjtid') as bandsucess
                 FROM DUAL;";  // solo trae un registro
         $result =  $this->db->query($qry);

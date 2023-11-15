@@ -21,7 +21,7 @@ class ProductsSalablesModel extends Model
         public function listStores($params)
         {
             $qry = "SELECT str_id, str_name FROM ctt_stores 
-                    WHERE (str_id = 30 OR str_type = 'MOVILES') 
+                    WHERE (str_name = 'EXPENDABLES' OR str_type = 'MOVILES') 
                     AND str_status = 1 order by str_name;";
             return $this->db->query($qry);
         }    
@@ -42,7 +42,6 @@ class ProductsSalablesModel extends Model
             return $this->db->query($qry);
         }    
 
-
 // Listado de proyectos
         public function listProjects($params)
         {
@@ -50,7 +49,7 @@ class ProductsSalablesModel extends Model
                     FROM ctt_projects AS pj
                     LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                     LEFT JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
-                    WHERE pjt_status in (1,2,4,7,8,9) ORDER BY pj.pjt_number;";
+                    WHERE pjt_status in (2,4,7,8,9) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 
@@ -79,9 +78,6 @@ class ProductsSalablesModel extends Model
 
             $qr2 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
             $this->db->query($qr2);
-
-            // $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
-            // $this->db->query($qr3);
 
             return $salId;
         }    

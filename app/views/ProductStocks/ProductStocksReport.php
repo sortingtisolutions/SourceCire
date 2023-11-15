@@ -128,7 +128,6 @@
                             </tr>';
                     }
                 }
-
                 $html .= '
                     
                     </tbody>
@@ -136,7 +135,6 @@
             </div>
         </section>
     ';
-
 
  $foot = '
     <footer>

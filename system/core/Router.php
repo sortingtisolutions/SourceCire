@@ -40,6 +40,7 @@ class Router
     // echo "2" .  $this->uri[2] . "<br>";
     // echo "3" .  $this->uri[3] . "<br>";
     // echo "4" .  $this->uri[4] . "<br>";
+    
   }
 
   /**

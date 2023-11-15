@@ -292,13 +292,7 @@ function putProductsList(dt) {
         subcId = sbcId;
         servId = svrId;
         MaxAccesorio(prdsku);
-        // let newprdsku = prdsku + 'XXX';
-        //console.log('selecciona elemento', prdId,'---', prdNm, '** ', prdsku);
-        // $('#txtProducts').val(prdNm);
-        // $('#txtIdProducts').val(prdId);
-        // $('#txtPrdSku').val(newprdsku);
-        // $('#listProduct').slideUp(100);
-        // validator();
+        
     });
 }
 
@@ -359,8 +353,8 @@ function settingTable(catId) {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [400, 800, -1],
+            [400, 800, 'Todos'],
             [ -1],
            /*  ['Todos'], */
         ],
@@ -497,26 +491,6 @@ function fillProducts(ft) {
                     })
                     .draw();
                     $(`#${u.prd_id}`).parents('tr').attr('id', u.prd_id);
-
-                // prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 7)}-${par[0].sersku.slice(7, 11)}`,
-
-                /* var H = `
-                <tr id="${u.prd_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
-                    <td class="sku">${skufull}</td>
-                    <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
-                    <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>
-                    <td class="quantity toLink" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}">${u.quantity}</td>
-                    <td class="level">${u.prd_level}</td>
-                    <td class="sku editable list">${u.srv_name}</td>
-                    <td class="sku">${u.prd_coin_type}</td>
-                    <td class="cellInvoice center editable fileload">${invoice}</td>
-                    <td class="catalog editable" data_action="list">${u.sbc_name}</td>
-                    <td class="catalog editable" data_action="list">${u.cat_name}</td>
-                    <td class="catalog editable" data_action="box">${u.prd_english_name}</td>
-                    <td class="catalog editable" data_action="box">${u.prd_comments}</td>
-                </tr>`;
-                $('#tblProducts tbody').append(H); */
             }
         });
         // settingTable();
@@ -1187,7 +1161,6 @@ function putDelSerie(dt) {
 }
 
 function putSelectSerie(dt) {
-    // console.log('3ro Click Modal');
     // console.log(dt);
     /* getInvoice(); */
     $('#txtSerIdSerie').val(dt[0].ser_id);
@@ -1301,9 +1274,7 @@ function putInvoiceList(dt) {
     //console.log(dt);
     var fc = $('#txtDocIdSerie').offset();
     $('#listInvoice .list-items').html('');
-    //console.log(fc);
-    //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
-    //$('#listInvoice').css({top: fc.top + 90 + 'px'});
+
     $('#listInvoice').slideUp('100', function () {
         //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');
@@ -1368,7 +1339,7 @@ function sel_invoice(res) {
         cm = omitirAcentos(cm);
         var cr = cm.indexOf(res);
         if (cr > -1) {
-            //            alert($(this).children().html())
+            //  alert($(this).children().html())
             $(this).css({display: 'block'});
         }
     });

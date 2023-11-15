@@ -65,24 +65,6 @@
                     </div>
 
                     <div class="form_secundary">
-<!--                         <h4>Seleccion de productos</h4>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="txtCategoryProduct" class="form-select form-select-sm required">
-                                    <option value="0" data-content="||||" selected>Selecciona una categoría</option>
-                                </select>
-                                <label for="txtCategoryProduct">Categoria</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="txtSubcategoryProduct" class="form-select form-select-sm required">
-                                    <option value="0" selected>Selecciona una subcategoría</option>
-                                </select>
-                                <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
-                            </div>
-                        </div>
- -->   
                     </div>
                 </div>
             </div>

@@ -12,11 +12,9 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //deep_loading('O');
-        //console.log('UNO');
-        settingTable();
-        getProjects();
-        $('.tblProyects').css({display: 'none'});
+        // settingTable();
+        getProjects(0);
+        // $('.tblProyects').css({display: 'none'});
 
     }, 100);
 }
@@ -92,7 +90,7 @@ function settingTable() {
         ],
     });
 
-      $('.tblProyects')
+      $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
             //$('.deep_loading').css({display: 'none'});
@@ -110,7 +108,7 @@ function putProjects(dt) {
     
     if (dt[0].pjt_id != '0') {
         $('#tblProyects tbody').html('');
-        let tabla = $('#tblProyects').DataTable();
+                
         $.each(dt, function (v, u) {
             if (u.pjt_status == 8)
             { valstage='#CC0000';
@@ -119,8 +117,7 @@ function putProjects(dt) {
              { valstage='#FFA500';
              valicon='fa fa-solid fa-edit detail'; }
 
-            console.log(valstage);
-            /* var H = `
+            var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>
                     <td class="sku"><i class="${valicon}"</td>
                     <td class="supply">${u.pjt_name}</td>
@@ -129,7 +126,7 @@ function putProjects(dt) {
                     <td class="date">${u.pjt_date_start}</td>
                     <td class="date">${u.pjt_date_end}</td>
                 </tr>`;
-            $('#tblProyects tbody').append(H); */
+            $('#tblProyects tbody').append(H); 
             tabla.row
             .add({
                 editable: `<i class="${valicon}" id="md${u.pjt_id}"></i>`,
@@ -145,6 +142,7 @@ function putProjects(dt) {
                 .attr('id', u.pjt_id)
                 .css({color: valstage});
         });
+        settingTable();
         activeIcons();
     } 
 }

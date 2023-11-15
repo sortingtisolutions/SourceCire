@@ -199,8 +199,7 @@ function activeActions() {
 }
 
 /** -------------------------------------------------------------------------- */
-/** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
-/** ---- Registra la nueva subcategoria ---- */
+
 function saveSubcategory() {
     let subcatNm = $('#txtSubcategory').val().toUpperCase();
     let subcatCd = $('#txtSubcategoryCode').val().toUpperCase();
@@ -233,12 +232,9 @@ function putSaveSubcategory(dt) {
         }, 100);
     }
 }
-/** ---- End GRABA NUEVA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
 /** -------------------------------------------------------------------------- */
-/** ---- Start EDITA SUBCATEGORIA ---- */
-/** ---- Llena los campos del formulario para editar ---- */
+
 function editSubcategory(sbcId) {
     let ix = goThroughSubcategory(sbcId);
     $('#txtSubcategory').val(subs[ix].sbc_name);

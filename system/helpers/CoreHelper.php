@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 /**
 * 
 */
+
 class CoreHelper
 {
   public static function validateController($controller)

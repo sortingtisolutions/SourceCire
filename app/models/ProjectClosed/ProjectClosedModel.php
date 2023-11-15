@@ -8,7 +8,6 @@ class ProjectClosedModel extends Model
         parent::__construct();
     }
 
-
 /* -- Listado de proyectos  ------------------------------------- */    
     public function listProjects($params)
     {
@@ -17,8 +16,8 @@ class ProjectClosedModel extends Model
 
         $qry = "SELECT pj.pjt_id, pj.pjt_name, ifnull(cus.cus_id , '0') as cus_id
                 FROM ctt_projects AS pj
-                INNER JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
-                INNER JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
+                LEFT JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
+                LEFT JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
                 WHERE pjt_status IN (8,9);";
 
         return $this->db->query($qry);
@@ -37,7 +36,7 @@ class ProjectClosedModel extends Model
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
 
-            $qry = "SELECT * , 
+           /*  $qry = "SELECT * , 
                     ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status, 
                     cn.pjtcn_quantity,
                     (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
@@ -50,13 +49,29 @@ class ProjectClosedModel extends Model
                 FROM ctt_projects_detail AS dt
                 INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id AND cn.prd_id = dt.prd_id
                 LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+                WHERE cn.pjt_id = $pjtId;"; */
+
+                $qry = "SELECT cn.pjtcn_prod_name, dt.pjtdt_prod_sku,sr.ser_situation,
+                ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
+                    cn.pjtcn_quantity,
+                    (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
+                    (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
+                    cn.pjtcn_days_cost + 
+                    (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
+                    ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
+                    (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
+                    (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
+                    cn.ver_id as verId,
+                    ( (cn.pjtcn_insured * cn.pjtcn_prod_price) * cn.pjtcn_quantity) *  cn.pjtcn_days_cost  AS seguro
+                FROM ctt_projects_detail AS dt
+                INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id AND cn.prd_id = dt.prd_id
+                LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
                 WHERE cn.pjt_id = $pjtId;";
 
         return $this->db->query($qry);
 
     }
     
-
 /* -- Listado ventas de expendables  --------------------------------------------------------- */
     public function saleExpendab($params)
     {
@@ -76,6 +91,7 @@ class ProjectClosedModel extends Model
         $cloTotExpen    = $this->db->real_escape_string($params['cloTotExpen']);
         $cloTotCombu    =  $this->db->real_escape_string($params['cloTotCombu']);
         $cloTotDisco    =  $this->db->real_escape_string($params['cloTotDisco']);
+        $cloTotDocum    =  $this->db->real_escape_string($params['cloTotDocum']);
         $cloCommen      = $this->db->real_escape_string($params['cloCommen']);
         $pjtid          = $this->db->real_escape_string($params['pjtid']);
         $usrid          = $this->db->real_escape_string($params['usrid']);
@@ -83,10 +99,12 @@ class ProjectClosedModel extends Model
         $cusId          = $this->db->real_escape_string($params['cusId']);
       
             $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
-                clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_fecha_cierre,
-				clo_flag_send,clo_comentarios, cus_id, pjt_id, usr_id, ver_id)
-            VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu',
-                    '$cloTotDisco',CURRENT_TIMESTAMP(), '0', '$cloCommen','$cusId','$pjtid','$usrid','$verid');";
+                    clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                    clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
+                    cus_id, pjt_id, usr_id, ver_id)
+                VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+                ' $cloTotDocum', Now(), '0', '$cloCommen','1',
+                '$cusId','$pjtid','$usrid','$verid');";
 
         $this->db->query($qry);
         $ducloId = $this->db->insert_id;

@@ -8,100 +8,58 @@ class WaytoPayModel extends Model
 	{
 		parent::__construct();
 	}
-
-
-// Obtiene el listado de las subcategorias activas   *****
-    public function listCategories($params)
-    {
-        $qry = "SELECT * FROM ctt_way_topay ORDER BY 1;";
-
-        return $this->db->query($qry);
-    }
-
-// Obtiene el listado de las subcategorias activas
-    public function tableSubcategories($params)
-    {
-
-        $table = 'ctt_vw_subcategories';  
-        $primaryKey = 'subcatid';
-        $columns = array(
-            array( 'db' => 'editable', 'dt' => 'editable' ),
-            array( 'db' => 'subcatid', 'dt' => 'subcatid' ),
-            array( 'db' => 'subccode', 'dt' => 'subccode' ),
-            array( 'db' => 'subcname', 'dt' => 'subcname' ),
-            array( 'db' => 'catgname', 'dt' => 'catgname' ),
-            array( 'db' => 'catgcode', 'dt' => 'catgcode' ),
-            array( 'db' => 'quantity', 'dt' => 'quantity' ),
-        );
-        $sql_details = array(
-            'user' => USER,
-            'pass' => PASSWORD,
-            'db'   => DB_NAME,
-            'host' => HOST,
-            'charset' => 'utf8',
-        );
-
-        return json_encode(
-            SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
-        );
-
-    }
-
     
 // Obtiene el listado de las subcategorias activas
     public function listWaytoPay($params)
     {
-
         $qry = "SELECT * FROM ctt_way_topay ORDER BY 1;";
-
         return $this->db->query($qry);
     }
 
-    
 // Obtiene el listado de las subcategorias activas
-    public function SaveSubcategory($params)
+    public function SaveWaytoPay($params)
     {
-        $sbcName = $this->db->real_escape_string($params['sbcName']);
-        $sbcCode = $this->db->real_escape_string($params['sbcCode']);
-        $catId = $this->db->real_escape_string($params['catId']);
+        $wayName = $this->db->real_escape_string($params['wayName']);
+        $wayCode = $this->db->real_escape_string($params['wayCode']);
+        $waystat = $this->db->real_escape_string($params['waystat']);
 
 
-        $qry = "INSERT INTO ctt_subcategories(sbc_code, sbc_name, sbc_status, cat_id)
-                VALUES('$sbcCode',UPPER('$sbcName'),1,'$catId')";
+        $qry = "INSERT INTO ctt_way_topay(wtp_clave, wtp_description, wtp_status)
+                VALUES('$wayCode',UPPER('$wayName'),'$waystat')";
         $this->db->query($qry);	
-        $sbcId = $this->db->insert_id;
-		return $sbcId;
+        $wayId = $this->db->insert_id;
+		return $wayId;
     }
 
 // Actualiza la subcategorias seleccionada
-    public function UpdateSubcategory($params)
+    public function UpdateWaytoPay($params)
     {
-        $sbcId      = $this->db->real_escape_string($params['sbcId']);
-        $sbcName    = $this->db->real_escape_string($params['sbcName']);
-        $sbcCode    = $this->db->real_escape_string($params['sbcCode']);
-        $catId      = $this->db->real_escape_string($params['catId']);
+        $wayId      = $this->db->real_escape_string($params['wayId']);
+        $wayName    = $this->db->real_escape_string($params['wayName']);
+        $wayCode    = $this->db->real_escape_string($params['wayCode']);
+        $waystat      = $this->db->real_escape_string($params['waystat']);
 
-        $qry = "UPDATE ctt_subcategories
+        $qry = "UPDATE ctt_way_topay
                 SET 
-                      sbc_name  = UPPER('$sbcName'),
-                      sbc_code  = '$sbcCode',
-                      cat_id    = '$catId'
-                WHERE sbc_id    = '$sbcId';";
+                    wtp_description  = UPPER('$wayName'),
+                    wtp_clave   = '$wayCode',
+                    wtp_status  = '$waystat'
+                WHERE wtp_id    = '$wayId';";
 
         $this->db->query($qry);	
-        return $sbcId;
+        return $wayId;
     }
 
 // Actualiza el status de la subcategorias a eliminar
-    public function DeleteSubcategory($params)
+    public function DeleteWayPay($params)
     {
-        $sbcid      = $this->db->real_escape_string($params['sbcId']);
+        $wayId      = $this->db->real_escape_string($params['wayId']);
 
         $qry = "UPDATE ctt_subcategories SET sbc_status = '0'
-                WHERE sbc_id  = '$sbcid';";
+                WHERE sbc_id  = '$wayId';";
 
         $this->db->query($qry);	
-        return $sbcid;
+        return $wayId;
     }
 
 }

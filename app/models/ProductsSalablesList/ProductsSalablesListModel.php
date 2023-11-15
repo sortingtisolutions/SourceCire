@@ -8,7 +8,6 @@ class ProductsSalablesListModel extends Model
         parent::__construct();
     }
 
-
 // Obtiene las ventas *****
     public function Sales()
     {
@@ -38,7 +37,8 @@ class ProductsSalablesListModel extends Model
 
         $salId = $this->db->real_escape_string($params['salId']);
 
-        $qry = "SELECT * FROM ctt_comments WHERE com_source_section = 'sales' AND com_action_id = $salId; ";
+        $qry = "SELECT * FROM ctt_comments 
+                WHERE com_source_section = 'sales' AND com_action_id = $salId; ";
         return $this->db->query($qry);
     }
 
@@ -114,7 +114,5 @@ class ProductsSalablesListModel extends Model
         $this->db->query($qry);
         return $this->db->insert_id;
     }
-
-
 
 }

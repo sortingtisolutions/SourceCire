@@ -1,0 +1,67 @@
+
+.payed_data-box {
+  display: grid;
+  grid-template-columns: 1fr 20%;
+  grid-template-rows: 100%;
+  height: 100%;
+
+  .payed_data-table {
+      overflow-y: scroll;
+
+      table {
+          width: 90%;
+          margin-top: 20px;
+
+          td {
+              position: relative;
+              padding-bottom: 0.9rem;
+              vertical-align: top;
+              border: 1px solid #CC0000;
+
+              &:first-child {
+                  text-align: right;
+                  vertical-align: top;
+                  padding-bottom: 1.4rem;
+                  width: 12rem;
+                  color: #777777;
+              }
+          }
+
+          .textbox {
+              border: 1px solid #dddddd;
+              border-radius: 3px;
+              padding: 3px 30px 3px 5px;
+              color: #777777;
+              outline: none;
+              font-weight: 700;
+              color: #000000;
+              text-transform: uppercase;
+
+              &.textbox-alert {
+                  border-color: var(--rw-fg-color_warning);
+                  background-color: var(--rw-bg-color_warning);
+              }
+          }
+
+          .textAlert {
+              position: absolute;
+              top: 0.25rem;
+              left: 0.6rem;
+              height: 1rem;
+              overflow: hidden;
+              color: #777777;
+              font-weight: 700;
+              visibility: hidden;
+          }
+
+          .icoTextBox {
+              position: absolute;
+              top: 4px;
+              right: 4px;
+              font-size: 1.4em;
+          }
+      }
+  }
+
+
+}

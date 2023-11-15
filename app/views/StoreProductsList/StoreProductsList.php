@@ -22,18 +22,7 @@
                         </div>
                     </div>
 
-                    <!-- <div class="row list-finder">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div class="box-items-list" id="boxProducts">Productos
-                                    <i class="fas fa-angle-down"></i>
-                                </div>
-                                
-                        </div>
-                        <div class="list-group list-hide">
-                            <div class="list-items" id="listProducts"></div>
-                        </div>
-                    </div> -->
-
+                 
                     <div class="row list-finder">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >

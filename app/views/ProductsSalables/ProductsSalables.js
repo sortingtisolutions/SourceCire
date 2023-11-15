@@ -1,7 +1,4 @@
-let prod,
-    proj,
-    folio,
-    comids = [];
+let prod, proj, folio, comids = [], gblStr;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -14,8 +11,7 @@ function inicial() {
     if (altr == 1) {
         get_stores();
         get_projects();
-        fill_dinamic_table();
-        get_products(30);
+        fill_dinamic_table();     
 
         $('#lstPayForm')
             .unbind('change')
@@ -29,7 +25,23 @@ function inicial() {
             });
 
         $('#addPurchase').on('click', function () {
-            saleApply();
+            $('#MoveFolioModal').modal('show');
+
+            $('#btnno')
+                .unbind('click')
+                .on('click', function () {
+                $('#MoveFolioModal').modal('hide');
+                // window.location = 'ProductsSalables';
+            });
+
+            $('#btnyes')
+                .unbind('click')
+                .on('click', function () {
+                // $('.btn-print').trigger('click');
+                // printInfoGetOut(folio);
+                saleApply();
+            });
+            
         });
 
         $('#newQuote').on('click', function () {
@@ -89,12 +101,17 @@ function put_nextNumber(dt) {
 function put_stores(dt) {
     if (dt[0].str_id > 0) {
         $.each(dt, function (v, u) {
+            if (u.str_name == 'EXPENDABLES'){
+                gblStr =  u.str_id;
+            }
             let H = ` <option value="${u.str_id}">${u.str_name}</option>`;
             $('#lstStore').append(H);
         });
     } else {
         $('#lstStore').html('');
     }
+    // console.log('Store In-', gblStr);
+    get_products(gblStr);
 
     $('#lstStore')
         .unbind('change')
@@ -106,7 +123,7 @@ function put_stores(dt) {
 }
 
 function put_projects(dt) {
-    console.log('put_projects',dt);
+    // console.log('put_projects',dt);
     proj = dt;
     if (dt[0].pjt_id > 0) {
         $.each(proj, function (v, u) {
@@ -387,7 +404,6 @@ function mkn(cf, tp) {
 }
 
 function saleApply() {
-    
         deep_loading('O');
         if (folio == undefined) {
             var pagina = 'ProductsSalables/NextExchange';
@@ -432,6 +448,7 @@ function saleApply() {
                 }
             } else {
                 deep_loading('C');
+                $('#MoveFolioModal').modal('hide');
             }
         }
 }
@@ -486,13 +503,7 @@ function saleDetailApply(dt) {
 function setSaleDetailApply(dt) {
     console.log(dt);
     deep_loading('C');
-
-    // let sal = dt.split('|')[0];
-    // let usr = dt.split('|')[1];
-    // let nme = dt.split('|')[2];
-    // let hst = localStorage.getItem('host');
-    // window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
-    // window.location = 'ProductsSalables';
+    window.location.reload();
 }
 
 function validator() {

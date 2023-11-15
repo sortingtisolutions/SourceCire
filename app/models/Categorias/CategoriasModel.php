@@ -41,7 +41,6 @@ class CategoriasModel extends Model
 		return $this->db->query($qry);
 	}
 
-
     public function UpdateCategoria($params)
 	{
 		$cat_name 	= $this->db->real_escape_string($params['cat_name']);

@@ -9,7 +9,6 @@ class PostCollectionModel extends Model
 		parent::__construct();
 	}
 
-
 // Obtiene el listado de las subcategorias activas
     public function listPostCollection($params)
     {
@@ -21,7 +20,6 @@ class PostCollectionModel extends Model
         return $this->db->query($qry);
     }
 
-    
 // Obtiene el listado de las subcategorias activas
     public function SaveSubcategory($params)
     {
