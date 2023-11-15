@@ -337,13 +337,12 @@ function putAnalysts(dt) {
 function putDetailsProds(dt) {
     let tabla = $('#tblAsignedProd').DataTable();
     tabla.rows().remove().draw();
+    let valstage='';
+    let locsecc='';
+    let icon = '';
     if (dt[0].pjtpd_id != '0')
-    {
-        let valstage='';
-        let locsecc='';
-        let icon = '';
-        
-        let tabla = $('#tblAsignedProd').DataTable();
+    {        
+        // let tabla = $('#tblAsignedProd').DataTable();
         // $('#tblAsignedProd table tbody').html('');
         $.each(dt, function (v, u){
             
@@ -419,7 +418,7 @@ function activeIcons() {
 function putSeries(dt) {
     // console.log('putSeries');
     settingSeries(dt);
-    build_modal_serie_old(dt);
+    build_modalSeries(dt);
     activeIconsSerie();
 }
 
@@ -499,38 +498,41 @@ function readAceptTable() {
 }
 
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
-function build_modal_serie_old(dt) {
-        //  console.log('build_modal_serie_old',dt);
+function build_modalSeries(dt) {
+        //  console.log('build_modalSeries',dt);
          let tabla = $('#tblSerie').DataTable();
         //  $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
          tabla.rows().remove().draw();
-         $.each(dt, function (v, u){
-             let skufull = String(u.pjtdt_prod_sku).slice(7, 11) == '' ? String(u.pjtdt_prod_sku).slice(0, 7) : String(u.pjtdt_prod_sku).slice(0, 7) + String(u.pjtdt_prod_sku).slice(7, 11);
-             let sku = String(u.pjtdt_prod_sku).slice(0, 7);
-             let acc = String(u.pjtdt_prod_sku).slice(7,8) == 'A' ? skufull : sku;
-             let valstage = u.ser_stage == 'TR' ? 'color:#CC0000' : 'color:#3c5777';
-             let level;
-             if(u.pjtvr_section == 4){
-                level = "Subarrendo";
-             }else{
-                level="Interno"
-             }
-             //console.log(dt);
-             tabla.row
-                 .add({
-                     sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i> 
-                                <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
-                     seriesku: skufull,
-                     sernumber: u.ser_no_econo,
-                     sertype: u.ser_serial_number,
-                     serfchout: u.pjtpd_day_start,
-                     serfchin: u.pjtpd_day_end,
-                     serlevel: level,
-                 })
-                 .draw();
-             $(`#${u.ser_id}`).parents('tr').attr('id',u.ser_id);
-         });
+         if (dt[0].pjtdt_id!=0)
+         {
+            $.each(dt, function (v, u){
+                let skufull = String(u.pjtdt_prod_sku).slice(7, 11) == '' ? String(u.pjtdt_prod_sku).slice(0, 7) : String(u.pjtdt_prod_sku).slice(0, 7) + String(u.pjtdt_prod_sku).slice(7, 11);
+                let sku = String(u.pjtdt_prod_sku).slice(0, 7);
+                let acc = String(u.pjtdt_prod_sku).slice(7,8) == 'A' ? skufull : sku;
+                let valstage = u.ser_stage == 'TR' ? 'color:#CC0000' : 'color:#3c5777';
+                let level;
+                if(u.pjtvr_section == 4){
+                    level = "Subarrendo";
+                }else{
+                    level="Interno"
+                }
+                //console.log(dt);
+                tabla.row
+                    .add({
+                        sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i> 
+                                    <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
+                        seriesku: skufull,
+                        sernumber: u.ser_no_econo,
+                        sertype: u.ser_serial_number,
+                        serfchout: u.pjtpd_day_start,
+                        serfchin: u.pjtpd_day_end,
+                        serlevel: level,
+                    })
+                .draw();
+                $(`#${u.ser_id}`).parents('tr').attr('id',u.ser_id);
+            });
+         }
 }
 
 /** ### LISTO ### +++++  Activa los iconos del modal de serie */
@@ -661,7 +663,7 @@ function putSerieDetails(dt){
                 .draw();
             //$(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
         });
-        // build_modal_seriefree(dt);
+        
         activeIconsNewSerie();
     } else{
         alert('Ya no existen Series Disponibles para cambiar');
