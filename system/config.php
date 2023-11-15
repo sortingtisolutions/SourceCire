@@ -53,6 +53,11 @@ define('USER', 'root');
 define('PASSWORD', '');
 define('DB_NAME', 'cttapp_cire');
 
+define('HOSTB', 'localhost');
+define('USERB', 'root');
+define('PASSWORDB', '');
+define('DB_NAMEB', 'cttapp_back_projects');
+
 define('HOST1', 'localhost');
 define('USER1', 'cttapp_user_qry1');
 define('PASSWORD1', '');

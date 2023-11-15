@@ -75,7 +75,7 @@ class MoveStoresInModel extends Model
                     FROM ctt_series ser WHERE ser.prd_id =pd.prd_id) as serNext, 
                 sb.sbc_name, ct.cat_name, sr.prd_id_acc
                 FROM ctt_products AS pd
-                INNER JOIN ctt_series AS sr ON pd.prd_id=sr.prd_id
+                LEFT JOIN ctt_series AS sr ON pd.prd_id=sr.prd_id
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
                 WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id =  $catId;";

@@ -2272,13 +2272,13 @@ function putLocations(){ //** AGREGO ED */
             }]`;
     
     console.log(par);
-        
-        fill_table(par);
-        clean_selectors();
+    fill_table(par);
+    clean_selectors();
     
 }
 
 function fill_table(par) { //** AGREGO ED */
+    console.log('Paso 3');
     let largo = $('#listLocationsTable tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#listLocationsTable tbody tr').remove() : '';
     par = JSON.parse(par);

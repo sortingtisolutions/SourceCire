@@ -10,7 +10,7 @@
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido ">
-        <!-- <div class="row"> -->
+        
             <div class="block_01" style="width: 100%">
                 <div class="row" >
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 blocks" style="width: 100%">
@@ -22,7 +22,6 @@
                             </tr>
                             <tr>
                                 <td class="formSales" >
-
                                     <form id="formSales" >
                                         <div class="form_group">
                                             <label for="lstProject">Nombre de proyecto:</label> 
@@ -33,44 +32,41 @@
 
                                         <div class="form_group">
                                             <label for="txtCustomer">Nombre Cliente:</label> 
-                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox required">
+                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox " disabled>
                                         </div>
 
                                         <div class="form_group">
                                             <label for="txtDateStar">Fecha Inicio Proyecto:</label> 
-                                            <input id="txtDateStar" name="txtDateStar" type="text" class="textbox required">
+                                            <input id="txtDateStar" name="txtDateStar" type="text" class="textbox " disabled>
                                         </div>
 
                                         <div class="form_group">
                                             <label for="txtDateEnd">Fecha final Proyecto:</label> 
-                                            <input id="txtDateEnd" name="txtDateEnd" type="text" class="textbox required">
+                                            <input id="txtDateEnd" name="txtDateEnd" type="text" class="textbox " disabled>
                                         </div>
 
                                         <div class="form_group">
                                             <label for="txtRepresen">Representante Legal:</label> 
-                                            <input id="txtRepresen" name="txtRepresen" type="text" class="textbox required">
+                                            <input id="txtRepresen" name="txtRepresen" type="text" class="textbox " disabled>
                                         </div>
 
                                         <div class="form_group">
                                             <label for="txtAdress">Domicilio:</label> 
-                                            <input id="txtAdress" name="txtAdress" type="text" class="textbox required">
+                                            <input id="txtAdress" name="txtAdress" type="text" class="textbox " disabled>
                                         </div>
 
                                         <div class="form_group">
                                             <label for="txtRespProg">Analista Programacion:</label> 
-                                            <input id="txtRespProg" name="txtRespProg" type="text" class="textbox required">
+                                            <input id="txtRespProg" name="txtRespProg" type="text" class="textbox " disabled>
                                         </div>
                                         
                                         <div class="form_group hide">
                                             <label for="txtInvoice">Num Factura:</label> 
                                             <input id="txtInvoice" name="txtInvoice" type="text" class="textbox">
                                         </div>
-
                                     </form>
-
                                 </td>
                             </tr>
- 
                         </table>
                     </div>
                 </div>
@@ -83,9 +79,8 @@
                         </div>   
                     </div>
                 </div>
-
             </div>
-       <!--  </div> -->
+       
     </div>
 </div>
 
@@ -103,17 +98,17 @@
                         <td class="concept"> Nombre del Proyecto:</td>
                         <!-- <td class=""> -->
                             <!--         <div class="row list-finder pos2 "> -->
-                                <td class="data">
-                                    <input id="txtProject" type="text" class="textbox" style="width:250px;" autocomplete="off" disabled>
-                                    <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                                    <span class="intructions">Nombre del proyecto</span>
-                                </td>
+                            <td class="data">
+                                <input id="txtProject" type="text" class="textbox" style="width:250px;" autocomplete="off" disabled>
+                                <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                                <span class="intructions">Nombre del proyecto</span>
+                            </td>
                     </tr>
 
                     <tr>
                         <td class="concept"><span class="reqsign"></span> Total del Proyecto:</td>
                         <td class="data">
-                            <input type="text" id="txtMontoProy" name="txtMontoProy" class="textbox" style="width:150px; text-transform:uppercase" autocomplete="off">
+                            <input type="text" id="txtMontoProy" name="txtMontoProy" class="textbox" style="width:150px;" autocomplete="off" disabled>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                             <span class="intructions">monto total del proyecto</span>
                         </td>
@@ -156,7 +151,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">**</span>Total Documento:</td>
                         <td class="data">
-                            <input type="text" id="txtMontoTotal" name="txtMontoTotal" class="textbox" style="width:150px;" autocomplete="off">
+                            <input type="text" id="txtMontoTotal" name="txtMontoTotal" class="textbox" style="width:150px; font-weight: bold; font-size: medium" disabled>
                             <span class="fail_note hide"></span>
                             <span class="intructions">Montol total del documento</span>
                         </td>
@@ -166,118 +161,19 @@
         </div>
 </div>
 
-<!-- Start Ventana modal AGREGA O MODIFICA PRODUCTO -->
-<div class="overlay_background overlay_hide"id="toSegmentModal" style="width: 65%; left:25%;" >
-        <div class="overlay_modal">
-            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <div class="formButtons">
-                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
-            </div>
-            <div class="formContent">
-                <table id="tblNewValues">
-                    <tr >
-                        <td class="concept"> Nombre del Proyecto:</td>
-                        <!-- <td class=""> -->
-                            <!--         <div class="row list-finder pos2 "> -->
-                                <td class="data">
-                                    <input id="txtProject" type="text" class="textbox" style="width:250px;" autocomplete="off" disabled>
-                                    <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                                    <span class="intructions">Nombre del proyecto</span>
-                                </td>
-                                <td class="concept"> Nombre del Proyecto:</td>
-                                <td class="data">
-                                    <input id="txtProject" type="text" class="textbox" style="width:250px;" autocomplete="off" disabled>
-                                    <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                                    <span class="intructions">Nombre del proyecto</span>
-                                </td>
-                    </tr>
-
-                    <tr>
-                        <td class="concept"><span class="reqsign"></span> Total del Proyecto:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoProy" name="txtMontoProy" class="textbox" style="width:150px; text-transform:uppercase" autocomplete="off">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">monto total del proyecto</span>
-                        </td>
-                        <td class="concept"><span class="reqsign"></span> Total del Proyecto:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoProy" name="txtMontoProy" class="textbox" style="width:150px; text-transform:uppercase" autocomplete="off">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">monto total del proyecto</span>
-                        </td>
-                    </tr>
-                    <div style="height:5px;"></div> <!-- Agregar un espacio -->
-            
-                    <table class="display compact nowrap"  id="tblSegmentVal" style="width: 70%">
-                        <thead>
-                            <tr>
-                                <th style="width:  20px"></th>
-                                <th style="width:  80px">Monto</th>
-                                <th style="width:  40px">Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-
-                    <div style="height:5px;"></div> <!-- Agregar un espacio -->
-                    <!-- <tr>
-                        <td class="concept"><span class="reqsign"></span> Total Mantenimiento:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoMant" name="txtMontoMant" class="textbox" style="width:150px" autocomplete="off">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">monto total del mantenimiento</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign"></span>Total Expendables:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoexpe" name="txtMontoexpe" class="textbox" style="width:150px" autocomplete="off">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">monto total de los expendables</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign"></span>Total Diesel:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoDies" name="txtMontoDies" class="textbox" style="width:150px" autocomplete="off">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">monto total del diesel</span>
-                        </td>
-                    </tr> -->
-
-                   <!--  <tr>
-                        <td class="concept"><span class="reqsign"></span>Monto Descuento:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoDesc" name="txtMontoDesc" class="textbox" style="width:150px;" autocomplete="off">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">monto total del descuento aplicado previo</span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="concept"><span class="reqsign">**</span>Total Documento:</td>
-                        <td class="data">
-                            <input type="text" id="txtMontoTotal" name="txtMontoTotal" class="textbox" style="width:150px;" autocomplete="off">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Montol total del documento</span>
-                        </td>
-                    </tr> -->
-                </table>
-            </div>
-        </div>
-</div>
-
-<div class="overlay_background overlay_hide" id="addSegmentModal" style="width: 65%; left:25%; background-color: rgba(255, 255, 255, 0); z-index: 500;">
+<div class="overlay_background overlay_hide" id="addSegmentModal" style="width: 85%; left:15%; background-color: rgba(255, 255, 255, 0); z-index: 500;">
     <div class="overlay_modal" style="z-index: 50;">
         
         <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
         <div class="" style="position: absolute; top: 10px; height: 60px; padding: 10px;">
-            <button type="button" class="btn btn-sm btn-primary" id="btn_save_locations">Guardar</button>
+            <button type="button" class="btn btn-sm btn-primary" id="btn_saveSegment">Guardar</button>
         </div>
+
+
         <div class="container-fluid" >
             <div class="contenido">
                 <div class="row">
-                    <div class="" style="width: 100%; height: 120vh; padding: 1% 10%; overflow: auto;">
+                    <div class="" style="width: 100%; height: 120vh; padding: 1% 10%;"> <!-- overflow: auto; -->
                         <div class="row">
                             <!-- <button class="bn btn-ok" id="addRowTbl">Agregar</button> -->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="background-color: #ffffff; border: 2px solid #eeeeee; border-radius: 10px;">
@@ -288,13 +184,11 @@
                                             <input type="text" id="txtMontoTotSeg" name="txtMontoTotSeg" class="form-control form-control-sm" style="width:150px" autocomplete="off"><br>
                                             <span class="textAlert"></span>
                                         </td>
-                                        
-                                        <td class="concept"><span class="reqsign"></span></td> <!-- Fecha Inicial -->
+                                        <td class="concept"><span class="reqsign"></span>Fecha: </td>
                                         <td>
-                                            <!-- <input type="text" id="txtLocationExtra" name="txtLocationExtra" class="form-control form-control-sm" style="width:100px" autocomplete="off"><br>
-                                            <span class="textAlert"></span> -->
+                                            <input type="text" id="txtPeriodPayed"  name="txtPeriodPayed" class="form-control" style="width:150px" autocomplete="off">
+                                            <td><i class="fas fa-calendar-alt icoTextBox" id="calendar"></i></td>
                                         </td>
-                                        
                                     </tr>
                                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
                                     <tr>   
@@ -303,11 +197,9 @@
                                         <td>
                                             <select id="txtFrecuency" name="txtFrecuency" class="form-control form-control-sm" style="width:100px">
                                                 <option value="1">Semanal</option>
-                                                <option value="2">Quincenal</option>
-                                                <option value="3">Mensual</option>
-                                                <option value="4">Bimestral</option>
-                                                <option value="5">Trimestral</option>
-                                                <option value="6">Semestral</option>
+                                                <option value="2">Mensual</option>
+                                                <option value="3">Trimestral</option>
+                                                <option value="4">Anual</option>
                                             </select>
                                             <!-- <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el estado</span> -->
                                         </td>
@@ -323,24 +215,27 @@
                                             </select>
                                             <!-- <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el estado</span> -->
                                         </td>
-                                        
+                        
                                     </tr>
-                                   <!--  <tr>
-                                        <div style="height:10px;"></div>
-                                    </tr> -->
+                                    <tr style="text-align:center;">
+                                        <td colspan=4>
+                                            <button class="bn btn-ok" id="addButtonSegm">Agregar</button>
+                                        </td>
+                                    </tr>
+                                
                                 </table>
-                                <div style="height:20px;"></div> <!-- Agregar un espacio -->
                             </div>
                         </div>
-                        <div style="height:20px;"></div>
+                        <div style="height:10px;"></div>
                         <div class="row mt-2" >
-                            <table class="display compact nowrap" id="listTable"style = "width: 100%" >
+                            <table class="display compact nowrap" id="listTable"style = "width: 95%" >
                                 <thead>
                                     <tr>
-                                        <th style = "width: 30px"></th>
-                                        <th style = "width: 100px">Numero de Pago</th>
-                                        <th style = "width: 100px">Fecha</th>
-                                        <th style = "width: 100px">Monto</th>
+                                        <th style = "width: 20px"></th>
+                                        <th style = "width: 50px">Numero de Pago</th>
+                                        <th style = "width: 50px">Frecuencia</th>
+                                        <th style = "width: 50px">Monto</th>
+                                        <th style = "width: 50px">Fecha</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -353,6 +248,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- Start Lista de productos -->
@@ -374,7 +270,7 @@
                 <div class="row">
                     <input type="hidden" class="form-control" id="txtIdClosure" aria-describedby="basic-addon3">
                     <div class="col-12 text-center">
-                        <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Estas seguro de dar salida a este proyecto?</span>
+                        <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro de agregar estos nuevos datos?</span>
                     </div>
                 </div>
                 </div>

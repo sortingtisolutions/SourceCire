@@ -12,9 +12,9 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        settingTable();
+        // settingTable();
         getProjects(0);
-        $('.tblProyects').css({display: 'none'});
+        // $('.tblProyects').css({display: 'none'});
 
     }, 100);
 }
@@ -90,7 +90,7 @@ function settingTable() {
         ],
     });
 
-      $('.tblProyects')
+      $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
             //$('.deep_loading').css({display: 'none'});
@@ -117,7 +117,6 @@ function putProjects(dt) {
              { valstage='color:#FFA500';
              valicon='fa fa-solid fa-edit detail'; }
 
-            console.log(valstage);
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>
                     <td class="sku"><i class="${valicon}"</td>
@@ -129,7 +128,7 @@ function putProjects(dt) {
                 </tr>`;
             $('#tblProyects tbody').append(H);
         });
-        // settingTable();
+        settingTable();
         activeIcons();
     } else {
         //settingTable();

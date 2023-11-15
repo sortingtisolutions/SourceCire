@@ -15,7 +15,7 @@ class Model
   */
   public function __construct()
   {
-    // $numr = mt_rand(1,1);
+    // $numr = mt_rand(1,4);
     /* echo "El numero es :" . $numr . " Aleatorio"; */
     $numr = 0;
     IF ($numr == 0){
@@ -38,19 +38,16 @@ class Model
     //   $this->db->set_charset("utf8");
     //   define('USEDUSER',USER3);
     // }
-  }
 
-  /**
-  * Finaliza conexion
-  */
+  }
+ 
+  /*** Finaliza conexion */
   public function __destruct()
   {
+    
      $this->db->close();
+
   }
-
-
-
-
 
 
 }

@@ -53,19 +53,57 @@ class ProjectReportsController extends Controller
         echo $res;
 
     }    
-    
-/* -- Listado de contenido de proyecto seleccionado  ----------------------------------------- */
-    public function projectContent($request_params)
+
+    public function listSuppliers($request_params)
     {
 
-        $result = $this->model->projectContent($request_params);
+        $result = $this->model->listSuppliers($request_params);
         $i = 0;
         while ($row = $result->fetCh_assoc())
         {
             $rowdata[$i] = $row;
             $i++;
         } 
-        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"ser_id":"0"}]';	
+        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
+        echo $res;
+
+    }    
+    
+/* -- Listado de contenido de proyecto seleccionado  ----------------------------------------- */
+    public function projectContent($request_params)
+    {
+
+        /* $result = $this->model->projectContent($request_params); */
+        if ($request_params['bn'] == '1') {
+            $result = $this->model->projectActive($request_params);
+        }elseif ($request_params['bn'] == '2') {
+            $result = $this->model->patrocinios($request_params);
+        }elseif ($request_params['bn'] == '3') {
+            $result = $this->model->cierres($request_params);
+        }elseif ($request_params['bn'] == '4') {
+            $result = $this->model->equipoMasRentado($request_params);
+        }elseif ($request_params['bn'] == '5') {
+            $result = $this->model->ProyectosTrabajados($request_params);
+        }elseif ($request_params['bn'] == '6') {
+            $result = $this->model->equipoMenosRentado($request_params);
+        }elseif ($request_params['bn'] == '7') {
+            $result = $this->model->Subarrendos($request_params);
+        }elseif ($request_params['bn'] == '8') {
+            $result = $this->model->SubbletingSuppliers($request_params);
+        }elseif ($request_params['bn'] == '9') {
+            $result = $this->model->newCustomers($request_params);
+        }elseif ($request_params['bn'] == '10') {
+            $result = $this->model->Productividad($request_params);
+        }elseif ($request_params['bn'] == '11') {
+            $result = $this->model->ProjectsByDeveloper($request_params);
+        }
+        $i = 0;
+        while ($row = $result->fetCh_assoc())
+        {
+            $rowdata[$i] = $row;
+            $i++;
+        } 
+        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
         echo $res;
 
     }
@@ -84,5 +122,7 @@ class ProjectReportsController extends Controller
         echo $res;
 
     }
+
+
 
 }

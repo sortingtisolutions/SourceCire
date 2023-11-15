@@ -1,5 +1,5 @@
 let seccion = '';
-let docs;
+let docs, gblcloid, gblpjtid;
 let grp = 50;
 let num = 0;
 let cats, subs, sku1, sku2, sku3, sku4;
@@ -14,8 +14,8 @@ function inicial() {
     setTimeout(() => {
 
         $('.tblProdMaster').css({display: 'none'});
-        // setting_table();
         getProjects(0);
+        getWayToPay();
     }, 100);
 }
 
@@ -24,7 +24,15 @@ function getProjects(catId) {
     var pagina = 'CollectAccounts/listProjects';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
-    var selector = putProducts;
+    var selector = putProjects;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getWayToPay() {
+    var pagina = 'CollectAccounts/getWayToPay';
+    var par = `[{"wtpId":""}]`;
+    var tipo = 'json';
+    var selector = putWayToPay;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -32,13 +40,12 @@ function getProjects(catId) {
 function settingTable() {
     let title = 'Control salida de proyectos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    //console.log('555');
     $('#tblCollets').DataTable({
-        order: [[2, 'desc']],
+        order:  [[ 1, 'asc' ], [ 8, 'asc' ]],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [200, 400, 600, -1],
+            [200, 400, 600, 'Todos'],
         ],
         buttons: [
             {
@@ -82,7 +89,7 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable',      class: 'edit', orderable: false},      
-            {data: 'clt_folio',      class: 'supply'},
+            {data: 'clt_folio',      class: 'sku'},
             {data: 'clt_create',    class: 'date'},
             {data: 'clt_namecli',    class: 'supply'},
             {data: 'clt_namepjt',   class: 'supply'},
@@ -94,36 +101,40 @@ function settingTable() {
         ],
     });
 
-      $('.tblProdMaster')
+    $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
             //$('.deep_loading').css({display: 'none'});
             //$('#tblCollets').DataTable().draw();
             deep_loading('C');
-        });
+    });
+}
+
+function putWayToPay(dt) {
+    tpprd = dt;
 }
 
 /** +++++  coloca los productos en la tabla */
-function putProducts(dt) {
-    //console.log('DOS',dt);
+function putProjects(dt) {
+    console.log('putProjects',dt);
     $('#tblCollets tbody').html('');
-    if (dt[0].clt_id != '0') {
-        //var catId = dt[0].cat_id;
-        //console.log('444',dt);
+    
+    if (dt[0].clt_id != undefined) {
+        console.log('each',dt[0].clt_id);
         //<i class='fas fa-edit detail'>
         $.each(dt, function (v, u) {
             var H = `
-                <tr id="${u.clt_id}">
+                <tr id="${u.clt_id}" data_pjt="${u.pjt_id}">
                     <td></i><i class='fas fa-door-open toWork'></i></td> 
-                    <td class="supply">${u.clt_folio}</td>
+                    <td class="sku">${u.clt_folio}</td>
                     <td class="date">${u.clt_date_generated}</td>
                     <td class="supply">${u.cus_name}</td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td> 
-                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td>
-                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td>
+                    <td class="sku">${mkn(u.pym_amount,'n')}</td>
+                    <td class="sku">${mkn(u.pendiente,'n')}</td>
                     <td class="date">${u.clt_deadline}</td>
-                    <td class="date">${u.clt_deadline}</td>
+                    <td class="date">${u.pym_date_paid}</td>
                 </tr>`;
             $('#tblCollets tbody').append(H);
         });
@@ -139,41 +150,130 @@ function activeIcons() {
     $('.toWork')
         .unbind('click')
         .on('click', function () {
-            let locID = $(this);
-            let pjtid = locID.parents('tr').attr('id');
+          
+        let cltid = $(this).parents('tr').attr('id');
+        let pjtId = $(this).parents('tr').attr('data_pjt');
+        gblcloid=cltid;
+        gblpjtid=pjtId;
+        // console.log('Globales',gblcloid, gblpjtid );
+        confirm_to_work(cltid);
 
-            //console.log('Paso ToWork..', pjtid);
-            confirm_to_work(pjtid);
         });
 
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            
         });
 
+    $('#registPayModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
+        });
+
+    
+    $('#savePayed.update')
+        .unbind('click')
+        .on('click', function () {
+            let user = Cookies.get('user').split('|');
+            let em = user[3];
+            let referen = $('#txtRefPayed').val();
+            let montopayed = $('#txtMontoPayed').val();
+            let foldoc = $('#txtNumFol').val();
+            let pjtId = gblpjtid;
+            let wayPay = $('#txtWayPay option:selected').val();
+            let projPeriod = $('#txtPeriodPayed').val();
+
+            let DateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
+            
+            let par = `
+            [{  "referen"       : "${referen}",
+                "DateStart"     :"${DateStart}",
+                "montopayed"     : "${montopayed}",
+                "foldoc"         : "${foldoc}",
+                "pjtId"          : "${pjtId}",
+                "wayPay"         : "${wayPay}",
+                "empId"          : "${em}"
+            }]`;
+            // console.log(par);
+            var pagina = 'CollectAccounts/insertPayAplied';
+            var tipo = 'html';
+            var selector = putToWork;
+            fillField(pagina, par, tipo, selector);
+            
+        });
 }
 
-function confirm_to_work(pjtid) {
+function confirm_to_work(cltid) {
     $('#starToWork').modal('show');
-    $('#txtIdProductPack').val(pjtid);
+    $('#txtIdProductPack').val(cltid);
     //borra paquete +
     $('#btnToWork').on('click', function () {
-        let Id = $('#txtIdProductPack').val();
-        let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
 
-        //console.log('Datos',pjtid,Id);
-        var pagina = 'CollectAccounts/UpdateSeriesToWork';
-        var par = `[{"pjtid":"${pjtid}"}]`;
-        var tipo = 'json';
-        var selector = putToWork;
-        fillField(pagina, par, tipo, selector);
+        let prdNm="Registro de pago para proyecto concluido";
+        $('#registPayModal').removeClass('overlay_hide');
+        $('.overlay_closer .title').html(prdNm);
+
+        let el = $(`#tblCollets tr[id="${cltid}"]`);
+            $('#txtNumFol').val($(el.find('td')[1]).text());
+            $('#txtProject').val($(el.find('td')[4]).text());
+
+        fillContent();
+    });
+}
+
+function fillContent() {
+    
+    let restdate='';
+    let todayweel =  moment(Date()).format('dddd');
+    restdate= moment().subtract(3, 'months');
+    let fecha = moment(restdate).format('DD/MM/YYYY');
+    let hoy=moment(Date()).format('DD/MM/YYYY');
+    $('#calendar').daterangepicker(
+        {
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+                ],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: true,
+            startDate: hoy,
+            endDate: fecha,
+            minDate: fecha,
+            maxDate:hoy,
+        },
+        function (start, end, label) {
+            $('#txtPeriodPayed').val(
+                // start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
+                start.format('DD/MM/YYYY') 
+            );
+            looseAlert($('#txtPeriodPayed').parent());
+        }
+    );
+
+    // Llena el selector de tipo de proyecto
+    $.each(tpprd, function (v, u) {
+        let H = `<option value="${u.wtp_id}"> ${u.wtp_description}</option>`;
+        $('#txtWayPay').append(H);
     });
 }
 
 function putToWork(dt){
     console.log(dt)
+    $('#registPayModal .btn_close').trigger('click');
 }
 
 function mkn(cf, tp) {
@@ -189,3 +289,40 @@ function mkn(cf, tp) {
     }
     return nm;
 }
+
+function fillData(inx) {
+
+$('#savePayed.update')
+        .unbind('click')
+        .on('click', function () {
+            let foldoc = $('#txtNumFol').val();
+            let projId = $('#txtProjectEdt').val();
+            let montopayed = $('#txtMontoPayed').val();
+            let referen = $('#txtRefPayed').val();
+            let WayPay = $('#txtWayPay option:selected').val();
+            let projPeriod = $('#txtPeriodPayed').val();
+
+            let projDateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
+            
+            let par = `
+            [{
+                "projId"         : "${projId}",
+                "foldoc"         : "${foldoc}",
+                "montopayed"     : "${montopayed}",
+                "referen"        : "${referen}",
+                "WayPay"        : "${WayPay}",
+                "projDateStart"  : "${projDateStart}",
+                "cuoId"          : "${cuoId}",
+                "cusId"          : "${cusCte}",
+                "cusParent"      : "${cusCteRel}",
+            }]`;
+            
+            console.log(par);
+            var pagina = 'Budget/UpdateProject';
+            var tipo = 'html';
+            var selector = loadProject;
+            fillField(pagina, par, tipo, selector);
+            
+        });
+}
+
