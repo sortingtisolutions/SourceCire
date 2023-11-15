@@ -6,12 +6,13 @@
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- Comentario prueba 3 -->
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
         <div class="row mvst_group">
-            <div class="mvst_panel">
+            <div class="mvst_panel" style="background-color: #e2edf3">
 
                 <div class="form-group">
                 <div>

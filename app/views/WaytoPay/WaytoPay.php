@@ -6,6 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido ">
@@ -25,14 +26,14 @@
                                     <input id="txtWtpDescription" name="txtWtpDescription" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtWtpDescription">Descripcion</label>
                                 </div>
-                                <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" >
+                                <input id="txtIdWayPay" name="txtIdWayPay" type="hidden" class="form-control form-control-sm" >
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtWtpCve" name="txtWtpCve" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtWtpCve">Clave corta</label>
                                 </div>
-                                <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" >
+                                <!-- <input id="txtIdWayPay" name="txtIdWayPay" type="hidden" class="form-control form-control-sm" > -->
                             </div>
 
                             <div class="row">
@@ -60,7 +61,7 @@
         <!-- Start Tabla de contenido -->
             <div class="mvst_table">
                 <h1>Lista de Formas de Pago</h1>
-                <table class="display compact nowrap"  id="tblSubcategory" style="width:850px; ">
+                <table class="display compact nowrap"  id="tblWaypay" style="width:850px; ">
                     <thead>
                         <tr>
                             <th style="width:  40px"></th>

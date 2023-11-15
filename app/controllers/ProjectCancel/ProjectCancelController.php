@@ -38,7 +38,6 @@ class ProjectCancelController extends Controller
             $res =  '[{"pjt_id":"0"}]';	
         }
         echo $res;
-
     }
 
     public function CancelProject($request_params)

@@ -165,44 +165,6 @@ public function NextSkuProduct($param)
         $serie =sprintf("%03d", $srsk);
         //return "hecho";
 
-
-        //PRODUCT
-        /*
-        $query = "SELECT COUNT(*) FROM ctt_products WHERE prd_sku = '$prod_sku'";
-        $res = $this->db->query($query);
-        if ($res->num_rows > 0) {
-            $query = "SELECT prd_id FROM ctt_products WHERE prd_sku = '$prod_sku'";
-            $res = $this->db->query($query);
-            $resp = $res->fetch_assoc();
-            $prdId = $resp['prd_id'];
-        }else{
-            $qry = "INSERT INTO ctt_products (
-                prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-                prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                prd_insured, sbc_id, srv_id, cin_id, prd_status) 
-            VALUES (
-                '$prod_sku', UPPER('$prod_name'), '', '', UPPER('$supplier'), 
-                '', '$price', '', UPPER('$comments'), '', 
-                '', '', '$subcategory', '', '$coin', '1'
-            );";
-            $this->db->query($qry);
-            $prdId = $this->db->insert_id;
-
-        }*/
-        /*
-        $qry = "INSERT INTO ctt_products (
-            prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-            prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-            prd_insured, sbc_id, srv_id, cin_id, prd_status) 
-        VALUES (
-            '$sku', UPPER('$pnm'), '', '', UPPER('$sup'), 
-            '', '$prc', '1', UPPER('$com'), '$prd_level', 
-            '', '', '$sbctg', '', '1', '1'
-        );";
-        $this->db->query($qry);
-        $prdId = $this->db->insert_id;
-            */
-        
        if ($prd!=0) {
        
             // SERIE
@@ -269,30 +231,6 @@ public function NextSkuProduct($param)
         $serie =sprintf("%03d", $srsk); // *** Ed
 
         $cant = 0;// *** Ed
-        //return "hecho";
-        //PRODUCT
-        /*
-        $query = "SELECT COUNT(*) FROM ctt_products WHERE prd_sku = '$prod_sku'";
-        $res = $this->db->query($query);
-        if ($res->num_rows > 0) {
-            $query = "SELECT prd_id FROM ctt_products WHERE prd_sku = '$prod_sku'";
-            $res = $this->db->query($query);
-            $resp = $res->fetch_assoc();
-            $prdId = $resp['prd_id'];
-        }else{
-            $qry = "INSERT INTO ctt_products_paso (
-                prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-                prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                prd_insured, sbc_id, srv_id, cin_id, prd_status) 
-            VALUES (
-                '$prod_sku', UPPER('$prod_name'), '', '', UPPER('$supplier'), 
-                '', '$price', '', UPPER('$comments'), '', 
-                '', '', '$subcategory', '', '$coin', '1'
-            );";
-            $this->db->query($qry);
-            $prdId = $this->db->insert_id;
-
-        }*/
 
         if ($prd > 0) {// *** Ed
             $prdId = $prd;

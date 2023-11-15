@@ -124,9 +124,6 @@
                             <th style="width: 600px">Nombre</th>
                             <th style="width:  80px">Precio</th>
                             <th style="width:  80px">Subcategoria</th>
-
-<!--                             <th style="width:  60px" id="numeroSerieColum">No. Serie</th>
-                            <th style="width:  auto" id="fechaRegColum">Fecha registro</th> -->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -152,8 +149,6 @@
         </div>
 
     </div>
-
-
 </div>
 
     <!-- Start Formato para impresion -->

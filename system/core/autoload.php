@@ -5,4 +5,5 @@ spl_autoload_register(function ($class) {
     return require CORE . "$class.php";
   if(is_file(HELPER_PATH . "$class.php"))
     return require HELPER_PATH . "$class.php";
+    
 });

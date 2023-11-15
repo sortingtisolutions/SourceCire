@@ -23,6 +23,7 @@ $qry = "SELECT pjtcn_prod_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt
         WHERE pcn.pjt_id=$verId ORDER BY pdt.pjtdt_prod_sku;";
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){

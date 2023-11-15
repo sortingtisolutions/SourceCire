@@ -1,5 +1,5 @@
 -- CREATE DATABASE 'cttapp_cire'
-
+/* v_1.2.2 */
 /* ACCESORIOS */
 /* Comentario prueba de clonacion en git - Edna*/
 DROP TABLE IF EXISTS `ctt_accesories`;

@@ -39,9 +39,6 @@ class ProjectsListModel extends Model
 				INNER JOIN ctt_projects_status AS prs ON prs.pjs_status=pr.pjt_status
 				WHERE pjt_id = $idSup and pr.pjt_status = 3;";
 
-		/* $qry = "SELECT sup_id, sup_business_name, sup_contact, sup_rfc, sup_email, sup_phone, sut_id 
-		FROM ctt_suppliers WHERE sup_id = $idSup ;"; */
-
 		$result = $this->db->query($qry);
 
 		if($row = $result->fetch_row()){
@@ -113,44 +110,6 @@ class ProjectsListModel extends Model
 
 		return $result;
 	}
-
-/* 	//Guarda proveedor
-public function SaveProjectsList($params)
-{
-	$estatus = 0;
-		try {
-			$qry = "INSERT INTO ctt_suppliers (sup_business_name, sup_contact, sup_rfc, sup_email, sup_phone,sup_status, sut_id)
-			VALUES('".$params['NomProveedor']."','".$params['ContactoProveedor']."','".$params['RfcProveedor']."','".$params['EmailProveedor']."','".$params['PhoneProveedor']."',1,'".$params['tipoProveedorId']."');";
-			$this->db->query($qry);	
-
-			$qry = "SELECT MAX(sup_id) AS id FROM ctt_suppliers;";
-			$result = $this->db->query($qry);
-			if ($row = $result->fetch_row()) {
-				$lastid = trim($row[0]);
-			}
-
-
-			$estatus = $lastid;
-		} catch (Exception $e) {
-			$estatus = 0;
-		}
-	return $estatus;
-} */
- /*    //borra proveedor
-	public function DeleteProjectsList($params)
-	{
-        $estatus = 0;
-        try {
-            $qry = "UPDATE ctt_suppliers
-                    SET sup_status = 0
-                    WHERE sup_id in (".$params['IdProveedor'].");";
-            $this->db->query($qry);
-            $estatus = 1;
-        } catch (Exception $e) {
-            $estatus = 0;
-        }
-		return $estatus;
-	} */
 
 	public function GetTipoProjectsList()
 	{

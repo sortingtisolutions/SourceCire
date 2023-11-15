@@ -80,7 +80,7 @@ class ProjectFiscalFieldsModel extends Model
         $this->db->query($qr1);
 
 
-        //++++++++ Actualiza el porcentaje de faltantes para datos fiscales ++++++//
+    //++++++++ Actualiza el porcentaje de faltantes para datos fiscales ++++++//
         $qr2 = "UPDATE ctt_customers SET cus_fill = (
                     WITH fields AS (
                         SELECT 'cus_name' as concepto,    coalesce(LENGTH(cus_name)     < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION

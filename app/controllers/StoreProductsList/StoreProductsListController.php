@@ -5,6 +5,7 @@
 
 class StoreProductsListController extends Controller
 {
+
     private $session;
     public $model;
 
@@ -40,9 +41,6 @@ class StoreProductsListController extends Controller
             }
             echo $res;
 
-              
-          // $params = array('unidad' => $res);
-          // $this->render(__CLASS__, $params);
     }
 
 // Lista los almacenes 
@@ -114,8 +112,6 @@ class StoreProductsListController extends Controller
         
     } 
     
-
-
     // Obtiene del detalle del projeto 
         public function listDetailProject($request_params)
         {
@@ -133,7 +129,5 @@ class StoreProductsListController extends Controller
             }
             echo $res;
         } 
-
-
 
 }

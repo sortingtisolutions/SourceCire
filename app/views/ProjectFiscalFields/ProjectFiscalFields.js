@@ -20,6 +20,7 @@ function getCustomerFields(cusId) {
     var selector = putCustomerFields;
     fillField(pagina, par, tipo, selector);
 }
+
 /** +++++  configura la table de proyectos */
 function settingTable() {
     let title = 'Lista de proyectos';

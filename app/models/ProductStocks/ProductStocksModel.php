@@ -36,7 +36,6 @@ class ProductStocksModel extends Model
 		$isProducto = $this->db->real_escape_string($request['isProducto']);
 		$isAccesorio = $this->db->real_escape_string($request['isAccesorio']);
 
-
 		$queryExt = "";
 		$levelProduct = "";
 		$BanderaLevel = 0;
@@ -71,7 +70,6 @@ class ProductStocksModel extends Model
 			$queryExt.= " AND pr.prd_level in (".$levelProduct.")";
 		}
 
-
 		if($isConcepto == 1)
 		{
 			$qry = "SELECT distinct pr.prd_sku, pr.prd_name, prd_price, sb.sbc_name FROM ctt_products AS pr
@@ -88,11 +86,6 @@ class ProductStocksModel extends Model
 			LEFT JOIN ctt_suppliers AS sp ON sp.sup_id = sr.sup_id
 			WHERE sr.ser_status = 1 AND st.stp_quantity > 0  ".$queryExt;
 		}
-
-		//print_r($qry);
-		//exit();
-
-
 
 		return $this->db->query($qry);
 	}	
@@ -118,13 +111,7 @@ class ProductStocksModel extends Model
 // Actualizala cantidad de productos en un almacen destino
 	public function UpdateProducts($param)
 	{
-		// $idPrd 			= $this->db->real_escape_string($param['prd']);
-		// $idStrSrc 		= $this->db->real_escape_string($param['str']);
-		// $quantity 		= $this->db->real_escape_string($param['qty']);
-
-		// $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} 
-		// WHERE str_id = {$idStrSrc} and  ser_id = {$idPrd};";
-		// return $this->db->query($qry);
+		
 	}
 
 
@@ -135,9 +122,9 @@ class ProductStocksModel extends Model
 		$idStrSrc 		= $this->db->real_escape_string($param['str']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 
-		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) VALUES ($quantity, $idStrSrc, $idPrd);";
+		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) 
+		VALUES ($quantity, $idStrSrc, $idPrd);";
 		return $this->db->query($qry);
 	}
 
-	
 }

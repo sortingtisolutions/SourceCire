@@ -54,8 +54,6 @@ function discountInsuredEvent() {
         .unbind('click')
         .on('click', function () {
             let elm = $(this);
-            // console.log(elm.offset().left);
-            // console.log(elm.offset().top);
             let posLeft = elm.offset().left - 90;
             let posTop = elm.offset().top - 80;
 
@@ -286,7 +284,6 @@ function eventsAction() {
         });
 
     expandCollapseSection();
-
 }
 
 function expandCollapseSection() {
@@ -679,10 +676,7 @@ function putEdosRepublic(dt) {
 }
 function putLocationType(dt) {
     loct =dt;
-/* 
-    $('#txtTypeLocationEdt').on('change', function () {
-        validator();
-    }); */
+
 }		
 
 /**  Llena el listado de prductores */
@@ -888,9 +882,7 @@ function actionSelProject(obj) {
 }
 
 function getCalendarPeriods(pj) {
-    // configura el calendario de seleccion de periodos
-    // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
-    // let fecha = moment(Date()).format('DD/MM/YYYY');
+
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -1672,7 +1664,6 @@ function putProductsRelatedPk(dt){
     });
 
     ActiveChangePKT();
-
 }
 
 function cleanInputs(){
@@ -1714,7 +1705,6 @@ function ActiveChangePKT(){
         infoDetallePkt(lcatsub);
         // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
     });
-
 }
 
 function settingProdChg(){
@@ -1784,7 +1774,6 @@ function putChangeProd_old(dt) {
     });
 }
 
-
 // Muestra el inventario de productos
 function stockProduct(bdgId, type) {
     getStockProjects(bdgId.substring(3, 20));
@@ -1834,10 +1823,7 @@ function editProject(pjtId) {
 }
 
 function fillContent() {
-    // configura el calendario de seleccion de periodos
-    // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
-    // let fecha = moment(Date()).format('DD/MM/YYYY');
-    // let restdate= moment().subtract(3, 'days');
+    
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -1978,10 +1964,7 @@ function fillData(inx) {
         $('#txtTripBack').parents('tr').removeAttr('class');
         $('#addLocation').parents('tr').removeAttr('class');
         add = 2;
-        //$('#btn_save_locations').addClass('hide');
-        
     }
-         // $('#txtEdosRepublic').parents('tr').removeAttr('class');
         $('#txtTripGo').parents('tr').removeAttr('class');
         $('#txtTripBack').parents('tr').removeAttr('class');
 
@@ -1997,8 +1980,7 @@ function fillData(inx) {
 			$('#txtLocationEdt').parents('tr').addClass('hide');
             $('#addLocation').parents('tr').removeAttr('class');	
             add = 2;							
-            //$('#btn_save_locations').addClass('hide');						
-            // $('#txtLocationEdt').val('');
+
         } else {
             console.log('Otro');
             $('#txtLocationEdt').val('CDMX');
@@ -2006,10 +1988,6 @@ function fillData(inx) {
             $('#txtTripGo').parents('tr').addClass('hide');
             $('#txtTripBack').parents('tr').addClass('hide');
             $('#addLocation').parents('tr').addClass('hide');	
-            // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
-            //     'selected',
-            //     'selected'
-            // );
         }
     });
 
@@ -2197,9 +2175,6 @@ function newProject() {
         .on('change', function () {
             let selection = $(this).val();
             if (selection == 2 || selection == 4) {
-                // console.log('Foraneo');
-                /* $('#txtEdosRepublic').parents('tr').removeAttr('class');
-                $('#txtLocationEdt').val('');*/
                 $('#txtTripGo').parents('tr').removeAttr('class');
                 $('#txtTripBack').parents('tr').removeAttr('class');
                  
@@ -2297,13 +2272,13 @@ function putLocations(){ //** AGREGO ED */
             }]`;
     
     console.log(par);
-        
-        fill_table(par);
-        clean_selectors();
+    fill_table(par);
+    clean_selectors();
     
 }
 
 function fill_table(par) { //** AGREGO ED */
+    console.log('Paso 3');
     let largo = $('#listLocationsTable tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#listLocationsTable tbody tr').remove() : '';
     par = JSON.parse(par);
@@ -2368,8 +2343,6 @@ function exchange_result(dt) {
     console.log(dt);
     if (add ==1) {
         $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion */
-        /* let tabla=$('#listLocationsTable').DataTable();
-        tabla.rows().remove().draw(); */
         $('#addLocationModal').addClass('overlay_hide');
     
     }else{
@@ -2484,8 +2457,7 @@ function actionNewProject() {
                         "empid"          : "${empid}",
                         "empname"        : "${empname}"
                     }] `;
-                    /* ,                       
-                        "edos_id"        : "${edos_id}" */ //colocar en linea 2245
+
                 // console.log(par);
                 var pagina = 'Budget/SaveProject';
                 var tipo = 'html';
@@ -2917,17 +2889,6 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-    /* if (acc == 'S') {
-        $('.invoice__modalBackgound').fadeIn('slow');
-        $('.invoice__loading')
-            .slideDown('slow')
-            .css({ 'z-index': 401, display: 'flex' });
-        $('#loadingText').text('BUSCANDO...');
-    } else {
-        $('.invoice__loading').slideUp('slow', function () {
-            $('.invoice__modalBackgound').fadeOut('slow');
-        });
-    } */
 
     if (acc == 'H') {
         $('.invoice__loading').slideUp('slow', function () {
@@ -3054,12 +3015,6 @@ function showResAcc(dt) {
 function promoteProject_old(pjtId) {
     // console.log('TERMINO PROMO-COTIZ-1');
     modalLoading('S');
-
-    /* let locprdid=520;  // codigo para probar funcion
-    let locserid=1416;
-    getRelPrdAcc(locprdid,locserid);
-    modalLoading('H'); */
-
     let verId = $('.invoice_controlPanel .version_current').attr(
         'data-version'
     );
@@ -3077,7 +3032,6 @@ function showResult_old(dt) {
     $('#P' + pjtId).remove();
     modalLoading('H');
     // console.log('TERMINO PROMO-COTIZ-2');
-    // promoteProject2(pjtId);
     cleanFormat();
 }
 

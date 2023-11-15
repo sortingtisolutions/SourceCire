@@ -40,7 +40,6 @@ WHERE pj.pjt_id='$proj_id' AND ser.ser_situation='M' AND pdm.pmt_date_register B
 
 $res = $conn->query($qry);
 
-
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }

@@ -36,11 +36,6 @@ class CodeBarModel extends Model
 				WHERE sr.ser_status = 1 AND st.stp_quantity > 0
 				AND st.str_id='$strId' order by st.str_id;"; 
 
-		//$store = $this->db->real_escape_string($store);
-		/* $qry = "SELECT * FROM ctt_products AS pr
-		LEFT JOIN  ctt_series AS sr ON sr.prd_id = pr.prd_id
-		WHERE sr.ser_status = 1 and sr.ser_sku is not null ;"; */
-
 		return $this->db->query($qry);
 	}	
 // Listado de Movimientos
@@ -50,8 +45,6 @@ class CodeBarModel extends Model
 		$qry = "SELECT * FROM ctt_stores_exchange WHERE exc_guid = '$guid' ORDER BY exc_date DESC;";
 		return $this->db->query($qry);
 	}
-
-
 
 // Registra los movimientos entre almacenes
 	public function SaveExchange($param, $user)
@@ -80,13 +73,7 @@ class CodeBarModel extends Model
 // Registra los movimientos entre almacenes origen
 	public function UpdateStoresSource($param)
 	{
-	// 	$idPrd 			= $this->db->real_escape_string($param['prd']);
-	// 	$idStrSrc 		= $this->db->real_escape_string($param['str']);
-	// 	$quantity 		= $this->db->real_escape_string($param['qty']);
-
-	// 	$qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $quantity 
-	// 	WHERE str_id = $idStrSrc and  ser_id = $idPrd;";
-	// 	return $this->db->query($qry);
+	
 	}
 // Busca si existe asignado un almacen con este producto
 	public function SechingProducts($param)
@@ -100,13 +87,7 @@ class CodeBarModel extends Model
 // Actualizala cantidad de productos en un almacen destino
 	public function UpdateProducts($param)
 	{
-		// $idPrd 			= $this->db->real_escape_string($param['prd']);
-		// $idStrSrc 		= $this->db->real_escape_string($param['str']);
-		// $quantity 		= $this->db->real_escape_string($param['qty']);
-
-		// $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} 
-		// WHERE str_id = {$idStrSrc} and  prd_id = {$idPrd};";
-		// return $this->db->query($qry);
+		
 	}
 
 // Agrega el registro de relación almacen producto

@@ -8,7 +8,6 @@ class MenuModel extends Model
 		parent::__construct();
 	}
 
-
 // Lista el Menu  *****
 	public function listaMenu($userId)
 	{

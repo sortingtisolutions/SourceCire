@@ -15,7 +15,6 @@
     $version = '';
     $freelance = '';
     $date = '';
-
     $isConcepto = 0;
 
     $dato = explode('@', $getFile);

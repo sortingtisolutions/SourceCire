@@ -1515,14 +1515,6 @@ function fillBudgetProds(jsn, days, stus) {
     activeInputSelector();
 
     if (pds.comments > 0) { // Agregado por Edna // *** Edna V1
-        //console.log($(`#bdg${pds.prd_id}`).attr('data-mice'));
-       /* if ($(`#bdg${pds.prd_id}`).attr('data-mice')==pds.pjtvr_id) {
-            $(`#bdg${pds.prd_id} .col_quantity-led`)
-            .removeAttr('class')
-            .addClass('col_quantity-led col_quantity-comment')
-            .attr('title', 'Comentarios al producto');
-        } */
-         
         $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
@@ -1538,10 +1530,7 @@ function putCounterPending(dt) {
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        /*  $(`#bdg${dt[0].prd_id} .col_quantity-led`)
-            .removeAttr('class')
-            .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`);  */ 
+
         $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
         .addClass('col_quantity-led col_quantity-pending')
         .attr('title', `${word} en pendiente`);
@@ -1894,26 +1883,7 @@ function putProductsRelated(dt) {
 }
 
 function putProductsRelatedSons(dt, pr) {
-   /*  let H = '';
-    $.each(dt, function (v, u) {
-        if (u.prd_parent == pr) {
-            let levelProduct =
-                u.prd_level == 'A' ? 'class="levelAccesory"' : '';
-            let prodSku =
-                u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
-            let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
-            H += `
-            <tr >
-                <td>${u.prd_sku}</td>
-                <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
-                <td>${u.prd_level}</td>
-                <td ${levelProduct} >${u.prd_name}</td>
-                <td>${u.cat_name}</td>
-            </tr>
-            `;
-        }
-    });
-    return H; */
+//    console.log('putProductsRelatedSons',dt);
 }
 
 function settingChangeSerie(){
@@ -1993,10 +1963,6 @@ function putProductsRelatedPk(dt){
             // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
         } 
     });
-
-  /*   $(`.invoice__modal-general table`).sticky({
-        top: 'thead tr:first-child',
-    }); */
     ActiveChangePKT();
 
 }
@@ -2314,8 +2280,6 @@ function fillData(inx) {
                 $('#txtLocationEdt').parents('tr').addClass('hide');
                 $('#seeLocation').parents('tr').removeAttr('class');	
                 add = 2;							
-                //$('#btn_save_locations').addClass('hide');						
-                // $('#txtLocationEdt').val('');
             } else {
                 console.log('Otro');
                 $('#txtLocationEdt').val('CDMX');
@@ -2323,10 +2287,7 @@ function fillData(inx) {
                 $('#txtTripGo').parents('tr').addClass('hide');
                 $('#txtTripBack').parents('tr').addClass('hide');
                 $('#seeLocation').parents('tr').addClass('hide');	
-                // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
-                //     'selected',
-                //     'selected'
-                // );
+    
             }
         });
     
@@ -2498,21 +2459,9 @@ par = `
         }]`;
 
 console.log(par);
-/* if (add ==2) {
-    let prjId = $('#txtProjectIdEdt').val();
-    let par = `
-    [{
-        "loc" :  "${loc}",
-        "edo" :  "${edo}",
-        "prjId" : "${prjId}"
-    }]`;
-    //save_exchange(par);
-}else{ */
     
     fill_table(par);
     clean_selectors();
-//}
-
 
 }
 function fill_table(par) { //** AGREGO ED */
@@ -2572,17 +2521,17 @@ fillField(pagina, par, tipo, selector);
 }
 
 function exchange_result(dt) {
-console.log(dt);
-if (add ==1) {
-    $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion */
-    $('#addLocationModal').addClass('overlay_hide');
+    console.log(dt);
+    if (add ==1) {
+        $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion */
+        $('#addLocationModal').addClass('overlay_hide');
 
-}else{
-    let prj_id = $('#txtProjectIdEdt').val();
-        
-    getLocationsEdos(prj_id);
-    clean_selectors();
-}
+    }else{
+        let prj_id = $('#txtProjectIdEdt').val();
+            
+        getLocationsEdos(prj_id);
+        clean_selectors();
+    }
 
 }
 

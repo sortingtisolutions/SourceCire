@@ -150,15 +150,6 @@ function setting_table() {
                     view_report();
                 },
             },
-             /* {
-                // Boton aplicar cambios
-                text: 'Aplicar subarrendos',
-                footer: true,
-                className: 'btn-apply hidden-field',
-                action: function (e, dt, node, config) {
-                    read_ProductForSubletting_table();
-                },
-            },  */
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -195,36 +186,6 @@ function setting_table() {
             [100, 200, 300, 'Todos'],
         ],
         buttons: [
-            /* {
-                //Botón para Excel
-                extend: 'excel',
-                footer: true,
-                title: title,
-                filename: filename,
-
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-            },
-            {
-                //Botón para PDF
-                extend: 'pdf',
-                footer: true,
-                title: title,
-                filename: filename,
-
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-            },
-            {
-                //Botón para imprimir
-                extend: 'print',
-                footer: true,
-                title: title,
-                filename: filename,
-
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-            }, */
             {
                 // Boton aplicar cambios
                 text: 'Aplicar subarrendos',
@@ -341,11 +302,7 @@ function put_status_mant(dt) {
     });
     $('#txtStatus').on('change', function () {
         px = parseInt($('#txtStatus option:selected').attr('data_indx'));
-        //console.log($('#txtStatus').val());
-        //$('#txtStatus').val(pj[px].pjt_id);
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-        //$('.objet').addClass('objHidden');
-        //get_products(pj[px].pjt_id);
+        
     }); 
 }
 function put_changes(dt) {
@@ -357,11 +314,7 @@ function put_changes(dt) {
     });
     $('#txtMotivo').on('change', function () {
         px = parseInt($('#txtMotivo option:selected').attr('data_indx'));
-        //console.log($('#txtStatus').val());
-        //$('#txtStatus').val(pj[px].pjt_id);
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-        //$('.objet').addClass('objHidden');
-        //get_products(pj[px].pjt_id);
+        
     }); 
 }
 function put_change_reasons(dt){
@@ -390,7 +343,6 @@ function put_change_reasons(dt){
 
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
-    // console.log(pj);
     // console.log(dt);
     pd = dt;
     
@@ -404,35 +356,11 @@ function put_Products(dt) {
     let cn = 0;
     if(dt[0].prd_id!=0){
         $.each(pd, function (v, u) {
-            /*
-            let datestart = u.sub_date_start;
-            let dateend = u.sub_date_end;
-    
-            if (datestart == null) {
-                datestart = define_days(
-                    'i',
-                    pj[px].pjt_date_start,
-                    u.pjtcn_days_base,
-                    u.pjtcn_days_trip,
-                    u.pjtcn_days_test
-                );
-            }
-            if (dateend == null) {
-                dateend = define_days(
-                    'f',
-                    pj[px].pjt_date_start,
-                    u.pjtcn_days_base,
-                    u.pjtcn_days_trip,
-                    u.pjtcn_days_test
-                );
-            }*/
+            
             let sku = u.pjtdt_prod_sku;
             if (sku == 'Pendiente') {
                 sku = `<span class="pending">${sku}</sku>`;
             }
-    
-            
-            // editable: `<i id="k${u.pjt_id}" class="fas fa-times-circle kill"></i>`,
             tabla.row
                 .add({
                     editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,
@@ -488,7 +416,6 @@ function put_Products(dt) {
                 let status = rw[0].cells[12].outerText;
                 //let no_serie = rw[0].cells[12].outerText;
 
-
                 let seriesId = rw[0].attributes[2].value;
                 let dataProjChange = rw[0].attributes[3].value;
                 let datamaintain = rw[0].attributes[4].value;
@@ -514,10 +441,6 @@ function put_Products(dt) {
                 $('#txtStatus').val(idStatus); 
                 $('#txtIdMaintain').val(datamaintain);
                 $('#txtIdStatus').val(idStatus); 
-                //$('#txtPeriod').val(datestar).split(' - ')[0]; 
-                //$('#txtPeriod').val(dateend).split(' - ')[1]; 
-                //console.log(status);
-                //setting_datepicket($('#txtPeriod'), datestar, dateend);
 
                 if ($('#txtIdMaintain').val() == 0) {
                     //console.log('add');
@@ -617,10 +540,7 @@ function updating_serie(acc) {
 function put_save_subleting(dt) { 
     console.log(dt);
     get_products(dt,em);
-    /* $('#txtIdSerie').val(0);
-    $('#txtIdStatus').val(0);
-    $('#txtIdMaintain').val(0); */
-    // $('#txtIdProject').val('');
+
     $('#txtComments').val('');
     $('#txtDays').val('');
     $('#txtHrs').val('');
@@ -728,10 +648,7 @@ function define_days(st, dt, db, dr, ds) {
     return dats;
 }
 function fillContent() {
-    // configura el calendario de seleccion de periodos
-    // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
-    // let fecha = moment(Date()).format('DD/MM/YYYY');
-    // let restdate= moment().subtract(3, 'days'); 
+
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -781,20 +698,8 @@ function fillContent() {
             );
             looseAlert($('#txtPeriod').parent());
 
-            // $('#txtPeriodProject').parent().children('span').html('');
-            // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
     );
-    // Llena el selector de tipo de proyecto
-    /* $.each(tpprd, function (v, u) {
-        let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
-        $('#txtType').append(H);
-    }); */
-    // Llena el selector de tipo de llamados
-
-
-    //
-    
 
 }
 
@@ -826,7 +731,6 @@ function activeIconsSerie2() {
         .on('click', function () {
             let id = $(this).attr('id');
             //console.log(id);
-
         });
             
 }

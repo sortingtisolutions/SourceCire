@@ -10,6 +10,7 @@
         visibility: hidden !important;
     }
 </style>
+
 <!-- Comentario prueba 2 -->
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
@@ -33,10 +34,6 @@
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
                                     <label for="NomAlmacen">Responsable de almacen</label>
-<!--								<select id="selectRowEncargado"  name="selectRowEncargado"  class="form-select form-select-sm" required>
-
-                                    </select>
-                                    <label for="selectTipoAlmacen" class="form-label">Responsable de Almacen</label> -->
                                 </div>
                             </div>
 
@@ -50,8 +47,6 @@
                                     <label for="selectTipoAlmacen" class="form-label">Tipo de almacen</label>
                                 </div>
                             </div>
-
-
 
                             <div class="row">
                                 <div class="col-6">
@@ -96,7 +91,6 @@
     
 </div>
 
-
 <!-- Start Ventana modal que muestra las EXISTENCIAS por serie -->
 <div class="overlay_background overlay_hide"id="ExisteStrModal" style="width:60%">
         <div class="overlay_modal">
@@ -131,7 +125,6 @@
         </div>
     </div>
 <!-- End Ventana modal SERIES -->
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

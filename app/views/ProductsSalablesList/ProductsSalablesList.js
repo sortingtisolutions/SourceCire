@@ -308,22 +308,21 @@ function returnApply() {
     } else {
         if (qty > 0 && com != '') {
             let par = `
-        [{
-            "sldSku" : "${dat[1]}",
-            "sldNme" : "${dat[2]}",
-            "sldPrc" : "${dat[3]}",
-            "saleId" : "${dat[0]}",
-            "seriId" : "${dat[4]}",
-            "projId" : "${dat[5]}",
-            "sldtId" : "${dat[6]}",
-            "sldQty" : "${qty}",
-            "sldSit" : "DEVOLUCION",
-            "sldsec" : "sales",
-            "commen" : "${com}",
-            "nfolio" : "${folio}",
-            "storId" : "5"
-        }]
-        `;
+            [{
+                "sldSku" : "${dat[1]}",
+                "sldNme" : "${dat[2]}",
+                "sldPrc" : "${dat[3]}",
+                "saleId" : "${dat[0]}",
+                "seriId" : "${dat[4]}",
+                "projId" : "${dat[5]}",
+                "sldtId" : "${dat[6]}",
+                "sldQty" : "${qty}",
+                "sldSit" : "DEVOLUCION",
+                "sldsec" : "sales",
+                "commen" : "${com}",
+                "nfolio" : "${folio}",
+                "storId" : "5"
+            }] `;
             // console.log(par);
             var pagina = 'ProductsSalablesList/SaveReturn';
             var tipo = 'html';

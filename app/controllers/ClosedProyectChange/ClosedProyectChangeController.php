@@ -24,127 +24,162 @@ class ClosedProyectChangeController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-    // LISTA LOS ALMACENES
-        public function listStores($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->listStores($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"str_id":"0"}]';	
-            }
-            echo $res;
-        } 
+/** */
+    public function listProjects($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjects($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    } 
+/** */
+    public function listDataProjects($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listDataProjects($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    } 
+/** */
+    public function getMontos($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getMontos($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    } 
+/** */
+    public function saveDocumentClosure($request_params)
+    {
+        $result = $this->model->saveDocumentClosure($request_params);
+        echo $result;
+    }
+/** */
+    public function insertCollectPays($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->insertCollectPays($request_params, $params);
+        $res = $result;
+        $pjtId  = $this->model->PromoteProject($request_params);
 
-// Lista los productos
-        public function listProducts($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->listProducts($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"prd_id":"0"}]';	
-            }
-            echo $res;
-        } 
+        echo $res;
+    } 
+/** */
+    public function listProducts($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProducts($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
 
-// Lista los proyectos
-        public function listProjects($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->listProjects($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"pjt_id":"0"}]';	
-            }
-            echo $res;
-        } 
 // Guarda la venta
-        public function NextExchange($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->NextExchange($request_params);
-            $res = $result;
-            echo $res;
-        } 
-// Guarda la venta
-        public function SaveSale($request_params)
-        {
-            $params =  $this->session->get('user');
-            $group = explode('|',$params);
+    // public function NextExchange($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->NextExchange($request_params);
+    //     $res = $result;
+    //     echo $res;
+    // } 
     
-            $user = $group[2];
+// Guarda la venta
+    // public function SaveSale($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $group = explode('|',$params);
 
-            $result = $this->model->SaveSale($request_params, $user);
-            $res = $result;
-            echo $res;
-        } 
+    //     $user = $group[2];
+
+    //     $result = $this->model->SaveSale($request_params, $user);
+    //     $res = $result;
+    //     echo $res;
+    // } 
     // Guarda detalle de la venta
-        public function SaveSaleDetail($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->SaveSaleDetail($request_params, $params);
-            $res = $result;
-            echo $res;
-        } 
+    // public function SaveSaleDetail($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->SaveSaleDetail($request_params, $params);
+    //     $res = $result;
+    //     echo $res;
+    // } 
+
+   
 
     // Guarda Comentario
-        public function SaveComments($request_params)
-        {
-            $params =  $this->session->get('user');
-            $group = explode('|',$params);
-    
-            $user = $group[2];
-            $result = $this->model->SaveComments($request_params, $user);
-            $res = $result;
-            echo $res;
-        } 
+    // public function SaveComments($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $group = explode('|',$params);
+
+    //     $user = $group[2];
+    //     $result = $this->model->SaveComments($request_params, $user);
+    //     $res = $result;
+    //     echo $res;
+    // } 
     // Guarda el archivo de venta
-        public function saveSaleList($request_params)
-        {
-            $params =  $this->session->get('user');
-            $group = explode('|',$params);
-    
-            $user = $group[0];
-            $name = $group[2];
+    // public function saveSaleList($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $group = explode('|',$params);
 
-            $result = $this->model->saveSaleList($request_params, $user);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"prd_id":"0"}]';	
-            }
-            $dir = ROOT . FOLDER_PATH . '/app/views/ClosedProyectChange/ClosedProyectChangeFile-'. $user .'.json';
+    //     $user = $group[0];
+    //     $name = $group[2];
 
-            if (file_exists($dir)) unlink($dir);
+    //     $result = $this->model->saveSaleList($request_params, $user);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"prd_id":"0"}]';	
+    //     }
+    //     $dir = ROOT . FOLDER_PATH . '/app/views/ClosedProyectChange/ClosedProyectChangeFile-'. $user .'.json';
 
-            $fileJson = fopen( $dir ,"w") or die("problema al escribir el archivo ");
-            fwrite($fileJson, $res);
-            fclose($fileJson);
+    //     if (file_exists($dir)) unlink($dir);
 
-            echo $user . '|' . $name;
-        } 
+    //     $fileJson = fopen( $dir ,"w") or die("problema al escribir el archivo ");
+    //     fwrite($fileJson, $res);
+    //     fclose($fileJson);
+
+    //     echo $user . '|' . $name;
+    // } 
 }

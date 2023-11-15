@@ -170,10 +170,7 @@ function getProveedoresTable() {
                   },
                },
             ],
-            // columnDefs: [
-            //    { responsivePriority: 1, targets: 0 },
-            //    { responsivePriority: 2, targets: -1 },
-            // ],
+            
             scrollY: 'calc(100vh - 260px)',
             scrollX: true,
             // scrollCollapse: true,
@@ -438,42 +435,6 @@ function SaveProveedores_old() {
          }
          if (respuesta != 0) {
             //getAlmacenesTable();
-           /*  var rowNode = table.row
-               .add({
-                  [0]:
-                     '<button onclick="EditProveedores(' +
-                     respuesta +
-                     ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletProveedor(' +
-                     respuesta +
-                     ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
-                  [1]: IdProveedor,
-                  [2]: NomProveedor,
-                  [3]: NomComercial,
-                  [4]: ContactoProveedor,
-                  [5]: RfcProveedor,
-                  [6]: selectConstancia,
-                  [7]: EmailProveedor,
-                  [8]: PhoneProveedor,
-                  [9]: PhoneAdicional,
-                  [10]: tipoProveedorId,
-                  [11]: selectAnticipo,
-                  [12]: MontoAnticipo,
-                  [13]: ProveInternacional,
-                  [14]: DatoDescripcion,
-                  [15]: selectCredito,
-                  [16]: DiasCredito,
-                  [17]: MontoCredito,
-                  [18]: selectFormaPago,
-                  [19]: DatoBanco,
-                  [20]: DatoClabe,
-               })
-               .draw()
-               .node();
-            $(rowNode).find('td').eq(0).addClass('edit');
-            $(rowNode).find('td').eq(1).addClass('text-center');
-            $(rowNode).find('td').eq(1).attr("hidden",true);
-            $(rowNode).find('td').eq(3).attr("hidden",true);
- */
             LimpiaModal();
             getProveedoresTable();
             getTipoProveedor();

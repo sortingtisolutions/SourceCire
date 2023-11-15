@@ -30,8 +30,7 @@ public function listEstatusMantenimiento($params)
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qry = "SELECT * FROM ctt_projects AS pj
         LEFT JOIN ctt_location AS lc ON lc.loc_id=pj.loc_id WHERE pjt_parent='$pjtId' ORDER BY pjt_id";
-        //
-        
+
         return $this->db->query($qry);
     }    
 
@@ -147,32 +146,6 @@ public function listEstatusMantenimiento($params)
 
         $qry = "SELECT count(*) as items FROM ctt_stores_products WHERE ser_id = $prodId AND str_id = $storId;";
         return $this->db->query($qry);
-    }
-
-
-// Actualizala cantidad de productos en un almacen destino
-    public function UpdateProducts($param)
-    {
-        // $idPrd 			= $this->db->real_escape_string($param['ser']);
-        // $idStrSrc 		= $this->db->real_escape_string($param['sti']);
-        // $quantity 		= $this->db->real_escape_string($param['qty']);
-
-        // $qry = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity + {$quantity} WHERE str_id = {$idStrSrc} and  ser_id = {$idPrd};";
-        // return $this->db->query($qry);
-    }
-
-// Agrega el registro de relación almacen producto
-    public function InsertProducts($param)
-     {
-    //     $idPrd 			= $this->db->real_escape_string($param['ser']);
-    //     $idStrSrc 		= $this->db->real_escape_string($param['sti']);
-    //     $quantity 		= $this->db->real_escape_string($param['qty']);
-
-    //     $qry = "INSERT INTO ctt_stores_products 
-    //                 (stp_quantity, str_id, ser_id) 
-    //             VALUES 
-    //                 ($quantity, $idStrSrc, $idPrd);";
-    //     return $this->db->query($qry);
     }
 
 // Proceso de subarrendo
@@ -302,8 +275,6 @@ public function listEstatusMantenimiento($params)
                     WHERE pmt_id = '$idMaintain'";
         $this->db->query($qry2);
 
-        
-
         return $idMaintain;
     }
 
@@ -326,7 +297,6 @@ public function listEstatusMantenimiento($params)
     // Guardar los datos del mantenimiento
     public function saveMaintain($params)
     {
-        
         $comments 		= $this->db->real_escape_string($params['comments']);
         $days 		    = $this->db->real_escape_string($params['days']);
         $hrs		    = $this->db->real_escape_string($params['hrs']);
@@ -338,20 +308,6 @@ public function listEstatusMantenimiento($params)
         $cost 	= $this->db->real_escape_string($params['cost']);
         $idProject 	= $this->db->real_escape_string($params['idProject']);
 
-        // Obtiene el ultimo sku registrado para el producto seleccionado
-       /* $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';";
-        $result = $this->db->query($qry);
-
-        $skus = $result->fetch_object();
-        $sku = $skus->last_sku;
-        $serie = $skus->last_serie;
-        $skuNew = intval($sku) +1 ;
-        $skuNew = 'R' . str_pad($skuNew, 3, "0", STR_PAD_LEFT);
-        $serieNew = intval($serie) +1 ;
-        $serieNew = 'R' . str_pad($serieNew, 3, "0", STR_PAD_LEFT);
-
-        $newSku = $produSku . $skuNew;*/
-
         // Agrega la nueva serie
         $qry1 = "INSERT INTO ctt_products_maintenance (
             pmt_days, pmt_hours, pmt_date_start, pmt_date_end, pmt_price, pmt_comments,pmt_date_register, mts_id, ser_id, pjtcr_id,pjt_id
@@ -361,30 +317,7 @@ public function listEstatusMantenimiento($params)
         $this->db->query($qry1);
 
         $pmtId = $this->db->insert_id;
-            /*
-        // Actualiza el detalle del proyecto con la serie
-        $qry2 = "UPDATE ctt_projects_detail AS pd
-                INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
-                SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id
-                WHERE pd.pjtdt_id = $pjDetail ;";
-        $this->db->query($qry2);
-
-        // Agrega el nuevo registro en la tabla de subarrendos
-        $qry3 = "INSERT INTO ctt_subletting (
-                    sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
-                    ser_id, sup_id, prj_id, cin_id)
-                SELECT 
-                    ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
-                    '$supplier', '$projecId', '$tpCoinId' 
-                FROM ctt_series WHERE pjtdt_id = $pjDetail;";
-        $this->db->query($qry3);
-
-        $qry4 = " INSERT INTO ctt_stores_products 
-                    (stp_quantity, str_id, ser_id, prd_id) 
-                VALUES 
-                    ('1','$storesId', '$serieId','$producId');";
-        $this->db->query($qry4);*/
-
+           
         return $pmtId;
 
     }

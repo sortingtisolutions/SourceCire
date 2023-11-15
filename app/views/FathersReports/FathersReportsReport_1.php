@@ -33,7 +33,6 @@ WHERE pj.pjt_id IN ($proj_id)";
 
 $res = $conn->query($qry);
 
-
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }

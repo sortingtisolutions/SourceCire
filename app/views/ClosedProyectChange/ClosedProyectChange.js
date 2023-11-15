@@ -1,7 +1,4 @@
-let prod,
-    proj,
-    folio,
-    comids = [];
+let prod, gblcloid, proj, folio, comids = [], glbpjtid;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -12,37 +9,8 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-        get_stores();
         get_projects();
         fill_dinamic_table();
-        get_products(5);
-
-        $('#lstPayForm')
-            .unbind('change')
-            .on('change', function () {
-                var tp = $(this).val();
-                if (tp == 'TARJETA DE CREDITO') {
-                    $('#txtInvoice').addClass('required').parents('div.form_group').removeClass('hide');
-                } else {
-                    $('#txtInvoice').removeClass('required').parents('div.form_group').addClass('hide');
-                }
-            });
-
-        $('#addPurchase').on('click', function () {
-            saleApply();
-        });
-
-        $('#newQuote').on('click', function () {
-            window.location = 'ProductsSalables';
-        });
-        $('#newComment').on('click', function () {
-            addComments('sales', '');
-        });
-
-        $('.required').on('focus', function () {
-            $(this).removeClass('forValid');
-            $(this).parent().children('.novalid').remove();
-        });
         confirm_alert();
     } else {
         setTimeout(() => {
@@ -52,14 +20,31 @@ function inicial() {
 }
 
 /** OBTENCION DE DATOS */
-
 /**  Obtiene el listado de almacenes */
-function get_stores() {
-    var pagina = 'ClosedProyectChange/listStores';
+function get_projects() {
+    var pagina = 'ClosedProyectChange/listProjects';
     var par = `[{"strId":""}]`;
     var tipo = 'json';
-    var selector = put_stores;
-    caching_events('get_stores');
+    var selector = put_projects;
+    caching_events('get_projects');
+    fillField(pagina, par, tipo, selector);
+}
+
+function getDataProjects(pjtId) {
+    var pagina = 'ClosedProyectChange/listDataProjects';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putdataprojects;
+    caching_events('get_projects');
+    fillField(pagina, par, tipo, selector);
+}
+
+function get_montos(pjtId) {
+    var pagina = 'ClosedProyectChange/getMontos';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = fill_purchase;
+    caching_events('get_montos');
     fillField(pagina, par, tipo, selector);
 }
 
@@ -74,298 +59,489 @@ function get_products(strId) {
 }
 
 /**  Obtiene el listado de proyectos */
-function get_projects() {
-    var pagina = 'ClosedProyectChange/listProjects';
-    var par = `[{"strId":""}]`;
-    var tipo = 'json';
-    var selector = put_projects;
-    caching_events('get_projects');
-    fillField(pagina, par, tipo, selector);
-}
-
-function put_nextNumber(dt) {
-    console.log(dt);
-}
-
-function put_stores(dt) {
-    if (dt[0].str_id > 0) {
-        $.each(dt, function (v, u) {
-            let H = ` <option value="${u.str_id}">${u.str_name}</option>`;
-            $('#lstStore').append(H);
-        });
-    } else {
-        $('#lstStore').html('');
-    }
-
-    $('#lstStore')
-        .unbind('change')
-        .on('change', function () {
-            let strId = $(this).val();
-            get_products(strId);
-        });
-}
-
 function put_projects(dt) {
     proj = dt;
     if (dt[0].pjt_id > 0) {
         $.each(proj, function (v, u) {
-            let H = ` <option value="${v + 1}">${u.pjt_number}</option>`;
+            let H = `<option value="${u.pjt_id}" >${u.pjt_number}-${u.pjt_name}</option>`;
             $('#lstProject').append(H);
         });
-    } else {
-        $('#lstProject').html('');
-    }
+    } else { $('#lstProject').html('');  }
 
     $('#lstProject')
         .unbind('change')
         .on('change', function () {
-            console.log($(this).val());
-            var ix = $(this).val();
-            if (ix > 0) {
-                $('#txtProject').parents('div.form_group').removeClass('hide');
-                $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
-                $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
-            } else {
-                $('#txtProject').parents('div.form_group').addClass('hide');
-                $('#txtProject').val('');
-                $('#txtCustomer').val('');
-            }
+            fill_dinamic_table();
+            let lpjt = $(this).val();
+            glbpjtid=lpjt;
+            getDataProjects(lpjt);
+            get_montos(lpjt);
+
         });
+}
+
+function putdataprojects(dt) {
+    proj = dt;
+    if (dt[0].pjt_id > 0) {
+        $.each(proj, function (v, u) {
+                // $('#txtProject').parents('div.form_group').removeClass('hide');
+                $('#txtProject').val(u.pjt_name.toUpperCase());
+                $('#txtCustomer').val(u.cus_name);
+                $('#txtDateStar').val(u.pjt_date_start.toUpperCase());
+                $('#txtDateEnd').val(u.pjt_date_end.toUpperCase());
+                $('#txtRepresen').val(u.cus_legal_representative);
+                $('#txtAdress').val(u.cus_address);
+                $('#txtRespProg').val(u.emp_fullname.toUpperCase());
+        });
+    } else { $('#lstProject').html(''); }
+
+    $('#txtProject').on('change', function () {
+        let id = $(this).val();
+        console.log('Change',id);
+        fill_dinamic_table();
+        getDataProjects(lpjt);
+        // get_montos(lpjt);
+    });
 }
 
 function put_products(dt) {
     console.log(dt);
-    $('.list_products ul').html('');
-    if (dt[0].ser_id > 0) {
-        prod = dt;
-        let H = '';
-        $.each(dt, function (v, u) {
-            H = `
-                <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
-                    <div class="prodLevel">${u.ser_sku}</div>
-                    <div class="prodName">${u.prd_name}</div>
-                    <div class="prodLevel">${u.prd_price}</div>
-                    <div class="prodStock">${u.stock}</div>
-                </li> `;
-
-            $('.list_products ul').append(H);
-        });
-
-        $('.list_products ul li')
-            .unbind('click')
-            .on('click', function () {
-                let inx = $(this).attr('data_indx');
-                if (prod[inx].stock > 0) {
-                    fill_purchase(prod[inx], inx);
-                }
-            });
-    }
 }
 
-/**  +++++   Arma el escenario de la cotizacion  */
+/** *****  Arma el escenario de la cotizacion  */
 function fill_dinamic_table() {
     caching_events('fill_dinamic_table');
     let H = `
-        <table class="table_control" id="tblControl" style="width: 900px;">
+        <table class="table_control" id="tblControl" style="width: 1100px;">
             <thead>
-                <tr>
-                    <th rowspan="2" class="w5 fix product">CODIGO</th>
-                    <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
-                </tr>
                 <tr class="headrow">
-                    <th class="w4 zone_01" >CANTIDAD </th>
-                    <th class="w3 zone_01" >DESCRIPCION </th>
-                    <th class="w3 zone_03" >PRECIO</th>
-                    <th class="w3 zone_03" >DESCUENTO</th>
-                    <th class="w3 zone_03" >TOTAL</th>
+                    <th class="w4 zone_01" ></th>
+                    <th class="w4 zone_01" >VERSION </th>
+                    <th class="w3 zone_01" >TOTAL PROYECTO </th>
+                    <th class="w3 zone_01" >TOTAL MANTENIMIENTO </th>
+                    <th class="w3 zone_03" >TOTAL EXPENDABLES</th>
+                    <th class="w3 zone_03" >TOTAL DIESEL</th>
+                    <th class="w3 zone_03" >MONTO DESCUENTO</th>
+                    <th class="w3 zone_03" >TOTAL COBRO</th>
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
     `;
     $('#tbl_dynamic').html(H);
     tbldynamic('tbl_dynamic');
-    add_boton();
 }
 
-function add_boton() {
-    let H = `<br><button class="btn-add" id="addProduct">+ agregar producto</button>`;
-    $('.frame_fix_top #tblControl thead th.product').append(H);
+/**  ***** Guarda el producto en la cotización ***** */
+function fill_purchase(dt) {
+    // console.log('fill_purchase',dt);
+    if (dt[0].clo_id > 0) {
+        $.each(dt, function (v, u) {
+        let H = `
+            <tr id="${u.clo_id}" data_index="${u.clo_id}">
+                <td><i class="fas fa-penfa-solid fa-chart-pie segment"></i><i class="fas fa-solid fa-money-check addData"></i></td>
+                <td class="cost" >${u.clo_id}</td>
+                <td class="cost" >${mkn(u.clo_total_proyects,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_maintenance,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_expendables,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_diesel,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_discounts,'n')}</td>
+                <td class="cost" >${mkn(u.clo_total_document,'n')}</td>
+            </tr> `;
+            $('#tbl_dynamic tbody').append(H);
+            $(`.frame_content #tblControl tbody #${u.clo_id} td.quantity`).attr({contenteditable: 'true'});
+        });
+    }
 
-    $('.frame_fix_top #addProduct').on('click', function (e) {
-        var posLeft = $('.frame_fix_top #addProduct').offset().left;
-        var posTop = $('.frame_fix_top #addProduct').offset().top;
+    $('.addData')
+    .unbind('click')
+    .on('click', function () {
 
-        let hg = parseFloat($('.frame_fix_top').css('height'));
-        let pt = $('.frame_fix_top').offset().top;
-        let pb = hg + pt;
-        let lm = (pb / 4) * 3;
+        let cloid = $(this).parents('tr').attr('id');
+        let nomproy = $(`#lstProject option[value="${glbpjtid}"]`).text().split('-')[1];
+        gblcloid=cloid;
+        console.log('addData',nomproy);
+        let el = $(`#tbl_dynamic tr[id="${cloid}"]`);
+            $('#txtProject').val($('#txtProject').val());
+            let montproy=$(el.find('td')[2]).text();
+            let montmant=$(el.find('td')[3]).text();
+            let montexpe=$(el.find('td')[4]).text();
+            let montdies=$(el.find('td')[5]).text();
+            let montdesc=$(el.find('td')[6]).text();
+            let monttota=$(el.find('td')[7]).text();
+            // let monttota= (parseFloat(montproy)+parseFloat(montmant)+parseFloat(montexpe)+parseFloat(montdies))-parseFloat(montdesc);
+            // console.log('col2',montproy);
+            $('#txtMontoProy').val(montproy);
+            $('#txtMontoMant').val(montmant);
+            $('#txtMontoexpe').val(montexpe);
+            $('#txtMontoDies').val(montdies);
+            $('#txtMontoDesc').val(montdesc);
+            $('#txtMontoTotal').val(monttota);
+        let prdNm="Agrega nuevos valores de cierre al proyecto: " + nomproy + "";
+        $('#newValuesModal').removeClass('overlay_hide');
+        $('.overlay_closer .title').html(prdNm);
+        activeProjectsFunctions();
 
-        let h1 = parseFloat($('.box_list_products').css('height'));
+    });
 
-        if (posTop > lm) {
-            posTop = posTop - (h1 - 20);
-            $('.list_products').css({bottom: '26px'});
-            $('.sel_product').css({top: h1 - 26 + 'px'});
-        } else {
-            $('.list_products').css({top: '20px'});
-            $('.sel_product').css({top: 0});
+    $('.segment')
+        .unbind('click')
+        .on('click', function () {
+            let cloid = $(this).parents('tr').attr('id');
+            gblcloid=cloid;
+            let el = $(`#tbl_dynamic tr[id="${cloid}"]`);
+            let monttota=$(el.find('td')[7]).text();
+            settingTableSeg(gblcloid);
+            let id = $(this).parents('tr').attr('id');
+            // console.log('segment',id);
+            // let prdNm="Segmenta valores para cobrar"
+            $('#txtMontoTotSeg').val(monttota);
+            $('#addSegmentModal').removeClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            fillContent();
+        });
+
+    $('#btn_save')
+        .unbind('click')
+        .on('click', function () {
+            confirm_to_Save(gblcloid);
+        });
+
+    $('#newValuesModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
+        });
+
+    $('#toSegmentModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
+        });
+}
+
+function activeProjectsFunctions() {
+    console.log('ACTIVA');
+    putSaleExpendab();
+    putTotalMaintenance();
+    findExtraDiesel();
+    findDiscount();
+
+    setTimeout(() => {
+        updateTotals();
+    }, 100);
+
+}
+
+
+function putSaleExpendab() {
+    let cfr = 0;
+    $('#txtMontoexpe').html(fnm($('#txtMontoexpe').val(), 2, '.', ','));
+    $('#txtMontoexpe').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
         }
-
-        $('.box_list_products')
-            .css({top: posTop + 'px', left: posLeft + 'px'})
-            .slideDown(200);
-        $(`.list_products`).css({display: 'none'});
-
-        $('.box_list_products')
-            .unbind('mouseleave')
-            .on('mouseleave', function () {
-                $('.box_list_products').slideUp(200);
-                $('.sel_product').text('');
-            });
-
-        $('#Products .sel_product')
-            .unbind('keyup')
-            .on('keyup', function () {
-                let text = $(this).text().toUpperCase();
-                sel_product(text);
-            });
+        $('#txtMontoexpe').html(fnm(val, 2, '.', ','));
+        updateTotals();
     });
 }
 
-/**  +++++ Guarda el producto en la cotización +++++ */
-function fill_purchase(pr, ix) {
-    caching_events('fill_purchase');
-    // console.log(pr);
-    // console.log(ix);
+function putTotalMaintenance(){
+    let cfr = 0;
+    $('#txtMontoMant').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoMant').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    }); 
+}
 
-    $('#Products .sel_product').text('');
+function findDiscount() {
+    let cfr = 0;
+    $('#txtMontoDesc').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoDesc').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
+}
 
-    //  let prdName = pr.prod_name.replace(/°/g, '"');
+function findExtraDiesel() {
+    let cfr = 0;
+    $('#txtMontoDies').unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        $('#txtMontoDies').html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
+}
 
-    let ky = registered_product(pr.ser_id);
-    if (ky == 0) {
-        let H = `
-        <tr id="${pr.ser_id}" data_index="${ix}">
-            <td class="product"><i class="fas fa-times-circle kill"></i>${pr.prd_sku} - ${pr.prd_name}</td>
-            <td class="quantity" data_quantity="${pr.stock}">1</td>
-            <td class="price">${pr.prd_price}</td>
-            <td class="cost">0</td>
-        </tr>
-    `;
+function updateTotals() {
+    let total = parseFloat($('#txtMontoProy').val().replace(/,/g, ''));
+        total += parseFloat($('#txtMontoexpe').val().replace(/,/g, ''));
+        total += parseFloat($('#txtMontoMant').val().replace(/,/g, ''));
+        total += parseFloat($('#txtMontoDies').val().replace(/,/g, ''));
+        total -= parseFloat($('#txtMontoDesc').val().replace(/,/g, ''));
 
-        $('#tbl_dynamic tbody').append(H);
-        $(`.frame_content #tblControl tbody #${pr.ser_id} td.quantity`).attr({contenteditable: 'true'});
-    }
+        $('#txtMontoTotal').val(fnm(total, 2, '.', ','));
+}
 
-    rgcnt = 1;
-    update_totals();
+ /** */
+ function confirm_to_Save(pjtid) {
+    $('#starClosure').modal('show');
+    $('#txtIdClosure').val(pjtid);
 
-    $('td.quantity')
-        .unbind('blur')
-        .on('blur', function () {
-            let qty = parseInt($(this).text());
-            let qtydef = parseInt($(this).attr('data_quantity'));
-            if (qty < 1) {
-                $(this).text(1);
-            } else if (qty > qtydef) {
-                $(this).text(qtydef);
-            }
-            rgcnt = 1;
-            update_totals();
+    $('#btnClosure').on('click', function () {
+        $('#starClosure').modal('hide');
+        // console.log('Valor CloID',pjtid);
+         saveNewDocument(pjtid);
+    });
+}
+/*** */
+function saveNewDocument(dt) {
+    let user = Cookies.get('user').split('|');
+    let u = user[0];
+    let n = user[2];
+    let em = user[3];
+
+    let cloTotProy = parseFloat($('#txtMontoProy').val().replace(/,/g, ''));
+    let cloTotMaint =parseFloat($('#txtMontoMant').val().replace(/,/g, ''));
+    let cloTotExpen = parseFloat($('#txtMontoexpe').val().replace(/,/g, ''));
+    let cloTotCombu =parseFloat($('#txtMontoDies').val().replace(/,/g, ''));
+    let cloTotDisco = parseFloat($('#txtMontoDesc').val().replace(/,/g, ''));
+    let cloTotDocum = parseFloat($('#txtMontoTotal').val().replace(/,/g, ''));
+    let cloId = gblcloid;
+    let usrid = u;
+
+    var par = `
+        [{  "cloTotProy" : "${cloTotProy}",
+            "cloTotMaint" : "${cloTotMaint}",
+            "cloTotExpen" : "${cloTotExpen}",
+            "cloTotCombu" : "${cloTotCombu}",
+            "cloTotDisco" : "${cloTotDisco}",
+            "cloTotDocum" : "${cloTotDocum}",
+            "cloId" : "${cloId}",
+            "usrid" : "${usrid}"
+        }] `;
+    // console.log('Save Doc-',par);
+    var pagina = 'ClosedProyectChange/saveDocumentClosure';
+    var tipo = 'html';
+    var selector = putToWork;
+    fillField(pagina, par, tipo, selector);
+    // putToWork('45');
+}
+
+function putToWork(dt){
+    console.log('putToWork ', dt);
+    let folio=dt;
+
+    // $('#lstProject').html('');
+    $('#newValuesModal .btn_close').trigger('click');
+    // inicial();
+    // get_projects();
+    // fill_dinamic_table();
+    window.location.reload();
+}
+
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
         });
+    }
+}
+
+/** Configuracion de la tabla para segmentar*/
+function settingTableSeg(cloid){
+    let numcloid=cloid;
+    $('#addSegmentModal').removeClass('overlay_hide');
+    $('#listTable').DataTable ({
+        bDestroy: true,
+        dom: 'Brti',
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            { data: 'editable',  class: 'edit' },
+            { data: 'numpay',    class: 'sku' },
+            { data: 'frepay',    class: 'sku' },
+            { data: 'cantpay',   class: 'sku' },
+            { data: 'datepay',   class: 'date' },
+        ],
+    });
+
+    $('#addButtonSegm')
+        .unbind('click')
+        .on('click', function () {
+            // console.log('Agregar a TBL');
+            putSegments();
+        });
+
+    $('#btn_saveSegment')
+    .unbind('click')
+    .on('click', function (){
+        let user = Cookies.get('user').split('|');
+        let em = user[3];
+        $('#listTable tbody tr').each(function (v, u) {
+            let lnumpay=$($(u).find('td')[1]).text();
+            let lfrecpay=$($(u).find('td')[2]).text();
+            let lcantpay=$($(u).find('td')[3]).text();
+            let ldatepay=$($(u).find('td')[4]).text();
+
+            let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
+            console.log('TRUK ',truk);
+            build_data_structure(truk);
+        });
+    });
+
+    $('#addSegmentModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('#addSegmentModal').addClass('overlay_hide');
+
+    });
+}
+/**Agrega los datos segmentado en la tabla */
+function putSegments(){ 
+    let MontoTot=parseFloat($('#txtMontoTotSeg').val().replace(/,/g, ''));
+    let cantFrec =$('#txtFrecuency').val();
+    let cantSegm =$('#txtSegment').val();
+    let frecDesc =$(`#txtFrecuency option[value="${cantFrec}"]`).text();
+    let cantDesc =$(`#txtSegment option[value="${cantSegm}"]`).text();
+    let numpedido;
+    let montoInd= parseFloat(MontoTot) / parseFloat(cantSegm);
+    montoInd =montoInd.toFixed(2);
+
+    let unittime='';
+    switch (cantFrec) {
+        case '01':
+            unittime='w';
+            break;
+        case '2':
+            unittime='M';
+            break;
+        case '3':
+            unittime='Q';
+            break;
+        case '4':
+            unittime='y';
+            break;
+        default:
+    }
+    // let hoy=moment(Date()).format('DD/MM/YYYY');
+    let Period = $('#txtPeriodPayed').val();
+    let DateStart = moment(Period,'DD/MM/YYYY').format('YYYY-MM-DD');
+
+    for (var i = 0; i < cantSegm; i++){
+        numpedido=parseFloat(i) + 1;
+        fechapago=moment([DateStart],'YYYY-MM-DD').add(numpedido, unittime).format('YYYY-MM-DD');
+        par = ` [{
+                    "montind"   : "${montoInd}",
+                    "numpay"    : "${numpedido}",
+                    "valfrec"   : "${frecDesc}",
+                    "datepay"   : "${fechapago}"
+                }]`;
+
+        // console.log(par);
+        fill_table(par);
+    }
+}
+
+function fill_table(par) { //** AGREGO ED */
+
+    par = JSON.parse(par);
+    let tabla = $('#listTable').DataTable();
+    tabla.row
+        .add({
+            editable: `<i class="fas fa-times-circle kill" id ="md${par[0].numpay}"></i>`,
+            numpay:     par[0].numpay,
+            frepay:     par[0].valfrec,
+            cantpay:    par[0].montind,
+            datepay:    par[0].datepay,
+        })
+        .draw();
+
+    $('#md' + par[0].numpay).parents('tr').attr('id', par[0].numpay).attr('data-content', 1);
 
     $('.kill')
         .unbind('click')
         .on('click', function () {
-            let id = $(this).parents('tr').attr('id');
-            console.log(id);
-            $('.frame_content #' + id).remove();
-            $('.frame_fix_row #' + id).remove();
-            $('.frame_fix_col #' + id).remove();
-            $('.frame_fix_top #' + id).remove();
-            rgcnt = 1;
-            update_totals();
-        });
-}
-
-/** Actualiza los totales */
-function update_totals() {
-    let ttlrws = $('.frame_content').find('tbody tr').length;
-    if (rgcnt == 1) {
-        rgcnt = 0;
-        caching_events('update_totals');
-
-        let total = 0;
-        $('.frame_content #tblControl tbody tr').each(function (v) {
-            let pid = $(this).attr('id');
-            if ($(this).children('td.quantity').html() != undefined) {
-                qtybs = parseInt(pure_num($(this).children('td.quantity').text()));
-                prcbs = parseFloat(pure_num($(this).children('td.price').text()));
-                costs = qtybs * prcbs;
-
-                $('#' + pid)
-                    .children('td.cost')
-                    .html(mkn(costs, 'n'));
-
-                total += costs;
-            }
-        });
-        $('#total').html(mkn(total, 'n'));
-        $('#ttlproducts').html(ttlrws);
-    }
-}
-
-function registered_product(id) {
-    let ky = 0;
-    $('.frame_content table tbody tr').each(function () {
-        let idp = $(this).attr('id');
-        if (id == idp) {
-            let qty = parseInt($(this).children('td.quantity').text()) + 1;
-            let qtydef = parseInt($(this).children('td.quantity').attr('data_quantity'));
-
-            if (qty > qtydef) qty = qtydef;
-            $(this).children('td.quantity').text(qty);
-
-            ky = 1;
-        }
-    });
-    return ky;
-}
-
-/** ++++++ Selecciona los productos del listado */
-function sel_product(res) {
-    $('.list_products').css({display: 'block'});
-    if (res.length < 1) {
-        $('.list_products ul li').css({display: 'block'});
-    } else {
-        $('.list_products ul li').css({display: 'none'});
-    }
-    $('.list_products ul li').each(function (index) {
-        var cm = $(this).attr('data_content').toUpperCase().replace(/|/g, '');
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //            alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
+            tabla.row($(this).parent('tr')).remove().draw();
     });
 }
 
-/**  ++++ Omite acentos para su facil consulta */
-function omitirAcentos(text) {
-    var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
-    var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
-    for (var i = 0; i < acentos.length; i++) {
-        text = text.replace(acentos.charAt(i), original.charAt(i));
-    }
-    return text;
+/** Guarda los datos de la tabla ***** */
+function build_data_structure(pr) {
+    // console.log(pr);
+    let el = pr.split('|');
+    let folid =  el[0];
+    let deadpay =  el[1];
+    let amoupay= el[2];
+    let pjtId =  el[3];
+    let cloid =  el[4];
+    let empid =  el[5];
+    let cusid =  '';
+    
+    par = `
+        [{  "folid" :  "${folid}",
+            "cusid" :  "${cusid}",
+            "amoupay" :  "${amoupay}",
+            "pjtId" : "${pjtId}",
+            "cloid" :  "${cloid}",
+            "empid" : "${empid}",
+            "deadpay" : "${deadpay}"
+        }]`;
+    // console.log(' Antes de Insertar', par);
+    save_exchange(par);
 }
 
-/**  +++++ Cachando eventos   */
+function save_exchange(pr) {
+    // console.log(pr);
+    var pagina = 'ClosedProyectChange/insertCollectPays';
+    var par = pr;
+    var tipo = 'html';
+    var selector = exchange_result;
+    fillField(pagina, par, tipo, selector);
+}
+
+function exchange_result(dt) {
+    // console.log('exchange_result',dt);
+    $('#listTable').DataTable().destroy; 
+    $('#addSegmentModal').addClass('overlay_hide');
+    
+}
+
+function setReport(dt) {
+    console.log(dt);
+    deep_loading('C');
+
+    let sal = dt.split('|')[0];
+    let usr = dt.split('|')[1];
+    let nme = dt.split('|')[2];
+    let hst = localStorage.getItem('host');
+    window.open(url + 'app/views/ClosedProyectChange/ClosedProyectChangeReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
+    window.location = 'ClosedProyectChange';
+}
+
+/**  ****** Cachando eventos   */
 function caching_events(ev) {
     // console.log(ev);
 }
@@ -384,153 +560,44 @@ function mkn(cf, tp) {
     return nm;
 }
 
-function saleApply() {
-    deep_loading('O');
-
-    if (folio == undefined) {
-        var pagina = 'ClosedProyectChange/NextExchange';
-        var par = '[{"par":""}]';
-        var tipo = 'html';
-        var selector = putNextExchangeNumber;
-        fillField(pagina, par, tipo, selector);
-    } else {
-        let ky = validator();
-        if (ky == 1) {
-            let pix = $('#lstProject').val();
-            console.log(pix);
-            let payForm = $('#lstPayForm').val();
-            let invoice = $('#txtInvoice').val();
-            let customer = $('#txtCustomer').val().toUpperCase();
-            let pjtName = pix == '' ? '' : proj[pix - 1].pjt_name.toUpperCase();
-            let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
-            let strId = $('#lstStore').val();
-
-            let par = `
-[{
-    "salPayForm"        : "${payForm}",
-    "salNumberInvoice"  : "${invoice}",
-    "salCustomerName"   : "${customer}",
-    "pjtName"           : "${pjtName}",
-    "strId"             : "${strId}",
-    "pjtId"             : "${pjtId}",
-    "comId"             : "${comids}"
-}]`;
-
-            console.log(par);
-
-            // console.log(par);
-            clean_required();
-            let rws = $('.frame_content #tblControl tbody tr').length;
-            if (rws > 0) {
-                var pagina = 'ProductsSalables/SaveSale';
-                var tipo = 'html';
-                var selector = saleDetailApply;
-                fillField(pagina, par, tipo, selector);
-            } else {
-                alert('Tabla vacia');
-                deep_loading('C');
-            }
-        } else {
-            deep_loading('C');
+function fillContent() {
+    let restdate='';
+    restdate= moment(Date())/* .subtract(1, 'days'); */
+    let fecha = moment(restdate).format('DD/MM/YYYY');
+    // let hoy=moment(Date()).format('DD/MM/YYYY');
+    $('#calendar').daterangepicker(
+        {
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+                ],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: true,
+            startDate: fecha,
+            endDate: fecha,
+            minDate: fecha,
+            // maxDate:hoy,
+        },
+        function (start, end, label) {
+            $('#txtPeriodPayed').val(
+                // start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
+                start.format('DD/MM/YYYY') 
+            );
+            looseAlert($('#txtPeriodPayed').parent());
         }
-    }
+    );
+
 }
 
-function putNextExchangeNumber(dt) {
-    console.log(dt);
-    folio = dt;
-    saleApply();
-}
-
-function saleDetailApply(dt) {
-    let pix = $('#lstProject').val();
-    let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
-    let strId = $('#lstStore').val();
-
-    console.log(pix, pjtId, strId);
-
-    $('.frame_content #tblControl tbody tr').each(function (v) {
-        let ix = $(this).attr('data_index');
-        if (prod[ix].ser_id != undefined) {
-            // let productSku = tr.children('td.product').text().replace(/\"/g, '°').split(' - ')[0];
-            let productSku = prod[ix].ser_sku;
-            let productName = prod[ix].prd_name.replace(/\"/g, '°');
-            let productPrice = prod[ix].prd_price;
-            let quantity = $(this).children('td.quantity').text();
-            let salId = dt;
-            let serId = prod[ix].ser_id;
-
-            let par = `
-[{
-    "sldSku"        : "${productSku}",
-    "sldName"       : "${productName}",
-    "sldPrice"      : "${productPrice}",
-    "sldQuantity"   : "${quantity}",
-    "salId"         : "${salId}",
-    "serId"         : "${serId}",
-    "strId"         : "${strId}",
-    "pjtId"         : "${pjtId}",
-    "folio"         : "${folio}"
-}]`;
-
-            console.log(par);
-
-            var pagina = 'ClosedProyectChange/SaveSaleDetail';
-            var tipo = 'html';
-            var selector = setSaleDetailApply;
-            fillField(pagina, par, tipo, selector);
-        }
-    });
-}
-
-function setSaleDetailApply(dt) {
-    console.log(dt);
-    deep_loading('C');
-
-    let sal = dt.split('|')[0];
-    let usr = dt.split('|')[1];
-    let nme = dt.split('|')[2];
-    let hst = localStorage.getItem('host');
-    window.open(url + 'app/views/ClosedProyectChange/ClosedProyectChangeReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
-    window.location = 'ClosedProyectChange';
-}
-
-function validator() {
-    var vl = 1;
-
-    var form = $('#formSales .required');
-
-    form.each(function () {
-        var k = $(this).val();
-        if (k == '') {
-            $(this).addClass('forValid');
-            $(this).parent().append('<i class="fas fa-times-circle novalid"></i>');
-            vl = 0;
-        }
-    });
-
-    return vl;
-}
-
-function clean_required() {
-    $('.required').removeClass('forValid');
-    $('.required').parent().children('.novalid').remove();
-}
-
-function saveComment(scc, mid, cmm) {
-    let par = `
-    [{
-        "section"       : "${scc}",
-        "sectnId"       : "${mid}",
-        "comment"       : "${cmm}"
-    }]`;
-
-    var pagina = 'ClosedProyectChange/SaveComments';
-    var tipo = 'html';
-    var selector = setSaveComment;
-    fillField(pagina, par, tipo, selector);
-}
-
-function setSaveComment(dt) {
-    comids.push(dt);
-}

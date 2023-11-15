@@ -33,8 +33,7 @@ public function listPackages($params)
     $qry = "SELECT pd.* FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
             WHERE prd_level ='K' AND prd_status = 1 " . $condition . ";";
-    /* $qry = "SELECT pd.* FROM ctt_products AS pd
-           WHERE prd_level ='K' AND prd_status = 1;"; */
+
     return $this->db->query($qry);
 }
 
@@ -83,7 +82,7 @@ public function listProductsPack($params)
         $srv_id             = $this->db->real_escape_string($param['srvId']);
         $cin_id             = $this->db->real_escape_string($param['exmId']);
         $prd_insured        =  1;
-        $prd_stock          =  0; // *** Edna V2
+        $prd_stock          =  1; // *** Edna V2
 
         $qry = "INSERT INTO ctt_products (prd_sku, prd_name, prd_model, prd_price, prd_visibility, 
         prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured, prd_stock) 
@@ -139,11 +138,9 @@ public function listProductsPack($params)
         $prd_id            = $this->db->real_escape_string($param['prdId']);
 
         $qry =  "DELETE FROM ctt_products WHERE prd_id = $prd_id" ;
-        
         $this->db->query($qry);
 
         $qrr =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_id" ;
-        
         $this->db->query($qrr);
 
         return $prd_id;
@@ -157,7 +154,6 @@ public function listProductsPack($params)
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
         $qry =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
-        
         $this->db->query($qry);
 
         return $prd_id;
@@ -170,7 +166,8 @@ public function listProductsPack($params)
         $prd_name           = $this->db->real_escape_string($param['prdName']);
         $prd_price          = $this->db->real_escape_string($param['prdPrice']);
 
-        $qry =  "UPDATE ctt_products SET prd_name = '$prd_name', prd_price = '$prd_price' WHERE prd_id = '$prd_id';" ;
+        $qry =  "UPDATE ctt_products SET prd_name = '$prd_name', prd_price = '$prd_price' 
+                WHERE prd_id = '$prd_id';" ;
         
         return $this->db->query($qry);
 

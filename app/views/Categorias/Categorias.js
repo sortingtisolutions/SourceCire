@@ -135,8 +135,7 @@ function actionButtons() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[2];
             let catId = $(this).parents('tr').attr('id');
-            //console.log($(this).attr('class').split(' '));
-            //console.log(acc);
+
             switch (acc) {
                 case 'modif':
                     editCategory(catId);

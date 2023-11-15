@@ -24,7 +24,6 @@ function inicial() {
     }, 2000);
 }
 
-
 /** ---- Obtiene listado de subcategorias */
 function getReasons() {
     var pagina = 'ListMaintenance/listReasons';

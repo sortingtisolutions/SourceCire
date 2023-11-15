@@ -1,5 +1,5 @@
 -- ************** FUNCIONES A CREAR ***********************
-
+/* v_1.2.2 */
 --**************fun_addstock**********************
 DELIMITER //
 CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT

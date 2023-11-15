@@ -828,8 +828,6 @@ public function updateOrder($request_params)
                 'dtfinl' => $row['pjt_date_end'],
             );
 
-            // print_r( $param);
-
             if ($action == 'U'){
 
                 if ($qtyAct > $qtyAnt){
@@ -913,7 +911,6 @@ public function updateOrder($request_params)
           //modificado por jjr
 
         echo $verId . ' | '. $pjtId . ' | '. $user . ' | '. $name . ' | '. $otrov ;
-
     }
 
 
@@ -938,7 +935,8 @@ public function updateOrder($request_params)
                 );
                 $serie = $this->model->SettingSeries($param);
 
-            } else*/if($prdLvl == 'P' || $prdLvl == 'S'){
+            } else*/
+            if($prdLvl == 'P' || $prdLvl == 'S'){
 
                 $prdparam = array(
                     'prodId' => $prodId,

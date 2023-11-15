@@ -38,6 +38,7 @@ if ($empid == '1'){
 }
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){
