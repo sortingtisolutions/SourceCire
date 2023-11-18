@@ -12,7 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        // settingTable();
+        //settingTable();
         getProjects(0);
         // $('.tblProyects').css({display: 'none'});
 
@@ -105,6 +105,7 @@ function putProjects(dt) {
     // console.log('DOS',dt);
     let valstage='';
     let valicon='';
+    //let tabla = $('#tblProyects').DataTable();
     
     if (dt[0].pjt_id != '0') {
         $('#tblProyects tbody').html('');
@@ -116,7 +117,7 @@ function putProjects(dt) {
             else 
              { valstage='#FFA500';
              valicon='fa fa-solid fa-edit detail'; }
-
+            console.log(valstage, valicon);
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>
                     <td class="sku"><i class="${valicon}"</td>
@@ -127,7 +128,7 @@ function putProjects(dt) {
                     <td class="date">${u.pjt_date_end}</td>
                 </tr>`;
             $('#tblProyects tbody').append(H); 
-            tabla.row
+            /* tabla.row
             .add({
                 editable: `<i class="${valicon}" id="md${u.pjt_id}"></i>`,
                 pjt_name:u.pjt_name,
@@ -140,7 +141,7 @@ function putProjects(dt) {
             $('#md' + u.pjt_id)
                 .parents('tr')
                 .attr('id', u.pjt_id)
-                .css({color: valstage});
+                .css({color: valstage}); */
         });
         settingTable();
         activeIcons();

@@ -28,32 +28,32 @@
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <input id="fechaInitial" name="fechaInitial" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
+                            <input id="fechaInitial" name="fechaInitial" type="date"  class="form-control form-control-sm required" style="text-transform: uppercase" >
                             <label for="fechaInitial">Fecha Inicial</label>
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <input id="fechaEnd" name="fechaEnd" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
+                            <input id="fechaEnd" name="fechaEnd" type="date"  class="form-control form-control-sm required" style="text-transform: uppercase" >
                             <label for="fechaEnd">Fecha Final</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtAnalyst" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona analista</option></select>
+                            <select id="txtAnalyst" class="form-select form-select-sm"><option value="0" data-content="||||" selected>Selecciona analista</option></select>
                             <label for="txtAnalyst">Analista</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtClient" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el cliente</option></select>
+                            <select id="txtClient" class="form-select form-select-sm"><option value="0" data-content="||||" selected>Selecciona el cliente</option></select>
                             <label for="txtClient">Cliente</label>
                         </div>
                     </div>
                     <div class="row objHidden">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtSupplier" class="form-select form-select-sm required">
+                            <select id="txtSupplier" class="form-select form-select-sm">
                                 <option value="0" selected>Selecciona proveedor</option>
                             </select>
                             <label for="txtSupplier">Proveedor</label>

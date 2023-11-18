@@ -55,7 +55,7 @@ class WhOutputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjt_id":"0"}]';
+            $res =  '[{"pjtcn_id":"0"}]';
         }
         echo $res;
     }
