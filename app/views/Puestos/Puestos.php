@@ -8,9 +8,9 @@
 <div class="container-fluid">
 	<div class="contenido">
 		<div class="row mvst_group">
-				<!-- Start área de formularios -->
-				<div class="mvst_panel" style="width:300px; background-color: #f8f2e2">
-					<div class="form-group">
+				<!-- Start área de formularios EAFC98 -->
+				<div class="mvst_panel" style="width:300px; background-color: #E8DC9F">
+					<div class="form-group"> 
 						<h4 id="titulo">Nuevo Puesto</h4> 
 						 
 						<form id="formPuestos" class="row g-3 needs-validation" novalidate>
@@ -99,8 +99,6 @@
 					 </div>
 				</div>
 		</div>
-
-
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

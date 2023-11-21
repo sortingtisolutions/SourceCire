@@ -1,4 +1,4 @@
-
+/* v_1.2.2 */
 --********** VISTAS PRINCIPALES A CREAR EN LA BASE DE DATOS **********************
 /* VISTA DE PRODUCTOS  */
 
@@ -45,8 +45,6 @@ FROM    ctt_projects AS pj
     INNER JOIN ctt_customers as cu ON cu.cus_id = co.cus_id
 WHERE pj.pjt_status IN (2, 3, 4, 5);
 
-
-
 /* VISTA DE SUBCATEGORIA  */
 DROP VIEW ctt_vw_subcategories;
 CREATE VIEW ctt_vw_subcategories AS
@@ -57,8 +55,6 @@ FROM ctt_subcategories AS sc
     INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
 WHERE sc.sbc_status = '1' AND ct.cat_status = '1'
 GROUP BY sc.sbc_id;
-
-
 
 /* VISTA DE SUBARRENDO  */
 DROP VIEW ctt_vw_subletting;
@@ -112,7 +108,6 @@ INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
 INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
 WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
 ORDER BY pd.prd_name;
-
 
 --******* 24-ago-23 ********************
 DROP VIEW ctt_vw_list_products2;

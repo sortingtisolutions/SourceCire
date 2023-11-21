@@ -96,7 +96,6 @@ class ProductsForSublettingController extends Controller
         echo $res;
     } 	 
 
-
 // Lista los monedas
     public function listStores($request_params)
     {
@@ -115,43 +114,10 @@ class ProductsForSublettingController extends Controller
         echo $res;
     } 	 
 
-// Agrega los seriales de los productos para subarrendo
-    public function addSerie($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->addSerie($request_params);
-        echo $result;
-        
-    } 	
-
 
 // Agrega los productos subarrendados
-    public function addSubletting($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result1 = $this->model->addSubletting($request_params);
-
-        $params =  $this->session->get('user');
-        $result2 = $this->model->SaveExchange($request_params, $params);
-
-        $params =  $this->session->get('user');
-        $item = $this->model->SechingProducts($request_params);
-        $num_items = $item->fetch_object();
-
-        if ($num_items->items > 0){
-            echo 'update';
-            // actualiza la cantidad en el almacen destino
-            $result3 = $this->model->UpdateProducts($request_params);
-        } else {
-            echo 'insert';
-            //agrega la relación almacen - producto
-            $result3 = $this->model->InsertProducts($request_params);
-        }
-        $res = $result3;
-        echo $res;
-    } 	
+   
     
-
 // Proceso de series de subarrendos    
     public function saveSubletting($request_params)
     {

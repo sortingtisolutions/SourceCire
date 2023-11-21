@@ -48,7 +48,6 @@
                                 <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" >
                             </div>
 
-
                             <!-- Código de la subcategoria -->
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

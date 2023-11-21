@@ -5,7 +5,6 @@
 
 	class PuestosController extends Controller
 	{
-
 		private $session;
 		public $model;
 
@@ -26,9 +25,6 @@
 		//OBTIENE LA LISTA DE PUESTOS
 		public function GetPuesto($request_params)
 		{
-	      /* $result = $this->model->GetPuesto($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	 */
-
 			$params =  $this->session->get('user');
 			$result = $this->model->GetPuesto($request_params);
 			$i = 0;

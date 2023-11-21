@@ -338,6 +338,7 @@ function selSubcategoryProduct(id) {
         });
 }
 
+
 function saveAccesoryId(prdId) {
     console.log(lsbc_id);
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
@@ -399,13 +400,10 @@ function product_apply(prId) {
     let acce = prId.attr('id').split('-');
     saveAccesoryId(acce[0]);
     //console.log(acce[2]);
-    //console.log("respuesta conseguida"+accesorioExist);
     setTimeout(() => {
         if (accesorioExist != 0) {
             putNewAccesorio(acce[0], accesorioExist, acce[2]);
-            //putNewAccesorio(acce[0],productoSelectSKU,acce[2]);
             //$(`.list-item[data-subcateg^="accesorio 41"]`).attr("hidden",true);
-
             $(`.list-item[data-subcateg^="${acce[2]}"]`).attr('hidden', true);
         }
     }, 500);

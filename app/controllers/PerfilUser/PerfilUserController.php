@@ -36,7 +36,6 @@
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 	  
-		
 		public function GetPerfiles()
 		{
 	      $result = $this->model->GetPerfiles();

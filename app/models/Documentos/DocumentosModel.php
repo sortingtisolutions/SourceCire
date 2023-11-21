@@ -31,12 +31,7 @@ public function SaveDocumento($request_params)
 		$sql = "INSERT INTO ctt_documents(doc_name, doc_type, doc_size, doc_content_type, doc_document,  dot_id, doc_admission_date,doc_code)
 				VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','$file','$tipoDocumento','$fechaadmision','$Code');";
 
-		/* $sql = "INSERT INTO ctt_documents(doc_name, doc_type, doc_size, doc_content_type, doc_document,  dot_id, doc_admission_date,doc_code)
-				VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','$file','$tipoDocumento','$fechaadmision','$Code');"; */
-
 		$this->db->query($sql);
-		/* $lastid = $this->db->insert_id;
-		//return $lastid; */
 		
 		$qry = "SELECT MAX(doc_id) AS id FROM ctt_documents;";
 		$result = $this->db->query($qry);
@@ -117,7 +112,6 @@ public function SaveDocumento($request_params)
 		}
 		return $lista;
 	}
-
 
     public function ActualizaDocumento($request_params)
 	{

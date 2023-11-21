@@ -164,11 +164,7 @@ function putCategory(dt) {
     });
 
     $('#txtCategoryProduct').on('change', function () {
-        let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
-       /*  $('#txtSubcategoryProduct').val();
-        $('#boxProducts').val();
-        $('#listProducts .list-items').val(); */
-        
+        let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;       
         $('#txtSubcategoryProduct').html(ops);
         let id = $(this).val();
         console.log('Limpia', id);
@@ -199,9 +195,6 @@ function putProducts(dt) {
         let H = `<div class="list-item" id="P-${u.prd_id}" data-subcateg="${u.sbc_id}" data-content="${u.prd_id}|${u.prd_sku}|${u.prd_name}|${u.prd_price}|${u.sbc_id}">
                     ${u.prd_sku} - ${u.prd_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
                 </div>`;
-        /* let H = `<div class="list-item" id="P-${u.prd_id}" data-subcateg="${u.sbc_id}" data-content="${u.prd_id}|${u.prd_sku}|${u.prd_name}|${u.prd_price}|${u.sbc_id}">
-                ${u.prd_sku} - ${u.prd_name}<div class="items-just"></div>
-            </div>`; */
         $('#listProducts').append(H);
     });
 }
@@ -512,10 +505,6 @@ function action_selected_products() {
                     break;
                 default:
             }
-            /* let edt = $(this).attr('class').indexOf('kill');
-            // console.log(edt);
-            let prdId = $(this).attr('id');
-            confirm_delet_product(prdId); */
         });
 
     $('.quantity')
@@ -587,9 +576,6 @@ function product_apply(prId) {
     let productName = prod[3];
     let productParent = $('#txtIdPackages').val();
     //let productQuantity = $('#txtQtyPrds').val();
-
-    //console.log(productParent);
-
     var pagina = 'Packages/SaveProduct';
     var par = `[{"prdId":"${productId}","prdParent":"${productParent}"}]`;
     //console.log(par);
@@ -684,9 +670,6 @@ function validator_part01() {
 }
 
 function editProdAsoc(Id, prdQty) {
-    //  $('#txtCategoryProduct').attr('disabled', true);
-    // $('#txtSubcategoryProduct').attr('disabled', true);
-    //  $('#delProdModal').modal('show');
     let prdId = Id.split('-')[0];
     let prdParent = Id.split('-')[1];
     console.log('Vals', prdId, prdParent, prdQty);

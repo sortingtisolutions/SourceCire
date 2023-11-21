@@ -95,7 +95,6 @@ class MoveStoresInController extends Controller
         echo $res;
     } 
 
-
 // Lista los proveedores
     public function listSuppliers($request_params)
     {
@@ -166,6 +165,5 @@ class MoveStoresInController extends Controller
         $res = $result;
         echo $res;
     } 
-
 
 }

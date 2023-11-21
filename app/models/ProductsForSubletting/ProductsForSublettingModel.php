@@ -142,19 +142,6 @@ public function listProyects($store)
         return $this->db->query($qry);
     }
 
-
-// Actualizala cantidad de productos en un almacen destino
-    public function UpdateProducts($param)
-    {
-        
-    }
-
-// Agrega el registro de relación almacen producto
-    public function InsertProducts($param)
-     {
-    
-    }
-
 // Proceso de subarrendo
     public function checkSerie($param)
     {
@@ -409,7 +396,6 @@ public function listProyects($store)
             $sentencia->execute();
         
             //print "El procedimiento contiene: $nombreEmb, $edad, $Expediente;
-        
             return true;
         
             } catch(PDOException $e) {

@@ -10,12 +10,15 @@ $usrId = $_GET['u'];
 $uname = $_GET['n'];
 $empid = $_GET['em'];
 
+$nameProject =$_GET['np'];
+$numProject =  $_GET['nump'];
+
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
 // 11-10-23
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-if ($empid == '1'){
+if ($empid == '1' || $empid == '2'){
 $qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt_number, 
         pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments
         FROM ctt_projects_content AS pcn
@@ -42,6 +45,7 @@ $qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity,
 }
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){
@@ -69,7 +73,7 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Detalle del proyecto: '. $items[0]['pjt_name'] .' </span>
+                    <span class="number">Detalle del proyecto: '. $nameProject .' </span>
                 <br>
                     <span class="date">Fecha de salida'.  $items[0]['pjt_date_start'] .'</span>
                 </p>

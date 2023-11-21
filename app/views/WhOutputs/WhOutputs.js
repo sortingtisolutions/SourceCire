@@ -12,9 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //deep_loading('O');
-        //console.log('UNO');
-        // settingTable();
+       
         getProjects(0);
         $('.tblProyects').css({display: 'none'});  
     }, 100);
@@ -96,8 +94,6 @@ function settingTable() {
       $('.tblProyects')
         .delay(500)
         .slideDown('fast', function () {
-            //$('.deep_loading').css({display: 'none'});
-            //$('#tblProyects').DataTable().draw();
             deep_loading('C');
         });
 
@@ -122,9 +118,7 @@ function putProducts(dt) {
             else
                 { valstage='color:#CC0000';
                 valicon='fa fa-solid fa-dolly detail'; }
-            // console.log(valstage);
-            //let valstage = u.pjt_status == 4 ? 'color:#008000' : 'color:#CC0000';
-            // <td class="sku"><i class='fa fa-solid fa-dolly detail' title="Edita detalles del proyecto"></i><i class='fa fa-cog toWork'></i></td>
+          
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}' data-version='${u.ver_id}'>
                     <td class="sku"><i class="${valicon}"></i></td>

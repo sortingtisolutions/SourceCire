@@ -1,6 +1,7 @@
 let products;
 //let prjid = window.location.pathname.split("/").pop();
 let gblprjid,user,usrid;
+let gblprjname;
 //var prjid;
 
 $(document).ready(function () {
@@ -21,8 +22,11 @@ function inicial() {
     user = Cookies.get('user').split('|');
     usrid = user[0];
     // Boton para registrar la salida del proyecto y los productos
-    $('#recordChgUser').on('click', function () {
-        confirm_toChgUsr(gblprjid);
+    $('#recordChgUser')
+        .unbind('click')
+        .on('click', function () {
+            console.log(gblprjid);
+            confirm_toChgUsr(gblprjid, gblprjname);
      });
 
      $('#cleanForm')
@@ -228,11 +232,12 @@ function activeIcons() {
         .on('click', function () {
             CleanCombos();
             let id = $(this).parents('tr');
-            // console.log(id);
+            //console.log(id);
             let pjtid = id.attr('id');
             let pjtnm = id.children('td.pjtname').text();
             gblprjid=pjtid;
-            // console.log('Cont-Producto', pjtid,pjtnm);
+            gblprjname = pjtnm;
+             console.log('Cont-Producto', pjtid,pjtnm);
             if (pjtid > 0) {
                 getUsersOnProject(pjtid);
                 editProject(pjtid,pjtnm);
@@ -272,11 +277,14 @@ function putUsersOnProject(dt) {
     }
 }
 
-function confirm_toChgUsr(pjtid) {
+function confirm_toChgUsr(pjtid,prjname) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
+    $('#ProjectName').text(prjname+'?')
     //borra paquete +
-    $('#btnClosure').on('click', function () {
+    $('#btnClosure')
+    .unbind('click')
+    .on('click', function () {
         $('#starClosure').modal('hide');
         // console.log('Datos CLICK',pjtid);
         datasUser(pjtid);
@@ -326,7 +334,7 @@ function datasUser(pjtid) {
                 break;
             default:
         }
-        // console.log('Datos', pjtid,areid,empid,empname);
+        console.log('Datos', pjtid,areid,empid,empname);
         updateUsers(pjtid,areid,empid,empname);
     }
 }
@@ -356,7 +364,6 @@ function printOutPutContent(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-
     // console.log('Datos', v, u, n, h);
     window.open(
         `${url}app/views/AssignProjects/AssignProjectsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,

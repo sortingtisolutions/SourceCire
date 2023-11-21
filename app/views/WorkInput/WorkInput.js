@@ -12,11 +12,9 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //deep_loading('O');
-        //console.log('UNO');
-        settingTable();
+        //settingTable();
         getProjects(0);
-        $('.tblProyects').css({display: 'none'});
+        // $('.tblProyects').css({display: 'none'});
 
     }, 100);
 }
@@ -92,7 +90,7 @@ function settingTable() {
         ],
     });
 
-      $('.tblProyects')
+      $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
             //$('.deep_loading').css({display: 'none'});
@@ -107,22 +105,19 @@ function putProjects(dt) {
     // console.log('DOS',dt);
     let valstage='';
     let valicon='';
+    //let tabla = $('#tblProyects').DataTable();
     
     if (dt[0].pjt_id != '0') {
         $('#tblProyects tbody').html('');
-        // <td class="date">${u.pjt_date_project}</td>
-        // <td class="supply editable">${u.pjt_location}</td>
-        // <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
-        
+                
         $.each(dt, function (v, u) {
             if (u.pjt_status == 8)
-            { valstage='color:#CC0000';
+            { valstage='#CC0000';
               valicon='fa fa-cog toWork'; }
             else 
-             { valstage='color:#FFA500';
+             { valstage='#FFA500';
              valicon='fa fa-solid fa-edit detail'; }
-
-            console.log(valstage);
+            console.log(valstage, valicon);
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>
                     <td class="sku"><i class="${valicon}"</td>
@@ -132,13 +127,25 @@ function putProjects(dt) {
                     <td class="date">${u.pjt_date_start}</td>
                     <td class="date">${u.pjt_date_end}</td>
                 </tr>`;
-            $('#tblProyects tbody').append(H);
+            $('#tblProyects tbody').append(H); 
+            /* tabla.row
+            .add({
+                editable: `<i class="${valicon}" id="md${u.pjt_id}"></i>`,
+                pjt_name:u.pjt_name,
+                pjt_number: u.pjt_number,
+                pjttp_name: u.pjttp_name,
+                pjt_date_start: u.pjt_date_start,
+                pjt_date_end: u.pjt_date_end,
+            })
+            .draw();
+            $('#md' + u.pjt_id)
+                .parents('tr')
+                .attr('id', u.pjt_id)
+                .css({color: valstage}); */
         });
-        // settingTable();
+        settingTable();
         activeIcons();
-    } else {
-        //settingTable();
-    }
+    } 
 }
 
 /** +++++  Activa los iconos */

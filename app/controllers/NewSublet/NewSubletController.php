@@ -132,7 +132,6 @@ public function listSubCategories($request_params)
         echo $res;
     }
 
-
 // Lista los proveedores
     public function listSuppliers($request_params)
     {
@@ -229,5 +228,4 @@ public function listSubCategories($request_params)
         echo $res;
     } 
     
-
 }

@@ -55,7 +55,7 @@ class WhOutputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjt_id":"0"}]';
+            $res =  '[{"pjtcn_id":"0"}]';
         }
         echo $res;
     }
@@ -132,16 +132,6 @@ class WhOutputContentController extends Controller
     {
         $params =  $this->session->get('user');
         $result = $this->model->checkSeries($request_params);
-        /*$i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"ser_id":"0"}]';
-        }*/
         echo $result;
     }
 
@@ -177,11 +167,7 @@ class WhOutputContentController extends Controller
             echo $result;
         }
 
-/** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
-
 /** +++++  PROCESO DE GENERACION Y REGISTRO DE SALIDA DE PROYECTO +++   */
-
-/** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
 
 public function ProcessGetOutProject($request_params)
     {  
@@ -284,24 +270,5 @@ public function ProcessGetOutProject($request_params)
         echo $folio;
     
     } 
-
-    // Obtiene datos del producto seleccionado
-   /*  public function getSelectSerie($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->getSelectSerie($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"ser_id":"0"}]';
-        }
-        echo $res;
-    } */
-
 
 }

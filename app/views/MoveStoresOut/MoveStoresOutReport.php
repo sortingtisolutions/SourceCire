@@ -20,6 +20,7 @@ $qry = "SELECT *
         WHERE bg.con_id = $verId ORDER BY exc_id;";
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){

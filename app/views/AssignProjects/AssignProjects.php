@@ -7,6 +7,7 @@
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
@@ -103,7 +104,8 @@
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdClosure" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Estas seguro de actualizar usuarios?</span>
+                    <span class="modal-title text-center" style="font-size: 1rem;" id="BorrarPerfilLabel">¿ESTAS SEGURO DE ACTUALIZAR LOS USUARIOS EN EL PROYECTO: </span>
+                    <span class="modal-title text-center" style="font-size: 1rem;" id="ProjectName"> ?</span>
                 </div>
             </div>
             

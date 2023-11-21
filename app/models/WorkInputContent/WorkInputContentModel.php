@@ -49,7 +49,7 @@ class WorkInputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $empid = $this->db->real_escape_string($params['empid']);
 
-        if ($empid==1){
+        if ($empid==1 || $empid==2){
             $qry = "SELECT prcn.pjtcn_id, prcn.pjtcn_prod_sku, prcn.pjtcn_prod_name, prcn.pjtcn_quantity, 
             prcn.pjtcn_prod_level, prcn.pjt_id, prcn.pjtcn_status, prcn.pjtcn_order, 
              case 
@@ -175,10 +175,8 @@ class WorkInputContentModel extends Model
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        
         $qry = "SELECT * FROM ctt_project_change_reason;";
-
-       return $this->db->query($qry);
+        return $this->db->query($qry);
    }
-
 
     // check de Productos
     public function checkSeries($params)
@@ -241,24 +239,39 @@ class WorkInputContentModel extends Model
         $prjid = $this->db->real_escape_string($params['prjid']);
         $prjnum = $this->db->real_escape_string($params['prjnum']);
 
-        $updt = "CREATE TABLE CLOSE_PROYECT_".$prjnum." SELECT pjd.pjtdt_id, pjd.pjtdt_prod_sku, pjd.pjtvr_id, 
-                pjtcn_id, pjtcn_prod_sku, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, 
-                pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip, 
-                pjtcn_days_test, pjtcn_discount_test ,pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
-                pjtcn_order, ver_id, pjt_id, 
-                sr.ser_id, ser_sku, ser_serial_number,ser_situation, ser_stage, 
-                prd.prd_id, prd_name, prd_price, sbc_id 
+        $updt = "CREATE TABLE cttapp_back_projects.CLOSE_PROYECT_".$prjnum." SELECT 
+                    pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_project, pj.pjt_status, 
+                    pj.pjt_date_start ,pj.pjt_date_end, pj.pjt_date_last_motion, pj.cuo_id,
+                    pjtcn_id, pjtcn_prod_sku, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, 
+                    pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip, 
+                    pjtcn_days_test, pjtcn_discount_test ,pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
+                    pjtcn_order, pjc.ver_id, 
+                    pjd.pjtdt_id, pjd.pjtdt_prod_sku, pjd.pjtvr_id, 
+                    pjp.pjtpd_day_start,pjp.pjtpd_day_end,
+                    sr.ser_id, ser_sku, ser_serial_number,ser_situation, ser_stage, 
+                    prd.prd_id, prd_name, prd_price, sbc_id 
                 FROM ctt_projects_detail AS pjd
+                INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id=pjd.pjtdt_id
                 INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id=pjd.pjtvr_id
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id=pjc.pjt_id
                 INNER JOIN ctt_series AS sr ON sr.ser_id=pjd.ser_id
                 INNER JOIN ctt_products AS prd ON prd.prd_id=sr.prd_id
-                WHERE pjc.pjt_id=$prjid;";
+                WHERE pjc.pjt_id = $prjid;";
 
          $this->db->query($updt);
          return $prjid;
         
     }
 
+    public function GetInProject($params)
+    {
+        $pjtid = $this->db->real_escape_string($params['pjtid']);
+        
+        $updt = "UPDATE ctt_projects SET pjt_status = '9' 
+                WHERE pjt_id = '$pjtid' ";
+         return $this->db->query($updt);
+        
+    }
     // Agrega Comentario // 11-10-23
     public function InsertComment($params, $userParam)
     {

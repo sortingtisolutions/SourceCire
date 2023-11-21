@@ -29,7 +29,7 @@ class WorkInputModel extends Model
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-                WHERE pj.pjt_status in ('9') ORDER BY pjt_date_start ASC;";
+                WHERE pj.pjt_status in ('8','9') ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 
@@ -63,4 +63,5 @@ class WorkInputModel extends Model
         return $this->db->query($qry2);
     }
 
+    
 }

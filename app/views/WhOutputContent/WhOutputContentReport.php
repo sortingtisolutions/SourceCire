@@ -9,6 +9,8 @@ $prdId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
 $empid = $_GET['em'];
+$numProject =  $_GET['nump'];
+$nameProject =$_GET['np'];
 
 $conkey = decodificar($_GET['h']) ;
 
@@ -16,7 +18,7 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 // 11-10-23
-if ($empid == '1'){
+if ($empid == '1' || $empid == '2'){
     $qry = "SELECT pcn.pjtcn_prod_name, pcn.pjtcn_prod_sku, pcn.pjtcn_quantity,
             pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments  
             FROM ctt_projects_content AS pcn
@@ -38,6 +40,7 @@ if ($empid == '1'){
 }
 
 $res = $conn->query($qry);
+
 $conn->close();
 
 while($row = $res->fetch_assoc()){
@@ -55,7 +58,7 @@ $header = '
                     </td>
                     <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
                     <p>
-                        <span class="number">Proyecto: '. $items[0]['pjt_name'] . '   #' . $items[0]['pjt_number'] .'</span>
+                        <span class="number">Proyecto: '. $nameProject. '   #' . $numProject .'</span>
                         <br><span style=" font-size: 8pt; color: #191970">Nombre Responsable: '. $uname .'</span>
                     </p>
                     </td>

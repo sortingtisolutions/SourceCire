@@ -43,7 +43,6 @@
             echo $res;	
         }
 
-
     // Graba la nueva subcategoria
         public function SaveSubcategory($request_params)
         {
@@ -69,6 +68,5 @@
             $res = $result;
             echo $res;
         }
-
 
     }

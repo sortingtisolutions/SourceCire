@@ -93,14 +93,6 @@ function setting_table() {
             {data: 'prodcant', class: 'quantity'},
             {data: 'prodcost', class: 'price left'},
             {data: 'prodseri', class: 'serie-product'},
-            /* {data: 'prodpeti', class: 'serie-product'},
-            {data: 'prodimpo', class: 'serie-product'},
-            {data: 'codexcsc', class: 'code-type_s'},
-            {data: 'stnamesc', class: 'store-name_s'},
-            {data: 'provname', class: 'store-name_s'},
-            {data: 'factname', class: 'store-name_s'},
-            {data: 'prodmarc', class: 'store-name_s'},
-            {data: 'comments', class: 'comments'}, */
         ],
     });
 }
@@ -195,12 +187,7 @@ function putStores(dt) {
         validator();
     });
 }
-/*
-    $('#txtInvoice').on('change', function () {
-        validator();
-    });
-}
-*/
+
 function putCoins(dt) {
     if (dt[0].cin_id != 0) {
         $.each(dt, function (v, u) {
@@ -415,13 +402,7 @@ function validator() {
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
     }
-    //console.log(ky, msg);
-
-    // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-    //     ky = 1;
-    //     msg += 'Debes indicar el costo del producto';
-    // }
-
+   
     //validacion de cantidad para agregar serie mayor a 1
     if ($('#txtQuantity').val() > 1) {
         // && $('#txtSerie').val() == 0
@@ -436,9 +417,6 @@ function validator() {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
     }
-
-    //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-    //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
 
     if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined && $('.pos6').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
@@ -593,19 +571,11 @@ function btn_apply_appears() {
 
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
-    // $('#txtTypeExchange').val(0);
-    //$('#txtStoreSource').val(0);
-    //$('#txtStoreTarget').val(0);
+
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
     $('#txtQuantity').val('');
     $('#txtSerie').attr('disabled', false);
     $('#txtSerie').val('');
-    /*if ($('#txtSerie').attr('disabled') == true){
-        //$('#txtSerie').attr('disabled', false);
-        alert('VALIDA');
-    } */
-
-    // ** HOLA ****
     
     $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
@@ -690,18 +660,6 @@ function build_data_structure(pr) {
     save_exchange(par);
 }
 
-/* function build_update_store_data(pr) {
-    let el = pr.split('|');
-    let par = `
-[{
-    "prd" :  "${el[0]}",
-    "qty" :  "${el[1]}",
-    "str" :  "${el[2]}",
-    "mov" :  "${el[3]}"
-}]`;
-
-    update_store(par);
-} */
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
@@ -712,15 +670,6 @@ function save_exchange(pr) {
     var selector = exchange_result;
     fillField(pagina, par, tipo, selector);
 }
-
-/* function update_store(ap) {
-    // console.log(ap);
-    var pagina = 'MoveStoresIn/UpdateStores';
-    var par = ap;
-    var tipo = 'html';
-    var selector = updated_stores;
-    fillField(pagina, par, tipo, selector);
-} */
 
 function exchange_result(dt) {
     $('.resFolio').text(refil(folio, 7));

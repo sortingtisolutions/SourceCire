@@ -493,15 +493,6 @@
                         </td>
                     </tr>
 
-                    <!-- <tr class="hide">
-                        <td>Estado de la República</td>
-                        <td>
-                            <select id="txtEdosRepublic" name="txtEdosRepublic" class="textbox wt5">
-                                <option value="0"></option>
-                            </select>
-                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el estado</span>
-                        </td>
-                    </tr> -->
 					<tr class="hide"> <!--  -->
                         <td></td>
                         <td>
@@ -727,7 +718,6 @@
         </div>
     </div>
 <!-- End Ventana modal SERIES -->
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> 

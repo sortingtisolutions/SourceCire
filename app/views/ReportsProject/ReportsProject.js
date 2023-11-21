@@ -20,7 +20,7 @@ function inicial() {
     $('.deep_loading').css({display: 'flex'});
     getStores(); // optiene los almacenes.
     getCategorias(); // Carga las categorias
-    // funcion para la carga de subcategorias
+   
     $('#selectRowCategorias').change(function () {
         var idCategoria = $('#selectRowCategorias option:selected').attr('id');
         console.log('SELECCIONA -- ', idCategoria);
@@ -382,14 +382,6 @@ function fill_table_Productos(par, tipoDato) {
 
 function btn_apply_appears() {
     $('.btn-apply').removeClass('hidden-field');
-
-    /*     let tabla = $('#tblExchanges').DataTable();
-    let rengs = tabla.rows().count();
-    if (rengs > 0) {
-        $('.btn-apply').removeClass('hidden-field');
-    } else {
-        $('.btn-apply').addClass('hidden-field');
-    } */
 }
 
 // Limpia los campos para uns nueva seleccion

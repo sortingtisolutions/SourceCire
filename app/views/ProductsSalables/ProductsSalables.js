@@ -25,7 +25,23 @@ function inicial() {
             });
 
         $('#addPurchase').on('click', function () {
-            saleApply();
+            $('#MoveFolioModal').modal('show');
+
+            $('#btnno')
+                .unbind('click')
+                .on('click', function () {
+                $('#MoveFolioModal').modal('hide');
+                // window.location = 'ProductsSalables';
+            });
+
+            $('#btnyes')
+                .unbind('click')
+                .on('click', function () {
+                // $('.btn-print').trigger('click');
+                // printInfoGetOut(folio);
+                saleApply();
+            });
+            
         });
 
         $('#newQuote').on('click', function () {
@@ -388,7 +404,6 @@ function mkn(cf, tp) {
 }
 
 function saleApply() {
-    
         deep_loading('O');
         if (folio == undefined) {
             var pagina = 'ProductsSalables/NextExchange';
@@ -433,6 +448,7 @@ function saleApply() {
                 }
             } else {
                 deep_loading('C');
+                $('#MoveFolioModal').modal('hide');
             }
         }
 }
@@ -487,13 +503,7 @@ function saleDetailApply(dt) {
 function setSaleDetailApply(dt) {
     console.log(dt);
     deep_loading('C');
-
-    // let sal = dt.split('|')[0];
-    // let usr = dt.split('|')[1];
-    // let nme = dt.split('|')[2];
-    // let hst = localStorage.getItem('host');
-    // window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
-    // window.location = 'ProductsSalables';
+    window.location.reload();
 }
 
 function validator() {

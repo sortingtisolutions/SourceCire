@@ -7,8 +7,6 @@ class PeriodsModel extends Model
     {
         parent::__construct();
     }
-
-    
 /** ====== Obtiene el periodo total del proyecto  ==========================  */
     public function getPeriodProject($params){
         $pjtId = $this->db->real_escape_string($params['pjtId']);
@@ -57,7 +55,6 @@ class PeriodsModel extends Model
 
         return 1;
     }    
-
 
 /** ==== Gruarda los periodos correspondientes ===============================================  */
     public function savePeriods($params)

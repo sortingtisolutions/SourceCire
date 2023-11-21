@@ -260,20 +260,6 @@ public function promoteToProject($params)
         $prdId = $this->db->real_escape_string($params['prdId']);
         $verId = $this->db->real_escape_string($params['verId']);
         $section = $this->db->real_escape_string($params['section']);// ***Modificado por Ed
-        /* $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name
-                    , pr.prd_level
-                    , ct.cat_name
-                    , ac.prd_parent
-                    , ifnull(sr.ser_comments,'') as ser_comments
-                    , ROW_NUMBER() OVER (PARTITION BY pr.prd_sku ORDER BY sr.ser_sku DESC) AS reng
-                FROM ctt_projects_detail AS pj
-                INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
-                INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
-                INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
-                LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
-                LEFT JOIN ctt_accesories AS ac ON ac.prd_id = sr.ser_id
-                INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
-                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId ORDER BY reng, pr.prd_level DESC;"; */
 
         $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
                 pr.prd_level, ct.cat_name, ifnull(sr.ser_comments,'') as ser_comments,
@@ -343,7 +329,6 @@ public function promoteToProject($params)
     }    
 
 
-
 /** ====== Actualiza cifras e la tabla temporal ==============================================  */
     public function updateMice($params)
     {
@@ -356,12 +341,14 @@ public function promoteToProject($params)
 
         $qry1 = "UPDATE ctt_projects_mice 
                 SET $field = $value,  pjtvr_action = '$action'
-                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section AND (pjtvr_action = 'N' OR pjtvr_action = 'U');";
+                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section 
+                AND (pjtvr_action = 'N' OR pjtvr_action = 'U');";
         $this->db->query($qry1);
 
         $qry2 = "UPDATE ctt_projects_mice 
                 SET $field = $value
-                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section AND pjtvr_action = 'A';";
+                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section 
+                AND pjtvr_action = 'A';";
         return $this->db->query($qry2);
 
     }
@@ -415,8 +402,6 @@ public function promoteToProject($params)
                     FROM ctt_comments 
                     WHERE com_id = $comId;";
         return $this->db->query($qry2);
-
-
     }
 
 
@@ -523,7 +508,7 @@ public function promoteToProject($params)
         $qry1 = "UPDATE ctt_projects 
                     SET pjt_date_last_motion = CURRENT_TIMESTAMP() 
                     WHERE pjt_id = '$pjtId' ";
-        // $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = $lastmov WHERE pjt_id = $pjtId;";
+
         $this->db->query($qry1);
     
         return $pjtId;
@@ -550,7 +535,7 @@ public function promoteToProject($params)
         return $result . '|' . $pjtId;
     }
 
-
+/** ====== =================  */
     public function getLocationType(){
         $qry = "SELECT loc_id, loc_type_location
         FROM ctt_location;
@@ -688,7 +673,7 @@ public function promoteToProject($params)
         $qry1 = "SELECT * FROM ctt_projects_content AS pc 
                  INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                  INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                 WHERE pj.pjt_id = $pjtId;";
+                 WHERE pj.pjt_id = $pjtId AND pd.srv_id IN (1,4);";
         return $this->db->query($qry1);
        
      }
@@ -707,10 +692,10 @@ public function promoteToProject($params)
 
 /** ====== Agrega el movimiento hecho en el proyecto =========================================  */
      public function settingProjectMovemen ($pjtId, $user){
-
+        // (pjtvr_quantity - pjtvr_quantity_ant)   as mov_quantity
         $qry1 = "INSERT INTO ctt_movements (mov_quantity, mov_type, prd_id, pjt_id, usr_id)
                  SELECT 
-                    (pjtvr_quantity - pjtvr_quantity_ant)   as mov_quantity
+                    (pjtvr_quantity)   as mov_quantity
                     , case 
                             when pjtvr_action = 'U' then 'Modifica Cantidad'
                             when pjtvr_action = 'A' then 'Agrego producto'
@@ -721,8 +706,7 @@ public function promoteToProject($params)
                     , $user	                                as usr_id
                  FROM ctt_projects_mice WHERE pjt_id = $pjtId AND pjtvr_action != 'N';";
         return $this->db->query($qry1);
-       
-
+    
      }
 
 
@@ -896,15 +880,6 @@ public function promoteToProject($params)
             $pjtdtId = $this->db->insert_id;
         }
         
-        /* if ( $serie != null){
-            // Asigna el id del detalle en la serie correspondiente
-            $qry4 = "UPDATE ctt_series 
-                        SET 
-                            pjtdt_id = '$pjtdtId'
-                        WHERE ser_id = $serie;";
-            $this->db->query($qry4);
-        } */
-
         // Agrega los periodos desiganados a la serie 
         $qry5 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs) 
@@ -920,9 +895,6 @@ public function promoteToProject($params)
         $prodId   = $this->db->real_escape_string($params['prodId']);
         $serId   = $this->db->real_escape_string($params['serId']);
 
-        /* $qry = "SELECT pr.* FROM ctt_products AS pr
-                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
-                WHERE ac.prd_parent = $prodId;"; */
         $qry = "SELECT ser_id FROM ctt_projects_detail 
                 WHERE pjtdt_id = $serId LIMIT 1;";
         $result =  $this->db->query($qry);

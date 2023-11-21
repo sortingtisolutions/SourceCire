@@ -258,23 +258,9 @@ class ProjectPlansModel extends Model
         $type = $this->db->real_escape_string($params['type']);
         $prdId = $this->db->real_escape_string($params['prdId']);
         $verId = $this->db->real_escape_string($params['verId']);
-        $section = $this->db->real_escape_string($params['section']);// *** Modificado por Ed
+        $section = $this->db->real_escape_string($params['section']);  // *** Modificado por Ed
 
-/*         $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
-                    pr.prd_level, ct.cat_name, ac.ser_parent,
-                    ifnull(sr.ser_comments,'') as ser_comments,
-                    ROW_NUMBER() OVER (PARTITION BY pr.prd_sku ORDER BY sr.ser_sku DESC) AS reng
-                FROM ctt_projects_detail AS pj
-                INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
-                INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
-                INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
-                LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
-                LEFT JOIN ctt_accesories AS ac ON ac.ser_parent = sr.ser_id
-                INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
-                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId 
-                ORDER BY reng, pr.prd_sku, pr.prd_level DESC;"; */
-
-            $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
+        $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
                     pr.prd_level, ct.cat_name, ifnull(sr.ser_comments,'') as ser_comments,
                     ROW_NUMBER() OVER (ORDER BY sr.ser_sku DESC) AS reng
                 FROM ctt_projects_detail AS pj
@@ -284,7 +270,7 @@ class ProjectPlansModel extends Model
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
                 WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
-                ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";// ***Modificado por Ed
+                ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";   // ***Modificado por Ed
 
         return $this->db->query($qry);
 
@@ -671,7 +657,7 @@ class ProjectPlansModel extends Model
         $qry1 = "SELECT * FROM ctt_projects_content AS pc 
                  INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                  INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                 WHERE pj.pjt_id = $pjtId;";
+                 WHERE pj.pjt_id = $pjtId AND pd.srv_id IN (1,4);";
         return $this->db->query($qry1);
        
      }
@@ -854,15 +840,6 @@ class ProjectPlansModel extends Model
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
         }
-            /*     if ( $serie != null){
-            // Asigna el id del detalle en la serie correspondiente
-            $qry4 = "UPDATE ctt_series 
-                        SET 
-                            pjtdt_id = '$pjtdtId'
-                        WHERE ser_id = $serie;";
-            $this->db->query($qry4);
-            }
- */
         // Agrega los periodos desiganados a la serie 
         $qry5 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs) 
@@ -877,9 +854,6 @@ class ProjectPlansModel extends Model
         $prodId   = $this->db->real_escape_string($params['prodId']);
         $serId   = $this->db->real_escape_string($params['serId']);
 
-        /* $qry = "SELECT pr.* FROM ctt_products AS pr
-                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
-                WHERE ac.prd_parent = $prodId;"; */
         $qry = "SELECT ser_id FROM ctt_projects_detail 
                 WHERE pjtdt_id = $serId LIMIT 1;";
         $result =  $this->db->query($qry);
@@ -951,7 +925,7 @@ class ProjectPlansModel extends Model
     public function ListLocationsEdos($params){
         $pjtId = $this->db->real_escape_string($params['prj_id']);
         $qry = "SELECT * FROM ctt_locacion_estado AS ldo 
-        INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id WHERE ldo.pjt_id='$pjtId';";
+                INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id WHERE ldo.pjt_id='$pjtId';";
         return $this->db->query($qry);
     } 
     // Guardar locaciones 
@@ -998,8 +972,8 @@ class ProjectPlansModel extends Model
         
         // Agrega los periodos designados a la serie 
         $qry3 = "UPDATE ctt_projects_detail 
-                        SET pjtdt_prod_sku = '$sersku', ser_id = '$serie', prd_id = '$serprdid'
-                    WHERE pjtdt_id = '$detid'; ";
+                    SET pjtdt_prod_sku = '$sersku', ser_id = '$serie', prd_id = '$serprdid'
+                WHERE pjtdt_id = '$detid'; ";
         $this->db->query($qry3);
         
         $joinval = $skuold . ' | ' . $skunew . ' | ' . $detid . ' | ' . $serie . ' | ' . $sersku . ' | ' . $serprdid ;
@@ -1033,8 +1007,8 @@ class ProjectPlansModel extends Model
         $verid      = $this->db->real_escape_string($params['verid']);
 
         $qry = "UPDATE ctt_projects_version 
-                SET pjtvr_order=$valnew
-        WHERE pjtvr_id=$verid;";
+                    SET pjtvr_order=$valnew
+                WHERE pjtvr_id=$verid;";
     
         return $this->db->query($qry);
     } 
@@ -1048,8 +1022,8 @@ class ProjectPlansModel extends Model
     function DeleteLocation($params){
         $loc_id = $this->db->real_escape_string($params['loc_id']);
         $qry1 = "DELETE FROM ctt_locacion_estado 
-        WHERE lce_id = '$loc_id';
-        ";
+                WHERE lce_id = '$loc_id';
+                ";
         $this->db->query($qry1);
         return $loc_id;
     }

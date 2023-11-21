@@ -8,14 +8,13 @@ class ClosedProyectChangeModel extends Model
         parent::__construct();
     }
 
-
 // Listado de almacenes  ****
         public function listProjects($params)
         {
             $qry = "SELECT DISTINCT pj.pjt_id, pj.pjt_number, pj.pjt_name
                     FROM ctt_projects AS pj
                     INNER JOIN ctt_documents_closure AS dcl ON dcl.pjt_id=pj.pjt_id
-                    WHERE pjt_status in (8,9) ORDER BY pj.pjt_number;";
+                    WHERE pjt_status in (9) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 
@@ -43,12 +42,23 @@ class ClosedProyectChangeModel extends Model
             return $this->db->query($qry);
         }    
 
+        public function getValuesDoc($params)
+        {
+            $cloid = $this->db->real_escape_string($params['pjtId']);
+
+            $qry = "SELECT clo_id,clo_ver_closed,clo_total_proyects,clo_total_maintenance,
+                            clo_total_expendables, clo_total_diesel,clo_total_discounts,clo_total_document	 
+                    FROM ctt_documents_closure WHERE clo_id=$cloid;";
+            return $this->db->query($qry);
+        }    
+
 // Listado de productos
         public function listProducts($params)
         {
-            $strId              = $this->db->real_escape_string($params['strId']);
+            $strId = $this->db->real_escape_string($params['strId']);
 
-            $qry = "SELECT sr.ser_id, sr.ser_sku, pd.prd_sku, pd.prd_name, pd.prd_price, SUM(sp.stp_quantity) as stock
+            $qry = "SELECT sr.ser_id, sr.ser_sku, pd.prd_sku, pd.prd_name, 
+                            pd.prd_price, SUM(sp.stp_quantity) as stock
                     FROM ctt_series AS sr
                     INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
                     INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
@@ -57,135 +67,184 @@ class ClosedProyectChangeModel extends Model
                     ORDER BY pd.prd_name ASC;";
             return $this->db->query($qry);
         }    
+/** */
+    public function saveDocumentClosure($params)
+    {
+        $cloTotProy     =  $this->db->real_escape_string($params['cloTotProy']);
+        $cloTotMaint    = $this->db->real_escape_string($params['cloTotMaint']);
+        $cloTotExpen    = $this->db->real_escape_string($params['cloTotExpen']);
+        $cloTotCombu    =  $this->db->real_escape_string($params['cloTotCombu']);
+        $cloTotDisco    =  $this->db->real_escape_string($params['cloTotDisco']);
+        $cloTotDocum    =  $this->db->real_escape_string($params['cloTotDocum']);
+        $cloId          = $this->db->real_escape_string($params['cloId']);
+        $usrid          = $this->db->real_escape_string($params['usrid']);
+      
+            $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
+                    clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                    clo_fecha_cierre,clo_flag_send,  cus_id, pjt_id, usr_id, ver_id)
+                SELECT '$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+                    '$cloTotDocum',Now(),'0', cus_id, pjt_id, '$usrid', ver_id 
+                FROM ctt_documents_closure
+                WHERE clo_id=$cloId;";
 
+        $this->db->query($qry);
+        $ducloId = $this->db->insert_id;
 
-// Listado de proyectos
-        
+        return $ducloId;
+    }
+/** */
+    public function insertCollectPays($params)
+    {
+        $folid     =  $this->db->real_escape_string($params['folid']);
+        $cusid    = $this->db->real_escape_string($params['cusid']);
+        $amoupay     =  $this->db->real_escape_string($params['amoupay']);
+        $pjtId    = $this->db->real_escape_string($params['pjtId']);
+        $cloid    =  $this->db->real_escape_string($params['cloid']);
+        $empid    =  $this->db->real_escape_string($params['empid']);
+        $deadpay    =  $this->db->real_escape_string($params['deadpay']);
 
+        $qry="INSERT INTO ctt_collect_accounts(clt_folio,clt_date_generated, clt_deadline, 
+                ctl_amount_payable, cus_id, pjt_id, clo_id, emp_id) 
+            VALUES ('$folid', Now(),'$deadpay','$amoupay','$cusid','$pjtId', '$cloid','$empid');";
+
+        $this->db->query($qry);
+        $colacc = $this->db->insert_id;
+
+        return $colacc;
+    }
+
+    public function PromoteProject($params)
+    {
+        /* Actualiza el estado en 2 convirtiendolo en presupuesto  */
+        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+        $qry = "UPDATE ctt_projects SET pjt_status = '99' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
+
+        return $pjtId;
+
+    }
+
+}
 // Guarda la venta
-        public function SaveSale($params, $user)
-        {
-            $salPayForm         = $this->db->real_escape_string($params['salPayForm']);
-            $salNumberInvoice   = $this->db->real_escape_string($params['salNumberInvoice']);
-            $salCustomerName    = $this->db->real_escape_string($params['salCustomerName']);
-            $strId              = $this->db->real_escape_string($params['strId']);
-            $pjtId              = $this->db->real_escape_string($params['pjtId']);
-            $comId              = $this->db->real_escape_string($params['comId']);
-            $pjtName            = $this->db->real_escape_string($params['pjtName']);
-            $usrName            = strtoupper($user);
+        // public function SaveSale($params, $user)
+        // {
+        //     $salPayForm         = $this->db->real_escape_string($params['salPayForm']);
+        //     $salNumberInvoice   = $this->db->real_escape_string($params['salNumberInvoice']);
+        //     $salCustomerName    = $this->db->real_escape_string($params['salCustomerName']);
+        //     $strId              = $this->db->real_escape_string($params['strId']);
+        //     $pjtId              = $this->db->real_escape_string($params['pjtId']);
+        //     $comId              = $this->db->real_escape_string($params['comId']);
+        //     $pjtName            = $this->db->real_escape_string($params['pjtName']);
+        //     $usrName            = strtoupper($user);
 
-            $qr1 = "INSERT INTO ctt_sales 
-                        (sal_pay_form, sal_number_invoice, sal_customer_name, str_id, pjt_id, sal_saller, sal_project)
-                    VALUES
-                        ('$salPayForm', '$salNumberInvoice', '$salCustomerName', '$strId', '$pjtId', '$usrName', '$pjtName');";
+        //     $qr1 = "INSERT INTO ctt_sales 
+        //                 (sal_pay_form, sal_number_invoice, sal_customer_name, str_id, pjt_id, sal_saller, sal_project)
+        //             VALUES
+        //                 ('$salPayForm', '$salNumberInvoice', '$salCustomerName', '$strId', '$pjtId', '$usrName', '$pjtName');";
 
-            $this->db->query($qr1);
-            $salId = $this->db->insert_id;
-            $salNumber = str_pad($salId, 7, '0', STR_PAD_LEFT); // Coloca 7 (0000000) digitos en el numero de venta
+        //     $this->db->query($qr1);
+        //     $salId = $this->db->insert_id;
+        //     $salNumber = str_pad($salId, 7, '0', STR_PAD_LEFT); // Coloca 7 (0000000) digitos en el numero de venta
 
-            $qr2 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
-            $this->db->query($qr2);
+        //     $qr2 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
+        //     $this->db->query($qr2);
 
-            $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
-            $this->db->query($qr3);
+        //     $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
+        //     $this->db->query($qr3);
 
-            return $salId;
-        }    
+        //     return $salId;
+        // }    
 
 
 // Registra el numero de folio 
-public function NextExchange()
-{
-    $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
-    $this->db->query($qry);
-    return $this->db->insert_id;
-}
-
+    // public function NextExchange()
+    // {
+    //     $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
+    //     $this->db->query($qry);
+    //     return $this->db->insert_id;
+    // }
 
 // Guarda detalle de la venta
-        public function SaveSaleDetail($params, $user)
-        {
-            $sldNameBrut    = $this->db->real_escape_string($params['sldName']);
-            $employee_data  = explode("|",$user);
-            $sldSku         = $this->db->real_escape_string($params['sldSku']);
-            $sldName        = str_replace('°','"',$sldNameBrut);
-            $sldPrice       = $this->db->real_escape_string($params['sldPrice']);
-            $sldQuantity    = $this->db->real_escape_string($params['sldQuantity']);
-            $salId          = $this->db->real_escape_string($params['salId']);
-            $serId          = $this->db->real_escape_string($params['serId']);
-            $strId          = $this->db->real_escape_string($params['strId']);
-            $pjtId          = $this->db->real_escape_string($params['pjtId']);
-            $folio          = $this->db->real_escape_string($params['folio']);
-            $serSt          = 'VENTA';
-            $usrName	    = $this->db->real_escape_string($employee_data[2]);
+    // public function SaveSaleDetail($params, $user)
+    // {
+    //     $sldNameBrut    = $this->db->real_escape_string($params['sldName']);
+    //     $employee_data  = explode("|",$user);
+    //     $sldSku         = $this->db->real_escape_string($params['sldSku']);
+    //     $sldName        = str_replace('°','"',$sldNameBrut);
+    //     $sldPrice       = $this->db->real_escape_string($params['sldPrice']);
+    //     $sldQuantity    = $this->db->real_escape_string($params['sldQuantity']);
+    //     $salId          = $this->db->real_escape_string($params['salId']);
+    //     $serId          = $this->db->real_escape_string($params['serId']);
+    //     $strId          = $this->db->real_escape_string($params['strId']);
+    //     $pjtId          = $this->db->real_escape_string($params['pjtId']);
+    //     $folio          = $this->db->real_escape_string($params['folio']);
+    //     $serSt          = 'VENTA';
+    //     $usrName	    = $this->db->real_escape_string($employee_data[2]);
 
-            $qry = "INSERT INTO ctt_sales_details 
-                        (sld_sku, sld_name, sld_price, sld_quantity, sal_id, ser_id, sld_situation)
-                    VALUES
-                        ('$sldSku', '$sldName', '$sldPrice', '$sldQuantity', '$salId', '$serId', '$serSt');";
-            $this->db->query($qry);
-            
-            $qry1 = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $sldQuantity 
-                    WHERE ser_id = $serId AND str_id = $strId;";
-            $this->db->query($qry1);
+    //     $qry = "INSERT INTO ctt_sales_details 
+    //                 (sld_sku, sld_name, sld_price, sld_quantity, sal_id, ser_id, sld_situation)
+    //             VALUES
+    //                 ('$sldSku', '$sldName', '$sldPrice', '$sldQuantity', '$salId', '$serId', '$serSt');";
+    //     $this->db->query($qry);
+        
+    //     $qry1 = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $sldQuantity 
+    //             WHERE ser_id = $serId AND str_id = $strId;";
+    //     $this->db->query($qry1);
 
-            $qry2 = "INSERT INTO ctt_stores_exchange 
-                                (exc_sku_product, exc_product_name, exc_quantity, exc_serie_product, exc_store, exc_comments, exc_proyect, exc_employee_name, ext_code, con_id, ext_id, cin_id)
-                    SELECT sr.ser_sku AS exc_sku_product, pr.prd_name AS exc_product_name, 
-                        '$sldQuantity' as exc_quantity, sr.ser_id AS exc_serie_product,
-                        st.str_name AS sxc_store, 'VENTA DIRECTA EN MOSTRADOR' AS exc_comments, (
-                            SELECT ucase(pjt_name) FROM ctt_projects WHERE pjt_id = $pjtId
-                        ) AS exc_proyect,
-                        '$usrName' AS exc_employee_name,
-                        'SCI' AS ext_code,
-                        '$folio' AS con_id,
-                        '3' AS ext_id,
-                        sr.cin_id
-                    FROM ctt_series as sr
-                    INNER JOIN ctt_products AS pr ON pr.prd_id = sr.prd_id
-                    INNER JOIN ctt_stores AS st ON st.str_id = $strId
-                    WHERE sr.ser_id = '$serId';";
-            $this->db->query($qry2);
+    //     $qry2 = "INSERT INTO ctt_stores_exchange 
+    //                         (exc_sku_product, exc_product_name, exc_quantity, exc_serie_product, 
+    //                         exc_store, exc_comments, exc_proyect, exc_employee_name, ext_code, 
+    //                         con_id, ext_id, cin_id)
+    //             SELECT sr.ser_sku AS exc_sku_product, pr.prd_name AS exc_product_name, 
+    //                 '$sldQuantity' as exc_quantity, sr.ser_id AS exc_serie_product,
+    //                 st.str_name AS sxc_store, 'VENTA DIRECTA EN MOSTRADOR' AS exc_comments, (
+    //                     SELECT ucase(pjt_name) FROM ctt_projects WHERE pjt_id = $pjtId) AS exc_proyect,
+    //                 '$usrName' AS exc_employee_name,
+    //                 'SCI' AS ext_code,
+    //                 '$folio' AS con_id,
+    //                 '3' AS ext_id,
+    //                 sr.cin_id
+    //             FROM ctt_series as sr
+    //             INNER JOIN ctt_products AS pr ON pr.prd_id = sr.prd_id
+    //             INNER JOIN ctt_stores AS st ON st.str_id = $strId
+    //             WHERE sr.ser_id = '$serId';";
+    //     $this->db->query($qry2);
 
-            return $salId .'|'.$employee_data[0] .'|'. $employee_data[2];
-        }    
+    //     return $salId .'|'.$employee_data[0] .'|'. $employee_data[2];
+    // }    
+        
 // Guarda archivo detalle de la venta
-        public function saveSaleList($params)
-        {
-            
-            $salId = $this->db->real_escape_string($params['salId']);
+    // public function saveSaleList($params)
+    // {
+    //     $salId = $this->db->real_escape_string($params['salId']);
 
-            $qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
-                    FROM ctt_sales AS sl
-                    INNER JOIN ctt_sales_details AS sd ON sd.sal_id = sl.sal_id
-                    INNER JOIN ctt_stores AS st ON st.str_id = sl.str_id
-                    LEFT JOIN ctt_projects As pj ON pj.pjt_id = sl.pjt_id
-                    WHERE sl.sal_id = $salId;";
+    //     $qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
+    //             FROM ctt_sales AS sl
+    //             INNER JOIN ctt_sales_details AS sd ON sd.sal_id = sl.sal_id
+    //             INNER JOIN ctt_stores AS st ON st.str_id = sl.str_id
+    //             LEFT JOIN ctt_projects As pj ON pj.pjt_id = sl.pjt_id
+    //             WHERE sl.sal_id = $salId;";
 
-            return $this->db->query($qry);
-            
-        }    
-
-
+    //     return $this->db->query($qry);
+    // }    
 
 // Guarda comentario
-    public function SaveComments($params, $user)
-    {
-        $section    = $this->db->real_escape_string($params['section']);
-        $movemId    = $this->db->real_escape_string($params['sectnId']);
-        $comment    = $this->db->real_escape_string($params['comment']);
-        $usrName    = strtoupper($user);
+    // public function SaveComments($params, $user)
+    // {
+    //     $section    = $this->db->real_escape_string($params['section']);
+    //     $movemId    = $this->db->real_escape_string($params['sectnId']);
+    //     $comment    = $this->db->real_escape_string($params['comment']);
+    //     $usrName    = strtoupper($user);
 
-        $qry = "INSERT INTO ctt_comments 
-                    (com_source_section, com_action_id, com_comment, com_user)
-                VALUES
-                    ('$section', '$movemId', '$comment', '$usrName');";
+    //     $qry = "INSERT INTO ctt_comments 
+    //                 (com_source_section, com_action_id, com_comment, com_user)
+    //             VALUES
+    //                 ('$section', '$movemId', '$comment', '$usrName');";
 
-        $this->db->query($qry);
-        $comId = $this->db->insert_id;
+    //     $this->db->query($qry);
+    //     $comId = $this->db->insert_id;
 
-        return $comId;
-    }    
+    //     return $comId;
+    // }    
 
-
-}
+    

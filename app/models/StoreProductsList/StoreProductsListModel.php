@@ -55,13 +55,6 @@ class StoreProductsListModel extends Model
         return $this->db->query($qry);
     }
 
-// Actualizala cantidad de productos en un almacen destino
-    public function UpdateProducts($param)
-    {
-       
-    }
-
-
 // Agrega el registro de relación almacen producto
     public function InsertProducts($param)
     {
@@ -87,17 +80,6 @@ class StoreProductsListModel extends Model
                 INNER JOIN ctt_projects_content AS prjt ON prjt.pjtcn_id = prdt.pjtcn_id
                 WHERE prdt.pjtdt_prod_sku != 'Pendiente' AND prjt.pjt_id = 1 ;";
         return $this->db->query($qry);
-
-
-
-        // [martes 04:11 p. m.] Erick Nava Hernández
-        // [dbo].[insertar_PROD]
-        // @cve_art varchar(20),
-        // @descr varchar(40),
-        // @uni_med varchar(10),
-        // @linea varchar(5),
-        // @peso float
-
 
     }	
 }

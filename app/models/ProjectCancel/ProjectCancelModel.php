@@ -21,10 +21,11 @@ class ProjectCancelModel extends Model
 		LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
 		LEFT JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
 		INNER JOIN ctt_projects_status AS ps ON ps.pjs_status=pj.pjt_status
-		WHERE pj.pjt_status in (4, 40, 6, 5);";
+		WHERE pj.pjt_status in (6, 5);";
         return $this->db->query($qry);
 
     }
+    
 /** Habilita el projecto                                                           ====  */    
     public function EnableProject($params)
     {
@@ -45,12 +46,11 @@ class ProjectCancelModel extends Model
         $pjtId = $this->db->real_escape_string($params);
         $qry = "DELETE FROM ctt_projects_periods WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
-                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                     WHERE pcn.pjt_id = $pjtId );";
         return $this->db->query($qry);
     }
 
-    
 /** Restaura las series del proyecto a productos disponibles                       ====  */
     public function restoreSeries($params)
     {
@@ -59,7 +59,7 @@ class ProjectCancelModel extends Model
                 SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
                 WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
-                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                     WHERE pcn.pjt_id = $pjtId );";
         return $this->db->query($qry);
     }
@@ -68,8 +68,8 @@ class ProjectCancelModel extends Model
     public function cleanDetail($params)
     {
         $pjtId = $this->db->real_escape_string($params);
-        $qry = "DELETE FROM ctt_projects_detail WHERE pjtcn_id IN  (
-                    SELECT pjtcn_id FROM ctt_projects_content WHERE pjt_id = $pjtId
+        $qry = "DELETE FROM ctt_projects_detail WHERE pjtvr_id IN  (
+                    SELECT pjtvr_id FROM ctt_projects_content WHERE pjt_id = $pjtId
                 );";
         return $this->db->query($qry);
     }

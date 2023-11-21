@@ -6,6 +6,7 @@
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
@@ -23,29 +24,6 @@
                         </div>
                     </div>
 
-                    <!-- <div class="row list-finder">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div class="box-items-list" id="boxProducts">Productos
-                                    <i class="fas fa-angle-down"></i>
-                                </div>
-                                
-                        </div>
-                        <div class="list-group list-hide">
-                            <div class="list-items" id="listProducts"></div>
-                        </div>
-                    </div> -->
-
-               <!--      <div class="row list-finder">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtProjects" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >
-                                <label for="txtProjects">Proyectos</label>
-                            </div>
-                            <input type="hidden" id="txtIdProjects" name="txtIdProjects">
-                        <div class="list-group list-hide">
-                            <div class="list-items" id="listProjects"></div>
-                        </div>
-                    </div> -->
-
                     <div class="row list-finder">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >
@@ -57,8 +35,6 @@
                         </div>
                     </div>
                     
-                  
-
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <textarea class="form-control form-control-sm" id="txtComments" style="height: 120px" rows="3"></textarea>
@@ -98,15 +74,6 @@
                             <label for="txtProjectName">Nombre del Proyecto</label>
                         </div>
 
-                        <!-- <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2  mb-2 form-floating">
-                            <input id="txtVersion" type="text" class="form-control form-control-sm"  data-mesage="Debes agregar la version del producto" >
-                            <label for="txtVersion">Versión Doc.</label>
-                        </div>
-
-                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2  mb-2 form-floating">
-                            <input id="txtFreelance" type="text" class="form-control form-control-sm"  data-mesage="Debes agregar el nombre del freelance" >
-                            <label for="txtFreelance">Freelance</label>
-                        </div> -->
                     </div>
 
                 <table class="display compact nowrap"  id="tblExchanges">
@@ -124,9 +91,7 @@
                 </table>
             </div>
 
-
-        
-            
+  
         </div>
 
     </div>

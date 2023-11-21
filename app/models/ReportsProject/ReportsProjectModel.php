@@ -36,7 +36,6 @@ class ReportsProjectModel extends Model
 		$isProducto = $this->db->real_escape_string($request['isProducto']);
 		$isAccesorio = $this->db->real_escape_string($request['isAccesorio']);
 
-
 		$queryExt = "";
 		$levelProduct = "";
 		$BanderaLevel = 0;
@@ -71,7 +70,6 @@ class ReportsProjectModel extends Model
 			$queryExt.= " AND pr.prd_level in (".$levelProduct.")";
 		}
 
-
 		if($isConcepto == 1)
 		{
 			$qry = "SELECT distinct pr.prd_sku, pr.prd_name, prd_price, sb.sbc_name FROM ctt_products AS pr
@@ -88,11 +86,6 @@ class ReportsProjectModel extends Model
 			LEFT JOIN ctt_suppliers AS sp ON sp.sup_id = sr.sup_id
 			WHERE sr.ser_status = 1 AND st.stp_quantity > 0  ".$queryExt;
 		}
-
-		//print_r($qry);
-		//exit();
-
-
 
 		return $this->db->query($qry);
 	}	
@@ -111,7 +104,8 @@ class ReportsProjectModel extends Model
 		$prodId = $this->db->real_escape_string($param['prd']);
 		$storId = $this->db->real_escape_string($param['str']);
 
-		$qry = "SELECT count(*) as items FROM ctt_stores_products WHERE ser_id = $prodId AND str_id = $storId;";
+		$qry = "SELECT count(*) as items FROM ctt_stores_products 
+				WHERE ser_id = $prodId AND str_id = $storId;";
 		return $this->db->query($qry);
 	}
 

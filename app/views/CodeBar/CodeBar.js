@@ -200,8 +200,6 @@ function putProducts(dt) {
 
 // Dibuja los productos
 function drawProducts() {
-   /*  $('.list-item').addClass('hide-items');
-    $(`.list-item[data-store^="${str}"]`).removeClass('hide-items'); */
     console.log('paso 2');
     var ps = $('#boxProducts').offset();
     $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});
@@ -239,19 +237,6 @@ function xdrawProducts(str) {
 function validator(prId) {
     let ky = 0;
     let msg = '';
-
-    /* if ($('#txtTypeExchange').val() == 0) {
-        ky = 1;
-        msg += 'Debes seleccionar un tipo de movimiento';
-        $('#txtTypeExchange').addClass('fail');
-    }
-
-    if ($('#txtStoreTarget').val() == 0 && link != '' && link != 'null') {
-        ky = 1;
-        msg += 'Debes seleccionar un almacen destino';
-        $('#txtStoreTarget').addClass('fail');
-    }*/
-
     let qtystk = prId.children().children('.quantity').attr('data-content');
     let qtysel = prId.children().children('.quantity').text();
     if (qtystk < qtysel) {

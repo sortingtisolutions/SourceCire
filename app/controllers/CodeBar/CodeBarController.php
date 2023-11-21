@@ -39,10 +39,6 @@ class CodeBarController extends Controller
 				$res =  '[{"ext_id":"0"}]';	
 			}
 			echo $res;
-
-			  
-		  // $params = array('unidad' => $res);
-		  // $this->render(__CLASS__, $params);
 	}
 
 // Lista los almacenes 

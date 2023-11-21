@@ -136,15 +136,12 @@ public function NextExchange()
                 );";
         $this->db->query($qry2);
 
-
-		$qry3 = "INSERT INTO 
-                    ctt_stores_products (stp_quantity, str_id, ser_id, prd_id) 
-                VALUES 
-                    ($exc_quantity, $str_id, $serId, $prd_id);";
+		$qry3 = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id, prd_id) 
+                VALUES ($exc_quantity, $str_id, $serId, $prd_id);";
         $this->db->query($qry3);
 
-        
-		$qry4 = "INSERT INTO ctt_products_documents (prd_id, doc_id, dcp_source) VALUES ($serId, $doc_id, 'S');";
+		$qry4 = "INSERT INTO ctt_products_documents (prd_id, doc_id, dcp_source) 
+                VALUES ($serId, $doc_id, 'S');";
         $this->db->query($qry4);
 
         return $con_id ;

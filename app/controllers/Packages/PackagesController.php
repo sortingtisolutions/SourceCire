@@ -95,7 +95,6 @@ class PackagesController extends Controller
         echo $res;
     }
 
-    
 // Lista los productos relacionados al paquete
     public function listProducts()
     {
@@ -113,7 +112,6 @@ class PackagesController extends Controller
         }
         echo $res;
     }
-
 
 // Lista los productos relacionados al paquete
     public function listProductsPack($request_params)
@@ -141,8 +139,6 @@ class PackagesController extends Controller
         $res = $result;
         echo $res;
     }	
-
-
 
 // Guarda producto del paquete
     public function SaveProduct($request_params)
@@ -189,7 +185,6 @@ class PackagesController extends Controller
         echo $res;
     }
     
-
 // Obtiene detalle del paquete
     public function deleteProduct($request_params)
     {

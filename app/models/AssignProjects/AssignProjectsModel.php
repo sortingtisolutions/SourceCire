@@ -75,8 +75,8 @@ class AssignProjectsModel extends Model
                 WHERE pjt_id=$pjtid";
         return $this->db->query($qry);
     }
-    /** ==== Obtiene el contenido del proyecto =============================================================  */
 
+    /** ==== Obtiene el contenido del proyecto =============================================================  */
     public function updateUsers($params)
     {
         $pjtid		= $this->db->real_escape_string($params['pjtid']);
@@ -85,16 +85,10 @@ class AssignProjectsModel extends Model
         $empname	= $this->db->real_escape_string($params['empname']);
         $usrid	    = $this->db->real_escape_string($params['usrid']);
 
-        /* $qry = "UPDATE ctt_who_attend_projects 
-                SET emp_id='$empid', emp_fullname='$empname'
-                WHERE pjt_id=$pjtid and are_id=$areid;";  
-        $folio = $this->db->query($qry); */
-
         $qry = "SELECT fun_updateuser($pjtid,$areid,$empid,'$empname',$usrid) 
                 AS valresult
                 FROM DUAL;";  
 
-        // $bandupdate = $this->db->query($qry);
         return $this->db->query($qry);
     }
 

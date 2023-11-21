@@ -82,5 +82,4 @@ class AddInfoCfidModel extends Model
 		return $this->db->query($qry);
 	}
 
-
 }

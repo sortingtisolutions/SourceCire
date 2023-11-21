@@ -21,6 +21,7 @@ class AssignFreelanceModel extends Model
                 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
+                WHERE pj.pjt_status IN (4,7,8)
                 ORDER BY pj.pjt_id DESC;";
 
         return $this->db->query($qry);
@@ -47,9 +48,10 @@ class AssignFreelanceModel extends Model
                 WHERE free.free_area_id= '$catId' AND NOT EXISTS (SELECT 1
                 FROM ctt_assign_proyect AS assi
                 WHERE assi.free_id = free.free_id AND assi.ass_status = 1
-                ) GROUP BY free_id;";
+                ) GROUP BY free_id ORDER BY free.free_name;";
         return $this->db->query($qry);
     }
+
     public function listFreelance2($param)
     {
         $catId = $this->db->real_escape_string($param['catId']);
@@ -82,12 +84,12 @@ class AssignFreelanceModel extends Model
     }	
 
 // Registra los movimientos entre almacenes
-public function NextExchange()
-{
-    $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
-    $this->db->query($qry);
-    return $this->db->insert_id;
-}
+    public function NextExchange()
+    {
+        $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
+        $this->db->query($qry);
+        return $this->db->insert_id;
+    }
 
 // Registra los movimientos entre almacenes
     public function SaveFreelanceProy($param, $user)
