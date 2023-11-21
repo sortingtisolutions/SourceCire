@@ -25,7 +25,8 @@ function inicial() {
     getComments_text(prjid);
     getDetailProds(prjid,em);
     getFreelances(prjid);
-    getAnalysts(prjid)
+    getAnalysts(prjid);
+    
 
     // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
@@ -340,7 +341,7 @@ function putDetailsProds(dt) {
     let valstage='';
     let locsecc='';
     let icon = '';
-    if (dt[0].pjtpd_id != '0')
+    if (dt[0].pjtcn_id > 0)
     {        
         // let tabla = $('#tblAsignedProd').DataTable();
         // $('#tblAsignedProd table tbody').html('');
@@ -370,10 +371,13 @@ function putDetailsProds(dt) {
                 })
                 .draw().node();
             $(rownode).css("background-color", valstage);
- 
         });
+        
         // tabla.row('.selected');
         activeIcons();
+    }else{
+        $('#recordOutPut').hide();
+
     }
 }
 
@@ -504,7 +508,7 @@ function build_modalSeries(dt) {
         //  $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
          tabla.rows().remove().draw();
-         if (dt[0].pjtdt_id!=0)
+         if (dt[0].ser_id > 0)
          {
             $.each(dt, function (v, u){
                 let skufull = String(u.pjtdt_prod_sku).slice(7, 11) == '' ? String(u.pjtdt_prod_sku).slice(0, 7) : String(u.pjtdt_prod_sku).slice(0, 7) + String(u.pjtdt_prod_sku).slice(7, 11);
@@ -626,6 +630,7 @@ function settingChangeSerie(){
             {data: 'serdetname', class: 'supply left'}, */
             {data: 'serdetnumber', class: 'supply'},
             {data: 'serdetsitu', class: 'sku'},
+            {data:  'projectname', class: 'supply left'},
           /*   {data: 'serdetstag', class: 'sku'}, */
         ],
     });
@@ -650,19 +655,23 @@ function putSerieDetails(dt){
         // $('.overlay_closer .title').html(` ${dt[0].prd_name} - ${dt[0].prd_sku}`);
         $('#ChangeSerieModal .overlay_closer .title').html(`DISPONIBLES`);
         tabla.rows().remove().draw();
-        $.each(dt, function (v, u) {
-            tabla.row
-                .add({
-                    // serchoose: '<input class="serprod fieldIn" type="checkbox" id="CH-' + u.ser_id + '" value="'+'">',
-                    /* serchange: `<i class='fas fa-edit toEdit' "></i> <i class='fas fa-check-circle toStop' "></i>`, */
-                    serchange: `<i class='fas fa-check-circle toChangeSer' id="${u.ser_id}" seridorg="${u.id_orig}"></i>`,
-                    serdetnumber: u.ser_serial_number,
-                    serdetsitu: u.ser_no_econo
-     
-                })
-                .draw();
-            //$(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
-        });
+        if (dt[0].ser_id > 0) {
+            $.each(dt, function (v, u) {
+                tabla.row
+                    .add({
+                        // serchoose: '<input class="serprod fieldIn" type="checkbox" id="CH-' + u.ser_id + '" value="'+'">',
+                        /* serchange: `<i class='fas fa-edit toEdit' "></i> <i class='fas fa-check-circle toStop' "></i>`, */
+                        serchange: `<i class='fas fa-check-circle toChangeSer' id="${u.ser_id}" seridorg="${u.id_orig}"></i>`,
+                        serdetnumber: u.ser_serial_number,
+                        serdetsitu: u.ser_no_econo,
+                        projectname: u.pjt_name
+         
+                    })
+                    .draw();
+                //$(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
+            });
+        }
+        
         
         activeIconsNewSerie();
     } else{
@@ -760,9 +769,11 @@ function printOutPut(verId) {
     // let n = user[2];
     let h = localStorage.getItem('host');
     let v = verId;
+    let nameproject = $('#txtProjectName').val();
+    let numproject = $('#txtProjectNum').val();
     // console.log('Datos', v, u, n, h);
     window.open(
-        `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}&np=${nameproject}&nump=${numproject}`,
         '_blank'
     );
 }
@@ -775,25 +786,27 @@ function printReports(pjtId, typrint) {
     
     let v = pjtId;
     let h = localStorage.getItem('host');
+    let nameproject = $('#txtProjectName').val();
+    let numproject = $('#txtProjectNum').val();
     // console.log('Datos', v, u, n, h);
     switch (typrint) {
         case "C":  // Contenido global
             window.open(
-                `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}`,
+                `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
         //   console.log("Contenido");
           break;
         case "D":  // Detalles del contenido con series
             window.open(
-                `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}`,
+                `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
         //   console.log("Detalle");
           break;
         case "A": // Detalles y Accesorios del contenido con series
             window.open(
-                `${url}app/views/WhOutputContent/WhOutputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}`,
+                `${url}app/views/WhOutputContent/WhOutputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
         //   console.log("Con Accesorios");

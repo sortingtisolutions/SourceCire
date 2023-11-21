@@ -276,6 +276,32 @@ function setting_table_AsignedProd() {
                 action: function (e, dt, node, config) {
                     /*read_package_table();*/
                 },
+            },{
+                // Boton imprimir contenido jjr
+                text: 'Print Contenido',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    // printContent(prjid, 'A');
+                    printReports(prjid, 'C');
+                },
+            },
+            {
+                // Boton imprimir detalle jjr
+                text: ' Print Detalle ',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    // printDetail(prjid);
+                    printReports(prjid, 'D');
+                },
+            },
+             {
+                // Boton imprimir detalle jjr
+                text: ' Print Accesories ',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    // printDetail(prjid);
+                    printReports(prjid, 'A');
+                },
             },
         ],
         pagingType: 'simple_numbers',
@@ -717,4 +743,50 @@ function modalLoading(acc) {
         });
     }
 }
+
+/**********  Impresion del contenido de un proyecto ***********/    
+function printReports(pjtId, typrint) {
+    // let user = Cookies.get('user').split('|');
+    // let u = user[0];
+    // let n = user[2];
+    
+    let v = pjtId;
+    let h = localStorage.getItem('host');
+    let nameproject = $('#txtProjectName').val();
+    let numproject = $('#txtProjectNum').val();
+    // console.log('Datos', v, u, n, h);
+    switch (typrint) {
+        case "C":  // Contenido global
+            window.open(
+                `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
+                '_blank'
+            );
+        //   console.log("Contenido");
+          break;
+        case "D":  // Detalles del contenido con series
+            window.open(
+                `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
+                '_blank'
+            );
+        //   console.log("Detalle");
+          break;
+        case "A": // Detalles y Accesorios del contenido con series
+            window.open(
+                `${url}app/views/WhOutputContent/WhOutputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
+                '_blank'
+            );
+        //   console.log("Con Accesorios");
+          break;
+        default:
+          console.log("No Hay REPORTE");
+          break;
+      }
+
+
+    // window.open(
+    //     `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+    //     '_blank'
+    // );
+}
+
 
