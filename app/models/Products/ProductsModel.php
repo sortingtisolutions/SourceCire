@@ -13,7 +13,7 @@ class ProductsModel extends Model
     public function listCategories()
     {
         $qry = "SELECT cat_id, cat_name FROM ctt_categories 
-            WHERE cat_status = 1 AND cat_id NOT IN (18,19);";
+            WHERE cat_status = 1 AND cat_id NOT IN (19,20);";
             
         return $this->db->query($qry);
     }

@@ -695,7 +695,7 @@ public function promoteToProject($params)
 
         $qry1 = "INSERT INTO ctt_movements (mov_quantity, mov_type, prd_id, pjt_id, usr_id)
                  SELECT 
-                    (pjtvr_quantity - pjtvr_quantity_ant)   as mov_quantity
+                    (pjtvr_quantity)   as mov_quantity
                     , case 
                             when pjtvr_action = 'U' then 'Modifica Cantidad'
                             when pjtvr_action = 'A' then 'Agrego producto'

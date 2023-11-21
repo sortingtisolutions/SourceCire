@@ -9,8 +9,6 @@ $prdId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
 $empid = $_GET['em'];
-$numProject =  $_GET['nump'];
-$nameProject =$_GET['np'];
 
 $conkey = decodificar($_GET['h']) ;
 
@@ -58,7 +56,7 @@ $header = '
                     </td>
                     <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
                     <p>
-                        <span class="number">Proyecto: '. $nameProject. '   #' . $numProject .'</span>
+                        <span class="number">Proyecto: '. $items[0]['pjt_name'] . '   #' . $items[0]['pjt_number'] .'</span>
                         <br><span style=" font-size: 8pt; color: #191970">Nombre Responsable: '. $uname .'</span>
                     </p>
                     </td>

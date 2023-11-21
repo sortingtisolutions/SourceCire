@@ -10,9 +10,6 @@ $usrId = $_GET['u'];
 $uname = $_GET['n'];
 $empid = $_GET['em'];
 
-$nameProject =$_GET['np'];
-$numProject =  $_GET['nump'];
-
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
@@ -73,7 +70,7 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Detalle del proyecto: '. $nameProject .' </span>
+                    <span class="number">Detalle del proyecto: '. $items[0]['pjt_name'] .' </span>
                 <br>
                     <span class="date">Fecha de salida'.  $items[0]['pjt_date_start'] .'</span>
                 </p>

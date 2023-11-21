@@ -1,9 +1,8 @@
 let products;
 //let prjid = window.location.pathname.split("/").pop();
 let gblprjid,user,usrid;
-let gblprjname;
 //var prjid;
-
+let prjid, v,u,n,em;
 $(document).ready(function () {
     if (verifica_usuario()) {
         // let temporal=Cookies.get('user');
@@ -15,18 +14,17 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setting_table_AsignedProd();
-    getUsersP();
+    /* getUsersP();
     getUsersA();
-    getUsersC();
+    getUsersC(); */
     getDetailProds();
     user = Cookies.get('user').split('|');
     usrid = user[0];
+    n = user[2];
+    em = user[3];
     // Boton para registrar la salida del proyecto y los productos
-    $('#recordChgUser')
-        .unbind('click')
-        .on('click', function () {
-            console.log(gblprjid);
-            confirm_toChgUsr(gblprjid, gblprjname);
+    $('#recordChgUser').on('click', function () {
+        printOutPut(prjid);
      });
 
      $('#cleanForm')
@@ -35,11 +33,11 @@ function inicial() {
             CleanCombos();
      });
 }
-
+/* 
 // Solicita los paquetes  OK
 function getUsersP() {
     //console.log(prjid)
-    var pagina = 'AssignProjects/listUsersP';
+    var pagina = 'OutputReprint/listUsersP';
     var par = `[{"pjt_id":""}]`;
     var tipo = 'json';
     var selector = putUsersP;
@@ -48,7 +46,7 @@ function getUsersP() {
 
 function getUsersA() {
     //console.log(prjid)
-    var pagina = 'AssignProjects/listUsersA';
+    var pagina = 'OutputReprint/listUsersA';
     var par = `[{"pjt_id":""}]`;
     var tipo = 'json';
     var selector = putUsersA;
@@ -57,16 +55,16 @@ function getUsersA() {
 
 function getUsersC() {
     //console.log(prjid)
-    var pagina = 'AssignProjects/listUsersC';
+    var pagina = 'OutputReprint/listUsersC';
     var par = `[{"pjt_id":""}]`;
     var tipo = 'json';
     var selector = putUsersC;
     fillField(pagina, par, tipo, selector);
 }
-
+ */
 // Solicita los productos del proyecto  OK
 function getDetailProds() {
-    var pagina = 'AssignProjects/listDetailProds';
+    var pagina = 'OutputReprint/listDetailProds';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
     var selector = putDetailsProds;
@@ -74,13 +72,13 @@ function getDetailProds() {
 }
 
 // Solicita los usuarios del proyecto  OK
-function getUsersOnProject(pjtid) {
-    var pagina = 'AssignProjects/listUsersOnProj';
+/* function getUsersOnProject(pjtid) {
+    var pagina = 'OutputReprint/listUsersOnProj';
     var par = `[{"pjt_id":"${pjtid}"}]`;
     var tipo = 'json';
     var selector = putUsersOnProject;
     fillField(pagina, par, tipo, selector);
-}
+} *//* 
 
 function updateUsers(pjtid,areid,empid,empname) {
     var par = `
@@ -90,12 +88,12 @@ function updateUsers(pjtid,areid,empid,empname) {
             "empname"   : "${empname}",
             "usrid"   : "${usrid}"
         }]`;
-    var pagina = 'AssignProjects/updateUsers';
+    var pagina = 'OutputReprint/updateUsers';
     var tipo = 'json';
     var selector = putupdateUser;
     fillField(pagina, par, tipo, selector);
 }
-
+ */
 // Configura la tabla de productos del proyecto
 
 function setting_table_AsignedProd() {
@@ -162,7 +160,7 @@ function setting_table_AsignedProd() {
 function putDetailsProds(dt) {
     let valstage='';
     let valicon='';
-    if (dt[0].pjt_id != '0')
+    if (dt[0].pjt_id > 0)
     {
         // let tabla = $('#tblAsignedProd').DataTable();
         $('#tblAsignedProd tbody').html('');
@@ -170,7 +168,7 @@ function putDetailsProds(dt) {
             if (u.pjt_status == 4)
                 { valstage='color:#008000';
                 valicon='fa fa-cog toWork'; }
-            else if (u.pjt_status == 7)
+            else if (u.pjt_status == 8)
                 { valstage='color:#FFA500';
                 valicon='fa fa-solid fa-dolly detail'; }
             else
@@ -191,7 +189,7 @@ function putDetailsProds(dt) {
         activeIcons();
     }
 }
-
+/* 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putUsersP(dt) {
     console.log(dt);
@@ -222,7 +220,7 @@ function putUsersC(dt) {
             $('#selUsrC').append(H);
         });
     }
-}
+} */
 
 // ### LISTO ###   habilita el botones para validar en TABLA INICIAL
 function activeIcons() {
@@ -232,14 +230,13 @@ function activeIcons() {
         .on('click', function () {
             CleanCombos();
             let id = $(this).parents('tr');
-            //console.log(id);
+            // console.log(id);
             let pjtid = id.attr('id');
             let pjtnm = id.children('td.pjtname').text();
             gblprjid=pjtid;
-            gblprjname = pjtnm;
-             console.log('Cont-Producto', pjtid,pjtnm);
+            // console.log('Cont-Producto', pjtid,pjtnm);
             if (pjtid > 0) {
-                getUsersOnProject(pjtid);
+                //getUsersOnProject(pjtid);
                 editProject(pjtid,pjtnm);
             }
         });
@@ -248,7 +245,7 @@ function activeIcons() {
 function editProject(pjtid,pjtnm) {
     $('#txtProjectName').val(pjtnm);
 }
-
+/* 
 function putUsersOnProject(dt) {
     console.log('putUsersOnProject', dt);
     if (dt[0].whoatd_id != '0') {
@@ -275,16 +272,13 @@ function putUsersOnProject(dt) {
             }
         });
     }
-}
+} */
 
-function confirm_toChgUsr(pjtid,prjname) {
+function confirm_toChgUsr(pjtid) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
-    $('#ProjectName').text(prjname+'?')
     //borra paquete +
-    $('#btnClosure')
-    .unbind('click')
-    .on('click', function () {
+    $('#btnClosure').on('click', function () {
         $('#starClosure').modal('hide');
         // console.log('Datos CLICK',pjtid);
         datasUser(pjtid);
@@ -298,7 +292,7 @@ function CleanCombos() {
     $('#selUsrC').val(0);
 }
 
-function datasUser(pjtid) {
+/* function datasUser(pjtid) {
     let empid='';
     let empname='';
     let areid=0;
@@ -334,11 +328,11 @@ function datasUser(pjtid) {
                 break;
             default:
         }
-        console.log('Datos', pjtid,areid,empid,empname);
+        // console.log('Datos', pjtid,areid,empid,empname);
         updateUsers(pjtid,areid,empid,empname);
     }
 }
-
+ */
 function putupdateUser(dt){
     console.log('TERMINO ACTUALIZAR', dt);
     CleanCombos();
@@ -357,7 +351,7 @@ function modalLoading(acc) {
         });
     }
 }
-
+/* 
 function printOutPutContent(verId) {
     let user = Cookies.get('user').split('|');
     let v = verId;
@@ -366,7 +360,20 @@ function printOutPutContent(verId) {
     let h = localStorage.getItem('host');
     // console.log('Datos', v, u, n, h);
     window.open(
-        `${url}app/views/AssignProjects/AssignProjectsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        `${url}app/views/OutputReprint/AssignProjectsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    );
+} */
+/**********  Impresion de la salida de un proyecto ***********/  
+function printOutPut(verId) {
+    // let user = Cookies.get('user').split('|');
+    // let u = user[0];
+    // let n = user[2];
+    let h = localStorage.getItem('host');
+    let v = verId;
+    // console.log('Datos', v, u, n, h);
+    window.open(
+        `${url}app/views/OutputReprint/OutputReprintContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}`,
         '_blank'
     );
 }

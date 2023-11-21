@@ -10,13 +10,15 @@ $usrId = $_GET['u'];
 $uname = $_GET['n'];
 
 $empid = $_GET['em'];
+$numProject =  $_GET['nump'];
+$nameProject =$_GET['np'];
 
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-if ($empid == '1'){
+if ($empid == '1' || $empid == '2'){
     $qry = "SELECT prd.prd_name, prd.prd_level, pjtcn_prod_name, pdt.pjtdt_prod_sku, 
             sr.ser_serial_number, pj.pjt_number, 
             pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments
@@ -71,7 +73,7 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Detalles y Accesorios del proyecto: '. $items[0]['pjt_name'] .' </span>
+                    <span class="number">Detalles y Accesorios del proyecto: '. $nameProject .' </span>
                 <br>
                     <span class="date">Fecha de salida'.  $items[0]['pjt_date_start'] .'</span>
                 </p>

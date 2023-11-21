@@ -198,14 +198,15 @@
            
             <div style="height:5px;"></div> <!-- Agregar un espacio -->
             
-            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 90%">
+            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
                 <thead>
                     <tr>
-                        <th style="width:  20px">Selecciona</th>
+                        <th style="width:  10px"></th>
                         <!-- <th style="width:  80px" >SKU</th>
                         <th style="width: 200px" >Descripcion Producto</th> -->
                         <th style="width:  80px">Num Serie</th>
-                        <th style="width:  40px">No. Econo</th>
+                        <th style="width:  10px">No. Econo</th>
+                        <th style="width:  200px">Proyecto</th>
                        <!--  <th style="width:  40px">Etapa</th> -->
                     </tr>
                 </thead>
@@ -277,17 +278,30 @@
 
 <!-- formulario de comentarios -->
     <div id="commentsTemplates" class="table_hidden box_template">
-        <div class="comments__box">
-            <!-- Lista de comentarios -->
+        <div class="comments__box" style=" width: 100%; height: 100%; padding: 1.1rem; display: grid; grid-template-rows: 1fr 170px;">
+            
             <div class="comments__list" style="border: 1px solid var(--br-gray-soft); border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.5rem; overflow-y: scroll;"></div>
-            <!-- Captura de cumentario -->
+            
                 <div class="comments__addNew" style="background-color: var(--br-gray-soft); padding: 0.5rem;">
                     <label for="txtComment">Escribe comentario</label><br>
                     <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput" ></textarea><br>
                     <span class="invoice_button" id="newComment" style="background-color: var(--in-white) !important;"><i class="fas fa-plus"></i>guardar comentario</span>
                 </div>
+            </div>
         </div>
     </div>
+
+    <!-- <div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box">
+            <div class="comments__list"></div>
+            <div class="comments__addNew">
+                <label for="txtComment">Escribe comentario</label><br>
+                <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
+                <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
+
+            </div>
+        </div>
+     </div> -->
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

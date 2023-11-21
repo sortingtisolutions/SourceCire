@@ -36,7 +36,7 @@ class WhOutputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $empid = $this->db->real_escape_string($params['empid']);
 
-        if ($empid==1){
+        if ($empid==1   || $empid==2){
             $qry = "SELECT prcn.pjtcn_id, prcn.pjtcn_prod_sku, prcn.pjtcn_prod_name, prcn.pjtcn_quantity, 
             prcn.pjtcn_prod_level, prcn.pjt_id, prcn.pjtcn_status, prcn.pjtcn_order, 
              case 
@@ -50,7 +50,7 @@ class WhOutputContentModel extends Model
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
-                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=prcn.pjtcn_id) 
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=prcn.pjtcn_id) 
                 = 
                 (SELECT COUNT(*)
                 FROM ctt_projects_content AS pcn
@@ -66,7 +66,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
                 END AS cant_ser
             FROM ctt_projects_content AS prcn
             WHERE prcn.pjt_id=$pjt_id ORDER BY prcn.pjtcn_section, prcn.pjtcn_prod_sku ASC";
@@ -85,7 +85,7 @@ class WhOutputContentModel extends Model
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
-                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=pjc.pjtcn_id) 
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=pjc.pjtcn_id) 
                 = 
                 (SELECT COUNT(*)
                 FROM ctt_projects_content AS pcn
@@ -102,7 +102,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE ser.ser_stage = 'TR' AND pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A')
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A')
                 END AS cant_ser
             FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
@@ -120,7 +120,7 @@ class WhOutputContentModel extends Model
         $qry = "SELECT fr.free_id,fr.free_name,ar.are_name FROM ctt_freelances AS fr
                 INNER JOIN ctt_areas AS ar ON ar.are_id=fr.free_area_id
                 INNER JOIN ctt_assign_proyect AS ap ON ap.free_id=fr.free_id
-                WHERE ap.pjt_id=$pjt_id 
+                WHERE ap.pjt_id=$pjt_id and ap.ass_status = 1
                 ORDER BY are_name";
 
         return $this->db->query($qry);
@@ -163,12 +163,16 @@ class WhOutputContentModel extends Model
        $ser_id = $this->db->real_escape_string($params['serid']);
        $serorg = $this->db->real_escape_string($params['serorg']);
 
-        $qry = "SELECT '$serorg' as id_orig, ser_id, ser_sku, ser_serial_number, 
-                ser_situation, ser_stage, pr.prd_name, pr.prd_sku, sr.ser_no_econo
-                FROM ctt_series AS sr
-                INNER JOIN ctt_products as pr on sr.prd_id = pr.prd_id
-                WHERE pr.prd_level!='A' AND (sr.ser_sku LIKE '$ser_id%' 
-                AND sr.ser_situation='D' and sr.ser_status=1);";
+        $qry = "SELECT '$serorg' as id_orig, sr.ser_id, ser_sku, ser_serial_number, 
+        ser_situation, ser_stage, pr.prd_name, pr.prd_sku, sr.ser_no_econo
+        , pj.pjt_name
+        FROM ctt_series AS sr
+        INNER JOIN ctt_products as pr on sr.prd_id = pr.prd_id
+        LEFT Join ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
+        LEFT JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pdt.pjtvr_id
+        LEFT JOIN ctt_projects AS pj ON pj.pjt_id = pv.pjt_id
+        WHERE pr.prd_level!='A' AND (sr.ser_sku LIKE '$ser_id%')
+        AND sr.ser_status=1;";
             
        return $this->db->query($qry);
    }
