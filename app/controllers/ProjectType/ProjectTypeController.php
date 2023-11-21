@@ -26,7 +26,7 @@
 
 		public function GetProjectType($request_params)
 		{
-	      $result = $this->model->GetProjectType($request_params);
+	      $result = $this->model->GetProjectTypes($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 
