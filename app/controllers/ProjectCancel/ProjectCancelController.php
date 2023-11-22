@@ -47,7 +47,7 @@ class ProjectCancelController extends Controller
         $periods    = $this->model->cleanPeriods($pjtId);
         $series     = $this->model->restoreSeries($pjtId);
         $detail     = $this->model->cleanDetail($pjtId);
-        $project    = $this->model->cancelProject($request_params);
+        $project    = $this->model->cancelProject($request_params, $params);
         echo $pjtId;
     }
 

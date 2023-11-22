@@ -26,6 +26,7 @@ function inicial() {
     getDetailProds(prjid,em);
     getFreelances(prjid);
     getAnalysts(prjid);
+    getLocations(prjid);
     
 
     // Boton para registrar la salida del proyecto y los productos
@@ -167,7 +168,14 @@ function getAnalysts(prjid) {
     var selector = putAnalysts;
     fillField(pagina, par, tipo, selector);
 }
-
+// Solicita los analistas  
+function  getLocations(prjid) {
+    var pagina = 'WhOutputContent/listLocations';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = putLocations;
+    fillField(pagina, par, tipo, selector);
+}
 // Solicita los productos del proyecto  OK
 function getDetailProds(prjid,empid) {
     console.log(empid);
@@ -317,7 +325,7 @@ function putProjects(dt) {
     $('#txtTipoProject').val(dt[0].pjttp_name);
     $('#txtStartDate').val(dt[0].pjt_date_start);
     $('#txtEndDate').val(dt[0].pjt_date_end);
-    $('#txtLocation').val(dt[0].pjt_location);
+    //$('#txtLocation').val(dt[0].pjt_location);
     $('#txtCustomer').val(dt[0].cus_name);
     //$('#txtAnalyst').val(dt[0].emp_fullname); // 11-10-23
     //$('#txtFreelance').val(dt[0].free_id); // 11-10-23
@@ -334,6 +342,19 @@ function putAnalysts(dt) {
     
 }
 
+function putLocations(dt) {
+    
+    console.log('locacion: ',dt)
+    if (dt[0].locations != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.locations}"> ${u.locations}</option>`;
+            $('#txtLocation').append(H);
+        });
+        $('#txtLocation').val(dt[0].locations); // 11-10-23
+    }
+    
+    
+}
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 function putDetailsProds(dt) {
     let tabla = $('#tblAsignedProd').DataTable();

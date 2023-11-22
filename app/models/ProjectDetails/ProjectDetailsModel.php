@@ -482,7 +482,7 @@ public function promoteToProject($params)
 
 
 /** ====== Cancela proyecto ==================================================================  */
-    public function cancelProject($params, $user)
+    public function cancelProject($params, $user, $name)
     {
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
@@ -496,6 +496,9 @@ public function promoteToProject($params)
         $qry2 = "UPDATE ctt_projects SET pjt_status = '5' WHERE pjt_id = $pjtId;";
         $this->db->query($qry2);  
 
+        $qry  = "INSERT ctt_activity_log (log_date, log_event, emp_number, emp_fullname, acc_id) 
+        VALUES(current_time(), 'CANCELADO','$user','$name', 2)"; // AQUI REQUIERE EL ID DE ACC_ID CORRESPONDIENTE
+        $this->db->query($qry);
         return $pjtId.'|'. $verId;
     }  
 
@@ -667,14 +670,22 @@ public function promoteToProject($params)
 
      }
   
-     public function getProjectVersion($pjtId)
+     public function getProjectVersion($pjtId,  $user,$name)
      {
         $pjtId   = $this->db->real_escape_string($pjtId);
+
+        $qr1 = "UPDATE ctt_projects
+                SET pjt_status = '6'
+                WHERE pjt_id = $pjtId;";
+        
         $qry1 = "SELECT * FROM ctt_projects_content AS pc 
                  INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                  INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                  WHERE pj.pjt_id = $pjtId AND pd.srv_id IN (1,4);";
+
         return $this->db->query($qry1);
+
+       
        
      }
   

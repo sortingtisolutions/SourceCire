@@ -75,10 +75,14 @@ class ProjectCancelModel extends Model
     }
 
 /** Cancela el proyecto definitivamente                                            ====  */
-    public function CancelProject($params)
+    public function CancelProject($params, $userParam)
     {
         /* Actualiza el estado en 6, status de cancelado definitivamente   */
         $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $group = explode('|',$userParam);
+    
+        $user = $group[0];
+        $name = $group[2];
         $qr1 = "UPDATE ctt_projects
                 SET pjt_status = '6'
                 WHERE pjt_id = $pjtId;";
@@ -87,6 +91,11 @@ class ProjectCancelModel extends Model
 
         $qr3 = "UPDATE ctt_subletting SET sub_date_end = now() WHERE prj_id = $pjtId;";
         $this->db->query($qr3);
+
+        $qry  = "INSERT ctt_activity_log (log_date, log_event, emp_number, emp_fullname, acc_id) 
+        VALUES(current_time(), 'CANCELADO','$user','$name', 2)"; // AQUI REQUIERE EL ID DE ACC_ID CORRESPONDIENTE
+        $this->db->query($qry);
+
 
         return $pjtId;
     }
