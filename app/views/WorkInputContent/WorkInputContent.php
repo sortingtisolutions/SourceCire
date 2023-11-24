@@ -66,6 +66,12 @@
                         </div> -->
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="txtLocation" class="form-select form-select-sm"><option value='0'></option></select>
+                                <label for="txtLocation">Dirección de Locación</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
                                 <label for="txtAnalyst">Responsables</label>
                             </div>

@@ -519,7 +519,7 @@ public function UpdatePeriodProject($request_params)
         // $periods    = $this->model->cleanPeriods($pjtId);
         // $series     = $this->model->restoreSeries($pjtId);
         // $detail     = $this->model->cleanDetail($pjtId);
-        $project    = $this->model->cancelProject($request_params, $user);
+        $project    = $this->model->cancelProject($request_params, $user, $name);
         echo $verId . '|'. $pjtId;
     }
 
@@ -592,7 +592,7 @@ public function updateOrder($request_params)
 
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $projectMovemen     = $this->model->settingProjectMovemen($pjtId, $user);
-            $result             = $this->model->getProjectVersion($pjtId);
+            $result             = $this->model->getProjectVersion($pjtId,  $user,$name);
             $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
             $resReorder = $this->reOrdenList($verId);
@@ -874,7 +874,7 @@ public function updateOrder($request_params)
         $detail         = $this->model->cleanDetail($pjtId);
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
-        $result         = $this->model->getProjectVersion($pjtId);
+        $result         = $this->model->getProjectVersion($pjtId,  $user,$name);
         $dateproject    = $this->model->saveDateProject($pjtId);
         $response       = $this->setSeries($result);
 
@@ -904,7 +904,7 @@ public function updateOrder($request_params)
         $projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
-        $result         = $this->model->getProjectVersion($pjtId);
+        $result         = $this->model->getProjectVersion($pjtId,  $user,$name);
         $dateproject    = $this->model->saveDateProject($pjtId);
         $response       = $this->setSeries($result);
         $resReorder = $this->reOrdenList($verId);

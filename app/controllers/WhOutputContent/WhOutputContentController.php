@@ -93,6 +93,23 @@ class WhOutputContentController extends Controller
         }
         echo $res;
     }
+
+    public function listLocations($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listLocations($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"locations":"0"}]';
+        }
+        echo $res;
+    }
         // Lista las series
     public function listSeries($request_params)
     {

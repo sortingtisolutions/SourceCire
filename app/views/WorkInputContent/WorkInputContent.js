@@ -26,6 +26,7 @@ function inicial() {
     getReason();
     getComments_text(prjid); // 11-10-23
     getAnalysts(prjid);
+    getLocations(prjid);
     
     $('#recordInPut').on('click', function () {
         confirm_to_GetOut(prjid);
@@ -78,7 +79,26 @@ function automaticCloseModal() {
         
     });
 }
-
+function  getLocations(prjid) {
+    var pagina = 'WorkInputContent/listLocations';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = putLocations;
+    fillField(pagina, par, tipo, selector);
+}
+function putLocations(dt) {
+    
+    console.log('locacion: ',dt)
+    if (dt[0].locations != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.locations}"> ${u.locations}</option>`;
+            $('#txtLocation').append(H);
+        });
+        $('#txtLocation').val(dt[0].locations); // 11-10-23
+    }
+    
+    
+}
 function fillComments(pjtId) {
     console.log(pjtId);
     
@@ -758,21 +778,21 @@ function printReports(pjtId, typrint) {
     switch (typrint) {
         case "C":  // Contenido global
             window.open(
-                `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
+                `${url}app/views/WorkInputContent/WorkInputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
         //   console.log("Contenido");
           break;
         case "D":  // Detalles del contenido con series
             window.open(
-                `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
+                `${url}app/views/WorkInputContent/WorkInputDetailReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
         //   console.log("Detalle");
           break;
         case "A": // Detalles y Accesorios del contenido con series
             window.open(
-                `${url}app/views/WhOutputContent/WhOutputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
+                `${url}app/views/WorkInputContent/WorkInputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
         //   console.log("Con Accesorios");
