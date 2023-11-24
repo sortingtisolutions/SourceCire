@@ -141,10 +141,10 @@ function putProjectContent(dt) {
         $.each(dt, function (v, u) {
             let costins=parseFloat(u.costo) + parseFloat(u.seguro);
             // console.log(costins);
-            let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
+            let H = `<tr id=${u.prd_id}, iname="${u.prd_name}">
                         <td class="cn"><i class='fas fa-pen modif'></i></td>
                         <td class="lf">${u.pjtdt_prod_sku}</td>
-                        <td class="lf">${u.pjtcn_prod_name}</td>
+                        <td class="lf">${u.prd_name}</td>
                         <td class="cn">1</td>
                         <td class="cn">${u.ser_situation}</td>
                         <td class="rg">${fnm(costins, 2, '.', ',')}</td>
