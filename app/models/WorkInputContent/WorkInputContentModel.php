@@ -206,7 +206,7 @@ class WorkInputContentModel extends Model
         $serid		= $this->db->real_escape_string($params['serid']);
 
         $qry = "UPDATE ctt_series SET ser_situation='D', ser_stage = 'D', pjtdt_id=0
-                WHERE ser_id=$serid;";  
+                WHERE ser_id=$serid or prd_id_acc = $serid";  
         $folio = $this->db->query($qry);
         return $folio;
     }

@@ -107,10 +107,10 @@ function getSeries(prdId) {
     var selector = putSeries;
     fillField(pagina, par, tipo, selector);
 }
-function getMaxAccesorio(prdsku) {
+function getMaxAccesorio(prdsku, prdid) {
     // console.log('Busca',prdsku);
     var pagina = 'Products/maxAccesorio';
-    var par = `[{"prdsku":"${prdsku}"}]`;
+    var par = `[{"prdsku":"${prdsku}", "prdid" : "${prdid}"}]`;
     var tipo = 'json';
     var selector = putMaxAccesorioc;
     fillField(pagina, par, tipo, selector);
@@ -291,21 +291,23 @@ function putProductsList(dt) {
         prodId = prdId;
         subcId = sbcId;
         servId = svrId;
-        MaxAccesorio(prdsku);
+        MaxAccesorio(prdsku, prodId);
         
     });
 }
 
-function MaxAccesorio(prdsku) {
+function MaxAccesorio(prdsku, prdid) {
        
     if (maxacc == undefined) {
-        getMaxAccesorio(prdsku);
+        getMaxAccesorio(prdsku, prdid);
         
     } else {
-        let newprdsku = prdsku + 'XXX' + maxacc;
+        /* let newprdsku = prdsku + 'XXX' + maxacc; */
+        let newprdsku = prdsku + 'A' + maxacc;
         $('#txtProducts').val(prodNm);
         $('#txtIdProducts').val(prodId);
         $('#txtPrdSku').val(newprdsku);
+       /*  $('#txtPrdSku').val(prdsku + 'A'+ maxacc); */
         
         $('#txtSbcId').val(subcId);
         $('#txtSrvId').val(servId);
@@ -928,6 +930,7 @@ function saveNewProduct() {
         let prdSv = $(`#txtSrvId`).val();
         let prdDc = $(`#txtDocId`).val();
         let prdDi = $(`#txtDcpId`).val();
+        let prdPrnt = $(`#txtIdProducts`).val();
 
         var par = `
                 [{  "prdId" : "${prdId}",
@@ -948,7 +951,8 @@ function saveNewProduct() {
                     "prdCn" : "${prdCn}",
                     "prdSv" : "${prdSv}",
                     "prdDc" : "${prdDc}",
-                    "prdDi" : "${prdDi}"
+                    "prdDi" : "${prdDi}",
+                    "prdPrnt" : "${prdPrnt}"
                 }]
             `;
             console.log(par);

@@ -53,7 +53,7 @@ class WorkInputModel extends Model
                 INNER JOIN ctt_version AS ver ON ver.ver_id=pjv.ver_id
                 INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pjv.pjt_id
                 SET ser.ser_situation='VA' AND ser.ser_stage='V'
-                WHERE (ver.ver_active=1 AND pjt.pjt_id=$pjtid AND pjt.pjt_status=8);";
+                WHERE (ver.ver_active=1 AND pjt.pjt_id=$pjtid AND pjt.pjt_status=8);"; // ***
         $upser= $this->db->query($qry);
 
         $qry2 = "UPDATE ctt_projects as pjt

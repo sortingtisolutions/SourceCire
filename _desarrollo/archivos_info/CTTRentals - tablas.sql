@@ -880,6 +880,16 @@ CREATE TABLE IF NOT EXISTS `ctt_version` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version de docuemntos de cotización';
 
 
+/* TABLA AGREGADA EL 24 DE NOVIEMBRE */
+CREATE TABLE `ctt_product_accesory` (
+	`pac_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`acc_id` INT(11) NULL DEFAULT NULL,
+	`prd_id` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`pac_id`) USING BTREE
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla para relacionar producto con accesorio'
+;
+
 
 /* VISTAS  */
 
@@ -971,6 +981,4 @@ SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_n
     ifnull(sup_id, 0) AS sup_id, ifnull(str_id, 0) AS str_id, ifnull(sub_id, 0) AS sub_id, ifnull(sut_id, 0) AS sut_id, ifnull(pjtdt_id, 0) AS pjtdt_id, 
     ifnull(pjtcn_id, 0) AS pjtcn_id, ifnull(cin_id, 0) AS cin_id
 FROM  ctt_vw_subletting;
-
-
 

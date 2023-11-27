@@ -304,9 +304,8 @@ function MaxAccesorio(prdsku) {
     } else {
         let newprdsku = prdsku + 'XXX' + maxacc;
         $('#txtProducts').val(prodNm);
-        $('#txtIdProducts').val(prodId);/* 
-        $('#txtPrdSku').val(newprdsku); */
-        $('#txtPrdSku').val(prdsku + 'A');
+        $('#txtIdProducts').val(prodId);
+        $('#txtPrdSku').val(newprdsku);
         
         $('#txtSbcId').val(subcId);
         $('#txtSrvId').val(servId);
