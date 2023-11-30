@@ -331,6 +331,41 @@ COMMENT='Registro de los acceso a la aplicacion'
 COLLATE='utf8mb4_general_ci'
 ;
 
+/** INSERTAR NUEVO MODULO **/
+
+INSERT INTO ctt_menu (mnu_id, mnu_parent, mnu_item, mnu_description, mnu_order, mod_id) VALUES
+	(77, 2, 'Proyectos Padre', 'Seccion para editar y pre cancelar los proyectos padres', 13, 76);
+
+INSERT INTO ctt_modules (mod_id, mod_code, mod_name, mod_description, mod_item) VALUES
+	(76, 's-parents-proj', 'Proyectos padres', 'Modulo para editar y precancelar los datos de un proyecto padre', 'ParentsProjects');
+
+INSERT INTO ctt_users_modules (urm_id, usr_id, mod_id) VALUES
+	(509, 1, 76);
+
+
+/** INSERTA EL NUEVO MENU PARA EL CRUD DE LOS MODULOS Y MENUS **/
+
+INSERT INTO ctt_menu (mnu_id, mnu_parent, mnu_item, mnu_description, mnu_order, mod_id) VALUES
+	(78, 0, 'Sistemas', 'Seccion para crear y editar modulos/menu', 14, 77);
+
+INSERT INTO ctt_modules (mod_id, mod_code, mod_name, mod_description, mod_item) VALUES
+	(77, 'p-system', 'Sistema', 'Modulo para crear y editar modulos/menu', 'System');
+
+INSERT INTO ctt_users_modules (urm_id, usr_id, mod_id) VALUES
+	(510, 1, 77);
+
+INSERT INTO ctt_menu (mnu_id, mnu_parent, mnu_item, mnu_description, mnu_order, mod_id) VALUES
+	(79, 78, 'Modulos', 'Seccion para crear y editar modulos', 1, 78),
+	(80, 78, 'Menú', 'Seccion para añadir y editar el menu', 2, 79);
+
+INSERT INTO ctt_modules (mod_id, mod_code, mod_name, mod_description, mod_item) VALUES
+	(78, 's-modules', 'Modulo', 'Modulo para crear y editar modulos', 'Modules'),
+	(79, 's-menu', 'Menu', 'Modulo para añadir y editar el menu', 'Menu');
+
+INSERT INTO ctt_users_modules (urm_id, usr_id, mod_id) VALUES
+	(511, 1, 78),
+	(512, 1, 79);
+	
 -- ************ 27 NOV 2023 ***********
 CREATE TABLE `ctt_tracking_proyects` (
 	`trck_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id del Tracking',
