@@ -879,6 +879,15 @@ CREATE TABLE IF NOT EXISTS `ctt_version` (
   PRIMARY KEY (`ver_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version de docuemntos de cotización';
 
+/* TABLA AGREGADA EL 24 DE NOVIEMBRE */
+CREATE TABLE `ctt_product_accesory` (
+	`pac_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`acc_id` INT(11) NULL DEFAULT NULL,
+	`prd_id` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`pac_id`) USING BTREE
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla para relacionar producto con accesorio'
+;
 
 
 /* VISTAS  */
