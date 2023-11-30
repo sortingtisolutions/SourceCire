@@ -147,7 +147,7 @@ public function listAccesorios($request_params)
     if ($i>0){
         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
     } else {
-        $res =  '[{"ser_id":"0"}]';	
+        $res =  '[{"prd_id":"0"}]';	
     }
     echo $res;
 }

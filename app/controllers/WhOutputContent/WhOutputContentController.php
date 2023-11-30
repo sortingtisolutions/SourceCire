@@ -144,6 +144,7 @@ class WhOutputContentController extends Controller
         }
         echo $res;
     }
+
     // Guarda el comentario // 11-10-23
     public function InsertComment($request_params)
     {
@@ -164,6 +165,7 @@ class WhOutputContentController extends Controller
         // **************************** //
         
     } 
+    
     public function checkSeries($request_params)
     {
         $params =  $this->session->get('user');

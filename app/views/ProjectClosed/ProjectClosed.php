@@ -53,6 +53,18 @@
                             </div>
                         </div>
                     </div>
+                    <div style="height:10px;"></div>
+
+                    <div class="row list-finder pos1 hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+                            <select id="txtReport" class="form-select form-select-sm required">
+                                <option value="1" selected>Si</option>
+                                <option value="2">No</option>
+                            </select>
+                            <label for="txtReport">Desglosar Paquetes</label>
+                        </div>
+                    </div>
+
                     <div style="height:20px;"></div>
                     <div class="row">
                         <div class="col-6">

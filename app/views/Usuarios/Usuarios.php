@@ -116,25 +116,19 @@
 
 							</div>
 
-
-
-
                             <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<select id="selectRowUserReporta"  name="selectRowUserReporta"  class="form-select form-select-sm" >
-									</select>
+									<select id="selectRowUserReporta"  name="selectRowUserReporta"  class="form-select form-select-sm" ></select>
 									<label for="selectRowUserReporta" class="form-label">Usuario reporta</label>
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<select id="selectRowPuestos"  name="selectRowPuestos"  class="form-select form-select-sm" >
-									</select>
+									<select id="selectRowPuestos"  name="selectRowPuestos"  class="form-select form-select-sm" ></select>
 									<label for="selectRowPuestos" class="form-label">Puesto</label>
 								</div>
 							</div>
-
 
 							<div class="row">
 								<div class="col-6">
@@ -179,6 +173,31 @@
 	</div>
 </div>
 
+<!-- Modal Editar Usuario -->
+<div class="modal fade" id="EditarUsuariosModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-sm">
+					 <div class="modal-content">
+					 <div class="modal-header ">
+					 </div>
+					 <div class="modal-body" style="padding: 0px !important;">
+
+					 <div class="row">
+						  <input hidden type="text" class="form-control" id="IdUsuarioEditar" aria-describedby="basic-addon3">
+						  <div class="col-12 text-center">
+								<span class="modal-title text-center" style="font-size: 1rem;" id="EditarPerfilLabel">Editar no permite ver la contraseña, si agrega una nueva y le da guardar se sustituira por la nueva agregada</span>
+						  </div>
+					 </div>
+
+					 </div>
+						  <div class="modal-footer">
+								<!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button> -->
+								<button type="button" class="btn btn-secondary" id="ContinueUsuario">Continuar</button>
+						  </div>
+					 </div>
+				</div>
+		</div>
+</div>
+
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="BorrarUsuariosModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
@@ -192,7 +211,7 @@
 					 <div class="row">
 						  <input hidden type="text" class="form-control" id="IdUsuarioBorrar" aria-describedby="basic-addon3">
 						  <div class="col-12 text-center">
-								<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
+								<span class="modal-title text-center" style="font-size: 1.0rem;" id="BorrarPerfilLabel">Va a eliminar usuario y sus privilegios ¿Seguro desea borrarlo?</span>
 						  </div>
 					 </div>
 
@@ -204,8 +223,6 @@
 					 </div>
 				</div>
 		</div>
-
- 
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

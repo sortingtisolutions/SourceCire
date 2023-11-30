@@ -4,7 +4,7 @@ var productoSelectId = 0;
 var productoSelectSKU = '';
 var accesorioExist = 0;
 var lsbc_id = 0;
-var productSku = 0;
+
 var accesorioSkuNew = '';
 
 $(document).ready(function () {
@@ -47,7 +47,6 @@ function getProducts(sbc_id) {
 }
 
 function getSeriesProd(prdId) {
-    console.log('getSeries');
     var pagina = 'ProductAccessory/listSeriesProd';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
@@ -185,9 +184,9 @@ function putAccesoriesById(dt) {
     console.log('putAccesoriesById',dt);
     deleteTablaAccesorios();
 
-    if (dt[0].ser_id != '') {
+    if (dt[0].prd_id != '') {
         $.each(dt, function (v, u) {
-            putNewAccesorio(u.ser_id, u.ser_sku, u.prd_name, u.prd_id);
+            putNewAccesorio(u.prd_id, u.prd_sku, u.prd_name);
         });
     }
 }
@@ -202,16 +201,13 @@ function selProductsSub(dt) {
                 $('#txtProductSubCat').append(H);
         });
     }
-    $('#txtProductSubCat')
-        .unbind('change')
-        .change(function () {
-            // let id = $(this).val();
-            let id = $(this).val();
-            lsbc_id = id;
-            productSku = $('#txtProductSubCat option:selected').attr('data-content').split('|')[2];
-            console.log('GET SERIES-',$('#txtProductSubCat option:selected').attr('data-content'));
-            getSeriesProd(id);
-        });
+    $('#txtProductSubCat').change(function () {
+        // let id = $(this).val();
+        let id = $(this).val();
+        lsbc_id = id;
+        //console.log('GET SERIES-',id);
+        getSeriesProd(id);
+    });
 }
 
 //llena la tabla de productos
@@ -238,7 +234,7 @@ function putSeriesProd(dt) {
                 .addClass('indicator');
         });
 
-        load_Accesories(productSku);
+        load_Accesories();
         action_selected_packages();
     } else {
         console.log('llego al else');
@@ -246,12 +242,11 @@ function putSeriesProd(dt) {
 }
 
 function putAccesorios(dt) {
-    console.log('PUT-ACCESORIOS', dt);
     $('#listProducts').html('');
-    if (dt[0].ser_id != '0') {
+    if (dt[0].prd_id != '0') {
         $.each(dt, function (v, u) {
             let H = `
-            <div class="list-item" id="${u.ser_id}-${u.ser_sku}-${u.prd_name}-${u.prd_id}" data-subcateg="${u.ser_id}" >
+            <div class="list-item" id="${u.prd_id}-${u.prd_sku}-${u.prd_name}" data-subcateg="${u.prd_name}" >
                 ${u.prd_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
             </div>`;
             $('#listProducts').append(H);
@@ -262,7 +257,6 @@ function putAccesorios(dt) {
 
 // Dibuja los productos
 function drawProducts() {
-    
     $('.list-item').addClass('hide-items');
 
     $('.list-item').removeClass('hide-items');
@@ -282,7 +276,7 @@ function drawProducts() {
         .on('click', function () {
             let id = $(this).parents('.list-item');
             console.log('SE DIO' + id);
-            console.log( $(this).parents('.list-item').attr('id'));
+            //console.log( $(this).parents('.list-item').attr('id'));
             product_apply(id);
         });
 }
@@ -317,9 +311,7 @@ function action_selected_packages() {
             console.log(productoSelectSKU);
             // console.log(productoSelectId);
 
-            getAccesoriesById(productoSelectSKU); 
-            
-            /* getAccesoriesById(productoSelectId); */
+            getAccesoriesById(productoSelectSKU);
             //select_products(prdId);
         });
 }
@@ -347,10 +339,10 @@ function selSubcategoryProduct(id) {
 }
 
 
-function saveAccesoryId(prdId, ser_id) {
+function saveAccesoryId(prdId) {
     console.log(lsbc_id);
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
-    var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}","ser_id":"${ser_id}"}]`;
+    var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}"}]`;
     var tipo = 'json';
     console.log(par);
     var selector = putAccesoriesRes;
@@ -358,7 +350,7 @@ function saveAccesoryId(prdId, ser_id) {
 }
 
 function putAccesoriesRes(dt) {
-    console.log('RESPUESTA ', dt);
+    //console.log('RESPUESTA ', dt);
     accesorioExist = dt;
 }
 
@@ -374,9 +366,9 @@ function action_selected_products() {
         });
 }
 
-function load_Accesories(prdSku) {
+function load_Accesories(prdId) {
     var pagina = 'ProductAccessory/listAccesorios';
-    var par = `[{"prdSku":"${prdSku}"}]`;
+    var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putAccesorios;
     fillField(pagina, par, tipo, selector);
@@ -388,7 +380,7 @@ function putAccesoriostable(dt) {
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
 
-    if (dt[0].prd_id != '0') {
+    if (dt[0].prd_id != '') {
         $.each(dt, function (v, u) {
             tabla.row
                 .add({
@@ -406,33 +398,29 @@ function putAccesoriostable(dt) {
 function product_apply(prId) {
     console.log('product_apply',prId);
     let acce = prId.attr('id').split('-');
-    saveAccesoryId(acce[3], acce[0]);
-    console.log(acce[3]);
+    saveAccesoryId(acce[0]);
+    //console.log(acce[2]);
     setTimeout(() => {
         if (accesorioExist != 0) {
-            console.log(acce[3]);
-            putNewAccesorio(acce[0], accesorioExist, acce[2], acce[3]);
+            putNewAccesorio(acce[0], accesorioExist, acce[2]);
             //$(`.list-item[data-subcateg^="accesorio 41"]`).attr("hidden",true);
-            $(`.list-item[data-subcateg^="${acce[0]}"]`).attr('hidden', true);
+            $(`.list-item[data-subcateg^="${acce[2]}"]`).attr('hidden', true);
         }
     }, 500);
 }
 
-function putNewAccesorio(idAccesorio, idSku, idName, idProd) {
+function putNewAccesorio(idAccesorio, idSku, idName) {
     //inserta el renglon en base
-    console.log('putNewAccesorio',idAccesorio + idSku + idName + idProd);
+    console.log('putNewAccesorio',idAccesorio + idSku + idName);
 
     let tabla = $('#tblProducts').DataTable();
-    if (idAccesorio) {
-        tabla.row
+    tabla.row
         .add({
-            editable: `<i class="fas fa-times-circle choice prod kill" id="${idAccesorio}-${productoSelectId}-${idProd}"></i>`,
+            editable: `<i class="fas fa-times-circle choice prod kill" id="${idAccesorio}-${productoSelectId}"></i>`,
             prod_sku: `<span >${idSku}</span>`,
             prodname: idName,
         })
         .draw();
-    }
-    
     action_selected_products();
 }
 
@@ -444,9 +432,8 @@ function confirm_delet_product(id) {
         let Id = $('#txtIdProductPack').val();
 
         var arrayID = Id.split('-');
-        let serId = arrayID[0];
+        let prdId = arrayID[0];
         let prdParent = arrayID[1];
-        let prdId = arrayID[2];
 
         let tabla = $('#tblProducts').DataTable();
         $('#delProdModal').modal('hide');
@@ -456,9 +443,8 @@ function confirm_delet_product(id) {
         tabla.row(prdRow).remove().draw();
 
         var pagina = 'ProductAccessory/deleteProduct';
-        var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","serId":"${serId}"}]`;
+        var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}"}]`;
         var tipo = 'json';
-        console.log(par);
         var selector = putDelPackages;
         fillField(pagina, par, tipo, selector);
     });
@@ -466,7 +452,7 @@ function confirm_delet_product(id) {
 
 function putDelPackages(dt) {
     $('#delPackModal').modal('hide');
-    load_Accesories(productSku);
+    load_Accesories();
 }
 
 function deleteTablaAccesorios() {

@@ -362,7 +362,6 @@ public function saveEdtSeries($params)
         $prdSv = $this->db->real_escape_string($params['prdSv']);
         $prdDc = $this->db->real_escape_string($params['prdDc']);
         $prdDi = $this->db->real_escape_string($params['prdDi']);
-        $prdPrnt = $this->db->real_escape_string($params['prdPrnt']);
         $prdSt = '1';
         $NxtId ='';
 
@@ -413,11 +412,6 @@ public function saveEdtSeries($params)
                         ";
                         $this->db->query($qry1);
             } 
-            if ($prdLv == 'A') {
-                $qryA = "INSERT ctt_product_accesory (acc_id, prd_id) VALUES ($prdId,$prdPrnt);";
-                $resAc = $this->db->query($qryA);
-            }
-            
             return  $prdCt;
     }
 
@@ -459,10 +453,8 @@ public function saveEdtSeries($params)
     public function maxAccesorio($params)
     {
         $prdsku = $this->db->real_escape_string($params['prdsku']);
-        $prdid = $this->db->real_escape_string($params['prdid']);
 
-        /* $qry = "SELECT '$prdsku' as prdsku, fun_buscamaxacc('$prdsku') AS maxacc FROM DUAL;"; */
-        $qry = "SELECT '$prdsku' as prdsku, LPAD(ifnull(COUNT(*),0)+1,2,'0') AS maxacc FROM ctt_product_accesory AS pac WHERE prd_id = $prdid;";
+        $qry = "SELECT '$prdsku' as prdsku, fun_buscamaxacc('$prdsku') AS maxacc FROM DUAL;";
         return $this->db->query($qry);
  
     }

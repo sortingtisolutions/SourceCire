@@ -610,8 +610,7 @@ function exchange_apply() {
             if(prdSku.length==7){
                 sersku= prdSku + refil(serie++, 3);
             }else{
-                /* sersku = prdSku + refil(serie++, 2); */
-                sersku = prdSku + 'XXX'+ refil(serie++, 2);
+                sersku = prdSku + 'XXX' + refil(serie++, 2);
                 console.log(sersku);
             }
             update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
@@ -644,8 +643,7 @@ function exchange_apply() {
             sersku= prdSku + refil(serie, 3);
         }else{
             
-            //sersku = prdSku + refil(serie, 2);
-            sersku = prdSku + 'XXX'+ refil(serie++, 2);
+            sersku = prdSku + 'XXX' + refil(serie++, 2);
             // console.log(sersku);
         }
         serie++;

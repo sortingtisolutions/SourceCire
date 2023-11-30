@@ -54,13 +54,13 @@ function inicial() {
             getOptionYesNo(); */
          });
          
-
     } else {
         setTimeout(() => {
             inicial();
         }, 100);
     }
 }
+
 function showModalComments() {
     let template = $('#commentsTemplates');
     // let pjtId = $('.version_current').attr('data-project');

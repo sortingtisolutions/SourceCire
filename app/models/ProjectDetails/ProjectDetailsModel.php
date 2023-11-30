@@ -703,7 +703,7 @@ public function promoteToProject($params)
 
 /** ====== Agrega el movimiento hecho en el proyecto =========================================  */
      public function settingProjectMovemen ($pjtId, $user){
-
+        // (pjtvr_quantity - pjtvr_quantity_ant)   as mov_quantity
         $qry1 = "INSERT INTO ctt_movements (mov_quantity, mov_type, prd_id, pjt_id, usr_id)
                  SELECT 
                     (pjtvr_quantity)   as mov_quantity

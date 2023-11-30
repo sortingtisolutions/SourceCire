@@ -27,11 +27,11 @@ function inicial() {
     getFreelances(prjid);
     getAnalysts(prjid);
     getLocations(prjid);
-    
+
 
     // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
-        confirm_to_GetOut(prjid); 
+        confirm_to_GetOut(prjid);
      });
 
     // Boton para imprimir la salida de los productos
@@ -43,9 +43,9 @@ function inicial() {
     .unbind('click')
     .on('click', function () {
         showModalComments();
-        
+
     });
-    
+
 }
 
 
@@ -70,35 +70,35 @@ function closeModals(table) {
         .unbind('click')
         .on('click', function () {
             automaticCloseModal();
-            
+
         });
 }
 function automaticCloseModal() {
-    
+
     $('.invoice__modal-general').slideUp(400, function () {
         $('.invoice__modalBackgound').fadeOut(400);
         $('.invoice__modal-general .modal__body').html('');
-        $('#listLocationsTable').DataTable().destroy; 
+        $('#listLocationsTable').DataTable().destroy;
         let tabla=$('#listLocationsTable').DataTable();
         tabla.rows().remove().draw();
-        
+
     });
 }
 
 function fillComments(pjtId) {
     console.log(pjtId);
-    
+
     // Agrega nuevo comentario
     $('.comments__addNew .invoice_button')
         .unbind('click')
         .on('click', function () {
-            
+
             //let pjtId = $('.version_current').attr('data-project');
 
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
 
-            console.log(comComment);
+            // console.log(comComment);
             if (comComment.length > 3) {
                 let par = `
                     [{
@@ -126,7 +126,7 @@ function putComments(dt) {
             fillCommnetElements(u);
         });
     }
-    
+
 }
 
 function fillCommnetElements(u) {
@@ -159,7 +159,7 @@ function getProjects(prjid) {
     fillField(pagina, par, tipo, selector);
 }
 
-// Solicita los analistas  
+// Solicita los analistas
 function getAnalysts(prjid) {
     //console.log(prjid)
     var pagina = 'WhOutputContent/listAnalysts';
@@ -168,7 +168,7 @@ function getAnalysts(prjid) {
     var selector = putAnalysts;
     fillField(pagina, par, tipo, selector);
 }
-// Solicita los analistas  
+// Solicita los analistas
 function  getLocations(prjid) {
     var pagina = 'WhOutputContent/listLocations';
     var par = `[{"pjt_id":"${prjid}"}]`;
@@ -183,7 +183,7 @@ function getDetailProds(prjid,empid) {
     var par = `[{"pjt_id":"${prjid}", "empid":"${empid}"}]`;
     var tipo = 'json';
     var selector = putDetailsProds;
-    fillField(pagina, par, tipo, selector); 
+    fillField(pagina, par, tipo, selector);
 }
 
 function getFreelances(prjid) {
@@ -252,7 +252,7 @@ function setting_table_AsignedProd() {
                     footer: true,
                     title: title,
                     filename: filename,
-    
+
                     //Aquí es donde generas el botón personalizado
                     text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
                 },
@@ -262,11 +262,11 @@ function setting_table_AsignedProd() {
                     footer: true,
                     title: title,
                     filename: filename,
-    
+
                     //Aquí es donde generas el botón personalizado
                     text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
                 },
-            
+
                 {
                     // Boton imprimir contenido jjr
                     text: 'Print Contenido',
@@ -308,7 +308,7 @@ function setting_table_AsignedProd() {
             {data: 'packname', class: 'sel supply'},
             {data: 'packcount', class: 'sel sku'},
             {data: 'packstatus', class: 'sel sku'},
-            {data: 'packlevel', class: 'sel sku'},           
+            {data: 'packlevel', class: 'sel sku'},
         ],
     });
 }
@@ -338,12 +338,12 @@ function putAnalysts(dt) {
         });
         $('#txtAnalyst').val(dt[0].emp_id); // 11-10-23
     }
-    
-    
+
+
 }
 
 function putLocations(dt) {
-    
+
     console.log('locacion: ',dt)
     if (dt[0].locations != 0) {
         $.each(dt, function (v, u) {
@@ -352,8 +352,8 @@ function putLocations(dt) {
         });
         $('#txtLocation').val(dt[0].locations); // 11-10-23
     }
-    
-    
+
+
 }
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 function putDetailsProds(dt) {
@@ -363,11 +363,11 @@ function putDetailsProds(dt) {
     let locsecc='';
     let icon = '';
     if (dt[0].pjtcn_id > 0)
-    {        
+    {
         // let tabla = $('#tblAsignedProd').DataTable();
         // $('#tblAsignedProd table tbody').html('');
         $.each(dt, function (v, u){
-            
+
             if (u.section == 'Base') { valstage='#e2e8f8'; }
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
@@ -388,12 +388,12 @@ function putDetailsProds(dt) {
                     packcount: u.pjtcn_quantity,
                     packstatus: u.section,
                     packlevel: u.pjtcn_prod_level,
-                   
+
                 })
                 .draw().node();
             $(rownode).css("background-color", valstage);
         });
-        
+
         // tabla.row('.selected');
         activeIcons();
     }else{
@@ -448,7 +448,7 @@ function putSeries(dt) {
 }
 
 function settingSeries(dt){
-        
+
     $('#SerieModal').removeClass('overlay_hide');
     $('#tblSerie').DataTable({
         // retrieve: true,
@@ -505,7 +505,7 @@ function settingSeries(dt){
             $('.overlay_closer .title').html('');
             $('#tblSerie').DataTable().destroy;
     });
-   
+
 }
 function readAceptTable() {
     $('#tblSerie tbody tr').each(function (v, u) {
@@ -514,7 +514,7 @@ function readAceptTable() {
         let serdata = $(this).attr('data');
         console.log("readAceptTable: ", serId);
         checkSerie(serId);
-        
+
         setTimeout(function(){
             console.log('');
         }, 3000);
@@ -545,7 +545,7 @@ function build_modalSeries(dt) {
                 //console.log(dt);
                 tabla.row
                     .add({
-                        sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i> 
+                        sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
                                     <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                         seriesku: skufull,
                         sernumber: u.ser_no_econo,
@@ -575,7 +575,7 @@ function activeIconsSerie() {
                 getSerieDetail(serprd, detIdChg);
             }
     });
-    
+
     $('.toCheck')
         .unbind('click')
         .on('click', function () {
@@ -591,7 +591,7 @@ function activeIconsSerie() {
                 $('#tblSerie').DataTable().destroy;
                 aux=0;
             }
-            getDetailProds(prjid,em);     
+            getDetailProds(prjid,em);
         });
 }
 
@@ -600,7 +600,7 @@ function checkSerie(pjtcnid) {
     var pagina = 'WhOutputContent/checkSeries';
     var par = `[{"serId":"${pjtcnid}"}]`;
     var tipo = 'html';
-    var selector = myCheck; 
+    var selector = myCheck;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -612,7 +612,7 @@ function myCheck(dt){
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
     // getDetailProds(prjid,em);
-    
+
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
@@ -686,14 +686,14 @@ function putSerieDetails(dt){
                         serdetnumber: u.ser_serial_number,
                         serdetsitu: u.ser_no_econo,
                         projectname: u.pjt_name
-         
+
                     })
                     .draw();
                 //$(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
             });
         }
-        
-        
+
+
         activeIconsNewSerie();
     } else{
         alert('Ya no existen Series Disponibles para cambiar');
@@ -712,7 +712,7 @@ function activeIconsNewSerie() {
 
         $('#'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
         // $('#'+serIdOrig).children(".claseElemento").cssmyCheck({"color":"#CC0000"});
-        changeSerieNew(serIdSel, serIdOrg); 
+        changeSerieNew(serIdSel, serIdOrg);
     });
 }
 
@@ -721,19 +721,19 @@ function changeSerieNew(serIdNew,serIdOrg) {
     var pagina = 'WhOutputContent/changeSerieNew';
     var par = `[{"serIdNew":"${serIdNew}", "serIdOrg":"${serIdOrg}" }]`;
     var tipo = 'html';
-    var selector = myCheckUp; 
+    var selector = myCheckUp;
     fillField(pagina, par, tipo, selector);
 }
-    
+
 function myCheckUp(dt){
     console.log('myCheckUp-',dt);
     $('.overlay_background').addClass('overlay_hide');
     $('.overlay_closer .title').html('');
     $('#tblChangeSerie').DataTable().destroy;
-    
+
 }
 
-/**********  Confirma salida de equipos ***********/    
+/**********  Confirma salida de equipos ***********/
 function confirm_to_GetOut(pjtid) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
@@ -743,12 +743,12 @@ function confirm_to_GetOut(pjtid) {
 
         console.log('Datos CLICK',pjtid);
          modalLoading('S');
-      
+
         var pagina = 'WhOutputContent/ProcessGetOutProject';
         var par = `[{"pjtid":"${pjtid}"}]`;
         var tipo = 'json';
         var selector = putToWork;
-        fillField(pagina, par, tipo, selector); 
+        fillField(pagina, par, tipo, selector);
         /* let Arg='23|56|PASO1,PASO2 ';
         putToWork(Arg); */
     });
@@ -783,7 +783,7 @@ function modalLoading(acc) {
     }
 }
 
-/**********  Impresion de la salida de un proyecto ***********/  
+/**********  Impresion de la salida de un proyecto ***********/
 function printOutPut(verId) {
     // let user = Cookies.get('user').split('|');
     // let u = user[0];
@@ -799,12 +799,12 @@ function printOutPut(verId) {
     );
 }
 
-/**********  Impresion del contenido de un proyecto ***********/    
+/**********  Impresion del contenido de un proyecto ***********/
 function printReports(pjtId, typrint) {
     // let user = Cookies.get('user').split('|');
     // let u = user[0];
     // let n = user[2];
-    
+
     let v = pjtId;
     let h = localStorage.getItem('host');
     let nameproject = $('#txtProjectName').val();
@@ -844,7 +844,7 @@ function printReports(pjtId, typrint) {
     // );
 }
 
-/**********  Impresion del contenido de un proyecto ***********/    
+/**********  Impresion del contenido de un proyecto ***********/
 /* function printContent(verId) {
     // let user = Cookies.get('user').split('|');
     // let u = user[0];
@@ -858,7 +858,7 @@ function printReports(pjtId, typrint) {
     );
 } */
 
-/**********  Impresion del detalle(series) de un proyecto ***********/  
+/**********  Impresion del detalle(series) de un proyecto ***********/
 /* function printDetail(verId) {
     // let user = Cookies.get('user').split('|');
     let v = verId;

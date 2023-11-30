@@ -31,9 +31,11 @@ function inicial() {
     });
 
     //Guardar Usuario *
-    $('#GuardarUsuario').on('click', function () {
+    $('#GuardarUsuario')
+        .unbind('click')
+        .on('click', function () {
         if (validaFormulario() == 1) {
-            SaveUsuario();
+            getSaveUsuario();
         } else {
             console.log('no entra');
         }
@@ -46,12 +48,17 @@ function inicial() {
     });
 
     //borra Usuario +
-    $('#BorrarUsuario').on('click', function () {
-        DeletUsuario();
+    $('#BorrarUsuario')
+        .unbind('click')
+        .on('click', function () {
+            DeleteUsuario();
     });
 
-    $('#LimpiarFormulario').on('click', function () {
-        LimpiaModal();
+    $('#LimpiarFormulario')
+        .unbind('click')
+        .on('click', function () {
+            LimpiaModal();
+            LimpiaModalModules();
     });
 
     $('#usuariosTable tbody').on('click', 'tr', function () {
@@ -171,48 +178,57 @@ function validaFormulario() {
 function EditUsuario(id, idPerfil) {
     UnSelectRowTable();
     LimpiaModal();
-    $('#titulo').text('Editar Usuarios');
-    var location = 'Usuarios/GetUsuario';
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data: {id: id},
-        url: location,
-        success: function (respuesta) {
-            console.log(respuesta);
-            $('#IdUsuario').val(respuesta.usr_id);
-            $('#NomUsuario').val(respuesta.emp_fullname);
-            $('#UserNameUsuario').val(respuesta.usr_username);
+    $('#EditarUsuariosModal').modal('show');
+    $('#EditarUsuariosModal')
+        .unbind('click')
+        .on('click', function () {
+        
+        $('#titulo').text('Editar Usuarios');
+        var location = 'Usuarios/GetUsuario';
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            data: {id: id},
+            url: location,
+            success: function (respuesta) {
+                console.log(respuesta);
+                $('#IdUsuario').val(respuesta.usr_id);
+                $('#NomUsuario').val(respuesta.emp_fullname);
+                $('#UserNameUsuario').val(respuesta.usr_username);
 
-            // $('#PassUsuario').val(respuesta.usr_password);
-            // $("#PassUsuarioRow").attr("hidden",true);
-            // $('#PassUsuario').attr("placeholder", "Cambiar Contraseña");
-            $('#AreaEmpUsuario').val(respuesta.are_id);
-            $('#NumEmpUsuario').val(respuesta.emp_number);
+                // $('#PassUsuario').val(respuesta.usr_password);
+                // $("#PassUsuarioRow").attr("hidden",true);
+                // $('#PassUsuario').attr("placeholder", "Cambiar Contraseña");
+                $('#AreaEmpUsuario').val(respuesta.are_id);
+                $('#NumEmpUsuario').val(respuesta.emp_number);
 
-            $('#lastDate').val(respuesta.usr_dt_last_access);
-            $('#userRegistry').val(respuesta.usr_dt_registry);
-            $('#EmpIdUsuario').val(respuesta.emp_id);
-            
-            getPerfilesUsuario(idPerfil);
-            getUserReport(respuesta.emp_report_to);
-            getPuestos(respuesta.pos_id);
+                $('#lastDate').val(respuesta.usr_dt_last_access);
+                $('#userRegistry').val(respuesta.usr_dt_registry);
+                $('#EmpIdUsuario').val(respuesta.emp_id);
+                
+                getPerfilesUsuario(idPerfil);
+                getUserReport(respuesta.emp_report_to);
+                getPuestos(respuesta.pos_id);
 
-            if (respuesta.modulesAsing != '') {
-                getModulesList(respuesta.modulesAsing, 'Asig'); //Asignados
-            }
-            getModulesList(respuesta.modulesAsing, 'Disp'); //Disponibles
-            
-            $('#UsuariosModal').modal('show');
-        },
-        error: function (EX) {
-            console.log(EX);
-        },
-    }).done(function () {});
+                if (respuesta.modulesAsing != '') {
+                    getModulesList(respuesta.modulesAsing, 'Asig'); //Asignados
+                }
+                getModulesList(respuesta.modulesAsing, 'Disp'); //Disponibles
+                
+                $('#UsuariosModal').modal('show');
+            },
+            error: function (EX) {
+                console.log(EX);
+            },
+        }).done(function () {});
+        
+        $('#EditarUsuariosModal').modal('hide');
+    });
+    
 }
 
 //confirm para borrar *
-function ConfirmDeletUser(id) {
+function ConfirmDeleteUser(id) {
     $('#BorrarUsuariosModal').modal('show');
     $('#IdUsuarioBorrar').val(id);
 }
@@ -224,7 +240,7 @@ function UnSelectRowTable() {
 }
 
 //BORRAR USUARIO *
-function DeletUsuario() {
+function DeleteUsuario() {
     var location = 'Usuarios/DeleteUsuario';
     var IdUsuario = $('#IdUsuarioBorrar').val();
     $.ajax({
@@ -259,7 +275,7 @@ function DeletUsuario() {
 }
 
 //Guardar Usuarios *
-function SaveUsuario() {
+function getSaveUsuario() {
     var location = 'Usuarios/SaveUsuario';
     var today = new Date();
     var fechaAcceso =
@@ -293,7 +309,7 @@ function SaveUsuario() {
             modulesAsig += $(this).attr('id') + ',';
         });
     modulesAsig = modulesAsig.slice(0, -1);
-    console.log(AreaNombre);
+    // console.log(AreaNombre);
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -313,7 +329,7 @@ function SaveUsuario() {
         },
         url: location,
         success: function (respuesta) {
-            console.log(respuesta);
+            // console.log(respuesta);
             if (IdUsuario != '') {
                 table
                     .row(':eq(' + positionRow + ')')
@@ -328,7 +344,7 @@ function SaveUsuario() {
                     .add({
                         [0]:
                             '<button onclick="EditUsuario(' + respuesta + ',' + idPerfil +
-                            ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletUser(' +
+                            ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeleteUser(' +
                             respuesta +
                             ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
                         [1]: respuesta,
@@ -343,10 +359,10 @@ function SaveUsuario() {
                     .node();
                 $(rowNode).find('td').eq(0).addClass('edit');
                 $(rowNode).find('td').eq(1).addClass('text-center');
-                LimpiaModal();
-                getPerfilesUsuario();
-                getPuestos();
-                getUserReport();
+                // LimpiaModal();
+                // getPerfilesUsuario();
+                // getPuestos();
+                // getUserReport();
             }
         },
         error: function (EX) {
@@ -355,6 +371,7 @@ function SaveUsuario() {
     }).done(function () {});
 
     LimpiaModal();
+    LimpiaModalModules();
     getPerfilesUsuario();
     getPuestos();
     getUserReport();
@@ -389,6 +406,7 @@ function LimpiaModalModules() {
 
 //obtiene la informacion de tabla Usuarios *
 function getUsuariosTable() {
+    LimpiaModalModules();
     var location = 'Usuarios/GetUsuarios';
     $('#usuariosTable').DataTable().destroy();
     $('#tablaUsuariosRow').html('');
@@ -399,14 +417,15 @@ function getUsuariosTable() {
         url: location,
         _success: function (respuesta) {
             var renglon = '';
-            // console.log(respuesta);
+            console.log(respuesta);
+            if (respuesta.usr_id != '0'){
             respuesta.forEach(function (row, index) {
                 renglon =
                     '<tr>' +
                         '<td class="text-center edit"> ' +
                         '<button onclick="EditUsuario(' +
                         row.usr_id + ',' + row.prf_id + ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-                        '<button onclick="ConfirmDeletUser(' + row.usr_id +
+                        '<button onclick="ConfirmDeleteUser(' + row.usr_id +
                         ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                         '</td>' +
                         "<td class='dtr-control text-center'>" + row.usr_id + '</td>' +
@@ -419,7 +438,7 @@ function getUsuariosTable() {
                     '</tr>';
                 $('#tablaUsuariosRow').append(renglon);
             });
-
+        }
             let title = 'Usuarios';
             let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
             
@@ -472,7 +491,7 @@ function getUsuariosTable() {
                             });
                             idSelected = idSelected.slice(0, -1);
                             if (idSelected != '') {
-                                ConfirmDeletUser(idSelected);
+                                ConfirmDeleteUser(idSelected);
                             }
                         },
                     },
@@ -560,11 +579,12 @@ function getModulesList(ModUser, tipeModul) {
         success: function (respuesta) {
             var renglon = '';
             // console.log(respuesta);
+            //row.mod_id + '">' + row.mod_code + ' - ' + row.mod_name +
             if (tipeModul == 'Asig') {
                 respuesta.forEach(function (row, index) {
                     renglon =
                         '<a href="#" class="list-group-item list-group-item-action" id="' +
-                        row.mod_id + '">' + row.mod_code + ' - ' + row.mod_name +
+                        row.mod_id + '">' + row.mod_name +
                         '<br><span class="list-group-item-Text" style="font-size: 10px;">' + row.mod_description +
                         '</span></a>';
                     $('#listAsignado').append(renglon);
@@ -573,7 +593,7 @@ function getModulesList(ModUser, tipeModul) {
                 respuesta.forEach(function (row, index) {
                     renglon =
                         '<a href="#" class="list-group-item list-group-item-action" id="' +
-                        row.mod_id + '">' + row.mod_code + ' - ' + row.mod_name +  
+                        row.mod_id + '">' + row.mod_name +  
                         '<br><span class="list-group-item-Text" style="font-size: 10px;">' + row.mod_description +
                         '</span></a>';
                     $('#listDisponible').append(renglon);

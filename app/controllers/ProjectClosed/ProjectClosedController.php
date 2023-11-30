@@ -107,6 +107,7 @@ class ProjectClosedController extends Controller
         }
         echo $res;
     }
+
     // LISTAR COMENTARIOS
     public function listComments($request_params)
     {

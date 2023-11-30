@@ -13,14 +13,13 @@ class UsuariosModel extends Model
 	public function GetUsuarios($params)
 	{
 		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, 
-				p.prf_name, u.usr_dt_registry, u.usr_dt_last_access, p.prf_id
+					p.prf_name, u.usr_dt_registry, u.usr_dt_last_access, p.prf_id
 				FROM ctt_users as u
 				LEFT JOIN ctt_employees as e on e.emp_id = u.emp_id
 				LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
 				WHERE u.usr_status = '1' and u.emp_id > '1';";
 		return $this->db->query($qry);
 	}
-
 
 	public function GetUsuario($params)
 	{
@@ -34,8 +33,9 @@ class UsuariosModel extends Model
 		}
 		$modulesAsing = substr($modulesAsing, 0, -1);
 
-		$qry = "SELECT 
-					u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id , e.emp_area, e.emp_id , e.emp_report_to , e.pos_id, u.usr_password, e.are_id
+		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, p.prf_name, 
+					   u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id , e.emp_area, e.emp_id , 
+					   e.emp_report_to , e.pos_id, u.usr_password, e.are_id
 				FROM ctt_users AS u
 				INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
 		        LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
@@ -137,7 +137,6 @@ class UsuariosModel extends Model
 
 				$password = "";
 				if ($PassUsuario!='') {
-
 					if($pass == $PassUsuario){
 						$password = $PassUsuario;
 					}else{
@@ -147,9 +146,9 @@ class UsuariosModel extends Model
 					//Actualiza Usuario
 					$qry = "UPDATE ctt_users 
 							SET usr_username = '$UserNameUsuario',
-							usr_password = '$password',
-							usr_dt_change_pwd = now(),
-							prf_id = '$idPerfil'
+								usr_password = '$password',
+								usr_dt_change_pwd = now(),
+								prf_id = '$idPerfil'
 							WHERE usr_id =$IdUsuario;";
 					$this->db->query($qry);
 	
@@ -157,7 +156,7 @@ class UsuariosModel extends Model
 					//Actualiza Usuario
 					$qry = "UPDATE ctt_users 
 							SET usr_username = '$UserNameUsuario',
-							prf_id = '$idPerfil'
+								prf_id = '$idPerfil'
 							WHERE usr_id =$IdUsuario;";
 					$this->db->query($qry);
 	
@@ -165,10 +164,10 @@ class UsuariosModel extends Model
 				//Actualiza Empledo
 				$qry = "UPDATE ctt_employees
 						SET emp_number = '$NumEmpUsuario',
-						emp_fullname = '$NomUsuario',
-						emp_area = '$areaNombre', 
-						pos_id = '$idPuesto',
-						are_id = '$AreaEmpUsuario'
+							emp_fullname = '$NomUsuario',
+							emp_area = '$areaNombre', 
+							pos_id = '$idPuesto',
+							are_id = '$AreaEmpUsuario'
 						WHERE emp_id = $EmpIdUsuario";
 				$this->db->query($qry); // 11-10-23
 
@@ -193,16 +192,23 @@ class UsuariosModel extends Model
 	//borra usuario
 	public function DeleteUsuario($params)
 	{
+		$IdUsuario = $this->db->real_escape_string($params['IdUsuario']);
 		$estatus = 0;
 			try {
 				//Borra perfil
-				$qry = "UPDATE ctt_users
-						SET usr_status = 0
+				// $qry = "UPDATE ctt_users
+				// 		SET usr_status = 0
+				// 		WHERE usr_id in (".$params['IdUsuario'].");";
+				// $this->db->query($qry);
+
+				$qry = "DELETE FROM  ctt_users
 						WHERE usr_id in (".$params['IdUsuario'].");";
 				$this->db->query($qry);
 
+				$qry2 = "DELETE FROM ctt_users_modules
+						WHERE usr_id = '$IdUsuario' ;";
+				$this->db->query($qry2);
 				
-
 				$estatus = 1;
 			} catch (Exception $e) {
 				$estatus = 0;
