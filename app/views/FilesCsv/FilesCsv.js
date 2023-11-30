@@ -301,123 +301,11 @@ function VerDocumento(id) {
 
 //obtiene la informacion de tabla Proveedores *
 function getDocumentosTable() {
-   /* var location = 'FilesCsv/GetDocumentos';                
-   $('#DocumentosTable').DataTable().destroy();
-   $("#tablaDocumentosRow").html(''); */
    var pagina = 'FilesCsv/GetDocumentos';
    var par = `[{"dot_id":""}]`;
    var tipo = 'json';
    var selector = putFiles;
    fillField(pagina, par, tipo, selector);
-  /*  $.ajax({
-      type: 'POST',
-      dataType: 'JSON',
-      url: location,
-      _success: function (respuesta) {
-         //console.log(respuesta);
-         var renglon = '';
-         respuesta.forEach(function (row, index) {
-            renglon =
-               '<tr>' +
-                  '<td>' + row.prd_id + '</td>' +
-
-                  "<td class='dtr-control text-center'>" + row.prd_sku + '</td>' +
-                  '<td>' + row.prd_name + '</td>' +
-                  '<td hidden>' + row.prd_english_name + '</td>' +
-                  '<td>' + row.prd_code_provider + '</td>' +
-                  '<td>' + row.prd_name_provider + '</td>' +
-                  '<td class="sku">' + row.prd_model + '</td>' +
-                  '<td>' + row.prd_price + '</td>' +
-                  '<td>' + row.prd_coin_type + '</td>' +
-                  '<td class="sku">' + prd_insured + '</td>' +
-                  '<td>' + row.srv_id + '</td>' +
-               '</tr>';
-            $('#tablaDocumentosRow').append(renglon);
-         });
-
-         let title = 'Documentos';
-         let filename =
-            title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
-         table = $('#DocumentosTable').DataTable({
-            order: [[1, 'asc']],
-            select: {
-               style: 'multi',
-               info: false,
-            },
-            lengthMenu: [
-               [50, 100, -1],
-               ['50', 100, 'Todo'],
-            ],
-            dom: 'Blfrtip',
-            buttons: [
-               {
-                  extend: 'pdf',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-                  //   className: 'btnDatableAdd',
-                  text:
-                     '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-               },
-               {
-                  extend: 'excel',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-                  //   className: 'btnDatableAdd',
-                  text:
-                     '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-               },
-               {
-                  //Botón para imprimir
-                  extend: 'print',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-
-                  //Aquí es donde generas el botón personalizado
-                  text:
-                     '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-               },
-               {
-                  text: 'Borrar seleccionados',
-                  className: 'btn-apply hidden-field',
-                  action: function () {
-                     var selected = table.rows({ selected: true }).data();
-                     var idSelected = '';
-                     selected.each(function (index) {
-                        idSelected += index[1] + ',';
-                     });
-                     idSelected = idSelected.slice(0, -1);
-                        if (idSelected != '') {
-                           ConfirmDeletDocumento(idSelected);
-                        }
-                  },
-               },
-            ],
-
-            scrollY: 'calc(100vh - 260px)',
-            scrollX: true,
-            // scrollCollapse: true,
-            paging: true,
-            pagingType: 'simple_numbers',
-            fixedHeader: true,
-            language: {
-               url: './app/assets/lib/dataTable/spanish.json',
-            },
-         }); 
-      },
-      get success() {
-         return this._success;
-      },
-      set success(value) {
-         this._success = value;
-      },
-      error: function ( jqXHR, textStatus, errorThrown) {
-         console.log( jqXHR, textStatus, errorThrown);
-      },
-   }).done(function () {}); */
 }
 
 
@@ -443,7 +331,7 @@ function putFiles(dt) {
                    NombreProveedor: u.prd_name_provider,
                    Modelo: u.prd_model,
                    Precio: u.prd_price,
-                   Moneda: u.prd_coin_type,
+                   Moneda: u.cin_code,
                    Seguro: u.prd_insured,
                    Servicio: u.srv_id
                })

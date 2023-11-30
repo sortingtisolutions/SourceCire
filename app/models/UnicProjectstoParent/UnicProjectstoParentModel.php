@@ -48,9 +48,8 @@ public function listPackages($params)
 // Listado de productos
 public function listProducts()
 {
-    $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
-            FROM ctt_products 
-            WHERE prd_status = 1;";
+    $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end, pj.pjt_parent
+    FROM ctt_projects as pj WHERE pj.pjt_parent = 0;";
     return $this->db->query($qry);
 }
 
@@ -92,13 +91,13 @@ public function listProductsPack($params)
     }
 
 // Registra el producto al paquete
-    public function SaveProduct($param)
+    public function SaveProject($param)
     {
-        $prd_id            = $this->db->real_escape_string($param['prdId']);
-        $prd_parent        = $this->db->real_escape_string($param['prdParent']);
+        $prj_id            = $this->db->real_escape_string($param['prjId']);
+        $prj_parent        = $this->db->real_escape_string($param['prjParent']);
         //$prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
 
-        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id) 
+        /* $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id) 
                 VALUES ('$prd_parent', '$prd_id');";
 
         $this->db->query($qry);
@@ -107,8 +106,13 @@ public function listProductsPack($params)
         $qrr =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent, pk.pck_quantity 
                  FROM ctt_products_packages AS pk
                  INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
-                 WHERE pk.pck_id = $pckId;" ;
-        
+                 WHERE pk.pck_id = $pckId;" ; */
+
+        $qry =  "UPDATE ctt_projects SET pjt_parent = '$prj_parent' where pjt_id = '$prj_id'" ;
+        $this->db->query($qry);
+        $qrr =  "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end, pj.pjt_parent
+                    FROM ctt_projects as pj
+                    WHERE pjt_id = '$prj_id';" ;
         $result = $this->db->query($qrr);
         return $result;
     }
@@ -117,13 +121,11 @@ public function listProductsPack($params)
 // Obtiene detalle de paquete
     public function detailPack($param)
     {
-        $prd_id            = $this->db->real_escape_string($param['prdId']);
+        $prd_id            = $this->db->real_escape_string($param['prjId']);
 
-        $qry =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, 
-                        pr.sbc_id, sb.cat_id
-                FROM ctt_products AS pr
-                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id 
-                WHERE prd_id = $prd_id" ;
+        $qry =  "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end, pj.pjt_parent
+        FROM ctt_projects as pj
+        WHERE pjt_id = $prd_id" ;
         
         $result = $this->db->query($qry);
         return $result;
@@ -147,13 +149,12 @@ public function listProductsPack($params)
 // Borra el producto del paquete
     public function deleteProduct($param)
     {
-        $prd_id            = $this->db->real_escape_string($param['prdId']);
-        $prd_parent        = $this->db->real_escape_string($param['prdParent']);
+        $prj_id            = $this->db->real_escape_string($param['prdId']);
 
-        $qry =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
+        $qry =  "UPDATE ctt_projects SET pjt_parent = 0 where pjt_id = '$prj_id'" ;
         $this->db->query($qry);
 
-        return $prd_id;
+        return $prj_id;
     }    
 
 // Borra el producto del paquete

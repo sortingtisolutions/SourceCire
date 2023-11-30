@@ -11,8 +11,6 @@ function inicial() {
     if (altr == 1) {
     setting_table_products();
     setting_table_packages();
-    getCategory();
-    getSubcategory();
     getProducts();
     deep_loading('O');
     getPackages(0);
@@ -67,7 +65,6 @@ function setting_table_packages() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable', class: 'edit'},
             {data: 'pack_sku', class: 'sel sku'},
             {data: 'packname', class: 'sel product-name'},
             {data: 'packpric', class: 'sel price'},
@@ -109,24 +106,6 @@ function setting_table_products() {
     });
 }
 
-// Solicita las categorias
-function getCategory() {
-   // console.log('Primer cat');
-    var pagina = 'UnicProjectstoParent/listCategories';
-    var par = `[{"param":""}]`;
-    var tipo = 'json';
-    var selector = putCategory;
-    fillField(pagina, par, tipo, selector);
-}
-// Solicita las subcategorias
-function getSubcategory() {
-    //console.log('Primer sub');
-    var pagina = 'UnicProjectstoParent/listSubCategories';
-    var par = `[{"catId":""}]`;
-    var tipo = 'json';
-    var selector = putSubCategory;
-    fillField(pagina, par, tipo, selector);
-}
 // Solicita los paquetes
 function getPackages(catId) {
     var pagina = 'UnicProjectstoParent/listPackages';
@@ -143,58 +122,10 @@ function getProducts() {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
-/* LLENA LOS DATOS DE LOS ELEMENTOS */
-// llena el selector de categorias
-function putCategory(dt) {
-    if (dt[0].cat_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.cat_id}" data-content="${u.cat_id}">${u.cat_name}</option>`;
-            $('#txtCategoryPack').append(H);
-            $('#txtCategoryProduct').append(H);
-            $('#txtCategoryList').append(H);
-        });
-    }
-
-    $('#txtCategoryPack').on('change', function () {
-        let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
-        $('#txtSubcategoryPack').html(ops);
-        let id = $(this).val();
-        selSubcategoryPack(id);
-        validator_part01();
-    });
-
-    $('#txtCategoryProduct').on('change', function () {
-        let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;       
-        $('#txtSubcategoryProduct').html(ops);
-        let id = $(this).val();
-        console.log('Limpia', id);
-        selSubcategoryProduct(id);
-        // validator_part02();
-    });
-
-    $('#txtCategoryProduct')
-        .unbind('click')
-        .on('click', function () {
-            $('.list-group').slideUp('slow');
-            //console.log('Click categoria');
-        });
-
-    $('#txtCategoryList').on('change', function () {
-        let catId = $(this).val();
-        deep_loading('O');
-        getPackages(catId);
-    });
-}
-// Mantiene en memoria el set de subcategorias
-function putSubCategory(dt) {
-    subcategos = dt;
-}
-
 function putProducts(dt) {
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="P-${u.prd_id}" data-subcateg="${u.sbc_id}" data-content="${u.prd_id}|${u.prd_sku}|${u.prd_name}|${u.prd_price}|${u.sbc_id}">
-                    ${u.prd_sku} - ${u.prd_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
+        let H = `<div class="list-item" id="P-${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">
+                    ${u.pjt_number} - ${u.pjt_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
                 </div>`;
         $('#listProducts').append(H);
     });
@@ -203,7 +134,7 @@ function putProducts(dt) {
 // Dibuja los productos
 function drawProducts(str) {
     $('.list-item').addClass('hide-items');
-    $(`.list-item[data-subcateg^="${str}"]`).removeClass('hide-items');
+    $(`.list-item`).removeClass('hide-items');
 
     var ps = $('#boxProducts').offset();
     $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});
@@ -240,7 +171,7 @@ function putPackages(dt) {
         $.each(dt, function (v, u) {
             tabla.row
                 .add({
-                    editable: `<i class="fas fa-pen choice pack modif" id="E-${u.pjt_id}"></i><i class="fas fa-times-circle choice pack kill" id="D-${u.prd_id}"></i>`,
+                    
                     pack_sku: `<span class="hide-support" id="SKU-${u.pjt_number}">${u.pjt_id}</span>${u.pjt_number}`,
                     packname: u.pjt_name,
                     packpric: u.pjt_date_start,
@@ -254,133 +185,6 @@ function putPackages(dt) {
     }
     deep_loading('C');
 }
-// Llena el selector de subcategorias
-function selSubcategoryPack(id) {
-    if (subcategos[0].sbc_id != 0) {
-        $.each(subcategos, function (v, u) {
-            if (u.cat_id === id) {
-                let H = `<option value="${u.sbc_id}" data-content="${u.sbc_id}|${u.cat_id}|${u.sbc_code}">${u.sbc_code} - ${u.sbc_name}</option>`;
-                $('#txtSubcategoryPack').append(H);
-            }
-        });
-    }
-
-    $('#txtSubcategoryPack')
-        .unbind('change')
-        .on('change', function () {
-            $('#boxProducts').val();
-            $('#listProducts').val();
-            let id = $(this).val();
-            validator_part01();
-        });
-}
-
-// Llena el selector de subcategorias
-function selSubcategoryProduct(id) {
-    if (subcategos[0].sbc_id != 0) {
-        $.each(subcategos, function (v, u) {
-            if (u.cat_id === id) {
-                let H = `<option value="${u.sbc_id}" data-content="${u.sbc_id}|${u.cat_id}|${u.sbc_code}">${u.sbc_code} - ${u.sbc_name}</option>`;
-                $('#txtSubcategoryProduct').append(H);
-            }
-        });
-    }
-
-    $('#txtSubcategoryProduct')
-        .unbind('change')
-        .on('change', function () {
-            $('#boxProducts').val();
-            $('#listProducts').val();
-            $('#list-items').val();
-            let id = $(this).val();
-            drawProducts(id);
-        });
-
-    $('#txtSubcategoryProduct')
-        .unbind('click')
-        .on('click', function () {
-            $('.list-group').slideUp('slow');
-            //console.log('Click sucategoria');
-        });
-}
-
-// Crea el paquete
-let sbccnt = 0;
-function packages_apply(subcat) {
-    let sbcId = $('#txtSubcategoryPack option:selected').val();
-    if (subcat != '' && subcat != undefined) {
-        let catId = refil($('#txtCategoryPack option:selected').val(), 2);
-        let subId = refil($('#txtSubcategoryPack option:selected').attr('data-content').split('|')[2], 2);
-        let prdsku = catId + subId + refil(subcat, 3);
-        let prdName = $('#txtPackageName').val();
-        let prdModel = '';
-        let prdPrice = $('#txtPackagePrice').val();
-        let prdCoinType = 'MXN';
-        let prdVisibility = 1;
-        let prdComments = '';
-        let prdStatus = 1;
-        let prdLevel = 'K';
-        let supId = 0;
-        let srvId = 1;
-        let exmId = 1;
-
-        sbccnt = 0;
-
-        let par = `[{
-        "prdsku"        : "${prdsku}",
-        "prdName"       : "${prdName}",
-        "prdModel"      : "${prdModel}",
-        "prdPrice"      : "${prdPrice}",
-        "prdCoinType"   : "${prdCoinType}",
-        "prdVisibility" : "${prdVisibility}",
-        "prdComments"   : "${prdComments}",
-        "prdStatus"     : "${prdStatus}",
-        "prdLevel"      : "${prdLevel}",
-        "sbcId"         : "${sbcId}",
-        "supId"         : "${supId}",
-        "srvId"         : "${srvId}",
-        "exmId"         : "${exmId}"
-    }]`;
-
-        fill_table_packs(par);
-    } else {
-        if (sbccnt < 10) {
-            setTimeout(() => {
-                sbccnt++;
-                build_sku_product(sbcId);
-            }, 1000);
-        }
-    }
-}
-
-function packages_edit() {
-    let prdId = $('#txtIdPackages').val();
-    let prdName = $('#txtPackageName').val();
-    let prdPrice = $('#txtPackagePrice').val();
-
-    let par = `
-        [{
-            "prdId"    : "${prdId}",
-            "prdName"  : "${prdName}",
-            "prdPrice" : "${prdPrice}"
-        }]
-    `;
-
-    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName);
-    $(`#tblPackages_wrapper #${prdId} .price`).html(prdPrice);
-
-    active_params();
-
-    let pagina = 'UnicProjectstoParent/updatePackage';
-    let tipo = 'html';
-    let selector = putPackageEdit;
-    fillField(pagina, par, tipo, selector);
-}
-
-function putPackageEdit(dt) {
-    // console.log(dt);
-}
-
 function active_params() {
     $('#txtIdPackages').val(0);
     $('#txtPackageName').val('');
@@ -441,11 +245,11 @@ function putNewPackage(dt) {
     $(`#SKU-${sku}`).parent().parent().attr('id', id).addClass('indicator');
     action_selected_packages();
 
-    tabla.on('select', function (e, dt, type, i) {
+    /* tabla.on('select', function (e, dt, type, i) {
         $('#txtCategoryProduct').val(0);
         $('#txtSubcategoryProduct').val(0);
         $('#txtIdPackages').val(0);
-    });
+    }); */
 }
 
 function action_selected_packages() {
@@ -475,21 +279,6 @@ function action_selected_packages() {
             }
         });
 
-    $('.choice')
-        .unbind('click')
-        .on('click', function () {
-            let edt = $(this).attr('class').indexOf('modif');
-            let prdId = $(this).attr('id').substring(2, 100);
-            if (edt >= 0) {
-                var pagina = 'UnicProjectstoParent/detailPack';
-                var par = `[{"prdId":"${prdId}"}]`;
-                var tipo = 'json';
-                var selector = put_detailPack;
-                fillField(pagina, par, tipo, selector);
-            } else {
-                confirm_delet_packages(prdId);
-            }
-        });
 }
 
 function action_selected_products() {
@@ -509,36 +298,6 @@ function action_selected_products() {
             }
         });
 
-    $('.quantity')
-        .unbind('blur')
-        .on('blur', function () {
-            let qty = $(this).val();
-            let prdId = $(this).attr('id').substring(3, 20);
-            editProdAsoc(prdId, qty);
-        });
-}
-
-function put_detailPack(dt) {
-    let chc = dt[0].prd_id;
-    setTimeout(() => {
-        $('#tblPackages').DataTable().rows().deselect();
-        $('#txtIdPackages').val(chc);
-        $('#txtPackageName').val(dt[0].prd_name);
-        $('#txtPackagePrice').val(dt[0].prd_price);
-        $('.mainTitle').html('Editar paquete');
-        $('#txtCategoryPack').val(dt[0].cat_id);
-        // $(`#txtCategoryPack option[value="${dt[0].cat_id}"]`).attr('selected', true);
-        $(`#txtCategoryPack option[value="${dt[0].cat_id}"]`).trigger('change');
-        $(`#txtSubcategoryPack option[value="${dt[0].sbc_id}"]`).attr('selected', true);
-        $(`#txtCategoryPack`).attr('disabled', true);
-        $(`#txtSubcategoryPack`).attr('disabled', true);
-        $('#btn_packages').html('Aplicar').removeClass('disabled');
-        $('#btn_packages_cancel').removeClass('hide-items');
-        $('.form_secundary').slideUp('slow', function () {
-            $('.form_primary').slideDown('slow');
-        });
-        $('#tblProducts').DataTable().rows().remove().draw();
-    }, 50);
 }
 
 function select_products(prdId) {
@@ -572,15 +331,13 @@ function putProductsPack(dt) {
 
 function product_apply(prId) {
     console.log(prId);
-    let prod = prId.attr('data-content').split('|');
-    let productId = prod[0];
-    let productSKU = prod[1];
-    let productName = prod[3];
-    let productParent = $('#txtIdPackages').val();
+    let proj = prId.attr('data-content').split('|');
+    let productId = proj[0];
+    let projParent = $('#txtIdPackages').val();
     //let productQuantity = $('#txtQtyPrds').val();
-    var pagina = 'Packages/SaveProduct';
-    var par = `[{"prdId":"${productId}","prdParent":"${productParent}"}]`;
-    //console.log(par);
+    var pagina = 'UnicProjectstoParent/SaveProject';
+    var par = `[{"prjId":"${productId}","prjParent":"${projParent}"}]`;
+    console.log(par);
     var tipo = 'json';
     var selector = putNewProductsPack;
     fillField(pagina, par, tipo, selector);
@@ -591,34 +348,16 @@ function putNewProductsPack(dt) {
     let tabla = $('#tblProducts').DataTable();
     tabla.row
         .add({
-            editable: `<i class="fas fa-times-circle choice prod kill" id="D-${dt[0].prd_id}-${dt[0].prd_parent}"></i>`,
-            prod_sku: `<span class="hide-support" id="SKU-${dt[0].prd_sku}">${dt[0].prd_id}</span>${dt[0].prd_sku}`,
-            prodname: dt[0].prd_name,
-            prodpric: dt[0].prd_price,
-            prodcant: '<input class="quantity fieldIn" type="text" id="QY-' + dt[0].prd_id + '-' + dt[0].prd_parent + '" value="' + dt[0].pck_quantity + '">',
+            editable: `<i class="fas fa-times-circle choice prod kill" id="D-${dt[0].pjt_id}-${dt[0].pjt_parent}"></i>`,
+            prod_sku: `<span class="hide-support" id="SKU-${dt[0].pjt_number}">${dt[0].pjt_id}</span>${dt[0].pjt_number}`,
+            prodname: dt[0].pjt_name,
+            prodpric: dt[0].pjt_date_start,
+            prodcant: dt[0].pjt_date_end,
         })
         .draw();
     action_selected_products();
 }
 
-function confirm_delet_packages(id) {
-    $('#delPackModal').modal('show');
-    $('#txtIdPackage').val(id);
-
-    //borra paquete +
-    $('#btnDelPackage').on('click', function () {
-        let prdId = $('#txtIdPackage').val();
-        let tabla = $('#tblPackages').DataTable();
-        let row = $('#' + prdId);
-        tabla.row(row).remove().draw();
-
-        var pagina = 'Packages/deletePackages';
-        var par = `[{"prdId":"${prdId}"}]`;
-        var tipo = 'json';
-        var selector = putDelPackages;
-        fillField(pagina, par, tipo, selector);
-    });
-}
 
 function confirm_delet_product(id) {
     $('#delProdModal').modal('show');
@@ -635,8 +374,8 @@ function confirm_delet_product(id) {
 
         tabla.row(prdRow).remove().draw();
 
-        var pagina = 'Packages/deleteProduct';
-        var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}"}]`;
+        var pagina = 'UnicProjectstoParent/deleteProduct';
+        var par = `[{"prdId":"${prdId}"}]`;
         var tipo = 'json';
         var selector = putDelPackages;
         fillField(pagina, par, tipo, selector);
@@ -645,44 +384,4 @@ function confirm_delet_product(id) {
 
 function putDelPackages(dt) {
     $('#delPackModal').modal('hide');
-}
-
-function validator_part01() {
-    let ky = 0;
-    let msg = '';
-    if ($('#txtSubcategoryPack').val() == 0) {
-        ky = 1;
-        msg += 'Debes seleccionar una subcategoria';
-    }
-
-    if ($('#txtPackageName').val() == 0) {
-        ky = 1;
-        msg += 'Debes indicar el nombre del paquete';
-    }
-    if ($('#txtPackagePrice').val() == 0) {
-        ky = 1;
-        msg += 'Debes indicar el precio del paquete';
-    }
-
-    if (ky == 0) {
-        $('#btn_packages').removeClass('disabled');
-    } else {
-        $('#btn_packages').addClass('disabled');
-    }
-}
-
-function editProdAsoc(Id, prdQty) {
-    let prdId = Id.split('-')[0];
-    let prdParent = Id.split('-')[1];
-    console.log('Vals', prdId, prdParent, prdQty);
-
-    var pagina = 'Packages/updateQuantityProds';
-    var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","prdQty":"${prdQty}"}]`;
-    var tipo = 'json';
-    var selector = putUpdatePackages;
-    fillField(pagina, par, tipo, selector);
-}
-
-function putUpdatePackages(dt) {
-    console.log('Dentro', dt);
 }

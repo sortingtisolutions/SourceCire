@@ -61,23 +61,23 @@
 
                     <div class="form_secundary">
                         <h4>Seleccion de productos</h4>
-                        <!-- <div class="row">
+                        <div class="row">
                             <input type="hidden" id="txtIdPackages" name="txtIdPackages"><br>
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                            <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtCategoryProduct" class="form-select form-select-sm required">
                                     <option value="0" data-content="||||" selected>Selecciona una categoría</option>
                                 </select>
                                 <label for="txtCategoryProduct">Categoria</label>
-                            </div>
+                            </div> -->
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtSubcategoryProduct" class="form-select form-select-sm required">
                                     <option value="0" selected>Selecciona una subcategoría</option>
                                 </select>
                                 <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
                             </div>
-                        </div> -->
+                        </div>  -->
 
                         <div class="row list-finder">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -111,7 +111,6 @@
                         <table class="display compact nowrap"  id="tblPackages"  style="width:95%">
                             <thead>
                                 <tr>
-                                    <th style="width:  30px"></th>
                                     <th style="width:  70px">Numero</th>
                                     <th style="width:  auto">Nombre</th>
                                     <th style="width:  30px">Fecha de inicio</th>
@@ -186,7 +185,7 @@
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea eliminar la relacion con el proyecto padre?</span>
                 </div>
             </div>
 

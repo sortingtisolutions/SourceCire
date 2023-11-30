@@ -141,10 +141,10 @@ class UnicProjectstoParentController extends Controller
     }	
 
 // Guarda producto del paquete
-    public function SaveProduct($request_params)
+    public function SaveProject($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->SaveProduct($request_params);
+        $result = $this->model->SaveProject($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
