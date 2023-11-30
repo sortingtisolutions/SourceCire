@@ -101,7 +101,7 @@
 													<th style="width: 30px"></th>
 													<th style="width: 30px">Id</th>
 													<th style="width: auto">Nombre</th>
-                                       <th style="width: 30px">Codigo</th>
+                                       				<th style="width: 30px">Codigo</th>
 													<th style="width: auto">Descripcion</th>
 
 											</tr>

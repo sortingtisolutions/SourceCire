@@ -74,6 +74,8 @@ function validaFormulario() {
 function EditPerfil(id) {
    UnSelectRowTable();
    LimpiaModal();
+
+   console.log('ID--',id);
    $('#titulo').text('Editar Perfil Usuario');
 
    var location = 'PerfilUser/GetDataPerfil';
@@ -83,6 +85,7 @@ function EditPerfil(id) {
       data: {id: id},
       url: location,
       success: function (respuesta) {
+         console.log('Edit--',respuesta);
          $('#NomPerfil').val(respuesta.prf_name);
          $('#CodPerfil').val(respuesta.prf_code);
          $('#DesPerfil').val(respuesta.prf_description);

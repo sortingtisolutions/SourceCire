@@ -558,11 +558,11 @@ public function UpdateProject($params)
     $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
 	
     $qry02 = "UPDATE    ctt_projects
-            SET    pjt_name            = '$pjt_name', 
+            SET    pjt_name            = upper('$pjt_name'), 
                     pjt_date_start      = '$pjt_date_start', 
                     pjt_date_end        = '$pjt_date_end',
                     pjt_time            = '$pjt_time',
-                    pjt_location        = '$pjt_location', 
+                    pjt_location        = upper('$pjt_location'), 
                     pjt_how_required    = '$pjt_how_required',
                     pjt_trip_go         = '$pjt_trip_go',
                     pjt_trip_back       = '$pjt_trip_back',

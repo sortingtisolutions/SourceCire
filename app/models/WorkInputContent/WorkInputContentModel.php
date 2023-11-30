@@ -316,5 +316,18 @@ class WorkInputContentModel extends Model
                 ORDER BY com_date ASC;";
         return $this->db->query($qry);
     } 
+    public function listLocations($params)
+    {
+        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+
+        $qry = "SELECT (case when lce.pjt_id
+                    then lce.lce_location
+                    ELSE pj.pjt_location END) AS locations
+                FROM ctt_projects AS pj
+                LEFT JOIN ctt_locacion_estado AS lce ON lce.pjt_id = pj.pjt_id
+                WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
+
+        return $this->db->query($qry);
+    }
 
 }

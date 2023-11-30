@@ -1,16 +1,16 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
-    require_once ROOT . FOLDER_PATH . '/app/models/WorkInputContent/WorkInputContentModel.php';
+    require_once ROOT . FOLDER_PATH . '/app/models/ParentsProjects/ParentsProjectsModel.php';
     require_once LIBS_ROUTE .'Session.php';
 
-class WorkInputContentController extends Controller
+class ParentsProjectsController extends Controller
 {
     private $session;
     public $model;
 
     public function __construct()
     {
-        $this->model = new WorkInputContentModel();
+        $this->model = new ParentsProjectsModel();
         $this->session = new Session();
         $this->session->init();
         if($this->session->getStatus() === 1 || empty($this->session->get('user')))
@@ -23,27 +23,11 @@ class WorkInputContentController extends Controller
 		$this->render(__CLASS__, $params);
     }
 
-    public function listFreelances($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listFreelances($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"free_id":"0"}]';
-        }
-        echo $res;
-    }
     // Lista los proyectos
-    public function listProjects($request_params)
+    public function listUsersP($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProjects($request_params);
+        $result = $this->model->listUsersP($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -54,10 +38,43 @@ class WorkInputContentController extends Controller
         } else {
             $res =  '[{"pjt_id":"0"}]';
         }
-    echo $res;
+        echo $res;
     }
 
-    // Lista los productos
+    public function listUsersA($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listUsersA($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"pjt_id":"0"}]';
+        }
+        echo $res;
+    }
+
+    public function listUsersC($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listUsersC($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"pjt_id":"0"}]';
+        }
+        echo $res;
+    }
+    // Lista los proyectos
     public function listDetailProds($request_params)
     {
         $params =  $this->session->get('user');
@@ -70,15 +87,16 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjtpd_id":"0"}]';
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
     }
 
-    public function listLocations($request_params)
+    // Lista los proyectos
+    public function getProject($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listLocations($request_params);
+        $result = $this->model->getProject($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -87,15 +105,20 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"locations":"0"}]';
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
     }
-    // Lista los comentarios del proyecto // 11-10-23
-    public function listComments($request_params)
+    public function UpdateProject($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listComments($request_params);
+        $result = $this->model->UpdateProject($request_params);
+        echo $result;
+    } 
+    public function listCustomers($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listCustomers($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -104,34 +127,23 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"com_id":"0"}]';	
+            $res =  '[{"cus_id":"0"}]';	
         }
         echo $res;
     } 
-    // ************************ //
+    // Borra un producto seleccionado
+	public function CancelParentsProjects($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->CancelParentsProjects($request_params, $params);
+		$res = $result ;
+		echo $res;
+	}
 
-    public function listSeries($request_params)
+    public function getLocationType($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listSeries($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"ser_id":"0"}]';
-        }
-        echo $res;
-    }
-    // Guarda el comentario // 11-10-23
-    public function InsertComment($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->InsertComment($request_params, $params);
-
+        $result = $this->model->getLocationType();
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -140,17 +152,67 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"com_id":"0"}]';	
+            $res =  '[{"loc_id":"0"}]';	
         }
         echo $res;
-        // **************************** //
-        
     } 
-        // Lista las series
-    public function listReason($request_params)
+
+    public function getLocations($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listReason($request_params);
+        $result = $this->model->getLocations($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"loc_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
+    public function listProjectsType($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjectsType($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+
+    } 
+    public function listProjectsTypeCalled($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjectsTypeCalled($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjttc_id":"0"}]';	
+        }
+        echo $res;
+
+    } 
+    // Lista los usuarion en los proyectos
+    public function listUsersOnProj($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listUsersOnProj($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -159,14 +221,14 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"ser_id":"0"}]';
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
     }
-    public function listAnalysts($request_params)
+    public function updateUsers($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listAnalysts($request_params);
+        $result = $this->model->updateUsers($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -175,72 +237,9 @@ class WorkInputContentController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"emp_id":"0"}]';
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
     }
 
-    public function checkSeries($request_params)
-    {
-        $params =  $this->session->get('user');
-        //$result = $this->model->checkSeries($request_params);
-        $result = $this->model->getSeries($request_params);
-        $i = 0;
-        $serie=0;
-        while($row = $result->fetch_assoc()){
-            $serid = $row["ser_id"];
-            if($row["prd_level"]=='P'){
-                $serie=$serid;
-            }
-            $paramsdet = array(
-                'serid' => $serid,
-                
-            );
-
-            $ActSeries = $this->model->ActualizaSeries($paramsdet);
-            
-        }
-        echo $serie;
-    }
-
-
-    public function listSeriesFree($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSeriesFree($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"ser_id":"0"}]';
-        }
-        echo $res;
-    }
-
-    public function createTblResp($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->createTblResp($request_params);
-        echo $result;
-    }
-
-    public function regMaintenance($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->regMaintenance($request_params);
-        echo $result;
-    }
-
-    public function RegisterGetIn($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->GetInProject($request_params);
-            
-            echo $result;
-        }
- 
 }

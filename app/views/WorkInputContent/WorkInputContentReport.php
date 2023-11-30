@@ -9,8 +9,11 @@ $prdId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
 $empid = $_GET['em'];
+$numProject =  $_GET['nump'];
+$nameProject =$_GET['np'];
 
 $conkey = decodificar($_GET['h']) ;
+date_default_timezone_set('America/Mexico_City');
 
 $h = explode("|",$conkey);
 
@@ -56,7 +59,7 @@ $header = '
                     </td>
                     <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
                     <p>
-                        <span class="number">Proyecto: '. $items[0]['pjt_name'] . '   #' . $items[0]['pjt_number'] .'</span>
+                        <span class="number">Proyecto: '. $nameProject. '   #' . $numProject .'</span>
                         <br><span style=" font-size: 8pt; color: #191970">Nombre Responsable: '. $uname .'</span>
                     </p>
                     </td>
@@ -75,27 +78,12 @@ $html = '
                 <tr>
                     <td>
                         <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
-                        Impresion de contenido del Proyecto
+                        Impresion de contenido de entrada de proyecto
+
                         </p>
                     </td>
-             
+            
                 </tr>
-                <!--<tr>
-                    <td class="half">
-                        <table class="table-data">
-                            <tr>
-                                <td class="concept"><strong>Nombre Responsable:</strong></td>
-                                <td class="data"><strong>'. $uname .'</strong></td>
-                            </tr>
-                            <tr>
-                                <td class="concept">&nbsp;</td>
-                                <td class="data">&nbsp;</td>
-                            </tr> 
-                        </table>
-                          
-                    </td>
-                </tr> -->
-                
             </table>
             <!-- End Datos de identificación  -->
 ';
@@ -170,20 +158,36 @@ $html .= '
 </section>';
 /* Tabla firmas -------------------------  */
 
-
 // Pie de pagina
 $foot = '
     <footer>
+        <table class="table-footer">
+            <tr>
+                <td class="side-color"></td>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <td class="td-foot foot-date" width="25%">{DATE F j, Y, g:i a}</td>
+                            <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+        </table>
         <table class="table-address">
             <tr>
+                <td class="addData">55 5676-1113<br />55 5676-1483</td>
+                <td class="addIcon addColor01"><img class="img-logo" src="../../../app/assets/img/icon-phone.png" style="width:4mm; height:auto;" /></td>
                 <td class="addData">Av Guadalupe I. Ramírez 763,<br />Tepepan Xochimilco, 16020, CDMX</td>
-                <td class="addIcon addColor02"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:3mm; height:auto;" /></td>
-                <td class="addData">ventas@cttrentals.com<br />presupuestos@cttrentals.com<br />proyectos@cttrentals.com</td>
-                <td class="addIcon addColor03"><img class="img-logo" src="../../../app/assets/img/icon-email.png"  style="width:3mm; height:auto;"/></td>
+                <td class="addIcon addColor02"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:4mm; height:auto;" /></td>
+                <td class="addData">reservaciones@cttrentals.com<br />presupuestos@cttrentals.com<br />cotizaciones@cttrentals.com</td>
+                <td class="addIcon addColor03"><img class="img-logo" src="../../../app/assets/img/icon-email.png"  style="width:4mm; height:auto;"/></td>
             </tr>
         </table>
     </footer>
 ';
+
 
 $css = file_get_contents('../../assets/css/reports_p.css');
 
