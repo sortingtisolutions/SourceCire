@@ -369,3 +369,16 @@ INSERT INTO `ctt_modules` (`mod_id`, `mod_code`, `mod_name`, `mod_description`, 
 INSERT INTO `ctt_users_modules` (`urm_id`, `usr_id`, `mod_id`) VALUES
 	(511, 1, 78),
 	(512, 1, 79);
+		
+-- ************ 27 NOV 2023 ***********
+CREATE TABLE `ctt_tracking_proyects` (
+	`trck_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id del Tracking',
+	`trck_date_mov` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP() COMMENT 'Fecha Automatica del movimiento',
+	`pjt_id` INT NULL COMMENT 'Id del Proyecto',
+	`pjs_status` INT NULL COMMENT 'Id de status de referencia al movimiento',
+	PRIMARY KEY (`trck_id`)
+)
+COMMENT='Tabla para registrar los movimientos de un proyecto desde la creacion del proyecto, hasta la salida a llamado'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
