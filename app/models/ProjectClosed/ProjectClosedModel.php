@@ -122,4 +122,16 @@ class ProjectClosedModel extends Model
         return $this->db->query($qry);
     }
 
+    // LISTAR COMENTARIOS
+    public function listComments($params)
+    {
+         $pjt_id = $this->db->real_escape_string($params['pjId']);
+        
+         $qry = "SELECT com_id, com_user, com_comment FROM ctt_comments 
+                 WHERE com_action_id=$pjt_id
+                 ORDER BY com_date;";
+ 
+        return $this->db->query($qry);
+    }
+
 }

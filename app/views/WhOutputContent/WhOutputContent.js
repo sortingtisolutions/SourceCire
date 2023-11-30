@@ -107,7 +107,7 @@ function fillComments(pjtId) {
                         "pjtId"         : "${prjid}"
                     }]
                     `;
-                var pagina = 'WorkInputContent/InsertComment';
+                var pagina = 'WhOutputContent/InsertComment';
                 var tipo = 'json';
                 console.log(par);
                 var selector = addComment;

@@ -350,7 +350,7 @@ function putProducts(dt) {
     });
 
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id_acc}">${u.prd_sku}-${u.prd_name}</div>`;
+        let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id}">${u.prd_sku}-${u.prd_name}</div>`;
         $('#listProducts .list-items').append(H);
     });
 
@@ -644,7 +644,8 @@ function exchange_apply() {
             sersku= prdSku + refil(serie, 3);
         }else{
             
-            sersku = prdSku + refil(serie, 2);
+            //sersku = prdSku + refil(serie, 2);
+            sersku = prdSku + 'XXX'+ refil(serie++, 2);
             // console.log(sersku);
         }
         serie++;

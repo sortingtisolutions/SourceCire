@@ -233,7 +233,13 @@ public function saveAccesorioByProducto($param)
 
         /* $qry = "UPDATE ctt_products SET prd_sku = CONCAT(substr(prd_sku,1,7),'XXX') WHERE prd_id = ".$prd_id.""; // Modificado por edna
         $this->db->query($qry); */
-        $qry = "UPDATE ctt_series SET ser_sku = CONCAT(substr(ser_sku,1,7),'A',substr(ser_sku,12,2),'XXX',substr(ser_sku,14,2)), prd_id_acc = 0  WHERE ser_id = $ser_id"; // Modificado por edna
+        $qry = "SELECT substr(pd.prd_sku,9,2) 'sku' FROM ctt_series AS sr 
+        INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id WHERE ser_id = $ser_id"; // Modificado por edna
+        $res = $this->db->query($qry);
+        $rs = $res->fetch_object();
+        $sku = $rs->sku; // para evitar que al eliminar se tome como dos X donde no van.
+
+        $qry = "UPDATE ctt_series SET ser_sku = CONCAT(substr(ser_sku,1,7),'A','$sku','XXX',substr(ser_sku,14,2)), prd_id_acc = 0  WHERE ser_id = $ser_id"; // Modificado por edna
         $this->db->query($qry);
         
         return $ser_id;

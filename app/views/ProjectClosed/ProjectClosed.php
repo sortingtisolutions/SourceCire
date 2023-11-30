@@ -69,7 +69,11 @@
         <!-- contenido de operación -->
             <div class="mvst_table projectClosed">
                 <h1>Detalles del Proyecto</h1>
-
+                    <div class="sidebar__comments" style="position: absolute;right: 15px;"> 
+                        <span class="invoice_button toComment">
+                            <i class="far fa-comment-alt"></i> Comentarios del proyecto
+                        </span> 
+                    </div>
                 <!-- caja de totales del reporte -->
                 <div class="totales">
                     
@@ -174,7 +178,31 @@
     </div>
 </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
-
+<!-- Fondo obscuro -->
+<div class="invoice__modalBackgound"></div>
+<!-- Modal General  -->
+<div class="invoice__modal-general invoice-border modalTable">
+        <div class="modal__header invoice-border">
+            <div class="modal__header-concept" style="font-weight: 700">&nbsp;Listados de productos</div>
+            <i class="far fa-window-close closeModal"></i>
+        </div>
+        <div class="modal__body">
+        </div>
+    </div>
+    <div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box" style=" width: 100%; height: 100%; padding: 1.1rem; display: grid; grid-template-rows: 1fr 170px;">
+            
+            <div class="comments__list" style="border: 1px solid var(--br-gray-soft); border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.5rem; overflow-y: scroll;">
+            </div>
+            
+                <!-- <div class="comments__addNew" style="background-color: var(--br-gray-soft); padding: 0.5rem;">
+                    <label for="txtComment">Escribe comentario</label><br>
+                    <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput" ></textarea><br>
+                    <span class="invoice_button" id="newComment" style="background-color: var(--in-white) !important;"><i class="fas fa-plus"></i>guardar comentario</span>
+                </div> -->
+            
+        </div>
+    </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
