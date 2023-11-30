@@ -53,12 +53,111 @@ function inicial() {
             getTipoProveedor();
             getOptionYesNo(); */
          });
-
+         
     } else {
         setTimeout(() => {
             inicial();
         }, 100);
     }
+}
+
+function showModalComments() {
+    let template = $('#commentsTemplates');
+    // let pjtId = $('.version_current').attr('data-project');
+
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Comentarios');
+    closeModals();
+    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
+
+    console.log( $('#txtComment').val()); */
+    //console.log(prjid);
+    fillComments(pjtgbl);
+}
+
+function fillComments(pjtId) {
+    console.log(pjtId);
+    
+    // Agrega nuevo comentario
+    /* $('.comments__addNew .invoice_button')
+        .unbind('click')
+        .on('click', function () {
+            
+            //let pjtId = $('.version_current').attr('data-project');
+
+            let comSrc = 'projects';
+            let comComment = $('#txtComment').val();
+
+            console.log(comComment);
+            if (comComment.length > 3) {
+                let par = `
+                    [{
+                        "comSrc"        : "${comSrc}",
+                        "comComment"    : "${comComment}",
+                        "pjtId"         : "${prjid}"
+                    }]
+                    `;
+                var pagina = 'WorkInputContent/InsertComment';
+                var tipo = 'json';
+                console.log(par);
+                var selector = addComment;
+                fillField(pagina, par, tipo, selector);
+            }
+        }); */
+
+    getComments(pjtId);
+}
+
+function getComments(pjtId) {
+    var pagina = 'ProjectClosed/listComments';
+    var par = `[{"pjId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putComments;
+    fillField(pagina, par, tipo, selector);
+}
+
+function putComments(dt) {
+    $('.comments__list').html('');
+    if (dt[0].com_id > 0) {
+        $.each(dt, function (v, u) {
+            console.log(u);
+            fillCommnetElements(u);
+        });
+    }
+    
+}
+/** ***** CIERRA MODALES ******* */
+function closeModals(table) {
+    $('.invoice__modal-general .modal__header .closeModal')
+        .unbind('click')
+        .on('click', function () {
+            automaticCloseModal();
+            
+        });
+}
+function automaticCloseModal() {
+    
+    $('.invoice__modal-general').slideUp(400, function () {
+        $('.invoice__modalBackgound').fadeOut(400);
+        $('.invoice__modal-general .modal__body').html('');
+        
+    });
+}
+
+function fillCommnetElements(u) {
+    console.log(u.com_comment);
+    let H = `
+        <div class="comment__group" style="border-bottom: 1px solid var(--br-gray-soft); padding: 0.2rem; width: 100%;">
+            <div class="comment__box comment__box-date" style="width: 100%;text-align: right; font-size: 0.9em; color: var(--in-oxford);"><i class="far fa-clock" style="padding: 0 0.5rem;"></i>${u.com_date}</div>
+            <div class="comment__box comment__box-text">${u.com_comment}</div>
+            <div class="comment__box comment__box-user" style="text-align: left; font-size: 0.9em; color: var(--in-oxford);">${u.com_user}</div>
+        </div>
+    `;
+
+    $('.comments__list').prepend(H);
+    //getComments_text(prjid);
 }
 
 function listChgStatus() {
@@ -107,7 +206,12 @@ function activeProjectsFunctions(pjtId) {
     findExtraDiesel(pjtId);
     findDiscount(pjtId);
     activaCampos(pjtId);
-
+    $('.sidebar__comments .toComment')
+    .unbind('click')
+    .on('click', function () {
+        showModalComments();
+        
+    });
     setTimeout(() => {
         updateTotals();
     }, 1000);
@@ -141,10 +245,10 @@ function putProjectContent(dt) {
         $.each(dt, function (v, u) {
             let costins=parseFloat(u.costo) + parseFloat(u.seguro);
             // console.log(costins);
-            let H = `<tr id=${u.prd_id}, iname="${u.prd_name}">
+            let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
                         <td class="cn"><i class='fas fa-pen modif'></i></td>
                         <td class="lf">${u.pjtdt_prod_sku}</td>
-                        <td class="lf">${u.prd_name}</td>
+                        <td class="lf">${u.pjtcn_prod_name}</td>
                         <td class="cn">1</td>
                         <td class="cn">${u.ser_situation}</td>
                         <td class="rg">${fnm(costins, 2, '.', ',')}</td>

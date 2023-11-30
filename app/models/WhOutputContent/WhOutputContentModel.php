@@ -196,12 +196,43 @@ class WhOutputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
        
         $qry = "SELECT com_id, com_user, com_comment FROM ctt_comments 
-                WHERE com_Action_id=$pjt_id
+                WHERE com_action_id=$pjt_id
                 ORDER BY com_date;";
 
        return $this->db->query($qry);
    }
+// Agrega Comentario // 11-10-23
+public function InsertComment($params, $userParam)
+{
+    $group = explode('|',$userParam);
 
+    $user   = $group[2];
+    $pjtId  = $this->db->real_escape_string($params['pjtId']);
+    $comSrc = $this->db->real_escape_string($params['comSrc']);
+    $comComment  = $this->db->real_escape_string($params['comComment']);
+
+    $qry1 = "INSERT INTO ctt_comments (
+                    com_source_section, 
+                    com_action_id, 
+                    com_user, 
+                    com_comment, 
+                    com_status
+            ) VALUES (
+                    '$comSrc', 
+                    $pjtId, 
+                    '$user',
+                    '$comComment',
+                    1
+            );";
+    $this->db->query($qry1);
+    $comId = $this->db->insert_id;
+
+    $qry2 = "   SELECT com_id, com_date, com_user, com_comment 
+                FROM ctt_comments 
+                WHERE com_id = $comId;";
+    return $this->db->query($qry2);
+
+}
     // check de Productos
     public function checkSeries($params)
     {
