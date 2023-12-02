@@ -280,18 +280,21 @@ function get_change_reasons(pd) {
 function put_Proyectos(dt) {
     pj = dt;
     //console.log(pj);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
-        $('#txtProject').append(H);
-    });
-    $('#txtProject').on('change', function () {
-        px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val($(this).val());
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-        $('.objet').addClass('objHidden');
-        get_products($(this).val(), em);
-        console.log('Value',$(this).val());
-    });
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+            $('#txtProject').append(H);
+        });
+        $('#txtProject').on('change', function () {
+            px = parseInt($('#txtProject option:selected').attr('data_indx'));
+            $('#txtIdProject').val($(this).val());
+            // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+            $('.objet').addClass('objHidden');
+            get_products($(this).val(), em);
+            console.log('Value',$(this).val());
+        });
+    }
+    
 }
 function put_status_mant(dt) {
 

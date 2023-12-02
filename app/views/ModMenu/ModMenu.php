@@ -33,7 +33,7 @@
 
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtItems" name="txtItems" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="txtItems" name="txtItems" type="text" class="form-control form-control-sm" required>
                                     <label for="txtItems">Titulo del menú</label>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
 
                             <!-- <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" required>
                                     <label for="NomAlmacen">Responsable de almacen</label>
 
                                 </div>
@@ -55,7 +55,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     
-                                    <input id="txtOrder" name="txtOrder" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="txtOrder" name="txtOrder" type="text" class="form-control form-control-sm" required>
                                     <label for="txtOrder">Orden</label>
                                 </div>
                             </div>

@@ -15,7 +15,7 @@
             <div class="mvst_panel">
                 <div class="form-group">
                 <div class="form_primary">
-                    <h4 class="mainTitle">Generar paquete</h4>
+                    <h4>Seleccion de proyectos únicos</h4>
 <!-- 
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="form_secundary">
-                        <h4>Seleccion de productos</h4>
+                        <h4>Seleccion de proyectos únicos</h4>
                         <div class="row">
                             <input type="hidden" id="txtIdPackages" name="txtIdPackages"><br>
                             <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -81,7 +81,7 @@
 
                         <div class="row list-finder">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div class="box-items-list" id="boxProducts">Productos Lista
+                                <div class="box-items-list" id="boxProducts">Proyectos Únicos
                                     <i class="fas fa-angle-down"></i>
                                 </div>
 

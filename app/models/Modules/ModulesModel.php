@@ -21,6 +21,12 @@ class ModulesModel extends Model
 				VALUES ('$mod_name','$mod_code','$mod_item','$mod_description')";
 		$this->db->query($qry);	
 		$mod_id = $this->db->insert_id;
+
+		$qry = "INSERT INTO ctt_users_modules(usr_id, mod_id) 
+				VALUES ('1','$mod_id ')";
+				
+		$this->db->query($qry);	
+		$mod_id = $this->db->insert_id;
 		return $mod_id;
 
 	}

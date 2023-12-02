@@ -62,8 +62,12 @@ function EditPuesto(id) {
     LimpiaModal();
     $('#titulo').text('Editar Puesto');
 
-    var location = 'Puestos/GetPuesto';
-    $.ajax({
+    var pagina = 'Puestos/GetPuesto';
+    var par = `[{"pos_id":"${id}"}]`;
+    var tipo = 'json';
+    var selector = putPuesto;
+    fillField(pagina, par, tipo, selector);
+    /* $.ajax({
         type: 'POST',
         dataType: 'JSON',
         data: {id: id},
@@ -77,7 +81,13 @@ function EditPuesto(id) {
         error: function (EX) {
             console.log(EX);
         },
-    }).done(function () {});
+    }).done(function () {}); */
+}
+function putPuesto(dt){
+    $('#IdPuesto').val(dt[0].pos_id);
+    $('#NomPuesto').val(dt[0].pos_name);
+    $('#DesPuesto').val(dt[0].pos_description );
+    $('#PuestoModal').modal('show');
 }
 //confirm para borrar **
 function ConfirmDeletPuesto(id) {

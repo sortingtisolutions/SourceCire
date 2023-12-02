@@ -169,7 +169,7 @@ function SaveDocumento() {
             $('#aceptados').text(respuesta.aceptados);
             $('#rechazados').text(respuesta.rechazados);
             if (respuesta.rechazados > 0) {
-                $('#estatus').text('Revisa que el sku, el codigo de la moneda, el precio, el servicio y el seguro esten correctamente');
+                $('#estatus').text('Revisa que los datos introducidos coincidan con los requeridos');
             }
             $('#MoveFolioModal').modal('show');
             $('#btnHideModal').on('click', function () {
