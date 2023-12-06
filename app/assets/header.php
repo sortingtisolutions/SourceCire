@@ -4,10 +4,12 @@
 
 <!DOCTYPE html>
 <html lang="es">
-    <head>
+    <head rel="shortcut icon" href="<?=  PATH_ASSETS . 'img/logoicon.ico' ?>" type="image/x-icon">
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>CTT Exp & Rentals</title>
+
+        <link rel="shortcut icon" href="<?=  PATH_ASSETS . 'img/logoicon.ico' ?>" type="image/x-icon" />
 
         <link rel="stylesheet" href="<?=  PATH_ASSETS . 'lib/daterangepicker/daterangepicker.css' ?>" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css"/>

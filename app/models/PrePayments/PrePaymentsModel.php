@@ -13,7 +13,9 @@ class PrePaymentsModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status<=4;";
+    $qry = "SELECT * FROM ctt_projects 
+            WHERE pjt_status>='4' and pjt_status<='9'
+            ORDER BY pjt_id";
     return $this->db->query($qry);
 }    
 
@@ -76,6 +78,41 @@ public function listCustomers()
         return $this->db->query($qry);
     }   
 
+    public function listDataProyects($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['prpid']);
+
+        $qry = "SELECT pjt.pjt_name, prp.prp_amount, sum(pcn.pjtcn_prod_price) as totbase, 
+                        pjt.pjt_date_start, pjs.pjs_name, pjt.pjt_id
+                FROM ctt_projects_content AS pcn
+                INNER JOIN ctt_prepayments AS prp ON pcn.pjt_id=prp.pjt_id
+                INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pcn.pjt_id
+                INNER JOIN ctt_projects_status AS pjs ON pjs.pjs_status=pjt.pjt_status
+                WHERE pcn.pjt_id=$pjtId AND pcn.pjtcn_section=1";
+
+        return $this->db->query($qry);
+    }   
+
+
+    public function insertPayAplied($params)
+    {
+        $referen = $this->db->real_escape_string($params['referen']);
+        $DateStart = $this->db->real_escape_string($params['DateStart']);
+        $montopayed = $this->db->real_escape_string($params['montopayed']);
+        $foldoc = $this->db->real_escape_string($params['foldoc']);
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $wayPay = $this->db->real_escape_string($params['wayPay']);
+        $empId = $this->db->real_escape_string($params['empId']);
+
+        $qry="INSERT INTO ctt_payments_applied (pym_folio,pym_date_paid,pym_date_done,
+                pym_amount,clt_id,pjt_id,wtp_id,emp_id)
+            VALUES ('$referen','$DateStart', Now(),'$montopayed','$foldoc','$pjtId','$wayPay','$empId');";
+
+        $this->db->query($qry);
+        $payapl = $this->db->insert_id;
+
+        return $payapl;
+    }
 
 // Listado de Almacenes
     public function listStores()

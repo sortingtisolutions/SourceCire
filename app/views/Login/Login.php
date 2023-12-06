@@ -24,6 +24,7 @@
 		/>
 
 		<title>CTT Exp & Rentals</title>
+		<link rel="shortcut icon" href="<?=  PATH_ASSETS . 'img/logoicon.ico' ?>" type="image/x-icon" />
 
 		<link rel="stylesheet" href="<?= FOLDER_PATH . '/app/assets/css/estilos.min.css' ?>">
 

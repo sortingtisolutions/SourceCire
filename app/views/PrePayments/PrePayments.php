@@ -48,7 +48,7 @@
 
 							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
 								<!-- <input id="txtCost" type="text" class="form-control form-control-sm  required" data-mesage="Debes Agregar el monto" > -->
-								<input id="txtCost" type="number" class="form-control required" data-mesage="Debes Agregar el monto" >
+								<input id="txtCost" type="number" class="form-control required" data-mesage="Debes Agregar el monto" autocomplete="off" >0.00</input>
 								<label for="txtCost">Monto de adelanto</label>
 							</div>
 
@@ -109,7 +109,7 @@
 						<div class="row ">
 
 								<div class="col-6">
-									<button type="button" class="btn btn-sm btn-primary disabled" data_accion="add" id="btn_subletting">Registrar</button>
+									<button type="button" class="btn btn-sm btn-primary disabled" data_accion="add" id="btn_register">Registrar</button>
 								</div>
 								<div class="col-6">
 									<button type="button" class="btn btn-sm btn-danger" data_accion="clean" id="btn_clean">Limpiar</button>
@@ -146,6 +146,70 @@
 	</div>
 </div>
 
+<div class="overlay_background overlay_hide" id="addAsigModal" style="width: 65%; left:15%; background-color: rgba(255, 255, 255, 0); z-index: 500;">
+<div class="overlay_modal" style="z-index: 50;">
+        
+        <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+        <div class="" style="position: absolute; top: 10px; height: 60px; padding: 10px;">
+            <button type="button" class="btn btn-sm btn-primary" id="btn_applyAmount">Aplicar monto</button>
+        </div>
+
+        <div class="container-fluid" >
+            <div class="contenido">
+                <div class="row">
+                    <div class="" > <!-- overflow: auto; -->
+                        <div class="row">
+                            <!-- <button class="bn btn-ok" id="addRowTbl">Agregar</button> -->
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="background-color: #ffffff; border: 2px solid #eeeeee; border-radius: 10px; padding: 3% 1% 0% 0%;">
+
+                                <table>
+                                    <tr >
+                                        <td class="concept" ><span class="reqsign" >&nbsp;</span>Monto Adelantado: </td>
+                                        <td>
+                                            <input type="text" id="txtMontoPre" name="txtMontoPre" class="textbox " style="width:150px" autocomplete="off" disabled><br>
+											<span class="intructions">&nbsp;</span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>   
+									<td class="concept"><span class="reqsign">&nbsp;</span>Cantidad a asignar: </td>
+                                        <td>
+                                            <input type="text" id="txtMontoAsig" name="txtMontoAsig" class="textbox" style="width:150px" autocomplete="off"><br>
+											<span class="intructions">&nbsp;</span>
+                                        </td>
+                                    </tr>
+                                    <!-- <tr style="text-align:center;">
+                                        <td colspan=4>
+                                            <button class="bn btn-ok" id="addButtonSegm">Aplicar</button>
+                                        </td>
+                                    </tr> -->
+
+                                </table>
+                            </div>
+                        </div>
+                        <div style="height:10px;"></div>
+                        <div class="row mt-2" >
+                            <table class="display compact nowrap" id="listTable"style = "width: 90%" >
+                                <thead>
+                                    <tr>
+                                        <th style = "width: 20px"></th>
+                                        <th style = "width: 50px">Proyecto</th>
+                                        <th style = "width: 50px">Estatus actual</th>
+                                        <th style = "width: 50px">Monto Base</th>
+                                        <th style = "width: 50px">Fecha inicio</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
@@ -154,7 +218,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">

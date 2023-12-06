@@ -169,7 +169,6 @@
             <button type="button" class="btn btn-sm btn-primary" id="btn_saveSegment">Guardar</button>
         </div>
 
-
         <div class="container-fluid" >
             <div class="contenido">
                 <div class="row">

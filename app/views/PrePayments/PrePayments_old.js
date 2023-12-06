@@ -1,4 +1,4 @@
-let pj, px, pd, glbdata;
+let pj, px, pd;
 let user,v,u,n,em;
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -16,10 +16,12 @@ function inicial() {
     get_Proyectos();
     getCustomers();
     getRegisters(u, em);
-    $('#txtCost').val('0.00');
+    /* get_coins();
+    get_suppliers();
+    get_stores(); */
     fillContent();
     getTypeMov();// agregado por Edna
-    
+    // get_changes(); // agregado por Edna
     // activeIconsSerie();
     
     
@@ -38,15 +40,18 @@ function inicial() {
         validator();
     });
 
-    $('#btn_register').on('click', function () {
+    $('#btn_subletting').on('click', function () {
         let acc = $(this).attr('data_accion');
         InsertRegister(em);
     });
-
-    $('#btn_clean').on('click', function () {
-        applyClean();(em);
-    });
-       
+    
+     // $('#txtComments').on('blur', function () {
+    //     validator();
+    // });
+    // $('#txtMotivo').on('blur', function () {
+    //     validator();
+    // });
+   
 }
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
@@ -175,6 +180,41 @@ function setting_table() {
         ],
     });
 
+    $('#tblMotivoMantenimiento').DataTable({
+        order: [[1, 'desc']],
+        dom: 'Blfrtip',
+        select: {
+            style: 'single',
+            info: false,
+        },
+        lengthMenu: [
+            [100, 200, 300, -1],
+            [100, 200, 300, 'Todos'],
+        ],
+        buttons: [
+            {
+                // Boton aplicar cambios
+                text: 'Aplicar subarrendos',
+                footer: true,
+                className: 'btn-apply hidden-field',
+                action: function (e, dt, node, config) {
+                    read_ProductForSubletting_table();
+                },
+            },
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            { data: 'editable', class: 'edit' },
+            { data: 'prodname', class: 'product-name' },
+            { data: 'prod_sku', class: 'sku' },
+        ],
+    });
 }
 
 /**  ++++   Coloca los proyectos en el listado del input */
@@ -239,6 +279,29 @@ function put_changes(dt) {
         
     }); 
 }
+function put_change_reasons(dt){
+    //console.log(dt);
+    
+    let tabla = $('#tblMotivoMantenimiento').DataTable();
+    tabla.rows().remove().draw();
+    if (dt[0].pjtcr_definition != undefined) {
+        $.each(dt, function (v, u) {
+            tabla.row
+            .add({
+                editable: `<i id="${u.pjtcr_id}" class="fas fa-certificate serie motivo"></i>`,
+                prodname: u.pjtcr_definition,
+                prod_sku: u.pjtcr_description,
+            })
+            .draw();
+            
+        });
+    }
+    $('#tblPrePayment tbody tr')
+        .unbind('click')
+        .on('click', function (){
+            // activeIconsSerie2();
+        });
+}
 
 
 /**  ++++   Coloca los productos en el listado del input */
@@ -258,11 +321,11 @@ function putRegisters(dt) {
         $.each(pd, function (v, u) {
             tabla.row
                 .add({
-                    editable: `<i id="${u.prp_id}" data="${u.prp_folio}|${u.prp_amount}|${u.prp_date_doc}|${u.pjt_id}|${u.wtp_id}" class="fas fa-solid fa-file-invoice-dollar modif"></i>`,
+                    editable: `<i id="${u.prp_id}" class="fas fa-solid fa-file-invoice-dollar modif"></i>`,
                     custnam: u.cus_name,
                     proynam: u.pjt_name,
                     foldoc: u.prp_folio,
-                    amount: mkn(u.prp_amount,'n'),
+                    amount: u.prp_amount,
                     datedoc: u.prp_date_doc,
                     status: u.statprp,
                     datereg: u.prp_date_register,
@@ -273,7 +336,7 @@ function putRegisters(dt) {
                 })
                 .draw();
         });
-        activeIcons();
+        activeIconsSerie();
     }   
 }
 
@@ -297,6 +360,11 @@ function InsertRegister(em) {
     let comments = $('#txtComments').val();
     let empid=em;
 
+    // let projChange = $('#txtMotivo').val();
+    // let serieId = $('#txtIdSerie').val();
+    // let dtResFin = moment($('#txtPeriod').val().split(' - ')[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+    // let idMaintain = $('#txtIdMaintain').val();
+
     let par = `
     [{
         "idPrj" : "${idPrj}",
@@ -311,6 +379,13 @@ function InsertRegister(em) {
         "empid"  : "${empid}"
     }]`;
    
+    
+    // if (acc == 'add') {
+    //     var pagina = 'PrePayments/savePrePayment';
+    // } 
+    // else {
+    //    var pagina = 'PrePayments/changeMaintain';
+    // }
     console.log(par);
 
     var pagina = 'PrePayments/savePrePayment';
@@ -320,24 +395,34 @@ function InsertRegister(em) {
 }
 function putsavePrePayment(dt) { 
     // console.log(dt);
-    applyClean();
-    getRegisters(dt,em);
-}
-
-function applyClean(){
-    $('#txtProject').val(0);
-    $('#txtFolio').val('');
+    $('#txtComments').val('');
     $('#txtRoot').val('');
     $('#txtDest').val('');
     $('#txtPeriod').val('DD/MM/YYYY');
     $('#txtCost').val('0.00');
     $('#txtTypeMov').val(0);
+    $('#txtProject').val(0);
     $('#txtCustomer').val(0);
-    $('#txtComments').val('');
 
+    getRegisters(dt,em);
 }
 
+function activeIconsSerie() {
+    $('.modif')
+        .unbind('click')
+        .on('click', function () {
+            let prpId = $(this).attr('id');
+            // console.log('activeIconsSerie-', prpId);
+            getDataProyects(prpId);
+            settingTableSeg();
+            $('#addAsigModal').removeClass('overlay_hide');
+            
+        });
+}
+
+
 function settingTableSeg(){
+    let numcloid=5;
     $('#addSegmentModal').removeClass('overlay_hide');
     $('#listTable').DataTable ({
         bDestroy: true,
@@ -358,6 +443,31 @@ function settingTableSeg(){
         ],
     });
 
+    // $('#addButtonSegm')
+    //     .unbind('click')
+    //     .on('click', function () {
+    //         console.log('Agregar a TBL');
+    //         // putSegments();
+    //     });
+
+    $('#btn_applyAmount')
+        .unbind('click')
+        .on('click', function (){
+        console.log('Aplica Monto');
+    //     let user = Cookies.get('user').split('|');
+    //     let em = user[3];
+    //     $('#listTable tbody tr').each(function (v, u) {
+    //         let lnumpay=$($(u).find('td')[1]).text();
+    //         let lfrecpay=$($(u).find('td')[2]).text();
+    //         let lcantpay=$($(u).find('td')[3]).text();
+    //         let ldatepay=$($(u).find('td')[4]).text();
+
+    //         let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
+    //         console.log('TRUK ',truk);
+    //         build_data_structure(truk);
+    //     });
+    });
+
     $('#addAsigModal .btn_close')
         .unbind('click')
         .on('click', function () {
@@ -366,69 +476,18 @@ function settingTableSeg(){
     });
 }
 
-function activeIcons() {
-    $('.modif')
-        .unbind('click')
-        .on('click', function () {
-            let prpId = $(this).attr('id');
-            glbdata = $(this).attr('data');
-            // console.log('activeIcons-', prpId, 'Data',glbdata);
-            getDataProyects(prpId);
-            settingTableSeg();
-            $('#txtMontoPre').val(mkn(glbdata.split('|')[1],'n'));
-            $('#addAsigModal').removeClass('overlay_hide');
-        });
-
-    $('#btn_applyAmount')
-        .unbind('click')
-        .on('click', function (){
-        console.log('Aplica Monto',glbdata);
-        // let prp_id = $(this).attr('id');
-        let referen = glbdata.split('|')[0];
-        let DateStart = glbdata.split('|')[2];
-        let montopayed =glbdata.split('|')[1];
-        let pjtId = glbdata.split('|')[3];
-        let wayPay = glbdata.split('|')[4];
-        let foldoc = 0;
-        // let projPeriod = moment(Date()).format('DD/MM/YYYY');
-        // DateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
-        
-        let par = `
-        [{  "referen"       : "${referen}",
-            "DateStart"     :"${DateStart}",
-            "montopayed"     : "${montopayed}",
-            "foldoc"         : "${foldoc}",
-            "pjtId"          : "${pjtId}",
-            "wayPay"         : "${wayPay}",
-            "empId"          : "${em}"
-        }]`;
-        console.log(par);
-        var pagina = 'PrePayments/insertPayAplied';
-        var tipo = 'html';
-        var selector = putToWork;
-        fillField(pagina, par, tipo, selector);
-        
-    });
-}
-
-function putToWork(dt){
-    // console.log('putToWork',dt)
-    glbdata='';
-    // $('#addAsigModal .btn_close').trigger('click');
-}
-
 function putSegments(dt){ 
 
     let tabla = $('#listTable').DataTable();
-    // $('.overlay_closer .title').html(`Catalogo - ${catnme}`); ${mkn(u.ctl_amount_payable,'n')}
+    // $('.overlay_closer .title').html(`Catalogo - ${catnme}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
         tabla.row
         .add({
-            editable: `<i class="fas fa-info-circle kill" id ="${u.pjt_id}"></i>`,
+            editable: `<i class="fas fa-times-circle kill" id ="${u.pjt_id}"></i>`,
             numpay:     u.pjt_name,
             frepay:     u.pjs_name,
-            cantpay:    mkn(u.totbase,'n'),
+            cantpay:    u.totbase,
             datepay:    u.pjt_date_start,
         })
         .draw();
@@ -443,10 +502,6 @@ function putSegments(dt){
     });
 
 }
-
-
-
-
 function fill_table(par) { //** AGREGO ED */
 
     par = JSON.parse(par);
@@ -470,20 +525,6 @@ function fill_table(par) { //** AGREGO ED */
     });
 }
 
-function mkn(cf, tp) {
-    let nm = cf;
-    switch (tp) {
-        case 'n':
-            nm = formato_numero(cf, '2', '.', ',');
-            break;
-        case 'p':
-            nm = formato_numero(cf, '1', '.', ',');
-            break;
-        default:
-    }
-    return nm;
-}
-
 /*  ++++++++ Valida los campos  +++++++ */
 function validator() {
     let ky = 0;
@@ -504,9 +545,9 @@ function validator() {
     //     msg += 'La fecha final debe ser por lo menos de un día de diferencia';
     // }
     if (ky == 0) {
-        $('#btn_register').removeClass('disabled');
+        $('#btn_subletting').removeClass('disabled');
     } else {
-        $('#btn_register').addClass('disabled');
+        $('#btn_subletting').addClass('disabled');
     }
     // console.log(msg);
 }

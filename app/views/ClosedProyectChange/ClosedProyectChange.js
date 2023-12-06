@@ -419,6 +419,7 @@ function settingTableSeg(cloid){
 
     });
 }
+
 /**Agrega los datos segmentado en la tabla */
 function putSegments(){ 
     let MontoTot=parseFloat($('#txtMontoTotSeg').val().replace(/,/g, ''));

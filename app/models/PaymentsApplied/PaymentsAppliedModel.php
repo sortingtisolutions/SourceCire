@@ -11,8 +11,6 @@ class PaymentsAppliedModel extends Model
 	}
 
 
-
-
 // Obtiene el listado de las subcategorias activas
     public function listProjects($params)
     {
@@ -87,6 +85,26 @@ class PaymentsAppliedModel extends Model
 
         // $this->db->query($qry);	
         // return $sbcid;
+    }
+
+    public function insertPayAplied($params)
+    {
+        $referen = $this->db->real_escape_string($params['referen']);
+        $DateStart = $this->db->real_escape_string($params['DateStart']);
+        $montopayed = $this->db->real_escape_string($params['montopayed']);
+        $foldoc = $this->db->real_escape_string($params['foldoc']);
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $wayPay = $this->db->real_escape_string($params['wayPay']);
+        $empId = $this->db->real_escape_string($params['empId']);
+
+        $qry="INSERT INTO ctt_payments_applied (pym_folio,pym_date_paid,pym_date_done,
+                pym_amount,clt_id,pjt_id,wtp_id,emp_id)
+            VALUES ('$referen','$DateStart', Now(),'$montopayed','$foldoc','$pjtId','$wayPay','$empId');";
+
+        $this->db->query($qry);
+        $payapl = $this->db->insert_id;
+
+        return $payapl;
     }
 
 }
