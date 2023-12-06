@@ -7,10 +7,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 define('URI', $_SERVER['REQUEST_URI']);
 
-define('SRVNME', $_SERVER['SERVER_NAME']);
-
-define('HTTPH', $_SERVER['SERVER_PROTOCOL']);
-
 define('REQUEST_METHOD', $_SERVER['REQUEST_METHOD']);
 
 //////////////////////////////////////
@@ -21,7 +17,6 @@ define('FOLDER_PATH', '/TesteoCire');               /* DESARROLLO LOCAL */
 //define('FOLDER_PATH', '/TesteoCire');               /* DESARROLLO REMOTO */
 //define('FOLDER_PATH', '/SourceCire');               /* DESARROLLO REMOTO */
 
-define('FOLDER_DASH', '/Ciredashboard');
 
 define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 
@@ -36,6 +31,7 @@ define('HELPER_PATH', 'system/helpers/');
 define('LIBS_ROUTE', ROOT . FOLDER_PATH . '/system/libs/');
 
 define('FULL_PATH', ROOT . FOLDER_PATH);
+
 
 //////////////////////////////////////
 // Valores de core
@@ -76,14 +72,6 @@ define('HOST3', 'localhost');
 define('USER3', 'cttapp_user_qry3');
 define('PASSWORD3', '');
 define('DB_NAME3', 'cttapp_cire');
-
-//////////////////////////////////////
-// Valores de DASHBOARD
-/////////////////////////////////////
-
-// define('FOLDER_DASH_PATH', 'http://ctt-app.com/Ciredashboard/Dashboard');  /* Produccion */
-//define('FOLDER_DASH_PATH', 'http://desarrollo.com/Ciredashboard/Dashboard');  /* DESARROLLO */
-define('FOLDER_DASH_PATH', 'http://127.0.0.1/Ciredashboard/Dashboard');  /* DESARROLLO */
 
 
 //////////////////////////////////////

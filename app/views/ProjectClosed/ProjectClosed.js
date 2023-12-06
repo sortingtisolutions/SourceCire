@@ -15,6 +15,14 @@ const totdie = $('#totDiesel');
 const totdis = $('#totDiscount');
 const totdoc = $('#totals');
 const totals = $('#totals');
+const totprjIva = $('#totProjectIva');
+
+
+const totBase = $('#totBase');
+const totExtra = $('#totExtra');
+const totDias = $('#totDias');
+const totSubarrendo = $('#totSubarrendo');
+const totPrepago = $('#totPrepago');
 
 const size = [
     { s: 20 },
@@ -53,6 +61,8 @@ function inicial() {
             getTipoProveedor();
             getOptionYesNo(); */
          });
+
+         
          
     } else {
         setTimeout(() => {
@@ -180,11 +190,13 @@ function getProjects() {
 }
 
 function putProjects(dt) {
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.pjt_id}|${u.cus_id}">${u.pjt_name}</option>`;
+            pjs.append(H);
+        });
+    }
     
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.pjt_id}|${u.cus_id}">${u.pjt_name}</option>`;
-        pjs.append(H);
-    });
     $('#txtExpendab').val('0.00');
 
     pjs.unbind('change').on('change', function () {
@@ -194,9 +206,11 @@ function putProjects(dt) {
         let cusId = $(this).val().split('|')[1];
         pjtgbl=pjtId;
         cusgbl=cusId;
+        $('#txtReport').val(1);
         // console.log('Variables',pjtgbl, cusgbl);
         $('#txtExpendab').html('0.00');
         activeProjectsFunctions(pjtId);
+
     });
 }
 
@@ -205,28 +219,39 @@ function activeProjectsFunctions(pjtId) {
     getTotalMantenance(pjtId);
     findExtraDiesel(pjtId);
     findDiscount(pjtId);
-    activaCampos(pjtId);
+    activaCampos(pjtId, 1);
+    getTotalEquipo(pjtId,'1');
+    getTotalEquipo(pjtId,'2');
+    getTotalEquipo(pjtId,'3');
+    getTotalEquipo(pjtId,'4');
+    getTotalesProyecto(pjtId,'4');
     $('.sidebar__comments .toComment')
     .unbind('click')
     .on('click', function () {
         showModalComments();
         
     });
-    setTimeout(() => {
+    $('#txtReport')
+         .unbind('change')
+         .on('change', function () {
+            getProjectContent(pjtId, $('#txtReport').val());
+            console.log(pjtId,$('#txtReport').val())
+         });
+    /* setTimeout(() => {
         updateTotals();
-    }, 1000);
+    }, 1000); */
     deep_loading('C');
 }
 
 
-function activaCampos(pjtId) {
+function activaCampos(pjtId, type) {
     $('.list-finder').removeClass('hide-items');
-    getProjectContent(pjtId);
+    getProjectContent(pjtId, type);
 }
 
-function getProjectContent(pjtId) {
+function getProjectContent(pjtId, type) {
     let data = [
-        {pjtId: pjtId, },
+        {pjtId: pjtId, type: type,},
         ];
 
     var pagina = 'ProjectClosed/projectContent';
@@ -247,9 +272,9 @@ function putProjectContent(dt) {
             // console.log(costins);
             let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
                         <td class="cn"><i class='fas fa-pen modif'></i></td>
-                        <td class="lf">${u.pjtdt_prod_sku}</td>
+                        <td class="lf">${u.prd_sku}</td>
                         <td class="lf">${u.pjtcn_prod_name}</td>
-                        <td class="cn">1</td>
+                        <td class="cn">${u.quantity}</td>
                         <td class="cn">${u.ser_situation}</td>
                         <td class="rg">${fnm(costins, 2, '.', ',')}</td>
                         <td class="lf">${u.ser_comments}</td>
@@ -259,10 +284,11 @@ function putProjectContent(dt) {
     }    
     widthTable(tblprod);
 
-    let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo) + parseFloat(pc.seguro), 0);
-    let liva=tot*(0.16)+parseFloat(tot);
-    tot=liva;
+    /* let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo) + parseFloat(pc.seguro), 0);
+    let liva=tot * 0.16 + parseFloat(tot);
+    // tot=liva;
     totprj.html(fnm(tot, 2, '.', ','));
+    totprjIva.html(fnm(liva, 2, '.', ',')) */
     // console.log(tot);
     activeIcons();
 }
@@ -342,6 +368,66 @@ function putTotalMaintenance(dt){
     }); 
 }
 
+// Obtener los datos totales para Equipo Base, Extra, Dias, Subarrendo
+function getTotalEquipo(pjtId, equipo){
+    var pagina = 'ProjectClosed/totalEquipo';
+    var par = `[{"pjtId":"${pjtId}", "equipo":"${equipo}"}]`;
+    var tipo = 'json';
+    var selector = putTotalEquipo;
+    fillField(pagina, par, tipo, selector); 
+}
+
+// getTotalesProyecto
+// Obtener los datos totales para el proyecto
+function getTotalesProyecto(pjtId){
+    var pagina = 'ProjectClosed/totalesProyecto';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putTotalesProyecto;
+    fillField(pagina, par, tipo, selector); 
+}
+function putTotalEquipo(dt){
+    console.log(dt);
+    let cfr = 0;
+    if (dt[0].section == '1') {
+        totBase.html(fnm(dt[0].monto, 2, '.', ','));
+
+    }
+    if (dt[0].section == '2') {
+        totExtra.html(fnm(dt[0].monto, 2, '.', ','));
+
+    }
+    if (dt[0].section == '3') {
+        totDias.html(fnm(dt[0].monto, 2, '.', ','));
+
+    }
+    if (dt[0].section == '4') {
+        totSubarrendo.html(fnm(dt[0].monto, 2, '.', ','));
+
+    }
+}
+
+function putTotalesProyecto(dt){
+    console.log(dt);
+    let liva=dt[0].monto * 0.16 + parseFloat(dt[0].monto);
+    totprj.html(fnm(dt[0].monto, 2, '.', ','));
+    totprjIva.html(fnm(liva, 2, '.', ','));
+    updateTotals();
+}
+
+// OBTENER LOS TOTALES POR PREPAGOS DENTRO DEL PROYECTO
+function getTotalPrepago(pjtId){
+    var pagina = 'ProjectClosed/totalPrepago';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putTotalPrepago;
+    fillField(pagina, par, tipo, selector); 
+}
+
+function putTotalPrepago(dt){
+    console.log(dt);
+    totPrepago.html(fnm(dt[0].maintenance, 2, '.', ','));
+}
 function findDiscount(pjtId) {
     let cfr = 0;
     dis.val("0.00", 2, '.', ',');
@@ -369,7 +455,7 @@ function findExtraDiesel(pjtId) {
 }
 
 function updateTotals() {
-    let total = parseFloat(totprj.html().replace(/,/g, ''));
+    let total = parseFloat(totprjIva.html().replace(/,/g, ''));
 
     total += parseFloat(totexp.html().replace(/,/g, ''));
     total += parseFloat(totman.html().replace(/,/g, ''));

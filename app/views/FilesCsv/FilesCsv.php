@@ -63,10 +63,16 @@
  -->
 							<div class="row">
 								<div class="col-6">
-									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarDocumento">Procesar</button>
+									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarDocumento">Cargar</button>
 								</div>
 								<div class="col-6">
 									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarFormulario">Limpiar</button>
+								</div>
+								<div class="col-6 objHidden">
+									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarProcess">Procesar</button>
+								</div>
+								<div class="col-6 objHidden">
+									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarTabla">Limpiar Tabla</button>
 								</div>
 							</div>
 						</form>
@@ -83,6 +89,7 @@
 								<table id="DocumentosTable" class="display  display compact nowrap" style="width:95%">         
 										<thead>
 											<tr>
+													<th style="width: 100px"></th>
 													<th style="width: 200px">SKU</th>
 													<th style="width: 100px">Producto</th>
 													<th style="width: 100px">Nombre en Ingles</th>
@@ -118,7 +125,7 @@
 					 <div class="row">
 						  <input hidden type="text" class="form-control" id="IdDocumentoBorrar" aria-describedby="basic-addon3">
 						  <div class="col-12 text-center">
-								<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
+								<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea eliminar los datos?</span>
 						  </div>
 					 </div>
 
@@ -131,6 +138,34 @@
 				</div>
 		</div>
 
+		<!-- Modal Borrar -->
+<div class="modal fade" id="confirmarCargaModal" tabindex="-1" aria-labelledby="confirmarCargaLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-sm">
+					 <div class="modal-content">
+					 <div class="modal-header ">
+					 </div>
+					 <div class="modal-body" style="padding: 0px !important;">
+
+
+					 <div class="row">
+						  <input hidden type="text" class="form-control" id="IdConfirmar" aria-describedby="basic-addon3">
+						  <div class="col-12 text-center">
+								<span class="modal-title text-center" style="font-size: 1.2rem;" id="confirmCargaLabel">¿Seguro que desea subir a productos?</span>
+								
+						  </div>
+						  <div class="col-12 text-center">
+						  	<span class="modal-title text-center" style="font-size: 1rem;">Ten en cuenta que solo se registraran los datos que tienen un estatus exitoso</span>
+						  </div>
+						</div>
+
+					 </div>
+						  <div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-primary" id="confirmLoad">Confirmar</button>
+						  </div>
+					 </div>
+				</div>
+		</div>
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="filtroDocumentoModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
@@ -144,7 +179,8 @@
 					 <div class="row">
 						  <input hidden type="text" class="form-control" id="IdDocumentoBorrar" aria-describedby="basic-addon3">
 						  <div class="col-12 text-center">
-								<span class="modal-title text-center" style="font-size: 1rem;" >Solo se aceptan archivos con extencion JPG,PNG,PDF</span>
+								<span class="modal-title text-center" style="font-size: 1rem;" >Solo se aceptan archivos con extencion csv</span>
+								
 						  </div>
 					 </div>
 
@@ -158,7 +194,16 @@
 
 
 </div>
-
+<!-- loading -->
+<div class="invoice__loading modalLoading">
+            <div class="box_loading">
+                <p class="text_loading">
+                    Registrando Datos en Productos<br>
+                    <i class="fas fa-spinner spin"></i> 
+                    </p>
+                <p>Se estan actualizando los registros en la tabla de productos, este proceso podria tomar un par de segundos</p>
+            </div>
+        </div>
 <!-- Modal para imprimir folio de salida -->
 <div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -170,8 +215,26 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Se registraron: <span id='aceptados'></span>, exitosamente</span>
-					<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Fueron rechazados: <span id='rechazados'></span>. <span id="estatus"></span> </span> 
+					<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Fueron rechazados: <span id='rechazados'></span>. </span> 
                 </div>
+				<div class="col-12 text-center">
+					<span class="modal-title text-center" style="font-size: 0.8rem;" id="duplicidad"></span>
+                </div>
+				<div class="col-12 text-center">
+					<span class="modal-title text-center" style="font-size: 0.8rem;" id="sku"></span>
+				</div>
+				<div class="col-12 text-center">
+					 <span class="modal-title text-center" style="font-size: 0.8rem;" id="moneda"></span>
+				</div>
+				<div class="col-12 text-center">
+					<span class="modal-title text-center" style="font-size: 0.8rem;" id="costo"></span>
+				</div>
+				<div class="col-12 text-center">
+					<span class="modal-title text-center" style="font-size: 0.8rem;" id="servicio"></span>
+				</div>
+				<div class="col-12 text-center">
+					<span class="modal-title text-center" style="font-size: 0.8rem;" id="seguro"></span> 
+				</div>
             </div>
 
             </div>

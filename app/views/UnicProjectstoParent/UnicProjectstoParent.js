@@ -15,25 +15,25 @@ function inicial() {
     deep_loading('O');
     getPackages(0);
     //console.log('PASO 1');
-    $('#txtPackageName').on('change', function () {
+    /* $('#txtPackageName').on('change', function () {
         validator_part01();
     });
     $('#txtPackagePrice').on('change', function () {
         validator_part01();
-    });
+    }); */
 
-    $('#btn_packages').on('click', function () {
+    /* $('#btn_packages').on('click', function () {
         let name = $(this).text();
         if (name == 'Aplicar') {
             packages_edit();
         } else {
             packages_apply();
         }
-    });
+    }); */
 
-    $('#btn_packages_cancel').on('click', function () {
+    /* $('#btn_packages_cancel').on('click', function () {
         active_params();
-    });
+    }); */
     } else {
         setTimeout(() => {
             inicial();
@@ -137,7 +137,7 @@ function drawProducts(str) {
     $(`.list-item`).removeClass('hide-items');
 
     var ps = $('#boxProducts').offset();
-    $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});
+    $('.list-group').css({top: ps.top + 120 + 'px', display: 'none'});
     $('.box-items-list i').removeClass('rotate');
     $('#boxProducts')
         .unbind('click')

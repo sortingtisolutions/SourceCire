@@ -13,7 +13,7 @@ class PuestosModel extends Model
 	{
 		$qry = "SELECT pos_id, pos_name, pos_description 
 				FROM ctt_position
-				WHERE pos_id>1; ";
+				WHERE pos_id>1 AND pos_status <> '0'; ";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -27,9 +27,10 @@ class PuestosModel extends Model
 
     public function GetPuesto($params)
 	{
+		$posId 	= $this->db->real_escape_string($params['pos_id']);
 		$qry = "SELECT pos_id, pos_name, pos_description 
 				FROM ctt_position
-				WHERE pos_id>1;";
+				WHERE pos_id = $posId;";
 		$result = $this->db->query($qry);
 		
 		return $result;
