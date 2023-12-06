@@ -23,14 +23,14 @@
 
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtNamModule" name="txtNamModule" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="txtNamModule" name="txtNamModule" type="text" class="form-control form-control-sm"  required>
                                     <label for="txtNamModule">Nombre del módulo</label>
                                 </div>
                                 <input id="txtIdModule" name="txtIdModule" type="hidden">
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtCode" name="txtCode" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="txtCode" name="txtCode" type="text" class="form-control form-control-sm"  required>
                                     <label for="txtCode">Código</label>
                                 </div>
                                 
@@ -38,7 +38,7 @@
                             
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtNameItems" name="txtNameItems" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="txtNameItems" name="txtNameItems" type="text" class="form-control form-control-sm"  required>
                                     <label for="txtNameItems">Nombre de los elementos</label>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
 
                             <!-- <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
+                                    <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" required>
                                     <label for="NomAlmacen">Responsable de almacen</label>
 
                                 </div>

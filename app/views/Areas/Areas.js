@@ -10,7 +10,7 @@ $(document).ready(function () {
 
 function inicial() {
     if (altr == 1) {
-        deep_loading('O');
+        
         settingTable();
         getStores();
         fillStores();
@@ -102,7 +102,7 @@ function fillStores() {
         $.each(strs, function (v, u) {
             fillTableStores(v);
         });
-        deep_loading('C');
+        
     } else {
         setTimeout(() => {
             fillStores();

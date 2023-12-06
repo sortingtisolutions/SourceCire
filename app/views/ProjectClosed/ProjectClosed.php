@@ -87,41 +87,71 @@
                         </span> 
                     </div>
                 <!-- caja de totales del reporte -->
-                <div class="totales">
-                    
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales del proyecto</div>
-                        <div class="totales__grupo-dato tope"  id="totProject" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales Mantenimiento</div>
-                        <div class="totales__grupo-dato  tope"  id="totMaintenance" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales Expendables</div>
-                        <div class="totales__grupo-dato  tope"  id="totExpendab" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Diesel Extra</div>
-                        <div class="totales__grupo-dato  tope"  id="totDiesel" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Descuento a aplicar</div>
-                        <div class="totales__grupo-dato  tope"  id="totDiscount" >0.00</div>
-                    </div>
-                    
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales</div>
-                        <div class="totales__grupo-dato tope"  id="totals" >0.00</div>
-                    </div>
+                <div class="totales" style="height: 150px;">
+                    <div class="" style="display: contents; ">
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Equipo Base</div>
+                            <div class="totales__grupo-dato  tope"  id="totBase" >0.00</div>
+                        </div>
                         
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Equipo Extra</div>
+                            <div class="totales__grupo-dato  tope"  id="totExtra" >0.00</div>
+                        </div>
+                        
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Equipo x Día</div>
+                            <div class="totales__grupo-dato  tope"  id="totDias" >0.00</div>
+                        </div>
+                        
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales de Subarrendos</div>
+                            <div class="totales__grupo-dato  tope"  id="totSubarrendo" >0.00</div>
+                        </div>
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales del proyecto</div>
+                            <div class="totales__grupo-dato tope"  id="totProject" >0.00</div>
+                        </div>
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales del proyecto con IVA</div>
+                            <div class="totales__grupo-dato tope"  id="totProjectIva" >0.00</div>
+                        </div>
+                        <div style="height:10px; width: 10% "></div><!-- Agregar un espacio -->
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Mantenimiento</div>
+                            <div class="totales__grupo-dato  tope"  id="totMaintenance" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Expendables</div>
+                            <div class="totales__grupo-dato  tope"  id="totExpendab" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Total de Diesel Extra</div>
+                            <div class="totales__grupo-dato  tope"  id="totDiesel" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Descuento a aplicar</div>
+                            <div class="totales__grupo-dato  tope"  id="totDiscount" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Monto de Prepago </div>
+                            <div class="totales__grupo-dato  tope"  id="totPrepago" >0.00</div>
+                        </div>
+                        
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Monto total a pagar</div>
+                            <div class="totales__grupo-dato tope"  id="totals" >0.00</div>
+                        </div>
+                    </div>
                 </div>
+                
+                
                 <!-- Tabla de productos del proyecto -->
-                    <div class="tabla__contenedor">
+                    <div class="tabla__contenedor" style="height: 1000px; padding: 3rem 0px 0px 0px">
                         <table  id="tblProducts">
                             <thead>
                                 <tr>
