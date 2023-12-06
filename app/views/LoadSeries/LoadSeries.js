@@ -1,7 +1,7 @@
 var table = null;
 var positionRow = 0;
 var archivo = null;
-
+let datos;
 $(document).ready(function () {
    verifica_usuario();
    inicial();
@@ -12,7 +12,7 @@ function inicial() {
     settingTable();
     getDocumentosTable(); 
     bsCustomFileInput.init();
-    GetTypeDocumento();
+    activeButtons();
 
     $("#cargaFiles").change(function () {
         archivo = this.files[0];
@@ -34,14 +34,21 @@ function inicial() {
             SaveDocumento();        
         }
     });
+    
+
+    $('#GuardarProcess').on('click', function(){   
+        loadProcess();
+    });
     //borra almacen +
-    $('#BorrarProveedor').on('click', function(){    
-        DeleteDocumentos();
-    });  
+    
 
     $('#LimpiarFormulario').on('click', function () {
       LimpiaModal();
    });
+   $('#LimpiarTabla').on('click', function () {
+        eliminarDatos();
+       
+    });
 
     $('#DocumentosTable tbody').on('click', 'tr', function () {
       positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
@@ -70,7 +77,23 @@ function validaFormulario() {
         })
     return valor;
 }
-
+function activeButtons(){
+    setTimeout(() => {
+        console.log(datos[0]);
+        if (datos[0].cin_code) {
+            $('#GuardarProcess').parent().removeClass('objHidden');
+            $('#LimpiarTabla').parent().removeClass('objHidden');
+            $('#GuardarDocumento').parent().addClass('objHidden');
+            $('#LimpiarFormulario').parent().addClass('objHidden');
+        }else{
+            $('#GuardarProcess').parent().addClass('objHidden');
+            $('#LimpiarTabla').parent().addClass('objHidden');
+            $('#GuardarDocumento').parent().removeClass('objHidden');
+            $('#LimpiarFormulario').parent().removeClass('objHidden');
+        }
+    }, 200);
+    
+}
 function settingTable() {
    let title = 'Lista de Tipos de Documentos';
    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -78,8 +101,8 @@ function settingTable() {
        order: [[1, 'asc']],
        dom: 'Blfrtip',
        lengthMenu: [
-           [50, 100, -1],
-           [50, 100, 'Todos'],
+        [500, 1000, -1],
+        [500, 1000, 'Todos'],
        ],
        buttons: [
            {
@@ -125,10 +148,10 @@ function settingTable() {
        scrollX: true,
        fixedHeader: true,
        columns: [
+        {data: 'result', class: 'result'},
         {data: 'Sku', class: 'Sku'},
         {data: 'NumeroSerie', class: 'NumeroSerie'},
         {data: 'Costo', class: 'Costo'},
-        {data: 'Situacion', class: 'Situacion'},
         {data: 'FechaRegistro', class: 'FechaRegistro'},
         {data: 'FechaBaja', class: 'FechaBaja'},
         {data: 'Marca', class: 'Marca'},
@@ -152,7 +175,7 @@ function SaveDocumento() {
    var data = new FormData();
    data.append("file",archivo);
    data.append("NomDocumento", NomDocumento);
-
+   modalLoading('S');
    if(ExtDocumento == "csv"){
         $.ajax({
             type: "POST",
@@ -168,14 +191,18 @@ function SaveDocumento() {
             getDocumentosTable();
             $('#aceptados').text(respuesta.aceptados);
             $('#rechazados').text(respuesta.rechazados);
-            if (respuesta.rechazados > 0) {
-                $('#estatus').text('Revisa que los datos introducidos coincidan con los requeridos');
-            }
-            $('#MoveFolioModal').modal('show');
+            /* if (respuesta.rechazados > 0) {
+                 $('#estatus').text('Revisa que el sku, el codigo de la moneda, el precio, el servicio y el seguro esten correctamente');
+            } */
+            
+            modalLoading('H');
+            showResults();
+           $('#MoveFolioModal').modal('show');
             $('#btnHideModal').on('click', function () {
                 $('#MoveFolioModal').modal('hide');
-
+                LimpiaModal();
             });
+            activeButtons();
         },
         error: function (EX) {console.log(EX);}
         }).done(function () {}); 
@@ -184,6 +211,37 @@ function SaveDocumento() {
     }
 } 
 
+function showResults(){
+    var pagina = 'LoadSeries/listResults';
+    var par = `[{"prod_id":""}]`;
+    var tipo = 'json';
+    var selector = put_results;
+    fillField(pagina, par, tipo, selector);
+}
+function put_results(dt) {
+    console.log(dt);
+    if (dt[0].duplicidad > 0) {
+        $('#duplicidad').text('Por duplicidad en sku: '+ dt[0].duplicidad);
+    }
+    if (dt[0].SKU > 0) {
+        
+        $('#sku').text('Por problemas con el sku: '+  dt[0].SKU);
+        
+    }
+    if (dt[0].costo > 0) {
+        $('#costo').text('Por problemas con costo: '+ dt[0].costo);
+    }
+    if (dt[0].moneda > 0) {
+        $('#moneda').text('Por problemas con moneda: '+ dt[0].moneda);
+    }
+    if (dt[0].almacen > 0) {
+        $('#almacen').text('Por problemas con almacen: '+ dt[0].almacen);
+    }
+    if (dt[0].proveedor > 0) {
+        $('#proveedor').text('Por problemas con proveedor: '+ dt[0].proveedor);
+    }
+    
+}
 
 //Limpia datos en modal  **
 function LimpiaModal() {
@@ -195,7 +253,6 @@ function LimpiaModal() {
     $('#fechaadmision').val('');
     $('#formDocumento').removeClass('was-validated');
     $('#titulo').text('Nuevo Documento');
-    GetTypeDocumento();
 }
 
 //ver Documentos
@@ -235,10 +292,45 @@ function getDocumentosTable() {
   
 }
 
+//Envia los datos almacenados a la tabla de productos *
+function loadProcess() {
+    $('#confirmarCargaModal').modal('show');
+    
+    $('#confirmLoad').on('click', function () {
+        modalLoading('S');
+        console.log('subir datos');
+        var pagina = 'LoadSeries/loadProcess';
+        var par = `[{"dot_id":""}]`;
+        var tipo = 'json';
+        var selector = putFiles;
+        fillField(pagina, par, tipo, selector); 
+        $('#confirmarCargaModal').modal('hide');
+        activeButtons();
+        setTimeout(() => {
+            modalLoading('H');
+        }, 100);
+    });
+ }
+ function eliminarDatos(){
+    $('#BorrarDocumentosModal').modal('show');
+
+    $('#BorrarProveedor').on('click', function () {
+        var pagina = 'LoadSeries/DeleteData';
+        var par = `[{"ass_id":""}]`;
+        var tipo = 'html';
+        var selector = putFiles;
+        fillField(pagina, par, tipo, selector); 
+        console.log('eliminar');
+        $('#BorrarDocumentosModal').modal('hide');
+        activeButtons();
+        
+    });
+ }
 
 function putFiles(dt) {
    console.log(dt);
    pd = dt;
+   datos = dt;
    let largo = $('#DocumentosTable tbody tr td').html();
    largo == 'Ningún dato disponible en esta tabla'
        ? $('#DocumentosTable tbody tr').remove()
@@ -247,14 +339,23 @@ function putFiles(dt) {
    
    tabla.rows().remove().draw();
    let cn = 0;
-   if(dt[0].ser_id !=0){
+   if(dt[0].ser_id > 0){
+        
        $.each(pd, function (v, u) {
+        let icon;
+            if (u.result == 'EXITOSO') {
+                icon = "fas fa-check-circle";
+                valstage='color:#008000';
+            } else {
+                icon = "fas fa-times-circle";
+                valstage='color:#CC0000';
+            }
            tabla.row
                .add({
+                   result: `<i class="${icon}" style="${valstage}"></i>`,
                    Sku: u.ser_sku,
                    NumeroSerie: u.ser_serial_number,
                    Costo: u.ser_cost,
-                   Situacion: u.ser_situation,
                    FechaRegistro: u.ser_date_registry,
 
                    FechaBaja: u.ser_date_down,
@@ -274,26 +375,16 @@ function putFiles(dt) {
        });
    }
 }
-// Optiene los tipos de documentos
-function GetTypeDocumento(id) {
-    $('#selectRowTipoDocumento').html("");
-    var location = 'LoadSeries/GetTypeDocumento';
-    $.ajax({
-       type: 'POST',
-       dataType: 'JSON',
-       data: {id: id},
-       url: location,
-       success: function (respuesta) {
-          var renglon = "<option id='0'  value=''>Seleccione...</option> ";
-          respuesta.forEach(function (row, index) {
-             renglon += '<option id=' + row.dot_id + '  value="' + row.dot_id + '">' + row.dot_name + '</option> ';
-          });
-          $('#selectRowTipoDocumento').append(renglon);
-          if (id != undefined) {
-             $("#selectRowTipoDocumento option[value='" + id + "']").attr('selected', 'selected');
-          }
-       },
-       error: function () {},
-    }).done(function () {});
- }
 
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    }
+}
