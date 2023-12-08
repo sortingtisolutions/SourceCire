@@ -366,9 +366,9 @@ function deleteStore(strId) {
   
         $('#confirmModal').modal('show');
 
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la moneda?');
+        $('#confirmModalLevel').html('¿Seguro que desea borrar la Almacen y Unidad Móvil?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#confirmButton').html('Borrar').css({display: 'inline'});
         $('#Id').val(strId);
 
         //   $('#BorrarAlmacenModal').modal('show');

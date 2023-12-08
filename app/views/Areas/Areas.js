@@ -259,7 +259,7 @@ function deleteStore(strId) {
 
         $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#confirmButton').html('Borrar area').css({display: 'inline'});
         $('#Id').val(strId);
 
         

@@ -178,7 +178,7 @@ public function SaveDocumento($request_params)
 		SUM(case when ldp.result LIKE '% moneda,%' then 1 ELSE 0 END) moneda,
 		SUM(case when ldp.result LIKE '% costo,%' then 1 ELSE 0 END) costo,
 		SUM(case when ldp.result LIKE '% servicio,%' then 1 ELSE 0 END) servicio,
-		SUM(case when ldp.result LIKE '% seguro%' then 1 ELSE 0 END) seguro
+		SUM(case when ldp.result LIKE '% seguro%' then 1 ELSE 0 END) seguro, 1 as results
 		FROM ctt_load_products AS ldp";
 		return $this->db->query($qry);
 	}

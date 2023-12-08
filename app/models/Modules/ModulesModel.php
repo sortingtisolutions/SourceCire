@@ -26,7 +26,8 @@ class ModulesModel extends Model
 				VALUES ('1','$mod_id')";
 				
 		$this->db->query($qry);	
-		$mod_id = $this->db->insert_id;
+		$usm_id = $this->db->insert_id;
+
 		return $mod_id;
 
 	}

@@ -99,9 +99,9 @@
             <div class="row rowTop">
                         <h1>PROYECTOS </h1>
                         
-                        <select id="txtCategoryList" class="topList">
+                        <!-- <select id="txtCategoryList" class="topList">
                             <option value="0">SELECCIONA CATÁLOGO</option>
-                        </select>
+                        </select> -->
                         
                     </div>
                 <div class="double-column">

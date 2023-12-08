@@ -43,7 +43,7 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-       
+        
         getProjects();
         widthTable(tblprod);
         listChgStatus();
@@ -200,7 +200,8 @@ function putProjects(dt) {
     $('#txtExpendab').val('0.00');
 
     pjs.unbind('change').on('change', function () {
-        deep_loading('P');
+        deep_loading('O');
+        
         // console.log('VAL-', $(this).val());
         let pjtId = $(this).val().split('|')[0];
         let cusId = $(this).val().split('|')[1];
@@ -212,6 +213,7 @@ function putProjects(dt) {
         activeProjectsFunctions(pjtId);
 
     });
+    
 }
 
 function activeProjectsFunctions(pjtId) {
@@ -246,6 +248,7 @@ function activeProjectsFunctions(pjtId) {
 
 function activaCampos(pjtId, type) {
     $('.list-finder').removeClass('hide-items');
+    
     getProjectContent(pjtId, type);
 }
 

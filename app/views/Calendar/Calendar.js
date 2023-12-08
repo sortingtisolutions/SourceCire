@@ -6,15 +6,31 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendarPrueba');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        headerToolbar: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'dayGridWeek,dayGridDay' 
+        }
+    });
+    calendar.prev();
+    calendar.next();
+    calendar.render();
+    });
 
 function inicial() {
     if (altr == 1) {
-        deep_loading('O');
-        settingTable();
+        
+        /* settingTable();
         getStores();
         fillStores();
-        confirm_alert();
+        confirm_alert(); */
+        
+          
     } else {
         setTimeout(() => {
             inicial();
@@ -24,14 +40,14 @@ function inicial() {
 
 //CONFIGURACION DE DATATABLE
 function settingTable() {
-    let title = 'Lista de Modulos Operativos en la Empresa';
+    let title = 'Lista de Areas Operativas de la Empresa';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    $('#ModulesTable').DataTable({
+    $('#AreasTable').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
+            [50, 100, -1],
+            [50, 100, 'Todos'],
         ],
         buttons: [
             {
@@ -78,18 +94,16 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
-            {data: 'modCode', class: 'module-code'},
-            {data: 'modName', class: 'module-name'},
-            {data: 'modItem', class: 'module-item'},
-            {data: 'modDescription', class: 'module-description'},
+            {data: 'storesid', class: 'strid bold'},
+            {data: 'storname', class: 'store-name'},
         ],
     });
 }
 
 // Solicita los productos de un almacen seleccionado
 function getStores() {
-    var pagina = 'Modules/GetModules';
-    var par = `[{"mod_id":""}]`;
+    var pagina = 'Areas/GetAreas';
+    var par = `[{"are_id":""}]`;
     var tipo = 'json';
     var selector = putStores;
     fillField(pagina, par, tipo, selector);
@@ -100,11 +114,11 @@ function putStores(dt) {
 }
 function fillStores() {
     if (strs != null) {
-        let tabla = $('#ModulesTable').DataTable();
+        let tabla = $('#AreasTable').DataTable();
         $.each(strs, function (v, u) {
             fillTableStores(v);
         });
-        deep_loading('C');
+        
     } else {
         setTimeout(() => {
             fillStores();
@@ -136,7 +150,7 @@ function actionButtons() {
         .on('click', function () {
             let strId = $(this).parents('tr').attr('id');
             let quant = $(this).html();
-            let ctnme = $(this).parents('tr').children('td.module-name').html();
+            let ctnme = $(this).parents('tr').children('td.store-name').html();
             strnme = ctnme;
             // console.log(strId, quant, ctnme);
             if (quant > 0) {
@@ -149,7 +163,7 @@ function actionButtons() {
         .unbind('click')
         .on('click', function () {
             if (validaFormulario() == 1) {
-                if ($('#txtIdModule').val() == '') {
+                if ($('#IdAlmacen').val() == '') {
                     saveStore();
                 } else {
                     updateStore();
@@ -160,46 +174,39 @@ function actionButtons() {
     $('#LimpiarFormulario')
         .unbind('click')
         .on('click', function () {
-            $('#txtNamModule').val('');
-            $('#txtIdModule').val('');
-            $('#txtCode').val('');
-            $('#txtNameItems').val('');
-            $('#txtDescription').val('');
+            $('#NomAlmacen').val('');
+            $('#IdAlmacen').val('');
+            $('#selectTipoAlmacen option[value="0"]').attr('selected', true);
+            $('#selectRowEncargado').val('');
         });
 }
 
 function fillTableStores(ix) {
-    let tabla = $('#ModulesTable').DataTable();
+    let tabla = $('#AreasTable').DataTable();
+    // console.log(strs.length);
     tabla.row
         .add({
-            editable: `<i class="fas fa-pen modif" id ="mod${strs[ix].mod_id}"></i><i class="fas fa-times-circle kill"></i>`,
-            modCode: strs[ix].mod_code,
-            modName: strs[ix].mod_name,
-            modItem: strs[ix].mod_item,
-            modDescription: strs[ix].mod_description,
+            editable: `<i class="fas fa-pen modif" id ="md${strs[ix].are_id}"></i><i class="fas fa-times-circle kill"></i>`,
+            storesid: strs[ix].are_id,
+            storname: strs[ix].are_name,
         })
         .draw();
-    $('#mod' + strs[ix].mod_id)
+    $('#md' + strs[ix].are_id)
         .parents('tr')
-        .attr('id', strs[ix].mod_id);
+        .attr('id', strs[ix].are_id);
     actionButtons();
 }
 
 function saveStore() {
-    var txtNamModule = $('#txtNamModule').val();
-    var txtCode = $('#txtCode').val();
-    var txtNameItems = $('#txtNameItems').val();
-    var txtDescription = $('#txtDescription').val();
-   // var strtype = $('#selectTipoAlmacen').val();
+    var strName = $('#NomAlmacen').val();
+    var strtype = $('#selectTipoAlmacen').val();
     var par = `
-        [{  "mod_name"   : "${txtNamModule}",
-            "mod_code"   : "${txtCode}",
-            "mod_item"   : "${txtNameItems}",
-            "mod_description"   : "${txtDescription}"
+        [{  "are_name"   : "${strName}",
+            "are_status"   : "${strtype}"
         }]`;
 
     strs = '';
-    var pagina = 'Modules/SaveModule';
+    var pagina = 'Areas/SaveArea';
     var tipo = 'html';
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
@@ -218,22 +225,17 @@ function putSaveStore(dt) {
 }
 
 function updateStore() {
-    
-    var txtIdModule = $('#txtIdModule').val();
-    var txtNamModule = $('#txtNamModule').val();
-    var txtCode = $('#txtCode').val();
-    var txtNameItems = $('#txtNameItems').val();
-    var txtDescription = $('#txtDescription').val();
+    var strId = $('#IdAlmacen').val();
+    var strName = $('#NomAlmacen').val();
+    var strType = $('#selectTipoAlmacen option:selected').val();
     var par = `
-        [{  "mod_id"        : "${txtIdModule}",
-            "mod_name"      : "${txtNamModule}",
-            "mod_code"      : "${txtCode}",
-            "mod_item"      : "${txtNameItems}",
-            "mod_description"      : "${txtDescription}"
+        [{  "are_id"        : "${strId}",
+            "are_name"      : "${strName}",
+            "are_status"      : "${strType}"
         }]`;
 
     strs = '';
-    var pagina = 'Modules/UpdateModule';
+    var pagina = 'Areas/UpdateArea';
     var tipo = 'html';
     var selector = putUpdateStore;
     fillField(pagina, par, tipo, selector);
@@ -241,12 +243,11 @@ function updateStore() {
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
+        console.log(dt);
         let ix = goThroughStore(dt);
 
-        $(`#${strs[ix].mod_id}`).children('td.module-name').html(strs[ix].mod_name);
-        $(`#${strs[ix].mod_id}`).children('td.module-code').html(strs[ix].mod_code);
-        $(`#${strs[ix].mod_id}`).children('td.module-item').html(strs[ix].mod_item);
-        $(`#${strs[ix].mod_id}`).children('td.module-description').html(strs[ix].mod_description);
+        $(`#${strs[ix].are_id}`).children('td.store-name').html(strs[ix].are_name);
+        $(`#${strs[ix].are_id}`).children('td.store-type').html(strs[ix].are_status);
 
         //putQuantity(strs[ix].are_id);
         $('#LimpiarFormulario').trigger('click');
@@ -260,31 +261,29 @@ function putUpdateStore(dt) {
 function editStore(strId) {
     console.log('Editando');
     let ix = goThroughStore(strId);
-    $('#txtNamModule').val(strs[ix].mod_name);
-    $('#txtIdModule').val(strs[ix].mod_id);
-    $('#txtCode').val(strs[ix].mod_code);
-    $('#txtNameItems').val(strs[ix].mod_item);
-    $('#txtDescription').val(strs[ix].mod_description);
-    
+    $('#NomAlmacen').val(strs[ix].are_name);
+    $('#IdAlmacen').val(strs[ix].are_id);
+    $('#selectTipoAlmacen').val(strs[ix].are_status);
 }
 
 function deleteStore(strId) {
+    console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
     
         $('#confirmModal').modal('show');
 
-        $('#confirmModalLevel').html('¿Seguro que desea borrar el Module?');
+        $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar modulo').css({display: 'inline'});
+        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
         $('#Id').val(strId);
 
         
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
-            var pagina = 'Modules/DeleteModule';
-            var par = `[{"mod_id":"${strId}"}]`;
+            var pagina = 'Areas/DeleteArea';
+            var par = `[{"are_id":"${strId}"}]`;
             var tipo = 'html';
             var selector = putDeleteStore;
             fillField(pagina, par, tipo, selector);
@@ -294,7 +293,7 @@ function deleteStore(strId) {
 
 function putDeleteStore(dt) {
     getStores();
-    let tabla = $('#ModulesTable').DataTable();
+    let tabla = $('#AreasTable').DataTable();
     tabla
         .row($(`#${dt}`))
         .remove()
@@ -305,7 +304,7 @@ function putDeleteStore(dt) {
 function goThroughStore(strId) {
     let inx = -1;
     $.each(strs, function (v, u) {
-        if (strId == u.mod_id) inx = v;
+        if (strId == u.are_id) inx = v;
     });
     return inx;
 }
@@ -322,3 +321,6 @@ function validaFormulario() {
     });
     return valor;
 }
+
+
+/// CALENDARIO ///
