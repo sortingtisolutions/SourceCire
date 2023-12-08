@@ -260,9 +260,9 @@ function deleteStore(strId) {
 
         $('#confirmModal').modal('show');
 
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la moneda?');
+        $('#confirmModalLevel').html('¿Seguro que desea borrar el tipo de proyecto?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#confirmButton').html('Borrar tipo de proyecto').css({display: 'inline'});
         $('#Id').val(strId);
 
         //   $('#BorrarAlmacenModal').modal('show');

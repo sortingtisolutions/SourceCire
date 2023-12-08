@@ -72,8 +72,7 @@ function inicial() {
 
 function activeButtons(){
     setTimeout(() => {
-        console.log(datos[0]);
-        if (datos[0].cin_code) {
+        if (datos[0].prd_id) {
             $('#GuardarProcess').parent().removeClass('objHidden');
             $('#LimpiarTabla').parent().removeClass('objHidden');
             $('#GuardarDocumento').parent().addClass('objHidden');
@@ -234,29 +233,28 @@ function showResults(){
 }
 /**  ++++    */
 function put_results(dt) {
-    console.log(dt);
-    
-    if (dt[0].SKU > 0) {
-        if (dt[0].duplicidad > 0) {
-            $('#duplicidad').text('Por duplicidad en sku: '+ dt[0].duplicidad);
-        }else{
-            $('#sku').text('Por problemas con el sku: '+  dt[0].SKU);
+    if (dt[0].results > 0) {
+        if (dt[0].SKU > 0) {
+            if (dt[0].duplicidad > 0) {
+                $('#duplicidad').text('Por duplicidad en sku: '+ dt[0].duplicidad);
+            }else{
+                $('#sku').text('Por problemas con el sku: '+  dt[0].SKU);
+            }
+            
         }
-        
+        if (dt[0].moneda > 0) {
+            $('#moneda').text('Por problemas con moneda: '+ dt[0].moneda);
+        }
+        if (dt[0].costo > 0) {
+            $('#costo').text('Por problemas con costo: '+ dt[0].costo);
+        }
+        if (dt[0].servicio > 0) {
+            $('#servicio').text('Por problemas con servicio: '+ dt[0].servicio);
+        }
+        if (dt[0].seguro > 0) {
+            $('#seguro').text('Por problemas con seguro: '+ dt[0].seguro);
+        }
     }
-    if (dt[0].moneda > 0) {
-        $('#moneda').text('Por problemas con moneda: '+ dt[0].moneda);
-    }
-    if (dt[0].costo > 0) {
-        $('#costo').text('Por problemas con costo: '+ dt[0].costo);
-    }
-    if (dt[0].servicio > 0) {
-        $('#servicio').text('Por problemas con servicio: '+ dt[0].servicio);
-    }
-    if (dt[0].seguro > 0) {
-        $('#seguro').text('Por problemas con seguro: '+ dt[0].seguro);
-    }
-    
 }
 
 function UnSelectRowTable() {

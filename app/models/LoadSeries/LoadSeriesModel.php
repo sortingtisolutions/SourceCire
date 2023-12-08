@@ -236,7 +236,7 @@ public function SaveDocumento($request_params)
 		SUM(case when ldp.result LIKE '% costo,%' then 1 ELSE 0 END) costo,
 		SUM(case when ldp.result LIKE '% moneda,%' then 1 ELSE 0 END) moneda,
 		SUM(case when ldp.result LIKE '% almacen%' then 1 ELSE 0 END) almacen,
-		SUM(case when ldp.result LIKE '% proveedor%' then 1 ELSE 0 END) proveedor
+		SUM(case when ldp.result LIKE '% proveedor%' then 1 ELSE 0 END) proveedor, 1 as results
 		FROM ctt_load_series AS ldp";
 		return $this->db->query($qry);
 	}

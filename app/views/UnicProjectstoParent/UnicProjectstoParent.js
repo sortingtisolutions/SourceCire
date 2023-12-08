@@ -123,6 +123,7 @@ function getProducts() {
     fillField(pagina, par, tipo, selector);
 }
 function putProducts(dt) {
+    $('#listProducts').html('');
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">
                     ${u.pjt_number} - ${u.pjt_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
@@ -143,7 +144,6 @@ function drawProducts(str) {
         .unbind('click')
         .on('click', function () {
             $('.list-group').slideToggle('slow');
-            console.log('Click lista');
             $('.box-items-list i').toggleClass('rotate');
         });
 
@@ -153,6 +153,7 @@ function drawProducts(str) {
             let id = $(this).parents('.list-item');
             //console.log(id);
             product_apply(id);
+            getProducts();
         });
 }
 
@@ -216,7 +217,6 @@ function fill_table_packs(par) {
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblPackages tbody tr').remove() : '';
 
     pr = JSON.parse(par);
-
     var pagina = 'UnicProjectstoParent/savePack';
     var par = par;
     var tipo = 'html';
@@ -384,4 +384,5 @@ function confirm_delet_product(id) {
 
 function putDelPackages(dt) {
     $('#delPackModal').modal('hide');
+    getProducts();
 }

@@ -150,7 +150,8 @@ public function listProjectsTypeCalled($params)
     
         $user = $group[0];
         $name = $group[2];
-        $qry3 = "UPDATE ctt_projects SET pjt_status = 5 where pjt_parent = $pjtid";
+        
+        $qry3 = "UPDATE ctt_projects SET pjt_status = 5 where pjt_parent = $pjtid AND pjt_status > 3";
         $this->db->query($qry3);
 
         /* $qry = "UPDATE ctt_projects SET pjt_status = 5 where pjt_id = $pjtid";

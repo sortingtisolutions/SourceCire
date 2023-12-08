@@ -109,13 +109,14 @@ function putProjects(dt) {
     
     if (dt[0].pjt_id != '0') {
         $('#tblProyects tbody').html('');
-                
+        console.log(dt[0].pjt_status);
         $.each(dt, function (v, u) {
+           
             if (u.pjt_status == 8)
-            { valstage='#CC0000';
+            { valstage='color: #CC0000';
               valicon='fa fa-cog toWork'; }
             else 
-             { valstage='#FFA500';
+             { valstage='color: #FFA500';
              valicon='fa fa-solid fa-edit detail'; }
             console.log(valstage, valicon);
             var H = `

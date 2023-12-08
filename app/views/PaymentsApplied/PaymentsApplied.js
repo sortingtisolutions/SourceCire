@@ -45,6 +45,7 @@ function settingTable() {
     let title = 'Lista de Formas de Pago';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblPymApplied').DataTable({
+        bDestroy: true,
         order: [
             [1, 'asc'],
         ],
@@ -110,7 +111,7 @@ function settingTable() {
 
 function putlistProjects(dt) {
     console.log(dt);
-
+    $('#lstProjects').html('');
     $.each(dt, function (v, u) {
         var H = `<option value="${u.pjt_id}">${u.pjt_id} - ${u.pjt_name}</option>`;
         $('#lstProjects').append(H);
@@ -131,7 +132,7 @@ function putPayments(dt) {
     console.log('1',dt);
     $('#tblPymApplied tbody').html('');
     var prds=dt;
-    if (prds[0].pym_id != '0') {
+    if (prds[0].pym_id > 0) {
         $.each(prds, function (v, u) {
         
                 var H = `

@@ -68,7 +68,7 @@ class ProjectClosedModel extends Model
                             (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                             (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
                             cn.ver_id as verId,
-                            case when (pr.prd_level = 'P' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * pr.prd_price) * cn.pjtcn_quantity) *  cn.pjtcn_days_cost
+                            case when (pr.prd_level = 'P' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
                                 ELSE 0 END AS seguro
                         FROM ctt_projects_detail AS dt
                         INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
@@ -105,7 +105,7 @@ class ProjectClosedModel extends Model
                     (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                     (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
                     cn.ver_id as verId,
-                    ( (cn.pjtcn_insured * cn.pjtcn_prod_price) * cn.pjtcn_quantity)*  cn.pjtcn_days_cost AS seguro
+                    ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro
                 FROM ctt_projects_detail AS dt
                 INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
                 INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
@@ -121,7 +121,7 @@ class ProjectClosedModel extends Model
                     (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                     (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
                     cn.ver_id as verId,
-                    (( (cn.pjtcn_insured * cn.pjtcn_prod_price) * cn.pjtcn_quantity) *  cn.pjtcn_days_cost)   AS seguro
+                    (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro
                 FROM ctt_projects_detail AS dt
                 INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
                 INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id

@@ -40,6 +40,7 @@ function settingTable() {
     let title = 'Lista de Formas de Pago';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblSubcategory').DataTable({
+        bDestroy: true,
         order: [
             [1, 'asc'],
         ],
@@ -103,13 +104,13 @@ function putSubcategories(dt) {
     console.log('1',dt);
     $('#tblSubcategory tbody').html('');
     var prds=dt;
-    if (prds[0].wtp_id != '0') {
+    if (prds[0].pclt_id > 0) {
         
         // var catId = prds[0].wtp_id;
         $.each(prds, function (v, u) {
             // if (u.wtp_id != '') {
                 var H = `
-                <tr id="${u.wtp_id}">
+                <tr id="${u.pclt_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
                     <td class="sku" data-content="${u.pclt_porcent}">${u.pclt_porcent}</td>
                     <td class="supply">${u.pjt_name}</td>
@@ -138,10 +139,10 @@ function activeIcons() {
             if (ValidForm() == 1) {
                 if ($('#txtIdSubcategory').val() == '') {
                     //console.log('Save');
-                    // saveSubcategory();
+                    saveSubcategory();
                 } else {
                     //console.log('Update');
-                    // updateSubcategory();
+                    updateSubcategory();
                 }
             }
         });

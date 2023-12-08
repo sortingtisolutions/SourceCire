@@ -23,7 +23,8 @@ function inicial() {
     n = user[2];
     em = user[3];
     // Boton para registrar la salida del proyecto y los productos
-    $('#recordChgUser').on('click', function () {
+    $('#recordChgUser').unbind('click').on('click', function () {
+        
         printOutPut(prjid);
      });
 
@@ -234,6 +235,7 @@ function activeIcons() {
             let pjtid = id.attr('id');
             let pjtnm = id.children('td.pjtname').text();
             gblprjid=pjtid;
+            console.log(prjid);
             // console.log('Cont-Producto', pjtid,pjtnm);
             if (pjtid > 0) {
                 //getUsersOnProject(pjtid);

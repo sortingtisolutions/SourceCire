@@ -49,7 +49,7 @@ public function listPackages($params)
 public function listProducts()
 {
     $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end, pj.pjt_parent
-    FROM ctt_projects as pj WHERE pj.pjt_parent = 0;";
+    FROM ctt_projects as pj WHERE pj.pjt_parent = 0 AND pj.pjt_status NOT IN(40);";
     return $this->db->query($qry);
 }
 
@@ -58,7 +58,7 @@ public function listProductsPack($params)
 {
     $prjId = $this->db->real_escape_string($params['prjId']);
     $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end, pj.pjt_parent
-    FROM ctt_projects as pj WHERE pj.pjt_parent = $prjId;";
+    FROM ctt_projects as pj WHERE pj.pjt_parent = $prjId ;";
     return $this->db->query($qry);
 }
 
