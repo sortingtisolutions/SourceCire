@@ -48,6 +48,22 @@
 			echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 
+		public function listResults($request_params)
+		{
+			$params =  $this->session->get('user');
+			$result = $this->model->listResults($request_params);
+			$i = 0;
+			while($row = $result->fetch_assoc()){
+				$rowdata[$i] = $row;
+				$i++;
+			}
+			if ($i>0){
+				$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+			} else {
+				$res =  '[{"pjt_id":"0"}]';	
+			}
+			echo $res;
+		} 
 		public function GetDocumentos($request_params)
 		{
 			$result = $this->model->GetDocumentos($request_params);
@@ -63,28 +79,20 @@
 			  }
 			  echo $res;
 		}
-		public function GetDocumentosFicha($request_params)
+		public function loadProcess($request_params)
 		{
-	      $result = $this->model->GetDocumentosFicha($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
+			$params =  $this->session->get('user');
+            $result = $this->model->loadProcess($request_params);
+			$res =  '[{"prd_id":"0"}]';
+			echo $res;
 		}
 
-		public function DeleteDocumentos($request_params)
+		public function DeleteData($request_params)
 		{
-		  $result = $this->model->DeleteDocumentos($request_params);	  
-		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
-		}
-
-		public function verDocumento($request_params)
-		{
-		  $result = $this->model->verDocumento($request_params);	
-		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
-		}
-
-		public function GetTypeDocumento($request_params)
-		{
-		  $result = $this->model->GetTypeDocumento($request_params);	
-		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
+			$params =  $this->session->get('user');
+            $result = $this->model->DeleteData($request_params);
+			$res =  '[{"prd_id":"0"}]';
+			echo $res;
 		}
 
 	}

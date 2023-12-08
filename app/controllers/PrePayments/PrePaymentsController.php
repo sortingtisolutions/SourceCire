@@ -95,6 +95,23 @@ class PrePaymentsController extends Controller
 		echo $res;
 	}
 
+    // Lista las clientes
+	public function getCustomersProj($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->getCustomersProj($request_params);
+		$i = 0;
+		while($row = $result->fetch_assoc()){
+			$rowdata[$i] = $row;
+			$i++;
+		}
+		if ($i>0){
+			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		} else {
+			$res =  '[{"cat_id":"0"}]';	
+		}
+		echo $res;
+	}
     
     public function listChangeReasons($request_params)
     {
@@ -148,6 +165,23 @@ class PrePaymentsController extends Controller
         }
         echo $res;
     } 	 
+// Lista los monedas
+public function listDataProyects($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listDataProyects($request_params);
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"prp_id":"0"}]';	
+    }
+    echo $res;
+} 	 
 
 // Lista los monedas
     public function listStores($request_params)
@@ -173,7 +207,6 @@ class PrePaymentsController extends Controller
         $params =  $this->session->get('user');
         $result = $this->model->addSerie($request_params);
         echo $result;
-        
     } 	
 
 
@@ -248,4 +281,14 @@ class PrePaymentsController extends Controller
             
         echo $result;
     }
+
+    public function insertPayAplied($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->insertPayAplied($request_params, $params);
+        $res = $result;
+        // $pjtId  = $this->model->PromoteProject($request_params);
+
+        echo $res;
+    } 
 }
