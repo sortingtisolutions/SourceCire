@@ -90,6 +90,15 @@ function getDataProyects(prpid) {
     var selector = putDataProyects;
     fillField(pagina, par, tipo, selector);
 }
+
+function getCustomersProj(pjtId) {
+    // console.log(pj);
+    var pagina = 'PrePayments/getCustomersProj';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putCustomersProj;
+    fillField(pagina, par, tipo, selector);
+}
 /////////////////////
 ///
 ////////////////////
@@ -186,13 +195,14 @@ function put_Proyectos(dt) {
         $('#txtProject').append(H);
     });
     $('#txtProject').on('change', function () {
-        let px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        let idpjy = $(this).val();
+        $('#txtCustomer').val(0);
+        // let px = parseInt($('#txtProject option:selected').attr('data_indx'));
+        let pjtId = $(this).val();
         $('#txtIdProject').val($(this).val());
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
         $('.objet').addClass('objHidden');
         // getRegisters($(this).val(), em);
-        console.log('Chg-Proy',px, idpjy) ;
+        getCustomersProj(pjtId);
+        console.log('Chg-Proy', pjtId) ;
     });
 }
 
@@ -202,10 +212,17 @@ function putCustomers(dt) {
         let H = `<option data_indx="${v}" value="${u.cus_id}">${u.cus_name}</option>`;
         $('#txtCustomer').append(H);
     });
+
     $('#txtCustomer').on('change', function () {
         px = parseInt($('#txtCustomer option:selected').attr('data_indx'));
         console.log('Chg-Cust',px);
     }); 
+}
+
+function putCustomersProj(dt) {
+    console.log(dt);
+    $("#txtCustomer option[value='" + dt[0].cus_id + "']").attr('selected', 'selected');
+
 }
 
 function putTypeMov(dt) {
@@ -281,7 +298,7 @@ function putRegisters(dt) {
 function putDataProyects(dt) {
     // console.log(dt);
     settingTableSeg();
-    putSegments(dt);
+    putBasesVal(dt);
 }
 
 
@@ -382,21 +399,27 @@ function activeIcons() {
     $('#btn_applyAmount')
         .unbind('click')
         .on('click', function (){
-        console.log('Aplica Monto',glbdata);
-        // let prp_id = $(this).attr('id');
+        // console.log('Aplica Monto',glbdata);
+
+        let prpId = $(this).attr('id');
+        let montoasig = $('#txtMontoAsig').val();
         let referen = glbdata.split('|')[0];
-        let DateStart = glbdata.split('|')[2];
         let montopayed =glbdata.split('|')[1];
+        let DateStart = glbdata.split('|')[2];
         let pjtId = glbdata.split('|')[3];
         let wayPay = glbdata.split('|')[4];
         let foldoc = 0;
+        let montodiff = montopayed - montoasig;
         // let projPeriod = moment(Date()).format('DD/MM/YYYY');
         // DateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
         
         let par = `
-        [{  "referen"       : "${referen}",
+        [{  "prpId"          : "${prpId}"
+            "referen"       : "${referen}",
             "DateStart"     :"${DateStart}",
             "montopayed"     : "${montopayed}",
+            "montoasig"     : "${montoasig}",
+            "montodiff"     : "${montodiff}",
             "foldoc"         : "${foldoc}",
             "pjtId"          : "${pjtId}",
             "wayPay"         : "${wayPay}",
@@ -417,7 +440,7 @@ function putToWork(dt){
     // $('#addAsigModal .btn_close').trigger('click');
 }
 
-function putSegments(dt){ 
+function putBasesVal(dt){ 
 
     let tabla = $('#listTable').DataTable();
     // $('.overlay_closer .title').html(`Catalogo - ${catnme}`); ${mkn(u.ctl_amount_payable,'n')}
@@ -737,7 +760,7 @@ function fillContent() {
 //     //     .unbind('click')
 //     //     .on('click', function () {
 //     //         console.log('Agregar a TBL');
-//     //         // putSegments();
+//     //         // putBasesVal();
 //     //     });
 
 //     $('#btn_applyAmount')
@@ -766,7 +789,7 @@ function fillContent() {
 //     });
 // }
 
-// function putSegments(dt){ 
+// function putBasesVal(dt){ 
 
 //     let tabla = $('#listTable').DataTable();
 //     // $('.overlay_closer .title').html(`Catalogo - ${catnme}`);
