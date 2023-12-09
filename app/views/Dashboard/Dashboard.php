@@ -11,7 +11,7 @@
         
         <script type="text/javascript">
             function redirect() {
-                let newpath="<?= FOLDER_DASH_PATH ?> . /Dashboard ";
+                let newpath="<?= FOLDER_DASH_PATH ?>";
                 window.location.href = newpath;
             }
             window.onload = redirect;

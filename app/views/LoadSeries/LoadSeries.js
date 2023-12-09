@@ -79,7 +79,7 @@ function validaFormulario() {
 }
 function activeButtons(){
     setTimeout(() => {
-        if (datos[0].ser_id) {
+        if (datos[0].prd_id) {
             $('#GuardarProcess').parent().removeClass('objHidden');
             $('#LimpiarTabla').parent().removeClass('objHidden');
             $('#GuardarDocumento').parent().addClass('objHidden');
