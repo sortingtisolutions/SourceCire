@@ -10,7 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <script type="text/javascript">
             function redirect() {
-                let newpath="<?= FOLDER_DASH_PATH ?>";
+                let newpath="<?= FOLDER_DASH_PATH ?> . /DashboardFull";
                 window.location.href = newpath;
             }
         window.onload = redirect;

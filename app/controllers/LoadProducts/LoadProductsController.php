@@ -1,16 +1,16 @@
 <?php
 	defined('BASEPATH') or exit('No se permite acceso directo');
-	require_once ROOT . FOLDER_PATH . '/app/models/FilesCsv/FilesCsvModel.php';
+	require_once ROOT . FOLDER_PATH . '/app/models/LoadProducts/LoadProductsModel.php';
 	require_once LIBS_ROUTE . 'Session.php';
 
-	class FilesCsvController extends Controller
+	class LoadProductsController extends Controller
 	{
 		private $session;
 		public $model;
 
 		public function __construct()
 		{
-			$this->model = new FilesCsvModel();
+			$this->model = new LoadProductsModel();
 			$this->session= new Session();
 			$this->session->init();
 			if($this->session->getStatus()===1 || empty($this->session->get('user')))

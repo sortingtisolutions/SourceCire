@@ -172,7 +172,7 @@ function settingTable() {
 
 //Guardar Almacen **
 function SaveDocumento() {
-   var location = "FilesCsv/SaveDocumento";
+   var location = "LoadProducts/SaveDocumento";
    var idDocumentos = $('#IdDocumentNew').val();
    var NomDocumento = $('#NomDocumento').val();
    var ExtDocumento = $('#ExtDocumento').val();
@@ -225,7 +225,7 @@ function SaveDocumento() {
    }
 } 
 function showResults(){
-    var pagina = 'FilesCSV/listResults';
+    var pagina = 'LoadProducts/listResults';
     var par = `[{"prod_id":""}]`;
     var tipo = 'json';
     var selector = put_results;
@@ -277,7 +277,7 @@ function LimpiaModal() {
 
 //obtiene la informacion de tabla documentos *
 function getDocumentosTable() {
-   var pagina = 'FilesCsv/GetDocumentos';
+   var pagina = 'LoadProducts/GetDocumentos';
    var par = `[{"dot_id":""}]`;
    var tipo = 'json';
    var selector = putFiles;
@@ -289,7 +289,7 @@ function loadProcess() {
     $('#confirmLoad').on('click', function () {
         console.log('subir datos');
         modalLoading('S');
-        var pagina = 'FilesCsv/loadProcess';
+        var pagina = 'LoadProducts/loadProcess';
         var par = `[{"dot_id":""}]`;
         var tipo = 'json';
         var selector = putFiles;
@@ -306,7 +306,7 @@ function loadProcess() {
     $('#BorrarDocumentosModal').modal('show');
 
     $('#BorrarProveedor').on('click', function () {
-        var pagina = 'FilesCsv/DeleteData';
+        var pagina = 'LoadProducts/DeleteData';
         var par = `[{"ass_id":""}]`;
         var tipo = 'html';
         var selector = putFiles;

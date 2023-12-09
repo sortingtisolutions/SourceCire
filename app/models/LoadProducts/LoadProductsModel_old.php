@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
 
-class FilesCsvModel extends Model
+class LoadProductsModel extends Model
 {
 	public function __construct()
 	{
@@ -25,17 +25,17 @@ public function SaveDocumento($request_params)
 				$cont = 0;
 				$aux = 0;
 				$csv_file = fopen($_FILES['file']['tmp_name'], 'r');
-				while(($filesCsv = fgetcsv($csv_file)) !== FALSE){
-					/* if (strlen($filesCsv[0]) <= 10 && strlen($filesCsv[0]) >= 7 && strlen($filesCsv[7]) == 3 && is_numeric($filesCsv[6]) && is_numeric($filesCsv[8]) && is_numeric($filesCsv[9]) && ($filesCsv[8] == '0' || $filesCsv[8] == '1')) {
+				while(($LoadProducts = fgetcsv($csv_file)) !== FALSE){
+					/* if (strlen($LoadProducts[0]) <= 10 && strlen($LoadProducts[0]) >= 7 && strlen($LoadProducts[7]) == 3 && is_numeric($LoadProducts[6]) && is_numeric($LoadProducts[8]) && is_numeric($LoadProducts[9]) && ($LoadProducts[8] == '0' || $LoadProducts[8] == '1')) {
 						
 						$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct 
 							INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
-							where ct.cat_id = SUBSTR('$filesCsv[0]',1,2) AND sb.sbc_code = SUBSTR('$filesCsv[0]',3,2)";
+							where ct.cat_id = SUBSTR('$LoadProducts[0]',1,2) AND sb.sbc_code = SUBSTR('$LoadProducts[0]',3,2)";
 						$res = $this->db->query($qry1);
 						$rs = $res->fetch_object();
 						$acept = $rs->cant;
 
-						$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$filesCsv[7]' UNION SELECT 0 LIMIT 1";
+						$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$LoadProducts[7]' UNION SELECT 0 LIMIT 1";
 						$rest = $this->db->query($qry2);
 						$rst = $rest->fetch_object();
 						$coin = $rst->cin_id;
@@ -43,10 +43,10 @@ public function SaveDocumento($request_params)
 
 						if($acept > 0 && $coin>0){
 							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_price, cin_id, prd_insured, srv_id)
-									VALUES ('$filesCsv[0]', '$filesCsv[1]','$filesCsv[2]', '$filesCsv[3]', '$filesCsv[4]', '$filesCsv[5]', '$filesCsv[6]', '$coin', '$filesCsv[8]', '$filesCsv[9]')";
+									VALUES ('$LoadProducts[0]', '$LoadProducts[1]','$LoadProducts[2]', '$LoadProducts[3]', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$coin', '$LoadProducts[8]', '$LoadProducts[9]')";
 							$this->db->query($qry);
 							$cont++;
-							$estatus = strlen($filesCsv[7]);
+							$estatus = strlen($LoadProducts[7]);
 						}else{
 							$aux++;
 							$estatus = 'Hubo un problema con el sku o la moneda';
@@ -59,10 +59,10 @@ public function SaveDocumento($request_params)
 					$estatus = 'Problema con ';
 					
 
-					if (strlen($filesCsv[0]) == 7) {
+					if (strlen($LoadProducts[0]) == 7) {
 						// REVISION DE SKU
-						$skuCsv = substr($filesCsv[0], 5, 3);
-						$sku = strval($filesCsv[0]);
+						$skuCsv = substr($LoadProducts[0], 5, 3);
+						$sku = strval($LoadProducts[0]);
 						
 						// Revisar que el la categoria y subcategoria exista en la base de datos
 						$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct
@@ -100,13 +100,13 @@ public function SaveDocumento($request_params)
 							$acept =0;
 						}
 					}else{
-						$sku = strval($filesCsv[0]);
+						$sku = strval($LoadProducts[0]);
 						$estatus = $estatus. 'SKU, ';
 						$acept =0;
 					}
-					if (strlen($filesCsv[7]) == 3) {
+					if (strlen($LoadProducts[7]) == 3) {
 						# Revision de Moneda
-						$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$filesCsv[7]' UNION SELECT 0 LIMIT 1";
+						$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$LoadProducts[7]' UNION SELECT 0 LIMIT 1";
 						$rest = $this->db->query($qry2);
 						$rst = $rest->fetch_object();
 						$coin = $rst->cin_id;
@@ -117,15 +117,15 @@ public function SaveDocumento($request_params)
 						$coin = 0;
 						$estatus = $estatus.'moneda, ';
 					}
-					if (!is_numeric($filesCsv[6])) {
+					if (!is_numeric($LoadProducts[6])) {
 						# Costo
 						$estatus = $estatus.'costo, ';
 					}
-					if (!is_numeric($filesCsv[9])) {
+					if (!is_numeric($LoadProducts[9])) {
 						# Servicio
 						$estatus = $estatus.'servicio, ';
 					}
-					if ($filesCsv[8] < 0 && $filesCsv[8] > 1) {
+					if ($LoadProducts[8] < 0 && $LoadProducts[8] > 1) {
 						# Seguro
 						$estatus = $estatus.'seguro.';
 					}
@@ -133,13 +133,13 @@ public function SaveDocumento($request_params)
 					if($acept > 0 && $coin>0 && $skuValido == 0){
 						$cont++;
 						$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_price, cin_id, prd_insured, srv_id,sbc_id, result)
-								VALUES ('$sku', '$filesCsv[1]','$filesCsv[2]', '$filesCsv[3]', '$filesCsv[4]', '$filesCsv[5]', '$filesCsv[6]', '$coin', '$filesCsv[8]', '$filesCsv[9]',$sbcId, 'EXITOSO')";
+								VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$LoadProducts[3]', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$coin', '$LoadProducts[8]', '$LoadProducts[9]',$sbcId, 'EXITOSO')";
 						$this->db->query($qry);
 					}else{
 						
 						$aux++;
 						$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_price, cin_id, prd_insured, srv_id,sbc_id, result)
-								VALUES ('$sku', '$filesCsv[1]','$filesCsv[2]', '$filesCsv[3]', '$filesCsv[4]', '$filesCsv[5]', '$filesCsv[6]', '$coin', '$filesCsv[8]', '$filesCsv[9]',$sbcId, '$estatus')";
+								VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$LoadProducts[3]', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$coin', '$LoadProducts[8]', '$LoadProducts[9]',$sbcId, '$estatus')";
 						$this->db->query($qry);
 					}
 					
