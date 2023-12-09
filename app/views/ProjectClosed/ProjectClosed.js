@@ -24,6 +24,8 @@ const totDias = $('#totDias');
 const totSubarrendo = $('#totSubarrendo');
 const totPrepago = $('#totPrepago');
 
+let monto = 0.16;
+
 const size = [
     { s: 20 },
     { s: 100 },
@@ -239,13 +241,25 @@ function activeProjectsFunctions(pjtId) {
             getProjectContent(pjtId, $('#txtReport').val());
             console.log(pjtId,$('#txtReport').val())
          });
+    $('#txtIva')
+         .unbind('change')
+         .on('change', function () {
+            changeIva($('#txtIva').val());
+            console.log($('#txtIva').val())
+         });
     /* setTimeout(() => {
         updateTotals();
     }, 1000); */
     deep_loading('C');
 }
 
+function changeIva(iva){
+    
+    console.log(parseFloat(monto * iva) + parseFloat(monto));
+    let liva= (parseFloat(monto * iva) + parseFloat(monto));
+    totprjIva.html(fnm(liva, 2, '.', ','));
 
+}
 function activaCampos(pjtId, type) {
     $('.list-finder').removeClass('hide-items');
     
@@ -412,9 +426,11 @@ function putTotalEquipo(dt){
 
 function putTotalesProyecto(dt){
     console.log(dt);
-    let liva=dt[0].monto * 0.16 + parseFloat(dt[0].monto);
+    let iva = parseFloat($('#txtIva').val());
+    let liva=dt[0].monto * iva + parseFloat(dt[0].monto);
     totprj.html(fnm(dt[0].monto, 2, '.', ','));
     totprjIva.html(fnm(liva, 2, '.', ','));
+    monto = dt[0].monto;
     updateTotals();
 }
 

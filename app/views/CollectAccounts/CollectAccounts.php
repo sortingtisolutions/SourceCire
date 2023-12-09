@@ -102,6 +102,7 @@
                      <tr>
                         <td>Folio</td>
                         <td>
+                            <input type="hidden" id="txtMontoTotal" name="txMontoTotal" class="textbox wt5">
                             <input type="text" id="txtNumFol" name="txtNumFol" class="textbox wt5" autocomplete="off" disabled><br>
                             <span class="textAlert"></span>
                         </td>
