@@ -1,9 +1,9 @@
 <?php
 	defined('BASEPATH') or exit('No se permite acceso directo');
-	require_once ROOT . FOLDER_PATH . '/app/models/Calendar/CalendarModel.php';
+	require_once ROOT . FOLDER_PATH . '/app/models/CalendarProyects/CalendarProyectsModel.php';
 	require_once LIBS_ROUTE . 'Session.php';
 
-	class CalendarController extends Controller
+	class CalendarProyectsController extends Controller
 	{
 
 		private $session;
@@ -11,7 +11,7 @@
 
 		public function __construct()
 		{
-			$this->model = new CalendarModel();
+			$this->model = new CalendarProyectsModel();
 			$this->session= new Session();
 			$this->session->init();
 			if($this->session->getStatus()===1 || empty($this->session->get('user')))
@@ -45,10 +45,10 @@
 			echo $result;
 		}
 
-		public function GetAreas($request_params)
+		public function GetEventos($request_params)
 		{
 			$params =  $this->session->get('user');
-            $result = $this->model->GetAreas($request_params);
+            $result = $this->model->GetEventos($request_params);
             $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -57,11 +57,28 @@
             if ($i>0){
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
-                $res =  '[{"are_id":"0"}]';	
+                $res =  '[{"id":"0"}]';	
             }
             echo $res;
 		}
-
+		
+		// LISTA LOS PROYECTOS ACTIVOS
+		public function listProyects($request_params)
+		{
+			$params =  $this->session->get('user');
+			$result = $this->model->listProyects($request_params['store']);
+			$i = 0;
+			while($row = $result->fetch_assoc()){
+				$rowdata[$i] = $row;
+				$i++;
+			}
+			if ($i>0){
+				$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+			} else {
+				$res =  '[{"pjt_id":"0"}]';	
+			}
+			echo $res;
+		} 
 		public function DeleteArea($request_params)
 		{
 			$params =  $this->session->get('user');

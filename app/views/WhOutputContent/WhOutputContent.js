@@ -224,7 +224,7 @@ function getComments_text(prjid) {
 }
 /** Obtiene el listado de los comentarios del proyecto */ // 11-10-23
 function getComments(pjtId) {
-    var pagina = 'WorkInputContent/listComments';
+    var pagina = 'WhOutputContent/listComments';
     var par = `[{"pjId":"${pjtId}"}]`;
     var tipo = 'json';
     var selector = putComments;
@@ -435,8 +435,60 @@ function activeIcons() {
                 getSeries(pjtcnid);
             }
         });
+    $('.toChange')
+        .unbind('click')
+        .on('click', function () {
+            console.log($(this).attr('id'));
+            /* getEvents($(this).attr('id'));
+            calendario('');
+            $('#CalendarModal').removeClass('overlay_hide');
+            $('#CalendarModal').fadeIn('slow');
+            $('#CalendarModal').draggable({
+                handle: ".overlay_modal"
+            });
+            //title= 'Serie';
+            $('.overlay_closer .title').html('');
+            $('#CalendarModal .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    $('#CalendarModal').addClass('overlay_hide');
+                }); */
+            
+    });
 }
-
+function getEvents(serId) {
+    var pagina = 'WhOutputContent/GetEventos';
+    var par = `[{"ser_id":"${serId}"}]`;
+    var tipo = 'json';
+    var selector = putEvents;
+    fillField(pagina, par, tipo, selector);
+}
+function putEvents(dt) {
+    
+    strs = dt;
+    calendario(strs);
+}
+function calendario(cal){
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        headerToolbar: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'dayGridMonth' 
+        },
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        selectable: true,
+        height: 300,
+        width:300,
+        events: cal,
+        eventClick: function(calEvent, jsEvent, view){
+            console.log(calEvent);
+        }
+    }); 
+    calendar.render();
+}
 //**************  NIVEL 2 DE DATOS  *****************************************
 
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
@@ -545,7 +597,8 @@ function build_modalSeries(dt) {
                 //console.log(dt);
                 tabla.row
                     .add({
-                        sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
+                        sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}"></i> 
+                                    <i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
                                     <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                         seriesku: skufull,
                         sernumber: u.ser_no_econo,
@@ -575,7 +628,26 @@ function activeIconsSerie() {
                 getSerieDetail(serprd, detIdChg);
             }
     });
-
+    $('.Calendar')
+    .unbind('click')
+    .on('click', function () {
+        console.log($(this).attr('id'));
+        getEvents($(this).attr('id'));
+        calendario('');
+        $('#CalendarModal').removeClass('overlay_hide');
+        $('#CalendarModal').fadeIn('slow');
+        $('#CalendarModal').draggable({
+            handle: ".overlay_modal"
+        });
+        //title= 'Serie';
+        $('.overlay_closer .title').html('');
+        $('#CalendarModal .btn_close')
+            .unbind('click')
+            .on('click', function () {
+                $('#CalendarModal').addClass('overlay_hide');
+            }); 
+        
+});
     $('.toCheck')
         .unbind('click')
         .on('click', function () {

@@ -1240,7 +1240,10 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    modalLoading('H');
+    setTimeout(() => {
+        modalLoading('H');
+    }, 200);
+
     $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1533,6 +1536,7 @@ function killProduct(bdgId) {
 
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
+    modalLoading('B');
     console.log('type: *', bdgId.substring(3, 20));
     getProductsRelated(bdgId.substring(3, 20), type);
 
@@ -1580,6 +1584,8 @@ function putProductsRelated(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    
+    modalLoading('H');
 }
 
 /// Muestra la información de los productos a poder cambiar
@@ -1776,6 +1782,7 @@ function putChangeProd_old(dt) {
 
 // Muestra el inventario de productos
 function stockProduct(bdgId, type) {
+    modalLoading('B');
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -1807,6 +1814,7 @@ function putStockProjects(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 function editProject(pjtId) {
