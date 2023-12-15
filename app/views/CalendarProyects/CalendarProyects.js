@@ -1,26 +1,17 @@
-let strs = null;
-let strnme = '';
 
+let strnme = '';
+let array = [];
+
+let i =0;
+let colores = ["#CD6155", "#AF7AC5", "#EC7063", "#5499C7", "#48C9B0", "#34495E", "#EB984E"];
 $(document).ready(function () {
     if (verifica_usuario()) {
         inicial();
+        
     }
 });
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendarPrueba');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'es',
-        headerToolbar: {
-            left: 'prev,next,today',
-            center: 'title',
-            right: 'dayGridWeek,dayGridDay' 
-        }
-    });
-    calendar.prev();
-    calendar.next();
-    calendar.render();
-    });
+
+    
 
 function inicial() {
     if (altr == 1) {
@@ -29,13 +20,38 @@ function inicial() {
         getStores();
         fillStores();
         confirm_alert(); */
+        //getEvents();
+        get_Proyectos();
+        calendario('');
+        setTimeout(() => {
         
+    }, 800);
           
     } else {
         setTimeout(() => {
             inicial();
         }, 100);
     }
+}
+function calendario(cal){
+    var calendarEl = document.getElementById('calendarPrueba');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        headerToolbar: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'dayGridMonth,dayGridWeek,dayGridDay' 
+        },
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        selectable: true,
+        events: cal,
+        height: 560,
+        eventClick: function(calEvent, jsEvent, view){
+            console.log(calEvent);
+        }
+    }); 
+    calendar.render();
 }
 
 //CONFIGURACION DE DATATABLE
@@ -101,16 +117,78 @@ function settingTable() {
 }
 
 // Solicita los productos de un almacen seleccionado
-function getStores() {
-    var pagina = 'Areas/GetAreas';
-    var par = `[{"are_id":""}]`;
+function getEvents(pjtId) {
+    var pagina = 'CalendarProyects/GetEventos';
+    var par = `[{"pjt_id":"${pjtId}"}]`;
     var tipo = 'json';
-    var selector = putStores;
+    var selector = putEvents;
     fillField(pagina, par, tipo, selector);
 }
+function get_Proyectos() {
+    var pagina = 'CalendarProyects/listProyects';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_Proyectos;
+    fillField(pagina, par, tipo, selector);
+}
+function putEvents(dt) {
+    //strs = dt;
+    dt.forEach(element => {
+        let x = Math.floor(Math.random()*colores.length);
+        array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : colores[x]};
+       
+    });
+    i++;
+    calendario(array);
+}
+/**  ++++   Coloca los proyectos en el listado del input */
+function put_Proyectos(dt) {
+    pj = dt;
+    //console.log(pj);
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            // let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+            let H = `<div class="" style="display:flex; gap: 0.3rem; margin-bottom: 5px;">
+                    <div style=""><input class="form-check-input check-box-prj" type="checkbox" value="${u.pjt_id}" id="checkProjects" >
+                    </div>
+                    <div class="totales__grupo-label" style="text-align: left;padding-left: 5px;">${u.pjt_name}</div>
+                </div>`;
+            $('#txtProject').append(H);
+        });
+        $('input[type="checkbox"]').on('change', function(){
+            let aux = 0;
+            //getEvents($(this).val());
+            if (this.checked) {
+                getEvents($(this).val());
+            }else{
+                for (let j = 0; j < array.length; j++) {
+                    if (array[j].id == $(this).val()) {
+                        aux= j;
+                    }
+                }
+                array.splice(aux,1);
+                i--;
+                calendario(array);
+            } 
 
-function putStores(dt) {
-    strs = dt;
+            /* $('input[type="checkbox"]:checked').each(function(){
+                prjs = prjs + "," +$(this).val() ;
+            }); */
+            
+            //console.log(this.checked,array);
+        }); 
+        /* $('#txtProject').on('change', function () {
+            px = parseInt($('#txtProject option:selected').attr('data_indx'));
+            $('#txtIdProject').val($(this).val());
+            // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+            //$('.objet').addClass('objHidden');
+            //get_products($(this).val(), em);
+            console.log('Value',$(this).val());
+            getEvents($(this).val());
+        }); */
+
+    }
+    
 }
 function fillStores() {
     if (strs != null) {
@@ -206,7 +284,7 @@ function saveStore() {
         }]`;
 
     strs = '';
-    var pagina = 'Areas/SaveArea';
+    var pagina = 'CalendarProyects/SaveArea';
     var tipo = 'html';
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
@@ -235,7 +313,7 @@ function updateStore() {
         }]`;
 
     strs = '';
-    var pagina = 'Areas/UpdateArea';
+    var pagina = 'CalendarProyects/UpdateArea';
     var tipo = 'html';
     var selector = putUpdateStore;
     fillField(pagina, par, tipo, selector);
@@ -282,7 +360,7 @@ function deleteStore(strId) {
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
-            var pagina = 'Areas/DeleteArea';
+            var pagina = 'CalendarProyects/DeleteArea';
             var par = `[{"are_id":"${strId}"}]`;
             var tipo = 'html';
             var selector = putDeleteStore;

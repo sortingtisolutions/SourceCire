@@ -18,6 +18,7 @@ function inicial() {
         let acc = $(this).attr('data_accion');
         updating_serie(acc);
     });
+    
 }
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
@@ -160,6 +161,7 @@ function putProductsList(dt) {
         $('#txtIdProducts').val(prdId);
         $('#listProduct').slideUp(100);
         get_products(prdId);
+        
         //validator();
     });
 }
@@ -192,7 +194,18 @@ function omitirAcentos(text) {
     }
     return text;
 }
-
+function getEvents(serId) {
+    var pagina = 'SearchIndividualProducts/GetEventos';
+    var par = `[{"ser_id":"${serId}"}]`;
+    var tipo = 'json';
+    var selector = putEvents;
+    fillField(pagina, par, tipo, selector);
+}
+function putEvents(dt) {
+    
+    strs = dt;
+    calendario(strs);
+}
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
     // console.log('put_Products-', dt);
@@ -209,8 +222,8 @@ function put_Products(dt) {
         $.each(pd, function (v, u) 
         {
             tabla.row
-                .add({
-                    editable: `<i id="k${u.prd_id}" class=""></i>`,
+                .add({ // <i class="fa-solid fa-calendar-days"></i>
+                    editable: `<i class="fas fa-calendar-alt choice toChange" id="${u.ser_id}"></i>`,
                     prodname:   u.prd_name,
                     prod_sku:   u.ser_sku,
                     serie:      u.ser_serial_number,
@@ -221,10 +234,49 @@ function put_Products(dt) {
                 })
                 .draw();
         });
+        $('.toChange')
+        .unbind('click')
+        .on('click', function () {
+            console.log($(this).attr('id'));
+            getEvents($(this).attr('id'));
+            calendario('');
+            $('#CalendarModal').removeClass('overlay_hide');
+            $('#CalendarModal').fadeIn('slow');
+            $('#CalendarModal').draggable({
+                handle: ".overlay_modal"
+            });
+            //title= 'Serie';
+            $('.overlay_closer .title').html('');
+            $('#CalendarModal .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    $('#CalendarModal').addClass('overlay_hide');
+                });
+            
+    });
     }
 }
 
-
+function calendario(cal){
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        headerToolbar: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'dayGridMonth' 
+        },
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        selectable: true,
+        events: cal,
+        height: 400,
+        eventClick: function(calEvent, jsEvent, view){
+            console.log(calEvent);
+        }
+    }); 
+    calendar.render();
+}
 /*  ++++++++ Valida los campos  +++++++ */
 function validator() {
     let ky = 0;

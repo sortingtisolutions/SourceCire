@@ -23,7 +23,22 @@ class WhOutputContentController extends Controller
 		$this->render(__CLASS__, $params);
     }
 
-
+    public function GetEventos($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->GetEventos($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"id":"0"}]';	
+        }
+        echo $res;
+    }
     // Lista los proyectos
     public function listProjects($request_params)
     {

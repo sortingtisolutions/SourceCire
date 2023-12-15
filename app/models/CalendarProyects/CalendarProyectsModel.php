@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No se permite acceso directo');
 require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
-class CalendarModel extends Model
+class CalendarProyectsModel extends Model
 {
 	public function __construct()
 	{
@@ -24,12 +24,26 @@ class CalendarModel extends Model
 	}
 	
 // Optiene los Usuaios existentes
-	public function GetAreas($params)
+	public function GetEventos($params)
 	{
-	
-		$qry = "SELECT * FROM ctt_areas where are_status=1 order by are_id ASC";
+		$pjt_id 	= $this->db->real_escape_string($params['pjt_id']);
+		/* $qry = "SELECT pjp.pjtdt_id 'id', ser_sku 'title', pjp.pjtpd_day_start 'start', pjp.pjtpd_day_end 'end', '#00aeee' as 'color' FROM ctt_projects_detail AS pjd 
+		INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
+		INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
+		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
+		WHERE pjc.pjt_id = 8"; */
+		$qry = "SELECT pjt_id 'id', pjt_name 'title', pj.pjt_date_start 'start', 
+		pj.pjt_date_end 'end' 
+		FROM ctt_projects AS pj WHERE pjt_id =$pjt_id";
 		return $this->db->query($qry);
 	}
+	// Listado de Proyectos  ****
+	public function listProyects($store)
+	{
+		$store = $this->db->real_escape_string($store);
+		$qry = "SELECT * FROM ctt_projects;";
+		return $this->db->query($qry);
+	}    
 
     /* public function GetArea($params)
 	{

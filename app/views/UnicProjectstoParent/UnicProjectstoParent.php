@@ -86,7 +86,7 @@
                                 </div>
 
                             </div>
-                            <div class="list-group">
+                            <div class="list-group" style="max-height: 400px;">
                                 <div class="list-items" id="listProducts"></div>
                             </div>
                         </div>

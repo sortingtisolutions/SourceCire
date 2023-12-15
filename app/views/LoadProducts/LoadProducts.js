@@ -73,7 +73,7 @@ function inicial() {
 function activeButtons(){
     setTimeout(() => {
         console.log(datos);
-        if (datos[0].prd_id) {
+        if (datos[0].prd_id > 0) {
             $('#GuardarProcess').parent().removeClass('objHidden');
             $('#LimpiarTabla').parent().removeClass('objHidden');
             $('#GuardarDocumento').parent().addClass('objHidden');

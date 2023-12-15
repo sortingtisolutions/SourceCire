@@ -348,7 +348,16 @@ public function InsertComment($params, $userParam)
 		$this->db->query($qry);
 		return $folio;
 	}
-
+    public function GetEventos($params)
+	{
+		$ser_id 	= $this->db->real_escape_string($params['ser_id']);
+		$qry = "SELECT pjp.pjtdt_id 'id', ser_sku 'title', pjp.pjtpd_day_start 'start', pjp.pjtpd_day_end 'end', '#3c5777' as 'color' FROM ctt_projects_detail AS pjd 
+		INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
+		INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
+		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
+		WHERE sr.ser_id=  $ser_id";
+		return $this->db->query($qry);
+	}
     public function GetProjectDetail($params)
     {
         $pjtid     = $this->db->real_escape_string($params['pjtid']);

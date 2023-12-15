@@ -131,9 +131,9 @@ function putProjects(dt) {
                     <td class="date">${u.clt_date_generated}</td>
                     <td class="supply">${u.cus_name}</td>
                     <td class="supply">${u.pjt_name}</td>
-                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td> 
+                    <td class="sku">${mkn(u.amount_payable,'n')}</td> 
                     <td class="sku">${mkn(u.pym_amount,'n')}</td>
-                    <td class="sku">${mkn(u.pendiente,'n')}</td>
+                    <td class="sku">${mkn(u.pending,'n')}</td>
                     <td class="date">${u.clt_deadline}</td>
                     <td class="date">${u.pym_date_paid}</td>
                 </tr>`;

@@ -126,10 +126,18 @@ function putProducts(dt) {
     $('#listProducts').html('');
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">
-                    ${u.pjt_number} - ${u.pjt_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
+                    ${u.pjt_number} - ${u.pjt_name}<div class="items-just"><i class="fas fa-arrow-circle-right toLink" id="${u.pjt_id}"></i></div>
                 </div>`;
         $('#listProducts').append(H);
     });
+    $('.toLink')
+        .unbind('click')
+        .on('click', function () {
+            let id = $(this).attr('id');
+            console.log('items-just',id);
+            product_apply(id);
+            getProducts();
+        });
 }
 
 // Dibuja los productos
@@ -138,7 +146,7 @@ function drawProducts(str) {
     $(`.list-item`).removeClass('hide-items');
 
     var ps = $('#boxProducts').offset();
-    $('.list-group').css({top: ps.top + 120 + 'px', display: 'none'});
+    $('.list-group').css({top: ps.top + 130 + 'px', display: 'none'});
     $('.box-items-list i').removeClass('rotate');
     $('#boxProducts')
         .unbind('click')
@@ -147,14 +155,7 @@ function drawProducts(str) {
             $('.box-items-list i').toggleClass('rotate');
         });
 
-    $('.list-item .items-just i')
-        .unbind('click')
-        .on('click', function () {
-            let id = $(this).parents('.list-item');
-            //console.log(id);
-            product_apply(id);
-            getProducts();
-        });
+    
 }
 
 // Llena la tabla de paquetes
@@ -331,12 +332,12 @@ function putProductsPack(dt) {
 
 function product_apply(prId) {
     console.log(prId);
-    let proj = prId.attr('data-content').split('|');
-    let productId = proj[0];
+   /*  let proj = prId.attr('data-content').split('|');
+    let productId = proj[0]; */
     let projParent = $('#txtIdPackages').val();
     //let productQuantity = $('#txtQtyPrds').val();
     var pagina = 'UnicProjectstoParent/SaveProject';
-    var par = `[{"prjId":"${productId}","prjParent":"${projParent}"}]`;
+    var par = `[{"prjId":"${prId}","prjParent":"${projParent}"}]`;
     console.log(par);
     var tipo = 'json';
     var selector = putNewProductsPack;

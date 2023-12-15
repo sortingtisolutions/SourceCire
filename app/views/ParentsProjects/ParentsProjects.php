@@ -16,7 +16,7 @@
             <div class="mvst_panel" style="width:280px; background-color: #e2edf3">
                 <div class="form-group">
                     <div class="form_primary">
-                        <h4 class="mainTitle">Responsables del Proyecto</h4>
+                        <h4 class="mainTitle">Editar Proyecto Padre</h4>
 
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -138,7 +138,7 @@
 
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
-                <h1>Selección de Proyectos</h1>
+                <h1>Selección de Proyectos Padres</h1>
                 <div class="mvst_list tblProdMaster">
                         <table class="display nowrap"  id="tblAsignedProd" style="width:100%; font-size: 0.7rem">
                             <thead>
