@@ -13,7 +13,9 @@ class PrePaymentsModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status<=4;";
+    $qry = "SELECT * FROM ctt_projects 
+            WHERE pjt_status>='2' and pjt_status<='99'
+            ORDER BY pjt_id";
     return $this->db->query($qry);
 }    
 
@@ -30,6 +32,17 @@ public function listCustomers()
     $qry = "SELECT cus_id,cus_cve_cliente,cus_name 
             FROM ctt_customers AS cus
             WHERE cus.cut_id=1 ORDER BY cus_name asc;";
+    return $this->db->query($qry);
+}
+
+public function getCustomersProj($params)
+{
+    $pjtId = $this->db->real_escape_string($params['pjtId']);
+    $qry = "SELECT cow.cuo_id,cus.cus_id,cus.cus_name, pj.pjt_id, pj.pjt_name 
+            FROM ctt_projects AS pj
+            LEFT JOIN ctt_customers_owner AS cow ON cow.cuo_id=pj.cuo_id
+            LEFT JOIN ctt_customers AS cus ON cus.cus_id=cow.cus_id
+            WHERE pj.pjt_id=$pjtId;";
     return $this->db->query($qry);
 }
 
@@ -76,6 +89,58 @@ public function listCustomers()
         return $this->db->query($qry);
     }   
 
+    public function listDataProyects($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['prpid']);
+
+        $qry = "SELECT pjt.pjt_name, prp.prp_amount, sum(pcn.pjtcn_prod_price) as totbase, 
+                        pjt.pjt_date_start, pjs.pjs_name, pjt.pjt_id
+                FROM ctt_projects_content AS pcn
+                INNER JOIN ctt_prepayments AS prp ON pcn.pjt_id=prp.pjt_id
+                INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pcn.pjt_id
+                INNER JOIN ctt_projects_status AS pjs ON pjs.pjs_status=pjt.pjt_status
+                WHERE pcn.pjt_id=$pjtId AND pcn.pjtcn_section=1";
+
+        return $this->db->query($qry);
+    }   
+
+
+    public function insertPayAplied($params)
+    {
+        $prpId = $this->db->real_escape_string($params['prpId']);
+        $referen = $this->db->real_escape_string($params['referen']);
+        $DateStart = $this->db->real_escape_string($params['DateStart']);
+        $montopayed = $this->db->real_escape_string($params['montopayed']);
+        $montoasig = $this->db->real_escape_string($params['montoasig']);
+        $montodiff = $this->db->real_escape_string($params['montodiff']);
+        $foldoc = $this->db->real_escape_string($params['foldoc']);
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $wayPay = $this->db->real_escape_string($params['wayPay']);
+        $empId = $this->db->real_escape_string($params['empId']);
+
+        $qry="INSERT INTO ctt_prepayments_recorded (pyr_folio, pyr_date_paid, 
+                        pyr_date_done, pyr_amount, pjt_base_amount, pyr_outcome, 
+                        clt_id, pjt_id, wtp_id, emp_id, prp_id) 
+            VALUES ('$referen','$DateStart', Now(),'$montopayed','$montoasig','$montodiff',
+                    '$foldoc','$pjtId','$wayPay','$empId','$prpId');";
+
+        $this->db->query($qry);
+        $payapl = $this->db->insert_id;
+
+        if($montodiff == 0) {
+            $qry2="UPDATE ctt_prepayments set prp_status=2
+                where prp_id=$prpId";
+
+            $this->db->query($qry2);
+        } else{
+            $qry3="UPDATE ctt_prepayments set prp_status=1
+            where prp_id=$prpId";
+
+            $this->db->query($qry3);
+        }
+
+        return $payapl;
+    }
 
 // Listado de Almacenes
     public function listStores()
@@ -288,7 +353,7 @@ public function listCustomers()
         $cost 	= $this->db->real_escape_string($params['cost']);
         $idProject 	= $this->db->real_escape_string($params['idProject']);
         
-        if($status ==3){
+        if($status == 3){
             $qry1 = "UPDATE ctt_series 
                     SET 
                         ser_situation = 'D', 
