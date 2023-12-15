@@ -10,8 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <script type="text/javascript">
             function redirect() {
-                let newpath="<?= FOLDER_DASH_PATH ?>";
-                window.location.href = newpath;
+                window.location.href = "http://desarrollo.com/Ciredashboard/DashboardFull";
             }
         window.onload = redirect;
         </script>

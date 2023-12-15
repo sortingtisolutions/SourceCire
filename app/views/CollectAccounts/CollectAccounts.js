@@ -12,7 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-
+        settingTable();
         $('.tblProdMaster').css({display: 'none'});
         getProjects(0);
         getWayToPay();
@@ -41,6 +41,7 @@ function settingTable() {
     let title = 'Control salida de proyectos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblCollets').DataTable({
+        bDestroy: true,
         order:  [[ 1, 'asc' ], [ 8, 'asc' ]],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -130,18 +131,18 @@ function putProjects(dt) {
                     <td class="date">${u.clt_date_generated}</td>
                     <td class="supply">${u.cus_name}</td>
                     <td class="supply">${u.pjt_name}</td>
-                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td> 
+                    <td class="sku">${mkn(u.amount_payable,'n')}</td> 
                     <td class="sku">${mkn(u.pym_amount,'n')}</td>
-                    <td class="sku">${mkn(u.pendiente,'n')}</td>
+                    <td class="sku">${mkn(u.pending,'n')}</td>
                     <td class="date">${u.clt_deadline}</td>
                     <td class="date">${u.pym_date_paid}</td>
                 </tr>`;
             $('#tblCollets tbody').append(H);
         });
-        settingTable();
+        // settingTable();
         activeIcons();
     } else {
-        settingTable();
+        // settingTable();
     }
 }
 
@@ -155,7 +156,7 @@ function activeIcons() {
         let pjtId = $(this).parents('tr').attr('data_pjt');
         gblcloid=cltid;
         gblpjtid=pjtId;
-        // console.log('Globales',gblcloid, gblpjtid );
+        console.log('Globales',gblcloid, gblpjtid );
         confirm_to_work(cltid);
 
         });
@@ -179,11 +180,13 @@ function activeIcons() {
             let em = user[3];
             let referen = $('#txtRefPayed').val();
             let montopayed = $('#txtMontoPayed').val();
-            let foldoc = $('#txtNumFol').val();
+            // let foldoc = $('#txtNumFol').val();
+            let foldoc = gblcloid;
             let pjtId = gblpjtid;
             let wayPay = $('#txtWayPay option:selected').val();
             let projPeriod = $('#txtPeriodPayed').val();
-
+            let montoTotal = $('#txtMontoTotal').val();
+            let montoRestante = (parseFloat(montoTotal) - parseFloat(montopayed));
             let DateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
             
             let par = `
@@ -193,9 +196,10 @@ function activeIcons() {
                 "foldoc"         : "${foldoc}",
                 "pjtId"          : "${pjtId}",
                 "wayPay"         : "${wayPay}",
-                "empId"          : "${em}"
+                "empId"          : "${em}",
+                "montoRest"      : "${montoRestante}"
             }]`;
-            // console.log(par);
+            console.log(par);
             var pagina = 'CollectAccounts/insertPayAplied';
             var tipo = 'html';
             var selector = putToWork;
@@ -218,7 +222,7 @@ function confirm_to_work(cltid) {
         let el = $(`#tblCollets tr[id="${cltid}"]`);
             $('#txtNumFol').val($(el.find('td')[1]).text());
             $('#txtProject').val($(el.find('td')[4]).text());
-
+            $('#txtMontoTotal').val($(el.find('td')[5]).text());
         fillContent();
     });
 }
@@ -274,6 +278,7 @@ function fillContent() {
 function putToWork(dt){
     console.log(dt)
     $('#registPayModal .btn_close').trigger('click');
+    getProjects(0);
 }
 
 function mkn(cf, tp) {
@@ -301,6 +306,8 @@ $('#savePayed.update')
             let referen = $('#txtRefPayed').val();
             let WayPay = $('#txtWayPay option:selected').val();
             let projPeriod = $('#txtPeriodPayed').val();
+            let montoTotal = $('#txtMontoTotal').val();
+            let montoRestante = (parseFloat(montoTotal) - parseFloat(montopayed));
 
             let projDateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
             
@@ -315,6 +322,7 @@ $('#savePayed.update')
                 "cuoId"          : "${cuoId}",
                 "cusId"          : "${cusCte}",
                 "cusParent"      : "${cusCteRel}",
+                "montoRest"      : "${montoRestante}",
             }]`;
             
             console.log(par);

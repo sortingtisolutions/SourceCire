@@ -1240,7 +1240,10 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    modalLoading('H');
+    setTimeout(() => {
+        modalLoading('H');
+    }, 200);
+
     $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1533,6 +1536,7 @@ function killProduct(bdgId) {
 
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
+    modalLoading('B');
     console.log('type: *', bdgId.substring(3, 20));
     getProductsRelated(bdgId.substring(3, 20), type);
 
@@ -1580,6 +1584,8 @@ function putProductsRelated(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    
+    modalLoading('H');
 }
 
 /// Muestra la información de los productos a poder cambiar
@@ -1776,6 +1782,7 @@ function putChangeProd_old(dt) {
 
 // Muestra el inventario de productos
 function stockProduct(bdgId, type) {
+    modalLoading('B');
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -1807,6 +1814,7 @@ function putStockProjects(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 function editProject(pjtId) {
@@ -2973,6 +2981,9 @@ function promoteProject(pjtId) {
     let verId = $('.invoice_controlPanel .version_current').attr(
         'data-version'
     );
+    // verId=parseInt(verId) + 1;
+    // console.log('ProductFAST', verId);
+    
     var pagina = 'Budget/ProcessProjectProductFAST';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
@@ -2994,11 +3005,11 @@ function showResult(dt) {
         console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
 
         // var pagina = 'Budget/ProcessBackAccesories';
-        var pagina = 'Budget/ProcessFuncAccesories';
-        var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
-        var tipo = 'html';
-        var selector = showResAcc;
-        fillField(pagina, par, tipo, selector);
+        // var pagina = 'Budget/ProcessFuncAccesories';
+        // var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+        // var tipo = 'html';
+        // var selector = showResAcc;
+        // fillField(pagina, par, tipo, selector);
     
     }, 2000);
     cleanFormat();

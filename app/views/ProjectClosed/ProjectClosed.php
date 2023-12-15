@@ -64,6 +64,16 @@
                             <label for="txtReport">Desglosar Paquetes</label>
                         </div>
                     </div>
+                    <div class="row list-finder pos1 hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+                            <select id="txtIva" class="form-select form-select-sm required">
+                                <option value="0.16" selected>16%</option>
+                                <option value="0">0%</option>
+                                <option value="0">Sin Iva</option>
+                            </select>
+                            <label for="txtIva">IVA</label>
+                        </div>
+                    </div>
 
                     <div style="height:20px;"></div>
                     <div class="row">

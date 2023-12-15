@@ -8,17 +8,13 @@
     <head>
         <title>Test</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        
         <script type="text/javascript">
             function redirect() {
-                let newpath="<?= FOLDER_DASH_PATH ?>";
-                window.location.href = newpath;
+                window.location.href = "http://desarrollo.com/Ciredashboard/Dashboard";
             }
-            window.onload = redirect;
-        
+        window.onload = redirect;
         </script>
     <script>
-            // window.location.href = "http://ctt-app.com/Ciredashboard/Dashboard";
             // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
             // window.focus();
     </script>

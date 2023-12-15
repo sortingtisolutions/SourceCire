@@ -24,7 +24,6 @@
 		/>
 
 		<title>CTT Exp & Rentals</title>
-		<link rel="shortcut icon" href="<?=  PATH_ASSETS . 'img/logoicon.ico' ?>" type="image/x-icon" />
 
 		<link rel="stylesheet" href="<?= FOLDER_PATH . '/app/assets/css/estilos.min.css' ?>">
 
@@ -45,8 +44,8 @@
 					<div class="px-lg-5 pt-lg-4 pb-lg-3 p-4 w-100 mb-auto">
 						<img src="<?=  PATH_ASSETS . 'img/logo.png' ?>" alt="logo CTT Exr & Rentals" class="img-fluid logo" />
 						<div class="row">
-							<div style="height:15px;"></div>
-							<span><small> Version Web 1.3.01</small></span>
+							<div style="height:10px;"></div>
+							<span><small> Version Web 1.2.20</small></span>
 						</div>
 					</div>
 					
