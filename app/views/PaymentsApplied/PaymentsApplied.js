@@ -94,7 +94,7 @@ function settingTable() {
         scrollX: true,
         columns: [
             /* {data: 'editable', name: 'editable', class: 'edit', orderable: false}, */
-            {data: 'subccode', name: 'subccode', class: 'subCode center bold'},
+            {data: 'subccode', name: 'subccode', class: 'supply'},
             {data: 'subcname', name: 'subcname', class: 'subName'},
             {data: 'subcname', name: 'subcname', class: 'subName'},
             {data: 'subcname', name: 'subcname', class: 'subName'},
@@ -130,12 +130,15 @@ function putlistProjects(dt) {
 /** ---- Almacena las subcategorias ---- */
 function putPayments(dt) {
     console.log('1',dt);
-    $('#tblPymApplied tbody').html('');
+    // $('#tblPymApplied tbody').html('');
+    let tabla = $('#tblPymApplied').DataTable();
+    tabla.rows().remove().draw();
     var prds=dt;
     if (prds[0].pym_id > 0) {
+        
         $.each(prds, function (v, u) {
         
-                var H = `
+                /* var H = `
                 <tr id="${u.pym_id}">
                 <!-- <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td> -->
                     <td class="supply">${u.pjt_name}</td>    
@@ -146,7 +149,20 @@ function putPayments(dt) {
                     <td class="date">${u.pym_date_done}</td>
                     <td class="sku">${u.emp_reg}</td>
                 </tr>`;
-                $('#tblPymApplied tbody').append(H);
+                $('#tblPymApplied tbody').append(H); */
+                tabla.row
+                .add({
+                    //editable: `<i class='fas fa-edit toLink' id ="${u.pjt_id}"></i><i class="fas fa-times-circle kill"></i>`,
+                    subccode: u.pjt_name,
+                    subcname: u.pym_folio,
+                    subcname: mkn(u.pym_amount,'n'),
+                    subcname: u.pym_date_paid,
+                    catgcode: u.wtp_description,
+                    subcname: u.pym_date_done,
+                    catgcode: u.emp_reg,
+                })
+                .draw();
+                /*  */
             }
         
         );

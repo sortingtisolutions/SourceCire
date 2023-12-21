@@ -58,12 +58,14 @@ public function listProducts2()
 
     public function GetEventos($params)
 	{
-		$ser_id 	= $this->db->real_escape_string($params['ser_id']);
-		$qry = "SELECT pjp.pjtdt_id 'id', ser_sku 'title', pjp.pjtpd_day_start 'start', pjp.pjtpd_day_end 'end', '#3c5777' as 'color' FROM ctt_projects_detail AS pjd 
+		$prd_id 	= $this->db->real_escape_string($params['prd_id']);
+		$qry = "SELECT pjp.pjtdt_id 'id', concat(ser_sku,' - ',pj.pjt_name) 'title', pjp.pjtpd_day_start 'start', pjp.pjtpd_day_end 'end', '#3c5777' as 'color' FROM ctt_projects_detail AS pjd 
 		INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
 		INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
 		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
-		WHERE sr.ser_id=  $ser_id";
+		INNER JOIN ctt_products AS prd ON prd.prd_id = sr.prd_id
+		INNER JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id
+		WHERE prd.prd_id = $prd_id";
 		return $this->db->query($qry);
 	}
 

@@ -2981,6 +2981,9 @@ function promoteProject(pjtId) {
     let verId = $('.invoice_controlPanel .version_current').attr(
         'data-version'
     );
+    // verId=parseInt(verId) + 1;
+    // console.log('ProductFAST', verId);
+    
     var pagina = 'Budget/ProcessProjectProductFAST';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
@@ -3002,11 +3005,11 @@ function showResult(dt) {
         console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
 
         // var pagina = 'Budget/ProcessBackAccesories';
-        var pagina = 'Budget/ProcessFuncAccesories';
-        var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
-        var tipo = 'html';
-        var selector = showResAcc;
-        fillField(pagina, par, tipo, selector);
+        // var pagina = 'Budget/ProcessFuncAccesories';
+        // var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+        // var tipo = 'html';
+        // var selector = showResAcc;
+        // fillField(pagina, par, tipo, selector);
     
     }, 2000);
     cleanFormat();

@@ -146,7 +146,9 @@ function putProjects(dt) {
         });
         settingTable();
         activeIcons();
-    } 
+    } else{
+        settingTable();
+    }
 }
 
 /** +++++  Activa los iconos */

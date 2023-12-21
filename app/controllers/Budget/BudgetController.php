@@ -701,7 +701,7 @@ public function ProcessProjectProductFAST($request_params)
                 
             }
         } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
-            for ($i = 1; $i<=$quanty; $i++){
+            for ($j=1; $j<=$quanty; $j++){
                 $products = $this->model->GetProducts($prodId);
                 while($acc = $products->fetch_assoc()){
 
