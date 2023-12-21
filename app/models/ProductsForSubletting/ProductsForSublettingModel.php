@@ -194,7 +194,7 @@ public function listProyects($store)
 
         $newSku = $produSku . $skuNew;
         
-        // Agrega la nueva serie
+        /* // Agrega la nueva serie
         $qry1 = "INSERT INTO ctt_series (
                     ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
                     ser_date_registry, ser_reserve_count, ser_behaviour, ser_comments, 
@@ -206,7 +206,20 @@ public function listProyects($store)
                     pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
                 FROM ctt_series AS sr  
                 RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
-                WHERE pd.prd_id = $producId LIMIT 1;";
+                WHERE pd.prd_id = $producId LIMIT 1;"; */
+        // Agrega la nueva serie
+        $qry1 = "INSERT INTO ctt_series (
+            ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
+            ser_date_registry, ser_reserve_count, ser_behaviour, ser_comments, 
+            prd_id, sup_id, cin_id, pjtdt_id
+        )
+        SELECT 
+            '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), 'EA', 
+            'R', curdate(),'1', ifnull(sr.ser_behaviour,'C'), '$comments', 
+            pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
+        FROM ctt_series AS sr  
+        RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+        WHERE pd.prd_id = $producId LIMIT 1;";
                 
         $this->db->query($qry1);
 

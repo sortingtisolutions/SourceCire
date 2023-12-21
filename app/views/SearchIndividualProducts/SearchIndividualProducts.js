@@ -1,5 +1,5 @@
 let pj, px, pd;
-
+let colores = ["#CD6155", "#AF7AC5", "#EC7063", "#5499C7", "#48C9B0", "#34495E", "#EB984E"];
 $(document).ready(function () {
     if (verifica_usuario()) {
         inicial();
@@ -94,6 +94,16 @@ function setting_table() {
                 className: 'btn-print hidden-field',
                 action: function (e, dt, node, config) {                    
                     printProduct();
+                },
+            },
+            {
+                // Boton aplicar cambios
+                text: 'Calendario',
+                className: 'btn-print hidden-field',
+                action: function (e, dt, node, config) {  
+                    let id = $('#txtIdProducts').val();
+                    getCalendar(id);                  
+                    // printProduct();
                 },
             },
         ],
@@ -194,22 +204,29 @@ function omitirAcentos(text) {
     }
     return text;
 }
-function getEvents(serId) {
+function getEvents(prdId) {
     var pagina = 'SearchIndividualProducts/GetEventos';
-    var par = `[{"ser_id":"${serId}"}]`;
+    var par = `[{"prd_id":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putEvents;
     fillField(pagina, par, tipo, selector);
 }
 function putEvents(dt) {
+    let array = [];
+    let i = 0;
+    dt.forEach(element => {
+        let x = Math.floor(Math.random()*colores.length);
+        array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : colores[x]};
+        i++;
+    });
     
-    strs = dt;
-    calendario(strs);
+    calendario(array);
 }
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
     // console.log('put_Products-', dt);
     pd = dt;
+    
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
         ? $('#tblProductForSubletting tbody tr').remove()
@@ -218,12 +235,14 @@ function put_Products(dt) {
     tabla.rows().remove().draw();
     let cn = 0;
     $('.btn-print').removeClass('hidden-field');
+    $('.btn-calendar').removeClass('hidden-field');
     if (pd[0].prd_name != undefined) {
         $.each(pd, function (v, u) 
         {
             tabla.row
                 .add({ // <i class="fa-solid fa-calendar-days"></i>
-                    editable: `<i class="fas fa-calendar-alt choice toChange" id="${u.ser_id}"></i>`,
+                    // editable: `<i class="fas fa-calendar-alt choice toChange" id="${u.ser_id}"></i>`,
+                    editable: '',
                     prodname:   u.prd_name,
                     prod_sku:   u.ser_sku,
                     serie:      u.ser_serial_number,
@@ -234,7 +253,7 @@ function put_Products(dt) {
                 })
                 .draw();
         });
-        $('.toChange')
+        /* $('.toChange')
         .unbind('click')
         .on('click', function () {
             console.log($(this).attr('id'));
@@ -253,10 +272,26 @@ function put_Products(dt) {
                     $('#CalendarModal').addClass('overlay_hide');
                 });
             
-    });
+    }); */
     }
 }
 
+function getCalendar(id){
+    
+    getEvents(id);
+    $('#CalendarModal').removeClass('overlay_hide');
+    $('#CalendarModal').fadeIn('slow');
+    $('#CalendarModal').draggable({
+        handle: ".overlay_modal"
+    });
+    //title= 'Serie';
+    $('.overlay_closer .title').html('');
+    $('#CalendarModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('#CalendarModal').addClass('overlay_hide');
+        });
+}
 function calendario(cal){
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -264,7 +299,7 @@ function calendario(cal){
         headerToolbar: {
             left: 'prev,next,today',
             center: 'title',
-            right: 'dayGridMonth' 
+            right: 'dayGridMonth,dayGridWeek,dayGridDay' 
         },
         navLinks: true, // can click day/week names to navigate views
         editable: true,

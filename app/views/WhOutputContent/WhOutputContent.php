@@ -183,8 +183,32 @@
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width:  80px">SKU</th>
+                        <th style="width:  70px">Producto</th>
                         <th style="width:  70px">Num <br>Economico</th>
                         <th style="width:  70px">Serie</th>
+                        <th style="width:  40px">Fecha Salida</th>
+                        <th style="width:  40px">Fecha Ingreso</th>
+                        <th style="width:  40px">Nivel</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
+
+<!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
+<div class="overlay_background overlay_hide" id="SeriePackModal" style="width: 65%; left:15%;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblSerieP" style="width: 90%">
+                <thead>
+                    <tr>
+                        <th style="width:  30px"></th>
+                        <th style="width:  80px">SKU</th>
+                        <th style="width:  30px">Num <br>Economico</th>
+                        <th style="width:  70px">Producto</th>
+                        <th style="width:  40px">Serie</th>
                         <th style="width:  40px">Fecha Salida</th>
                         <th style="width:  40px">Fecha Ingreso</th>
                         <th style="width:  40px">Nivel</th>
@@ -281,6 +305,18 @@
         </div>
     </div>
 <!-- end -->
+
+<!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
+<div class="overlay_background overlay_hide" id="SinSerieModal" style="width: 65%; left:15%;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <div style="height:5px;"></div> <!-- Agregar un espacio -->
+            <h2 style="text-align: center;margin-bottom: 20px">SERIE PENDIENTE</h2>
+            <h5 style="text-align: center;margin-bottom: 20px">Informe al personal de programación para que agregue la serie</h5>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
+
 
 <!-- formulario de comentarios -->
     <div id="commentsTemplates" class="table_hidden box_template">
