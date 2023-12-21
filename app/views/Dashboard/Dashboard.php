@@ -10,9 +10,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <script type="text/javascript">
             function redirect() {
-                window.location.href = "http://desarrollo.com/Ciredashboard/Dashboard";
+                let newpath="<?= FOLDER_DASH_PATH ?> . /Dashboard ";
+                window.location.href = newpath;
             }
-        window.onload = redirect;
+            window.onload = redirect;
+        
         </script>
     <script>
             // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
