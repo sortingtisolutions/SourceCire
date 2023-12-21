@@ -3,7 +3,7 @@ let products;
 let prjid;
 let glbcnid,glbprjnum;
 let motmanteince;
-let user,v,u,n,em;  //datos de usuaria para impresion
+let user,v,u,n,em, ar;  //datos de usuaria para impresion
 let aux=0;
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -18,10 +18,11 @@ function inicial() {
     u = user[0];
     n = user[2];
     em = user[3];
+    ar = user[6];
 
     setting_table_AsignedProd();
     getProjects(prjid);
-    getDetailProds(prjid,em);
+    getDetailProds(prjid,em,ar);
     getFreelances(prjid);
     getReason();
     getComments_text(prjid); // 11-10-23
@@ -200,9 +201,9 @@ function getProjects(prjid) {
 }
 
 // Solicita los productos del proyecto  OK
-function getDetailProds(prjid,empid) {
+function getDetailProds(prjid,empid,areid) {
     var pagina = 'WorkInputContent/listDetailProds';
-    var par = `[{"pjt_id":"${prjid}", "empid":"${empid}"}]`;
+    var par = `[{"pjt_id":"${prjid}", "empid":"${empid}", "areid":"${areid}"}]`;
     var tipo = 'json';
     var selector = putDetailsProds;
     fillField(pagina, par, tipo, selector);
@@ -591,7 +592,7 @@ function myCheck(dt){
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).find('.toAcept').css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
-    getDetailProds(prjid,em);
+    getDetailProds(prjid,em, ar);
 }
 
 function readAceptTable() {
@@ -603,7 +604,9 @@ function readAceptTable() {
         console.log("readAceptTable: ", serId, serdata);
         checkSerie(serId, serdata);
         setTimeout(function(){
-            console.log('');
+            $('.overlay_background').addClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            $('#tblSerie').DataTable().destroy;
         }, 3000);
         /* $('.overlay_background').addClass('overlay_hide');
         $('.overlay_closer .title').html('');
@@ -645,8 +648,8 @@ function settingReason(){
         .unbind('click')
         .on('click', function () {
             // console.log('Cierra Motivos');
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
+            $('#ReasonMtModal').addClass('overlay_hide');
+            $('#ReasonMtModal .overlay_closer .title').html('');
             $('#tblMaintenance').remove;
             $('#tblMaintenance').DataTable().destroy;
             
@@ -693,8 +696,8 @@ function activeIconsReason(serId) {
 
         let el = $(`#tblAsigInput tr[id="${glbcnid}"]`);
         $(el.find('td')[5]).html(motdesc);
-        $('.overlay_background').addClass('overlay_hide');
-        $('.overlay_closer .title').html('');
+        $('#ReasonMtModal').addClass('overlay_hide');
+        $('#ReasonMtModal .overlay_closer .title').html('');
         $('#tblMaintenance').DataTable().destroy;
     
     });

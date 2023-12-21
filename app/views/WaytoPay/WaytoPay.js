@@ -97,20 +97,32 @@ function putWaytoPay(dt) {
     subs=dt;
     // console.log('1',subs);
     var prds=dt;
-    $('#tblWaypay tbody').html('');
-   
+    // $('#tblWaypay tbody').html('');
+    let tabla = $('#tblWaypay').DataTable();
+    tabla.rows().remove().draw();
     if (prds[0].wtp_id != '0') {
         
         $.each(prds, function (v, u) {
-            var H = `
+            tabla.row
+                .add({
+                    editable: `<i class='fas fa-pen modif' id ="md${u.wtp_id}"></i><i class="fas fa-times-circle kill"></i>`,
+                    wayname: u.wtp_clave,
+                    waycode: u.wtp_description,
+                    waystat: u.wtp_status,
+                })
+                .draw();
+                $('#md' + u.wtp_id)
+                .parents('tr')
+                .attr('id', u.wtp_id);
+            /* var H = `
                 <tr id="${u.wtp_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
                     <td class="sku" data-content="${u.wtp_clave}">${u.wtp_clave}</td>
                     <td class="supply">${u.wtp_description}</td>
                     <td class="sku">${u.wtp_status}</td>
                 </tr>`;
-            $('#tblWaypay tbody').append(H);
-        });
+            $('#tblWaypay tbody').append(H); */
+        }); 
      
         // settingTable();
         activeIcons();

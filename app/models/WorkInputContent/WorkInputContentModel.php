@@ -48,8 +48,9 @@ class WorkInputContentModel extends Model
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $empid = $this->db->real_escape_string($params['empid']);
+        $areid = $this->db->real_escape_string($params['areid']);
 
-        if ($empid==1 || $empid==2){
+        if ($areid == 5){
             $qry = "SELECT prcn.pjtcn_id, prcn.pjtcn_prod_sku, prcn.pjtcn_prod_name, prcn.pjtcn_quantity, 
             prcn.pjtcn_prod_level, prcn.pjt_id, prcn.pjtcn_status, prcn.pjtcn_order, 
              case 
