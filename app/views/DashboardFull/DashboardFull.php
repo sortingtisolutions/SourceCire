@@ -13,7 +13,8 @@
                 let newpath="<?= FOLDER_DASH_PATH ?> . /DashboardFull";
                 window.location.href = newpath;
             }
-        window.onload = redirect;
+            window.onload = redirect;
+        
         </script>
 
     <script>

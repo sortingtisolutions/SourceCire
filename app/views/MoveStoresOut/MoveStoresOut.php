@@ -69,11 +69,11 @@
                             <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                         </div>
                     </div>
-                    <div class="sidebar__comments"> 
+                    <!-- <div class="sidebar__comments"> 
                         <span class="invoice_button toComment" id="toComment">
                             <i class="far fa-comment-alt"></i> Comentarios
                         </span> 
-                    </div> <!--- 11-10-23 -->
+                    </div>  --><!--- 11-10-23 -->
                 </div>
             </div>
 

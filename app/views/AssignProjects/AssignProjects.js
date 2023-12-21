@@ -14,7 +14,7 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    setting_table_AsignedProd();
+    //setting_table_AsignedProd();
     getUsersP();
     getUsersA();
     getUsersC();
@@ -188,7 +188,10 @@ function putDetailsProds(dt) {
                 </tr>`;
             $('#tblAsignedProd tbody').append(H);
         });
+        setting_table_AsignedProd();
         activeIcons();
+    }else{
+        setting_table_AsignedProd();
     }
 }
 

@@ -12,17 +12,17 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        settingTable();
-        $('.tblProdMaster').css({display: 'none'});
-        getProjects(0);
+        //settingTable();
+        //$('.tblProdMaster').css({display: 'none'});
+        getProjects();
         getWayToPay();
     }, 100);
 }
 
 /** +++++  Obtiene los proyectos de la base */
-function getProjects(catId) {
+function getProjects() {
     var pagina = 'CollectAccounts/listProjects';
-    var par = `[{"catId":"${catId}"}]`;
+    var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -101,14 +101,7 @@ function settingTable() {
             {data: 'clt_lastpay',   class: 'date'},
         ],
     });
-
-    $('.tblProdMaster')
-        .delay(500)
-        .slideDown('fast', function () {
-            //$('.deep_loading').css({display: 'none'});
-            //$('#tblCollets').DataTable().draw();
-            deep_loading('C');
-    });
+   
 }
 
 function putWayToPay(dt) {
@@ -119,10 +112,9 @@ function putWayToPay(dt) {
 function putProjects(dt) {
     console.log('putProjects',dt);
     $('#tblCollets tbody').html('');
-    
-    if (dt[0].clt_id != undefined) {
-        console.log('each',dt[0].clt_id);
-        //<i class='fas fa-edit detail'>
+
+    if (dt[0].clt_id > 0) {
+
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.clt_id}" data_pjt="${u.pjt_id}">
@@ -139,10 +131,10 @@ function putProjects(dt) {
                 </tr>`;
             $('#tblCollets tbody').append(H);
         });
-        // settingTable();
+        settingTable();
         activeIcons();
     } else {
-        // settingTable();
+        settingTable();
     }
 }
 
@@ -278,7 +270,7 @@ function fillContent() {
 function putToWork(dt){
     console.log(dt)
     $('#registPayModal .btn_close').trigger('click');
-    getProjects(0);
+    getProjects();
 }
 
 function mkn(cf, tp) {
