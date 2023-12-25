@@ -34,7 +34,7 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 
-$qry2 = "SELECT * FROM ctt_projects WHERE pjt_id='$proj_id'";
+$qry2 = "SELECT * FROM ctt_projects WHERE pjt_id IN('$proj_ids')";
 
 $res3 = $conn->query($qry2);
 //$conn->close();
@@ -43,7 +43,7 @@ while($row1 = $res3->fetch_assoc()){
 }
 
 $num = $result[0]['pjt_number'];
-$qry = "SELECT bdg_id, bdg_section, crp_id, crp_name, bdg_prod_price, 
+/* $qry = "SELECT bdg_id, bdg_section, crp_id, crp_name, bdg_prod_price, 
 bdg_quantity,bdg_days_base, bdg_days_cost, bdg_discount_base, 
 bdg_discount_insured, bdg_days_trip, bdg_discount_trip,bdg_insured, bdg_days_test,
 bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_discount_test, 
@@ -74,11 +74,11 @@ FROM ctt_budget AS bg
         LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id = (SELECT MAX(ver.ver_id) 
-		  FROM ctt_budget bug 
-INNER JOIN ctt_version AS ver ON ver.ver_id = bug.ver_id
-INNER JOIN ctt_projects AS prj ON prj.pjt_id = ver.pjt_id
-WHERE prj.pjt_id = pj.pjt_id)
+        WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id =  (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
+FROM ctt_budget bug UNION SELECT pv.ver_id from ctt_projects_version AS pv) bg
+INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
+INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
+WHERE pjt.pjt_id = pj.pjt_id)
 UNION 
 SELECT pv.pjtvr_id, pv.pjtvr_section,cr.crp_id, cr.crp_name,pv.pjtvr_prod_price,
 pv.pjtvr_quantity,pv.pjtvr_days_base,pv.pjtvr_days_cost, pv.pjtvr_discount_base, 
@@ -101,13 +101,41 @@ LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id
 LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = prjt.cuo_id
 LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-WHERE pj.pjt_id IN ($proj_ids) AND pv.ver_id = (SELECT MAX(vrs.ver_id) 
-FROM ctt_projects_version AS pv
-INNER JOIN ctt_version AS vrs ON vrs.ver_id = pv.ver_id
-INNER JOIN ctt_projects AS prj ON prj.pjt_id = vrs.pjt_id
-WHERE prj.pjt_id = pj.pjt_id)) AS result
+WHERE pj.pjt_id IN ($proj_ids) AND pv.ver_id =  (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
+FROM ctt_budget bug UNION SELECT pv.ver_id from ctt_projects_version AS pv) bg
+INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
+INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
+WHERE pjt.pjt_id = pj.pjt_id)) AS result
 GROUP BY prd_id, pjt_id 
-ORDER BY bdg_order, bdg_section";
+ORDER BY bdg_order, bdg_section"; */
+
+$qry = "SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, cn.pjtcn_prod_price bdg_prod_price,
+cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
+cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
+cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
+cn.pjtcn_days_test bdg_days_test, cn.pjtcn_discount_test bdg_discount_test, cn.pjtcn_prod_sku bdg_prod_sku, cn.pjtcn_prod_name bdg_prod_name,
+vr.ver_discount_insured, pr.prd_id, pj.pjt_name, CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+cn.pjtcn_order bdg_order, pj.pjt_number,  pjtv.pjt_name AS proyname, pjtv.pjt_date_project, pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
+pjtv.pjt_how_required, pjtv.pjt_trip_go, pjtv.pjt_trip_back, pjtv.pjt_to_carry_on, 
+pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, cu.cus_email, cu.cus_phone,
+cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, pj.pjt_id, 
+CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y'))
+FROM ctt_projects_detail AS dt
+INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
+INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
+LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' GROUP BY pj.pjt_id,cn.pjtcn_prod_name 
+ORDER BY cn.pjtcn_order, cn.pjtcn_section
+";
 
 $res = $conn->query($qry);
 
@@ -115,7 +143,7 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 // OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
-$query="SELECT cr.crp_id, cr.crp_name 
+/* $query="SELECT cr.crp_id, cr.crp_name 
 FROM ctt_subcategories AS sb 
 LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
 LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
@@ -124,7 +152,19 @@ INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id
 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
 LEFT JOIN ctt_projects_version AS pv on pv.prd_id = pd.prd_id 
-WHERE pj.pjt_id IN ($proj_ids) GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section";
+WHERE pj.pjt_id IN ($proj_ids) GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section"; */
+
+$query="SELECT DISTINCT cr.crp_id, cr.crp_name FROM ctt_projects_detail AS dt
+INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
+LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+WHERE pj.pjt_id IN($proj_ids) AND pr.prd_level != 'A' 
+GROUP BY cn.pjtcn_prod_name ORDER BY sb.sbc_order_print, cn.pjtcn_section";
+
 $res2 = $conn->query($query);
 $categories=array();
 $rr = 0;

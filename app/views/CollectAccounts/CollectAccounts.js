@@ -12,7 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //settingTable();
+        settingTable();
         //$('.tblProdMaster').css({display: 'none'});
         getProjects();
         getWayToPay();
@@ -131,7 +131,7 @@ function putProjects(dt) {
                 </tr>`;
             $('#tblCollets tbody').append(H);
         });
-        settingTable();
+        
         activeIcons();
     } else {
         settingTable();
@@ -259,9 +259,10 @@ function fillContent() {
             looseAlert($('#txtPeriodPayed').parent());
         }
     );
-
+    $('#txtWayPay').html('');
     // Llena el selector de tipo de proyecto
     $.each(tpprd, function (v, u) {
+        
         let H = `<option value="${u.wtp_id}"> ${u.wtp_description}</option>`;
         $('#txtWayPay').append(H);
     });
@@ -298,8 +299,8 @@ $('#savePayed.update')
             let referen = $('#txtRefPayed').val();
             let WayPay = $('#txtWayPay option:selected').val();
             let projPeriod = $('#txtPeriodPayed').val();
-            let montoTotal = $('#txtMontoTotal').val();
-            let montoRestante = (parseFloat(montoTotal) - parseFloat(montopayed));
+            let montoTotal = parseFloat($('#txtMontoTotal').val());
+            let montoRestante = (montoTotal - parseFloat(montopayed));
 
             let projDateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
             
@@ -314,7 +315,6 @@ $('#savePayed.update')
                 "cuoId"          : "${cuoId}",
                 "cusId"          : "${cusCte}",
                 "cusParent"      : "${cusCteRel}",
-                "montoRest"      : "${montoRestante}",
             }]`;
             
             console.log(par);

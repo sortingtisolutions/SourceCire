@@ -130,6 +130,7 @@ function getIdModuluesPerfiles(idPerfil) {
 // Optiene los perfiles disponibles *
 function getPerfilesUsuario(idPerfil) {
     // console.log('getPerfilesUsuario',idPerfil);
+    
     var location = 'PerfilUser/GetPerfiles';
     $.ajax({
         type: 'POST',
@@ -137,6 +138,7 @@ function getPerfilesUsuario(idPerfil) {
         url: location,
         success: function (respuesta) {
             // console.log('Perf-',respuesta);
+            $('#selectPerfilUsuario').html('');
             var renglon = "<option id='0'  value=''>Seleccione un perfil...</option> ";
             respuesta.forEach(function (row, index) {
                 renglon += '<option id="' + row.prf_id + '" value="'+ row.prf_id +'">' + row.prf_name + '</option> ';
