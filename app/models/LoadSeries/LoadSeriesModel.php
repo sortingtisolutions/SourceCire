@@ -216,19 +216,6 @@ public function SaveDocumento($request_params)
 		return $result;
 	}
 
-	public function verDocumento($params)
-	{
-		$qry = "SELECT doc_name, doc_type, doc_size, doc_content_type, doc_document FROM ctt_documents WHERE doc_id =  ".$params['id'].";";
-		$result = $this->db->query($qry);
-		if($row = $result->fetch_row()){
-			$item = array("doc_name" =>$row[0],
-			"doc_type" =>$row[1],
-			"doc_size" =>$row[2],
-			"doc_content_type" =>$row[3],
-			"doc_document" =>base64_encode($row[4]));
-		}
-		return $item;
-	}
 
 
 	// Listado de Proyectos  ****

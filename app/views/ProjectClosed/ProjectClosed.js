@@ -78,8 +78,8 @@ function inicial() {
                 concept = 0;
             }
             getProjects(concept);
-            if($('#txtProjects').val() > 0){
-             clean();}
+            
+             clean();
          });
          $('#RadioConceptos2')
          .unbind('change')
@@ -90,8 +90,8 @@ function inicial() {
                 concept = 0;
             }
             getProjects(concept);
-            if($('#txtProjects').val() > 0){
-                clean();}
+            
+            clean();
          });
         
          

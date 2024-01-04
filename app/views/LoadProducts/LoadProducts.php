@@ -38,6 +38,11 @@
 									<label for="NomDocumento">Nombre Documento</label>
 								</div>
 							</div>
+							<!-- <div class="row mt-4">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.8rem !important;" id="DescargarEjemplo">Descargar Ejemplo</button>
+								</div>
+							</div> -->
 
 							<!-- <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

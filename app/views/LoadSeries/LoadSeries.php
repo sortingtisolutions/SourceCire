@@ -38,15 +38,9 @@
 									<label for="NomDocumento">Nombre Documento</label>
 								</div>
 							</div>
-<!-- 
-							<div class="row">
-								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<select id="selectRowTipoDocumento"  name="selectRowTipoDocumento"  class="form-select form-select-sm" autocomplete="off" required >
-									</select>
-									<label for="selectRowTipoDocumento" class="form-label">Tipo Documento</label>
-								</div>
-							</div>
 
+							
+<!-- 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="fechaadmision" name="fechaadmision" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
@@ -75,6 +69,12 @@
 									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarTabla">Limpiar Tabla</button>
 								</div>
 							</div>
+
+							<!-- <div class="row mt-4">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.8rem !important;" id="DescargarEjemplo">Descargar Ejemplo</button>
+								</div>
+							</div> -->
 						</form>
 					</div>
 				</div>
