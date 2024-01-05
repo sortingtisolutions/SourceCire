@@ -258,7 +258,7 @@ public function listProyects($store)
         // Actualiza el detalle del proyecto con la serie
         $qry2 = "UPDATE ctt_projects_detail AS pd
             INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
-            SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId'
+            SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1
             WHERE pd.pjtdt_id = $pjDetail;";
         $this->db->query($qry2);
         // Agrega el nuevo registro en la tabla de subarrendos

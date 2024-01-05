@@ -14,7 +14,7 @@
 
                 <div class="form-group">
                 <div>
-                    <h1>PRODUCTO A REGISTRAR</h1>
+                    <h1>PRODUCTO A SUBARRENDAR</h1>
                 </div>
 
                     <!-- Almacen posición 1 -->

@@ -1,4 +1,5 @@
 let pjtgbl,verIdgbl,cusgbl,prdCmgbl, concept;
+let em, u, n,user,usrid;
 
 const pjs = $('#txtProjects');
 const exp = $('#txtExpendab');
@@ -46,7 +47,10 @@ $('document').ready(function () {
 function inicial() {
     if (altr == 1) {
         
-        
+        user = Cookies.get('user').split('|');
+        usrid = user[0];
+        n = user[2];
+        em = user[3];
         widthTable(tblprod);
         listChgStatus();
 
@@ -59,9 +63,18 @@ function inicial() {
          });
       
          $('#PrintClosure').on('click', function () {
-            /* LimpiaModal();
-            getTipoProveedor();
-            getOptionYesNo(); */
+            let pjt= $('#txtProjects').val();
+            let typeDes = $('#txtReport').val();
+            let pjtid = pjt.split('|')[0];
+            let prjType;
+
+            if ($('#RadioConceptos1').prop('checked')) {
+                prjType = 1;
+            } else {
+                prjType = 2;
+            }
+            printReport(pjtid,prjType, typeDes);
+           
          });
          if ($('#RadioConceptos1').prop('checked')) {
             concept = '8,9';
@@ -73,13 +86,12 @@ function inicial() {
          .on('change', function () {
             if ($('#RadioConceptos1').prop('checked')) {
                 concept = '8,9';
-                
             } else {
                 concept = 0;
             }
             getProjects(concept);
-            if($('#txtProjects').val() > 0){
-             clean();}
+            
+             clean();
          });
          $('#RadioConceptos2')
          .unbind('change')
@@ -90,8 +102,8 @@ function inicial() {
                 concept = 0;
             }
             getProjects(concept);
-            if($('#txtProjects').val() > 0){
-                clean();}
+            
+            clean();
          });
         
          
@@ -105,48 +117,18 @@ function inicial() {
 
 function showModalComments() {
     let template = $('#commentsTemplates');
-    // let pjtId = $('.version_current').attr('data-project');
 
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
-    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
-
-    console.log( $('#txtComment').val()); */
-    //console.log(prjid);
+    
     fillComments(pjtgbl);
 }
 
 function fillComments(pjtId) {
-    // Agrega nuevo comentario
-    /* $('.comments__addNew .invoice_button')
-        .unbind('click')
-        .on('click', function () {
-            
-            //let pjtId = $('.version_current').attr('data-project');
-
-            let comSrc = 'projects';
-            let comComment = $('#txtComment').val();
-
-            console.log(comComment);
-            if (comComment.length > 3) {
-                let par = `
-                    [{
-                        "comSrc"        : "${comSrc}",
-                        "comComment"    : "${comComment}",
-                        "pjtId"         : "${prjid}"
-                    }]
-                    `;
-                var pagina = 'WorkInputContent/InsertComment';
-                var tipo = 'json';
-                console.log(par);
-                var selector = addComment;
-                fillField(pagina, par, tipo, selector);
-            }
-        }); */
-
+    
     getComments(pjtId);
 }
 
@@ -344,12 +326,6 @@ function putProjectContent(dt) {
     }    
     widthTable(tblprod);
 
-    /* let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo) + parseFloat(pc.seguro), 0);
-    let liva=tot * 0.16 + parseFloat(tot);
-    // tot=liva;
-    totprj.html(fnm(tot, 2, '.', ','));
-    totprjIva.html(fnm(liva, 2, '.', ',')) */
-    // console.log(tot);
     activeIcons();
 }
 
@@ -558,6 +534,13 @@ function saveDocumentClosure() {
     let usrid = u;
     let verid = verIdgbl;
     let cusId = cusgbl;
+    let type;
+
+    if ($('#RadioConceptos1').prop('checked')) {
+        type = 1;
+    } else {
+        type = 2;
+    }
 
     var par = `
         [{  "cloTotProy" : "${cloTotProy}",
@@ -570,7 +553,8 @@ function saveDocumentClosure() {
             "cusId" :   "${cusId}",
             "pjtid" : "${pjtId}",
             "usrid" : "${usrid}",
-            "verid" : "${verid}"
+            "verid" : "${verid}",
+            "type" : "${type}"
         }] `;
     var pagina = 'ProjectClosed/saveDocumentClosure';
     var tipo = 'html';
@@ -642,7 +626,19 @@ function putSelectProduct(prdId) {
             // saveEditProduct(prdId);
         });
 }
-
+function printReport(verId, prjType, typeDes) {
+    // let user = Cookies.get('user').split('|');
+    // let u = user[0];
+    // let n = user[2];
+    console.log(verId);
+    let h = localStorage.getItem('host');
+    let v = verId;
+    // console.log('Datos', v, u, n, h);
+    window.open(
+        `${url}app/views/ProjectClosed/ProjectClosedReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}&t=${prjType}&d=${typeDes}`,
+        '_blank'
+    );
+}
 
 function resEdtProduct(dt) {
     $('#txtCinId').val('');

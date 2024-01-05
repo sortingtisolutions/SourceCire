@@ -12,7 +12,7 @@
             
         <div class="row mvst_group">
 
-            <div class="mvst_panel">
+            <div class="mvst_panel" style="background-color: #EDD2F5">
                 <div class="form-group">
                 <div class="form_primary">
                     <h4>Seleccion de proyectos únicos</h4>

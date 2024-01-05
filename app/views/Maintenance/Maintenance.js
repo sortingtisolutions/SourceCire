@@ -360,10 +360,10 @@ function put_Products(dt) {
     if(dt[0].prd_id!=0){
         $.each(pd, function (v, u) {
             
-            let sku = u.pjtdt_prod_sku;
+            /* let sku = u.pjtdt_prod_sku;
             if (sku == 'Pendiente') {
                 sku = `<span class="pending">${sku}</sku>`;
-            }
+            } */
             tabla.row
                 .add({
                     editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,

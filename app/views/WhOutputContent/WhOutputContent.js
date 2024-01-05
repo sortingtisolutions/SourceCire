@@ -697,7 +697,7 @@ function activeIconsSerie() {
                 $('#tblSerie').DataTable().destroy;
                 aux=0;
             }
-            getDetailProds(prjid,em, ar);
+            //getDetailProds(prjid,em, ar);
         });
 }
 
@@ -711,12 +711,14 @@ function checkSerie(pjtcnid) {
 }
 
 function myCheck(dt){
-    //console.log(dt);
+    console.log(dt);
     let sku = $('#'+dt).find('.toChange').attr('data-content').split('|')[0];
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
+    $('#'+pjtcn).removeClass('fas fa-edit');
+    $('#'+pjtcn).addClass('fas fa-regular fa-thumbs-up');
     // getDetailProds(prjid,em);
 
 }

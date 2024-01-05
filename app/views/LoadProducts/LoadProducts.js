@@ -51,9 +51,14 @@ function inicial() {
     $('#LimpiarFormulario').on('click', function () {
       LimpiaModal();
    });
+
    $('#LimpiarTabla').on('click', function () {
         eliminarDatos();
        
+    });
+
+    $('#DescargarEjemplo').on('click', function(){   
+        VerDocumento();
     });
 
     $('#DocumentosTable tbody').on('click', 'tr', function () {
@@ -69,7 +74,24 @@ function inicial() {
      }, 10);
    });
 }
-
+function VerDocumento() {
+    $.ajax({
+        url: 'app/assets/csv_ejemplos/productos.csv',
+        method: 'GET',
+        dataType: 'text',
+        success: function(data) {
+            // Generar la descarga del archivo CSV
+            var blob = new Blob([data], { type: 'text/csv' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'load_products.csv';
+            link.click();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el archivo CSV:', status, error);
+        }
+    });
+} 
 function activeButtons(){
     setTimeout(() => {
         console.log(datos);
@@ -143,9 +165,14 @@ function settingTable() {
                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
            },
            {
-               text: 'Borrar seleccionados',
-               
-           },
+            // Boton aplicar cambios
+            text: 'Descargar Ejemplo',
+            footer: true,
+            className: 'btn-apply',
+            action: function (e, dt, node, config) {
+                VerDocumento();
+            },
+            },
        ],
        pagingType: 'simple_numbers',
        language: {

@@ -16,12 +16,13 @@
             <div class="mvst_panel" style="width:280px; background-color: #e2edf3">
                 <div class="form-group">
                     <div class="form_primary">
-                        <h4 class="mainTitle">Responsables del Proyecto</h4>
+                        
 
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectName" type="text" class="form-control form-control-sm" style="font-size:10px; background:#EAEDED">
                                 <label for="txtProjectName">Nombre del Proyecto</label>
+                                <input id="txtIdProject" type="hidden" class="form-control form-control-sm" value="0"> 
                             </div>
                         </div>
 
