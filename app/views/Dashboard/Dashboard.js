@@ -420,8 +420,8 @@ function settingProjects(){
         dom: 'Blfrtip',
         bDestroy: true,
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [200, 400, -1],
+            [200, 400, 'Todos'],
         ],
         buttons: [
             {
@@ -505,8 +505,8 @@ function settingCamaras(){
         dom: 'Blfrtip',
         bDestroy: true,
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [200, 400, -1],
+            [200, 400, 'Todos'],
         ],
         buttons: [
             {
@@ -544,8 +544,8 @@ function settingProdSub(){
         dom: 'Blfrtip',
         bDestroy: true,
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [200, 400, -1],
+            [200, 400, 'Todos'],
         ],
         buttons: [
             {

@@ -394,3 +394,7 @@ ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW
 	WHERE se.ser_status=1 AND sp.stp_quantity>0
 	group by prd.prd_sku, prd.prd_name, prd.prd_level, sp.str_id
 	ORDER BY se.ser_sku  ;
+
+--******************** 30 Diciembre ************************
+ALTER TABLE `ctt_projects_mice`
+	ADD COLUMN `pjtvr_days_base_ant` INT(11) NULL DEFAULT NULL AFTER `pjtvr_days_base`;
