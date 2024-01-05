@@ -379,3 +379,22 @@ COMMENT='Tabla para registrar los movimientos de un proyecto desde la creacion d
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
+
+-- *************** 21 Diciembre *************
+ALTER TABLE `ctt_payments_applied`
+	ADD COLUMN `pym_pending` DOUBLE NULL DEFAULT '0' COMMENT 'Monto pendiente' COLLATE 'utf8mb4_general_ci' AFTER `pym_amount`
+	ADD COLUMN `pym_total` DOUBLE NULL DEFAULT '0' COMMENT 'Monto Total pagado' COLLATE 'utf8mb4_general_ci' AFTER `pym_pending`;
+
+
+-- *************** 22 Diciembre *************
+ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ctt_vw_stores_regiter` AS SELECT sp.str_id AS strId, se.ser_id as serId, prd.prd_sku as produsku, prd.prd_name as serlnumb, sum(sp.stp_quantity) as dateregs
+	FROM ctt_products as prd
+	INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
+	INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
+	WHERE se.ser_status=1 AND sp.stp_quantity>0
+	group by prd.prd_sku, prd.prd_name, prd.prd_level, sp.str_id
+	ORDER BY se.ser_sku  ;
+
+--******************** 30 Diciembre ************************
+ALTER TABLE `ctt_projects_mice`
+	ADD COLUMN `pjtvr_days_base_ant` INT(11) NULL DEFAULT NULL AFTER `pjtvr_days_base`;

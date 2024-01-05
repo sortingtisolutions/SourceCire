@@ -78,7 +78,7 @@ class StoreProductsListModel extends Model
                 FROM ctt_projects_detail AS prdt
                 INNER JOIN ctt_products AS prod ON prod.prd_id = prdt.prd_id 
                 INNER JOIN ctt_projects_content AS prjt ON prjt.pjtcn_id = prdt.pjtcn_id
-                WHERE prdt.pjtdt_prod_sku != 'Pendiente' AND prjt.pjt_id = 1 ;";
+                WHERE (prdt.pjtdt_prod_sku != 'Pendiente') AND prjt.pjt_id = 1 ;";
         return $this->db->query($qry);
 
     }	

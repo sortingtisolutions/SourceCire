@@ -434,10 +434,10 @@ function put_Freelances(dt) {
     if(dt[0].free_id){
         $.each(pd, function (v, u) {
             
-            let sku = u.pjtdt_prod_sku;
+            /* let sku = u.pjtdt_prod_sku;
             if (sku == 'Pendiente') {
                 sku = `<span class="pending">${sku}</sku>`;
-            }
+            } */
     
             var row= tabla.row
             .add({

@@ -39,7 +39,10 @@ function inicial() {
     $('#GuardarProcess').on('click', function(){   
         loadProcess();
     });
-    //borra almacen +
+
+    $('#DescargarEjemplo').on('click', function(){   
+        VerDocumento();
+    });
     
 
     $('#LimpiarFormulario').on('click', function () {
@@ -63,7 +66,10 @@ function inicial() {
      }, 10);
    });
 }
-
+//ver Documentos
+/* function VerDocumento() {
+    window.location.href = '/LoadSeriesCsv.php';
+} */
 //Valida los campos seleccionado *
 function validaFormulario() {
     var valor = 1;
@@ -135,9 +141,14 @@ function settingTable() {
                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
            },
            {
-               text: 'Borrar seleccionados',
-               
-           },
+                // Boton aplicar cambios
+                text: 'Descargar Ejemplo',
+                footer: true,
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    VerDocumento();
+                },
+            },
        ],
        pagingType: 'simple_numbers',
        language: {
@@ -255,30 +266,23 @@ function LimpiaModal() {
 }
 
 //ver Documentos
-function VerDocumento(id) {
-    var location = "LoadSeries/VerDocumento";
+function VerDocumento() {
     $.ajax({
-        type: "POST",
-        dataType: 'JSON',
-        data: {
-            id: id
+        url: 'app/assets/csv_ejemplos/series.csv',
+        method: 'GET',
+        dataType: 'text',
+        success: function(data) {
+            // Generar la descarga del archivo CSV
+            var blob = new Blob([data], { type: 'text/csv' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'load_series.csv';
+            link.click();
         },
-        url: location,
-        success: function (respuesta) {
-            //console.log(respuesta.doc_type);
-            var a = document.createElement('a');
-            a.href= "data:application/octet-stream;base64,"+respuesta.doc_document;
-            a.target = '_blank';
-           // a.download = respuesta.doc_name;
-
-            //a.download = respuesta.doc_name + "."+ respuesta.doc_type.trim();
-            a.download = respuesta.doc_name;
-            a.click();
-        },
-        error: function (jqXHR, textStatus, errorThrown){
-            console.log( jqXHR, textStatus, errorThrown);
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el archivo CSV:', status, error);
         }
-    }).done(function () { });
+    });
 } 
 
 //obtiene la informacion de tabla Proveedores *

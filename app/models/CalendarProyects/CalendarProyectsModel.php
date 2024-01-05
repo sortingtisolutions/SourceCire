@@ -33,7 +33,7 @@ class CalendarProyectsModel extends Model
 		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
 		WHERE pjc.pjt_id = 8"; */
 		$qry = "SELECT pjt_id 'id', pjt_name 'title', pj.pjt_date_start 'start', 
-		pj.pjt_date_end 'end' 
+		DATE_ADD(pj.pjt_date_end, INTERVAL 1 DAY) 'end' 
 		FROM ctt_projects AS pj WHERE pjt_id =$pjt_id";
 		return $this->db->query($qry);
 	}

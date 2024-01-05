@@ -183,17 +183,24 @@ class WorkInputContentController extends Controller
     public function checkSeries($request_params)
     {
         $params =  $this->session->get('user');
+        $prj_id = $request_params['prjid'];
         //$result = $this->model->checkSeries($request_params);
         $result = $this->model->getSeries($request_params);
         $i = 0;
         $serie=0;
         while($row = $result->fetch_assoc()){
             $serid = $row["ser_id"];
+            $ser_sku = $row["ser_sku"];
+            $prdid = $row["prd_id"];
             if($row["prd_level"]=='P'){
                 $serie=$serid;
+                $ser_sku =$ser_sku;
             }
             $paramsdet = array(
                 'serid' => $serid,
+                'prjid' => $prj_id,
+                'serSku' => $ser_sku,
+                'prdid' => $prdid
                 
             );
 

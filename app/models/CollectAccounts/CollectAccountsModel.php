@@ -92,10 +92,15 @@ class CollectAccountsModel extends Model
         $wayPay = $this->db->real_escape_string($params['wayPay']);
         $empId = $this->db->real_escape_string($params['empId']);
 
-        $qry1 = "SELECT case when pya.pym_amount then cla.ctl_amount_payable - SUM(pya.pym_amount) ELSE cla.ctl_amount_payable end as payment
+        /* $qry1 = "SELECT case when pya.pym_amount then cla.ctl_amount_payable - SUM(pya.pym_amount) ELSE cla.ctl_amount_payable end as payment
                 FROM ctt_payments_applied AS pya
                 LEFT JOIN ctt_collect_accounts AS cla ON cla.clt_id = pya.clt_id
-                WHERE cla.clt_id = $foldoc LIMIT 1;";
+                WHERE cla.clt_id = $foldoc LIMIT 1;"; */
+        $qry1 = "SELECT case when pya.pym_amount > 0 then cla.ctl_amount_payable - SUM(pya.pym_amount) ELSE cla.ctl_amount_payable end as payment
+        FROM ctt_collect_accounts AS cla
+        LEFT JOIN ctt_payments_applied AS pya ON cla.clt_id = pya.clt_id
+        WHERE cla.clt_id = $foldoc LIMIT 1;";
+        
         $rest = $this->db->query($qry1);
         $rst = $rest->fetch_object();
         $payment = $rst->payment;

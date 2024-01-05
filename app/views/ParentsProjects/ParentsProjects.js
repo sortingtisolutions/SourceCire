@@ -496,7 +496,7 @@ function datasUser(pjtid) {
 }
 function loadProject(dt) {
     console.log(dt);
-    
+    CleanCombos();
 }
 
 function putupdateUser(dt){
