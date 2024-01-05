@@ -6,11 +6,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Test</title>
+        <title>Dashboard Operaciones</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <script type="text/javascript">
             function redirect() {
-                let newpath="<?= FOLDER_DASH_PATH ?> . /Dashboard ";
+                let newpath="<?= FOLDER_DASH_PATH ?>" + "/Dashboard";
                 window.location.href = newpath;
             }
             window.onload = redirect;
