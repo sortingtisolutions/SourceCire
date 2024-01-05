@@ -176,7 +176,7 @@ class ProjectClosedModel extends Model
                             INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
                             LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
                             INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-                            WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level != 'K' AND pr.prd_level != 'A' UNION SELECT cn.pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,sr.ser_situation,
+                            WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level != 'K' AND pr.prd_level != 'A' UNION SELECT cn.pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,sr.ser_situation,
                                 ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
                                 cn.pjtcn_quantity as quantity,
                                 ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
@@ -244,17 +244,41 @@ class ProjectClosedModel extends Model
         $usrid          = $this->db->real_escape_string($params['usrid']);
         $verid          = $this->db->real_escape_string($params['verid']);
         $cusId          = $this->db->real_escape_string($params['cusId']);
-      
+        $type           = $this->db->real_escape_string($params['type']);
+        
+        if ($type==1) {
             $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
-                    clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
-                    clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
-                    cus_id, pjt_id, usr_id, ver_id)
-                VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
-                ' $cloTotDocum', Now(), '0', '$cloCommen','1',
-                '$cusId','$pjtid','$usrid','$verid');";
+                clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
+                cus_id, pjt_id, usr_id, ver_id)
+            VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+            ' $cloTotDocum', Now(), '0', '$cloCommen','1',
+            '$cusId','$pjtid','$usrid','$verid');";
+            
+            $this->db->query($qry);
+            $ducloId = $this->db->insert_id;
+        } else{
+            $qrypjts = $this->db->query("SELECT pjt_id, pj.pjt_name FROM ctt_projects AS pj WHERE pj.pjt_parent = '$pjtid' AND pj.pjt_status IN (8,9)");
+            
+            if($qrypjts->num_rows > 0){
+                while($row = $qrypjts->fetch_assoc()){
+                    $pjtId = $row['pjt_id'];
+                    $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
+                        clo_total_expendables, clo_total_diesel, clo_total_discounts,clo_total_document,
+                        clo_fecha_cierre,clo_flag_send,clo_comentarios, clo_ver_closed, 
+                        cus_id, pjt_id, usr_id, ver_id)
+                    VALUES ('$cloTotProy','$cloTotMaint','$cloTotExpen','$cloTotCombu','$cloTotDisco',
+                    ' $cloTotDocum', Now(), '0', '$cloCommen','1',
+                    '$cusId','$pjtId','$usrid','$verid');";
+                    
+                    $this->db->query($qry);
+                    $ducloId = $this->db->insert_id;
+                }
+            } 
+        }
+            
 
-        $this->db->query($qry);
-        $ducloId = $this->db->insert_id;
+        
 
         return $ducloId;
     }

@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No se permite acceso directo');
 require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
-class SearchIndividualProductsModel extends Model
+class ModulesCalendarModel extends Model
 {
     public function __construct()
     {
@@ -59,13 +59,16 @@ public function listProducts2()
     public function GetEventos($params)
 	{
 		$prd_id 	= $this->db->real_escape_string($params['prd_id']);
-		$qry = "SELECT pjp.pjtdt_id 'id', concat(ser_sku,' - ',pj.pjt_name) 'title', pjp.pjtpd_day_start 'start', DATE_ADD(pjp.pjtpd_day_end, INTERVAL 1 DAY) 'end', '#3c5777' as 'color' FROM ctt_projects_detail AS pjd 
-		INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
-		INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
-		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
-		INNER JOIN ctt_products AS prd ON prd.prd_id = sr.prd_id
-		INNER JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id
-		WHERE prd.prd_id = $prd_id";
+		$qry = "SELECT pdt.ser_id 'id', CONCAT(fr.free_name) 'title', pp.pjtpd_day_start 'start', 
+        pp.pjtpd_day_end 'end',  '#3c5777' as 'color' 
+        FROM ctt_products AS pd
+        INNER JOIN ctt_projects_detail AS pdt ON pdt.prd_id = pd.prd_id
+        INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+        INNER JOIN ctt_projects_periods AS pp ON pp.pjtdt_id = pdt.pjtdt_id
+        INNER JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pdt.pjtvr_id
+        INNER JOIN ctt_mobile_store AS ms ON ms.ser_id = sr.ser_id
+        INNER JOIN ctt_freelances AS fr ON fr.free_plates = ms.movstr_placas
+        WHERE pd.prd_id = $prd_id";
 		return $this->db->query($qry);
 	}
 

@@ -527,15 +527,15 @@ function build_modal_serie(dt) {
              
              tabla.row
                  .add({
-                     sermodif: `<i class="fas fa-wrench toChange" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}" style="${valmant}"></i> 
-                                <i class="fas fa-check-circle toAcept" id="${u.ser_id}" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}" style="${valstage}"></i>`,
+                     sermodif: `<i class="fas fa-wrench toChange" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.prd_id}" style="${valmant}"></i> 
+                                <i class="fas fa-check-circle toAcept" id="${u.ser_id}" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.prd_id}" style="${valstage}"></i>`,
                      seriesku: skufull,
                      sernumber: u.ser_serial_number,
                      sereconum: u.ser_serial_number,
                      sertype: u.prd_level,
                  })
                  .draw();
-             $(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
+             $(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id).attr('prd_id', u.prd_id);
          });
          activeIconsSer();
 }
@@ -561,8 +561,9 @@ function activeIconsSer() {
             let serprd = $(this).attr('data-content').split('|')[0];
             let serorg = $(this).attr('data-content').split('|')[1];
             let serId = $(this).attr('data-content').split('|')[2];
-            console.log("Para aceptar: ",serprd, serorg, serId);
-            checkSerie(serId, serprd);
+            let prdId = $(this).attr('data-content').split('|')[3];
+            console.log("Para aceptar: ", serId,serprd, prdId);
+            checkSerie(serId, serprd, prjid, prdId);
 
             let tabla = $('#tblSerie').DataTable();
             let numRows = tabla.rows().count();
@@ -578,21 +579,23 @@ function activeIconsSer() {
         });
 }
 
-function checkSerie(serId, serSku) {
-    //console.log('ID-Producto-Check', serId);
+function checkSerie(serId, serSku, prjid, prdId) {
+    console.log('ID-Producto-Check', serId, serSku, prjid, prdId);
     var pagina = 'WorkInputContent/checkSeries';
-    var par = `[{"serId":"${serId}", "serSku":"${serSku}", "prjid":${prjid}}]`;
+    var par = `[{"serId":"${serId}", "serSku":"${serSku}", "prjid":${prjid}, "prdid":${prdId}}]`;
     var tipo = 'html';
     var selector = myCheck; 
     fillField(pagina, par, tipo, selector);
 }
 
 function myCheck(dt){
-    console.log('myCheck', dt);
+    console.log('myCheck', dt, glbcnid);
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).find('.toAcept').css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
-    getDetailProds(prjid,em, ar);
+    $('#'+glbcnid).removeClass('fas fa-edit');
+    $('#'+glbcnid).addClass('fas fa-regular fa-thumbs-up');
+    //getDetailProds(prjid,em, ar);
 }
 
 function readAceptTable() {
@@ -601,8 +604,9 @@ function readAceptTable() {
         // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
         let serId = $(this).attr('id');
         let serdata = $($(this).find('td')[1]).text();
+        let prdId = $(this).attr('prd_id');
         console.log("readAceptTable: ", serId, serdata);
-        checkSerie(serId, serdata);
+        checkSerie(serId, serdata, prjid, prdId);
         setTimeout(function(){
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');

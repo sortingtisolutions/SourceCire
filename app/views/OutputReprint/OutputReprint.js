@@ -23,11 +23,7 @@ function inicial() {
     n = user[2];
     em = user[3];
     // Boton para registrar la salida del proyecto y los productos
-    $('#recordChgUser').unbind('click').on('click', function () {
-        
-        printOutPut(prjid);
-     });
-
+    
      $('#cleanForm')
         .unbind('click')
         .on('click', function () {
@@ -155,6 +151,12 @@ function setting_table_AsignedProd() {
             {data: 'pjtffin',   class: 'pjtffin date'},
         ],
     });
+
+    $('#recordChgUser').unbind('click').on('click', function () {
+        let prjId = $('#txtIdProject').val();
+        printOutPut(prjId);
+     });
+
 }
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
@@ -253,6 +255,7 @@ function activeIcons() {
 
 function editProject(pjtid,pjtnm) {
     $('#txtProjectName').val(pjtnm);
+    $('#txtIdProject').val(pjtid);
 }
 /* 
 function putUsersOnProject(dt) {
@@ -296,6 +299,7 @@ function confirm_toChgUsr(pjtid) {
 
 function CleanCombos() {
     $('#txtProjectName').val('');
+    $('#txtIdProject').val(0);
     $('#selUsrP').val(0);
     $('#selUsrA').val(0);
     $('#selUsrC').val(0);

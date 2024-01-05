@@ -709,8 +709,8 @@ public function saveBudgetList($params)
             $ser_reserve_count  = $series->ser_reserve_count; 
 
            $qry2 = "INSERT INTO ctt_projects_detail (
-                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
                 ); ";
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
@@ -724,27 +724,12 @@ public function saveBudgetList($params)
         } else {
             $serie  = null; 
             $sersku  = 'Pendiente' ;
-            $query = "SELECT COUNT(*) periodos, pp.pjtpd_day_end FROM ctt_projects_detail AS pd 
-            INNER JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pd.pjtvr_id
-            INNER JOIN ctt_projects AS pj ON pj.pjt_id = pv.pjt_id
-            INNER JOIN ctt_series AS sr ON sr.prd_id = pv.prd_id
-            INNER JOIN ctt_projects_periods AS pp ON pp.pjtpd_id = pd.pjtdt_id
-            WHERE pv.prd_id = $prodId AND pj.pjt_status NOT IN (9,99) 
-            AND pp.pjtpd_day_end < '$dtinic'";
-            $res = $this->db->query($query);
-            $futuro = $res->fetch_object();
-            $ser_futu = $futuro->periodos;
-            if ($ser_futu > 0) {
-                $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
-                    ); ";
-            }else{
-                $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
-                    ); ";
-            }
+            
+            $qry2 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                ); ";
+
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
         }

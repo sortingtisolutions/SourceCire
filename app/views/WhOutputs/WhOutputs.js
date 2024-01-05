@@ -104,6 +104,7 @@ function putProducts(dt) {
     console.log(dt);
     let valstage='';
     let valicon='';
+    let etiquetai = '';
     
     if (dt[0].pjt_id > 0) {        
         $('#tblProyects tbody').html('');
@@ -117,11 +118,17 @@ function putProducts(dt) {
                 valicon='fa fa-solid fa-dolly detail'; }
             else
                 { valstage='color:#CC0000';
-                valicon='fa fa-solid fa-dolly detail'; }
-          
+                valicon='fa fa-solid fa-dolly detail';
+                }
+                 //valicon='fa fa-solid fa-print detail';
+            if (u.pjt_status == 8){
+                etiquetai = '<i class="fa fa-solid fa-print print"></i>';
+            }else{
+                etiquetai = '';
+            }
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}' data-version='${u.ver_id}'>
-                    <td class="sku"><i class="${valicon}"></i></td>
+                    <td class="sku">${etiquetai}<i class="${valicon}"></i></td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
                     <td class="supply">${u.pjttp_name}</td>
@@ -164,6 +171,22 @@ function activeIcons() {
 
             window.location = 'WhOutputContent';
         });
+    $('.print')
+    .unbind('click')
+    .on('click', function () {
+        let h = localStorage.getItem('host');
+        let sltor = $(this);
+        let pjtid = sltor.parents('tr').attr('id');
+        let user = Cookies.get('user').split('|');
+        let u = user[0];
+        let n = user[2];
+        let em = user[3];
+        // console.log('Datos', v, u, n, h);
+        window.open(
+            `${url}app/views/OutputReprint/OutputReprintContentReport.php?v=${pjtid}&u=${u}&n=${n}&h=${h}&em=${em}`,
+            '_blank'
+        );
+    });
 }
 
 function confirm_to_work(pjtid, verid) {
