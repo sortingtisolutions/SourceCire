@@ -48,10 +48,11 @@
 								<th style="width: 200px">Producto</th>
 								<th style="width:  70px">SKU-Serie</th>
 								<th style="width:  90px">Serie</th>
-								<th style="width: 200px">Proyecto</th>
+								<th style="width: 150px">Proyecto</th>
 								<th style="width:  70px">Fecha Inicio</th>
 								<th style="width:  70px">Fecha Fin</th>
 								<th style="width:  30px">Estatus</th>
+								<th style="width:  30px">Usado (días)</th>
 							</tr>
 						</thead>
 						<tbody>						

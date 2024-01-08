@@ -911,34 +911,39 @@ public function promoteToProject($params)
             $this->db->query($qry2);
 
         } else {
-            $serie  = null; 
-            $sersku  = 'Pendiente' ;
-            $query = "SELECT COUNT(*) periodos, pp.pjtpd_day_end FROM ctt_projects_detail AS pd 
-            INNER JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pd.pjtvr_id
-            INNER JOIN ctt_projects AS pj ON pj.pjt_id = pv.pjt_id
-            INNER JOIN ctt_series AS sr ON sr.prd_id = pv.prd_id
-            INNER JOIN ctt_projects_periods AS pp ON pp.pjtpd_id = pd.pjtdt_id
-            WHERE pv.prd_id = $prodId AND pj.pjt_status NOT IN (9,99) 
-            AND pp.pjtpd_day_end < '$dtinic'";
-            $res = $this->db->query($query);
-            $futuro = $res->fetch_object();
-            $ser_futu = $futuro->periodos;
-            if ($ser_futu > 0) {
+          
+            $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
+            FROM ctt_series AS ser
+            WHERE ser.prd_id = $prodId AND NOT EXISTS (SELECT sr.ser_id serId
+            FROM ctt_series AS sr
+            INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+            INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+            WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+            OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl' OR 
+            '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+            OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";
+
+            $result =  $this->db->query($qry);
+            
+            $serie_futura = $result->fetch_object();
+            
+            if ($serie_futura != null){
+                $sersku  = $serie_futura->serSku;
+                $serie = $serie_futura->serId;
+
                 $qry2 = "INSERT INTO ctt_projects_detail (
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
                     ); ";
             }else{
+                $serie  = null; 
+                $sersku  = 'Pendiente' ;
                 $qry2 = "INSERT INTO ctt_projects_detail (
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
                     ); ";
             }
-           /*  $qry2 = "INSERT INTO ctt_projects_detail (
-                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id ) 
-                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId',2
-                ); "; */
-
+    
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
         }

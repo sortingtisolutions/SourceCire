@@ -82,7 +82,7 @@ define('DB_NAME3', 'cttapp_cire');
 /////////////////////////////////////
 
 // define('FOLDER_DASH_PATH', 'http://ctt-app.com/Ciredashboard');  /* Produccion */
-define('FOLDER_DASH_PATH', 'http://127.0.0.1/Ciredashboard');  /* DESARROLLO */
+define('FOLDER_DASH_PATH', 'http://desarrollo.com/Ciredashboard');  /* DESARROLLO */
 
 
 //////////////////////////////////////

@@ -723,39 +723,67 @@ public function saveBudgetList($params)
 
         } else {
             
-            $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
-            FROM ctt_series AS ser
-            WHERE ser.prd_id = $prodId AND NOT EXISTS (SELECT sr.ser_id serId
-            FROM ctt_series AS sr
-            INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
-            INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
-            WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
-            OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl' OR 
-            '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
-            OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";  // solo trae un registro
+            // buscar si existen series que regresen antes de que el producto actual se requiera.
+           /*  $query = "SELECT COUNT(*) periodos, pp.pjtpd_day_end FROM ctt_projects_detail AS pd 
+            INNER JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pd.pjtvr_id
+            INNER JOIN ctt_projects AS pj ON pj.pjt_id = pv.pjt_id
+            INNER JOIN ctt_series AS sr ON sr.prd_id = pv.prd_id
+            INNER JOIN ctt_projects_periods AS pp ON pp.pjtpd_id = pd.pjtdt_id
+            WHERE pv.prd_id = $prodId AND pj.pjt_status NOT IN (9,99) 
+            AND pp.pjtpd_day_end < '$dtinic'";
+            $res = $this->db->query($query);
+            $futuro = $res->fetch_object();
+            $ser_futu = $futuro->periodos;
+            if ($ser_futu > 0) { */
+                // Traer el dato de la serie
+               /*  $qry = "SELECT serId, serSku, con_futuro, fin FROM 
+                (SELECT sr.ser_id serId, sr.ser_sku serSku, (sr.ser_reserve_count + 1) as ser_reserve_count, pd.sttd_id,
+                SUM(case when pd.sttd_id = 3 then 1 ELSE 0 END) con_futuro, pjp.pjtpd_day_end fin
+                FROM ctt_series AS sr
+                INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+                INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+                WHERE sr.prd_id = $prodId GROUP BY sr.ser_id) AS res WHERE con_futuro = 0 AND fin < '$dtinic' LIMIT 1;";  // solo trae un registro */
+                
+                $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
+                FROM ctt_series AS ser
+                WHERE ser.prd_id = $prodId AND NOT EXISTS (SELECT sr.ser_id serId
+                FROM ctt_series AS sr
+                INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+                INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+                WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+                OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl' OR 
+                '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+                OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";  // solo trae un registro
 
-            $result =  $this->db->query($qry);
-            
-            $serie_futura = $result->fetch_object();
-            
+                $result =  $this->db->query($qry);
+                
+                $serie_futura = $result->fetch_object();
+                
 
-            if ($serie_futura != null){
-                $sersku  = $serie_futura->serSku;
-                $serie = $serie_futura->serId;
+                if ($serie_futura != null){
+                    $sersku  = $serie_futura->serSku;
+                    $serie = $serie_futura->serId;
 
-                $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
-                    ); ";
-            }else{
+                    $qry2 = "INSERT INTO ctt_projects_detail (
+                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
+                        ); ";
+                }else{
+                    $serie  = null; 
+                    $sersku  = 'Pendiente' ;
+                    $qry2 = "INSERT INTO ctt_projects_detail (
+                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
+                        ); ";
+                }
+            /* }else{
                 $serie  = null; 
                 $sersku  = 'Pendiente' ;
                 $qry2 = "INSERT INTO ctt_projects_detail (
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
                     ); ";
-            }
-           
+            } */
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
         }

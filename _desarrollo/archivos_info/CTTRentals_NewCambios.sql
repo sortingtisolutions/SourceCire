@@ -398,3 +398,31 @@ ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW
 --******************** 30 Diciembre ************************
 ALTER TABLE `ctt_projects_mice`
 	ADD COLUMN `pjtvr_days_base_ant` INT(11) NULL DEFAULT NULL AFTER `pjtvr_days_base`;
+
+
+
+--**********************************************
+ALTER TABLE `ctt_projects_detail`
+	ADD COLUMN `sttd_id` INT(11) NOT NULL DEFAULT '0' COMMENT 'FK id de la relacion con el estatus del detalle' AFTER `pjtvr_id`;
+
+CREATE TABLE `ctt_project_series_periods` (
+	`pjspd_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`pjspd_days` INT(11) NULL DEFAULT NULL,
+	`pjt_id` INT(11) NULL DEFAULT NULL,
+	`ser_id` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`pjspd_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;
+
+CREATE TABLE `ctt_status_details` (
+	`sttd_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`sttd_name` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`sttd_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;

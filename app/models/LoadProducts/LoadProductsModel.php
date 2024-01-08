@@ -91,7 +91,7 @@ public function SaveDocumento($request_params)
 							if ($acept == 0 ) {
 								$estatus = $estatus. 'SKU, ';
 							}
-							if($skuValido >= 1){ $estatus = $estatus. 'duplicidad de sku, ';}
+							if($skuValido != 0){ $estatus = $estatus. 'duplicidad de sku, ';}
 							if ($sbcId == 0) {
 								$estatus = $estatus. 'categoria o subcategoria en sku, ';
 							}
