@@ -14,8 +14,7 @@
                 window.location.href = newpath;
             }
             window.onload = redirect;
-        
-    </script>
+        </script>
     <script>
             // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
             // window.focus();
