@@ -380,6 +380,75 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
+CREATE TABLE `ctt_load_products` (
+	`prd_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'ID del producto',
+	`prd_sku` VARCHAR(15) NULL DEFAULT '' COMMENT 'SKU identificador del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_name` VARCHAR(200) NULL DEFAULT '' COMMENT 'Nombre del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_english_name` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre del producto en ingles' COLLATE 'utf8mb4_general_ci',
+	`prd_code_provider` VARCHAR(30) NULL DEFAULT '' COMMENT 'Código del producto segun proveedor' COLLATE 'utf8mb4_general_ci',
+	`prd_name_provider` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre del producto segun proveedor' COLLATE 'utf8mb4_general_ci',
+	`prd_model` VARCHAR(50) NULL DEFAULT '' COMMENT 'Modelo del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_price` DECIMAL(10,2) NULL DEFAULT '0.00' COMMENT 'Precio unitario del producto',
+	`prd_coin_type` VARCHAR(30) NULL DEFAULT '' COMMENT 'Tipo de moneda' COLLATE 'utf8mb4_general_ci',
+	`prd_visibility` VARCHAR(1) NULL DEFAULT '1' COMMENT 'Visibilidad del producto en cotización 1-visible, 0-no visible' COLLATE 'utf8mb4_general_ci',
+	`prd_comments` VARCHAR(300) NULL DEFAULT '' COMMENT 'Observaciones' COLLATE 'utf8mb4_general_ci',
+	`prd_status` VARCHAR(1) NULL DEFAULT '1' COMMENT 'Estatus del producto 1-Activo, 0-Inactivo' COLLATE 'utf8mb4_general_ci',
+	`prd_level` VARCHAR(1) NULL DEFAULT 'P' COMMENT 'Tipo de registro P-Producto, A-Accesorio, K-Paquete' COLLATE 'utf8mb4_general_ci',
+	`prd_lonely` VARCHAR(2) NULL DEFAULT NULL COMMENT 'Renta solo (sin accesorio)' COLLATE 'utf8mb4_general_ci',
+	`prd_insured` VARCHAR(1) NULL DEFAULT '1' COMMENT 'Cotiza seguro 1-si, 0-no' COLLATE 'utf8mb4_general_ci',
+	`sbc_id` INT(10) NULL DEFAULT '0' COMMENT 'ID de la subcategoría relacion ctt_subcategories',
+	`srv_id` INT(10) NULL DEFAULT '0' COMMENT 'ID del tipo de servicio relacion ctt_services',
+	`cin_id` INT(10) NULL DEFAULT '0' COMMENT 'ID del tipo de moneda relacion ctt_coin',
+	`prd_stock` INT(10) NULL DEFAULT '0' COMMENT 'Cantidad existente en almacenes',
+	`prd_reserved` INT(10) NULL DEFAULT '0' COMMENT 'Cantidad reservado',
+	`doc_id` INT(10) NULL DEFAULT '0' COMMENT 'Id del documento para relacionar la ficha técnica ctt_products_documents',
+	`result` VARCHAR(100) NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`prd_id`) USING BTREE,
+	INDEX `ndx_prdsku` (`prd_sku`) USING BTREE
+)
+COMMENT='Productos de la empresa.'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=DYNAMIC
+;
+
+CREATE TABLE `ctt_load_series` (
+	`ser_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'ID de la serie',
+	`ser_sku` VARCHAR(15) NULL DEFAULT NULL COMMENT 'SKU identificador del producto' COLLATE 'utf8mb4_general_ci',
+	`ser_serial_number` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Numero de serie del producto' COLLATE 'utf8mb4_general_ci',
+	`ser_cost` DECIMAL(10,2) NULL DEFAULT '0.00' COMMENT 'Costo unitario del producto',
+	`ser_status` VARCHAR(1) NULL DEFAULT NULL COMMENT 'Estatus del producto 1-Activo, 0-Inactivo' COLLATE 'utf8mb4_general_ci',
+	`ser_situation` VARCHAR(5) NULL DEFAULT NULL COMMENT 'Situación de estatus dentro del proceso ' COLLATE 'utf8mb4_general_ci',
+	`ser_stage` VARCHAR(5) NULL DEFAULT NULL COMMENT 'Etapa dentro del proceso' COLLATE 'utf8mb4_general_ci',
+	`ser_date_registry` DATETIME NULL DEFAULT 'CURRENT_TIMESTAMP' COMMENT 'Fecha de registro del producto',
+	`ser_date_down` DATETIME NULL DEFAULT 'CURRENT_TIMESTAMP' COMMENT 'Fecha de baja del producto',
+	`ser_reserve_count` INT(10) NULL DEFAULT '0' COMMENT 'Contador de rentas',
+	`ser_behaviour` VARCHAR(1) NOT NULL COMMENT 'Comportamiento del producto C-Compra, R-Renta' COLLATE 'utf8mb4_general_ci',
+	`ser_brand` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Marca del producto' COLLATE 'utf8mb4_general_ci',
+	`ser_cost_import` INT(10) NOT NULL DEFAULT '0' COMMENT 'Costo individual de importacion',
+	`ser_import_petition` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Numero de Pedimento de importación' COLLATE 'utf8mb4_general_ci',
+	`ser_sum_ctot_cimp` DOUBLE(10,2) NULL DEFAULT '0.00' COMMENT 'Suma del costo + costo importacion',
+	`ser_convert_cnac` DOUBLE(10,2) NULL DEFAULT '0.00' COMMENT 'Conversion del costo por tipo moneda',
+	`ser_no_econo` VARCHAR(20) NULL DEFAULT NULL COMMENT 'Numero economico asignado por almacen' COLLATE 'utf8mb4_general_ci',
+	`ser_comments` VARCHAR(200) NULL DEFAULT NULL COMMENT 'Comentarios sobre la serie del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_id` INT(10) NULL DEFAULT '0' COMMENT 'ID del producto relacion ctt_productos',
+	`sup_id` INT(10) NULL DEFAULT '0' COMMENT 'ID de la proveedor relacion ctt_suppliers',
+	`cin_id` INT(10) NULL DEFAULT '0' COMMENT 'ID del tipo de moneda relacion ctt_coin',
+	`pjtdt_id` INT(10) NULL DEFAULT '0' COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
+	`prd_id_acc` INT(10) NULL DEFAULT '0' COMMENT 'id relacion accesorio en productos',
+	`str_id` INT(10) NULL DEFAULT '0' COMMENT 'ID relacion con ctt_stores almacenes',
+	`result` VARCHAR(100) NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`ser_id`) USING BTREE,
+	INDEX `indx_prd_id` (`prd_id`) USING BTREE,
+	INDEX `prd_id_acc` (`prd_id_acc`) USING BTREE
+)
+COMMENT='Numero serie de productos correspondientes a un modelo.'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=DYNAMIC
+;
+
+
 -- *************** 21 Diciembre *************
 ALTER TABLE `ctt_payments_applied`
 	ADD COLUMN `pym_pending` DOUBLE NULL DEFAULT '0' COMMENT 'Monto pendiente' COLLATE 'utf8mb4_general_ci' AFTER `pym_amount`
