@@ -257,8 +257,8 @@ class WorkInputContentModel extends Model
             $folio = $this->db->query($qry);
         }
   
-        $qry = $this->db->query("INSERT INTO ctt_project_series_periods(pjspd_days, pjt_id, ser_id) 
-        SELECT DATEDIFF(ppd.pjtpd_day_end, ppd.pjtpd_day_start) + 1 days,  '$prjid' pjt_id,'$serid' ser_id
+        $qry = $this->db->query("INSERT INTO ctt_project_series_periods(pjspd_days, pjt_id, ser_id, pjtdt_id) 
+        SELECT DATEDIFF(ppd.pjtpd_day_end, ppd.pjtpd_day_start) + 1 days,  '$prjid' pjt_id,'$serid' ser_id, pjd.pjtdt_id
         FROM ctt_projects_periods AS ppd 
         INNER JOIN ctt_projects_detail AS pjd ON ppd.pjtdt_id = pjd.pjtdt_id
         INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id

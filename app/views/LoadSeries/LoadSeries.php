@@ -39,22 +39,6 @@
 								</div>
 							</div>
 
-							
-<!-- 
-							<div class="row">
-								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="fechaadmision" name="fechaadmision" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
-									<label for="fechaadmision">Fecha de Admision</label>
-								</div>
-							</div>
-
-                    		<div class="row">
-								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="CodDocumento" name="CodDocumento" type="text" class="form-control form-control-sm" style="text-transform: uppercase" >
-									<label for="CodDocumento">Codigo Documento</label>
-								</div>
-							</div>
- -->
  							<div class="row">
 								<div class="col-6">
 									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarDocumento">Cargar</button>
@@ -70,11 +54,11 @@
 								</div>
 							</div>
 
-							<!-- <div class="row mt-4">
+							<div class="row mt-4 objHidden">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.8rem !important;" id="DescargarEjemplo">Descargar Ejemplo</button>
+									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.8rem !important;" id="verMotivo">Motivo</button>
 								</div>
-							</div> -->
+							</div>
 						</form>
 					</div>
 				</div>
@@ -90,6 +74,7 @@
 										<thead>
 											<tr>
 													<th style="width: 100px"></th>
+													<th style="width: 60px">Resultado</th>
 													<th style="width: 60px">Sku</th>
 													<th style="width: 70px">Numero de Serie</th>
 													<th style="width: 70px">Costo</th>
@@ -242,12 +227,56 @@
 <div class="invoice__loading modalLoading">
             <div class="box_loading">
                 <p class="text_loading">
-                    Registrando Datos en Series<br>
+                   Cargando Datos de Series<br>
                     <i class="fas fa-spinner spin"></i> 
                     </p>
-                <p>Se estan actualizando los registros en la tabla de series, este proceso podria tomar un par de segundos</p>
+                <p>Se estan actualizando los registros en la tabla de series, este proceso podria tomar algunos segundos</p>
             </div>
         </div>
+<!-- MODAL PARA PODER VISUALIZAR LOS MOTIVOS DE ERROR-->
+
+<div class="modal fade" id="MotivosModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+				<h2>DESCRIPCIÓN DEL ERROR</h2>
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+
+            <div class="row">
+
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-1"> 1. El SKU introducido, puede no tener una categoria o subcategoria existente en la base de datos, o los últimos caracteres NO son númericos.</span>
+                </div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-2"> 2. El SKU introducido, ya existe en la tabla de productos.</span>
+				</div>
+				<div class="col-12">
+					 <span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-4"> 4. El costo no esta en formato decimal. </span>
+				</div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-5"> 5. El tipo de moneda es incorrecto, revise contar con una estructura similar a 'MXN' y que esta moneda este registrado en el modulo de moneda.</span>
+				</div>
+				<div class="col-1">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-6"> 6. El almacen no es correcto, puedes introducir el id o el nombre del almacen.</span>
+				</div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-7"> 7. El proveedor introducido NO existe en la tabla de proveedores.</span> 
+				</div>
+				<!-- <div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-7"> 7. El seguro solo puede tener dos valores '1' o '0', por favor de revisar.</span> 
+				</div> -->
+				
+            </div>
+
+            </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button> -->
+                    <button type="button" class="btn btn-secondary btnHideModal" id="btn_hide_modal">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
 
 <script src="<?=  PATH_ASSETS . 'lib/bs-custom-file-input.min.js' ?>"></script>
 

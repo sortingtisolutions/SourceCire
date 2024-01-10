@@ -82,11 +82,60 @@
 		public function loadProcess($request_params)
 		{
 			$params =  $this->session->get('user');
-            $result = $this->model->loadProcess($request_params);
+			$result = $this->model->getLoadSeries($request_params);
+			$load 	= $this->load_process($result);
+			$borrarSeries = $this->model->vaciarLoadSeries();
+            // $result = $this->model->loadProcess($request_params);
 			$res =  '[{"ser_id":"0"}]';
 			echo $res;
 		}
+		public function load_process($res){
+			while($row = $res->fetch_assoc()){
+				$ser_sku 			= $row["ser_sku"];
+				$ser_serial_number 	= $row["ser_serial_number"];
+				$ser_cost 			= $row["ser_cost"];
+				$ser_status 		= $row["ser_status"];
+				$ser_situation 		= $row["ser_situation"];
+				$ser_stage 			= $row["ser_stage"];
+				$ser_date_registry 	= $row["ser_date_registry"];
+				$ser_date_down	 	= $row["ser_date_down"];
 
+				$ser_brand 			= $row["ser_brand"];
+				$ser_cost_import 	= $row["ser_cost_import"];
+				$ser_import_petition= $row["ser_import_petition"];
+				$ser_sum_ctot_cimp 	= $row["ser_sum_ctot_cimp"];
+				$ser_no_econo 		= $row["ser_no_econo"];
+				$ser_comments 		= $row["ser_comments"];
+				$prd_id 			= $row["prd_id"];
+				$sup_id 			= $row["sup_id"];
+				$cin_id 			= $row["cin_id"];
+				$str_id 			= $row["str_id"];
+
+				$params = array(
+					'sersku' 		=> $ser_sku,
+					'sernum' 		=> $ser_serial_number,
+					'sercost' 		=> $ser_cost,
+					'status' 		=> $ser_status ,
+					'situation' 	=> $ser_situation,
+					'stage' 		=> $ser_stage,
+					'datereg' 		=> $ser_date_registry,
+					'datedown' 		=> $ser_date_down,
+
+					'serbrand' 		=> $ser_brand,
+					'costimport' 	=> $ser_cost_import,
+					'imppetition' 	=> $ser_import_petition,
+					'sumctotcimp' 	=> $ser_sum_ctot_cimp,
+					'noecono' 		=> $ser_no_econo,
+					'comments' 		=> $ser_comments,
+					'prdid' 		=> $prd_id,
+					'supid' 		=> $sup_id,
+
+					'cinid' 		=> $cin_id,
+					'strid' 		=> $str_id,
+				);
+				$this->model->saveSerie($params);
+			}
+		}
 		public function DeleteData($request_params)
 		{
 			$params =  $this->session->get('user');

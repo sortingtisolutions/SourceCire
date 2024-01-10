@@ -46,7 +46,7 @@ public function listProyects($store)
                 Left JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
                 Left JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
                 Left  JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id 
-                LEFT JOIN ctt_project_series_periods AS psp ON psp.ser_id = ser.ser_id
+                LEFT JOIN ctt_project_series_periods AS psp ON psp.pjtdt_id = pjd.pjtdt_id
                 WHERE pd.prd_id = $pjtId group by ser.ser_id ORDER BY ser.ser_serial_number;";
                 
         return $this->db->query($qry);
@@ -85,7 +85,7 @@ public function listProducts2()
 		return $this->db->query($qry);
 	}
 
-
+    
 }
 
 

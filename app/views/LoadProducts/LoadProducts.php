@@ -38,6 +38,7 @@
 									<label for="NomDocumento">Nombre Documento</label>
 								</div>
 							</div>
+							<div style="height:3px;"></div> <!-- Agregar un espacio -->
 							<!-- <div class="row mt-4">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.8rem !important;" id="DescargarEjemplo">Descargar Ejemplo</button>
@@ -80,6 +81,13 @@
 									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarTabla">Limpiar Tabla</button>
 								</div>
 							</div>
+							<div style="height:3px;"></div> <!-- Agregar un espacio -->
+							<!-- <div class="row mt-4 ">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<button type="button"  class="btn btn-secondary btn-sm btn-block objHidden" style="font-size: 0.8rem !important;" id="verMotivo">Motivo</button>
+									<input id="IdErrores" name="IdErrores" type="hidden" class="form-control form-control-sm" >
+								</div>
+							</div> -->
 						</form>
 					</div>
 				</div>
@@ -90,11 +98,12 @@
 					<h1>Productos cargados</h1>
 
 					<div class="row">
-						<div class="col-12 col-md-12">		
-								<table id="DocumentosTable" class="display  display compact nowrap" style="width:95%">         
+						<div class="col-12 col-md-12 ">		
+								<table id="DocumentosTable" class="display  compact nowrap" style="width:95%">         
 										<thead>
 											<tr>
 													<th style="width: 100px"></th>
+													<th style="width: 100px">Resultado</th>
 													<th style="width: 200px">SKU</th>
 													<th style="width: 100px">Producto</th>
 													<th style="width: 100px">Nombre en Ingles</th>
@@ -203,10 +212,10 @@
 <div class="invoice__loading modalLoading">
             <div class="box_loading">
                 <p class="text_loading">
-                    Registrando Datos en Productos<br>
+                    Cargando Datos de Productos<br>
                     <i class="fas fa-spinner spin"></i> 
                     </p>
-                <p>Se estan actualizando los registros en la tabla de productos, este proceso podria tomar un par de segundos</p>
+                <p>Se estan actualizando los registros en la tabla de productos, este proceso podria tomar algunos segundos</p>
             </div>
         </div>
 <!-- Modal para imprimir folio de salida -->
@@ -240,12 +249,60 @@
 				<div class="col-12 text-center">
 					<span class="modal-title text-center" style="font-size: 0.8rem;" id="seguro"></span> 
 				</div>
+				<div class="col-12 text-center">
+					<span class="modal-title text-center" style="font-size: 0.8rem;" id="categories"></span> 
+				</div>
             </div>
 
             </div>
                 <div class="modal-footer">
                     <!-- <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button> -->
                     <button type="button" class="btn btn-secondary" id="btnHideModal">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
+
+<!-- MODAL PARA PODER VISUALIZAR LOS MOTIVOS DE ERROR-->
+
+<div class="modal fade" id="MotivosModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+				<h2>DESCRIPCIÓN DEL ERROR</h2>
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+
+            <div class="row">
+
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-1"> 1. El SKU introducido, puede no tener una categoria o subcategoria existente en la base de datos, o los últimos 3 caracteres NO son númericos.</span>
+                </div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-2"> 2. El SKU introducido, esta existente en la tabla de productos.</span>
+				</div>
+				<div class="col-12">
+					 <span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-3"> 3. No se encontro ninguna subcategoria relacionada con los datos introducidos en el SKU. </span>
+				</div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-4"> 4. El tipo de moneda es incorrecto, revise contar con una estructura similar a 'MXN' y que esta moneda este registrado en el modulo de moneda.</span>
+				</div>
+				<div class="col-1">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-5"> 5. El costo introducido NO es númerico, por favor revisar que lo sea.</span>
+				</div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-6"> 6. El servicio introducido NO es númerico.</span> 
+				</div>
+				<div class="col-12">
+					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-7"> 7. El seguro solo puede tener dos valores '1' o '0', por favor de revisar.</span> 
+				</div>
+				
+            </div>
+
+            </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button> -->
+                    <button type="button" class="btn btn-secondary btnHideModal" id="btn_hide_modal">Cerrar</button>
                 </div>
             </div>
     </div>
