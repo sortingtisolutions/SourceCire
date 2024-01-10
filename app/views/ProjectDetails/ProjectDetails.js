@@ -1329,7 +1329,10 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    modalLoading('H');
+    setTimeout(() => {
+        modalLoading('H');
+    }, 200);
+    
     /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1821,15 +1824,19 @@ function infoProduct(bdgId, type,sec) { // *** Ed
     $('.invoice__modal-general .modal__header-concept').html(
         'Informacion de  los Productos Relacionados'
     );
+    modalLoading('B');
     closeModals();
     setTimeout(() => {
+        
         let verId = $('.version_current').attr('data-version');
         //console.log($('.version_current').attr('data-version'));
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
+        modalLoading('H');
     }, 500);
 }
 
 function infoPackage(bdgId, type, sec) {
+    modalLoading('B');
     setTimeout(() => {
         let verId = $('.version_current').attr('data-version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
@@ -1838,6 +1845,7 @@ function infoPackage(bdgId, type, sec) {
 }
 
 function infoDetallePkt(lcatsub) {
+    modalLoading('B');
     setTimeout(() => {
         // console.log('infoDetallePkt-'lcatsub);
         getChangeProd(lcatsub);
@@ -1990,7 +1998,7 @@ function putProductsRelatedPk(dt){
             // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
         } 
     });
-
+    modalLoading('H');
   /*   $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     }); */
@@ -2097,6 +2105,7 @@ function putNewProdChg(dt) {
 
 // Muestra el inventario de productos
 function stockProduct(bdgId,nameProd) {
+    modalLoading('B');
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -2139,6 +2148,7 @@ function putStockProjects(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 // Edita los datos del proyecto
@@ -3357,6 +3367,7 @@ function OrderMice(m) {
 /* ************************************************************************ */
 
 function periodProduct(prd,nameProd) {
+    modalLoading('B');
     let prdId = prd.substring(3, 10);
     let pjtId = $('.version_current').attr('data-project');
 
@@ -3378,6 +3389,7 @@ function periodProduct(prd,nameProd) {
 
 function putPeriods(dt) {
     $('#periodBox').html(dt);
+    modalLoading('H');
 }
 
 function purgeInterfase() {

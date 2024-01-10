@@ -1,4 +1,5 @@
-let pjtgbl,verIdgbl,cusgbl,prdCmgbl;
+let pjtgbl,verIdgbl,cusgbl,prdCmgbl, concept;
+let em, u, n,user,usrid;
 
 const pjs = $('#txtProjects');
 const exp = $('#txtExpendab');
@@ -24,6 +25,8 @@ const totDias = $('#totDias');
 const totSubarrendo = $('#totSubarrendo');
 const totPrepago = $('#totPrepago');
 
+let monto = 0.16;
+
 const size = [
     { s: 20 },
     { s: 100 },
@@ -43,8 +46,11 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-       
-        getProjects();
+        
+        user = Cookies.get('user').split('|');
+        usrid = user[0];
+        n = user[2];
+        em = user[3];
         widthTable(tblprod);
         listChgStatus();
 
@@ -57,11 +63,49 @@ function inicial() {
          });
       
          $('#PrintClosure').on('click', function () {
-            /* LimpiaModal();
-            getTipoProveedor();
-            getOptionYesNo(); */
-         });
+            let pjt= $('#txtProjects').val();
+            let typeDes = $('#txtReport').val();
+            let pjtid = pjt.split('|')[0];
+            let prjType;
 
+            if ($('#RadioConceptos1').prop('checked')) {
+                prjType = 1;
+            } else {
+                prjType = 2;
+            }
+            printReport(pjtid,prjType, typeDes);
+           
+         });
+         if ($('#RadioConceptos1').prop('checked')) {
+            concept = '8,9';
+            getProjects(concept);
+        } 
+
+         $('#RadioConceptos1')
+         .unbind('change')
+         .on('change', function () {
+            if ($('#RadioConceptos1').prop('checked')) {
+                concept = '8,9';
+            } else {
+                concept = 0;
+            }
+            getProjects(concept);
+            
+             clean();
+         });
+         $('#RadioConceptos2')
+         .unbind('change')
+         .on('change', function () {
+            if ($('#RadioConceptos2').prop('checked')) {
+                concept = '40';
+            } else {
+                concept = 0;
+            }
+            getProjects(concept);
+            
+            clean();
+         });
+        
          
          
     } else {
@@ -73,50 +117,18 @@ function inicial() {
 
 function showModalComments() {
     let template = $('#commentsTemplates');
-    // let pjtId = $('.version_current').attr('data-project');
 
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
-    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
-
-    console.log( $('#txtComment').val()); */
-    //console.log(prjid);
+    
     fillComments(pjtgbl);
 }
 
 function fillComments(pjtId) {
-    console.log(pjtId);
     
-    // Agrega nuevo comentario
-    /* $('.comments__addNew .invoice_button')
-        .unbind('click')
-        .on('click', function () {
-            
-            //let pjtId = $('.version_current').attr('data-project');
-
-            let comSrc = 'projects';
-            let comComment = $('#txtComment').val();
-
-            console.log(comComment);
-            if (comComment.length > 3) {
-                let par = `
-                    [{
-                        "comSrc"        : "${comSrc}",
-                        "comComment"    : "${comComment}",
-                        "pjtId"         : "${prjid}"
-                    }]
-                    `;
-                var pagina = 'WorkInputContent/InsertComment';
-                var tipo = 'json';
-                console.log(par);
-                var selector = addComment;
-                fillField(pagina, par, tipo, selector);
-            }
-        }); */
-
     getComments(pjtId);
 }
 
@@ -132,7 +144,6 @@ function putComments(dt) {
     $('.comments__list').html('');
     if (dt[0].com_id > 0) {
         $.each(dt, function (v, u) {
-            console.log(u);
             fillCommnetElements(u);
         });
     }
@@ -157,7 +168,6 @@ function automaticCloseModal() {
 }
 
 function fillCommnetElements(u) {
-    console.log(u.com_comment);
     let H = `
         <div class="comment__group" style="border-bottom: 1px solid var(--br-gray-soft); padding: 0.2rem; width: 100%;">
             <div class="comment__box comment__box-date" style="width: 100%;text-align: right; font-size: 0.9em; color: var(--in-oxford);"><i class="far fa-clock" style="padding: 0 0.5rem;"></i>${u.com_date}</div>
@@ -179,17 +189,19 @@ function listChgStatus() {
 }
 
 // Obtiene el listado de los proyectos en etapa de pryecto
-function getProjects() {
-    let data = [{  pjtId: '', }, ];
+function getProjects(concept) {
+    //let data = [{  pjtId: ${concept}', }, ];
 
     var pagina = 'ProjectClosed/listProjects';
-    var par = JSON.stringify(data);
+    var par = `[{"pjtId":"${concept}"}]`;
     var tipo = 'JSON';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
 
 function putProjects(dt) {
+    pjs.html('');
+    pjs.append('<option value="0">Selecciona el proyecto</option>');
     if (dt[0].pjt_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.pjt_id}|${u.cus_id}">${u.pjt_name}</option>`;
@@ -200,7 +212,8 @@ function putProjects(dt) {
     $('#txtExpendab').val('0.00');
 
     pjs.unbind('change').on('change', function () {
-        deep_loading('P');
+        deep_loading('O');
+        
         // console.log('VAL-', $(this).val());
         let pjtId = $(this).val().split('|')[0];
         let cusId = $(this).val().split('|')[1];
@@ -209,22 +222,34 @@ function putProjects(dt) {
         $('#txtReport').val(1);
         // console.log('Variables',pjtgbl, cusgbl);
         $('#txtExpendab').html('0.00');
-        activeProjectsFunctions(pjtId);
+        let radio =  $('#RadioConceptos1').prop('checked');
+        let type = radio == true ? 1 : 2;
+        console.log('type: ', type,'pjt', pjtId);
+        activeProjectsFunctions(pjtId, type);
 
     });
+    
 }
 
-function activeProjectsFunctions(pjtId) {
+function activeProjectsFunctions(pjtId, type) {
+    
     findExpenda(pjtId);
-    getTotalMantenance(pjtId);
     findExtraDiesel(pjtId);
     findDiscount(pjtId);
-    activaCampos(pjtId, 1);
-    getTotalEquipo(pjtId,'1');
-    getTotalEquipo(pjtId,'2');
-    getTotalEquipo(pjtId,'3');
-    getTotalEquipo(pjtId,'4');
-    getTotalesProyecto(pjtId,'4');
+    if (pjtId > 0 ) {
+        getTotalMantenance(pjtId,type);
+        getTotalPrepago(pjtId,type);
+        activaCampos(pjtId, 1, type);
+        getTotalEquipo(pjtId,'1', type);
+        getTotalEquipo(pjtId,'2', type);
+        getTotalEquipo(pjtId,'3', type);
+        getTotalEquipo(pjtId,'4', type);
+        getTotalesProyecto(pjtId, type);
+    }else{
+       clean();
+    }
+    
+
     $('.sidebar__comments .toComment')
     .unbind('click')
     .on('click', function () {
@@ -234,8 +259,20 @@ function activeProjectsFunctions(pjtId) {
     $('#txtReport')
          .unbind('change')
          .on('change', function () {
-            getProjectContent(pjtId, $('#txtReport').val());
-            console.log(pjtId,$('#txtReport').val())
+            let prjType;
+            if ($('#RadioConceptos1').prop('checked')) {
+                prjType = 1;
+            } 
+            if ($('#RadioConceptos2').prop('checked')) {
+                prjType = 2;
+            } 
+            
+            getProjectContent(pjtId, $('#txtReport').val(), prjType);
+         });
+    $('#txtIva')
+         .unbind('change')
+         .on('change', function () {
+            changeIva($('#txtIva').val());
          });
     /* setTimeout(() => {
         updateTotals();
@@ -243,15 +280,20 @@ function activeProjectsFunctions(pjtId) {
     deep_loading('C');
 }
 
-
-function activaCampos(pjtId, type) {
+function changeIva(iva){
+    let liva= (parseFloat(monto * iva) + parseFloat(monto));
+    totprjIva.html(fnm(liva, 2, '.', ','));
+    updateTotals();
+}
+function activaCampos(pjtId, type, prjType) {
     $('.list-finder').removeClass('hide-items');
-    getProjectContent(pjtId, type);
+    
+    getProjectContent(pjtId, type, prjType);
 }
 
-function getProjectContent(pjtId, type) {
+function getProjectContent(pjtId, type, prjType) {
     let data = [
-        {pjtId: pjtId, type: type,},
+        {pjtId: pjtId, type: type, prjType: prjType},
         ];
 
     var pagina = 'ProjectClosed/projectContent';
@@ -262,8 +304,7 @@ function getProjectContent(pjtId, type) {
 }
 
 function putProjectContent(dt) {
-    console.log(dt);
-    if (dt[0].pjtdt_id!=''){
+    if (dt[0].pjtdt_id > 0){
        
         tblprod.find('tbody').html('');
         verIdgbl=dt[0].ver_id;
@@ -276,7 +317,8 @@ function putProjectContent(dt) {
                         <td class="lf">${u.pjtcn_prod_name}</td>
                         <td class="cn">${u.quantity}</td>
                         <td class="cn">${u.ser_situation}</td>
-                        <td class="rg">${fnm(costins, 2, '.', ',')}</td>
+                        <td class="cn">${fnm(costins, 2, '.', ',')}</td>
+                        <td class="rg">${u.pjt_name}</td>
                         <td class="lf">${u.ser_comments}</td>
                     </tr>`;
             tblprod.append(H);
@@ -284,12 +326,6 @@ function putProjectContent(dt) {
     }    
     widthTable(tblprod);
 
-    /* let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo) + parseFloat(pc.seguro), 0);
-    let liva=tot * 0.16 + parseFloat(tot);
-    // tot=liva;
-    totprj.html(fnm(tot, 2, '.', ','));
-    totprjIva.html(fnm(liva, 2, '.', ',')) */
-    // console.log(tot);
     activeIcons();
 }
 
@@ -303,7 +339,6 @@ function activeIcons() {
             let prdId = sltor.parents('tr').attr('id'); 
             let Lname = sltor.parents('tr').attr('iname');
             let prdNm = 'Anexo de comentarios a: ' + Lname ; //+ '-' + Lname
-            console.log('Click Iconos',prdId, Lname);
             // $('#txtPrdName').val(Lname);
 
             $('#ProductModal').removeClass('overlay_hide');
@@ -344,9 +379,9 @@ function putSaleExpendab(dt) {
     });
 }
 
-function getTotalMantenance(pjtId){
+function getTotalMantenance(pjtId, type){
     var pagina = 'ProjectClosed/totalMantenimiento';
-    var par = `[{"pjtId":"${pjtId}"}]`;
+    var par = `[{"pjtId":"${pjtId}", "type":"${type}"}]`;
     var tipo = 'json';
     var selector = putTotalMaintenance;
     fillField(pagina, par, tipo, selector); 
@@ -369,25 +404,25 @@ function putTotalMaintenance(dt){
 }
 
 // Obtener los datos totales para Equipo Base, Extra, Dias, Subarrendo
-function getTotalEquipo(pjtId, equipo){
+function getTotalEquipo(pjtId, equipo, type){
     var pagina = 'ProjectClosed/totalEquipo';
-    var par = `[{"pjtId":"${pjtId}", "equipo":"${equipo}"}]`;
+    var par = `[{"pjtId":"${pjtId}", "equipo":"${equipo}", "type":"${type}"}]`;
     var tipo = 'json';
+    console.log(par);
     var selector = putTotalEquipo;
     fillField(pagina, par, tipo, selector); 
 }
 
 // getTotalesProyecto
 // Obtener los datos totales para el proyecto
-function getTotalesProyecto(pjtId){
+function getTotalesProyecto(pjtId, type){
     var pagina = 'ProjectClosed/totalesProyecto';
-    var par = `[{"pjtId":"${pjtId}"}]`;
+    var par = `[{"pjtId":"${pjtId}", "type":"${type}"}]`;
     var tipo = 'json';
     var selector = putTotalesProyecto;
     fillField(pagina, par, tipo, selector); 
 }
 function putTotalEquipo(dt){
-    console.log(dt);
     let cfr = 0;
     if (dt[0].section == '1') {
         totBase.html(fnm(dt[0].monto, 2, '.', ','));
@@ -405,28 +440,30 @@ function putTotalEquipo(dt){
         totSubarrendo.html(fnm(dt[0].monto, 2, '.', ','));
 
     }
+    
 }
 
 function putTotalesProyecto(dt){
-    console.log(dt);
-    let liva=dt[0].monto * 0.16 + parseFloat(dt[0].monto);
+    let iva = parseFloat($('#txtIva').val());
+    let liva=dt[0].monto * iva + parseFloat(dt[0].monto);
     totprj.html(fnm(dt[0].monto, 2, '.', ','));
     totprjIva.html(fnm(liva, 2, '.', ','));
+    monto = dt[0].monto;
     updateTotals();
 }
 
 // OBTENER LOS TOTALES POR PREPAGOS DENTRO DEL PROYECTO
-function getTotalPrepago(pjtId){
+function getTotalPrepago(pjtId, type){
     var pagina = 'ProjectClosed/totalPrepago';
-    var par = `[{"pjtId":"${pjtId}"}]`;
+    var par = `[{"pjtId":"${pjtId}", "type":"${type}"}]`;
     var tipo = 'json';
     var selector = putTotalPrepago;
     fillField(pagina, par, tipo, selector); 
 }
 
 function putTotalPrepago(dt){
-    console.log(dt);
-    totPrepago.html(fnm(dt[0].maintenance, 2, '.', ','));
+    totPrepago.html(fnm(dt[0].prp_amount, 2, '.', ','));
+    
 }
 function findDiscount(pjtId) {
     let cfr = 0;
@@ -461,6 +498,7 @@ function updateTotals() {
     total += parseFloat(totman.html().replace(/,/g, ''));
     total += parseFloat(totdie.html().replace(/,/g, ''));
     total -= parseFloat(totdis.html().replace(/,/g, ''));
+    total -= parseFloat(totPrepago.html().replace(/,/g, ''));
 
     totals.html(fnm(total, 2, '.', ','));
 }
@@ -496,6 +534,13 @@ function saveDocumentClosure() {
     let usrid = u;
     let verid = verIdgbl;
     let cusId = cusgbl;
+    let type;
+
+    if ($('#RadioConceptos1').prop('checked')) {
+        type = 1;
+    } else {
+        type = 2;
+    }
 
     var par = `
         [{  "cloTotProy" : "${cloTotProy}",
@@ -508,9 +553,9 @@ function saveDocumentClosure() {
             "cusId" :   "${cusId}",
             "pjtid" : "${pjtId}",
             "usrid" : "${usrid}",
-            "verid" : "${verid}"
+            "verid" : "${verid}",
+            "type" : "${type}"
         }] `;
-    console.log('Save-',par);
     var pagina = 'ProjectClosed/saveDocumentClosure';
     var tipo = 'html';
     var selector = resSaveClosure;
@@ -518,13 +563,34 @@ function saveDocumentClosure() {
 }
 
 function resSaveClosure(dt) {
-    console.log('resSaveClosure',dt);
     setTimeout(() => {
         window.location.reload();
     }, 1000);
     
 }
 
+function clean(){
+    findExpenda(0);
+    $('#txtDiscount').val('');
+    $('#txtDiesel').val('');
+    $('#txtComments').val('');
+    $('#txtReport').val('1');
+    $('#txtIva').val(0.16); 
+    tblprod.find('tbody').html('');
+
+    getTotalMantenance(0, 1);
+    activaCampos(0, 1, 1);
+    getTotalEquipo(0,'1', 1);
+    getTotalEquipo(0,'2', 1);
+    getTotalEquipo(0,'3', 1);
+    getTotalEquipo(0,'4', 1);
+    getTotalesProyecto(0, 1); 
+    getTotalPrepago(0,1);
+    $('#totDiesel').html("0.00");
+    $('#totDiscount').html("0.00");
+    $('#totals').html("0.00");
+    $('#totPrepago').html("0.00");
+}
 function confirm_to_Closure(pjtid) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
@@ -560,7 +626,19 @@ function putSelectProduct(prdId) {
             // saveEditProduct(prdId);
         });
 }
-
+function printReport(verId, prjType, typeDes) {
+    // let user = Cookies.get('user').split('|');
+    // let u = user[0];
+    // let n = user[2];
+    console.log(verId);
+    let h = localStorage.getItem('host');
+    let v = verId;
+    // console.log('Datos', v, u, n, h);
+    window.open(
+        `${url}app/views/ProjectClosed/ProjectClosedReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}&t=${prjType}&d=${typeDes}`,
+        '_blank'
+    );
+}
 
 function resEdtProduct(dt) {
     $('#txtCinId').val('');

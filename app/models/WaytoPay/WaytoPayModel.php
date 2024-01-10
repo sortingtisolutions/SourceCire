@@ -12,7 +12,7 @@ class WaytoPayModel extends Model
 // Obtiene el listado de las subcategorias activas
     public function listWaytoPay($params)
     {
-        $qry = "SELECT * FROM ctt_way_topay ORDER BY 1;";
+        $qry = "SELECT * FROM ctt_way_topay where wtp_status >0 ORDER BY 1;";
         return $this->db->query($qry);
     }
 
@@ -55,8 +55,8 @@ class WaytoPayModel extends Model
     {
         $wayId      = $this->db->real_escape_string($params['wayId']);
 
-        $qry = "UPDATE ctt_subcategories SET sbc_status = '0'
-                WHERE sbc_id  = '$wayId';";
+        $qry = "UPDATE ctt_way_topay SET wtp_status = '0'
+                WHERE wtp_id  = '$wayId';";
 
         $this->db->query($qry);	
         return $wayId;

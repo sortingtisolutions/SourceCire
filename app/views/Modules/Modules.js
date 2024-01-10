@@ -99,7 +99,6 @@ function putStores(dt) {
     strs = dt;
 }
 function fillStores() {
-    console.log(strs);
     if (strs != null) {
         let tabla = $('#ModulesTable').DataTable();
         $.each(strs, function (v, u) {
@@ -171,7 +170,6 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#ModulesTable').DataTable();
-    // console.log(strs.length);
     tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="mod${strs[ix].mod_id}"></i><i class="fas fa-times-circle kill"></i>`,
@@ -243,7 +241,6 @@ function updateStore() {
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
-        console.log(dt);
         let ix = goThroughStore(dt);
 
         $(`#${strs[ix].mod_id}`).children('td.module-name').html(strs[ix].mod_name);
@@ -272,7 +269,6 @@ function editStore(strId) {
 }
 
 function deleteStore(strId) {
-    console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
     
@@ -280,7 +276,7 @@ function deleteStore(strId) {
 
         $('#confirmModalLevel').html('¿Seguro que desea borrar el Module?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#confirmButton').html('Borrar modulo').css({display: 'inline'});
         $('#Id').val(strId);
 
         

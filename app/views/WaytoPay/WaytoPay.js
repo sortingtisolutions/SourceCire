@@ -11,7 +11,7 @@ function inicial() {
     if (altr == 1) {
         settingTable();
         getWaytoPay();
-        // confirm_alert();
+        confirm_alert();
     } else {
         setTimeout(() => {
             inicial();
@@ -97,20 +97,32 @@ function putWaytoPay(dt) {
     subs=dt;
     // console.log('1',subs);
     var prds=dt;
-    $('#tblWaypay tbody').html('');
-   
+    // $('#tblWaypay tbody').html('');
+    let tabla = $('#tblWaypay').DataTable();
+    tabla.rows().remove().draw();
     if (prds[0].wtp_id != '0') {
         
         $.each(prds, function (v, u) {
-            var H = `
+            tabla.row
+                .add({
+                    editable: `<i class='fas fa-pen modif' id ="md${u.wtp_id}"></i><i class="fas fa-times-circle kill"></i>`,
+                    wayname: u.wtp_clave,
+                    waycode: u.wtp_description,
+                    waystat: u.wtp_status,
+                })
+                .draw();
+                $('#md' + u.wtp_id)
+                .parents('tr')
+                .attr('id', u.wtp_id);
+            /* var H = `
                 <tr id="${u.wtp_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
                     <td class="sku" data-content="${u.wtp_clave}">${u.wtp_clave}</td>
                     <td class="supply">${u.wtp_description}</td>
                     <td class="sku">${u.wtp_status}</td>
                 </tr>`;
-            $('#tblWaypay tbody').append(H);
-        });
+            $('#tblWaypay tbody').append(H); */
+        }); 
      
         // settingTable();
         activeIcons();
@@ -129,14 +141,24 @@ function activeIcons() {
             if (ValidForm() == 1) {
                 if ($('#txtIdWayPay').val() == '') {
                     //console.log('Save');
-                    // saveSubcategory();
+                    saveSubcategory();
                 } else {
                     //console.log('Update');
-                    // updateSubcategory();
+                    updateSubcategory();
                 }
             }
         });
-
+        function ValidForm() {
+            var valor = 1;
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    valor = 0;
+                }
+            });
+            return valor;
+        }
     /**  ---- Limpia los campos del formulario ----- */
     $('#btnClean')
         .unbind('click')
@@ -268,20 +290,21 @@ function putUpdateWaytoPay(dt) {
 function DeleteWayPay(wayId) {
     let cn = $(`#${wayId}`).children('td.quantity').children('.toLink').html();
 
-    if (cn != 0) {
+    console.log(cn);
+    /* if (cn != 0) {
         $('#confirmModal').modal('show');
         $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
         $('#N').html('Cancelar');
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);
-    } else {
+    } else { */
         $('#confirmModal').modal('show');
 
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la subcategoria?');
+        $('#confirmModalLevel').html('¿Seguro que desea borrar la forma de pago?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar subcategoria').css({display: 'inline'});
+        $('#confirmButton').html('Borrar').css({display: 'inline'});
         $('#Id').val(wayId);
-        console.log('BORRAR REGISTRO');
+        console.log('BORRAR REGISTRO', wayId);
         $('#confirmButton').on('click', function () {
             var pagina = 'WaytoPay/DeleteWayPay';
             var par = `[{"wayId":"${wayId}"}]`;
@@ -289,12 +312,12 @@ function DeleteWayPay(wayId) {
             var selector = putDeleteWayPay;
             fillField(pagina, par, tipo, selector);
         });
-    }
+    //}
 }
 /** ---- Elimina el registro de la subcategoria borrada ---- */
 function putDeleteWayPay(dt) {
     console.log('BORRAR LINEA');
-    getCategories();
+    getWaytoPay();
     let tabla = $('#tblWaypay').DataTable();
     tabla
         .row($(`#${dt}`))

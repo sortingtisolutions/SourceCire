@@ -21,21 +21,35 @@ $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 // 11-10-23
 if ($empid == '1' || $empid == '2'){
     $qry = "SELECT pcn.pjtcn_prod_name, pcn.pjtcn_prod_sku, pcn.pjtcn_quantity,
-            pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments  
+            pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name, 
+                CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period  
             FROM ctt_projects_content AS pcn
             INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
             INNER JOIN ctt_products AS pd ON pd.prd_id=pcn.prd_id
+            LEFT JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
+            LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
+            INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+            INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
             WHERE pj.pjt_id=$prdId 
             ORDER BY pcn.pjtcn_prod_sku;";
 } else{
     $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
                     pjc.pjt_id, pjtcn_order, pjc.pjtcn_section,
-                    pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments 
+                    pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pd.prd_comments, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name, 
+                CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period 
             FROM ctt_projects_content AS pjc
             INNER JOIN ctt_projects AS pj ON pj.pjt_id=pjc.pjt_id
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
             INNER JOIN ctt_products AS pd ON pd.prd_id=pjc.prd_id
+            LEFT JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
+            LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
+            INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+            INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
             WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid
             ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }
@@ -47,7 +61,8 @@ $conn->close();
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
-
+date_default_timezone_set('America/Mexico_City');
+$hoy=new DateTime();
 // Cabezal de la página
 $header = '
     <header>
@@ -73,6 +88,91 @@ $equipoBase = '1';
 $html = '
     <section>
         <div class="container">
+        <table class="table-data bline-d tline">
+        <tr>
+            <td class="rline half">
+                <!-- Start datos del cliente -->
+                <table class="table-data">
+                    <tr>
+                        <td class="concept">Cliente:</td>
+                        <td class="data">'. $items[0]['cus_name']  .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Domicilio:</td>
+                        <td class="data">'.  $items[0]['cus_address'] .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Quien Solicita:</td>
+                        <td class="data">'. $items[0]['pjt_how_required'] .'</td>
+                     </tr>
+                    <tr>
+                        <td class="concept">Correo Electrónico:</td>
+                        <td class="data">'. $items[0]['cus_email'] .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Teléfono:</td>
+                        <td class="data">'. $items[0]['cus_phone'] .'</td>
+                    </tr>
+                   
+                    <tr>
+                        <td class="concept">Analista CTT:</td>
+                        <td class="data">'. $uname .'</td>
+                    </tr>
+                </table>
+                <!-- End datos del cliente -->
+            </td>
+            <td class="half">
+                <!-- Start Datos del projecto -->
+                <table class="table-data">
+                
+                    <tr>
+                        <td class="concept">Fecha Cotización:</td>
+                        <td class="data">'. $hoy->format('d/m/Y') .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Ciudad:</td>
+                        <td class="data">'. $items[0]['pjt_location'] .'</td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="concept">Tipo de Locación:</td>
+                        <td class="data">'. $items[0]['loc_type_location'] .'</td>
+                    </tr> -->
+                    <tr>
+                        <td class="concept">Tipo de proyecto:</td>
+                        <td class="data">'. $items[0]['pjttp_name'] .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Fechas de Proyecto:</td>
+                        <td class="data">'. $items[0]['period'] .'</td>
+                    </tr>
+                    ';
+                    if ($items[0]['pjt_trip_go']) {
+                        $html .='
+                            <tr>
+                                <td class="concept">Dias de Viaje:</td>
+                                <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
+                            </tr>';
+                    }
+                    if ($items[0]['pjt_test_tecnic']) {
+                        $html .='
+                        <tr>
+                            <td class="concept">Dias de Pruebas:</td>
+                            <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
+                        </tr>';
+                    }
+                    
+                    $html .='
+                    <tr>
+                        <td class="concept">&nbsp;</td>
+                        <td class="data">&nbsp;</td>
+                    </tr>
+                    
+                </table>
+                <!-- End Datos del projecto -->
+            </td>
+        </tr>
+    </table>
+    <!-- End Datos de identificación  -->
         <div style="height:20px;"></div>
             <table class="table-data bline tline" style="text-align: center">
                 <tr>

@@ -6,7 +6,16 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+<style>
+    .hiddenElement {
+        visibility: hidden !important;
+    }
 
+  #calendar {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+</style>
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
 		<div class="contenido ">
@@ -39,10 +48,11 @@
 								<th style="width: 200px">Producto</th>
 								<th style="width:  70px">SKU-Serie</th>
 								<th style="width:  90px">Serie</th>
-								<th style="width: 200px">Proyecto</th>
+								<th style="width: 150px">Proyecto</th>
 								<th style="width:  70px">Fecha Inicio</th>
 								<th style="width:  70px">Fecha Fin</th>
 								<th style="width:  30px">Estatus</th>
+								<th style="width:  30px">Usado (días)</th>
 							</tr>
 						</thead>
 						<tbody>						
@@ -77,8 +87,28 @@
     </div>
 </div>
 
+
+<!-- Start Ventana modal AGREGA O MODIFICA  -->
+	<div class="overlay_background overlay_hide" id="CalendarModal" style="height: 600px; width:70%;left:160px;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+			<!--
+            <div class="formButtons">
+                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
+            </div>-->
+            <div class="">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+<!-- End Ventana modal AGREGA O MODIFICA  -->
+
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/fullcalendar/core/index.global.min.js' ?>"></script><!-- Agregador por Edna-->
+<script src="<?=  PATH_ASSETS . 'lib/fullcalendar/daygrid/index.global.min.js' ?>"></script><!-- Agregador por Edna-->
+<script src="<?=  PATH_ASSETS . 'lib/fullcalendar/es.global.js' ?>"></script><!-- Agregador por Edna-->
 <script src="<?=  PATH_VIEWS . 'SearchIndividualProducts/SearchIndividualProducts.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

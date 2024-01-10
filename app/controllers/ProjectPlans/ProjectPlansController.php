@@ -545,6 +545,23 @@ public function getNewProdChg($request_params)
 
     }
 
+    public function updatePeriods($periods, $result){
+        while($row = $result->fetch_assoc()){
+            $periodId = $row["pjtpd_id"];
+            $dtini    = $periods["dtinic"];
+            $dtfin    = $periods["dtfinl"];
+
+            $params = array(
+                'prdpId' => $periodId,
+                'dtinic' => $dtini,
+                'dtfinl' => $dtfin,
+            );
+            $update = $this->model-> UpdatePeriods($params);
+
+        }
+        return $update;
+    }
+
 /** ==== Actualiza las series y sus productos relacionados  ==================================  */
     public function setSeries($result)
     {
@@ -602,7 +619,6 @@ public function getNewProdChg($request_params)
                         'detlId' => 0,
                     );
                     $serie = $this->model->SettingSeries($params);
-                    // echo $serie . ' - ' ;
                 }
             } else if ( $bdglvl == 'P' || $bdglvl == 'S' ){
                 for ($i = 1; $i<=$quanty; $i++){
@@ -634,38 +650,6 @@ public function getNewProdChg($request_params)
                         'prodId' => $prodId, 
                         'serId' => $serId,
                     );
-                    // echo $serId . ' - Prod ' . $prodId ;
-                   /*  $accesory = $this->model->GetAccesories($paramacc);  //jjr
-                    while($acc = $accesory->fetch_assoc()){
-
-                        $acceId =  $acc["prd_id"];
-                        $acceNm =  $acc["prd_name"];
-                        $accePc =  $acc["prd_price"];
-
-                        $accparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $acceId, 
-                            'dtinic' => $dtinic, 
-                            'dtfinl' => $dtfinl,
-                            'bdgsku' => $bdgsku,
-                            'bdgnme' => $acceNm,
-                            'bdgprc' => $accePc,
-                            'bdglvl' => 'A',
-                            'bdgqty' => $ttlqty,
-                            'dybase' => $dybase,
-                            'dycost' => $dycost,
-                            'dsbase' => $dsbase,
-                            'dytrip' => $dytrip,
-                            'dstrip' => $dstrip,
-                            'dytest' => $dytest,
-                            'dstest' => $dstest,
-                            'bdgIns' => $bdgIns,
-                            'versId' => $versId,
-                            'detlId' => $detlId,
-                        );
-                        $serie = $this->model->SettingSeries($accparams);
-                        // echo $serId . ' - SER-ACC ' . $prodId ;
-                    } */
 
                 }
             } else if ( $bdglvl == 'K' ){
@@ -699,44 +683,11 @@ public function getNewProdChg($request_params)
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-                        // echo 'Paso SettingSeries';
                         $serId=$detlId;
                         $paramaccpk = array(
                             'prodId' => $pkpdId, 
                             'serId' => $serId,
                         );
-                        /* $accesory = $this->model->GetAccesories($paramaccpk);
-                        // echo 'Paso GetAccesories';
-                        while($acc = $accesory->fetch_assoc()){
-    
-                            $acceId =  $acc["prd_id"];
-                            $acceNm =  $acc["prd_name"];
-                            $accePc =  $acc["prd_price"];
-    
-                            $accparams = array(
-                                'pjetId' => $pjetId, 
-                                'prodId' => $acceId, 
-                                'dtinic' => $dtinic, 
-                                'dtfinl' => $dtfinl,
-                                'bdgsku' => $bdgsku,
-                                'bdgnme' => $acceNm,
-                                'bdgprc' => $accePc,
-                                'bdglvl' => 'A',
-                                'bdgqty' => $ttlqty,
-                                'dybase' => $dybase,
-                                'dycost' => $dycost,
-                                'dsbase' => $dsbase,
-                                'dytrip' => $dytrip,
-                                'dstrip' => $dstrip,
-                                'dytest' => $dytest,
-                                'dstest' => $dstest,
-                                'bdgIns' => $bdgIns,
-                                'versId' => $versId,
-                                'detlId' => $detlId,
-                            );
-                            $serie = $this->model->SettingSeries($accparams);
-                            // echo 'Paso SettingSeries de un ACCESORIO';
-                        } */
                     }
                 }
             }
@@ -751,18 +702,21 @@ public function getNewProdChg($request_params)
             $action = $row["pjtvr_action"];
             $qtyAct = $row["pjtvr_quantity"];
             $qtyAnt = $row["pjtvr_quantity_ant"];
+            $daysAct = $row["pjtvr_days_base"];
+            $daysAnt = $row["pjtvr_days_base_ant"];
             $qtyAct = intval($qtyAct);
             $qtyAnt = intval($qtyAnt);
-
+            $daysAct = intval($daysAct);
+            $daysAnt = intval($daysAnt);
+            $updQty = $action . $daysAct . $daysAnt;
             $param = array(
                 'prodId' => $row["prd_id"],
                 'pjetId' => $row["pjtvr_id"],
                 'prdlvl' => $row['pjtvr_prod_level'],
                 'servId' => $row['srv_id'],
-                'dtinic' => $row['pjt_date_start'],
-                'dtfinl' => $row['pjt_date_end'],
+                'dtinic' => $row['date_start'],
+                'dtfinl' => $row['date_end'],
             );
-
             // print_r( $param);
 
             switch ($action){
@@ -779,6 +733,7 @@ public function getNewProdChg($request_params)
                             $updQty = $this-> KillQuantityDetail($param);
                         }
                     }
+                    
                     break;
                 case 'D':
                     for ($i=1; $i <= $qtyAct; $i++){
@@ -792,8 +747,20 @@ public function getNewProdChg($request_params)
                     break;
                 default:
             }
+            if ($daysAct != $daysAnt) {
+                $periodparams = array(
+                    'prodId' => $row["prd_id"],
+                    'prdsct' => $row['pjtvr_section'],
+                    'dtinic' => $row['date_start'],
+                    'dtfinl' => $row['date_end'],
+                );
+
+                $result2 = $this->model-> getperiods($periodparams);
+                $upd = $this->updatePeriods($periodparams, $result2);
+            } 
+            $res = $row['prd_id'];
         }
-        return 1;
+        return $res;
     }
 
 /** ==== Importa proyecto ====================================================================  */
@@ -888,21 +855,6 @@ public function getNewProdChg($request_params)
                         'prodId' => $prodId, 
                         'serId' => $serId,
                     );
-                /* $accesory = $this->model->GetAccesories($paramacc);
-                while($acc = $accesory->fetch_assoc()){
-
-                    $aprodId = $acc["prd_id"];
-                    $apjetId = $pjetId;
-
-                    $accparams = array(
-                        'prodId' => $aprodId, 
-                        'pjetId' => $apjetId,
-                        'dtinic' => $dtinic, 
-                        'dtfinl' => $dtfinl,
-                        'detlId' => $detlId,
-                    );
-                    $serie = $this->model->SettingSeries($accparams);
-                } */
                
             } elseif($prdLvl == 'K'){
                 $products = $this->model->GetProducts($prodId);
@@ -918,27 +870,11 @@ public function getNewProdChg($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($pktparams);
-                    //echo 'Paso SettingSeries';
                     $serId=$detlId;
                     $paramaccpk = array(
                         'prodId' => $kprodId, 
                         'serId' => $serId,
                     );
-                    /* $accesory = $this->model->GetAccesories($paramaccpk);
-                    while($acc = $accesory->fetch_assoc()){
-
-                        $aprodId = $acc["prd_id"];
-                        $apjetId = $pjetId;
-    
-                        $accparams = array(
-                            'prodId' => $aprodId, 
-                            'pjetId' => $apjetId,
-                            'dtinic' => $dtinic, 
-                            'dtfinl' => $dtfinl,
-                            'detlId' => $detlId,
-                        );
-                        $serie = $this->model->SettingSeries($accparams);
-                    } */
                 }
             }
 

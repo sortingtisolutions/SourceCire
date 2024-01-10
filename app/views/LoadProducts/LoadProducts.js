@@ -51,12 +51,31 @@ function inicial() {
     $('#LimpiarFormulario').on('click', function () {
       LimpiaModal();
    });
+
    $('#LimpiarTabla').on('click', function () {
         eliminarDatos();
        
+        $('#verMotivo').addClass('objHidden');
     });
 
-    $('#DocumentosTable tbody').on('click', 'tr', function () {
+    $('#DescargarEjemplo').on('click', function(){   
+        VerDocumento();
+    });
+    /* $('#verMotivo')
+    .unbind('click').on('click', function () {
+        var errores = $('#IdErrores').val().split(',');
+        limpiarModalErrores();
+        $.each(errores, function(v,u){
+            console.log($('#codigo-' + u).text());
+            $('#codigo-' + u).removeClass('objHidden');
+        });
+        $('#MotivosModal').modal('show');
+        
+        $('#btn_hide_modal').on('click', function () {
+            $('#MotivosModal').modal('hide');
+        });
+    }); */
+    /* $('#DocumentosTable tbody').on('click', 'tr', function () {
       positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
 
       setTimeout(() => {
@@ -67,13 +86,39 @@ function inicial() {
             $('.btn-apply').removeClass('hidden-field');
          }
      }, 10);
-   });
+   }); */
 }
-
+function limpiarModalErrores(){
+    $('#codigo-1').addClass('objHidden');
+    $('#codigo-2').addClass('objHidden');
+    $('#codigo-3').addClass('objHidden');
+    $('#codigo-4').addClass('objHidden');
+    $('#codigo-5').addClass('objHidden');
+    $('#codigo-6').addClass('objHidden');
+    $('#codigo-7').addClass('objHidden');
+}
+function VerDocumento() {
+    $.ajax({
+        url: 'app/assets/csv_ejemplos/productos.csv',
+        method: 'GET',
+        dataType: 'text',
+        success: function(data) {
+            // Generar la descarga del archivo CSV
+            var blob = new Blob([data], { type: 'text/csv' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'load_products.csv';
+            link.click();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el archivo CSV:', status, error);
+        }
+    });
+} 
 function activeButtons(){
     setTimeout(() => {
-        console.log(datos[0]);
-        if (datos[0].cin_code) {
+        //console.log(datos);
+        if (datos[0].prd_id > 0) {
             $('#GuardarProcess').parent().removeClass('objHidden');
             $('#LimpiarTabla').parent().removeClass('objHidden');
             $('#GuardarDocumento').parent().addClass('objHidden');
@@ -105,6 +150,7 @@ function settingTable() {
    let title = 'Lista de Tipos de Documentos';
    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
    $('#DocumentosTable').DataTable({
+        bDestroy: true,
        order: [[1, 'asc']],
        dom: 'Blfrtip',
        lengthMenu: [
@@ -143,9 +189,14 @@ function settingTable() {
                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
            },
            {
-               text: 'Borrar seleccionados',
-               
-           },
+            // Boton aplicar cambios
+            text: 'Descargar Ejemplo',
+            footer: true,
+            className: 'btn-apply',
+            action: function (e, dt, node, config) {
+                VerDocumento();
+            },
+            },
        ],
        pagingType: 'simple_numbers',
        language: {
@@ -156,6 +207,7 @@ function settingTable() {
        fixedHeader: true,
        columns: [
             {data: 'result', class: 'result'},
+            {data: 'error', class: 'Producto'},
            {data: 'SKU', class: 'SKU bold'},
            {data: 'Producto', class: 'Producto'},
            {data: 'NombreIngles', class: 'NombreIngles'},
@@ -173,7 +225,7 @@ function settingTable() {
 
 //Guardar Almacen **
 function SaveDocumento() {
-   var location = "FilesCsv/SaveDocumento";
+   var location = "LoadProducts/SaveDocumento";
    var idDocumentos = $('#IdDocumentNew').val();
    var NomDocumento = $('#NomDocumento').val();
    var ExtDocumento = $('#ExtDocumento').val();
@@ -202,13 +254,15 @@ function SaveDocumento() {
            data:data,
            url: location,
        success: function (respuesta) {
-          console.log(respuesta);
+          //console.log(respuesta);
+          
            getDocumentosTable();
            $('#aceptados').text(respuesta.aceptados);
            $('#rechazados').text(respuesta.rechazados);
            /* if (respuesta.rechazados > 0) {
                 $('#estatus').text('Revisa que el sku, el codigo de la moneda, el precio, el servicio y el seguro esten correctamente');
            } */
+           
            showResults();
            modalLoading('H');
            $('#MoveFolioModal').modal('show');
@@ -225,8 +279,17 @@ function SaveDocumento() {
        $('#filtroDocumentoModal').modal('show');
    }
 } 
+function limpiarResults(){
+    $('#duplicidad').text('');
+    $('#sku').text('');
+    $('#moneda').text('');
+    $('#costo').text('');
+    $('#servicio').text('');
+    $('#seguro').text('');
+    $('#categories').text('');
+}
 function showResults(){
-    var pagina = 'FilesCSV/listResults';
+    var pagina = 'LoadProducts/listResults';
     var par = `[{"prod_id":""}]`;
     var tipo = 'json';
     var selector = put_results;
@@ -234,29 +297,32 @@ function showResults(){
 }
 /**  ++++    */
 function put_results(dt) {
-    console.log(dt);
-    
-    if (dt[0].SKU > 0) {
-        if (dt[0].duplicidad > 0) {
-            $('#duplicidad').text('Por duplicidad en sku: '+ dt[0].duplicidad);
-        }else{
-            $('#sku').text('Por problemas con el sku: '+  dt[0].SKU);
+    //console.log(dt);
+    limpiarResults();
+    if (dt[0].results > 0) {
+        if (dt[0].SKU > 0) {
+            if (dt[0].duplicidad > 0) {
+                $('#duplicidad').text('Por duplicidad en sku: '+ dt[0].duplicidad);
+            }else{
+                $('#sku').text('Por problemas con el sku: '+  dt[0].SKU);
+            }
         }
-        
+        if (dt[0].moneda > 0) {
+            $('#moneda').text('Por problemas con moneda: '+ dt[0].moneda);
+        }
+        if (dt[0].costo > 0) {
+            $('#costo').text('Por problemas con costo: '+ dt[0].costo);
+        }
+        if (dt[0].servicio > 0) {
+            $('#servicio').text('Por problemas con servicio: '+ dt[0].servicio);
+        }
+        if (dt[0].seguro > 0) {
+            $('#seguro').text('Por problemas con seguro: '+ dt[0].seguro);
+        }
+        if (dt[0].categoria) {
+            $('#categories').text('Por problemas con la subcategoria/categoria: '+ dt[0].categoria);
+        }
     }
-    if (dt[0].moneda > 0) {
-        $('#moneda').text('Por problemas con moneda: '+ dt[0].moneda);
-    }
-    if (dt[0].costo > 0) {
-        $('#costo').text('Por problemas con costo: '+ dt[0].costo);
-    }
-    if (dt[0].servicio > 0) {
-        $('#servicio').text('Por problemas con servicio: '+ dt[0].servicio);
-    }
-    if (dt[0].seguro > 0) {
-        $('#seguro').text('Por problemas con seguro: '+ dt[0].seguro);
-    }
-    
 }
 
 function UnSelectRowTable() {
@@ -274,12 +340,12 @@ function LimpiaModal() {
     $('#fechaadmision').val('');
     $('#formDocumento').removeClass('was-validated');
     $('#titulo').text('Nuevo Documento');
-    
 }
 
 //obtiene la informacion de tabla documentos *
 function getDocumentosTable() {
-   var pagina = 'FilesCsv/GetDocumentos';
+    modalLoading('S');
+   var pagina = 'LoadProducts/GetDocumentos';
    var par = `[{"dot_id":""}]`;
    var tipo = 'json';
    var selector = putFiles;
@@ -289,9 +355,9 @@ function getDocumentosTable() {
 function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad').on('click', function () {
-        console.log('subir datos');
+        //console.log('subir datos');
         modalLoading('S');
-        var pagina = 'FilesCsv/loadProcess';
+        var pagina = 'LoadProducts/loadProcess';
         var par = `[{"dot_id":""}]`;
         var tipo = 'json';
         var selector = putFiles;
@@ -308,12 +374,12 @@ function loadProcess() {
     $('#BorrarDocumentosModal').modal('show');
 
     $('#BorrarProveedor').on('click', function () {
-        var pagina = 'FilesCsv/DeleteData';
+        var pagina = 'LoadProducts/DeleteData';
         var par = `[{"ass_id":""}]`;
         var tipo = 'html';
         var selector = putFiles;
         fillField(pagina, par, tipo, selector); 
-        console.log('eliminar');
+        //console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
         activeButtons();
         
@@ -321,16 +387,17 @@ function loadProcess() {
  }
 
 function putFiles(dt) {
-   console.log(dt);
+   //console.log(dt);
    pd = dt;
    datos = dt;
-   let largo = $('#DocumentosTable tbody tr td').html();
+   /* let largo = $('#DocumentosTable tbody tr td').html();
    largo == 'Ningún dato disponible en esta tabla'
        ? $('#DocumentosTable tbody tr').remove()
        : '';
    tabla =  $('#DocumentosTable').DataTable();
    
-   tabla.rows().remove().draw();
+   tabla.rows().remove().draw(); */
+   $('#DocumentosTable tbody').html('');
    let cn = 0;
    if(dt[0].prd_id > 0){
     
@@ -343,9 +410,10 @@ function putFiles(dt) {
                 icon = "fas fa-times-circle";
                 valstage='color:#CC0000';
             }
-           tabla.row
+          /*  tabla.row
                .add({
                    result: `<i class="${icon}" style="${valstage}"></i>`,
+                   error: u.result,
                    SKU: u.prd_sku,
                    Producto: u.prd_name,
                    NombreIngles: u.prd_english_name,
@@ -357,12 +425,58 @@ function putFiles(dt) {
                    Seguro: u.prd_insured,
                    Servicio: u.srv_id
                })
-               .draw();
+               .draw(); */
+               let H = `
+                <tr>
+                    <td><i class="${icon} show" style="${valstage}"></i></td>
+                    <td>${u.result}</td>
+                    <td>${u.prd_sku}</td>
+                    <td>${u.prd_name}</td>
+                    <td>${u.prd_english_name}</td>
+                    <td>${u.prd_code_provider}</td>
+                    <td>${u.prd_name_provider}</td>
+                    <td>${u.prd_model}</td>
+                    <td>${u.prd_price}</td>
+                    <td>${u.cin_code}</td>
+                    <td>${u.prd_insured}</td>
+                    <td>${u.srv_id}</td>
+                </tr>
+            `;
+            $('#DocumentosTable tbody').append(H);
+           
            cn++;
        });
+       
+    //settingTable();
+    
+   }else{
+    settingTable();
    }
+   activarBoton();
+   modalLoading('H');
 }
 
+function activarBoton(){
+    $('.show')
+    .unbind('click')
+    .on('click', function(){
+        var tr = $(this).closest('tr');
+        var errores = tr.find('td').eq(1).text().split(',');
+        /* $('#IdErrores').val(errores);
+        var errores = $('#IdErrores').val().split(','); */
+        limpiarModalErrores();
+        $.each(errores, function(v,u){
+            console.log($('#codigo-' + u).text());
+            $('#codigo-' + u).removeClass('objHidden');
+        });
+        $('#MotivosModal').modal('show');
+        
+        $('#btn_hide_modal').on('click', function () {
+            $('#MotivosModal').modal('hide');
+        });
+        // $('#verMotivo').removeClass('objHidden');
+    });
+}
 function modalLoading(acc) {
     if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');

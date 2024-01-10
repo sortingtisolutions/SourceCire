@@ -709,8 +709,8 @@ public function saveBudgetList($params)
             $ser_reserve_count  = $series->ser_reserve_count; 
 
            $qry2 = "INSERT INTO ctt_projects_detail (
-                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
-                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1
                 ); ";
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
@@ -722,14 +722,40 @@ public function saveBudgetList($params)
             $this->db->query($qry1);
 
         } else {
-            $serie  = null; 
-            $sersku  = 'Pendiente' ;
             
-            $qry2 = "INSERT INTO ctt_projects_detail (
-                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
-                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
-                ); ";
+            $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
+            FROM ctt_series AS ser
+            WHERE ser.prd_id = $prodId AND NOT EXISTS (SELECT sr.ser_id serId
+            FROM ctt_series AS sr
+            INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+            INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+            WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+            OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl' OR 
+            '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+            OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";  // solo trae un registro
 
+            $result =  $this->db->query($qry);
+            
+            $serie_futura = $result->fetch_object();
+            
+
+            if ($serie_futura != null){
+                $sersku  = $serie_futura->serSku;
+                $serie = $serie_futura->serId;
+
+                $qry2 = "INSERT INTO ctt_projects_detail (
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
+                    ); ";
+            }else{
+                $serie  = null; 
+                $sersku  = 'Pendiente' ;
+                $qry2 = "INSERT INTO ctt_projects_detail (
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
+                    ); ";
+            }
+           
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
         }

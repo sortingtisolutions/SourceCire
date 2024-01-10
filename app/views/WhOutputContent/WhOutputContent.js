@@ -2,7 +2,8 @@ let products;
 //let prjid = window.location.pathname.split("/").pop();
 let prjid, serIdNew;
 let serIdAnt=0;
-let user,v,u,n,em;  //datos de usuaria para impresion
+let user,v,u,n,em, ar;  //datos de usuaria para impresion
+let pjtcn;
 //var prjid;
 let aux=0;
 $(document).ready(function () {
@@ -19,11 +20,12 @@ function inicial() {
     u = user[0];
     n = user[2];
     em = user[3];
+    ar = user[6];
 
     setting_table_AsignedProd();
     getProjects(prjid);
     getComments_text(prjid);
-    getDetailProds(prjid,em);
+    getDetailProds(prjid,em,ar);
     getFreelances(prjid);
     getAnalysts(prjid);
     getLocations(prjid);
@@ -177,10 +179,10 @@ function  getLocations(prjid) {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los productos del proyecto  OK
-function getDetailProds(prjid,empid) {
-    console.log(empid);
+function getDetailProds(prjid, emp_id,areid) {
+    console.log(areid);
     var pagina = 'WhOutputContent/listDetailProds';
-    var par = `[{"pjt_id":"${prjid}", "empid":"${empid}"}]`;
+    var par = `[{"pjt_id":"${prjid}", "empid":"${emp_id}", "areid":"${areid}"}]`;
     var tipo = 'json';
     var selector = putDetailsProds;
     fillField(pagina, par, tipo, selector);
@@ -224,7 +226,7 @@ function getComments_text(prjid) {
 }
 /** Obtiene el listado de los comentarios del proyecto */ // 11-10-23
 function getComments(pjtId) {
-    var pagina = 'WorkInputContent/listComments';
+    var pagina = 'WhOutputContent/listComments';
     var par = `[{"pjId":"${pjtId}"}]`;
     var tipo = 'json';
     var selector = putComments;
@@ -315,20 +317,13 @@ function setting_table_AsignedProd() {
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putProjects(dt) {
-    /* let user = Cookies.get('user').split('|');
-    let u = user[0];
-    let n = user[2]; */
     let usrname=n.replaceAll('+',' ');
-    // console.log('Datas-',n, usrname);
     $('#txtProjectName').val(dt[0].pjt_name);
     $('#txtProjectNum').val(dt[0].pjt_number);
     $('#txtTipoProject').val(dt[0].pjttp_name);
     $('#txtStartDate').val(dt[0].pjt_date_start);
     $('#txtEndDate').val(dt[0].pjt_date_end);
-    //$('#txtLocation').val(dt[0].pjt_location);
     $('#txtCustomer').val(dt[0].cus_name);
-    //$('#txtAnalyst').val(dt[0].emp_fullname); // 11-10-23
-    //$('#txtFreelance').val(dt[0].free_id); // 11-10-23
 }
 function putAnalysts(dt) {
     if (dt[0].emp_id != 0) {
@@ -338,13 +333,9 @@ function putAnalysts(dt) {
         });
         $('#txtAnalyst').val(dt[0].emp_id); // 11-10-23
     }
-
-
 }
 
 function putLocations(dt) {
-
-    console.log('locacion: ',dt)
     if (dt[0].locations != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.locations}"> ${u.locations}</option>`;
@@ -364,10 +355,7 @@ function putDetailsProds(dt) {
     let icon = '';
     if (dt[0].pjtcn_id > 0)
     {
-        // let tabla = $('#tblAsignedProd').DataTable();
-        // $('#tblAsignedProd table tbody').html('');
         $.each(dt, function (v, u){
-
             if (u.section == 'Base') { valstage='#e2e8f8'; }
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
@@ -377,9 +365,7 @@ function putDetailsProds(dt) {
             } else{
                 icon ='fas fa-edit';
             }
-            //console.log(valstage);
             let skufull = String(u.pjtcn_prod_sku).slice(7, 11) == '' ? String(u.pjtcn_prod_sku).slice(0, 7) : String(u.pjtcn_prod_sku).slice(0, 7) + '-' + String(u.pjtcn_prod_sku).slice(7, 11);
-
             var rownode=tabla.row
                 .add({
                     editable: `<i class="${icon} toLink" id="${u.pjtcn_id}"></i>`,
@@ -388,17 +374,13 @@ function putDetailsProds(dt) {
                     packcount: u.pjtcn_quantity,
                     packstatus: u.section,
                     packlevel: u.pjtcn_prod_level,
-
                 })
                 .draw().node();
             $(rownode).css("background-color", valstage);
         });
-
-        // tabla.row('.selected');
         activeIcons();
     }else{
         $('#recordOutPut').hide();
-
     }
 }
 
@@ -428,23 +410,68 @@ function activeIcons() {
     $('.toLink')
         .unbind('click')
         .on('click', function () {
-            //let selected = $(this).parent().attr('id');
             let pjtcnid = $(this).attr('id');
-            // console.log('Click Nivel 2', pjtcnid);
+            pjtcn = pjtcnid;
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
             }
         });
 }
-
+function getEvents(serId) {
+    var pagina = 'WhOutputContent/GetEventos';
+    var par = `[{"ser_id":"${serId}"}]`;
+    var tipo = 'json';
+    var selector = putEvents;
+    fillField(pagina, par, tipo, selector);
+}
+function putEvents(dt) {
+    
+    strs = dt;
+    calendario(strs);
+}
+function calendario(cal){
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        headerToolbar: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'dayGridMonth' 
+        },
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        selectable: true,
+        height: 300,
+        width:300,
+        events: cal,
+        eventClick: function(calEvent, jsEvent, view){
+            console.log(calEvent);
+        }
+    }); 
+    calendar.render();
+}
 //**************  NIVEL 2 DE DATOS  *****************************************
 
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putSeries(dt) {
     // console.log('putSeries');
-    settingSeries(dt);
-    build_modalSeries(dt);
-    activeIconsSerie();
+    if (dt[0].ser_id > 0) {
+        settingSeries(dt);
+        build_modalSeries(dt);
+        activeIconsSerie();
+        
+    }else{
+        $('#SinSerieModal').removeClass('overlay_hide');
+        $('#SinSerieModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            //console.log('Cierra Series');
+            $('.overlay_background').addClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            $('#tblSerie').DataTable().destroy;
+    });
+    }
+    
 }
 
 function settingSeries(dt){
@@ -489,6 +516,7 @@ function settingSeries(dt){
         columns: [
             {data: 'sermodif', class: 'edit'},
             {data: 'seriesku', class: 'sku left'},
+            {data: 'prdname', class: 'left'},
             {data: 'sernumber', class: 'sku'},
             {data: 'sertype', class: 'sku'},
             {data: 'serfchout', class: 'sku'},
@@ -507,6 +535,61 @@ function settingSeries(dt){
     });
 
 }
+/* 
+function settingSeriesPackage(dt){
+
+    $('#SeriePackModal').removeClass('overlay_hide');
+    $('#tblSerieP').DataTable({
+        // retrieve: true,
+        bDestroy: true,
+        // dom: 'Blfrtip',
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [100, 200, -1],
+            [100, 200, 'Todos'],
+        ],
+        buttons: [
+            {
+                // Boton imprimir contenido jjr
+                text: 'Select All OK',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    readAceptTable();
+                    // printContent(prjid);
+                },
+            },
+            
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'sermodif', class: 'edit'},
+            {data: 'seriesku', class: 'sku left'},
+            {data: 'sernumber', class: 'sku'},
+            {data: 'prodname', class: 'sku'},
+            {data: 'sertype', class: 'sku'},
+            {data: 'serfchout', class: 'sku'},
+            {data: 'serfchin', class: 'sku'},
+            {data: 'serlevel', class: 'sku'},
+        ],
+    });
+
+    $('#SeriePackModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            //console.log('Cierra Series');
+            $('.overlay_background').addClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            $('#tblSerie').DataTable().destroy;
+    });
+ 
+}*/
 function readAceptTable() {
     $('#tblSerie tbody tr').each(function (v, u) {
         // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
@@ -516,10 +599,12 @@ function readAceptTable() {
         checkSerie(serId);
 
         setTimeout(function(){
-            console.log('');
+            $('.overlay_background').addClass('overlay_hide');
+                $('.overlay_closer .title').html('');
+                $('#tblSerie').DataTable().destroy;
         }, 3000);
     });
-    getDetailProds(prjid,em);
+    getDetailProds(prjid,em, ar);
 }
 
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
@@ -545,9 +630,11 @@ function build_modalSeries(dt) {
                 //console.log(dt);
                 tabla.row
                     .add({
-                        sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
+                        sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}"></i> 
+                                    <i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
                                     <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                         seriesku: skufull,
+                        prdname: u.prd_name,
                         sernumber: u.ser_no_econo,
                         sertype: u.ser_serial_number,
                         serfchout: u.pjtpd_day_start,
@@ -575,7 +662,26 @@ function activeIconsSerie() {
                 getSerieDetail(serprd, detIdChg);
             }
     });
-
+    $('.Calendar')
+    .unbind('click')
+    .on('click', function () {
+        console.log($(this).attr('id'));
+        getEvents($(this).attr('id'));
+        calendario('');
+        $('#CalendarModal').removeClass('overlay_hide');
+        $('#CalendarModal').fadeIn('slow');
+        $('#CalendarModal').draggable({
+            handle: ".overlay_modal"
+        });
+        //title= 'Serie';
+        $('.overlay_closer .title').html('');
+        $('#CalendarModal .btn_close')
+            .unbind('click')
+            .on('click', function () {
+                $('#CalendarModal').addClass('overlay_hide');
+            }); 
+        
+});
     $('.toCheck')
         .unbind('click')
         .on('click', function () {
@@ -591,7 +697,7 @@ function activeIconsSerie() {
                 $('#tblSerie').DataTable().destroy;
                 aux=0;
             }
-            getDetailProds(prjid,em);
+            //getDetailProds(prjid,em, ar);
         });
 }
 
@@ -605,12 +711,14 @@ function checkSerie(pjtcnid) {
 }
 
 function myCheck(dt){
-    //console.log(dt);
+    console.log(dt);
     let sku = $('#'+dt).find('.toChange').attr('data-content').split('|')[0];
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
+    $('#'+pjtcn).removeClass('fas fa-edit');
+    $('#'+pjtcn).addClass('fas fa-regular fa-thumbs-up');
     // getDetailProds(prjid,em);
 
 }
@@ -659,8 +767,8 @@ function settingChangeSerie(){
     $('#ChangeSerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
+            $('#ChangeSerieModal').addClass('overlay_hide');
+            $('#ChangeSerieModal .title').html('');
             $('#tblChangeSerie').DataTable().destroy;
         });
 }
@@ -680,9 +788,7 @@ function putSerieDetails(dt){
             $.each(dt, function (v, u) {
                 tabla.row
                     .add({
-                        // serchoose: '<input class="serprod fieldIn" type="checkbox" id="CH-' + u.ser_id + '" value="'+'">',
-                        /* serchange: `<i class='fas fa-edit toEdit' "></i> <i class='fas fa-check-circle toStop' "></i>`, */
-                        serchange: `<i class='fas fa-check-circle toChangeSer' id="${u.ser_id}" seridorg="${u.id_orig}"></i>`,
+                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}"></i>`,
                         serdetnumber: u.ser_serial_number,
                         serdetsitu: u.ser_no_econo,
                         projectname: u.pjt_name
@@ -710,7 +816,7 @@ function activeIconsNewSerie() {
         serIdNew=serIdSel;
         // console.log("New Serie", serIdSel, serIdOrg );
 
-        $('#'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
+        $('.sr'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
         // $('#'+serIdOrig).children(".claseElemento").cssmyCheck({"color":"#CC0000"});
         changeSerieNew(serIdSel, serIdOrg);
     });
@@ -727,9 +833,10 @@ function changeSerieNew(serIdNew,serIdOrg) {
 
 function myCheckUp(dt){
     console.log('myCheckUp-',dt);
-    $('.overlay_background').addClass('overlay_hide');
-    $('.overlay_closer .title').html('');
-    $('#tblChangeSerie').DataTable().destroy;
+    $('#ChangeSerieModal').addClass('overlay_hide');
+    //$('.overlay_closer .title').html('');
+    $('#tblChangeSerie').DataTable().destroy; 
+    getSeries(pjtcn);
 
 }
 

@@ -219,8 +219,10 @@ function putDetailsProds(dt) {
     let valicon='';
     if (dt[0].pjt_id != '0')
     {
-        // let tabla = $('#tblAsignedProd').DataTable();
-        $('#tblAsignedProd tbody').html('');
+        let tabla = $('#tblAsignedProd').DataTable();
+        
+        tabla.rows().remove().draw();
+        /* $('#tblAsignedProd tbody').html(''); */
         $.each(dt, function (v, u){
             if (u.pjt_status == 4)
                 { valstage='color:#008000';
@@ -232,7 +234,21 @@ function putDetailsProds(dt) {
                 { valstage='color:#CC0000';
                 valicon='fa fa-solid fa-dolly detail'; }
                 // style='${valstage}'
-            var H = `
+            tabla.row
+                .add({
+                    editable: `<i class="fas fa-edit toLink" id="${u.pjt_id}"></i> <i class="fas fa-times-circle kill" id=${u.pjt_id}></i>`,
+                    pjtname: u.pjt_name,
+                    pjtnum: u.pjt_number,
+                    pjttpy:u.pjttp_name,
+                    pjtfini: u.pjt_date_start,
+                    pjtffin: u.pjt_date_end,
+                })
+                .draw();
+                $('#' + u.pjt_id)
+                .parents('tr')
+                .attr('id', u.pjt_id)
+                .attr('name', u.pjt_name);
+            /* var H = `
                 <tr id="${u.pjt_id}" name="${u.pjt_name}">  
                     <td class="supply"><i class="fas fa-edit toLink" id="${u.pjt_id}"></i> <i class="fas fa-times-circle kill" id=${u.pjt_id}></i></td>
                     <td class="pjtname">${u.pjt_name}</td>
@@ -241,7 +257,7 @@ function putDetailsProds(dt) {
                     <td class="pjtfini">${u.pjt_date_start}</td>
                     <td class="pjtffin">${u.pjt_date_end}</td>
                 </tr>`;
-            $('#tblAsignedProd tbody').append(H);
+            $('#tblAsignedProd tbody').append(H); */
         });
         activeIcons();
     }
@@ -480,7 +496,7 @@ function datasUser(pjtid) {
 }
 function loadProject(dt) {
     console.log(dt);
-    
+    CleanCombos();
 }
 
 function putupdateUser(dt){

@@ -1335,7 +1335,10 @@ function putBudgets(dt) {
     expandCollapseSection();
     updateTotals();
     sectionShowHide();
-    modalLoading('H');
+    // modalLoading('H');
+    setTimeout(() => {
+        modalLoading('H');
+    }, 200);
     /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1807,6 +1810,7 @@ function killProduct(pjtv) {
 
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type,sec) {
+    modalLoading('B');
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#infoProductTemplate');
@@ -1824,6 +1828,7 @@ function infoProduct(bdgId, type,sec) {
 }
 
 function infoPackage(bdgId, type, sec) {
+    modalLoading('B');
     setTimeout(() => {
         let verId = $('.version_current').attr('data-version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
@@ -1880,6 +1885,7 @@ function putProductsRelated(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 function putProductsRelatedSons(dt, pr) {
@@ -1964,6 +1970,7 @@ function putProductsRelatedPk(dt){
         } 
     });
     ActiveChangePKT();
+    modalLoading('H');
 
 }
 
@@ -2066,6 +2073,7 @@ function putNewProdChg(dt) {
 
 // Muestra el inventario de productos
 function stockProduct(bdgId,nameProd) {
+    modalLoading('B');
     console.log('stockProduct',bdgId);
     getStockProjects(bdgId.substring(3, 20));
 
@@ -2110,6 +2118,7 @@ function putStockProjects(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 // Edita los datos del proyecto
@@ -3296,6 +3305,7 @@ function OrderMice(m) {
 
 /* ==== Define los periodos de cada serie ======================== */
 function periodProduct(prd, nameProd) {
+    modalLoading('B');
     let prdId = prd.substring(3, 10);
     let pjtId = $('.version_current').attr('data-project');
 
@@ -3318,6 +3328,7 @@ function periodProduct(prd, nameProd) {
 function putPeriods(dt) {
     console.log(dt);
     $('#periodBox').html(dt);
+    modalLoading('H');
     
 }
 

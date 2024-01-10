@@ -12,7 +12,7 @@
             
         <div class="row mvst_group">
 
-            <div class="mvst_panel">
+            <div class="mvst_panel" style="background-color: #EDD2F5">
                 <div class="form-group">
                 <div class="form_primary">
                     <h4>Seleccion de proyectos únicos</h4>
@@ -86,7 +86,7 @@
                                 </div>
 
                             </div>
-                            <div class="list-group">
+                            <div class="list-group" style="max-height: 400px;">
                                 <div class="list-items" id="listProducts"></div>
                             </div>
                         </div>
@@ -99,9 +99,9 @@
             <div class="row rowTop">
                         <h1>PROYECTOS </h1>
                         
-                        <select id="txtCategoryList" class="topList">
+                        <!-- <select id="txtCategoryList" class="topList">
                             <option value="0">SELECCIONA CATÁLOGO</option>
-                        </select>
+                        </select> -->
                         
                     </div>
                 <div class="double-column">

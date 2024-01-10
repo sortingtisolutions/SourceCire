@@ -35,8 +35,9 @@ class WhOutputContentModel extends Model
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $empid = $this->db->real_escape_string($params['empid']);
+        $areid = $this->db->real_escape_string($params['areid']);
 
-        if ($empid==1   || $empid==2){
+        if ($areid == 5){
             $qry = "SELECT prcn.pjtcn_id, prcn.pjtcn_prod_sku, prcn.pjtcn_prod_name, prcn.pjtcn_quantity, 
             prcn.pjtcn_prod_level, prcn.pjt_id, prcn.pjtcn_status, prcn.pjtcn_order, 
              case 
@@ -348,7 +349,16 @@ public function InsertComment($params, $userParam)
 		$this->db->query($qry);
 		return $folio;
 	}
-
+    public function GetEventos($params)
+	{
+		$ser_id 	= $this->db->real_escape_string($params['ser_id']);
+		$qry = "SELECT pjp.pjtdt_id 'id', ser_sku 'title', pjp.pjtpd_day_start 'start', pjp.pjtpd_day_end 'end', '#3c5777' as 'color' FROM ctt_projects_detail AS pjd 
+		INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
+		INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
+		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
+		WHERE sr.ser_id=  $ser_id";
+		return $this->db->query($qry);
+	}
     public function GetProjectDetail($params)
     {
         $pjtid     = $this->db->real_escape_string($params['pjtid']);
