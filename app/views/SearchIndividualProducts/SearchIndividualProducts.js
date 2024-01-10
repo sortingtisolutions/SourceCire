@@ -241,7 +241,6 @@ function put_Products(dt) {
         $.each(pd, function (v, u) 
         {
             let serId = u.ser_id;
-            // let totalDays = getVecesUsado(serId);
             tabla.row
                 .add({ // <i class="fa-solid fa-calendar-days"></i>
                     // editable: `<i class="fas fa-calendar-alt choice toChange" id="${u.ser_id}"></i>`,
@@ -279,13 +278,6 @@ function put_Products(dt) {
     }); */
     }
 }
-/* function getVecesUsado(id){
-    var pagina = 'SearchIndividualProducts/listProducts';
-    var par = `[{"serId":"${id}"}]`;
-    var tipo = 'json';
-    var selector = putVecesUsado;
-    fillField(pagina, par, tipo, selector);
-} */
 function getCalendar(id){
     
     getEvents(id);

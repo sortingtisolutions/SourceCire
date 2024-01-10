@@ -57,13 +57,14 @@ public function SaveDocumento($request_params)
 					} */
 					
 					$sku = '';
-					$estatus = 'Problema con ';
+					$estatus = '';
 					
 					if ($LoadProducts[6] != 'Nombre en Ingles') {
 						if (strlen($LoadProducts[0]) == 7) {
 							// REVISION DE SKU
 							$skuCsv = substr($LoadProducts[0], 5, 3);
 							$sku = strval($LoadProducts[0]);
+							$nombre_producto = '';
 							
 							// Revisar que el la categoria y subcategoria exista en la base de datos
 							$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct
@@ -86,23 +87,36 @@ public function SaveDocumento($request_params)
 							$resp = $this->db->query($qry4);
 							$respuesta = $resp->fetch_object();
 							$sbcId = $respuesta->sbc_id;
+
+							if (strpos($LoadProducts[1], "'") !== false) {
+								$nombre_producto = str_replace("'", '"', $LoadProducts[1]);
+							}else{
+								$nombre_producto = $LoadProducts[1];
+							}
 	
 	
 							if ($acept == 0 ) {
-								$estatus = $estatus. 'SKU, ';
+								//SKU
+								$estatus = $estatus. '1,';
 							}
-							if($skuValido != 0){ $estatus = $estatus. 'duplicidad de sku, ';}
+							if($skuValido != 0){ 
+								// duplicidad de sku
+								$estatus = $estatus. '2,';
+							}
 							if ($sbcId == 0) {
-								$estatus = $estatus. 'categoria o subcategoria en sku, ';
+								// categoria o subcategoria
+								$estatus = $estatus. '3,';
 							}
 							// Revisar que termine en numerico
 							if (!is_numeric($skuCsv)) {
-								$estatus = $estatus. 'SKU, ';
+								//sku
+								$estatus = $estatus. '1,';
 								$acept =0;
 							}
 						}else{
 							$sku = strval($LoadProducts[0]);
-							$estatus = $estatus. 'SKU, ';
+							// sku
+							$estatus = $estatus. '1,';
 							$acept =0;
 						}
 						if (strlen($LoadProducts[3]) == 3) {
@@ -112,36 +126,44 @@ public function SaveDocumento($request_params)
 							$rst = $rest->fetch_object();
 							$coin = $rst->cin_id;
 							if ($coin==0) {
-								$estatus = $estatus.'moneda, ';
+								//moneda
+								$estatus = $estatus.'4,';
 							}
 						}else{
 							$coin = 0;
-							$estatus = $estatus.'moneda, ';
+							$estatus = $estatus.'4,';
 						}
 						if (!is_numeric($LoadProducts[2])) {
 							# Costo
-							$estatus = $estatus.'costo, ';
+							$estatus = $estatus.'5,';
 						}
 						if (!is_numeric($LoadProducts[5])) {
 							# Servicio
-							$estatus = $estatus.'servicio, ';
+							$estatus = $estatus.'6,';
 						}
 						if ($LoadProducts[4] < 0 && $LoadProducts[4] > 1) {
 							# Seguro
-							$estatus = $estatus.'seguro.';
+							$estatus = $estatus.'7.';
 						}
 						
 						if($acept > 0 && $coin>0 && $skuValido == 0){
-							$cont++;
-							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model,sbc_id, result)
-									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]',$sbcId, 'EXITOSO')";
-							$this->db->query($qry);
+							try {
+								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model,sbc_id, result)
+										VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]',$sbcId, 'EXITOSO')";
+								$this->db->query($qry);
+								$cont++;
+							} catch (\Throwable $th) {
+								$estatus = 'ERROR';
+							}
+							
+							
 						}else{
 							
-							$aux++;
 							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model,sbc_id, result)
-									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]',$sbcId, '$estatus')";
+									VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]',$sbcId, '$estatus')";
 							$this->db->query($qry);
+							
+							$aux++;
 						}
 						
 					}
@@ -176,12 +198,13 @@ public function SaveDocumento($request_params)
 	// Listado de Proyectos  ****
 	public function listResults($store)
 	{
-		$qry = "SELECT SUM(case when ldp.result LIKE '% duplicidad de sku,%' then 1 ELSE 0 END) duplicidad, 
-		SUM(case when ldp.result LIKE '% SKU,%' then 1 ELSE 0 END) SKU,
-		SUM(case when ldp.result LIKE '% moneda,%' then 1 ELSE 0 END) moneda,
-		SUM(case when ldp.result LIKE '% costo,%' then 1 ELSE 0 END) costo,
-		SUM(case when ldp.result LIKE '% servicio,%' then 1 ELSE 0 END) servicio,
-		SUM(case when ldp.result LIKE '% seguro%' then 1 ELSE 0 END) seguro, 1 as results
+		$qry = "SELECT SUM(case when ldp.result LIKE '%2,%' then 1 ELSE 0 END) duplicidad, 
+		SUM(case when ldp.result LIKE '%1,%' then 1 ELSE 0 END) SKU,
+		SUM(case when ldp.result LIKE '%4,%' then 1 ELSE 0 END) moneda,
+		SUM(case when ldp.result LIKE '%5,%' then 1 ELSE 0 END) costo,
+		SUM(case when ldp.result LIKE '%6,%' then 1 ELSE 0 END) servicio,
+		SUM(case when ldp.result LIKE '%7%' then 1 ELSE 0 END) seguro,
+		SUM(case when ldp.result LIKE '%3%' then 1 ELSE 0 END) categoria, 1 as results
 		FROM ctt_load_products AS ldp";
 		return $this->db->query($qry);
 	}
@@ -191,8 +214,8 @@ public function SaveDocumento($request_params)
 		$qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, ldp.prd_name_provider,
 		ldp.prd_model, ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, case when ldp.prd_insured = 1 then 'Sí' ELSE 'NO' END prd_insured,
 		ldp.srv_id, srv.srv_name, cn.cin_code, result FROM ctt_load_products AS ldp
-		INNER JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
-		INNER JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
+		LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
+		LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
 		$result = $this->db->query($qry);
 		//$lista = array();
 		/* while ($row = $result->fetch_row()){
@@ -323,9 +346,9 @@ public function SaveDocumento($request_params)
 
 	public function loadProcess($params)
 	{
-		$qry = "INSERT INTO ctt_products_paso(
-			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, srv_id)
-	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, srv_id
+		$qry = "INSERT INTO ctt_products(
+			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, srv_id, sbc_id)
+	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, srv_id, sbc_id
 	FROM ctt_load_products a WHERE a.result = 'EXITOSO';";
 		$result = $this->db->query($qry);
 		$qry1 = "TRUNCATE TABLE ctt_load_products;";
