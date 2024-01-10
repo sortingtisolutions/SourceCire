@@ -53,7 +53,11 @@ function inicial() {
        
     });
 
-    $('#DocumentosTable tbody').on('click', 'tr', function () {
+    /* $('#verMotivo').on('click', function () {
+       
+    }); */
+
+    /* $('#DocumentosTable tbody').on('click', 'tr', function () {
       positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
 
       setTimeout(() => {
@@ -64,7 +68,7 @@ function inicial() {
             $('.btn-apply').removeClass('hidden-field');
          }
      }, 10);
-   });
+   }); */
 }
 //ver Documentos
 /* function VerDocumento() {
@@ -103,7 +107,8 @@ function settingTable() {
    let title = 'Lista de Tipos de Documentos';
    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
    $('#DocumentosTable').DataTable({
-       order: [[1, 'asc']],
+        bDestroy: true,
+        order: [[1, 'asc']],
        dom: 'Blfrtip',
        lengthMenu: [
         [500, 1000, -1],
@@ -159,6 +164,7 @@ function settingTable() {
        fixedHeader: true,
        columns: [
         {data: 'result', class: 'result'},
+        {data: 'error', class: 'result'},
         {data: 'Sku', class: 'Sku'},
         {data: 'NumeroSerie', class: 'NumeroSerie'},
         {data: 'Costo', class: 'Costo'},
@@ -228,8 +234,17 @@ function showResults(){
     var selector = put_results;
     fillField(pagina, par, tipo, selector);
 }
+function limpiarResults(){
+    $('#duplicidad').text('')
+    $('#sku').text('')
+    $('#moneda').text('')
+    $('#costo').text('')
+    $('#almacen').text('')
+    $('#proveedor').text('')
+}
 function put_results(dt) {
     console.log(dt);
+    limpiarResults();
     if (dt[0].results > 0) {
         if (dt[0].duplicidad > 0) {
             $('#duplicidad').text('Por duplicidad en sku: '+ dt[0].duplicidad);
@@ -264,7 +279,23 @@ function LimpiaModal() {
     $('#formDocumento').removeClass('was-validated');
     $('#titulo').text('Nuevo Documento');
 }
-
+function activarBoton(){
+    $('.show')
+    .unbind('click')
+    .on('click', function(){
+        var tr = $(this).closest('tr');
+        var errores = tr.find('td').eq(1).text().split(',');
+        limpiarModalErrores();
+        $.each(errores, function(v,u){
+            $('#codigo-' + u).removeClass('objHidden');
+        });
+        $('#MotivosModal').modal('show');
+        
+        $('#btn_hide_modal').on('click', function () {
+            $('#MotivosModal').modal('hide');
+        });
+    });
+}
 //ver Documentos
 function VerDocumento() {
     $.ajax({
@@ -287,6 +318,7 @@ function VerDocumento() {
 
 //obtiene la informacion de tabla Proveedores *
 function getDocumentosTable() {
+    modalLoading('S');
    var pagina = 'LoadSeries/GetDocumentos';
    var par = `[{"dot_id":""}]`;
    var tipo = 'json';
@@ -309,9 +341,11 @@ function loadProcess() {
         fillField(pagina, par, tipo, selector); 
         $('#confirmarCargaModal').modal('hide');
         activeButtons();
-        setTimeout(() => {
+        
+        modalLoading('H');
+        /* setTimeout(() => {
             modalLoading('H');
-        }, 100);
+        }, 100); */
     });
  }
  function eliminarDatos(){
@@ -334,13 +368,14 @@ function putFiles(dt) {
    console.log(dt);
    pd = dt;
    datos = dt;
-   let largo = $('#DocumentosTable tbody tr td').html();
+   /* let largo = $('#DocumentosTable tbody tr td').html();
    largo == 'Ningún dato disponible en esta tabla'
        ? $('#DocumentosTable tbody tr').remove()
        : '';
    tabla =  $('#DocumentosTable').DataTable();
    
-   tabla.rows().remove().draw();
+   tabla.rows().remove().draw(); */
+   $('#DocumentosTable tbody').html('');
    let cn = 0;
    if(dt[0].ser_id > 0){
         
@@ -353,9 +388,10 @@ function putFiles(dt) {
                 icon = "fas fa-times-circle";
                 valstage='color:#CC0000';
             }
-           tabla.row
+           /* tabla.row
                .add({
                    result: `<i class="${icon}" style="${valstage}"></i>`,
+                   error: u.result,
                    Sku: u.ser_sku,
                    NumeroSerie: u.ser_serial_number,
                    Costo: u.ser_cost,
@@ -372,13 +408,51 @@ function putFiles(dt) {
                    Moneda: u.cin_code,
                    Almacen: u.sup_business_name,
                    Proveedor: u.str_name
-               })
-               .draw();
+               }) 
+               .draw(); */
+
+               let H = `
+                <tr>
+                    <td><i class="${icon} show" style="${valstage}"></i></td>
+                    <td>${u.result}</td>
+                    <td>${u.ser_sku}</td>
+                    <td>${u.ser_serial_number}</td>
+                    <td>${u.ser_cost}</td>
+                    <td>${u.ser_date_registry}</td>
+
+                    <td>${u.ser_date_down}</td>
+                    <td>${u.ser_brand}</td>
+                    <td>${u.ser_import_petition}</td>
+                    <td>${u.ser_cost_import}</td>
+                    <td>${u.ser_sum_ctot_cimp}</td>
+
+                    <td>${u.ser_no_econo}</td>
+                    <td>${u.ser_comments}</td>
+                    <td>${u.cin_code}</td>
+                    <td>${u.sup_business_name}</td>
+                    <td>${u.str_name}</td>
+                </tr>
+            `;
+            $('#DocumentosTable tbody').append(H);
+            
            cn++;
        });
+       //settingTable();
+       activarBoton();
+   }else{
+    settingTable();
    }
+   modalLoading('H');
 }
-
+function limpiarModalErrores(){
+    $('#codigo-1').addClass('objHidden');
+    $('#codigo-2').addClass('objHidden');
+    $('#codigo-3').addClass('objHidden');
+    $('#codigo-4').addClass('objHidden');
+    $('#codigo-5').addClass('objHidden');
+    $('#codigo-6').addClass('objHidden');
+    $('#codigo-7').addClass('objHidden');
+}
 function modalLoading(acc) {
     if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');

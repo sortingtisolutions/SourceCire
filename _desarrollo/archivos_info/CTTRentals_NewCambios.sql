@@ -426,3 +426,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 AUTO_INCREMENT=1
 ;
+
+--*************************************************
+ALTER TABLE `ctt_project_series_periods`
+	ADD COLUMN `pjtdt_id` INT NULL AFTER `ser_id`;
