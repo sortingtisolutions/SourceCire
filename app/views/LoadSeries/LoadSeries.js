@@ -285,14 +285,25 @@ function activarBoton(){
     .on('click', function(){
         var tr = $(this).closest('tr');
         var errores = tr.find('td').eq(1).text().split(',');
-        limpiarModalErrores();
+        var motivosError = 0;
+
+        settingTableErrores();
+
         $.each(errores, function(v,u){
-            $('#codigo-' + u).removeClass('objHidden');
+            if(u > 0){
+                motivosError = motivosError + ',' + u;
+                console.log(motivosError);
+            }
+            if (u == 'EXITOSO') {
+                motivosError = 0;
+            }
         });
-        $('#MotivosModal').modal('show');
-        
-        $('#btn_hide_modal').on('click', function () {
-            $('#MotivosModal').modal('hide');
+        getErrores(motivosError);
+        $('#MotivosModal').removeClass('overlay_hide');
+        $('#MotivosModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
         });
     });
 }
@@ -385,7 +396,7 @@ function putFiles(dt) {
                 icon = "fas fa-check-circle";
                 valstage='color:#008000';
             } else {
-                icon = "fas fa-times-circle";
+                icon = "fas fa-exclamation-circle";
                 valstage='color:#CC0000';
             }
            /* tabla.row
@@ -453,6 +464,58 @@ function limpiarModalErrores(){
     $('#codigo-6').addClass('objHidden');
     $('#codigo-7').addClass('objHidden');
 }
+
+function settingTableErrores() {
+    let title = 'Lista de Tipos de Documentos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('#tblMotivos').DataTable({
+         bDestroy: true,
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [500, 1000, -1],
+            [500, 1000, 'Todos'],
+        ],
+        buttons: [
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+             {data: 'code', class: 'result'},
+             {data: 'nameError', class: 'Producto'},
+        ],
+    });
+ }
+
+function getErrores(errores){
+    console.log(errores);
+    var pagina = 'LoadSeries/listErrores';
+    var par = `[{"errores":"${errores}"}]`;
+    var tipo = 'json';
+    var selector = put_errores;
+    fillField(pagina, par, tipo, selector);
+}
+function put_errores(dt){
+    let tabla = $('#tblMotivos').DataTable();
+    $('.overlay_closer .title').html('MOTIVOS DE ERROR');
+    tabla.rows().remove().draw();
+    if(dt[0].erm_id > 0){
+        $.each(dt, function (v, u) {
+            tabla.row
+            .add({
+                code: u.erm_id,
+                nameError: u.erm_title,
+            })
+            .draw();
+        });
+    }
+}
+
 function modalLoading(acc) {
     if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');

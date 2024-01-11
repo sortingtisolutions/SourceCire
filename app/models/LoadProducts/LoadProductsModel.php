@@ -93,8 +93,6 @@ public function SaveDocumento($request_params)
 							}else{
 								$nombre_producto = $LoadProducts[1];
 							}
-	
-	
 							if ($acept == 0 ) {
 								//SKU
 								$estatus = $estatus. '1,';
@@ -228,6 +226,16 @@ public function SaveDocumento($request_params)
 						"doc_admission_date" =>$row[6]);
 			array_push($lista, $item);
 		} */
+		return $result;
+	}
+
+	public function listErrores($params)
+	{
+		$errores = $this->db->real_escape_string($params['errores']);
+
+		$qry = "SELECT erm.erm_id, erm.erm_title FROM ctt_error_message AS erm WHERE erm.erm_id IN($errores)";
+		$result = $this->db->query($qry);
+		
 		return $result;
 	}
 

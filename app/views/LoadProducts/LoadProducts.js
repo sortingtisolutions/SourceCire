@@ -88,7 +88,7 @@ function inicial() {
      }, 10);
    }); */
 }
-function limpiarModalErrores(){
+/* function limpiarModalErrores(){
     $('#codigo-1').addClass('objHidden');
     $('#codigo-2').addClass('objHidden');
     $('#codigo-3').addClass('objHidden');
@@ -96,7 +96,7 @@ function limpiarModalErrores(){
     $('#codigo-5').addClass('objHidden');
     $('#codigo-6').addClass('objHidden');
     $('#codigo-7').addClass('objHidden');
-}
+} */
 function VerDocumento() {
     $.ajax({
         url: 'app/assets/csv_ejemplos/productos.csv',
@@ -222,6 +222,32 @@ function settingTable() {
    });
 }
 
+function settingTableErrores() {
+    let title = 'Lista de Tipos de Documentos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('#tblMotivos').DataTable({
+         bDestroy: true,
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [500, 1000, -1],
+            [500, 1000, 'Todos'],
+        ],
+        buttons: [
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+             {data: 'code', class: 'result'},
+             {data: 'nameError', class: 'Producto'},
+        ],
+    });
+ }
 
 //Guardar Almacen **
 function SaveDocumento() {
@@ -407,7 +433,7 @@ function putFiles(dt) {
                 icon = "fas fa-check-circle";
                 valstage='color:#008000';
             } else {
-                icon = "fas fa-times-circle";
+                icon = "fas fa-exclamation-circle";
                 valstage='color:#CC0000';
             }
           /*  tabla.row
@@ -462,20 +488,64 @@ function activarBoton(){
     .on('click', function(){
         var tr = $(this).closest('tr');
         var errores = tr.find('td').eq(1).text().split(',');
+        var motivosError = 0;
+        settingTableErrores();
         /* $('#IdErrores').val(errores);
         var errores = $('#IdErrores').val().split(','); */
-        limpiarModalErrores();
+        //limpiarModalErrores();
+
         $.each(errores, function(v,u){
-            console.log($('#codigo-' + u).text());
-            $('#codigo-' + u).removeClass('objHidden');
+            if(u > 0){
+                motivosError = motivosError + ',' + u;
+                
+                //console.log(motivosError);
+            }
+            if (u == 'EXITOSO') {
+                motivosError = 0;
+            }
+            /* console.log($('#codigo-' + u).text());
+            $('#codigo-' + u).removeClass('objHidden'); */
         });
-        $('#MotivosModal').modal('show');
+        
+        getErrores(motivosError);
+        $('#MotivosModal').removeClass('overlay_hide');
+        $('#MotivosModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
+        });
+        /* 
         
         $('#btn_hide_modal').on('click', function () {
             $('#MotivosModal').modal('hide');
-        });
+        }); */
         // $('#verMotivo').removeClass('objHidden');
     });
+}
+
+function getErrores(errores){
+    console.log(errores);
+    var pagina = 'LoadProducts/listErrores';
+    var par = `[{"errores":"${errores}"}]`;
+    var tipo = 'json';
+    var selector = put_errores;
+    fillField(pagina, par, tipo, selector);
+}
+function put_errores(dt){
+    
+    let tabla = $('#tblMotivos').DataTable();
+    $('.overlay_closer .title').html('MOTIVOS DE ERROR');
+    tabla.rows().remove().draw();
+    if(dt[0].erm_id > 0){
+        $.each(dt, function (v, u) {
+            tabla.row
+            .add({
+                code: u.erm_id,
+                nameError: u.erm_title,
+            })
+            .draw();
+        });
+    }
 }
 function modalLoading(acc) {
     if (acc == 'S') {

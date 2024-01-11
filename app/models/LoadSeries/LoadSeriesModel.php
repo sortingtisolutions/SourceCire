@@ -127,9 +127,9 @@ public function SaveDocumento($request_params)
 									$rst = $rest->fetch_object();
 									$prdId = $rst->prd_id;
 		
-									if($prdId == 0){ // si por alguna razon envia 0 (que no deberia ocurrir, por los if anteriores) enviara el error marcado en el prd_id
+									/* if($prdId == 0){ // si por alguna razon envia 0 (que no deberia ocurrir, por los if anteriores) enviara el error marcado en el prd_id
 										$estatus = $estatus . "3,";
-									}
+									} */
 								}
 							}
 						}else{
@@ -141,7 +141,7 @@ public function SaveDocumento($request_params)
 							$costo = $LoadProducts[7];
 						}else{
 							$costo = 0;
-							$estatus = $estatus . '4,';
+							$estatus = $estatus . '5,';
 						}
 						// Verificar que el tipo de moneda exista
 						if (strlen($LoadProducts[6]) == 3) {
@@ -152,11 +152,11 @@ public function SaveDocumento($request_params)
 							$coin = $rst->cin_id;
 
 							if ($coin == 0) {
-								$estatus = $estatus . "5,";
+								$estatus = $estatus . "4,";
 							}
 						}else{
 							if ($LoadProducts[6] != '') {
-								$estatus = $estatus . "5,";
+								$estatus = $estatus . "4,";
 							}
 							$coin = 0;
 						}
@@ -166,7 +166,7 @@ public function SaveDocumento($request_params)
 							# code...
 							$strId = $store;
 						}else{
-							$estatus = $estatus . '6,';
+							$estatus = $estatus . '9,';
 						}
 
 						// verifica que el proveedor este correcto
@@ -180,7 +180,7 @@ public function SaveDocumento($request_params)
 						} else{
 							$supIdacept = 0;
 							$supId = 0;
-							$estatus = $estatus . '7';
+							$estatus = $estatus . '10';
 						}
 						
 						//if ( && (is_numeric($LoadProducts[1]) || $LoadProducts[1]== '') && is_numeric($LoadProducts[2])) {
@@ -334,5 +334,15 @@ public function SaveDocumento($request_params)
 		$qry1 = "TRUNCATE TABLE ctt_load_series;";
 		
 		return  $this->db->query($qry1);
+	}
+
+	public function listErrores($params)
+	{
+		$errores = $this->db->real_escape_string($params['errores']);
+		
+		$qry = "SELECT erm.erm_id, erm.erm_title FROM ctt_error_message AS erm WHERE erm.erm_id IN($errores)";
+		$result = $this->db->query($qry);
+		
+		return $result;
 	}
 }

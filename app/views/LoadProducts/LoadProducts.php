@@ -264,7 +264,7 @@
 </div>
 
 <!-- MODAL PARA PODER VISUALIZAR LOS MOTIVOS DE ERROR-->
-
+<!-- 
 <div class="modal fade" id="MotivosModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -301,13 +301,29 @@
 
             </div>
                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button> -->
+                   
                     <button type="button" class="btn btn-secondary btnHideModal" id="btn_hide_modal">Cerrar</button>
                 </div>
             </div>
     </div>
-</div>
+</div> -->
 
+<div class="overlay_background overlay_hide" id="MotivosModal" style="width: 60%; left:25%;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+<!--             <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            <div style="height:15px;"></div>  -->
+            <table class="display compact nowrap"  id="tblMotivos" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="width:  30px">Codigo</th>
+                        <th style="width: 180px">Descripcion del Error</th>			
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 <script src="<?=  PATH_ASSETS . 'lib/bs-custom-file-input.min.js' ?>"></script>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
