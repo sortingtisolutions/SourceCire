@@ -143,6 +143,20 @@
 			$res =  '[{"ser_id":"0"}]';
 			echo $res;
 		}
-
+		public function listErrores($request_params)
+		{
+			$result = $this->model->listErrores($request_params);
+			$i = 0;
+			  while($row = $result->fetch_assoc()){
+				  $rowdata[$i] = $row;
+				  $i++;
+			  }
+			  if ($i>0){
+				  $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+			  } else {
+				  $res =  '[{"erm_id":"0"}]';	
+			  }
+			  echo $res;
+		}
 
 	}
