@@ -12,7 +12,7 @@
 			<div class="row mvst_group">
 				<div class="mvst_panel" style="background-color: #B0C4DE">
 					<div class="form-group">
-					<h1>Registro de nuevos pagos </h1>
+					<h1>Registro de un pago adelantado </h1>
 						<div class="row">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 								<select id="txtProject" class="form-select form-select-sm " aria-label="Floating label select" data-mesage="Debes seleccionar un proyecto">
@@ -120,7 +120,7 @@
 				</div>
 
 				<div class="mvst_table">
-					<h1>Registros de Pagos adelantados para proyectos</h1>
+					<h1>Lista de Pagos adelantados para proyectos</h1>
 					<table class="display compact nowrap"  id="tblPrePayment">
 						<thead>
 							<tr>
