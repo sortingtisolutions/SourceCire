@@ -430,3 +430,14 @@ AUTO_INCREMENT=1
 --*************************************************
 ALTER TABLE `ctt_project_series_periods`
 	ADD COLUMN `pjtdt_id` INT NULL AFTER `ser_id`;
+
+--***************************************************
+CREATE TABLE `ctt_error_message` (
+	`erm_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`erm_title` VARCHAR(150) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`erm_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;

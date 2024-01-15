@@ -2087,6 +2087,7 @@ function stockProduct(bdgId,nameProd) {
     closeModals();
 }
 function putStockProjects(dt) {
+    console.log(dt);
     $('.invoice__modal-general table tbody').html('');
     if (dt[0].prd_name != 0) {
         $.each(dt, function (v, u) {

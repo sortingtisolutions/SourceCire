@@ -39,25 +39,30 @@ public function listProyects($store)
                 ser.ser_situation, ser.ser_date_registry, ser.ser_date_down, 
 					 IFNULL(pjp.pjtpd_day_start,'') AS pjtpd_day_start, 
                 IFNULL(pjp.pjtpd_day_end,'')pjtpd_day_end, pj.pjt_name,
-                IFNULL(SUM(psp.pjspd_days), 0) total_days
+                (SELECT IFNULL(SUM(psp.pjspd_days), 0) totalDays
+                FROM ctt_project_series_periods as psp WHERE psp.ser_id = ser.ser_id) total_days
 					 FROM ctt_products AS pd 
                 INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
                 Left JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
                 Left JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
                 Left JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
                 Left  JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id 
-                LEFT JOIN ctt_project_series_periods AS psp ON psp.pjtdt_id = pjd.pjtdt_id
                 WHERE pd.prd_id = $pjtId group by ser.ser_id ORDER BY ser.ser_serial_number;";
                 
         return $this->db->query($qry);
     }    
 
 // Listar los productos2
-public function listProducts2()
+public function listProducts2($param)
 {
-    $qry = "SELECT * FROM ctt_products A 
+    $word = $this->db->real_escape_string($param['word']);
+   /*  $qry = "SELECT * FROM ctt_products A 
             WHERE A.prd_visibility=1 AND A.prd_level='P'
-            ORDER BY prd_name;";
+            ORDER BY prd_name;"; */
+    $qry = "SELECT * FROM ctt_products A 
+    WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
+        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' )
+    ORDER BY prd_name;";
     return $this->db->query($qry);
 }
 
@@ -75,7 +80,9 @@ public function listProducts2()
     public function GetEventos($params)
 	{
 		$prd_id 	= $this->db->real_escape_string($params['prd_id']);
-		$qry = "SELECT pjp.pjtdt_id 'id', concat(ser_sku,' - ',pj.pjt_name) 'title', pjp.pjtpd_day_start 'start', DATE_ADD(pjp.pjtpd_day_end, INTERVAL 1 DAY) 'end', '#3c5777' as 'color' FROM ctt_projects_detail AS pjd 
+		$qry = "SELECT pjp.pjtdt_id 'id', concat(ser_sku,' - ',pj.pjt_name) 'title', 
+        pjp.pjtpd_day_start 'start', DATE_ADD(pjp.pjtpd_day_end, INTERVAL 1 DAY) 'end', '#3c5777' as 'color', pjd.sttd_id
+        FROM ctt_projects_detail AS pjd 
 		INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
 		INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
 		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id

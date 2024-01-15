@@ -70,12 +70,12 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
-								<table id="DocumentosTable" class="display  display compact nowrap" style="width:100%">         
+								<table id="DocumentosTable" class="display  display compact nowrap" style="min-width: 1400px">         
 										<thead>
 											<tr>
-													<th style="width: 100px"></th>
-													<th style="width: 60px">Resultado</th>
-													<th style="width: 60px">Sku</th>
+													<th style="width: 10px"></th>
+													<th style="width: 50px">Resultado</th>
+													<th style="width: 70px">Sku</th>
 													<th style="width: 70px">Numero de Serie</th>
 													<th style="width: 70px">Costo</th>
 													<th style="width: 70px">Fecha de registro</th>

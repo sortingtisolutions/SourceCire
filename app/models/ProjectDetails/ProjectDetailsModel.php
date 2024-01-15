@@ -294,7 +294,7 @@ public function promoteToProject($params)
                 LEFT JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                 LEFT JOIN ctt_projects AS pjt ON pjt.pjt_id = pcn.pjt_id
                 LEFT JOIN ctt_projects_periods AS ped ON ped.pjtdt_id = pdt.pjtdt_id
-                WHERE ser.prd_id = $prdId;";
+                WHERE ser.prd_id = $prdId AND pdt.sttd_id != 4 Order by pdt.pjtdt_prod_sku, ped.pjtpd_day_start ASC;";
         return $this->db->query($qry);
     } 
 
@@ -529,6 +529,10 @@ public function promoteToProject($params)
         $this->db->query($qry);
         return $pjtId.'|'. $verId;
     }  
+
+    function cancelSeries($params){
+
+    }
 
  /** Actualiza la fecha del proyecto, en la que hubo un movimiento */   
     public function saveDateProject($pjtId)
@@ -854,19 +858,52 @@ public function promoteToProject($params)
  
         while($row = $result->fetch_assoc()){
             $pjtdtId = $row["pjtdt_id"];
-            $qry2 = "UPDATE ctt_series 
-                        SET ser_situation = 'D', 
+
+            $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+                INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+                WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT ser_id FROM ctt_projects_detail AS pdt
+                WHERE pdt.pjtdt_id = $pjtdtId LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+        
+            $result =  $this->db->query($qry);
+            $pjtdt = $result->fetch_object();
+            
+            if ($pjtdt != null ) {
+                $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                $ser_id = $pjtdt->ser_id; 
+                $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+        
+                $result =  $this->db->query($qry);
+                $series = $result->fetch_object();
+                if ($series != null) {
+                    $pjtdt_id = $series->pjtdt_id;
+                    if ($pjtdt_id == $pjtdtId) {
+                    
+                        $qry2 = "UPDATE ctt_series 
+                                    SET ser_situation = 'EA', 
+                                        ser_stage = 'R',
+                                        pjtdt_id = $pjtdt_ft_id
+                                WHERE ser_id = $ser_id;";
+                        $this->db->query($qry2);
+            
+                        $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                        $this->db->query($updtQry);
+                    }
+                }
+                
+            }else{
+                $qry2 = "UPDATE ctt_series 
+                    SET ser_situation = 'D', 
                             ser_stage = 'D', 
                             pjtdt_id = 0 
-                      WHERE pjtdt_id = $pjtdtId;";
-            $this->db->query($qry2);
-
+                    WHERE pjtdt_id = $pjtdtId;";
+                $this->db->query($qry2);
+            }
+            
             $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry3);
-
+        
             $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry4);
-
         }
         return '1';
     }
@@ -918,7 +955,7 @@ public function promoteToProject($params)
             FROM ctt_series AS sr
             INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
             INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
-            WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+            WHERE sr.ser_id = ser.ser_id AND pd.sttd_id != 4 AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
             OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl' OR 
             '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
             OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";
@@ -931,10 +968,47 @@ public function promoteToProject($params)
                 $sersku  = $serie_futura->serSku;
                 $serie = $serie_futura->serId;
 
-                $qry2 = "INSERT INTO ctt_projects_detail (
+                /* $qry2 = "INSERT INTO ctt_projects_detail (
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
-                    ); ";
+                    ); "; */
+                // Si la fecha de reserva de una serie asignada es mayor a la de la serie que se planea colocar a futuro
+                // que esta tome su lugar y la serie anterior que se coloque como serie a futuro
+                // Esto en caso de que se reserve antes una serie pero despues en otro proyecto las fechas de reserva sean menores a la anterior
+                $qry3="SELECT sr.ser_id serId, pjp.pjtpd_day_start, pjp.pjtpd_day_end, sr.pjtdt_id
+                FROM ctt_series AS sr
+                INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = sr.pjtdt_id
+                WHERE sr.ser_id = $serie AND pjp.pjtpd_day_start > '$dtfinl' LIMIT 1;";
+                $result1 =  $this->db->query($qry3);
+                            
+                $serie_actual = $result1->fetch_object();
+                if ($serie_actual != null ) {
+                    $pjtdt_id  = $serie_actual->pjtdt_id;
+
+                    $qry4 ="UPDATE ctt_projects_detail SET sttd_id = 3 where pjtdt_id = $pjtdt_id";
+                    $this->db->query($qry4);
+
+
+                    $qry2 = "INSERT INTO ctt_projects_detail (
+                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1
+                        ); ";
+                    $this->db->query($qry2);
+                    $pjtdtId = $this->db->insert_id;
+
+                    $qry4 ="UPDATE ctt_series 
+                        SET 
+                            pjtdt_id = $pjtdtId
+                        WHERE ser_id = '$serie'";
+                    $this->db->query($qry4);
+                }else{
+                    $qry2 = "INSERT INTO ctt_projects_detail (
+                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
+                        ); ";
+                    $this->db->query($qry2);
+                    $pjtdtId = $this->db->insert_id;
+                }
             }else{
                 $serie  = null; 
                 $sersku  = 'Pendiente' ;
@@ -942,10 +1016,11 @@ public function promoteToProject($params)
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
                     ); ";
+                 $this->db->query($qry2);
+                 $pjtdtId = $this->db->insert_id;
             }
     
-            $this->db->query($qry2);
-            $pjtdtId = $this->db->insert_id;
+           
         }
         
         // Agrega los periodos desiganados a la serie 

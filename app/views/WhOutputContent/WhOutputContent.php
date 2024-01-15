@@ -347,7 +347,7 @@
 <!-- Start Ventana modal AGREGA O MODIFICA  -->
 <div class="overlay_background overlay_hide" id="CalendarModal" style="height: 500px; width:50%;left:350px;">
         <div class="overlay_modal">
-            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <div class="overlay_closer"><span class="title_calendar" style="font-weight: bold; font-size: 1.5em;"></span><span class="btn_close">Cerrar</span></div>
 			<!--
             <div class="formButtons">
                 <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
