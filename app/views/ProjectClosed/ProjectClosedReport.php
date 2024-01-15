@@ -33,12 +33,18 @@ if ($type==1) {
         (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
         cn.ver_id as verId,
         case when (pr.prd_level = 'P' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
-            ELSE 0 END AS seguro, dt.pjtdt_id, pj.pjt_name, pj.pjt_number
+            ELSE 0 END AS seguro, dt.pjtdt_id, pj.pjt_name, pj.pjt_number, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
         FROM ctt_projects_detail AS dt
         INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
         INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
         LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+        LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+        LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
         WHERE cn.pjt_id = $pjtId AND pr.prd_level != 'A'";
     }else{
         $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, sr.ser_situation,
@@ -52,7 +58,9 @@ if ($type==1) {
                             (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                             (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
                             cn.ver_id as verId,
-                            ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name
+                            ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
                         FROM ctt_projects_detail AS dt
                         INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
                         INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
@@ -69,12 +77,18 @@ if ($type==1) {
                             (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                             (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
                             cn.ver_id as verId,
-                            (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name
+                            (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
                         FROM ctt_projects_detail AS dt
                         INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
                         INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
                         LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
                         INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+                        LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                        LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+                        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+                        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
                         WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level = 'K' GROUP BY cn.pjtcn_id";
     }
     
@@ -93,13 +107,19 @@ if ($type==1) {
             (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
             cn.ver_id as verId,
             case when (pr.prd_level = 'P' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
-                ELSE 0 END AS seguro, dt.pjtdt_id, pjt.pjt_name, pjt.pjt_number
+                ELSE 0 END AS seguro, dt.pjtdt_id, pjt.pjt_name, pjt.pjt_number, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
         FROM ctt_projects_detail AS dt
         INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
         INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
         LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
         INNER JOIN ctt_projects AS pjt  ON pjt.pjt_id = pj.pjt_parent
+        LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+        LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
         WHERE pj.pjt_parent = $pjtId AND pr.prd_level != 'A' and pj.pjt_status in(8,9)";
     }else{
         $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, sr.ser_situation,
@@ -113,7 +133,9 @@ if ($type==1) {
                                 (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                                 (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
                                 cn.ver_id as verId,
-                                ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name
+                                ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
                             FROM ctt_projects_detail AS dt
                             INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
                             INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
@@ -130,12 +152,18 @@ if ($type==1) {
                                 (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
                                 (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
                                 cn.ver_id as verId,
-                                (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name
+                                (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
                             FROM ctt_projects_detail AS dt
                             INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
                             INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
                             LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
                             INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+                            LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                            LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+                            INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+                            INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
                             WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level = 'K' and pj.pjt_status in(8,9) GROUP BY cn.pjtcn_id";
     }
 }
@@ -148,6 +176,9 @@ $conn->close();
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
+
+date_default_timezone_set('America/Mexico_City');
+$hoy=new DateTime();
 
 // Cabezal de la página
 $header = '
@@ -174,34 +205,118 @@ $equipoBase = '1';
 $html = '
     <section>
         <div class="container">
-        <div style="height:20px;"></div>
-            <table class="table-data bline tline" style="text-align: center">
-                <tr>
-                    <td>
-                        <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
-                        Impresion de contenido del Proyecto
-                        </p>
-                    </td>
-             
-                </tr>
-                <!--<tr>
-                    <td class="half">
-                        <table class="table-data">
-                            <tr>
-                                <td class="concept"><strong>Nombre Responsable:</strong></td>
-                                <td class="data"><strong>'. $uname .'</strong></td>
-                            </tr>
-                            <tr>
-                                <td class="concept">&nbsp;</td>
-                                <td class="data">&nbsp;</td>
-                            </tr> 
-                        </table>
-                          
-                    </td>
-                </tr> -->
+        <table class="table-data bline-d tline">
+        <tr>
+            <td class="rline half">
+                <!-- Start datos del cliente -->
+                <table class="table-data">
+                    <tr>
+                        <td class="concept">Cliente:</td>
+                        <td class="data">'. $items[0]['cus_name']  .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Domicilio:</td>
+                        <td class="data">'.  $items[0]['cus_address'] .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Quien Solicita:</td>
+                        <td class="data">'. $items[0]['pjt_how_required'] .'</td>
+                     </tr>
+                    <tr>
+                        <td class="concept">Correo Electrónico:</td>
+                        <td class="data">'. $items[0]['cus_email'] .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Teléfono:</td>
+                        <td class="data">'. $items[0]['cus_phone'] .'</td>
+                    </tr>
+                   
+                    <tr>
+                        <td class="concept">Analista CTT:</td>
+                        <td class="data">'. $uname .'</td>
+                    </tr>
+                </table>
+                <!-- End datos del cliente -->
+            </td>
+            <td class="half">
+                <!-- Start Datos del projecto -->
+                <table class="table-data">
                 
-            </table>
-            <!-- End Datos de identificación  -->
+                    <tr>
+                        <td class="concept">Fecha Cotización:</td>
+                        <td class="data">'. $hoy->format('d/m/Y') .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Ciudad:</td>
+                        <td class="data">'. $items[0]['pjt_location'] .'</td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="concept">Tipo de Locación:</td>
+                        <td class="data">'. $items[0]['loc_type_location'] .'</td>
+                    </tr> -->
+                    <tr>
+                        <td class="concept">Tipo de proyecto:</td>
+                        <td class="data">'. $items[0]['pjttp_name'] .'</td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Fechas de Proyecto:</td>
+                        <td class="data">'. $items[0]['period'] .'</td>
+                    </tr>
+                    ';
+                    if ($items[0]['pjt_trip_go']) {
+                        $html .='
+                            <tr>
+                                <td class="concept">Dias de Viaje:</td>
+                                <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
+                            </tr>';
+                    }
+                    if ($items[0]['pjt_test_tecnic']) {
+                        $html .='
+                        <tr>
+                            <td class="concept">Dias de Pruebas:</td>
+                            <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
+                        </tr>';
+                    }
+                    
+                    $html .='
+                    <tr>
+                        <td class="concept">&nbsp;</td>
+                        <td class="data">&nbsp;</td>
+                    </tr>
+                    
+                </table>
+                <!-- End Datos del projecto -->
+            </td>
+        </tr>
+    </table>
+    <!-- End Datos de identificación  -->
+    <table class="table-data bline tline" style="text-align: center">
+        <tr>
+            <td>
+                <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
+                Impresion de contenido del Proyecto
+                </p>
+            </td>
+     
+        </tr>
+        <!--<tr>
+            <td class="half">
+                <table class="table-data">
+                    <tr>
+                        <td class="concept"><strong>Nombre Responsable:</strong></td>
+                        <td class="data"><strong>'. $uname .'</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">&nbsp;</td>
+                        <td class="data">&nbsp;</td>
+                    </tr> 
+                </table>
+                  
+            </td>
+        </tr> -->
+        
+    </table>
+    <!-- End Datos de identificación  -->
 ';
 
 /* Tabla de equipo base -------------------------  */

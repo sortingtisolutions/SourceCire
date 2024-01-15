@@ -4,6 +4,7 @@ let prjid, serIdNew;
 let serIdAnt=0;
 let user,v,u,n,em, ar;  //datos de usuaria para impresion
 let pjtcn;
+let colores = ["#CD6155", "#AF7AC5", "#EC7063", "#5499C7", "#48C9B0", "#34495E", "#EB984E"];
 //var prjid;
 let aux=0;
 $(document).ready(function () {
@@ -425,9 +426,15 @@ function getEvents(serId) {
     fillField(pagina, par, tipo, selector);
 }
 function putEvents(dt) {
-    
-    strs = dt;
-    calendario(strs);
+    let array = [];
+    let i = 0;
+    dt.forEach(element => {
+        let x = Math.floor(Math.random()*colores.length);
+        array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : colores[x]};
+        i++;
+    });
+    //strs = dt;
+    calendario(array);
 }
 function calendario(cal){
     var calendarEl = document.getElementById('calendar');
@@ -630,7 +637,7 @@ function build_modalSeries(dt) {
                 //console.log(dt);
                 tabla.row
                     .add({
-                        sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}"></i> 
+                        sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}" data-serie ="${u.ser_sku}"></i> 
                                     <i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
                                     <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                         seriesku: skufull,
@@ -666,6 +673,7 @@ function activeIconsSerie() {
     .unbind('click')
     .on('click', function () {
         console.log($(this).attr('id'));
+        let serSKU = $(this).attr('data-serie');
         getEvents($(this).attr('id'));
         calendario('');
         $('#CalendarModal').removeClass('overlay_hide');
@@ -674,7 +682,7 @@ function activeIconsSerie() {
             handle: ".overlay_modal"
         });
         //title= 'Serie';
-        $('.overlay_closer .title').html('');
+        $('.overlay_closer .title_calendar').html(serSKU);
         $('#CalendarModal .btn_close')
             .unbind('click')
             .on('click', function () {
