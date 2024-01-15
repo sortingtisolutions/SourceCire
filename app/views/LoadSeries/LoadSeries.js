@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
-    settingTable();
+    //settingTable();
     getDocumentosTable(); 
     bsCustomFileInput.init();
     activeButtons();
@@ -285,14 +285,25 @@ function activarBoton(){
     .on('click', function(){
         var tr = $(this).closest('tr');
         var errores = tr.find('td').eq(1).text().split(',');
-        limpiarModalErrores();
+        var motivosError = 0;
+
+        settingTableErrores();
+
         $.each(errores, function(v,u){
-            $('#codigo-' + u).removeClass('objHidden');
+            if(u > 0){
+                motivosError = motivosError + ',' + u;
+                console.log(motivosError);
+            }
+            if (u == 'EXITOSO') {
+                motivosError = 0;
+            }
         });
-        $('#MotivosModal').modal('show');
-        
-        $('#btn_hide_modal').on('click', function () {
-            $('#MotivosModal').modal('hide');
+        getErrores(motivosError);
+        $('#MotivosModal').removeClass('overlay_hide');
+        $('#MotivosModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
         });
     });
 }
@@ -337,11 +348,12 @@ function loadProcess() {
         var pagina = 'LoadSeries/loadProcess';
         var par = `[{"dot_id":""}]`;
         var tipo = 'json';
-        var selector = putFiles;
+        var selector =  getResult;
         fillField(pagina, par, tipo, selector); 
         $('#confirmarCargaModal').modal('hide');
         activeButtons();
         
+       
         modalLoading('H');
         /* setTimeout(() => {
             modalLoading('H');
@@ -355,7 +367,7 @@ function loadProcess() {
         var pagina = 'LoadSeries/DeleteData';
         var par = `[{"ass_id":""}]`;
         var tipo = 'html';
-        var selector = putFiles;
+        var selector =  getResult;
         fillField(pagina, par, tipo, selector); 
         console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
@@ -364,6 +376,10 @@ function loadProcess() {
     });
  }
 
+ function getResult(dt){
+    console.log(dt);
+    window.location.reload();
+ }
 function putFiles(dt) {
    console.log(dt);
    pd = dt;
@@ -385,7 +401,7 @@ function putFiles(dt) {
                 icon = "fas fa-check-circle";
                 valstage='color:#008000';
             } else {
-                icon = "fas fa-times-circle";
+                icon = "fas fa-exclamation-circle";
                 valstage='color:#CC0000';
             }
            /* tabla.row
@@ -413,34 +429,34 @@ function putFiles(dt) {
 
                let H = `
                 <tr>
-                    <td><i class="${icon} show" style="${valstage}"></i></td>
-                    <td>${u.result}</td>
-                    <td>${u.ser_sku}</td>
-                    <td>${u.ser_serial_number}</td>
-                    <td>${u.ser_cost}</td>
-                    <td>${u.ser_date_registry}</td>
+                    <td style="width: 10px"><i class="${icon} show" style="${valstage}"></i></td>
+                    <td style="width: 50px">${u.result}</td>
+                    <td style="width: 80px">${u.ser_sku}</td>
+                    <td style="width: 50px">${u.ser_serial_number}</td>
+                    <td style="width: 70px">${u.ser_cost}</td>
+                    <td style="width: 70px">${u.ser_date_registry}</td>
 
-                    <td>${u.ser_date_down}</td>
-                    <td>${u.ser_brand}</td>
-                    <td>${u.ser_import_petition}</td>
-                    <td>${u.ser_cost_import}</td>
-                    <td>${u.ser_sum_ctot_cimp}</td>
+                    <td style="width: 60px">${u.ser_date_down}</td>
+                    <td style="width: 40px">${u.ser_brand}</td>
+                    <td style="width: 70px">${u.ser_import_petition}</td>
+                    <td style="width: 60px">${u.ser_cost_import}</td>
+                    <td style="width: 60px">${u.ser_sum_ctot_cimp}</td>
 
-                    <td>${u.ser_no_econo}</td>
-                    <td>${u.ser_comments}</td>
-                    <td>${u.cin_code}</td>
-                    <td>${u.sup_business_name}</td>
-                    <td>${u.str_name}</td>
+                    <td style="width: 60px">${u.ser_no_econo}</td>
+                    <td style="width: 70px">${u.ser_comments}</td>
+                    <td style="width: 20px">${u.cin_code}</td>
+                    <td style="width: 20px">${u.sup_business_name}</td>
+                    <td style="width: 20px">${u.str_name}</td>
                 </tr>
             `;
             $('#DocumentosTable tbody').append(H);
             
            cn++;
        });
-       //settingTable();
+       settingTable();
        activarBoton();
    }else{
-    settingTable();
+    //settingTable();
    }
    modalLoading('H');
 }
@@ -453,6 +469,58 @@ function limpiarModalErrores(){
     $('#codigo-6').addClass('objHidden');
     $('#codigo-7').addClass('objHidden');
 }
+
+function settingTableErrores() {
+    let title = 'Lista de Tipos de Documentos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('#tblMotivos').DataTable({
+         bDestroy: true,
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [500, 1000, -1],
+            [500, 1000, 'Todos'],
+        ],
+        buttons: [
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+             {data: 'code', class: 'result'},
+             {data: 'nameError', class: 'Producto'},
+        ],
+    });
+ }
+
+function getErrores(errores){
+    console.log(errores);
+    var pagina = 'LoadSeries/listErrores';
+    var par = `[{"errores":"${errores}"}]`;
+    var tipo = 'json';
+    var selector = put_errores;
+    fillField(pagina, par, tipo, selector);
+}
+function put_errores(dt){
+    let tabla = $('#tblMotivos').DataTable();
+    $('.overlay_closer .title').html('MOTIVOS DE ERROR');
+    tabla.rows().remove().draw();
+    if(dt[0].erm_id > 0){
+        $.each(dt, function (v, u) {
+            tabla.row
+            .add({
+                code: u.erm_id,
+                nameError: u.erm_title,
+            })
+            .draw();
+        });
+    }
+}
+
 function modalLoading(acc) {
     if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');

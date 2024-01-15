@@ -70,12 +70,12 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
-								<table id="DocumentosTable" class="display  display compact nowrap" style="width:100%">         
+								<table id="DocumentosTable" class="display  display compact nowrap" style="min-width: 1400px">         
 										<thead>
 											<tr>
-													<th style="width: 100px"></th>
-													<th style="width: 60px">Resultado</th>
-													<th style="width: 60px">Sku</th>
+													<th style="width: 10px"></th>
+													<th style="width: 50px">Resultado</th>
+													<th style="width: 70px">Sku</th>
 													<th style="width: 70px">Numero de Serie</th>
 													<th style="width: 70px">Costo</th>
 													<th style="width: 70px">Fecha de registro</th>
@@ -234,7 +234,23 @@
             </div>
         </div>
 <!-- MODAL PARA PODER VISUALIZAR LOS MOTIVOS DE ERROR-->
-
+<div class="overlay_background overlay_hide" id="MotivosModal" style="width: 60%; left:25%;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+<!--             <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            <div style="height:15px;"></div>  -->
+            <table class="display compact nowrap"  id="tblMotivos" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="width:  30px">Codigo</th>
+                        <th style="width: 180px">Descripcion del Error</th>			
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+<!-- 
 <div class="modal fade" id="MotivosModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -263,20 +279,18 @@
 				<div class="col-12">
 					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-7"> 7. El proveedor introducido NO existe en la tabla de proveedores.</span> 
 				</div>
-				<!-- <div class="col-12">
-					<span class="modal-title objHidden" style="font-size: 0.8rem;" id="codigo-7"> 7. El seguro solo puede tener dos valores '1' o '0', por favor de revisar.</span> 
-				</div> -->
+				
 				
             </div>
 
             </div>
                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button> -->
+                    
                     <button type="button" class="btn btn-secondary btnHideModal" id="btn_hide_modal">Cerrar</button>
                 </div>
             </div>
     </div>
-</div>
+</div> -->
 
 <script src="<?=  PATH_ASSETS . 'lib/bs-custom-file-input.min.js' ?>"></script>
 

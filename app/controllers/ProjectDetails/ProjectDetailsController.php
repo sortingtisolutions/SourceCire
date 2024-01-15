@@ -520,6 +520,7 @@ public function UpdatePeriodProject($request_params)
         // $series     = $this->model->restoreSeries($pjtId);
         // $detail     = $this->model->cleanDetail($pjtId);
         $project    = $this->model->cancelProject($request_params, $user, $name);
+        //$cancel_series = $this->model->cancelSeries($request_params);
         echo $verId . '|'. $pjtId;
     }
 

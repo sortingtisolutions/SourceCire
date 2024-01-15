@@ -16,7 +16,7 @@ function inicial() {
     get_Proyectos();
     getCustomers();
     getRegisters(u, em);
-    $('#txtCost').val('0.00');
+    $('#txtCost').val('0.0');
     fillContent();
     getTypeMov();// agregado por Edna
     
@@ -194,6 +194,7 @@ function put_Proyectos(dt) {
         let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
         $('#txtProject').append(H);
     });
+
     $('#txtProject').on('change', function () {
         $('#txtCustomer').val(0);
         // let px = parseInt($('#txtProject option:selected').attr('data_indx'));
@@ -245,7 +246,6 @@ function putTypeMov(dt) {
 }
 
 function put_changes(dt) {
-
     //console.log(dt);
     $.each(dt, function (v, u) {
         let H = `<option data_indx="${v}" value="${u.pjtcr_id}">${u.pjtcr_definition}</option>`;
@@ -260,19 +260,17 @@ function put_changes(dt) {
 
 /**  ++++   Coloca los productos en el listado del input */
 function putRegisters(dt) {
-    // console.log(dt);
+    console.log(dt);
     pd = dt;
     
-    let largo = $('#tblPrePayment tbody tr td').html();
-    largo == 'Ningún dato disponible en esta tabla'
-        ? $('#tblPrePayment tbody tr').remove()
-        : '';
+    let largo = $('#tblPrePayment tbody tr td').html('');
+    largo == 'Ningún dato disponible en esta tabla' ? $('#tblPrePayment tbody tr').remove() : '';
     let tabla = $('#tblPrePayment').DataTable();
-    
+    if(dt[0].prd_id != '0'){
     tabla.rows().remove().draw();
     let cn = 0;
-    if(dt[0].prp_id!=0){
-        $.each(pd, function (v, u) {
+    
+        $.each(dt, function (v, u) {
             tabla.row
                 .add({
                     editable: `<i id="${u.prp_id}" data="${u.prp_folio}|${u.prp_amount}|${u.prp_date_doc}|${u.pjt_id}|${u.wtp_id}" class="fas fa-solid fa-file-invoice-dollar modif"></i>`,
@@ -293,6 +291,7 @@ function putRegisters(dt) {
         activeIcons();
     }   
 }
+
 
 /**  ++++   Coloca los productos en el listado del input */
 function putDataProyects(dt) {
@@ -649,325 +648,3 @@ function fillContent() {
     );
 
 }
-
-
-// function fillContent_old() {
-
-//     let restdate='';
-//     let todayweel =  moment(Date()).format('dddd');
-//     if (todayweel=='Monday' || todayweel=='Sunday'){
-//         restdate= moment().subtract(3, 'days');
-//     } else { restdate= moment(Date()) } 
-
-    
-//     let fecha = moment(Date()).format('DD/MM/YYYY');
-//     $('#calendar').daterangepicker(
-//         {
-//             autoApply: true,
-//             locale: {
-//                 format: 'DD/MM/YYYY',
-//                 separator: ' - ',
-//                 applyLabel: 'Apply',
-//                 cancelLabel: 'Cancel',
-//                 fromLabel: 'From',
-//                 toLabel: 'To',
-//                 customRangeLabel: 'Custom',
-//                 weekLabel: 'W',
-//                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-//                 monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-//                     'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
-//                 ],
-//                 firstDay: 1,
-//             },
-//             showCustomRangeLabel: false,
-//             singleDatePicker: false,
-//             startDate: fecha,
-//             endDate: fecha,
-//             minDate: fecha,
-//         },
-//         function (start, end, label) {
-//             $('#txtPeriod').val(
-//                 start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
-//             );
-//             looseAlert($('#txtPeriod').parent());
-
-//         }
-//     );
-
-// }
-
-
-// function activeIconsSerie() {
-//     $('.modif')
-//         .unbind('click')
-//         .on('click', function () {
-//             let prpId = $(this).attr('id');
-//             // console.log('activeIconsSerie-', prpId);
-//             getDataProyects(prpId);
-//             settingTableSeg();
-//             $('#addAsigModal').removeClass('overlay_hide');
-            
-
-//             // let serId = $(this).attr('id').slice(1, 10);
-
-//             // $('#mantenimientoModal').removeClass('overlay_hide');
-//             // title= 'Lista de Motivos';
-//             // $('.overlay_closer .title').html(title);
-//             // $('#mantenimientoModal .btn_close')
-//             //     .unbind('click')
-//             //     .on('click', function () {
-//             //         $('#mantenimientoModal').addClass('overlay_hide');
-//             //     });
-            
-//             //getSelectSerie(serId);
-//         });
-// }
-
-// // function activeIconsSerie2() {
-    
-// //     $('.serie.motivo')
-// //         .unbind('click')
-// //         .on('click', function () {
-// //             let id = $(this).attr('id');
-// //             //console.log(id);
-// //         });
-            
-// // }
-
-// function settingTableSeg(){
-//     let numcloid=5;
-//     $('#addSegmentModal').removeClass('overlay_hide');
-//     $('#listTable').DataTable ({
-//         bDestroy: true,
-//         dom: 'Brti',
-//         pagingType: 'simple_numbers',
-//         language: {
-//             url: 'app/assets/lib/dataTable/spanish.json',
-//         },
-//         scrollY: 'calc(100vh - 200px)',
-//         scrollX: true,
-//         fixedHeader: true,
-//         columns: [
-//             { data: 'editable',  class: 'edit' },
-//             { data: 'numpay',    class: 'sku' },
-//             { data: 'frepay',    class: 'sku' },
-//             { data: 'cantpay',   class: 'sku' },
-//             { data: 'datepay',   class: 'date' },
-//         ],
-//     });
-
-//     // $('#addButtonSegm')
-//     //     .unbind('click')
-//     //     .on('click', function () {
-//     //         console.log('Agregar a TBL');
-//     //         // putBasesVal();
-//     //     });
-
-//     $('#btn_applyAmount')
-//         .unbind('click')
-//         .on('click', function (){
-//         console.log('Aplica Monto');
-//     //     let user = Cookies.get('user').split('|');
-//     //     let em = user[3];
-//     //     $('#listTable tbody tr').each(function (v, u) {
-//     //         let lnumpay=$($(u).find('td')[1]).text();
-//     //         let lfrecpay=$($(u).find('td')[2]).text();
-//     //         let lcantpay=$($(u).find('td')[3]).text();
-//     //         let ldatepay=$($(u).find('td')[4]).text();
-
-//     //         let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
-//     //         console.log('TRUK ',truk);
-//     //         build_data_structure(truk);
-//     //     });
-//     });
-
-//     $('#addAsigModal .btn_close')
-//         .unbind('click')
-//         .on('click', function () {
-//             $('#addAsigModal').addClass('overlay_hide');
-
-//     });
-// }
-
-// function putBasesVal(dt){ 
-
-//     let tabla = $('#listTable').DataTable();
-//     // $('.overlay_closer .title').html(`Catalogo - ${catnme}`);
-//     tabla.rows().remove().draw();
-//     $.each(dt, function (v, u) {
-//         tabla.row
-//         .add({
-//             editable: `<i class="fas fa-times-circle kill" id ="${u.pjt_id}"></i>`,
-//             numpay:     u.pjt_name,
-//             frepay:     u.pjs_name,
-//             cantpay:    u.totbase,
-//             datepay:    u.pjt_date_start,
-//         })
-//         .draw();
-//         $('#md' + u.pjt_id,).parents('tr').attr('id', u.pjt_id,).attr('data-content', 1);
-
-//         $('.kill')
-//             .unbind('click')
-//             .on('click', function () {
-//                 tabla.row($(this).parent('tr')).remove().draw();
-//         });
- 
-//     });
-
-
-//      // <?= FOLDER_PATH . '/main/addClient' ?>
-//     // console.log('FOLDER_PATH-', `${FOLDER_PATH}`);
-
-//     // console.log('FOLDER_DASH_PATH-', $FOLDER_DASH_PATH);
-//     // console.log('ROOT-', $ROOT);
-//     // console.log('LIBS_ROUTE-', $LIBS_ROUTE);
-//     // console.log('FULL_PATH-', $FULL_PATH);
-//     // let FOLDER_PATH='<?php echo $FOLDER_PATH?>'
-
-//     // let MontoTot=parseFloat($('#txtMontoTotSeg').val().replace(/,/g, ''));
-//     // let cantFrec =$('#txtFrecuency').val();
-//     // let cantSegm =$('#txtSegment').val();
-//     // let frecDesc =$(`#txtFrecuency option[value="${cantFrec}"]`).text();
-//     // let cantDesc =$(`#txtSegment option[value="${cantSegm}"]`).text();
-//     // let numpedido;
-//     // let montoInd= parseFloat(MontoTot) / parseFloat(cantSegm);
-//     // montoInd =montoInd.toFixed(2);
-
-//     // let unittime='';
-//     // switch (cantFrec) {
-//     //     case '01':
-//     //         unittime='w';
-//     //         break;
-//     //     case '2':
-//     //         unittime='M';
-//     //         break;
-//     //     case '3':
-//     //         unittime='Q';
-//     //         break;
-//     //     case '4':
-//     //         unittime='y';
-//     //         break;
-//     //     default:
-//     // }
-//     // // let hoy=moment(Date()).format('DD/MM/YYYY');
-//     // let Period = $('#txtPeriodPayed').val();
-//     // let DateStart = moment(Period,'DD/MM/YYYY').format('YYYY-MM-DD');
-
-//     // for (var i = 0; i < cantSegm; i++){
-//     //     numpedido=parseFloat(i) + 1;
-//     //     fechapago=moment([DateStart],'YYYY-MM-DD').add(numpedido, unittime).format('YYYY-MM-DD');
-//     //     par = ` [{
-//     //                 "montind"   : "${montoInd}",
-//     //                 "numpay"    : "${numpedido}",
-//     //                 "valfrec"   : "${frecDesc}",
-//     //                 "datepay"   : "${fechapago}"
-//     //             }]`;
-
-//     //     // console.log(par);
-//     //     fill_table(par);
-//     // }
-// }
-
-
-// /** ++++  Setea el calendario ++++++ */
-// function setting_datepicket(sl, di, df) {
-//     console.log(sl);
-//     let fc = moment(Date()).format('DD/MM/YYYY');
-//     $(sl).daterangepicker(
-//         {
-//             singleDatePicker: false,
-//             autoApply: true,
-//             locale: {
-//                 format: 'DD/MM/YYYY',
-//                 daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-//                 monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-//                 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
-//             ],
-//                 firstDay: 1,
-//             },
-//             minDate: fc,
-//             startDate: moment(di, 'DD/MM/YYYY'),
-//             endDate: moment(df, 'DD/MM/YYYY'),
-//             opens: 'left',
-//             drops: 'auto',
-//         },
-//         function (start, end, label) {
-//             let sdin = start.format('DD/MM/YYYY');
-//             let sdfn = end.format('DD/MM/YYYY');
-//             $('#txtPeriod').html(sdin + ' - ' + sdfn);
-//             setTimeout(() => {
-//                 validator();
-//             }, 500);
-//         }
-//     );
-// }
-
-/**  ++++   Coloca las monedas en el listado del input */
-// function put_coins(dt) {
-//     $.each(dt, function (v, u) {
-//         let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
-//         $('#txtCoinType').append(H);
-//     });
-//     $('#txtCoinType').on('change', function () {
-//         validator();
-//     });
-// }
-// /**  ++++   Coloca los proveedores en el listado del input */
-// function put_suppliers(dt) {
-//     $.each(dt, function (v, u) {
-//         let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
-//         $('#txtSupplier').append(H);
-//     });
-//     $('#txtSupplier').on('change', function () {
-//         validator();
-//     });
-// }
-// /**  ++++   Coloca los almacenes en el listado del input */
-// function put_stores(dt) {
-//     $.each(dt, function (v, u) {
-//         let H = `<option value="${u.str_id}">${u.str_name}</option>`;
-//         $('#txtStoreSource').append(H);
-//     });
-//     $('#txtStoreSource').on('change', function () {
-//         validator();
-//     });
-// }
-// function get_changes() {
-//     var pagina = 'PrePayments/listChangeReasons';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     var selector = put_changes;
-//     fillField(pagina, par, tipo, selector);
-// }
-// /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-// function get_coins() {
-//     var pagina = 'PrePayments/listCoins';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     var selector = put_coins;
-//     fillField(pagina, par, tipo, selector);
-// }
-// /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-// function get_suppliers() {
-//     var pagina = 'PrePayments/listSuppliers';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     var selector = put_suppliers;
-//     fillField(pagina, par, tipo, selector);
-// }
-// /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-// function get_stores() {
-//     var pagina = 'PrePayments/listStores';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     var selector = put_stores;
-//     fillField(pagina, par, tipo, selector);
-// }
-
-// function get_change_reasons(pd) {
-//     var pagina = 'PrePayments/listChangeReasons';
-//     var par = `[{"prod_id":""}]`;
-//     var tipo = 'json';
-//     var selector = put_change_reasons;
-//     fillField(pagina, par, tipo, selector);
-// }
