@@ -187,7 +187,7 @@ function confirm_to_work(pjtid) {
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
 
-        //console.log('Datos',pjtid,Id);
+        console.log('Datos',pjtid,Id);
         var pagina = 'WorkInput/UpdateSeriesToWork';
         var par = `[{"pjtid":"${pjtid}"}]`;
         var tipo = 'json';

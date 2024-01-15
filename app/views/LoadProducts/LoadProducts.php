@@ -99,21 +99,21 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12 ">		
-								<table id="DocumentosTable" class="display  compact nowrap" style="width:95%">         
+								<table id="DocumentosTable" class="display  compact nowrap" style="min-width: 1400px">         
 										<thead>
 											<tr>
-													<th style="width: 100px"></th>
-													<th style="width: 100px">Resultado</th>
-													<th style="width: 200px">SKU</th>
-													<th style="width: 100px">Producto</th>
-													<th style="width: 100px">Nombre en Ingles</th>
-													<th style="width: 100px">Codigo de Proveedor</th>
-													<th style="width: 100px">Nombre de Proveedor</th>
+													<th style="width: 10px"></th>
+													<th style="width: 60px">Resultado</th>
+													<th style="width: 60px">SKU</th>
+													<th style="width: 200px">Producto</th>
+													<th style="width: 200px">Nombre en Ingles</th>
+													<th style="width: 200px">Codigo de Proveedor</th>
+													<th style="width: 200px">Nombre de Proveedor</th>
 													<th style="width:  60px">Modelo</th>
 													<th style="width: 100px">Precio</th>
 													<th style="width:  60px">Moneda</th>
-													<th style="width: 100px">Seguro</th>
-													<th style="width: 100px">Servicio</th>
+													<th style="width: 50px">Seguro</th>
+													<th style="width: 50px">Servicio</th>
 											</tr>
 										</thead>
 										<tbody id="tablaDocumentosRow">

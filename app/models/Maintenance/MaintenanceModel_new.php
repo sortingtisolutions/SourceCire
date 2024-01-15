@@ -287,102 +287,34 @@ public function listEstatusMantenimiento($params)
         $cost 	= $this->db->real_escape_string($params['cost']);
         $idProject 	= $this->db->real_escape_string($params['idProject']);
         
-        if($status == 3){
-            // Obtenemos la serie actual para poner su detail en un estatus de 'usado'
-            $qry3="SELECT sr.pjtdt_id FROM ctt_series AS sr
-            WHERE sr.ser_id = $serieId LIMIT 1;";
-            $result1 =  $this->db->query($qry3);
-            $serie_actual = $result1->fetch_object();
-
-            if ($serie_actual != null) {
-                $pjtdt_id  = $serie_actual->pjtdt_id;
-                $query = "UPDATE ctt_projects_detail SET sttd_id = 4 where pjtdt_id='$pjtdt_id'";
-                $this->db->query($query);
-            }
-            // vemos si existe una serie a futuro en reserva que inicie despues de que este mantenimiento termina.
-            $query = "SELECT sr.ser_id serId, sr.prd_id, pd.pjtdt_id, pd.pjtvr_id, pd.sttd_id, pjp.pjtpd_day_start, pjp.pjtpd_day_end
-            FROM ctt_series AS sr
-            INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
-            INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
-            WHERE sr.ser_id = $serieId AND pd.sttd_id = 3 AND pjp.pjtpd_day_start > '$dtResFin' ORDER BY pjtpd_day_start ASC LIMIT 1;"; // En Orden por fecha de inicio para que la mas proxima sea la que salga
-            $result = $this->db->query($query);
-            $pjdt = $result->fetch_object();
-            if ($pjdt != null) { // si existe alguna serie en futuro entonces la serie va a cambiar a reserva con el id del detalle de esta serie en reserva
-                $pjtdt_id = $pjdt->pjtdt_id;
+        if($status ==3){
+            
+            /* $qry = "SELECT pjd.pjtdt_id FROM ctt_projects_detail AS pjd
+            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+            INNER JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pjd.pjtvr_id
+            WHERE pjd.ser_id = '$serieId' AND pjd.sttd_id = 3 AND pv.pjt_id != $idProject ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+        
+            $result =  $this->db->query($qry);
+            $pjtdt = $result->fetch_object();
+        
+            if ($pjtdt != null) {
+                $pjtdtId = $pjtdt->pjtdt_id; 
                 $qry1 = "UPDATE ctt_series 
-                        SET 
-                            ser_situation = 'EA', 
-                            ser_stage = 'R',
-                            pjtdt_id = $pjtdt_id
-                        WHERE ser_id = '$serieId';";
-                $this->db->query($qry1);
-                // modificamos el detalle para indicarle que es el activo.
-                $qry4 ="UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id = $pjtdt_id";
-                $this->db->query($qry4);
+                SET ser_situation='EA', ser_stage = 'R', pjtdt_id='$pjtdtId', ser_reserve_count = (ser_reserve_count + 1)
+                WHERE ser_id = $serId;";
+                
+                $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id='$pjtdtId'";
+                $this->db->query($updtQry);
             }else{
-                // Si no existe ninguna serie a futuro entonces sin problema lo coloca como disponible.
                 $qry1 = "UPDATE ctt_series 
                         SET 
                             ser_situation = 'D', 
-                            ser_stage = 'D',
-                            pjtdt_id = 0
+                            ser_stage = 'D'
                         WHERE ser_id = '$serieId';";
                 $this->db->query($qry1);
-            }
-           
-        }else{
-            // Vemos que si existen series a futuro que inicien antes de que el mantenimiento termine entonces cambie de serie o la coloque como pendiente.
-            $query = "SELECT sr.ser_id serId, sr.prd_id, pd.pjtdt_id, pd.pjtvr_id, pd.sttd_id, pjp.pjtpd_day_start, pjp.pjtpd_day_end
-            FROM ctt_series AS sr
-            INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
-            INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
-            WHERE sr.ser_id = $serieId AND pd.sttd_id = 3 AND pjp.pjtpd_day_start <= '$dtResFin';";
-            $result = $this->db->query($query);
-            $res= $result->fetch_object();
-            // Si no existen series a futuro no cambia nada
-            if($res != null){
-                while ($row = $result->fetch_row()){
-                    $pjtd_id = $row['pjtdt_id'];
-                    $prodId = $row['prd_id'];
-                    // primero hay que ver si existen series disponibles en las fechas reservadas.
-                    $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
-                    FROM ctt_series AS ser
-                    WHERE ser.prd_id = $prodId AND NOT EXISTS (SELECT sr.ser_id serId
-                    FROM ctt_series AS sr
-                    INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
-                    INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
-                    WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtResIni' AND '$dtResFin' 
-                    OR pjp.pjtpd_day_end BETWEEN '$dtResIni' AND '$dtResFin' OR 
-                    '$dtResIni' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
-                    OR '$dtResFin' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";  // solo trae un registro
-        
-                    $result =  $this->db->query($qry);
-                    
-                    $serie_futura = $result->fetch_object();
-
-                    if ($serie_futura !=null ) { // Si existen series disponibles en esas fechas se modifica el sku y el id de la serie en details.
-                        $sersku  = $serie_futura->serSku;
-                        $serie = $serie_futura->serId;
-
-                        $qry = "UPDATE ctt_projects_detail 
-                        SET pjtdt_prod_sku = $sersku, 
-                            ser_id = $serie, 
-                            sttd_id = 3
-                        where pjtdt_id = '$pjtd_id'";
-                        $this->db->query($qry);
-                    }else{ // si no existen series a futuro disponibles en las fechas se quedan pendiente
-                        $qry = "UPDATE ctt_projects_detail 
-                        SET pjtdt_prod_sku = 'Pendiente', 
-                            ser_id = null, 
-                            sttd_id = 2
-                        where pjtdt_id = '$pjtd_id'";
-                        $this->db->query($qry);
-                    }
-                    
-                }
-            }
-            
+            } */
         }
+        
         
 
         $qry2 = "UPDATE ctt_products_maintenance

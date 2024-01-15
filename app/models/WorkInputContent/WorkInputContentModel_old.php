@@ -234,27 +234,10 @@ class WorkInputContentModel extends Model
         $prjid = $this->db->real_escape_string($params['prjid']);
         $serSku = $this->db->real_escape_string($params['serSku']);
         $prdid = $this->db->real_escape_string($params['prdid']);
-
-        // Obtenemos la serie actual para poner su detail en un estatus de 'usado'
-        $qry3="SELECT sr.pjtdt_id FROM ctt_series AS sr
-        WHERE sr.ser_id = $serid LIMIT 1;";
-        $result1 =  $this->db->query($qry3);
-        $serie_actual = $result1->fetch_object();
-
-        if ($serie_actual != null) {
-            $pjtdt_id  = $serie_actual->pjtdt_id;
-            $query = "UPDATE ctt_projects_detail SET sttd_id = 4 where pjtdt_id='$pjtdt_id'";
-            $this->db->query($query);
-        }
         
-        
-        // Busca si la serie esta reservada a futuro
         $qry2 = "SELECT pjd.pjtdt_id FROM ctt_projects_detail AS pjd
-        INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
-        WHERE pjd.ser_id = $serid AND pjd.sttd_id = 3 ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
-
-        
-        // Si lo esta entonces No va a colocar como disponible la serie
+        WHERE pjd.ser_id = $serid AND pjd.sttd_id = 3 LIMIT 1";
+    
         $result2 =  $this->db->query($qry2);
         $pjtdt = $result2->fetch_object();
         if ($pjtdt != null) {

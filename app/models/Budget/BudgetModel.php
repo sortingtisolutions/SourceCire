@@ -729,7 +729,7 @@ public function saveBudgetList($params)
             FROM ctt_series AS sr
             INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
             INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
-            WHERE sr.ser_id = ser.ser_id AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+            WHERE sr.ser_id = ser.ser_id AND pd.sttd_id != 4 AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
             OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl' OR 
             '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
             OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end));";  // solo trae un registro
@@ -743,10 +743,44 @@ public function saveBudgetList($params)
                 $sersku  = $serie_futura->serSku;
                 $serie = $serie_futura->serId;
 
-                $qry2 = "INSERT INTO ctt_projects_detail (
+                /* $qry2 = "INSERT INTO ctt_projects_detail (
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
-                    ); ";
+                    ); "; */
+                    $qry3="SELECT sr.ser_id serId, pjp.pjtpd_day_start, pjp.pjtpd_day_end, sr.pjtdt_id
+                    FROM ctt_series AS sr
+                    INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = sr.pjtdt_id
+                    WHERE sr.ser_id = $serie AND pjp.pjtpd_day_start > '$dtfinl' LIMIT 1;";
+                    $result1 =  $this->db->query($qry3);
+                                
+                    $serie_actual = $result1->fetch_object();
+                    if ($serie_actual != null ) {
+                        $pjtdt_id  = $serie_actual->pjtdt_id;
+    
+                        $qry4 ="UPDATE ctt_projects_detail SET sttd_id = 3 where pjtdt_id = $pjtdt_id";
+                        $this->db->query($qry4);
+    
+    
+                        $qry2 = "INSERT INTO ctt_projects_detail (
+                            pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                            VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1
+                            ); ";
+                        $this->db->query($qry2);
+                        $pjtdtId = $this->db->insert_id;
+    
+                        $qry4 ="UPDATE ctt_series 
+                            SET 
+                                pjtdt_id = $pjtdtId
+                            WHERE ser_id = '$serie'";
+                        $this->db->query($qry4);
+                    }else{
+                        $qry2 = "INSERT INTO ctt_projects_detail (
+                            pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                            VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
+                            ); ";
+                        $this->db->query($qry2);
+                        $pjtdtId = $this->db->insert_id;
+                    }
             }else{
                 $serie  = null; 
                 $sersku  = 'Pendiente' ;
@@ -754,10 +788,11 @@ public function saveBudgetList($params)
                     pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
                     VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
                     ); ";
+                $this->db->query($qry2);
+                $pjtdtId = $this->db->insert_id;
             }
            
-            $this->db->query($qry2);
-            $pjtdtId = $this->db->insert_id;
+            
         }
 
         $qry4 = "INSERT INTO ctt_projects_periods 

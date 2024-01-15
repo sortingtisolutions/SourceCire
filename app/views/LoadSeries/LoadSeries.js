@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
-    settingTable();
+    //settingTable();
     getDocumentosTable(); 
     bsCustomFileInput.init();
     activeButtons();
@@ -348,11 +348,12 @@ function loadProcess() {
         var pagina = 'LoadSeries/loadProcess';
         var par = `[{"dot_id":""}]`;
         var tipo = 'json';
-        var selector = putFiles;
+        var selector =  getResult;
         fillField(pagina, par, tipo, selector); 
         $('#confirmarCargaModal').modal('hide');
         activeButtons();
         
+       
         modalLoading('H');
         /* setTimeout(() => {
             modalLoading('H');
@@ -366,7 +367,7 @@ function loadProcess() {
         var pagina = 'LoadSeries/DeleteData';
         var par = `[{"ass_id":""}]`;
         var tipo = 'html';
-        var selector = putFiles;
+        var selector =  getResult;
         fillField(pagina, par, tipo, selector); 
         console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
@@ -375,6 +376,10 @@ function loadProcess() {
     });
  }
 
+ function getResult(dt){
+    console.log(dt);
+    window.location.reload();
+ }
 function putFiles(dt) {
    console.log(dt);
    pd = dt;
@@ -424,34 +429,34 @@ function putFiles(dt) {
 
                let H = `
                 <tr>
-                    <td><i class="${icon} show" style="${valstage}"></i></td>
-                    <td>${u.result}</td>
-                    <td>${u.ser_sku}</td>
-                    <td>${u.ser_serial_number}</td>
-                    <td>${u.ser_cost}</td>
-                    <td>${u.ser_date_registry}</td>
+                    <td style="width: 10px"><i class="${icon} show" style="${valstage}"></i></td>
+                    <td style="width: 50px">${u.result}</td>
+                    <td style="width: 80px">${u.ser_sku}</td>
+                    <td style="width: 50px">${u.ser_serial_number}</td>
+                    <td style="width: 70px">${u.ser_cost}</td>
+                    <td style="width: 70px">${u.ser_date_registry}</td>
 
-                    <td>${u.ser_date_down}</td>
-                    <td>${u.ser_brand}</td>
-                    <td>${u.ser_import_petition}</td>
-                    <td>${u.ser_cost_import}</td>
-                    <td>${u.ser_sum_ctot_cimp}</td>
+                    <td style="width: 60px">${u.ser_date_down}</td>
+                    <td style="width: 40px">${u.ser_brand}</td>
+                    <td style="width: 70px">${u.ser_import_petition}</td>
+                    <td style="width: 60px">${u.ser_cost_import}</td>
+                    <td style="width: 60px">${u.ser_sum_ctot_cimp}</td>
 
-                    <td>${u.ser_no_econo}</td>
-                    <td>${u.ser_comments}</td>
-                    <td>${u.cin_code}</td>
-                    <td>${u.sup_business_name}</td>
-                    <td>${u.str_name}</td>
+                    <td style="width: 60px">${u.ser_no_econo}</td>
+                    <td style="width: 70px">${u.ser_comments}</td>
+                    <td style="width: 20px">${u.cin_code}</td>
+                    <td style="width: 20px">${u.sup_business_name}</td>
+                    <td style="width: 20px">${u.str_name}</td>
                 </tr>
             `;
             $('#DocumentosTable tbody').append(H);
             
            cn++;
        });
-       //settingTable();
+       settingTable();
        activarBoton();
    }else{
-    settingTable();
+    //settingTable();
    }
    modalLoading('H');
 }
