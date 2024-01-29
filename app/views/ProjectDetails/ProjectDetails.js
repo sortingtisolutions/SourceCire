@@ -1745,7 +1745,7 @@ function activeInputSelector() {
                     default:
                 }
             }
-            else if(type == 'K' && sec == '1' )
+            else if(type == 'K' && sec == '2' )
             {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':

@@ -271,6 +271,17 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
                 WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
                 ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";   // ***Modificado por Ed
+        /* $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
+                pr.prd_level, ct.cat_name, ifnull(sr.ser_comments,'') as ser_comments,
+                ROW_NUMBER() OVER (ORDER BY sr.ser_sku DESC) AS reng
+            FROM ctt_projects_detail AS pj
+            INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
+            INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
+            INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
+            LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
+            INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
+            WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
+            ORDER BY pj.pjtdt_prod_sku, reng ASC;";   // ***Modificado por Ed */
 
         return $this->db->query($qry);
 
@@ -508,6 +519,10 @@ class ProjectPlansModel extends Model
                     WHERE pjt_id = '$pjtId' ";
         
         $this->db->query($qry1);
+
+        $qry2 = "SELECT fun_getTotalProject($pjtId) as getTotalProject FROM DUAL;";  // solo trae un registro
+        $result =  $this->db->query($qry2);
+        $respuesta = $result->fetch_object();
 
         return $pjtId;
     }
@@ -782,10 +797,13 @@ class ProjectPlansModel extends Model
     public function KillQuantityDetail($params)
     {
         $pjtvrId = $this->db->real_escape_string($params['pjetId']);
+
         $qry1 = "WITH elements AS (
-                        SELECT *,
-                            ROW_NUMBER() OVER (partition by prd_id ORDER BY pjtdt_prod_sku DESC) AS reng
-                        FROM ctt_projects_detail WHERE pjtvr_id = $pjtvrId ORDER BY pjtdt_prod_sku)
+                        SELECT dt.*,
+                            ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng
+                            FROM ctt_projects_detail AS dt
+		                    LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
+                            WHERE pjtvr_id = $pjtvrId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) ORDER BY dt.pjtdt_prod_sku)
                 SELECT pjtdt_id FROM elements WHERE reng =1;";
         $result =  $this->db->query($qry1);
  
@@ -803,6 +821,565 @@ class ProjectPlansModel extends Model
 
             $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry4); */
+            $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+            WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+            INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+        
+            $result =  $this->db->query($qry);
+            $pjtdt = $result->fetch_object();
+            
+            if ($pjtdt != null ) {
+                $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                $ser_id = $pjtdt->ser_id; 
+                $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+        
+                $result =  $this->db->query($qry);
+                $series = $result->fetch_object();
+                if ($series != null) {
+                    $pjtdt_id = $series->pjtdt_id;
+                    if ($pjtdt_id == $pjtdtId) {
+                    
+                        $qry2 = "UPDATE ctt_series 
+                                    SET ser_situation = 'EA', 
+                                        ser_stage = 'R',
+                                        pjtdt_id = $pjtdt_ft_id
+                                WHERE ser_id = $ser_id;";
+                        $this->db->query($qry2);
+            
+                        $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                        $this->db->query($updtQry);
+                    }
+                }else{
+                    $qry2 = "UPDATE ctt_series 
+                        SET ser_situation = 'D', 
+                                ser_stage = 'D', 
+                                pjtdt_id = 0 
+                        WHERE pjtdt_id = $pjtdtId;";
+                    $this->db->query($qry2);
+                }
+                
+            }else{
+                $qry2 = "UPDATE ctt_series 
+                    SET ser_situation = 'D', 
+                            ser_stage = 'D', 
+                            pjtdt_id = 0 
+                    WHERE pjtdt_id = $pjtdtId;";
+                $this->db->query($qry2);
+            }
+            $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry3);
+        
+            $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry4);
+        }
+        return '1';
+    }
+
+    public function KillQuantityDetailFijo($params)
+    {
+        $pjtvrId = $this->db->real_escape_string($params['pjetId']);
+
+        $qry1 = "WITH elements AS (
+                        SELECT dt.*,
+                            ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng
+                            FROM ctt_projects_detail AS dt
+		                    LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
+                            WHERE pjtvr_id = $pjtvrId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) ORDER BY dt.pjtdt_prod_sku)
+                SELECT pjtdt_id,  ser_id FROM elements WHERE reng =1;";
+        $result =  $this->db->query($qry1);
+ 
+        while($row = $result->fetch_assoc()){
+            $pjtdtId = $row["pjtdt_id"];
+            $serId = $row["ser_id"];
+            
+            $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+            WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+            INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+            
+        
+            $result =  $this->db->query($qry);
+            $pjtdt = $result->fetch_object();
+
+            if ($pjtdt != null ) {
+                $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                $ser_id = $pjtdt->ser_id; 
+                $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+        
+                $result =  $this->db->query($qry);
+                $series = $result->fetch_object();
+
+                
+
+                if ($series != null) {
+                    $pjtdt_id = $series->pjtdt_id;
+                    if ($pjtdt_id == $pjtdtId) {
+                    
+                        $qry2 = "UPDATE ctt_series 
+                                    SET ser_situation = 'EA', 
+                                        ser_stage = 'R',
+                                        pjtdt_id = $pjtdt_ft_id
+                                WHERE ser_id = $ser_id;";
+                        $this->db->query($qry2);
+            
+                        $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                        $this->db->query($updtQry);
+
+                        
+                    }
+                }
+                
+                
+            }else{
+                
+                $qry2 = "UPDATE ctt_series 
+                    SET ser_situation = 'D', 
+                            ser_stage = 'D', 
+                            pjtdt_id = 0 
+                    WHERE pjtdt_id = $pjtdtId;";
+                $this->db->query($qry2);
+            }
+            $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry3);
+        
+            $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry4);
+
+            if ($serId != 0) {
+                $qry = "SELECT pd.* FROM ctt_projects_detail AS pd
+                INNER JOIN ctt_series AS sr ON sr.ser_id = pd.ser_id
+                WHERE sr.prd_id_acc = $serId";
+        
+                $seriesAcc =  $this->db->query($qry);
+                while ($row = $seriesAcc->fetch_assoc()) {
+                    $ptdtId = $row['pjtdt_id'];
+                    $ser_id = $row['ser_id'];
+    
+                    $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+                    INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+                    WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+                    INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+                    WHERE pdt.pjtdt_id = $ptdtId AND prd_id_acc > 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+                    
+                
+                    $result =  $this->db->query($qry);
+                    $pjtdtR = $result->fetch_object();
+                    if ($pjtdtR != null ) {
+                        $pjtdtftid = $pjtdtR->pjtdt_id; 
+                        $serId = $pjtdtR->ser_id; 
+                        $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $serId";
+                        $result =  $this->db->query($qry);
+                        $srs = $result->fetch_object();
+                        if ($srs != null) {
+                            $pdt_id = $srs->pjtdt_id;
+                            if ($pdt_id == $ptdtId) {
+                                $qry2 = "UPDATE ctt_series 
+                                            SET ser_situation = 'EA', 
+                                                ser_stage = 'R',
+                                                pjtdt_id = $pjtdtftid
+                                        WHERE ser_id = $serId;";
+                                $this->db->query($qry2);
+                    
+                                $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdtftid";
+                                $this->db->query($updtQry);
+                            }
+                        }
+                    }else{
+                        $qry2 = "UPDATE ctt_series 
+                            SET ser_situation = 'D', 
+                                    ser_stage = 'D', 
+                                    pjtdt_id = 0 
+                            WHERE pjtdt_id = $ptdtId;";
+                        $this->db->query($qry2);
+                    }
+                    $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $ptdtId;";
+                    $this->db->query($qry3);
+                
+                    $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $ptdtId;";
+                    $this->db->query($qry4);
+                } 
+            }
+              
+           
+        }
+        return '1';
+    }
+    public function KillQuantityDetailVirtual($params)
+    {
+        $pjtvrId = $this->db->real_escape_string($params['pjetId']);
+
+        $qry1 = "WITH elements AS (
+            SELECT dt.*,
+                ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng
+                FROM ctt_projects_detail AS dt
+              LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
+                LEFT JOIN ctt_products AS pd ON pd.prd_id = dt.prd_id
+                WHERE pjtvr_id = $pjtvrId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) AND prd_type_asigned = 'V' ORDER BY dt.pjtdt_prod_sku)
+      SELECT pjtdt_id,  ser_id, reng, pjtdt_prod_sku, prd_id FROM elements WHERE reng = 1;";
+        $result =  $this->db->query($qry1);
+ 
+        while($row = $result->fetch_assoc()){
+            $pjtdtId = $row["pjtdt_id"];
+            $prdId = $row["prd_id"];
+            
+            $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+            WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+            INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+            
+        
+            $result =  $this->db->query($qry);
+            $pjtdt = $result->fetch_object();
+
+            $qryProds = "SELECT * FROM ctt_products_packages WHERE prd_parent = $prdId";
+            $prods = $this->db->query($qryProds);
+
+            if ($pjtdt != null ) {
+                $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                $ser_id = $pjtdt->ser_id; 
+                $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+        
+                $result =  $this->db->query($qry);
+                $series = $result->fetch_object();
+
+                
+
+                if ($series != null) {
+                    $pjtdt_id = $series->pjtdt_id;
+                    if ($pjtdt_id == $pjtdtId) {
+                    
+                        $qry2 = "UPDATE ctt_series 
+                                    SET ser_situation = 'EA', 
+                                        ser_stage = 'R',
+                                        pjtdt_id = $pjtdt_ft_id
+                                WHERE ser_id = $ser_id;";
+                        $this->db->query($qry2);
+            
+                        $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                        $this->db->query($updtQry);
+
+                        
+                    }
+                }
+                
+                
+            }else{
+                
+                $qry2 = "UPDATE ctt_series 
+                    SET ser_situation = 'D', 
+                            ser_stage = 'D', 
+                            pjtdt_id = 0 
+                    WHERE pjtdt_id = $pjtdtId;";
+                $this->db->query($qry2);
+            }
+            $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry3);
+        
+            $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry4);
+
+            while($row = $prods->fetch_assoc()){
+                $prdId = $row["prd_id"];
+                $pck_quantity = $row["pck_quantity"];
+                
+                for ($i=0; $i < $pck_quantity; $i++) { 
+                    $query ="SELECT * FROM ctt_projects_detail AS pdt WHERE pdt.prd_id = $prdId AND pjtvr_id = $pjtvrId ORDER BY pdt.pjtdt_prod_sku LIMIT 1;";
+                    $detailPakc= $this->db->query($query);
+                    $series = $detailPakc->fetch_object();
+
+                    if ($series != null) {
+                        $pjtdtId = $series->pjtdt_id; 
+
+                        $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+                        INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+                        WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+                        INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+                        WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+                        
+                    
+                        $result =  $this->db->query($qry);
+                        $pjtdt = $result->fetch_object();
+            
+                        if ($pjtdt != null ) {
+                            $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                            $ser_id = $pjtdt->ser_id; 
+                            $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+                    
+                            $result =  $this->db->query($qry);
+                            $series = $result->fetch_object();
+            
+                            
+            
+                            if ($series != null) {
+                                $pjtdt_id = $series->pjtdt_id;
+                                if ($pjtdt_id == $pjtdtId) {
+                                
+                                    $qry2 = "UPDATE ctt_series 
+                                                SET ser_situation = 'EA', 
+                                                    ser_stage = 'R',
+                                                    pjtdt_id = $pjtdt_ft_id
+                                            WHERE ser_id = $ser_id;";
+                                    $this->db->query($qry2);
+                        
+                                    $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                                    $this->db->query($updtQry);
+            
+                                    
+                                }
+                            }
+                            
+                        }
+                        $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+                        $this->db->query($qry3);
+                    
+                        $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
+                        $this->db->query($qry4);
+                    }else{
+                    
+                        $qry2 = "UPDATE ctt_series 
+                            SET ser_situation = 'D', 
+                                    ser_stage = 'D', 
+                                    pjtdt_id = 0 
+                            WHERE pjtdt_id = $pjtdtId;";
+                        $this->db->query($qry2);
+                    }
+                }
+
+            }
+
+
+        }
+        return '1';
+    }
+    public function KillQuantityDetailPackage($params)
+    {
+        $pjtvrId = $this->db->real_escape_string($params['pjetId']);
+        $prodId = $this->db->real_escape_string($params['prodId']);
+
+        $qry1 = "WITH elements AS (
+            SELECT dt.*,pd.prd_type_asigned,
+                ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng
+                FROM ctt_projects_detail AS dt
+              LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
+                LEFT JOIN ctt_products AS pd ON pd.prd_id = dt.prd_id
+                WHERE pjtvr_id = $pjtvrId AND dt.prd_id =  $prodId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) AND (prd_type_asigned = 'V' OR prd_type_asigned = 'F' OR prd_type_asigned = 'I') ORDER BY dt.pjtdt_prod_sku)
+      SELECT pjtdt_id,  ser_id, reng, pjtdt_prod_sku, prd_id,prd_type_asigned FROM elements WHERE reng = 1;";
+        $result =  $this->db->query($qry1);
+ 
+        while($row = $result->fetch_assoc()){
+            $pjtdtId = $row["pjtdt_id"];
+            $prdId = $row["prd_id"];
+            $typeAsigned = $row["prd_type_asigned"];
+            $serId = $row["ser_id"];
+
+            // PRIMERO MODIFICAR EL PRODUCTO PRINCIPAL YA SEA FIJO O VIRTUAL
+            $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+            WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+            INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 AND (prd_type_asigned = 'V' OR prd_type_asigned = 'F') LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+        
+            $result =  $this->db->query($qry);
+            $pjtdt = $result->fetch_object();
+
+            if ($pjtdt != null ) {
+                $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                $ser_id = $pjtdt->ser_id; 
+                $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+        
+                $result =  $this->db->query($qry);
+                $series = $result->fetch_object();
+
+                
+
+                if ($series != null) {
+                    $pjtdt_id = $series->pjtdt_id;
+                    if ($pjtdt_id == $pjtdtId) {
+                    
+                        $qry2 = "UPDATE ctt_series 
+                                    SET ser_situation = 'EA', 
+                                        ser_stage = 'R',
+                                        pjtdt_id = $pjtdt_ft_id
+                                WHERE ser_id = $ser_id;";
+                        $this->db->query($qry2);
+            
+                        $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                        $this->db->query($updtQry);
+
+                        
+                    }
+                }
+                
+            }else{
+                
+                $qry2 = "UPDATE ctt_series 
+                    SET ser_situation = 'D', 
+                            ser_stage = 'D', 
+                            pjtdt_id = 0 
+                    WHERE pjtdt_id = $pjtdtId;";
+                $this->db->query($qry2);
+            }
+            $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry3);
+        
+            $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry4);
+
+
+            // VERIFICAMOS DE QUE TIPO ES EL PRODUCTO, PARA VER QUE TIPO DE ACCESORIOS VA A BUSCAR
+
+            if ($typeAsigned == 'F') {
+                if ($serId != 0) {
+                    $qry = "SELECT pd.* FROM ctt_projects_detail AS pd
+                    INNER JOIN ctt_series AS sr ON sr.ser_id = pd.ser_id
+                    WHERE sr.prd_id_acc = $serId";
+            
+                    $seriesAcc =  $this->db->query($qry);
+                    while ($row = $seriesAcc->fetch_assoc()) {
+                        $ptdtId = $row['pjtdt_id'];
+                        $ser_id = $row['ser_id'];
+        
+                        $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+                        INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+                        WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+                        INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+                        WHERE pdt.pjtdt_id = $ptdtId AND prd_id_acc > 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+                        
+                    
+                        $result =  $this->db->query($qry);
+                        $pjtdtR = $result->fetch_object();
+                        if ($pjtdtR != null ) {
+                            $pjtdtftid = $pjtdtR->pjtdt_id; 
+                            $serId = $pjtdtR->ser_id; 
+                            $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $serId";
+                            $result =  $this->db->query($qry);
+                            $srs = $result->fetch_object();
+                            if ($srs != null) {
+                                $pdt_id = $srs->pjtdt_id;
+                                if ($pdt_id == $ptdtId) {
+                                    $qry2 = "UPDATE ctt_series 
+                                                SET ser_situation = 'EA', 
+                                                    ser_stage = 'R',
+                                                    pjtdt_id = $pjtdtftid
+                                            WHERE ser_id = $serId;";
+                                    $this->db->query($qry2);
+                        
+                                    $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdtftid";
+                                    $this->db->query($updtQry);
+                                }
+                            }
+                        }else{
+                            $qry2 = "UPDATE ctt_series 
+                                SET ser_situation = 'D', 
+                                        ser_stage = 'D', 
+                                        pjtdt_id = 0 
+                                WHERE pjtdt_id = $ptdtId;";
+                            $this->db->query($qry2);
+                        }
+                        $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $ptdtId;";
+                        $this->db->query($qry3);
+                    
+                        $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $ptdtId;";
+                        $this->db->query($qry4);
+                    } 
+                }
+            }elseif ($typeAsigned == 'V') {
+                $qryProds = "SELECT * FROM ctt_products_packages WHERE prd_parent = $prdId";
+                $prods = $this->db->query($qryProds);
+
+                while($row = $prods->fetch_assoc()){
+                    $prdId = $row["prd_id"];
+                    $pck_quantity = $row["pck_quantity"];
+                    
+                    for ($i=0; $i < $pck_quantity; $i++) { 
+                        $query ="SELECT * FROM ctt_projects_detail AS pdt WHERE pdt.prd_id = $prdId AND pjtvr_id = $pjtvrId ORDER BY pdt.pjtdt_prod_sku LIMIT 1;";
+                        $detailPakc= $this->db->query($query);
+                        $series = $detailPakc->fetch_object();
+    
+                        if ($series != null) {
+                            $pjtdtId = $series->pjtdt_id; 
+    
+                            $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
+                            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
+                            WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
+                            INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
+                            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+                            
+                        
+                            $result =  $this->db->query($qry);
+                            $pjtdt = $result->fetch_object();
+                
+                            if ($pjtdt != null ) {
+                                $pjtdt_ft_id = $pjtdt->pjtdt_id; 
+                                $ser_id = $pjtdt->ser_id; 
+                                $qry = "SELECT sr.pjtdt_id FROM ctt_series AS sr WHERE sr.ser_id = $ser_id";
+                        
+                                $result =  $this->db->query($qry);
+                                $series = $result->fetch_object();
+                
+                                
+                
+                                if ($series != null) {
+                                    $pjtdt_id = $series->pjtdt_id;
+                                    if ($pjtdt_id == $pjtdtId) {
+                                    
+                                        $qry2 = "UPDATE ctt_series 
+                                                    SET ser_situation = 'EA', 
+                                                        ser_stage = 'R',
+                                                        pjtdt_id = $pjtdt_ft_id
+                                                WHERE ser_id = $ser_id;";
+                                        $this->db->query($qry2);
+                            
+                                        $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
+                                        $this->db->query($updtQry);
+                
+                                        
+                                    }
+                                }
+                                
+                            }
+                            $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+                            $this->db->query($qry3);
+                        
+                            $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
+                            $this->db->query($qry4);
+                        }else{
+                        
+                            $qry2 = "UPDATE ctt_series 
+                                SET ser_situation = 'D', 
+                                        ser_stage = 'D', 
+                                        pjtdt_id = 0 
+                                WHERE pjtdt_id = $pjtdtId;";
+                            $this->db->query($qry2);
+                        }
+                    }
+                }
+            }
+            
+        }
+        return $prodId;
+    }
+    /* public function KillQuantityDetailPackage($params)
+    {
+        $pjtvrId = $this->db->real_escape_string($params['pjetId']);
+
+        $qry1 = "WITH elements AS (
+                        SELECT dt.*,
+                            ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng
+                            FROM ctt_projects_detail AS dt
+		                    LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
+                            WHERE pjtvr_id = $pjtvrId ORDER BY dt.pjtdt_prod_sku)
+                SELECT pjtdt_id FROM elements WHERE reng =1;";
+        $result =  $this->db->query($qry1);
+ 
+        while($row = $result->fetch_assoc()){
+            $pjtdtId = $row["pjtdt_id"];
+            
             $qry = "SELECT pjd.pjtdt_id, pjd.ser_id FROM ctt_projects_detail AS pjd
                 INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
                 WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT ser_id FROM ctt_projects_detail AS pdt
@@ -849,7 +1426,7 @@ class ProjectPlansModel extends Model
             $this->db->query($qry4);
         }
         return '1';
-    }
+    } */
 
 /** ====== Asigna las series y el detalle del producto al detalle del proyecto  ==============  */
     public function SettingSeries($params)
@@ -859,10 +1436,11 @@ class ProjectPlansModel extends Model
         $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
         $pjetId   = $this->db->real_escape_string($params['pjetId']);
         $detlId   = $this->db->real_escape_string($params['detlId']);
+        $type_asigned   = $this->db->real_escape_string($params['type_asigned']);
         // Busca serie que se encuentre disponible y obtiene el id
         $qry1 = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count 
                  FROM ctt_series WHERE prd_id = $prodId 
-                 AND (pjtdt_id = 0 OR ISNULL(pjtdt_id))
+                 AND (pjtdt_id = 0 OR ISNULL(pjtdt_id)) AND prd_id_acc = 0
                  ORDER BY ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry1);
         
@@ -874,8 +1452,8 @@ class ProjectPlansModel extends Model
 
             // Agrega el registro en el detalle con los datos de la serie
             $qry3 = "INSERT INTO ctt_projects_detail (
-                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1, '$type_asigned'
                 ); ";
             $this->db->query($qry3);
             $pjtdtId = $this->db->insert_id;
@@ -893,7 +1471,7 @@ class ProjectPlansModel extends Model
             
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
             FROM ctt_series AS ser
-            WHERE ser.prd_id = '$prodId' AND NOT EXISTS (SELECT sr.ser_id serId
+            WHERE ser.prd_id = '$prodId' AND prd_id_acc = 0 AND NOT EXISTS (SELECT sr.ser_id serId
             FROM ctt_series AS sr
             INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
             INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
@@ -916,7 +1494,7 @@ class ProjectPlansModel extends Model
                 $qry3="SELECT sr.ser_id serId, pjp.pjtpd_day_start, pjp.pjtpd_day_end, sr.pjtdt_id
                 FROM ctt_series AS sr
                 INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = sr.pjtdt_id
-                WHERE sr.ser_id = $serie AND pjp.pjtpd_day_start > '$dtfinl' LIMIT 1;";
+                WHERE sr.ser_id = $serie AND pjp.pjtpd_day_start > '$dtfinl' AND prd_id_acc = 0 LIMIT 1;";
                 $result1 =  $this->db->query($qry3);
                             
                 $serie_actual = $result1->fetch_object();
@@ -928,8 +1506,8 @@ class ProjectPlansModel extends Model
 
 
                     $qry2 = "INSERT INTO ctt_projects_detail (
-                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1
+                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 1, '$type_asigned'
                         ); ";
                     $this->db->query($qry2);
                     $pjtdtId = $this->db->insert_id;
@@ -943,8 +1521,8 @@ class ProjectPlansModel extends Model
 
                 }else{
                     $qry2 = "INSERT INTO ctt_projects_detail (
-                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
+                        pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                        VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3, '$type_asigned'
                         ); ";
                     $this->db->query($qry2);
                     $pjtdtId = $this->db->insert_id;
@@ -954,8 +1532,8 @@ class ProjectPlansModel extends Model
                 $serie  = null; 
                 $sersku  = 'Pendiente' ;
                 $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
-                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 2, '$type_asigned'
                     ); ";
                 $this->db->query($qry2);
                 $pjtdtId = $this->db->insert_id;
@@ -969,7 +1547,7 @@ class ProjectPlansModel extends Model
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
         $this->db->query($qry5);
 
-        return  $pjtdtId;
+        return $serie;
     }
     
     public function getDetails($params){
@@ -977,7 +1555,122 @@ class ProjectPlansModel extends Model
 
     }
 
+    public function getAccesorios($serie){
+        $qry = "SELECT *, (ser_reserve_count + 1) as ser_reserve_count  
+                FROM ctt_series WHERE prd_id_acc = $serie";  // solo trae un registro
 
+        return $this->db->query($qry);
+    }
+    public function SettingSeriesAcce($params)
+    {
+        $pjetId   = $this->db->real_escape_string($params['pjetId']);  // este es el valor pjtvr_id
+        $prodId   = $this->db->real_escape_string($params['prodId']);
+        $dtinic   = $this->db->real_escape_string($params['dtinic']);
+        $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
+        $detlId   = $this->db->real_escape_string($params['detlId']);
+        $serId   = $this->db->real_escape_string($params['serId']);
+
+        $serieAcc = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count  
+        FROM ctt_series WHERE pjtdt_id = 0 AND ser_id = $serId LIMIT 1";
+        
+        $result =  $this->db->query($serieAcc);
+            
+        $series = $result->fetch_object();
+
+        if ($series != null) {
+            $serId  = $series->ser_id; 
+            $sersku  = $series->ser_sku;
+            $ser_reserve_count  = $series->ser_reserve_count; 
+            $qry2 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                VALUES ('$detlId', '$sersku', '$serId',  '$prodId',  '$pjetId', 1, 'AF'
+                ); ";
+            $this->db->query($qry2);
+            $pjtdtId = $this->db->insert_id;
+            
+            $qry1 = "UPDATE ctt_series SET ser_situation = 'EA', ser_stage = 'R',
+                        ser_reserve_count = $ser_reserve_count,
+                        pjtdt_id = '$pjtdtId'
+                    WHERE ser_id = $serId;"; 
+            $this->db->query($qry1);
+
+        }else{
+            $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
+                    FROM ctt_series AS ser
+                    WHERE ser.ser_id = $serId AND NOT EXISTS (SELECT sr.ser_id serId
+                    FROM ctt_series AS sr
+                    INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+                    INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+                    WHERE sr.ser_id = ser.ser_id AND pd.sttd_id != 4 AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+                    OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl'  
+                    OR '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+                    OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end))";  // solo trae un registro
+
+            $result =  $this->db->query($qry);
+            $serie_futura = $result->fetch_object();
+            if ($serie_futura != null){
+                $sersku  = $serie_futura->serSku;
+                $serId = $serie_futura->serId;
+
+                /* $qry2 = "INSERT INTO ctt_projects_detail (
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id) 
+                    VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId', 3
+                    ); "; */
+                    $qry3="SELECT sr.ser_id serId, pjp.pjtpd_day_start, pjp.pjtpd_day_end, sr.pjtdt_id
+                    FROM ctt_series AS sr
+                    INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = sr.pjtdt_id
+                    WHERE sr.ser_id = $serId AND pjp.pjtpd_day_start > '$dtfinl' LIMIT 1;";
+                    $result1 =  $this->db->query($qry3);
+                                
+                    $serie_actual = $result1->fetch_object();
+                    if ($serie_actual != null ) {
+                        $pjtdt_id  = $serie_actual->pjtdt_id;
+
+                        $qry4 ="UPDATE ctt_projects_detail SET sttd_id = 3 where pjtdt_id = $pjtdt_id";
+                        $this->db->query($qry4);
+
+
+                        $qry2 = "INSERT INTO ctt_projects_detail (
+                            pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                            VALUES ('$detlId', '$sersku', '$serId',  '$prodId',  '$pjetId', 1, 'AF'
+                            ); ";
+                        $this->db->query($qry2);
+                        $pjtdtId = $this->db->insert_id;
+
+                        $qry4 ="UPDATE ctt_series 
+                            SET 
+                                pjtdt_id = $pjtdtId
+                            WHERE ser_id = '$serId'";
+                        $this->db->query($qry4);
+                    }else{
+                        $qry2 = "INSERT INTO ctt_projects_detail (
+                            pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                            VALUES ('$detlId', '$sersku', '$serId',  '$prodId',  '$pjetId', 3, 'AF'
+                            ); ";
+                        $this->db->query($qry2);
+                        $pjtdtId = $this->db->insert_id;
+                    }
+            }else{
+                $serId  = null; 
+                $sersku  = 'Pendiente' ;
+                $qry2 = "INSERT INTO ctt_projects_detail (
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
+                    VALUES ('$detlId', '$sersku', '$serId',  '$prodId',  '$pjetId', 2, 'AF'
+                    ); ";
+                $this->db->query($qry2);
+                $pjtdtId = $this->db->insert_id;
+            }
+        
+
+        }
+
+        $qry4 = "INSERT INTO ctt_projects_periods 
+                    (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
+                VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
+        $this->db->query($qry4);
+
+    return  $serId;
+    }
     public function GetAccesories($params)
     {
         $prodId   = $this->db->real_escape_string($params['prodId']);
@@ -1002,7 +1695,7 @@ class ProjectPlansModel extends Model
     public function GetProducts($params)
     {
         $prodId        = $this->db->real_escape_string($params);
-        $qry = "SELECT pd.* 
+        $qry = "SELECT pd.*, pk.pck_quantity
                 FROM ctt_products_packages AS pk 
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pk.prd_id
                 WHERE  pk.prd_parent = $prodId;";

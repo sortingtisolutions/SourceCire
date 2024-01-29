@@ -101,8 +101,8 @@ public function listProductsPack($params)
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
         //$prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
 
-        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id) 
-                VALUES ('$prd_parent', '$prd_id');";
+        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id, prd_type_asigned) 
+                VALUES ('$prd_parent', '$prd_id', 'K');";
 
         $this->db->query($qry);
         $pckId = $this->db->insert_id;

@@ -510,3 +510,31 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 AUTO_INCREMENT=1
 ;
+
+--**************************************************
+
+ALTER TABLE ctt_products
+	ADD COLUMN prd_type_asigned INT(10) NULL DEFAULT NULL COMMENT 'Tipo de asignacion al Producto en su relacion' AFTER prd_name_provider;
+
+ALTER TABLE `ctt_products`
+	CHANGE COLUMN `prd_type_asigned` `prd_type_asigned` VARCHAR(5) NULL DEFAULT NULL COMMENT 'Tipo de asignacion al Producto en su relacion' AFTER `prd_name_provider`;
+ALTER TABLE `ctt_products_packages`
+	ADD COLUMN `prd_type_asigned` VARCHAR(5) NULL DEFAULT NULL COMMENT 'Tipo de asignacion al Producto en su relacion' AFTER `pck_quantity`;
+
+
+CREATE TABLE ctt_total_project_amount (
+	tpa_id INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del registro',
+	pjt_id INT(11) NULL DEFAULT NULL COMMENT 'Relacion con Id del Proyecto',
+	tpa_amount DOUBLE NULL DEFAULT NULL COMMENT 'Suma total del proyecto',
+	tpa_date_registed DATETIME NULL DEFAULT current_timestamp() COMMENT 'Fecha de actualizacion',
+	PRIMARY KEY (tpa_id) USING BTREE,
+	INDEX pjt_id (pjt_id) USING BTREE
+)
+COMMENT='Suma total del proyecto sin IVA'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+
+ALTER TABLE `ctt_projects_detail`
+	ADD COLUMN `prd_type_asigned` VARCHAR(5) NULL DEFAULT NULL AFTER `pjtdt_prod_sku`;
