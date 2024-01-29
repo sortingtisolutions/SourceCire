@@ -264,6 +264,14 @@ public function listDocument($request_params)
 		echo $res;
 	}
 
+	public function verifyChanges($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->verifyChanges($request_params);
+		$res = $result ;
+		echo $res;
+	}
+
 // Guarda los cambios de una serie
 	public function saveEdtSeries($request_params)
 	{

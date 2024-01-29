@@ -188,6 +188,7 @@ function putCategory(dt) {
 // Mantiene en memoria el set de subcategorias
 function putSubCategory(dt) {
     subcategos = dt;
+    console.log(subcategos);
 }
 
 function putProducts(dt) {

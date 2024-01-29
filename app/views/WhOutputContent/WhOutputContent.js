@@ -620,6 +620,9 @@ function build_modalSeries(dt) {
          let tabla = $('#tblSerie').DataTable();
         //  $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
+
+        $('.overlay_closer .title_calendar').html(dt[0].prd_name);
+
          tabla.rows().remove().draw();
          if (dt[0].ser_id > 0)
          {
@@ -637,7 +640,7 @@ function build_modalSeries(dt) {
                 //console.log(dt);
                 tabla.row
                     .add({
-                        sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}" data-serie ="${u.ser_sku}"></i> 
+                        sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}" data-serie ="${u.prd_name}"></i> 
                                     <i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
                                     <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                         seriesku: skufull,
@@ -682,7 +685,7 @@ function activeIconsSerie() {
             handle: ".overlay_modal"
         });
         //title= 'Serie';
-        $('.overlay_closer .title_calendar').html(serSKU);
+        //$('.overlay_closer .title_calendar').html(serSKU);
         $('#CalendarModal .btn_close')
             .unbind('click')
             .on('click', function () {

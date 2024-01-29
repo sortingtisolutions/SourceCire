@@ -110,7 +110,7 @@ function settingTable() {
         ],
         pagingType: 'simple_numbers',
         language: {
-            url: 'app/assets/lib/dataTable/Spanish.json',
+            url: 'app/assets/lib/dataTable/spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,

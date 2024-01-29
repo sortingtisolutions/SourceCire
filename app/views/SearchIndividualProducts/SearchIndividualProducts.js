@@ -144,7 +144,7 @@ function putProductsList(dt) {
     });
  */
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
+        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
         $('#listProduct .list-items').append(H);
     });
 

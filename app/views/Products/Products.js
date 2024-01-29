@@ -25,7 +25,7 @@ function inicial() {
         getCoins();
         getDocument();
         getInvoice();
-        getListProducts();
+        //getListProducts();
     } else {
         setTimeout(() => {
             inicial();
@@ -92,13 +92,13 @@ function getProducts(catId) {
     fillField(pagina, par, tipo, selector);
 }
 /** +++++   */
-function getListProducts() {
+/* function getListProducts() {
     var pagina = 'Products/listProducts2';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putProductsList;
     fillField(pagina, par, tipo, selector);
-}
+} */
 /** +++++  Obtiene las series de un producto seleccionado */
 function getSeries(prdId) {
     var pagina = 'Products/listSeries';
@@ -237,7 +237,7 @@ function putProducts(dt) {
     console.log('LLena Products ');
 }
 
-function putProductsList(dt) {
+/* function putProductsList(dt) {
     // console.log('putProductsList',dt);
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
@@ -294,7 +294,7 @@ function putProductsList(dt) {
         MaxAccesorio(prdsku);
         
     });
-}
+} */
 
 function MaxAccesorio(prdsku) {
        
@@ -303,7 +303,7 @@ function MaxAccesorio(prdsku) {
         
     } else {
         let newprdsku = prdsku + 'XXX' + maxacc;
-        $('#txtProducts').val(prodNm);
+        //$('#txtProducts').val(prodNm);
         $('#txtIdProducts').val(prodId);
         $('#txtPrdSku').val(newprdsku);
         
@@ -652,8 +652,8 @@ function putSelectProduct(dt) {
     let lnl = prdLonely == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
     let ass = prdInsured == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
 
-    $(`#txtCatId`).attr('disabled', true);
-    $(`#txtSbcId`).attr('disabled', true);
+    /* $(`#txtCatId`).attr('disabled', true);
+    $(`#txtSbcId`).attr('disabled', true); */
 
     $('#txtPrdId').val(prdId);
     $('#txtPrdName').val(prdName);
@@ -676,9 +676,9 @@ function putSelectProduct(dt) {
     $('#txtPrdInsured').html(ass);
 
     // console.log('Carga-P ', dt);
-    if (prdLevel == 'A') {
+    /* if (prdLevel == 'A') {
         $('#txtProducts').attr('disabled', false);
-    }
+    } */
     $('#tblEditProduct .checkbox i')
         .unbind('click')
         .on('click', function () {
@@ -695,22 +695,65 @@ function putSelectProduct(dt) {
             }
         });
 
-    $('#txtSbcId')
+    /* $('#txtSbcId')
         .unbind('change')
         .on('change', function () {
             let catId = $(`#txtCatId option[value="${id}"]`).val();
             let sbcId = $(`#txtSbcId option[value="${id}"]`).val();
-            console.log(cat_id, sbcId);
-        });
+            console.log(catId, sbcId);
+        }); */
+        $('#txtSbcId')
+        .unbind('change')
+        .on('change', function () {
+            let catId = $(`#txtCatId`).val();
+            let sbcId = $(this).val();
+            console.log(catId, sbcId);
+            sbcCode = subcategoriesGetCode(sbcId);
 
+            sku2 = refil(sbcCode, 2);
+            sku3 = '';
+            sku4 = '';
+
+            fillFieldSkuBox();
+        });
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
+            
+            let prdSk = $('#txtPrdSku').val();
+            if (prdSk.length == 4) {
+                console.log('Verificar');
+                verificarCambio();
+            }else{
+                saveEditProduct();
+            }
             // console.log('CLick-boton');
-            saveEditProduct();
+            //
+            // 
         });
 }
+function verificarCambio(){
+    let prdId = $('#txtPrdId').val();
+    var par = `
+        [{
+            "prdId" : "${prdId}"
+        }]
+    `;
+    console.log(par);
+    var pagina = 'Products/verifyChanges';
+    var tipo = 'html';
+    var selector = resVerification;
+    fillField(pagina, par, tipo, selector); 
+}
 
+function resVerification(dt){
+    console.log(dt);
+    if (dt == 1) {
+        $('#VerifyModal').modal('show');
+    }else{
+        saveEditProduct();
+    }
+}
 function saveEditProduct() {
     
     let ky = validatorProductsFields();
@@ -726,8 +769,8 @@ function saveEditProduct() {
         let prdNp = $('#txtPrdNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
-        let prdLv = prdLl == '1' ? 'A' : 'P';
+        /* let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
+        let prdLv = prdLl == '1' ? 'A' : 'P'; */
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
         let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
         let prdCt = $(`#txtCatId`).val();
@@ -749,7 +792,6 @@ function saveEditProduct() {
                     "prdNp" : "${prdNp}",
                     "prdCm" : "${prdCm}",
                     "prdVs" : "${prdVs}",
-                    "prdLv" : "${prdLv}",
                     "prdLn" : "${prdLn}",
                     "prdAs" : "${prdAs}",
                     "prdCt" : "${prdCt}",
@@ -760,7 +802,7 @@ function saveEditProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
-            // console.log('Update-P ', par);
+        console.log('Update-P ', par);
         var pagina = 'Products/saveEdtProduct';
         var tipo = 'html';
         var selector = resEdtProduct;
@@ -769,15 +811,15 @@ function saveEditProduct() {
 }
 
 function resEdtProduct(dt) {
-    // console.log('AQUI ACTUALIZA PRODUCTO');
+    console.log('AQUI ACTUALIZA PRODUCTO', dt);
     let prdId = dt.split('|')[0];
     let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-    let prdSk = $('#txtPrdSku').val();
+    let prdSk = dt.split('|')[2];
     let prdPr = formato_numero($('#txtPrdPrice').val(), 2, '.', ',');
     let prdEn = $('#txtPrdEnglishName').val();
     let prdCm = $('#txtPrdComments').val();
     // let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
-    let prdLv = $('#txtPrdLevel').text().substring(1, 2);
+    // let prdLv = $('#txtPrdLevel').text().substring(1, 2);
     let prdCt = $(`#txtCatId option:selected`).text();
     let prdSb = $(`#txtSbcId option:selected`).text();
     let prdCn = $(`#txtCinId option:selected`).val() == 0 ? '' : $(`#txtCinId option:selected`).text().split('-')[0];
@@ -786,13 +828,13 @@ function resEdtProduct(dt) {
 
     let docInvo = `<span class="invoiceView" id="F${prdDi}"><i class="fas fa-file-alt"></i></span>`;
     let prdDc = prdDi == 0 ? '' : docInvo;
-    prdLv = prdLv == 'A' ? 'A' : 'P';
+    /* prdLv = prdLv == 'A' ? 'A' : 'P'; */
     console.log('ACTUALIZA JJR');
     let el = $(`#tblProducts tr[id="${prdId}"]`);
     $(el.find('td')[1]).text(prdSk);
     $(el.find('td')[2]).text(prdNm);
     $(el.find('td')[3]).text(prdPr);
-    $(el.find('td')[5]).text(prdLv);
+    $(el.find('td')[5]).text('P');
     $(el.find('td')[6]).text(prdSv);
     $(el.find('td')[7]).text(prdCn);
     $(el.find('td')[8]).html(prdDc);
@@ -809,10 +851,10 @@ function createNewProduct() {
     let prdNm = 'Nuevo producto';
     cleanProductsFields();
 
-    $(`#txtCatId`).attr('disabled', false);
-    $(`#txtSbcId`).attr('disabled', false);
-    $('#txtProducts').attr('disabled',true);
-    $('#txtProducts').val('');
+   /*  $(`#txtCatId`).attr('disabled', false);
+    $(`#txtSbcId`).attr('disabled', false); */
+    //$('#txtProducts').attr('disabled',true);
+    //$('#txtProducts').val('');
     $('#ProductModal').removeClass('overlay_hide');
     $('#txtPrdVisibility').html('<i class="fas fa-check-square"></i>');
     $('.overlay_closer .title').html(prdNm);
@@ -840,20 +882,20 @@ function createNewProduct() {
                     $(`#txtCatId`).val(0);
                     $(`#txtSbcId`).val(0);
                     $(`#txtPrdSku`).val('');
-                    $(`#txtCatId`).attr('disabled', true);
-                    $(`#txtSbcId`).attr('disabled', true);
+                    /* $(`#txtCatId`).attr('disabled', true);
+                    $(`#txtSbcId`).attr('disabled', true); */
                     $(`#txtSrvId`).attr('disabled', true);
-                    $(`#txtProducts`).attr('disabled', false);
+                    //$(`#txtProducts`).attr('disabled', false);
                     maxacc=undefined;
                     // console.log('Valores del Accesorio, Cat=20, SubCat=152');
                 } else {
                     $(`#txtCatId`).val(0);
                     $(`#txtSbcId`).val(0);
-                    $(`#txtProducts`).val('');
+                    //$(`#txtProducts`).val('');
                     $('#txtPrdSku').val('');
-                    $(`#txtCatId`).attr('disabled', false);
-                    $(`#txtSbcId`).attr('disabled', false);
-                    $(`#txtProducts`).attr('disabled', true);
+                    /* $(`#txtCatId`).attr('disabled', false);
+                    $(`#txtSbcId`).attr('disabled', false); */
+                    //$(`#txtProducts`).attr('disabled', true);
                     $(`#txtSrvId`).attr('disabled', false);
                 }
             }
@@ -885,6 +927,17 @@ function createNewProduct() {
         .on('click', function () {
             saveNewProduct();
         });
+    $('#txtPrdLevel').on('click', function(){
+        let prdLvl = $('#txtPrdLevel').children('i').attr('data_val');
+        if (prdLvl == 1) {
+            $('#txtCatId').val(40);
+            $(`#txtSbcId option[data_category="${40}"]`).removeClass('hide');
+        }else{
+            $('#txtCatId').val(0);
+            $(`#txtSbcId option[data_category="${0}"]`).removeClass('hide');
+        }
+        
+    });
 }
 
 function subcategoriesGetCode(sbcId) {
@@ -918,8 +971,8 @@ function saveNewProduct() {
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
         
         prdVs = !prdVs ? 1 : prdVs;
-        let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
-        prdLv = prdLv == '1' ? 'A' : 'P';
+        /* let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
+        prdLv = prdLv == '1' ? 'A' : 'P'; */
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
         let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
         let prdCt = $(`#txtCatId`).val();
@@ -940,7 +993,6 @@ function saveNewProduct() {
                     "prdNp" : "${prdNp}",
                     "prdCm" : "${prdCm}",
                     "prdVs" : "${prdVs}",
-                    "prdLv" : "${prdLv}",
                     "prdLn" : "${prdLn}",
                     "prdAs" : "${prdAs}",
                     "prdCt" : "${prdCt}",
