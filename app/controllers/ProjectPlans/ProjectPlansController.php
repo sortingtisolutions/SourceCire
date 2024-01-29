@@ -563,7 +563,7 @@ public function getNewProdChg($request_params)
     }
 
 /** ==== Actualiza las series y sus productos relacionados  ==================================  */
-    public function setSeries($result)
+    /* public function setSeries($result)
     {
         while($row = $result->fetch_assoc()){
             $dtstar = $row["pjt_date_start"];
@@ -589,7 +589,7 @@ public function getNewProdChg($request_params)
             $bdgIns = $row["pjtcn_insured"];
             $prdexp = $row["srv_id"];
             $versId = $row["ver_id"];
-
+            $lvlas = $row["prd_type_asigned"];
             $ttlqty = $prdexp == '2'? $quanty: 1;
             $quanty = $prdexp == '2'? 1: $quanty;
 
@@ -693,8 +693,370 @@ public function getNewProdChg($request_params)
             }
         }
         return 1;
-    }
+    } */
+    public function setSeries($result)
+    {
+        while($row = $result->fetch_assoc()){
+            $dtstar = $row["pjt_date_start"];
+            $dybase = $row["pjtcn_days_base"];
+            $dycost = $row["pjtcn_days_cost"];
+            $dytrip = $row["pjtcn_days_trip"] / 2;
+            $dytest = $row["pjtcn_days_test"];
+            $quanty = $row["pjtcn_quantity"];
+            $prodId = $row["prd_id"];
+            $pjetId = $row["pjtvr_id"];
+            $dyinic = $dytrip + $dytest;
+            $dyfinl = $dytrip + $dybase;
+            $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
+            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days'));
 
+            $bdgsku = $row["pjtcn_prod_sku"];
+            $bdgnme = $row["pjtcn_prod_name"];
+            $bdgprc = $row["pjtcn_prod_price"];
+            $bdglvl = $row["pjtcn_prod_level"];
+            $dsbase = $row["pjtcn_discount_base"];
+            $dstrip = $row["pjtcn_discount_trip"];
+            $dstest = $row["pjtcn_discount_test"];
+            $bdgIns = $row["pjtcn_insured"];
+            $prdexp = $row["srv_id"];
+            $versId = $row["ver_id"];
+            $lvlas = $row["prd_type_asigned"];
+
+            $ttlqty = $prdexp == '2'? $quanty: 1;
+            $quanty = $prdexp == '2'? 1: $quanty;
+
+            if ($lvlas == 'F'){
+                for ($i = 1; $i<=$quanty; $i++){
+
+                    $params = array(
+                        'pjetId' => $pjetId,
+                        'prodId' => $prodId,
+                        'dtinic' => $dtinic,
+                        'dtfinl' => $dtfinl,
+                        'bdgsku' => $bdgsku,
+                        'bdgnme' => $bdgnme,
+                        'bdgprc' => $bdgprc,
+                        'bdglvl' => $bdglvl,
+                        'bdgqty' => $ttlqty,
+                        'dybase' => $dybase,
+                        'dycost' => $dycost,
+                        'dsbase' => $dsbase,
+                        'dytrip' => $dytrip,
+                        'dstrip' => $dstrip,
+                        'dytest' => $dytest,
+                        'dstest' => $dstest,
+                        'bdgIns' => $bdgIns,
+                        'versId' => $versId,
+                        'detlId' => 0,
+                        'type_asigned' => 'PF',
+                    );
+                    $detlId = $this->model->SettingSeries($params);
+                    $serId=$detlId;
+                    
+                    if ($serId != null) {
+                        $seriesAcc = $this->ProcessSeriesAccesories($params, $serId);
+                    }
+
+                }
+            }else if ($lvlas == 'V'){
+                for ($i = 1; $i<=$quanty; $i++){
+                    
+                    $params = array(
+                        'pjetId' => $pjetId,
+                        'prodId' => $prodId,
+                        'dtinic' => $dtinic,
+                        'dtfinl' => $dtfinl,
+                        'bdgsku' => $bdgsku,
+                        'bdgnme' => $bdgnme,
+                        'bdgprc' => $bdgprc,
+                        'bdglvl' => $bdglvl,
+                        'bdgqty' => $ttlqty,
+                        'dybase' => $dybase,
+                        'dycost' => $dycost,
+                        'dsbase' => $dsbase,
+                        'dytrip' => $dytrip,
+                        'dstrip' => $dstrip,
+                        'dytest' => $dytest,
+                        'dstest' => $dstest,
+                        'bdgIns' => $bdgIns,
+                        'versId' => $versId,
+                        'detlId' => 0,
+                        'type_asigned' => 'PV',
+                    );
+                    $detlId = $this->model->SettingSeries($params);
+
+                    $products = $this->model->GetProducts($prodId);
+
+                    while($prdPck = $products->fetch_assoc()){
+                        $pkpdId =  $prdPck["prd_id"];
+                        $pkpdNm =  $prdPck["prd_name"];
+                        $pkpdPc =  $prdPck["prd_price"];
+                        $pkqty  =  $prdPck["pck_quantity"];
+
+                        for ($j = 1; $j <= $pkqty; $j++){
+                            
+                            $prdparam = array(
+                                'prodId' => $pkpdId, 
+                                'pjetId' => $pjetId, 
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl, 
+                                'detlId' => 0,
+                                'type_asigned' => 'AV',
+                            );
+                           
+                            $detlId = $this->model->SettingSeries($prdparam);
+                        }
+                        
+                    }
+                }
+            }else if ($lvlas == 'K'){
+                for ($i = 1; $i<=$quanty; $i++){
+                    $products = $this->model->GetProducts($prodId);
+                    while($prd = $products->fetch_assoc()){
+
+                        $pkpdId =  $prd["prd_id"];
+                        $pkpdNm =  $prd["prd_name"];
+                        $pkpdPc =  $prd["prd_price"];
+                        $pkqty =  $prd["pck_quantity"];
+                        $type =  $prd["prd_type_asigned"];
+
+                        for ($k=1; $k<=$pkqty; $k++){
+                            // Los productos pueden ser Virtuales o Fijos. 
+                            if ($type == 'V') {
+                                $prdctsAcc = $this->model->GetProducts($pkpdId);
+
+                                $params = array(
+                                    'prodId' => $pkpdId, 
+                                    'pjetId' => $pjetId,
+                                    'dtinic' => $dtinic, 
+                                    'dtfinl' => $dtfinl,
+                                    'detlId' => 0,
+                                    'type_asigned' => 'PV',
+                                );
+                                $serie      = $this->model->SettingSeries($params);
+
+                                while($acc = $prdctsAcc->fetch_assoc()){
+                
+                                    $prdAccId =  $acc["prd_id"];
+                                    $prdAccNm =  $acc["prd_name"];
+                                    $prdAccPc =  $acc["prd_price"];
+                                    $prdAccqty =  $acc["pck_quantity"];
+
+                                    if($prdAccqty>0){
+                                        for ($j=0; $j < $prdAccqty; $j++) { 
+                                            $prodparams = array(
+                                                'prodId' => $prdAccId, 
+                                                'pjetId' => $pjetId,
+                                                'dtinic' => $dtinic, 
+                                                'dtfinl' => $dtfinl,
+                                                'detlId' => 0,
+                                                'type_asigned' => 'AV',
+                                            );
+                                            $detlId = $this->model->SettingSeries($prodparams);
+                                        }
+                                    } 
+                                }
+                            }elseif ($type == 'F') {
+                                
+                                //for ($i=0; $i < $pkqty; $i++) { 
+                                    $params = array(
+                                        'prodId' => $pkpdId, 
+                                        'pjetId' => $pjetId,
+                                        'dtinic' => $dtinic, 
+                                        'dtfinl' => $dtfinl,
+                                        'detlId' => 0,
+                                        'type_asigned' => 'PF',
+                                    );
+                                    $serie      = $this->model->SettingSeries($params);
+                                    if ($serie != null) {
+                                        $seriesAcc = $this->ProcessSeriesAccesories($params, $serie);
+                                    }
+                                    
+                                //}
+                                
+                            }else{ // sino cumple con alguna de esas caracteriticas, significa que es un producto individual
+                                
+                                $prodparams = array(
+                                    'prodId' => $pkpdId, 
+                                    'pjetId' => $pjetId,
+                                    'dtinic' => $dtinic, 
+                                    'dtfinl' => $dtfinl,
+                                    'detlId' => 0,
+                                    'type_asigned' => 'PI',
+                                );
+                                $detlId = $this->model->SettingSeries($prodparams);
+                                    
+                            }
+                            
+                        }
+                    }
+                    /* $products = $this->model->GetProducts($prodId);
+
+
+                    while($acc = $products->fetch_assoc()){
+
+                        $pkpdId =  $acc["prd_id"];
+                        $pkpdNm =  $acc["prd_name"];
+                        $pkpdPc =  $acc["prd_price"];
+                        $pkqty =  $acc["pck_quantity"];
+                        $type =  $acc["prd_type_asigned"];
+                        if ($pkqty > 0) {
+                            for ($j=1; $j<=$pkqty; $j++){
+                                // Los productos pueden ser Virtuales o Fijos. 
+                                if ($type == 'V') {
+                                    $prdctsAcc = $this->model->GetProducts($pkpdId);
+
+                                    $prodparams = array(
+                                        'pjetId' => $pjetId,
+                                        'prodId' => $pkpdId,
+                                        'dtinic' => $dtinic,
+                                        'dtfinl' => $dtfinl,
+                                        'bdgsku' => $bdgsku,
+                                        'bdgnme' => $pkpdNm,
+                                        'bdgprc' => $pkpdPc,
+                                        'bdglvl' => 'P',
+                                        'bdgqty' => $ttlqty,
+                                        'dybase' => $dybase,
+                                        'dycost' => $dycost,
+                                        'dsbase' => $dsbase,
+                                        'dytrip' => $dytrip,
+                                        'dstrip' => $dstrip,
+                                        'dytest' => $dytest,
+                                        'dstest' => $dstest,
+                                        'bdgIns' => $bdgIns,
+                                        'versId' => $versId,
+                                        'detlId' => 0,
+                                    );
+                                    $detlId = $this->model->SettingSeries($prodparams);
+
+                                    while($acc = $prdctsAcc->fetch_assoc()){
+                                        $prdAccId =  $acc["prd_id"];
+                                        $prdAccNm =  $acc["prd_name"];
+                                        $prdAccPc =  $acc["prd_price"];
+                                        $prdAccqty =  $acc["pck_quantity"];
+
+                                        if($prdAccqty>0){
+                                            for ($k=0; $k < $prdAccqty; $k++) { 
+                                                $prodparams = array(
+                                                    'pjetId' => $pjetId,
+                                                    'prodId' => $prdAccId,
+                                                    'dtinic' => $dtinic,
+                                                    'dtfinl' => $dtfinl,
+                                                    'bdgsku' => $bdgsku,
+                                                    'bdgnme' => $prdAccNm,
+                                                    'bdgprc' => $prdAccPc,
+                                                    'bdglvl' => 'P',
+                                                    'bdgqty' => $ttlqty,
+                                                    'dybase' => $dybase,
+                                                    'dycost' => $dycost,
+                                                    'dsbase' => $dsbase,
+                                                    'dytrip' => $dytrip,
+                                                    'dstrip' => $dstrip,
+                                                    'dytest' => $dytest,
+                                                    'dstest' => $dstest,
+                                                    'bdgIns' => $bdgIns,
+                                                    'versId' => $versId,
+                                                    'detlId' => 0,
+                                                );
+                                                $detlId = $this->model->SettingSeries($prodparams);
+                                                $serId=$detlId;
+                                            }
+                                        }
+                                    }
+                                    
+                                }elseif ($type == 'F') {
+                                    for ($j=0; $j < $pkqty; $j++) {
+                
+                                        $prodparams = array(
+                                            'pjetId' => $pjetId,
+                                            'prodId' => $pkpdId,
+                                            'dtinic' => $dtinic,
+                                            'dtfinl' => $dtfinl,
+                                            'bdgsku' => $bdgsku,
+                                            'bdgnme' => $pkpdNm,
+                                            'bdgprc' => $pkpdPc,
+                                            'bdglvl' => 'P',
+                                            'bdgqty' => $ttlqty,
+                                            'dybase' => $dybase,
+                                            'dycost' => $dycost,
+                                            'dsbase' => $dsbase,
+                                            'dytrip' => $dytrip,
+                                            'dstrip' => $dstrip,
+                                            'dytest' => $dytest,
+                                            'dstest' => $dstest,
+                                            'bdgIns' => $bdgIns,
+                                            'versId' => $versId,
+                                            'detlId' => 0,
+                                        );
+                                        $detlId = $this->model->SettingSeries($prodparams);
+                                        $serId=$detlId;
+                                        if ($serId != null) {
+                                            $seriesAcc = $this->ProcessSeriesAccesories($params, $serId);
+                                        }
+                                        
+                                    }
+                                }else{
+
+                                }
+                            }
+                        }
+                        
+                    } */
+                }
+            }else{
+                for ($j = 1; $j<=$quanty; $j++){
+                    $params = array(
+                        'pjetId' => $pjetId,
+                        'prodId' => $prodId,
+                        'dtinic' => $dtinic,
+                        'dtfinl' => $dtfinl,
+                        'bdgsku' => $bdgsku,
+                        'bdgnme' => $bdgnme,
+                        'bdgprc' => $bdgprc,
+                        'bdglvl' => $bdglvl,
+                        'bdgqty' => $ttlqty,
+                        'dybase' => $dybase,
+                        'dycost' => $dycost,
+                        'dsbase' => $dsbase,
+                        'dytrip' => $dytrip,
+                        'dstrip' => $dstrip,
+                        'dytest' => $dytest,
+                        'dstest' => $dstest,
+                        'bdgIns' => $bdgIns,
+                        'versId' => $versId,
+                        'detlId' => 0,
+                        'type_asigned' => 'PI',
+                    );
+                    $detlId = $this->model->SettingSeries($params);
+                    $serId=$detlId;
+                }
+            }
+        }
+        return 1;
+    } 
+    public function ProcessSeriesAccesories($params, $serie){
+        $result = $this->model->getAccesorios($serie);
+        while($row = $result->fetch_assoc()){
+            $serId      = $row["ser_id"];
+            $prdId      = $row["prd_id"];
+            $pdIdAc     = $row["prd_id_acc"];
+            $dtinic     = $params["dtinic"];
+            $dtfinl     = $params["dtfinl"];
+            $pjetId     = $params["pjetId"];
+    
+            $accesoryData=array(
+                'pjetId' => $pjetId, 
+                'prodId' => $prdId, 
+                'dtinic' => $dtinic, 
+                'dtfinl' => $dtfinl,
+                'detlId' => 0,
+                'serId'  => $serId,
+                'type_asigned' => 'AF',
+            );
+            $seriesAcc  = $this->model->SettingSeriesAcce($accesoryData);
+        }
+        return 1;
+    }
 /** ==== Actualiza los productos de la version maestra  ======================================  */
     public function updateSeries($result)
     {
@@ -709,6 +1071,8 @@ public function getNewProdChg($request_params)
             $daysAct = intval($daysAct);
             $daysAnt = intval($daysAnt);
             $updQty = $action . $daysAct . $daysAnt;
+            
+            $type = $row["prd_type_asigned"];
             $param = array(
                 'prodId' => $row["prd_id"],
                 'pjetId' => $row["pjtvr_id"],
@@ -716,6 +1080,7 @@ public function getNewProdChg($request_params)
                 'servId' => $row['srv_id'],
                 'dtinic' => $row['date_start'],
                 'dtfinl' => $row['date_end'],
+                'type'   => $row["prd_type_asigned"],
             );
             // print_r( $param);
 
@@ -760,7 +1125,7 @@ public function getNewProdChg($request_params)
             } 
             $res = $row['prd_id'];
         }
-        return $res;
+        return $updQty;
     }
 
 /** ==== Importa proyecto ====================================================================  */
@@ -827,9 +1192,221 @@ public function getNewProdChg($request_params)
         $servId =  $params['servId'];
         $dtinic =  $params['dtinic'];
         $dtfinl =  $params['dtfinl'];
+        $lvlas  =  $params['type'];
 
         if ($servId == '1'){
-            if ($prdLvl == 'A'){
+            if ($lvlas == 'F'){
+                
+                $prdparam = array(
+                    'prodId' => $prodId, 
+                    'pjetId' => $pjetId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl, 
+                    'detlId' => 0,
+                    'type_asigned' => 'PF',
+                );
+                
+                $detlId = $this->model->SettingSeries($prdparam);
+                
+                if ($detlId) {
+                    $seriesAcc = $this->ProcessSeriesAccesories($prdparam, $detlId);
+                }
+                
+            }else if ($lvlas == 'V'){
+                
+                $prdparam = array(
+                    'prodId' => $prodId, 
+                    'pjetId' => $pjetId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl, 
+                    'detlId' => 0,
+                    'type_asigned' => 'PV',
+                );
+                
+                $detlId = $this->model->SettingSeries($prdparam);
+
+                $products = $this->model->GetProducts($prodId);
+                while($pkt = $products->fetch_assoc()){
+                    $kprodId = $pkt["prd_id"];
+                    $kpjetId = $pjetId;
+                    $type =  $pkt["prd_type_asigned"];
+                    $pkqty =  $pkt["pck_quantity"];
+
+                    for ($i=0; $i < $pkqty; $i++) { 
+                        $prdparam = array(
+                            'prodId' => $kprodId, 
+                            'pjetId' => $kpjetId, 
+                            'dtinic' => $dtinic, 
+                            'dtfinl' => $dtfinl, 
+                            'detlId' => 0,
+                            'type_asigned' => 'AV',
+                        );
+                       
+                        $detlId = $this->model->SettingSeries($prdparam);
+                    }
+                    
+                }
+            }else if ($lvlas == 'K'){
+                /* $products = $this->model->GetProducts($prodId);
+                while($pkt = $products->fetch_assoc()){
+                    $kprodId = $pkt["prd_id"];
+                    $kpjetId = $pjetId;
+                    $type =  $pkt["prd_type_asigned"];
+                    $pkqty =  $pkt["pck_quantity"];
+
+                    if ($type == 'V') {
+                        for ($i=0; $i < $pkqty; $i++) { 
+                            $accesorios = $this->model->GetProducts($kprodId);
+                            $pktparams = array(
+                                'prodId' => $kprodId, 
+                                'pjetId' => $kpjetId,
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'detlId' => 0,
+                            );
+                            $detlId = $this->model->SettingSeries($pktparams);
+                            $serId=$detlId;
+
+                            while($acc = $accesorios->fetch_assoc()){
+                                $prdAccId =  $acc["prd_id"];
+                                $prdAccNm =  $acc["prd_name"];
+                                $prdAccPc =  $acc["prd_price"];
+                                $prdAccqty =  $acc["pck_quantity"];
+                                for ($j=0; $j < $prdAccqty; $j++) { 
+                                    $pktparams = array(
+                                        'prodId' => $prdAccId, 
+                                        'pjetId' => $kpjetId,
+                                        'dtinic' => $dtinic, 
+                                        'dtfinl' => $dtfinl,
+                                        'detlId' => 0,
+                                    );
+                                    $detlId = $this->model->SettingSeries($pktparams);
+                                    $serId=$detlId;
+                                }
+                            }
+                        }
+                        
+                    }elseif ($type == 'F') {
+                        for ($i=0; $i < $pkqty; $i++) { 
+                            $pktparams = array(
+                                'prodId' => $kprodId, 
+                                'pjetId' => $kpjetId,
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'detlId' => 0,
+                            );
+                            $detlId = $this->model->SettingSeries($pktparams);
+                            $serId=$detlId;
+                            if ($serId) {
+                                $seriesAcc = $this->ProcessSeriesAccesories($pktparams, $serId);
+                            }
+                        }
+                    }else{
+                        for ($i=0; $i < $pkqty; $i++) { 
+                            $pktparams = array(
+                                'prodId' => $kprodId, 
+                                'pjetId' => $kpjetId,
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'detlId' => 0,
+                            );
+                            $detlId = $this->model->SettingSeries($pktparams);
+                            $serId=$detlId;
+                        }
+                    }
+                } */
+                $products = $this->model->GetProducts($prodId);
+                while($prd = $products->fetch_assoc()){
+
+                    $pkpdId =  $prd["prd_id"];
+                    $pkpdNm =  $prd["prd_name"];
+                    $pkpdPc =  $prd["prd_price"];
+                    $pkqty =  $prd["pck_quantity"];
+                    $type =  $prd["prd_type_asigned"];
+
+                    
+                    for ($k=1; $k<=$pkqty; $k++){
+                        // Los productos pueden ser Virtuales o Fijos. 
+                        if ($type == 'V') {
+                            $prdctsAcc = $this->model->GetProducts($pkpdId);
+
+                            $params = array(
+                                'prodId' => $pkpdId, 
+                                'pjetId' => $pjetId,
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'detlId' => 0,
+                                'type_asigned' => 'PV',
+                            );
+                            $serie      = $this->model->SettingSeries($params);
+
+                            while($acc = $prdctsAcc->fetch_assoc()){
+            
+                                $prdAccId =  $acc["prd_id"];
+                                $prdAccNm =  $acc["prd_name"];
+                                $prdAccPc =  $acc["prd_price"];
+                                $prdAccqty =  $acc["pck_quantity"];
+
+                                if($prdAccqty>0){
+                                    for ($i=0; $i < $prdAccqty; $i++) { 
+                                        $prodparams = array(
+                                            'prodId' => $prdAccId, 
+                                            'pjetId' => $pjetId,
+                                            'dtinic' => $dtinic, 
+                                            'dtfinl' => $dtfinl,
+                                            'detlId' => 0,
+                                            'type_asigned' => 'AV',
+                                        );
+                                        $detlId = $this->model->SettingSeries($prodparams);
+                                    }
+                                } 
+                            }
+                        }elseif ($type == 'F') {
+                            
+                            //for ($i=0; $i < $pkqty; $i++) { 
+                                $params = array(
+                                    'prodId' => $pkpdId, 
+                                    'pjetId' => $pjetId,
+                                    'dtinic' => $dtinic, 
+                                    'dtfinl' => $dtfinl,
+                                    'detlId' => 0,
+                                    'type_asigned' => 'PF',
+                                );
+                                $serie      = $this->model->SettingSeries($params);
+                                if ($serie != null) {
+                                    $seriesAcc = $this->ProcessSeriesAccesories($params, $serie);
+                                }
+                                
+                            //}
+                            
+                        }else{ // sino cumple con alguna de esas caracteriticas, significa que es un producto individual
+                            
+                            $prodparams = array(
+                                'prodId' => $pkpdId, 
+                                'pjetId' => $pjetId,
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'detlId' => 0,
+                                'type_asigned' => 'PI',
+                            );
+                            $detlId = $this->model->SettingSeries($prodparams);
+                                
+                        }
+                        
+                    }
+                }
+            }else{
+                $prdparam = array(
+                    'prodId' => $prodId, 
+                    'pjetId' => $pjetId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl, 
+                    'detlId' => 0,
+                    'type_asigned' => 'PI',
+                );
+                $detlId = $this->model->SettingSeries($prdparam);
+            }
+            /* if ($prdLvl == 'A'){
                 $param = array(
                     'prodId' => $prodId, 
                     'pjetId' => $pjetId, 
@@ -876,7 +1453,7 @@ public function getNewProdChg($request_params)
                         'serId' => $serId,
                     );
                 }
-            }
+            } */
 
         } elseif ($servId == '2'){
 
@@ -889,8 +1466,48 @@ public function getNewProdChg($request_params)
     public function KillQuantityDetail($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->KillQuantityDetail($request_params);
-        $res = $result;
+        /* $result = $this->model->KillQuantityDetail($request_params);
+        $res = $result; */
+        if ($request_params['type'] == 'V') {
+            $result = $this->model->KillQuantityDetailVirtual($request_params);
+           
+            $res = $result;
+        }elseif ($request_params['type'] == 'F') {
+            $result = $this->model->KillQuantityDetailFijo($request_params);
+            $res = $result;
+        }elseif ($request_params['type'] == 'K') {
+
+            $prodId =  $request_params['prodId'];
+            $pjetId =  $request_params['pjetId'];
+            $dtinic =  $request_params['dtinic'];
+            $dtfinl =  $request_params['dtfinl'];
+
+            $prdcts = $this->model->GetProducts($prodId);
+            while($prd = $prdcts->fetch_assoc()){
+            
+                $prdId =  $prd["prd_id"];
+                $prdqty =  $prd["pck_quantity"];
+
+                if($prdqty>0){
+                    for ($i=0; $i < $prdqty; $i++) { 
+                        $prodparams = array(
+                            'prodId' => $prdId, 
+                            'pjetId' => $pjetId,
+                            'dtinic' => $dtinic, 
+                            'dtfinl' => $dtfinl,
+                            'detlId' => 0,
+                        );
+                        $result = $this->model->KillQuantityDetailPackage($prodparams);
+                        $res = $result;
+                    }
+                } 
+            }
+            
+        }else{
+            $result = $this->model->KillQuantityDetail($request_params);
+            $res = $result;
+        }
+        
         return $res;
     }
 
