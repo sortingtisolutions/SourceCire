@@ -34,7 +34,7 @@ $qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-        WHERE pcn.pjt_id=$prdId AND substr(pdt.pjtdt_prod_sku,11,1)!='A' 
+        WHERE pcn.pjt_id=$prdId AND pdt.prd_type_asigned != 'AF' AND pdt.prd_type_asigned != 'AV'
         ORDER BY pdt.pjtdt_prod_sku;";
 } else{
 $qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity, 
@@ -55,7 +55,7 @@ $qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity,
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-        WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid AND substr(pdt.pjtdt_prod_sku,11,1)!='A'
+        WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid AND pdt.prd_type_asigned != 'AF' AND pdt.prd_type_asigned != 'AV'
         ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }
 

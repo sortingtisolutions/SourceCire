@@ -16,8 +16,24 @@
                 <div class="form-group">
                 <div class="form_primary">
                     <h4 class="mainTitle">RELACIÓN PRODUCTO-ACCESORIO</h4>
-
                         <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display: flex;gap: 1rem;font-size: 13px; background: #fff;margin-top: 20px; border-radius: 4px; ">
+                                
+                                <div class="" style="margin-left: 0px; margin-top: 5px;margin-bottom: 5px;">
+                                    <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos1" val="1" checked>
+                                    <label class="form-check-label" for="RadioConceptos1">
+                                    Accesorios Fijos
+                                    </label>
+                                </div>
+                                <div class="" style="margin-left: 18px;margin-top: 5px;">
+                                    <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos2" val="2" >
+                                    <label class="form-check-label" for="RadioConceptos2">
+                                    Accesorios Virtuales
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 5px;">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtCategoryProd" class="form-select form-select-sm required">
                                     <option value="0" data-content="||||" selected>Selecciona una categoría</option>
@@ -43,6 +59,8 @@
                                 <label for="txtProductSubCat" class="form-label">Productos</label>
                             </div>
                         </div>
+
+                        
 
 
                         <div id="selectAccesorios" style="visibility: hidden;">
@@ -109,8 +127,9 @@
                             <thead>
                                 <tr>
                                     <th style="width:  20px"></th>
-                                    <th style="width:  70px">Sku Accesorio</th>
+                                    <th style="width:  40px">Sku Accesorio</th>
                                     <th >Nombre Accesorio</th>
+                                    <th style="width:  20px">Cantidad</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
