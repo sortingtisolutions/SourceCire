@@ -535,6 +535,5 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
-
 ALTER TABLE `ctt_projects_detail`
 	ADD COLUMN `prd_type_asigned` VARCHAR(5) NULL DEFAULT NULL AFTER `pjtdt_prod_sku`;
