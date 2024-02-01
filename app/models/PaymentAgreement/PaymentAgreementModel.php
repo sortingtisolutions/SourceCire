@@ -21,9 +21,19 @@ class PaymentAgreementModel extends Model
     }
 
 // Listado de Almacecnes
-    public function listStores()
+    public function listProjects()
     {
         $qry = "SELECT * FROM ctt_projects WHERE pjt_status BETWEEN 4 AND 9";
+        return $this->db->query($qry);
+    }
+
+// monto del proyecto
+    public function getAmountProject($param)
+    {
+        $pjtId = $this->db->real_escape_string($param['pjtId']);
+
+        $qry = "SELECT tpa_amount FROM ctt_total_project_amount 
+                WHERE pjt_id=$pjtId LIMIT 1;";
         return $this->db->query($qry);
     }
 

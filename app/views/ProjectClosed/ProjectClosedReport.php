@@ -22,8 +22,8 @@ if ($type==1) {
     if ($desgloce==1) {
         $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku,sr.ser_situation,
         ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-        cn.pjtcn_quantity,1 as quantity, case when (pr.prd_level = 'P' 
-            AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then 
+        cn.pjtcn_quantity,1 as quantity, case when (pr.prd_type_asigned != 'KP' 
+            AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then 
         (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
         (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
         cn.pjtcn_days_cost + 
@@ -32,7 +32,7 @@ if ($type==1) {
         (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
         (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
         cn.ver_id as verId,
-        case when (pr.prd_level = 'P' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
+        case when (pr.prd_type_asigned != 'KP' AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
             ELSE 0 END AS seguro, dt.pjtdt_id, pj.pjt_name, pj.pjt_number, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
                 , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
                 , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
@@ -45,59 +45,52 @@ if ($type==1) {
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-        WHERE cn.pjt_id = $pjtId AND pr.prd_level != 'A'";
+        WHERE cn.pjt_id = $pjtId AND dt.prd_type_asigned != 'AV' AND dt.prd_type_asigned != 'AF'";
     }else{
-        $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, sr.ser_situation,
-                            ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-                            1 as quantity,
-                            (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
-                            (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
-                            cn.pjtcn_days_cost + 
-                            (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
-                            ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
-                            (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
-                            (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
-                            cn.ver_id as verId,
-                            ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
-                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
-                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
-                        FROM ctt_projects_detail AS dt
-                        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-                        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-                        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-                        WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level != 'K' AND pr.prd_level != 'A' UNION SELECT cn.pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,sr.ser_situation,
-                            ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-                            cn.pjtcn_quantity as quantity,
-                            ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
-                            (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
-                            cn.pjtcn_days_cost + 
-                            (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
-                            ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
-                            (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
-                            (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
-                            cn.ver_id as verId,
-                            (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
-                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
-                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
-                        FROM ctt_projects_detail AS dt
-                        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-                        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-                        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-                        LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-                        LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-                        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-                        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-                        WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level = 'K' GROUP BY cn.pjtcn_id";
+        $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' ELSE 'M' END ser_situation,
+        ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
+        1 as quantity,
+        (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
+        cn.pjtcn_days_cost + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
+        ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
+        cn.ver_id as verId,
+        ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name
+    FROM ctt_projects_detail AS dt
+    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+    INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+    WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level != 'K' AND dt.prd_type_asigned != 'AV' AND dt.prd_type_asigned != 'AF' 
+    UNION SELECT cn.pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,case when sr.ser_situation != 'M' then '' ELSE 'M' END ser_situation,
+        ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
+        cn.pjtcn_quantity as quantity,
+        ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
+        cn.pjtcn_days_cost + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
+        ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
+        cn.ver_id as verId,
+        (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name
+    FROM ctt_projects_detail AS dt
+    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+    INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+    WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level = 'K' GROUP BY cn.pjtcn_id";
     }
     
 }else{
     if ($desgloce == 1) {
         $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku,sr.ser_situation,
             ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-            cn.pjtcn_quantity,1 as quantity, case when (pr.prd_level = 'P' 
-                AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then 
+            cn.pjtcn_quantity,1 as quantity, case when (pr.prd_type_asigned != 'KP' 
+                AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then 
             (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
             (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
             cn.pjtcn_days_cost + 
@@ -106,7 +99,7 @@ if ($type==1) {
             (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
             (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
             cn.ver_id as verId,
-            case when (pr.prd_level = 'P' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
+            case when (pr.prd_type_asigned != 'KP' AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
                 ELSE 0 END AS seguro, dt.pjtdt_id, pjt.pjt_name, pjt.pjt_number, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
                 , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
                 , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
@@ -120,51 +113,44 @@ if ($type==1) {
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-        WHERE pj.pjt_parent = $pjtId AND pr.prd_level != 'A' and pj.pjt_status in(8,9)";
+        WHERE pj.pjt_parent = $pjtId AND dt.prd_type_asigned != 'AV' AND dt.prd_type_asigned != 'AF' and pj.pjt_status in(8,9)";
     }else{
-        $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, sr.ser_situation,
-                                ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-                                1 as quantity,
-                                (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
-                                (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
-                                cn.pjtcn_days_cost + 
-                                (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
-                                ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
-                                (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
-                                (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
-                                cn.ver_id as verId,
-                                ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
-                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
-                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
-                            FROM ctt_projects_detail AS dt
-                            INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-                            INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-                            LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                            INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-                            WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level != 'K' AND pr.prd_level != 'A' UNION SELECT cn.pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,sr.ser_situation,
-                                ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-                                cn.pjtcn_quantity as quantity,
-                                ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
-                                (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
-                                cn.pjtcn_days_cost + 
-                                (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
-                                ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
-                                (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
-                                (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
-                                cn.ver_id as verId,
-                                (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
-                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
-                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
-                            FROM ctt_projects_detail AS dt
-                            INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-                            INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-                            LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                            INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-                            LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-                            LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-                            INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-                            INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-                            WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level = 'K' and pj.pjt_status in(8,9) GROUP BY cn.pjtcn_id";
+        $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' ELSE 'M' END ser_situation,
+        ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
+        1 as quantity,
+        (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
+        cn.pjtcn_days_cost + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
+        ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
+        cn.ver_id as verId,
+        ( (cn.pjtcn_insured * cn.pjtcn_prod_price))*  cn.pjtcn_days_cost AS seguro,  dt.pjtdt_id, pj.pjt_name
+    FROM ctt_projects_detail AS dt
+    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+    INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+    WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level != 'K'  AND dt.prd_type_asigned != 'AV' AND dt.prd_type_asigned != 'AF' 
+    UNION SELECT cn.pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,case when sr.ser_situation != 'M' then '' ELSE 'M' END ser_situation,
+        ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
+        cn.pjtcn_quantity as quantity,
+        ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
+        cn.pjtcn_days_cost + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
+        ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
+        (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
+        (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test) * cn.pjtcn_quantity as costo,
+        cn.ver_id as verId,
+        (( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost)   AS seguro,  dt.pjtdt_id, pj.pjt_name
+    FROM ctt_projects_detail AS dt
+    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+    INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+    WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level = 'K' and pj.pjt_status in(8,9) GROUP BY cn.pjtcn_id";
     }
 }
 

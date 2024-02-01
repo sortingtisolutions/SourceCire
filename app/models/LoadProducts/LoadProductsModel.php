@@ -60,6 +60,7 @@ public function SaveDocumento($request_params)
 					$estatus = '';
 					$sbcId = 0;
 					if ($LoadProducts[6] != 'Nombre en Ingles') {
+						$typeacc = 0;
 						if (strlen($LoadProducts[0]) == 7) {
 							// REVISION DE SKU
 							$skuCsv = substr($LoadProducts[0], 5, 3);
@@ -151,15 +152,21 @@ public function SaveDocumento($request_params)
 							# Seguro
 							$estatus = $estatus.'7,';
 						}
-						if (strlen($LoadProducts[10]) == 1) {
+						/* if (strlen($LoadProducts[10]) == 1) {
 							$prd_level = 1;
 						}else{
 							$prd_level = 0;
 							$estatus = $estatus.'11';
+						} */
+						if ($LoadProducts[10] == 'PI' || $LoadProducts[10] == 'PF' || $LoadProducts[10] == 'PV') {
+							$typeacc = 1;
+							
+						}else{
+							$estatus = $estatus.'11';
 						}
-						if($acept > 0 && $coin>0 && $skuValido == 0){
+						if($acept > 0 && $coin>0 && $skuValido == 0 && $typeacc == 1){
 							try {
-								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model,prd_level, sbc_id, result)
+								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_type_asigned, sbc_id, result)
 										VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]',$sbcId, 'EXITOSO')";
 								$this->db->query($qry);
 								$cont++;
@@ -170,7 +177,7 @@ public function SaveDocumento($request_params)
 							
 						}else{
 							
-							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model,prd_level,sbc_id, result)
+							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_type_asigned,sbc_id, result)
 									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]', $sbcId, '$estatus')";
 							$this->db->query($qry);
 							
@@ -368,8 +375,8 @@ public function SaveDocumento($request_params)
 	public function loadProcess($params)
 	{
 		$qry = "INSERT INTO ctt_global_products(
-			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id)
-	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id
+			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id)
+	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id
 	FROM ctt_load_products a WHERE a.result = 'EXITOSO';";
 		$result = $this->db->query($qry);
 		$qry1 = "TRUNCATE TABLE ctt_load_products;";

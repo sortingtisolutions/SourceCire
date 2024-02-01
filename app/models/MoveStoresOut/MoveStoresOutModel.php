@@ -43,7 +43,7 @@ class MoveStoresOutModel extends Model
 		$word = $this->db->real_escape_string($param['word']);
 
 		$qry ="SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
-				sr.prd_id, pr.prd_name,pr.prd_coin_type
+				sr.prd_id, pr.prd_name,pr.prd_coin_type, pr.prd_type_asigned
 				FROM ctt_products AS pr
 				INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
 				INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
@@ -96,7 +96,7 @@ class MoveStoresOutModel extends Model
 
 		return $folio;
 	}
-
+	
 // Registra los movimientos entre almacenes origen
 	public function UpdateStoresSource($param)
 	{
@@ -163,7 +163,7 @@ class MoveStoresOutModel extends Model
 
 		$qry = "SELECT COUNT(*) as exist 
 				FROM ctt_stores_products 
-				WHERE ser_id = $idSer AND str_id = $storId;;";
+				WHERE ser_id = $idSer AND str_id = $storId;"; // ¿Una misma serie puede estar en varios almacenes?
 		return $this->db->query($qry);
 	}
 	
@@ -199,14 +199,51 @@ class MoveStoresOutModel extends Model
 
 	public function getAccesories($param){
 		$prd_sku		= $this->db->real_escape_string($param['sku']);
-		$qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sp.str_id, sp.stp_quantity
+		$ser_id			= $this->db->real_escape_string($param['serid']);
+		/* $qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sp.str_id, sp.stp_quantity
 			FROM ctt_products AS prd 
 			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
 			WHERE SUBSTR(prd.prd_sku,1,7)=SUBSTR('$prd_sku',1,7) AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
+			GROUP BY prd.prd_id , prd.prd_sku, prd_name;"; */
+		$qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sp.str_id, sp.stp_quantity
+			FROM ctt_products AS prd 
+			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
+			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
+			WHERE sr.prd_id_acc = $ser_id AND prd.prd_status = 1 AND prd.prd_stock > 0
 			GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 
 		return $this->db->query($qry);
+	}
+	public function GetProducts($params)
+    {
+        $prdid 		    = $this->db->real_escape_string($params);
+        $qry = "SELECT prd.*, pk.pck_quantity
+		FROM ctt_products_packages AS pk 
+		INNER JOIN ctt_products AS prd ON prd.prd_id = pk.prd_id
+		WHERE  pk.prd_parent = $prdid  GROUP BY prd.prd_id";
+        return $this->db->query($qry);
+
+    }
+	public function getSeriesProduct($prdId, $qty){
+
+		/* $qry ="SELECT * FROM ctt_series sr WHERE sr.prd_id = $prdId 
+		AND NOT EXISTS (SELECT * FROM ctt_stores_products sp WHERE sp.ser_id = sr.ser_id) LIMIT $qty;";
+		$res = $this->db->query($qry);
+
+		$result = $res->fetch_object();
+
+		if ($result == null) { */
+			$qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sr.str_id, 1 AS stp_quantity
+			FROM ctt_products AS prd 
+			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
+			WHERE sr.prd_id = $prdId AND prd.prd_status = 1 AND sr.ser_status = 1 AND prd.prd_stock > 0
+			GROUP BY sr.ser_id LIMIT $qty;";
+			$res = $this->db->query($qry);
+		//}
+        
+        return $res;
+
 	}
 	public function getNumAccesories($param){
 		$prd_sku		= $this->db->real_escape_string($param['sku']);

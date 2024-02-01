@@ -193,15 +193,15 @@ class MoveStoresOutController extends Controller
 				
 			}
 			
-			$response =  $this->setAccesories($request_params);
+			//$response =  $this->setProducts($request_params);
 			$var = 1;
 		}
 		echo $var;
 		
 	} 
-	public function setAccesories($param)
+	public function setProducts($param)
 	{
-		$resultado = $this->model->getAccesories($param);
+		//$resultado = $this->model->getAccesories($param);
 		/* $cantAccesories = $this->model->getNumAccesories($param);
 		$cant = $cantAccesories->fetch_object();  */
 		$typeExch = $param['typeExch'];
@@ -209,9 +209,14 @@ class MoveStoresOutController extends Controller
 		$mov = $param['mov'];
 		$qty = $param['qty'];
 		$prdsku = $param['sku'];
+		$prdid = $param['prdid'];
+		
+		$prdlvl = $param['lvl'];
+
+		if ($prdlvl == 'PF') {
+			$resultado = $this->model->getAccesories($param);
 
 			while($row = $resultado->fetch_assoc()){
-				
 				$prd_id = $row["prd_id"];
 				$ser_id = $row["ser_id"];
 				$strid2 = $row["str_id"];
@@ -221,52 +226,161 @@ class MoveStoresOutController extends Controller
 					'stridT' => $strid2,
 					'strid' => $strid1,
 					'qty' => $qty,
+					'typeExch' => $typeExch,
+					'mov' => $mov,
 				);
 	
-				if($typeExch == 2){
-					if ($mov == 'S' ){
-						$result = $this->model->UpdateStoresSourceT($paramsacc);
-						$res = $result;
-						
+				$response =  $this->setAccesories($paramsacc);
+			}
+		}elseif ($prdlvl == 'PV') {
+			$resultado = $this->model->getProducts($prdid);
+			while($pkt = $resultado->fetch_assoc()){
+                $pkqty =  $pkt["pck_quantity"];
+				$prd_id = $pkt["prd_id"];
+				$series = $this->model->getSeriesProduct($prd_id, $pkqty);
+				
+				while($serie = $series->fetch_assoc()){
+					$ser_id = $serie["ser_id"];
+					$strid2 = $serie["str_id"];
+
+					$paramsacc = array(
+						'prdid' => $prd_id,
+						'serid' => $ser_id,
+						'stridT' => $strid2,
+						'strid' => $strid1,
+						'qty' => $qty,
+						'typeExch' => $typeExch,
+						'mov' => $mov,
+					);
+					$response =  $this->setAccesories($paramsacc);
+				}
+				
+				
+			}
+
+		}/* elseif ($prdlvl == 'KP') {
+			$resultado = $this->model->getProducts($prdid);
+			while($pkt = $resultado->fetch_assoc()){
+                $kprodId = $pkt["prd_id"];
+                $kpjetId = $pjetId;
+                $type =  $pkt["prd_type_asigned"];
+                $pkqty =  $pkt["pck_quantity"];
+
+				if ($type == 'PF') {
+					$resultado = $this->model->getAccesories($param);
+
+					while($row = $resultado->fetch_assoc()){
+						$prd_id = $row["prd_id"];
+						$ser_id = $row["ser_id"];
+						$strid2 = $row["str_id"];
+						//$qty = $row[''];
+						$paramsacc = array(
+							'prdid' => $prd_id,
+							'serid' => $ser_id,
+							'stridT' => $strid2,
+							'strid' => $strid1,
+							'qty' => $qty,
+							'typeExch' => $typeExch,
+							'mov' => $mov,
+						);
+			
+						$response =  $this->setAccesories($paramsacc);
 					}
-			
-					if ($mov == 'T' ){
-						$params =  $this->session->get('user');
-						$item = $this->model->SechingProducts($paramsacc);
-			
-						$num_items = $item->fetch_object();
-			
-						if ($num_items->exist > 0){
-							// echo 'update';
-							// actualiza la cantidad en el almacen destino
-							$result = $this->model->UpdateProducts($paramsacc);
-							
-						} else {
-							// echo 'insert';
-							//agrega la relación almacen - producto
-							$result = $this->model->InsertProducts($paramsacc);
+				}elseif ($type =='PV') {
+					$prd_id = $pkt["prd_id"];
+					$products = $this->model->getProducts($prd_id);
+					while($acc = $products->fetch_assoc()){
+						$pkqty =  $acc["pck_quantity"];
+						$prd_id = $acc["prd_id"];
+						$series = $this->model->getSeriesProduct($prd_id, $pkqty);
+					
+						while($serie = $series->fetch_assoc()){
+							$ser_id = $serie["ser_id"];
+							$strid2 = $serie["str_id"];
+		
+							$paramsacc = array(
+								'prdid' => $prd_id,
+								'serid' => $ser_id,
+								'stridT' => $strid2,
+								'strid' => $strid1,
+								'qty' => $qty,
+								'typeExch' => $typeExch,
+								'mov' => $mov,
+							);
+							$response =  $this->setAccesories($paramsacc);
 						}
-						$res = $result;
-						
-						echo $num_items->exist; //$res;
 					}
 				}else{
-					if ($typeExch == 3 &&  $strid1 == 30){
+					$prd_id = $pkt["prd_id"];
+					$ser_id = $pkt["ser_id"];
+					$strid2 = $pkt["str_id"];
+					//$qty = $row[''];
+					$paramsacc = array(
+						'prdid' => $prd_id,
+						'serid' => $ser_id,
+						'stridT' => $strid2,
+						'strid' => $strid1,
+						'qty' => $qty,
+						'typeExch' => $typeExch,
+						'mov' => $mov,
+					);
+		
+					$response =  $this->setAccesories($paramsacc);
+				} 
+			}
+		}*/
+		return $ser_id;
+			
+	}
+	public function setAccesories($paramsacc){
+		$typeExch = $paramsacc['typeExch'];
+		$mov = $paramsacc['mov'];
+		$strid1 = $paramsacc['strid'];
+		
+		if($typeExch == 2){
+			if ($mov == 'S' ){
+				$result = $this->model->UpdateStoresSourceT($paramsacc);
+				$res = $result;
+				
+			}
+	
+			if ($mov == 'T' ){
+				$params =  $this->session->get('user');
+				$item = $this->model->SechingProducts($paramsacc);
+	
+				$num_items = $item->fetch_object();
+	
+				if ($num_items->exist > 0){
+					// echo 'update';
+					// actualiza la cantidad en el almacen destino
+					$result = $this->model->UpdateProducts($paramsacc);
 					
-						$params =  $this->session->get('user');
-						$result = $this->model->UpdateStoresSourceE($paramsacc);
-						$res = $result;
-						
-					}else{
-						if ($mov == 'S' ){
-					
-							$params =  $this->session->get('user');
-							$result = $this->model->UpdateStoresSource($paramsacc);
-							$res = $result;
-						}
-					}
-					
+				} else {
+					// echo 'insert';
+					//agrega la relación almacen - producto
+					$result = $this->model->InsertProducts($paramsacc);
+				}
+				$res = $result;
+				
+				echo $num_items->exist; //$res;
+			}
+		}else{
+			if ($typeExch == 3 &&  $strid1 == 30){
+			
+				$params =  $this->session->get('user');
+				$result = $this->model->UpdateStoresSourceE($paramsacc);
+				$res = $result;
+				
+			}else{
+				if ($mov == 'S' ){
+			
+					$params =  $this->session->get('user');
+					$result = $this->model->UpdateStoresSource($paramsacc);
+					$res = $result;
 				}
 			}
+			
+		}
 	}
+	
 }

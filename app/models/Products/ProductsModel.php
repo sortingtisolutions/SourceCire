@@ -127,10 +127,10 @@ public function listInvoice()
         $qry = "SELECT 
                     p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                     CASE 
-                        WHEN p.prd_level IN ('P','A') THEN  ifnull(sum(sp.stp_quantity),0)
+                        WHEN p.prd_type_asigned != 'KP' THEN  ifnull(sum(sp.stp_quantity),0)
                         ELSE 0 
                     END AS quantity, 
-                    p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, IFNULL(dt.doc_id, 0) AS doc_id, dt.doc_name, ct.cat_id,
+                    p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_type_asigned, IFNULL(dt.doc_id, 0) AS doc_id, dt.doc_name, ct.cat_id,
                     sv.srv_name, p.prd_comments, p.prd_name_provider
                 FROM  ctt_products AS p
                 INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id   AND sc.sbc_status = 1
@@ -141,7 +141,7 @@ public function listInvoice()
                 LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
                 LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id  AND dc.dcp_source = 'P'
                 LEFT JOIN ctt_documents 			AS dt ON dt.doc_id = dc.doc_id AND dt.dot_id = 2  
-                WHERE prd_status = 1 AND p.prd_level IN ('A', 'P') AND ct.cat_id = $catId AND p.prd_visibility=1
+                WHERE prd_status = 1 AND p.prd_level IN ('A', 'P') AND p.prd_type_asigned != 'KP' AND ct.cat_id = $catId AND p.prd_visibility=1
                 GROUP BY p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, p.prd_price, p.prd_coin_type, p.prd_english_name 
                 ORDER BY p.prd_sku;";
         return $this->db->query($qry);
@@ -149,7 +149,7 @@ public function listInvoice()
     public function listProducts2()
     {
         $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
-                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';";
+                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P' AND p.prd_type_asigned != 'KP';";
         return $this->db->query($qry);
     }
     

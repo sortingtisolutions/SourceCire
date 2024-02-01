@@ -193,13 +193,13 @@ public function listDiscounts($params)
     {
         $word = $this->db->real_escape_string($params['word']);
         
-        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
+        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_type_asigned,
                         pd.prd_insured, sb.sbc_name,cat_name,
                 CASE 
-                    WHEN prd_level ='K' THEN 
+                    WHEN pd.prd_type_asigned ='KP' THEN 
                         (SELECT prd_stock
                                 FROM ctt_products WHERE prd_id = pd.prd_id)
-                    WHEN prd_level ='P' THEN 
+                    WHEN pd.prd_type_asigned !='KP' THEN 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
                                 FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
@@ -277,12 +277,12 @@ public function listProductsSub($params)
     $dstr = $this->db->real_escape_string($params['dstr']);
     $dend = $this->db->real_escape_string($params['dend']);
 
-    $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
+    $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, pd.prd_type_asigned,
                     sb.sbc_name,
             CASE 
-                WHEN prd_level ='K' THEN 
+                WHEN prd_type_asigned ='KP' THEN 
                     (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
-                WHEN prd_level ='P' THEN 
+                WHEN prd_type_asigned !='KP' THEN 
                     (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                 ELSE 
                     (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
@@ -726,6 +726,12 @@ public function saveBudgetList($params)
                     WHERE ser_id = $serie;"; 
             $this->db->query($qry1);
 
+            /* $qry2 = "UPDATE ctt_products 
+            SET 
+                prd_reserved = prd_reserved + 1
+            WHERE prd_id = $prodId;";
+            $this->db->query($qry2); */
+
         } else {
             
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
@@ -778,6 +784,12 @@ public function saveBudgetList($params)
                                 pjtdt_id = $pjtdtId
                             WHERE ser_id = '$serie'";
                         $this->db->query($qry4);
+
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
                     }else{
                         $qry2 = "INSERT INTO ctt_projects_detail (
                             pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
@@ -850,6 +862,12 @@ public function saveBudgetList($params)
                     WHERE ser_id = $serId;"; 
             $this->db->query($qry1);
 
+            /* $qry2 = "UPDATE ctt_products 
+            SET 
+                prd_reserved = prd_reserved + 1
+            WHERE prd_id = $prodId;";
+            $this->db->query($qry2); */
+
         }else{
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
                     FROM ctt_series AS ser
@@ -899,6 +917,12 @@ public function saveBudgetList($params)
                                 pjtdt_id = $pjtdtId
                             WHERE ser_id = '$serId'";
                         $this->db->query($qry4);
+
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
                     }else{
                         $qry2 = "INSERT INTO ctt_projects_detail (
                             pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
@@ -983,7 +1007,7 @@ public function UpdatePeriodProject($params)
             $catsub = $this->db->real_escape_string($params['catsub']);
 
             $qry = "SELECT prd_id, prd_sku, prd_name FROM ctt_products 
-                    WHERE substr(prd_sku,1,4)='$catsub' AND prd_level='P'
+                    WHERE substr(prd_sku,1,4)='$catsub' AND prd_type_asigned !='KP'
                     ORDER BY prd_id;";
 
             return $this->db->query($qry);
@@ -1084,6 +1108,12 @@ public function UpdatePeriodProject($params)
                          ser_reserve_count = ser_reserve_count + 1
                      WHERE prd_id_acc = $serId;";
              $this->db->query($qry1);
+
+             /* $qry2 = "UPDATE ctt_products 
+                SET 
+                    prd_reserved = prd_reserved + 1
+                WHERE prd_id = $prodId;";
+            $this->db->query($qry2); */
  
              $qry4 = "INSERT INTO ctt_projects_periods 
                          (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
