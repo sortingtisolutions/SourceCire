@@ -1,5 +1,5 @@
 var seccion = '';
-let folio, mthseries;
+let folio, mthseries,gblidfrec, glbpjtid,gblcloid;
 let = pr = [];
 let = link = '';
 
@@ -13,114 +13,89 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     getExchange();
-    getStores();
-    getCoins();
-    getCategories();
+    getProjects();
+    // getCoins();
+    // getCategories();
     setting_table();
 
-    $('#btn_exchange').on('click', function () {
-        exchange_apply(0);
+    $('#btn_regist').on('click', function () {
+        console.log('valor Frec', gblidfrec);
+        if (gblidfrec <= 3){
+            putSegments();
+        }
+        else{
+            putIndividual();
+        }
     });
 
-    $('#txtCost').on('blur', function () {
-        let costo_import =parseFloat($('#txtCostImp').val());
-        let cant = parseInt($('#txtQuantity').val());
-        let costo_uni = parseFloat($('#txtCost').val());
-        
-        validator();
-        
-        if (costo_import) {
-            //$('#txtCostTot').val((costo_import+costo_uni)*cant);
-            if (costo_uni && costo_import) {
-                $('#txtCostTot').val((costo_import+costo_uni)*cant);
-            }else{
-                if(!costo_uni){
-                    $('#txtCostTot').val((costo_import)*cant);
-                }
-                if (!costo_import) {
-                    $('#txtCostTot').val((costo_uni)*cant);
-                }
-                
-            }
-        } else {
-            if (costo_uni) {
-                $('#txtCostTot').val(costo_uni*cant);
-            }else{
-                $('#txtCostTot').val(0);
-            }
-            
-        }
-        // console.log($('#txtCostImp').val(), costo_uni);
-    });
-    $('#txtCostImp').on('blur', function () {
-        let costo_import = parseInt($('#txtCostImp').val());
-        let cant = parseInt($('#txtQuantity').val());
-        let costo_uni = parseInt($('#txtCost').val());
-        let costoTotal = costo_import + cant + costo_uni;
-        
-        if (costo_import) {
-            
-            if (costo_uni && costo_import) {
-                console.log(cant);
-                $('#txtCostTot').val((costo_import+costo_uni)*cant);
-            }else{
-                if(!costo_uni){
-                    $('#txtCostTot').val((costo_import)*cant);
-                }
-                if (!costo_import) {
-                    $('#txtCostTot').val((costo_uni)*cant);
-                } 
-            }
-        } else {
-            if (costo_uni) {
-                $('#txtCostTot').val(costo_uni*cant);
-            }else{
-                $('#txtCostTot').val(0);
-            }
-            
-        }
-        
-    });
-    $('#txtSerie').on('blur', function () {
+    $('#txtPeriodPayed').on('blur', function () {
         validator();
     });
 
-    $('#txtQuantity').on('blur', function () {
-        let costo_import =parseFloat($('#txtCostImp').val());
-        let cant = parseInt($('#txtQuantity').val());
-        let costo_uni = parseFloat($('#txtCost').val());
-        let costoTotal = costo_import + costo_uni;
-        validator();
-       // $('#txtCostTot').val(costo_uni*cant);
-       if (costo_import) {
-            //$('#txtCostTot').val((costo_import+costo_uni)*cant);
-            if (costo_uni && costo_import) {
-                $('#txtCostTot').val((costo_import+costo_uni)*cant);
-            }else{
-                if(!costo_uni){
-                    $('#txtCostTot').val((costo_import)*cant);
-                }
-                if (!costo_import) {
-                    $('#txtCostTot').val((costo_uni)*cant);
-                }
-                
-            }
-        } else {
-            if (costo_uni) {
-                $('#txtCostTot').val(costo_uni*cant);
-            }else{
-                $('#txtCostTot').val(0);
-            }
-            
-        }
+    $('#btn-apply').on('click', function () {
+        applyTable();
+        // exchange_apply(0);
     });
+    
+
+    // $('#txtCostImp').on('blur', function () {
+    //     let costo_import = parseInt($('#txtCostImp').val());
+    //     let cant = parseInt($('#txtQuantity').val());
+    //     let costo_uni = parseInt($('#txtCost').val());
+    //     let costoTotal = costo_import + cant + costo_uni;
+        
+    //     if (costo_import) {
+            
+    //         if (costo_uni && costo_import) {
+    //             console.log(cant);
+    //             $('#txtCostTot').val((costo_import+costo_uni)*cant);
+    //         }else{
+    //             if(!costo_uni){
+    //                 $('#txtCostTot').val((costo_import)*cant);
+    //             }
+    //             if (!costo_import) {
+    //                 $('#txtCostTot').val((costo_uni)*cant);
+    //             } 
+    //         }
+    //     } else {
+    //         if (costo_uni) {
+    //             $('#txtCostTot').val(costo_uni*cant);
+    //         }else{
+    //             $('#txtCostTot').val(0);
+    //         }    
+    //     }
+        
 }
+
+function getExchange() {
+    var pagina = 'PaymentAgreement/listExchange';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putFrecuency;
+    fillField(pagina, par, tipo, selector);
+}
+// Solicita el listado de almacenes
+function getProjects() {
+    var pagina = 'PaymentAgreement/listProjects';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putProyects;
+    fillField(pagina, par, tipo, selector);
+}
+function getAmountProjet(pjtId) {
+    var pagina = 'PaymentAgreement/getAmountProject';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putAmountProjet;
+    fillField(pagina, par, tipo, selector);
+}
+
 // Setea de la tabla
 function setting_table() {
     let title = 'Entradas de Almacen';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
-    $('#tblExchanges').DataTable({
+    $('#tblPayAgree').DataTable({
         order: [[0, 'desc']],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -175,106 +150,25 @@ function setting_table() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable', class: 'edit'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodname', class: 'product-name'},
-            {data: 'prodcant', class: 'quantity'},
-            {data: 'prodcost', class: 'price left'},
-            {data: 'comments', class: 'comments'},
+            { data: 'editable',  class: 'edit' },
+            { data: 'numpay',    class: 'sku' },
+            { data: 'frepay',    class: 'sku' },
+            { data: 'cantpay',   class: 'sku' },
+            { data: 'datepay',   class: 'date' },
+            { data: 'notes',   class: 'sku' },
         ],
     });
-    $('#addButtonSegm')
-    .unbind('click')
-    .on('click', function () {
-        // console.log('Agregar a TBL');
-        putSegments();
-    });
 
-    // $('#btn_saveSegment')
+    // $('#addButtonSegm')
     // .unbind('click')
-    // .on('click', function (){
-    //     let user = Cookies.get('user').split('|');
-    //     let em = user[3];
-    //     $('#listTable tbody tr').each(function (v, u) {
-    //         let lnumpay=$($(u).find('td')[1]).text();
-    //         let lfrecpay=$($(u).find('td')[2]).text();
-    //         let lcantpay=$($(u).find('td')[3]).text();
-    //         let ldatepay=$($(u).find('td')[4]).text();
-
-    //         let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
-    //         console.log('TRUK ',truk);
-    //         build_data_structure(truk);
-    //     });
-    // });
-
-    // $('#addSegmentModal .btn_close')
-    //     .unbind('click')
-    //     .on('click', function () {
-    //         $('#addSegmentModal').addClass('overlay_hide');
-
+    // .on('click', function () {
+    //     // console.log('Agregar a TBL');
+    //     putSegments();
     // });
 }
 
 // Solicita los tipos de movimiento
-function getExchange() {
-    var pagina = 'PaymentAgreement/listExchange';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putFrecuency;
-    fillField(pagina, par, tipo, selector);
-}
-// Solicita el listado de almacenes
-function getStores() {
-    var pagina = 'PaymentAgreement/listStores';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putProyects;
-    fillField(pagina, par, tipo, selector);
-}
-// // Solicita los provedores
-// function getSuppliers() {
-//     var pagina = 'PaymentAgreement/listSuppliers';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     //var selector = putSuppliers;
-//     var selector = putSupplierList;
-//     fillField(pagina, par, tipo, selector);
-// }
-// // Solicita los documentos factura
-// function getInvoice(id) {
-//     console.log(id);
-//     var pagina = 'PaymentAgreement/listInvoice';
-//     var par = `[{"extId":"${id}"}]`;
-//     var tipo = 'json';
-//     var selector = putInvoiceList;
-//     fillField(pagina, par, tipo, selector);
-// }
-// // Solicita los documentos factura
-// function getCoins() {
-//     var pagina = 'PaymentAgreement/listCoins';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     var selector = putCoins;
-//     fillField(pagina, par, tipo, selector);
-// }
-// // Solicita las categorias
-// function getCategories() {
-//     console.log('categos');
-//     var pagina = 'PaymentAgreement/listCategories';
-//     var par = `[{"store":""}]`;
-//     var tipo = 'json';
-//     var selector = putCategories;
-//     fillField(pagina, par, tipo, selector);
-// }
-// // Solicita los productos de un almacen seleccionado
-// function getProducts(catId) {
-//     var pagina = 'PaymentAgreement/listProducts';
-//     var par = `[{"catId":"${catId}"}]`;
-//     var tipo = 'json';
-//     var selector = putProducts;
-//     fillField(pagina, par, tipo, selector);
-// }
-// Solicita los movimientos acurridos
+
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
@@ -292,23 +186,13 @@ function putFrecuency(dt) {
     $('#txtFrecuency').on('change', function () {
         let id = $(this).val();
         id == 4 ? code='1011' : code='1101';
-        
+        gblidfrec=id;
+        // console.log('CODE', code);
         setting_interface(code,id);
-        // relocation_products();
-        // validator();
 
-        $('#txtCostImp').val(0);
-        $('#txtCostProy').val(0);
-        $('#txtCostTot').val(0);
+        $('#txtCostInd').val(0);
+
     });
-}
-/**  ++++++  configura la interfasede inputs requeridos */
-function setting_interface(code,id) {
-    // console.log('CODE ', code,'-', id);
-    code.substring(1, 2) == '0' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
-    code.substring(2, 3) == '0' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
-    code.substring(3, 4) == '0' ? $('.pos3').addClass('hide-items') : $('.pos3').removeClass('hide-items');
-    code.substring(4, 5) == '0' ? $('.pos4').addClass('hide-items') : $('.pos4').removeClass('hide-items');
 }
 
 // Dibuja los almacenes
@@ -321,51 +205,100 @@ function putProyects(dt) {
     }
 
     $('#txtProyects').on('change', function () {
-        validator();
+        // validator();
+        let pjtId = $(this).val();
+        // console.log('PJTID-',pjtId);
+        $('.pos0').removeClass('hide-items');
+        getAmountProjet(pjtId);
+        // putSegments();
+        fillContent();
     });
 }
 
-function putCoins(dt) {
-    if (dt[0].cin_id != 0) {
+function putAmountProjet(dt) {
+    if (dt[0].pjt_id != 0) {
         $.each(dt, function (v, u) {
-            let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
-            $('#txtCoin').append(H);
+            $('#txtCostProy').val(mkn(u.tpa_amount,'n'));
         });
     }
 
-    $('#txtCoin').on('change', function () {
-        validator();
-    });
 }
 
-function putCategories(dt) {
-    if (dt[0].cat_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
-            $('#txtCategory').append(H);
-        });
+/**  ++++++  configura la interfasede inputs requeridos */
+function setting_interface(code,id) {
+    // console.log('CODE-VAL ', code,'-', id);
+    code.substring(1, 2) == '0' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
+    code.substring(2, 3) == '0' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
+    code.substring(3, 4) == '0' ? $('.pos3').addClass('hide-items') : $('.pos3').removeClass('hide-items');
+    code.substring(4, 5) == '0' ? $('.pos4').addClass('hide-items') : $('.pos4').removeClass('hide-items');
+}
 
-        $('#txtCategory').on('change', function () {
-            let catId = $(this).val();
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            $('#txtProducts').val('   Cargando Informacion . . . .');
-            getProducts(catId);
-        });
+function mkn(cf, tp) {
+    let nm = cf;
+    switch (tp) {
+        case 'n':
+            nm = formato_numero(cf, '2', '.', ',');
+            break;
+        case 'p':
+            nm = formato_numero(cf, '1', '.', ',');
+            break;
+        default:
     }
+    return nm;
 }
 
 
+function fillContent() {
+    let restdate='';
+    restdate= moment(Date()).subtract(3, 'months');
+    let fecha = moment(restdate).format('DD/MM/YYYY');
+    let hoy=moment(Date()).format('DD/MM/YYYY');
 
+    $('#calendar').daterangepicker(
+        {
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+                ],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: true,
+            startDate: hoy,
+            endDate: fecha,
+            minDate: hoy,
+            // maxDate:fecha,
+        },
+        function (start, end, label) {
+            $('#txtPeriodPayed').val(
+                // start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
+                start.format('DD/MM/YYYY') 
+            );
+            looseAlert($('#txtPeriodPayed').parent());
+        }
+    );
 
-
+}
 
 function putSegments(){ 
-    let MontoTot=parseFloat($('#txtMontoTotSeg').val().replace(/,/g, ''));
+    console.log('putSegments');
+    let MontoTot=parseFloat($('#txtCostProy').val().replace(/,/g, ''));
     let cantFrec =$('#txtFrecuency').val();
-    let cantSegm =$('#txtSegment').val();
+    let cantSegm =$('#txtSegments').val();
     let frecDesc =$(`#txtFrecuency option[value="${cantFrec}"]`).text();
-    let cantDesc =$(`#txtSegment option[value="${cantSegm}"]`).text();
-    let numpedido;
+    // let cantDesc =$(`#txtSegments option[value="${cantSegm}"]`).text();
+    let comments =$('#txtComments').val();
+    let numorder;
     let montoInd= parseFloat(MontoTot) / parseFloat(cantSegm);
     montoInd =montoInd.toFixed(2);
 
@@ -378,7 +311,7 @@ function putSegments(){
             unittime='M';
             break;
         case '3':
-            unittime='Q';
+            unittime='M';
             break;
         case '4':
             unittime='y';
@@ -390,24 +323,55 @@ function putSegments(){
     let DateStart = moment(Period,'DD/MM/YYYY').format('YYYY-MM-DD');
 
     for (var i = 0; i < cantSegm; i++){
-        numpedido=parseFloat(i) + 1;
-        fechapago=moment([DateStart],'YYYY-MM-DD').add(numpedido, unittime).format('YYYY-MM-DD');
+        numorder=parseFloat(i) + 1;
+        fechapago=moment([DateStart],'YYYY-MM-DD').add(numorder, unittime).format('YYYY-MM-DD');
         par = ` [{
                     "montind"   : "${montoInd}",
-                    "numpay"    : "${numpedido}",
+                    "numpay"    : "${numorder}",
                     "valfrec"   : "${frecDesc}",
-                    "datepay"   : "${fechapago}"
+                    "datepay"   : "${fechapago}",
+                    "notes"     : "${comments}"
                 }]`;
 
         // console.log(par);
-        fill_table(par);
+        fill_tablesegm(par);
     }
 }
+//******************************************************************* */
+function putIndividual(){ 
+    console.log('putIndividual');
+    let MontoTot=parseFloat($('#txtCostProy').val().replace(/,/g, ''));
+    let cantFrec =$('#txtFrecuency').val();
+    let frecDesc =$(`#txtFrecuency option[value="${cantFrec}"]`).text();
+    let numorder;
+    let montocobrar=$('#txtCostInd').val();
+    let montoInd= parseFloat(montocobrar);
+    montoInd =montoInd.toFixed(2);
+    // let cantDesc =$(`#txtSegments option[value="${cantSegm}"]`).text();
+    let comments =$('#txtComments').val();
+    
+    let Period = $('#txtPeriodPayed').val();
+    let DateStart = moment(Period,'DD/MM/YYYY').format('YYYY-MM-DD');
 
-function fill_table(par) { //** AGREGO ED */
+    numorder=parseFloat(1);
+    fechapago=moment([DateStart],'YYYY-MM-DD').format('YYYY-MM-DD');
+    par = ` [{
+                "montind"   : "${montoInd}",
+                "numpay"    : "${numorder}",
+                "valfrec"   : "${frecDesc}",
+                "datepay"   : "${fechapago}",
+                "notes"     : "${comments}"
+            }]`;
 
+    console.log('par-ind',par);
+    fill_tablesegm(par);
+    
+}
+//******************************************************************* */
+function fill_tablesegm(par) { //** AGREGO ED */
+    console.log('fill_tablesegm');
     par = JSON.parse(par);
-    let tabla = $('#listTable').DataTable();
+    let tabla = $('#tblPayAgree').DataTable();
     tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill" id ="md${par[0].numpay}"></i>`,
@@ -415,10 +379,18 @@ function fill_table(par) { //** AGREGO ED */
             frepay:     par[0].valfrec,
             cantpay:    par[0].montind,
             datepay:    par[0].datepay,
+            notes:      par[0].notes,
         })
         .draw();
 
     $('#md' + par[0].numpay).parents('tr').attr('id', par[0].numpay).attr('data-content', 1);
+
+    let rengs = tabla.rows().count();
+    if (rengs > 0) {
+        $('.btn-apply').removeClass('hidden-field');
+    } else {
+        $('.btn-apply').addClass('hidden-field');
+    }
 
     $('.kill')
         .unbind('click')
@@ -427,164 +399,87 @@ function fill_table(par) { //** AGREGO ED */
     });
 }
 
+function applyTable(){
 
+    let user = Cookies.get('user').split('|');
+    let em = user[3];
+    $('#tblPayAgree tbody tr').each(function (v, u) {
+        let lnumpay=$($(u).find('td')[1]).text();
+        let lfrecpay=$($(u).find('td')[2]).text();
+        let lcantpay=$($(u).find('td')[3]).text();
+        let ldatepay=$($(u).find('td')[4]).text();
 
-
-
-
-
-
-
-
-// Almacena los registros de productos en un arreglo
-function putProducts(dt) {
-    var ps = $('#txtProducts').offset();
-    $('#listProducts .list-items').html('');
-    //console.log(dt);
-    $('#listProducts').css({top: ps.top + 30 + 'px'});
-    $('#listProducts').slideUp('100', function () {
-        $('#listProducts .list-items').html('');
+        let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
+        console.log('TRUK ',truk);
+        build_data_structure(truk);
     });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id}">${u.prd_sku}-${u.prd_name}</div>`;
-        $('#listProducts .list-items').append(H);
-    });
-
-    /* QUITA NOTA EN EL CAMPO DE PRODUCTOS */
-    $('#txtProducts').val('');
     
-    $('#txtProducts').on('focus', function () {
-        $('#listProducts').slideDown('slow');
-    });
-
-    $('#listProducts').on('mouseleave', function () {
-        $('#listProducts').slideUp('slow');
-    });
-
-    $('#txtProducts').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
-            $('#listProducts').slideUp(100);
-        } else {
-            $('#listProducts').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_products(res);
-    });
-
-    $('#listProducts .list-item').on('click', function () {
-        console.log('SELECC-',$(this).text().split('-')[0].slice(10,11), $(this).text().split('-')[0].slice(7,10));
-        console.log('data_complement-',$(this).attr('data_complement'))
-        let prdNm = $(this).html();
-        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
-        let serie = $(this).attr('data_serie');
-        let accesorio = $(this).text().split('-')[0].slice(7,10);
-        console.log('prdId-',prdId)
-        
-        $('#txtProducts').val(prdNm);
-        $('#txtIdProducts').val(prdId);
-        $('#txtNextSerie').val(serie);
-        $('#txtPrice').val($(this).attr('data_complement').split('|')[3]);
-        $('#txtCoinType').val($(this).attr('data_complement').split('|')[4]);
-        $('#listProducts').slideUp(100);
-        validator();
-        
-    });
-}
-// AGREGA LAS FACTURAS CON TEXTO SELECTIVO
-function putInvoiceList(dt) {
-    //console.log(dt);
-    var fc = $('#txtInvoice').offset();
-    $('#listInvoice .list-items').html('');
-
-    //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
-    $('#listInvoice').css({top: fc.top + 30 + 'px'});
-    $('#listInvoice').slideUp('100', function () {
-        //$('.list-group #listInvoice').slideUp('100', function () {
-        $('#listInvoice .list-items').html('');
-    });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
-        $('#listInvoice .list-items').append(H);
-    });
-
-    $('#txtInvoice').on('focus', function () {
-        //$('.list-group #listInvoice').slideDown('slow');
-        $('#listInvoice').slideDown('slow');
-    });
-
-    $('#listInvoice').on('mouseleave', function () {
-        $('#listInvoice').slideUp('slow');
-    });
-
-    $('#txtInvoice').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
-            $('#listInvoice').slideUp(100);
-        } else {
-            $('#listInvoice').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_invoice(res);
-    });
-
-    $('#listInvoice .list-item').on('click', function () {
-        let prdNm = $(this).html();
-        let prdId = $(this).attr('id');
-        //console.log(prdId);
-        $('#txtInvoice').val(prdNm);
-        $('#txtIdInvoice').val(prdId);
-        $('#listInvoice').slideUp(100);
-        validator();
-    });
 }
 
-// CARGA LA INFORMACION DE LOS PROVEEDORES DE PRODUCTOS
-function putSupplierList(dt) {
-    var sl = $('#txtSuppliers').offset();
-    $('#listSupplier .list-items').html('');
-    //console.log(sl);
-    $('#listSupplier').css({top: sl.top + 30 + 'px'});
-    $('#listSupplier').slideUp('100', function () {
-        $('#listSupplier .list-items').html('');
-    });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
-        $('#listSupplier .list-items').append(H);
-    });
-
-    $('#txtSuppliers').on('focus', function () {
-        $('#listSupplier').slideDown('fast');
-    });
-
-    $('#listSupplier').on('mouseleave', function () {
-        $('#listSupplier').slideUp('fast');
-    });
-
-    $('#txtSuppliers').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
-            $('#listSupplier').slideUp(100);
-        } else {
-            $('#listSupplier').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_suppliers(res);
-    });
-
-    $('#listSupplier .list-item').on('click', function () {
-        let prdNm = $(this).html();
-        let prdId = $(this).attr('id');
-        //console.log('selecciona elemento', prdId,'---', prdNm);
-        $('#txtSuppliers').val(prdNm);
-        $('#txtIdSuppliers').val(prdId);
-        $('#listSupplier').slideUp(100);
-        validator();
-    });
+/** Guarda los datos de la tabla ***** */
+function build_data_structure(pr) {
+    // console.log(pr);
+    let el = pr.split('|');
+    let folid =  el[0];
+    let deadpay =  el[1];
+    let amoupay= el[2];
+    let pjtId =  el[3];
+    let cloid =  el[4];
+    let empid =  el[5];
+    let cusid =  '';
+    
+    par = `
+        [{  "folid" :  "${folid}",
+            "cusid" :  "${cusid}",
+            "amoupay" :  "${amoupay}",
+            "pjtId" : "${pjtId}",
+            "cloid" :  "${cloid}",
+            "empid" : "${empid}",
+            "deadpay" : "${deadpay}"
+        }]`;
+    // console.log(' Antes de Insertar', par);
+    save_exchange(par);
 }
+
+function save_exchange(pr) {
+    // console.log(pr);
+    var pagina = 'ClosedProyectChange/insertCollectPays';
+    var par = pr;
+    var tipo = 'html';
+    var selector = exchange_result;
+    fillField(pagina, par, tipo, selector);
+}
+
+function exchange_result(dt) {
+    // console.log('exchange_result',dt);
+    $('#listTable').DataTable().destroy; 
+    $('#addSegmentModal').addClass('overlay_hide');
+    
+}
+
+/* let el = $(`#tblCustomers tr[id="${cusId}"]`);
+                $(el.find('td')[1]).text(cusName);
+                $(el.find('td')[2]).text(cusEmail);
+                $(el.find('td')[3]).text(cusPhone);
+                $(el.find('td')[4]).text(cusAdrr);
+                $(el.find('td')[5]).text(cusRFC);  //5
+                $(el.find('td')[6]).text(cusQualy);
+                $(el.find('td')[7]).text(TypeProdT);
+                $(el.find('td')[8]).text(cusICod);
+                $(el.find('td')[9]).text(cusSatC);
+                $(el.find('td')[10]).text(cusStat);  //10
+                $(el.find('td')[11]).text(cusDirector);
+                $(el.find('td')[12]).text(cusLegRepre);
+                $(el.find('td')[13]).text(cusLegEmail);
+                $(el.find('td')[14]).text(cusLegPhone); 
+                $(el.find('td')[15]).text(cusCont);  //15
+                $(el.find('td')[16]).text(cusContPhone);
+                $(el.find('td')[17]).text(cusContEmail);
+                $(el.find('td')[18]).text(cusWorkC);
+                $(el.find('td')[19]).text(cusInvoi);
+
+
+ */
 
 // reubica el input de los productos
 function relocation_products() {
@@ -659,13 +554,15 @@ function validator() {
     } */
 
     if (ky == 0) {
-        $('#btn_exchange').removeClass('disabled');
+        $('#btn_regist').removeClass('disabled');
     } else {
-        $('#btn_exchange').addClass('disabled');
+        $('#btn_regist').addClass('disabled');
         //console.clear();
         //console.log(msg);
     }
 }
+
+
 
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply() {
@@ -772,11 +669,11 @@ function exchange_apply() {
 // Llena la tabla de los datos de movimientos
 function fill_table(par) {
     // console.log('Paso 3 ', par);
-    let largo = $('#tblExchanges tbody tr td').html();
-    largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
+    let largo = $('#tblPayAgree tbody tr td').html();
+    largo == 'Ningún dato disponible en esta tabla' ? $('#tblPayAgree tbody tr').remove() : '';
     par = JSON.parse(par);
 
-    let tabla = $('#tblExchanges').DataTable();
+    let tabla = $('#tblPayAgree').DataTable();
     if(mthseries==1){
         tabla.row
         .add({
@@ -838,7 +735,7 @@ function fill_table(par) {
 
 function btn_apply_appears() {
     // console.log('Paso 4 ');
-    let tabla = $('#tblExchanges').DataTable();
+    let tabla = $('#tblPayAgree').DataTable();
     let rengs = tabla.rows().count();
     if (rengs > 0) {
         $('.btn-apply').removeClass('hidden-field');
@@ -884,7 +781,7 @@ function read_exchange_table() {
         var selector = putNextExchangeNumber;
         fillField(pagina, par, tipo, selector);
     } else {
-        $('#tblExchanges tbody tr').each(function (v, u) {
+        $('#tblPayAgree tbody tr').each(function (v, u) {
             let seriesku = $(this).attr('data-content').split('|')[3];
             let prodname = $($(u).find('td')[2]).text();
             let quantity = $($(u).find('td')[3]).text();
@@ -1089,3 +986,170 @@ function printInfoGetOut(verId) {
         '_blank'
     );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Almacena los registros de productos en un arreglo
+// function putProducts(dt) {
+//     var ps = $('#txtProducts').offset();
+//     $('#listProducts .list-items').html('');
+//     //console.log(dt);
+//     $('#listProducts').css({top: ps.top + 30 + 'px'});
+//     $('#listProducts').slideUp('100', function () {
+//         $('#listProducts .list-items').html('');
+//     });
+
+//     $.each(dt, function (v, u) {
+//         let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id}">${u.prd_sku}-${u.prd_name}</div>`;
+//         $('#listProducts .list-items').append(H);
+//     });
+
+//     /* QUITA NOTA EN EL CAMPO DE PRODUCTOS */
+//     $('#txtProducts').val('');
+    
+//     $('#txtProducts').on('focus', function () {
+//         $('#listProducts').slideDown('slow');
+//     });
+
+//     $('#listProducts').on('mouseleave', function () {
+//         $('#listProducts').slideUp('slow');
+//     });
+
+//     $('#txtProducts').keyup(function (e) {
+//         var res = $(this).val().toUpperCase();
+//         if (res == '') {
+//             $('#listProducts').slideUp(100);
+//         } else {
+//             $('#listProducts').slideDown(400);
+//         }
+//         res = omitirAcentos(res);
+//         sel_products(res);
+//     });
+
+//     $('#listProducts .list-item').on('click', function () {
+//         console.log('SELECC-',$(this).text().split('-')[0].slice(10,11), $(this).text().split('-')[0].slice(7,10));
+//         console.log('data_complement-',$(this).attr('data_complement'))
+//         let prdNm = $(this).html();
+//         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
+//         let serie = $(this).attr('data_serie');
+//         let accesorio = $(this).text().split('-')[0].slice(7,10);
+//         console.log('prdId-',prdId)
+        
+//         $('#txtProducts').val(prdNm);
+//         $('#txtIdProducts').val(prdId);
+//         $('#txtNextSerie').val(serie);
+//         $('#txtPrice').val($(this).attr('data_complement').split('|')[3]);
+//         $('#txtCoinType').val($(this).attr('data_complement').split('|')[4]);
+//         $('#listProducts').slideUp(100);
+//         validator();
+        
+//     });
+// }
+// AGREGA LAS FACTURAS CON TEXTO SELECTIVO
+// function putInvoiceList(dt) {
+//     //console.log(dt);
+//     var fc = $('#txtInvoice').offset();
+//     $('#listInvoice .list-items').html('');
+
+//     //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
+//     $('#listInvoice').css({top: fc.top + 30 + 'px'});
+//     $('#listInvoice').slideUp('100', function () {
+//         //$('.list-group #listInvoice').slideUp('100', function () {
+//         $('#listInvoice .list-items').html('');
+//     });
+
+//     $.each(dt, function (v, u) {
+//         let H = `<div class="list-item" id="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
+//         $('#listInvoice .list-items').append(H);
+//     });
+
+//     $('#txtInvoice').on('focus', function () {
+//         //$('.list-group #listInvoice').slideDown('slow');
+//         $('#listInvoice').slideDown('slow');
+//     });
+
+//     $('#listInvoice').on('mouseleave', function () {
+//         $('#listInvoice').slideUp('slow');
+//     });
+
+//     $('#txtInvoice').keyup(function (e) {
+//         var res = $(this).val().toUpperCase();
+//         if (res == '') {
+//             $('#listInvoice').slideUp(100);
+//         } else {
+//             $('#listInvoice').slideDown(400);
+//         }
+//         res = omitirAcentos(res);
+//         sel_invoice(res);
+//     });
+
+//     $('#listInvoice .list-item').on('click', function () {
+//         let prdNm = $(this).html();
+//         let prdId = $(this).attr('id');
+//         //console.log(prdId);
+//         $('#txtInvoice').val(prdNm);
+//         $('#txtIdInvoice').val(prdId);
+//         $('#listInvoice').slideUp(100);
+//         validator();
+//     });
+// }
+
+// // CARGA LA INFORMACION DE LOS PROVEEDORES DE PRODUCTOS
+// function putSupplierList(dt) {
+//     var sl = $('#txtSuppliers').offset();
+//     $('#listSupplier .list-items').html('');
+//     //console.log(sl);
+//     $('#listSupplier').css({top: sl.top + 30 + 'px'});
+//     $('#listSupplier').slideUp('100', function () {
+//         $('#listSupplier .list-items').html('');
+//     });
+
+//     $.each(dt, function (v, u) {
+//         let H = `<div class="list-item" id="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
+//         $('#listSupplier .list-items').append(H);
+//     });
+
+//     $('#txtSuppliers').on('focus', function () {
+//         $('#listSupplier').slideDown('fast');
+//     });
+
+//     $('#listSupplier').on('mouseleave', function () {
+//         $('#listSupplier').slideUp('fast');
+//     });
+
+//     $('#txtSuppliers').keyup(function (e) {
+//         var res = $(this).val().toUpperCase();
+//         if (res == '') {
+//             $('#listSupplier').slideUp(100);
+//         } else {
+//             $('#listSupplier').slideDown(400);
+//         }
+//         res = omitirAcentos(res);
+//         sel_suppliers(res);
+//     });
+
+//     $('#listSupplier .list-item').on('click', function () {
+//         let prdNm = $(this).html();
+//         let prdId = $(this).attr('id');
+//         //console.log('selecciona elemento', prdId,'---', prdNm);
+//         $('#txtSuppliers').val(prdNm);
+//         $('#txtIdSuppliers').val(prdId);
+//         $('#listSupplier').slideUp(100);
+//         validator();
+//     });
+// }
+
