@@ -47,7 +47,7 @@ public function listProyects($store)
                 Left JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
                 Left JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
                 Left  JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id 
-                WHERE pd.prd_id = $pjtId group by ser.ser_id ORDER BY ser.ser_serial_number;";
+                WHERE pd.prd_id = $pjtId AND prd_id_acc = 0 group by ser.ser_id ORDER BY ser.ser_serial_number;";
                 
         return $this->db->query($qry);
     }    
@@ -61,7 +61,7 @@ public function listProducts2($param)
             ORDER BY prd_name;"; */
     $qry = "SELECT * FROM ctt_products A 
     WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
-        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' )
+        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_type_asigned != 'KP'
     ORDER BY prd_name;";
     return $this->db->query($qry);
 }
@@ -88,7 +88,7 @@ public function listProducts2($param)
 		INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
 		INNER JOIN ctt_products AS prd ON prd.prd_id = sr.prd_id
 		INNER JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id
-		WHERE prd.prd_id = $prd_id";
+		WHERE prd.prd_id = $prd_id AND pj.pjt_status <= 8";
 		return $this->db->query($qry);
 	}
 

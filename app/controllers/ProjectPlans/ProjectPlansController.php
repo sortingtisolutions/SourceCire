@@ -725,7 +725,7 @@ public function getNewProdChg($request_params)
             $ttlqty = $prdexp == '2'? $quanty: 1;
             $quanty = $prdexp == '2'? 1: $quanty;
 
-            if ($lvlas == 'F'){
+            if ($lvlas == 'PF'){
                 for ($i = 1; $i<=$quanty; $i++){
 
                     $params = array(
@@ -758,7 +758,7 @@ public function getNewProdChg($request_params)
                     }
 
                 }
-            }else if ($lvlas == 'V'){
+            }else if ($lvlas == 'PV'){
                 for ($i = 1; $i<=$quanty; $i++){
                     
                     $params = array(
@@ -809,7 +809,7 @@ public function getNewProdChg($request_params)
                         
                     }
                 }
-            }else if ($lvlas == 'K'){
+            }else if ($lvlas == 'KP'){
                 for ($i = 1; $i<=$quanty; $i++){
                     $products = $this->model->GetProducts($prodId);
                     while($prd = $products->fetch_assoc()){
@@ -822,7 +822,7 @@ public function getNewProdChg($request_params)
 
                         for ($k=1; $k<=$pkqty; $k++){
                             // Los productos pueden ser Virtuales o Fijos. 
-                            if ($type == 'V') {
+                            if ($type == 'PV') {
                                 $prdctsAcc = $this->model->GetProducts($pkpdId);
 
                                 $params = array(
@@ -856,7 +856,7 @@ public function getNewProdChg($request_params)
                                         }
                                     } 
                                 }
-                            }elseif ($type == 'F') {
+                            }elseif ($type == 'PF') {
                                 
                                 //for ($i=0; $i < $pkqty; $i++) { 
                                     $params = array(
@@ -1195,7 +1195,7 @@ public function getNewProdChg($request_params)
         $lvlas  =  $params['type'];
 
         if ($servId == '1'){
-            if ($lvlas == 'F'){
+            if ($lvlas == 'PF'){
                 
                 $prdparam = array(
                     'prodId' => $prodId, 
@@ -1212,7 +1212,7 @@ public function getNewProdChg($request_params)
                     $seriesAcc = $this->ProcessSeriesAccesories($prdparam, $detlId);
                 }
                 
-            }else if ($lvlas == 'V'){
+            }else if ($lvlas == 'PV'){
                 
                 $prdparam = array(
                     'prodId' => $prodId, 
@@ -1246,7 +1246,7 @@ public function getNewProdChg($request_params)
                     }
                     
                 }
-            }else if ($lvlas == 'K'){
+            }else if ($lvlas == 'KP'){
                 /* $products = $this->model->GetProducts($prodId);
                 while($pkt = $products->fetch_assoc()){
                     $kprodId = $pkt["prd_id"];
@@ -1327,7 +1327,7 @@ public function getNewProdChg($request_params)
                     
                     for ($k=1; $k<=$pkqty; $k++){
                         // Los productos pueden ser Virtuales o Fijos. 
-                        if ($type == 'V') {
+                        if ($type == 'PV') {
                             $prdctsAcc = $this->model->GetProducts($pkpdId);
 
                             $params = array(
@@ -1361,7 +1361,7 @@ public function getNewProdChg($request_params)
                                     }
                                 } 
                             }
-                        }elseif ($type == 'F') {
+                        }elseif ($type == 'PF') {
                             
                             //for ($i=0; $i < $pkqty; $i++) { 
                                 $params = array(
@@ -1468,14 +1468,14 @@ public function getNewProdChg($request_params)
         $params =  $this->session->get('user');
         /* $result = $this->model->KillQuantityDetail($request_params);
         $res = $result; */
-        if ($request_params['type'] == 'V') {
+        if ($request_params['type'] == 'PV') {
             $result = $this->model->KillQuantityDetailVirtual($request_params);
            
             $res = $result;
-        }elseif ($request_params['type'] == 'F') {
+        }elseif ($request_params['type'] == 'PF') {
             $result = $this->model->KillQuantityDetailFijo($request_params);
             $res = $result;
-        }elseif ($request_params['type'] == 'K') {
+        }elseif ($request_params['type'] == 'KP') {
 
             $prodId =  $request_params['prodId'];
             $pjetId =  $request_params['pjetId'];

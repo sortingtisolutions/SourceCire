@@ -394,7 +394,7 @@ function putProducts(dt) {
                     <td class="sku">${u.prd_sku}</td>
                     <td class="supply">${u.prd_name}</td>
                     <td class="supply">${u.prd_price}</td>
-                    <td class="date">${u.prd_level}</td>
+                    <td class="date">${u.prd_type_asigned}</td>
                     <td class="date">${u.srv_name}</td>
                     <td class="date">${u.prd_insured}</td>
                     <td class="date">${u.cin_code}</td>

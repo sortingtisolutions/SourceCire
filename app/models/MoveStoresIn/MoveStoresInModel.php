@@ -77,7 +77,7 @@ class MoveStoresInModel extends Model
                 FROM ctt_products AS pd
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id =  $catId;";
+                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND pd.prd_type_asigned != 'KP' AND ct.cat_id =  $catId;";
         return $this->db->query($qry);
     }	
 
@@ -113,8 +113,8 @@ public function NextExchange()
         $cpe_id             = $this->db->real_escape_string($param['cpe']);
         $bra_id             = $this->db->real_escape_string($param['bra']);
         $ctotal            = $this->db->real_escape_string($param['cto']);
-        $necono             = $this->db->real_escape_string($param['nec']);
-        $prdidacc           = $this->db->real_escape_string($param['acc']);
+        $necono             = $this->db->real_escape_string($param['nec']);/* 
+        $prdidacc           = $this->db->real_escape_string($param['acc']); */
 
         $exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
         $ser_status         = '1';
@@ -125,10 +125,10 @@ public function NextExchange()
 
 		$qry1 = "INSERT INTO ctt_series (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
                     ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
-                    ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments,prd_id_acc) 
+                    ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments) 
                 VALUES ('$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', 
                 '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id',  UPPER('$bra_id'), '$cpe_id', '$pet_id',
-                '$ctotal', '$necono','$str_id','$exc_comments','$prdidacc');";
+                '$ctotal', '$necono','$str_id','$exc_comments');";
 
         $this->db->query($qry1);
         $serId = $this->db->insert_id;

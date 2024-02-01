@@ -178,12 +178,12 @@ class ProjectDetailsModel extends Model
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
 
-        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
+        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, pd.prd_type_asigned,
                         sb.sbc_name,
                 CASE 
-                    WHEN prd_level ='K' THEN 
+                    WHEN prd_type_asigned ='KP' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
-                    WHEN prd_level ='P' THEN 
+                    WHEN prd_type_asigned !='KP' THEN 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
@@ -203,12 +203,12 @@ public function listProductsSub($params)
     $dstr = $this->db->real_escape_string($params['dstr']);
     $dend = $this->db->real_escape_string($params['dend']);
 
-    $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
+    $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, pd.prd_type_asigned,
                     sb.sbc_name,
             CASE 
-                WHEN prd_level ='K' THEN 
+                WHEN prd_type_asigned ='KP' THEN 
                     (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
-                WHEN prd_level ='P' THEN 
+                WHEN prd_type_asigned !='KP' THEN 
                     (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                 ELSE 
                     (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
@@ -262,7 +262,7 @@ public function promoteToProject($params)
         $section = $this->db->real_escape_string($params['section']);// ***Modificado por Ed
 
         $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
-                pr.prd_level, ct.cat_name, ifnull(sr.ser_comments,'') as ser_comments,
+                pr.prd_level, ct.cat_name, ifnull(sr.ser_comments,'') as ser_comments, pr.prd_type_asigned,
                 ROW_NUMBER() OVER (ORDER BY sr.ser_sku DESC) AS reng
                 FROM ctt_projects_detail AS pj
                 INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
@@ -271,7 +271,7 @@ public function promoteToProject($params)
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
                 WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
-                ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";// ***Modificado por Ed
+                ORDER BY reng, pr.prd_sku, pr.prd_type_asigned DESC;";// ***Modificado por Ed
         return $this->db->query($qry);
 
     }
@@ -955,6 +955,12 @@ public function promoteToProject($params)
                                         pjtdt_id = $pjtdt_ft_id
                                 WHERE ser_id = $ser_id;";
                         $this->db->query($qry2);
+
+                       /*  $qry2 = "UPDATE ctt_products 
+                            SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
             
                         $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
                         $this->db->query($updtQry);
@@ -966,6 +972,12 @@ public function promoteToProject($params)
                                 pjtdt_id = 0 
                         WHERE pjtdt_id = $pjtdtId;";
                     $this->db->query($qry2);
+
+                    /* $qry2 = "UPDATE ctt_products 
+                    SET 
+                        prd_reserved = prd_reserved - 1
+                    WHERE prd_id = $prodId;";
+                    $this->db->query($qry2); */
                 }
                 
             }else{
@@ -975,6 +987,12 @@ public function promoteToProject($params)
                             pjtdt_id = 0 
                     WHERE pjtdt_id = $pjtdtId;";
                 $this->db->query($qry2);
+
+                /* $qry2 = "UPDATE ctt_products 
+                SET 
+                    prd_reserved = prd_reserved - 1
+                WHERE prd_id = $prodId;";
+                $this->db->query($qry2); */
             }
             $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry3);
@@ -1031,6 +1049,12 @@ public function promoteToProject($params)
                                         pjtdt_id = $pjtdt_ft_id
                                 WHERE ser_id = $ser_id;";
                         $this->db->query($qry2);
+
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
             
                         $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
                         $this->db->query($updtQry);
@@ -1048,6 +1072,11 @@ public function promoteToProject($params)
                             pjtdt_id = 0 
                     WHERE pjtdt_id = $pjtdtId;";
                 $this->db->query($qry2);
+                /* $qry2 = "UPDATE ctt_products 
+                SET 
+                    prd_reserved = prd_reserved - 1
+                WHERE prd_id = $prodId;";
+                $this->db->query($qry2); */
             }
             $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry3);
@@ -1089,6 +1118,12 @@ public function promoteToProject($params)
                                                 pjtdt_id = $pjtdtftid
                                         WHERE ser_id = $serId;";
                                 $this->db->query($qry2);
+
+                                /* $qry2 = "UPDATE ctt_products 
+                                SET 
+                                    prd_reserved = prd_reserved + 1
+                                WHERE prd_id = $prodId;";
+                                $this->db->query($qry2); */
                     
                                 $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdtftid";
                                 $this->db->query($updtQry);
@@ -1101,6 +1136,12 @@ public function promoteToProject($params)
                                     pjtdt_id = 0 
                             WHERE pjtdt_id = $ptdtId;";
                         $this->db->query($qry2);
+
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved - 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
                     }
                     $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $ptdtId;";
                     $this->db->query($qry3);
@@ -1124,7 +1165,7 @@ public function promoteToProject($params)
                 FROM ctt_projects_detail AS dt
               LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
                 LEFT JOIN ctt_products AS pd ON pd.prd_id = dt.prd_id
-                WHERE pjtvr_id = $pjtvrId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) AND prd_type_asigned = 'V' ORDER BY dt.pjtdt_prod_sku)
+                WHERE pjtvr_id = $pjtvrId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) AND pd.prd_type_asigned = 'PV' ORDER BY dt.pjtdt_prod_sku)
       SELECT pjtdt_id,  ser_id, reng, pjtdt_prod_sku, prd_id FROM elements WHERE reng = 1;";
         $result =  $this->db->query($qry1);
  
@@ -1165,7 +1206,13 @@ public function promoteToProject($params)
                                         pjtdt_id = $pjtdt_ft_id
                                 WHERE ser_id = $ser_id;";
                         $this->db->query($qry2);
-            
+                        
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
+
                         $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
                         $this->db->query($updtQry);
 
@@ -1182,6 +1229,12 @@ public function promoteToProject($params)
                             pjtdt_id = 0 
                     WHERE pjtdt_id = $pjtdtId;";
                 $this->db->query($qry2);
+
+                /* $qry2 = "UPDATE ctt_products 
+                SET 
+                    prd_reserved = prd_reserved - 1
+                WHERE prd_id = $prodId;";
+                $this->db->query($qry2); */
             }
             $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry3);
@@ -1231,6 +1284,12 @@ public function promoteToProject($params)
                                                     pjtdt_id = $pjtdt_ft_id
                                             WHERE ser_id = $ser_id;";
                                     $this->db->query($qry2);
+
+                                    /* $qry2 = "UPDATE ctt_products 
+                                    SET 
+                                        prd_reserved = prd_reserved + 1
+                                    WHERE prd_id = $prodId;";
+                                    $this->db->query($qry2); */
                         
                                     $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
                                     $this->db->query($updtQry);
@@ -1253,6 +1312,12 @@ public function promoteToProject($params)
                                     pjtdt_id = 0 
                             WHERE pjtdt_id = $pjtdtId;";
                         $this->db->query($qry2);
+
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved - 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
                     }
                 }
 
@@ -1268,12 +1333,12 @@ public function promoteToProject($params)
         $prodId = $this->db->real_escape_string($params['prodId']);
 
         $qry1 = "WITH elements AS (
-            SELECT dt.*,pd.prd_type_asigned,
+            SELECT dt.pjtdt_id, dt.ser_id, dt.pjtdt_prod_sku, dt.prd_id, dt.pjtvr_id, dt.sttd_id,pd.prd_type_asigned,
                 ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng
                 FROM ctt_projects_detail AS dt
               LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
                 LEFT JOIN ctt_products AS pd ON pd.prd_id = dt.prd_id
-                WHERE pjtvr_id = $pjtvrId AND dt.prd_id =  $prodId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) AND (prd_type_asigned = 'V' OR prd_type_asigned = 'F' OR prd_type_asigned = 'I') ORDER BY dt.pjtdt_prod_sku)
+                WHERE pjtvr_id = $pjtvrId AND dt.prd_id =  $prodId AND (sr.prd_id_acc = 0 OR ISNULL(sr.prd_id_acc)) AND (pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' OR pd.prd_type_asigned = 'PI') ORDER BY dt.pjtdt_prod_sku)
       SELECT pjtdt_id,  ser_id, reng, pjtdt_prod_sku, prd_id,prd_type_asigned FROM elements WHERE reng = 1;";
         $result =  $this->db->query($qry1);
  
@@ -1289,8 +1354,7 @@ public function promoteToProject($params)
             WHERE pjd.sttd_id = 3 AND pjd.ser_id = (SELECT pdt.ser_id FROM ctt_projects_detail AS pdt
             INNER JOIN ctt_series AS sr ON sr.ser_id = pdt.ser_id
             INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
-            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 AND (prd_type_asigned = 'V' OR prd_type_asigned = 'F') LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
-        
+            WHERE pdt.pjtdt_id = $pjtdtId AND prd_id_acc = 0 AND (pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF') LIMIT 1) ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
             $result =  $this->db->query($qry);
             $pjtdt = $result->fetch_object();
 
@@ -1314,6 +1378,11 @@ public function promoteToProject($params)
                                         pjtdt_id = $pjtdt_ft_id
                                 WHERE ser_id = $ser_id;";
                         $this->db->query($qry2);
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
             
                         $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
                         $this->db->query($updtQry);
@@ -1330,6 +1399,12 @@ public function promoteToProject($params)
                             pjtdt_id = 0 
                     WHERE pjtdt_id = $pjtdtId;";
                 $this->db->query($qry2);
+
+                /* $qry2 = "UPDATE ctt_products 
+                SET 
+                    prd_reserved = prd_reserved - 1
+                WHERE prd_id = $prodId;";
+                $this->db->query($qry2); */
             }
             $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry3);
@@ -1340,7 +1415,7 @@ public function promoteToProject($params)
 
             // VERIFICAMOS DE QUE TIPO ES EL PRODUCTO, PARA VER QUE TIPO DE ACCESORIOS VA A BUSCAR
 
-            if ($typeAsigned == 'F') {
+            if ($typeAsigned == 'PF') {
                 if ($serId != 0) {
                     $qry = "SELECT pd.* FROM ctt_projects_detail AS pd
                     INNER JOIN ctt_series AS sr ON sr.ser_id = pd.ser_id
@@ -1375,6 +1450,12 @@ public function promoteToProject($params)
                                                     pjtdt_id = $pjtdtftid
                                             WHERE ser_id = $serId;";
                                     $this->db->query($qry2);
+
+                                    /* $qry2 = "UPDATE ctt_products 
+                                    SET 
+                                        prd_reserved = prd_reserved + 1
+                                    WHERE prd_id = $prodId;";
+                                    $this->db->query($qry2); */
                         
                                     $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdtftid";
                                     $this->db->query($updtQry);
@@ -1387,6 +1468,11 @@ public function promoteToProject($params)
                                         pjtdt_id = 0 
                                 WHERE pjtdt_id = $ptdtId;";
                             $this->db->query($qry2);
+                            /* $qry2 = "UPDATE ctt_products 
+                            SET 
+                                prd_reserved = prd_reserved - 1
+                            WHERE prd_id = $prodId;";
+                            $this->db->query($qry2); */
                         }
                         $qry3 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $ptdtId;";
                         $this->db->query($qry3);
@@ -1395,7 +1481,7 @@ public function promoteToProject($params)
                         $this->db->query($qry4);
                     } 
                 }
-            }elseif ($typeAsigned == 'V') {
+            }elseif ($typeAsigned == 'PV') {
                 $qryProds = "SELECT * FROM ctt_products_packages WHERE prd_parent = $prdId";
                 $prods = $this->db->query($qryProds);
 
@@ -1441,6 +1527,12 @@ public function promoteToProject($params)
                                                         pjtdt_id = $pjtdt_ft_id
                                                 WHERE ser_id = $ser_id;";
                                         $this->db->query($qry2);
+
+                                        /* $qry2 = "UPDATE ctt_products 
+                                        SET 
+                                            prd_reserved = prd_reserved + 1
+                                        WHERE prd_id = $prodId;";
+                                        $this->db->query($qry2); */
                             
                                         $updtQry = "UPDATE ctt_projects_detail SET sttd_id = 1 where pjtdt_id=$pjtdt_ft_id";
                                         $this->db->query($updtQry);
@@ -1463,6 +1555,12 @@ public function promoteToProject($params)
                                         pjtdt_id = 0 
                                 WHERE pjtdt_id = $pjtdtId;";
                             $this->db->query($qry2);
+
+                            /* $qry2 = "UPDATE ctt_products 
+                            SET 
+                                prd_reserved = prd_reserved - 1
+                            WHERE prd_id = $prodId;";
+                            $this->db->query($qry2); */
                         }
                     }
                 }
@@ -1510,6 +1608,13 @@ public function promoteToProject($params)
                             pjtdt_id = '$pjtdtId'
                         WHERE ser_id = $serie;";
             $this->db->query($qry2);
+
+            // 
+            /* $qry2 = "UPDATE ctt_products 
+            SET 
+                prd_reserved = prd_reserved + 1
+            WHERE prd_id = $prodId;";
+            $this->db->query($qry2); */
 
         } else {
           
@@ -1565,6 +1670,13 @@ public function promoteToProject($params)
                             pjtdt_id = $pjtdtId
                         WHERE ser_id = '$serie'";
                     $this->db->query($qry4);
+
+                    /* $qry2 = "UPDATE ctt_products 
+                    SET 
+                        prd_reserved = prd_reserved + 1
+                    WHERE prd_id = $prodId;";
+                    $this->db->query($qry2); */
+
                 }else{
                     $qry2 = "INSERT INTO ctt_projects_detail (
                         pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
@@ -1635,6 +1747,12 @@ public function promoteToProject($params)
                     WHERE ser_id = $serId;"; 
             $this->db->query($qry1);
 
+            /* $qry2 = "UPDATE ctt_products 
+            SET 
+                prd_reserved = prd_reserved + 1
+            WHERE prd_id = $prodId;";
+            $this->db->query($qry2); */
+
         }else{
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
                     FROM ctt_series AS ser
@@ -1683,6 +1801,12 @@ public function promoteToProject($params)
                                 pjtdt_id = $pjtdtId
                             WHERE ser_id = '$serId'";
                         $this->db->query($qry4);
+
+                        /* $qry2 = "UPDATE ctt_products 
+                        SET 
+                            prd_reserved = prd_reserved + 1
+                        WHERE prd_id = $prodId;";
+                        $this->db->query($qry2); */
                     }else{
                         $qry2 = "INSERT INTO ctt_projects_detail (
                             pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id, sttd_id, prd_type_asigned) 
@@ -1843,7 +1967,7 @@ public function promoteToProject($params)
 
         $qry = "SELECT prd_id, prd_sku, prd_name, prd_stock-fun_buscarentas(prd_sku) AS stock
                 FROM ctt_products 
-                WHERE substr(prd_sku,1,4)='$catsub' AND prd_level='P'
+                WHERE substr(prd_sku,1,4)='$catsub' AND prd_type_asigned !='KP'
                 ORDER BY prd_id;"; // ***Ed
 
         return $this->db->query($qry);

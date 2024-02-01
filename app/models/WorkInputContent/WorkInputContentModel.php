@@ -187,35 +187,42 @@ class WorkInputContentModel extends Model
         $prjid = $this->db->real_escape_string($params['prjid']);
         $prdid = $this->db->real_escape_string($params['prdid']);
 
-        $qry = "SELECT COUNT(pjd.pjtdt_id) cant FROM ctt_projects_detail AS pjd
+       /*  $qry = "SELECT COUNT(pjd.pjtdt_id) cant FROM ctt_projects_detail AS pjd
         WHERE pjd.prd_id = '$prdid' AND pjd.sttd_id = 3";
         $result =  $this->db->query($qry);
         $cant = $result->fetch_object();
 
-        $cnt = $cant->cant; 
-        if ($cnt > 0) {
+        $cnt = $cant->cant;  */
+        $qry = "SELECT sr.ser_situation FROM ctt_series AS sr WHERE sr.ser_id =$serId";
+        $result =  $this->db->query($qry);
+        $situation = $result->fetch_object();
+
+        $cnt = $situation->ser_situation;
+        if ($cnt != 'M') {
             $qry = "SELECT pjd.pjtdt_id FROM ctt_projects_detail AS pjd
             WHERE pjd.prd_id = '$prdid' AND pjd.sttd_id = 3 LIMIT 1";
-    
+        
             $result =  $this->db->query($qry);
             $pjtdt = $result->fetch_object();
-    
-            $pjtdtId = $pjtdt->pjtdt_id; 
+            if ($pjtdt != null) {
+                $pjtdtId = $pjtdt->pjtdt_id; 
 
-            $updt = "UPDATE ctt_series 
-            SET ser_situation='EA', ser_stage = 'R', pjtdt_id='$pjtdtId', ser_reserve_count = (ser_reserve_count + 1)
-            WHERE ser_id = $serId;";
-            
-            $updtQry = "UPDATE ctt_projects_detail SET pjtdt_prod_sku = '$serSku', ser_id =$serId, sttd_id = 1 where pjtdt_id='$pjtdtId'";
-        }else{
-            $updt = "UPDATE ctt_series 
-            SET ser_situation='D', ser_stage = 'D', pjtdt_id=0
-            WHERE ser_id = $serId;";
+                $updt = "UPDATE ctt_series 
+                SET ser_situation='EA', ser_stage = 'R', pjtdt_id='$pjtdtId', ser_reserve_count = (ser_reserve_count + 1)
+                WHERE ser_id = $serId;";
+                
+                $updtQry = "UPDATE ctt_projects_detail SET ser_id =$serId, sttd_id = 1 where pjtdt_id='$pjtdtId'";
+                $this->db->query($updtQry);
+            }else{
+                $updt = "UPDATE ctt_series 
+                    SET ser_situation='D', ser_stage = 'D', pjtdt_id=0
+                    WHERE ser_id = $serId;";
+            }
+            $this->db->query($updt);
         }
-        $this->db->query($updt);
         
 
-         return $cnt;
+         return $serId;
     }
     // listar los datos de las series que coinciden
     public function getSeries($params){

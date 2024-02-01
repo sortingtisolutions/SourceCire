@@ -1,16 +1,17 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
-    require_once ROOT . FOLDER_PATH . '/app/models/PaymentAgreement/PaymentAgreementModel.php';
+    require_once ROOT . FOLDER_PATH . '/app/models/NewSublet/NewSubletModel.php';
     require_once LIBS_ROUTE .'Session.php';
 
-class PaymentAgreementController extends Controller
+class NewSubletController extends Controller
 {
     private $session;
     public $model;
 
+
     public function __construct()
     {
-        $this->model = new PaymentAgreementModel();
+        $this->model = new NewSubletModel();
         $this->session = new Session();
         $this->session->init();
         if($this->session->getStatus() === 1 || empty($this->session->get('user')))
@@ -23,7 +24,8 @@ class PaymentAgreementController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-    // LISTA LOS TIPOS DE MOVIMIENTOS
+
+// LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()
     {
         $params =  $this->session->get('user');
@@ -42,10 +44,10 @@ class PaymentAgreementController extends Controller
     }
 
 // Lista los almacenes 
-    public function listProjects($request_params)
+    public function listStores($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProjects();
+        $result = $this->model->listStores();
             $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -55,24 +57,6 @@ class PaymentAgreementController extends Controller
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
                 $res =  '[{"str_id":"0"}]';	
-            }
-            echo $res;
-    }    
-
-    // Lista los almacenes 
-    public function getAmountProject($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->getAmountProject($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"pjt_id":"0"}]';	
             }
             echo $res;
     }    
@@ -95,6 +79,24 @@ class PaymentAgreementController extends Controller
             echo $res;
     }    
 
+// Lista los Categorias 
+public function listSubCategories($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listSubCategories($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"cat_id":"0"}]';	
+        }
+        echo $res;
+}    
+
 // Lista los productos
     public function listProducts($request_params)
     {
@@ -112,6 +114,23 @@ class PaymentAgreementController extends Controller
         }
         echo $res;
     } 
+    
+    public function listProducts2($request_params)
+	{
+		$params =  $this->session->get('user');
+        $result = $this->model->listProducts2();
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pro_id":"0"}]';	
+        }
+        echo $res;
+    }
 
 // Lista los proveedores
     public function listSuppliers($request_params)
@@ -174,14 +193,39 @@ class PaymentAgreementController extends Controller
 		$res = $result;
         echo $res;
 	} 
+    // Obtiene el folio del movimiento 
+	public function NextSkuProduct($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->NextSkuProduct($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"cin_id":"0"}]';	
+        }
+        echo $res;
+	} 
 
 // Registra los movimientos entre almacenes
-    public function SaveExchange($request_params)
+    public function SaveSubletting($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->SaveExchange($request_params, $params);
+        $result = $this->model->SaveSubletting($request_params, $params);
         $res = $result;
         echo $res;
     } 
-
+    // GUARDAR EL PRODUCTO ***ED
+    public function SaveProduct($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->SaveProduct($request_params, $params);
+        $res = $result;
+        echo $res;
+    } 
+    
 }
