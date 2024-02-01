@@ -32,7 +32,7 @@ public function listPackages($params)
     $condition = $catId == 0 ? '' : ' AND cat_id = ' . $catId;
     $qry = "SELECT pd.* FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-            WHERE prd_level ='K' AND prd_status = 1 " . $condition . ";";
+            WHERE prd_type_asigned = 'KP' AND prd_status = 1 " . $condition . ";";
 
     return $this->db->query($qry);
 }
@@ -102,7 +102,7 @@ public function listProductsPack($params)
         //$prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
 
         $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id, prd_type_asigned) 
-                VALUES ('$prd_parent', '$prd_id', 'K');";
+                VALUES ('$prd_parent', '$prd_id', 'KP');";
 
         $this->db->query($qry);
         $pckId = $this->db->insert_id;

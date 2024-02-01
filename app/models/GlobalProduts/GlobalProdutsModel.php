@@ -24,7 +24,7 @@ class GlobalProdutsModel extends Model
 
         $qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, ldp.prd_name_provider,
 		ldp.prd_model, ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, case when ldp.prd_insured = 1 then 'Sí' ELSE 'NO' END prd_insured,
-		ldp.srv_id, srv.srv_name, cn.cin_code, prd_level, ct.cat_name, sb.sbc_name FROM ctt_global_products AS ldp
+		ldp.srv_id, srv.srv_name, cn.cin_code, prd_type_asigned, ct.cat_name, sb.sbc_name FROM ctt_global_products AS ldp
 		LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
 		LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id
 		LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = ldp.sbc_id
@@ -150,8 +150,8 @@ class GlobalProdutsModel extends Model
 	{
         $idSelected = $this->db->real_escape_string($param['idSelected']);
 		$qry = "INSERT INTO ctt_products(
-			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id)
-	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id
+			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id)
+	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id
 	FROM ctt_global_products a WHERE a.prd_sku != '' AND prd_status = 1 AND sbc_id > 0 AND prd_id IN ($idSelected);";
 		$result = $this->db->query($qry);
 
@@ -164,8 +164,8 @@ class GlobalProdutsModel extends Model
     public function loadProcessAll($param)
 	{
 		$qry = "INSERT INTO ctt_products(
-			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id)
-	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id
+			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id)
+	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id
 	FROM ctt_global_products a WHERE a.prd_sku != '' AND prd_status = 1 AND sbc_id > 0;";
 		$result = $this->db->query($qry);
 

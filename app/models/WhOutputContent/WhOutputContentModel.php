@@ -274,9 +274,29 @@ public function InsertComment($params, $userParam)
         $this->db->query($updt3);
         $joinval=1;
 
-        $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
+        //Antes hay que considerar si ya existen series a futuro.
+        $qry = "SELECT * FROM ctt_projects_detail AS pdt
+            INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pdt.pjtdt_id 
+            WHERE pdt.ser_id = $serid AND pdt.sttd_id = 3 ORDER BY ppd.pjtpd_day_start ASC LIMIT 1";
+
+        $result1 =  $this->db->query($qry);
+
+        $serie_futura =  $result1->fetch_object();
+
+        if ($serie_futura != null) {
+            $pjtdt_id  = $serie_futura->pjtdt_id;
+            $updt4 = "UPDATE ctt_series SET ser_situation='EA', ser_stage = 'R', pjtdt_id=$pjtdt_id
                 WHERE ser_id=$serid AND pjtdt_id=$serIdOrg;";
-        $this->db->query($updt4);
+            $this->db->query($updt4);
+            
+            $updtQry = "UPDATE ctt_projects_detail SET ser_id =$serid, sttd_id = 1 where pjtdt_id='$pjtdt_id'";
+            $this->db->query($updt);
+        }else{
+            $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
+                WHERE ser_id=$serid AND pjtdt_id=$serIdOrg;";
+            $this->db->query($updt4);
+        }
+
         $joinval=$joinval+1;
 
         $updt5 = "UPDATE ctt_series SET ser_situation='EA', ser_stage='R',  pjtdt_id=$serIdOrg

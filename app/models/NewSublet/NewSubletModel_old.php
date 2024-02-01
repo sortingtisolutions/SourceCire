@@ -227,7 +227,7 @@ public function NextSkuProduct($param)
         // $ser_lonely         = '1';
         $ser_behaviour      = 'C';
 
-        $prd_level = 'PS';
+        $prd_level = 'S';
         $serie =sprintf("%03d", $srsk); // *** Ed
 
         $cant = 0;// *** Ed
@@ -238,7 +238,7 @@ public function NextSkuProduct($param)
             
             $qry = "INSERT INTO ctt_products (
                 prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-                prd_model, prd_price, prd_visibility, prd_comments, prd_type_asigned, prd_lonely, 
+                prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
                 prd_insured, sbc_id, srv_id, cin_id, prd_status, prd_stock) 
             VALUES (
                 '$sku', UPPER('$pnm'), '', '', UPPER('$sup'), 

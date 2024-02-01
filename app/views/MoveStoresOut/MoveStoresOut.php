@@ -45,6 +45,7 @@
                                 <input id="boxProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
                                 <label for="boxProducts">Productos</label>
                                 <input type="hidden" id="boxIdProducts" name="boxIdProducts">
+                                <input type="hidden" id="boxLvlProducts" name="boxLvlProducts">
                             </div>
                         <div id="listProducts" class="list-group list-hide">
                             <div class="list-items" ></div>
