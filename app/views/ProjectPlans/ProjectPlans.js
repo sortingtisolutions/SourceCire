@@ -1209,7 +1209,7 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_type">${u.prd_level}</td>
+                <td class="col_type">${u.prd_type_asigned}</td>
                 <td class="col_category">${u.sbc_name}</td>
                 <td class="col_category">${u.prd_price}</td>
             </tr> `;
@@ -1260,7 +1260,7 @@ function loadBudget(inx, bdgId) {
         "pjtvr_days_test"           : "0",
         "pjtvr_discount_test"       : "0",
         "pjtvr_insured"             : "${insurance}",
-        "pjtvr_prod_level"          : "${prod[inx].prd_level}",
+        "pjtvr_prod_level"          : "${prod[inx].prd_type_asigned}",
         "prd_id"                    : "${prod[inx].prd_id}",
         "pjt_id"                    : "${pjtId}",
         "ver_id"                    : "${verId}",
@@ -1868,12 +1868,12 @@ function putProductsRelated(dt) {
         }											   
         //let skushort=u.pjtdt_prod_sku.substring(0,7);
 		let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();							  
-        if (u.prd_level != 'K') {
+        if (u.prd_type_asigned != 'KP') {
             let H = `
             <tr ${levelProduct}>
                 <td>${skushort}</td>
                 <td><span class="${pending}">${prod_sku}</span></td>
-                <td>${u.prd_level}</td>
+                <td>${u.prd_type_asigned}</td>
                 <td>${u.prd_name}</td>
                 <td>${u.cat_name}</td>
                 <td>${u.ser_comments}</td> 
@@ -1937,7 +1937,7 @@ function putProductsRelatedPk(dt){
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${product_name} `);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let levelProduct = u.prd_type_asigned != 'KP' ? 'class="levelProd"' : '';
         let cat=u.prd_sku.substring(0,2);
         let catsub=u.pjtdt_prod_sku.substring(0,4);
         let locsku=u.pjtdt_prod_sku.substring(0,7);
@@ -1950,7 +1950,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: locsku,
-                serchoose: u.prd_level,
+                serchoose: u.prd_type_asigned,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })
@@ -1961,7 +1961,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: u.prd_sku,
-                serchoose: u.prd_level,
+                serchoose: u.prd_type_asigned,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })

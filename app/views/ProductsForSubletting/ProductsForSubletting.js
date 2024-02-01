@@ -390,8 +390,8 @@ function updating_serie(acc) {
         "projecId"  :   "${projecId}",
         "projContId"  :   "${projContId}"
     }]`;
-    //console.log(par);
-     if (acc == 'add') {
+    console.log(par);
+    if (acc == 'add') {
         var pagina = 'ProductsForSubletting/saveSubletting';
     } else {
         var pagina = 'ProductsForSubletting/changeSubletting';

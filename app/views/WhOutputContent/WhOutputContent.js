@@ -611,7 +611,7 @@ function readAceptTable() {
                 $('#tblSerie').DataTable().destroy;
         }, 3000);
     });
-    getDetailProds(prjid,em, ar);
+    //getDetailProds(prjid,em, ar);
 }
 
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1

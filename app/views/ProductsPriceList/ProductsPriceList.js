@@ -41,17 +41,17 @@ function putPriceList(dt) {
         // setting_table();
         var catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
-            pack = u.prd_level == 'K' ? 'fas' : 'far';
+            pack = u.prd_type_asigned == 'KP' ? 'fas' : 'far';
             let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
             let invoice = u.doc_id == 0 ? '' : docInvo;
             let reserved =
-                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
+                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_type_asigned}">${u.prd_reserved}</span>` : '';
             var H = `
                 <tr class="odd">
                     <td class="edit"></td>
                     <td class="sku"><span class="hide-support">${u.prd_id}</span>${u.prd_sku}</td>
                     <td class="product-name"><i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}</td>
-                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
+                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_type_asigned}">${u.prd_stock}</span></td>
                     <td class="reserved">${reserved}</td>
                     <td class="price">${u.prd_price}</td>
                     <td class="sku">${u.prd_coin_type}</td>
@@ -213,7 +213,7 @@ function active_icons() {
             let pkn = $(this).attr('data-content').split('|')[1];
             console.log ('Existencias-', prd, qty, pkt, pkn );
             if (qty > 0) {
-                if (pkt == 'K') {
+                if (pkt == 'KP') {
                     getProduct(prd, pkn);
                 } else {
                     getSeries(prd);
@@ -318,7 +318,7 @@ function build_modal_product(dt) {
     $('.overlay_closer .title').html(`${dt[0].paquete}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        pack = u.prd_level == 'K' ? 'fas' : 'far';
+        pack = u.prd_type_asigned == 'KP' ? 'fas' : 'far';
         var skufull = u.prd_sku.slice(7, 11) == '' ? '' : '-' + u.prd_sku.slice(7, 11);
         tabla.row
             .add({
@@ -397,23 +397,26 @@ function build_modal_serie(dt) {
 
     $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
     tabla.rows().remove().draw();
-    $.each(dt, function (v, u) {
-        lcskush = u.ser_sku.slice(0, 7);
-        lcskuhi = u.ser_sku.slice(7, 11);
-        tabla.row
-            .add({
-                produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku}`,
-                serlnumb: u.ser_serial_number,
-                dateregs: u.ser_date_registry,
-                cvstatus: u.ser_situation,
-                cvestage: u.ser_stage,
-                typeprod: u.comportamiento,
-                comments: u.comments,
-                serqntty: u.stp_quantity,
-                serstore: u.str_name,
-            })
-            .draw();
-    });
+    if (dt[0].ser_id > 0) {
+        $.each(dt, function (v, u) {
+            lcskush = u.ser_sku.slice(0, 7);
+            lcskuhi = u.ser_sku.slice(7, 11);
+            tabla.row
+                .add({
+                    produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku}`,
+                    serlnumb: u.ser_serial_number,
+                    dateregs: u.ser_date_registry,
+                    cvstatus: u.ser_situation,
+                    cvestage: u.ser_stage,
+                    typeprod: u.comportamiento,
+                    comments: u.comments,
+                    serqntty: u.stp_quantity,
+                    serstore: u.str_name,
+                })
+                .draw();
+        });
+    }
+    
 }
 
 function putProductReserve(dt) {
@@ -456,19 +459,22 @@ function putProductReserve(dt) {
 
 function build_modal_reserved(dt) {
     let tabla = $('#tblReservedList').DataTable();
-    $('.overlay_closer .title').html(`${dt[0].name}`);
     tabla.rows().remove().draw();
+    if (dt[0].prd_id > 0) {
+        $('.overlay_closer .title').html(`${dt[0].name}`);
 
-    $.each(dt, function (v, u) {
-        tabla.row
-            .add({seriesku: u.ser_sku, 
-                serinumb: u.ser_serial_number, 
-                sersitua: u.ser_situation, 
-                projname: u.pjt_name, 
-                projstar: u.pjt_date_start, 
-                projeend: u.pjt_date_end})
-            .draw();
-    });
+        $.each(dt, function (v, u) {
+            tabla.row
+                .add({seriesku: u.ser_sku, 
+                    serinumb: u.ser_serial_number, 
+                    sersitua: u.ser_situation, 
+                    projname: u.pjt_name, 
+                    projstar: u.pjt_date_start, 
+                    projeend: u.pjt_date_end})
+                .draw();
+        });
+    }
+    
 }
 
 function modalLoading(acc) {

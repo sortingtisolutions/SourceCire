@@ -262,7 +262,7 @@ public function listEstatusMantenimiento($params)
                 FROM ctt_series WHERE pjtdt_id = $pjDetail;";
         $this->db->query($qry3);
 
-        $qry4 = " INSERT INTO ctt_stores_products 
+        $qry4 = "INSERT INTO ctt_stores_products 
                     (stp_quantity, str_id, ser_id, prd_id) 
                 VALUES 
                     ('1','$storesId', '$serieId','$producId');";

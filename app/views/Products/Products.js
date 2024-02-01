@@ -84,13 +84,13 @@ function getInvoice() {
     fillField(pagina, par, tipo, selector);
 }
 /** +++++  Obtiene los productos de la base */
-function getProducts(catId) {
+/* function getProducts(catId) {
     var pagina = 'Products/listProducts';
     var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
-}
+} */
 /** +++++   */
 /* function getListProducts() {
     var pagina = 'Products/listProducts2';
@@ -231,11 +231,11 @@ function putInvoice(dt) {
 }
 
 /** +++++  coloca los productos en la tabla */
-function putProducts(dt) {
+/* function putProducts(dt) {
     prds = dt;
     fillProducts('0');
     console.log('LLena Products ');
-}
+} */
 
 /* function putProductsList(dt) {
     // console.log('putProductsList',dt);
@@ -455,7 +455,7 @@ function settingTable(catId) {
 
 
 /** +++++  coloca los productos en la tabla y filtra */
-function fillProducts(ft) {
+/* function fillProducts(ft) {
     settingTable();
     $('#tblProducts tbody').html('');
 
@@ -466,7 +466,7 @@ function fillProducts(ft) {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
             if (u.prd_level != cod) {
-                pack = u.prd_level == 'K' ? 'fas' : 'far';
+                pack = u.prd_type_asigned == 'KP' ? 'fas' : 'far';
                 let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
                 let invoice = u.doc_id == 0 ? '' : docInvo;
                 let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
@@ -499,7 +499,7 @@ function fillProducts(ft) {
     } else {
         settingTable();
     }
-}
+} */
 
 function getModalSeries(id) {
     let qty = $(`#${id}`).children('td.prodqtty').text();

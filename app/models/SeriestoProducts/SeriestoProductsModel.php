@@ -103,7 +103,7 @@ public function list_products($params) // Edna
     $qry = "SELECT prd.prd_id ser_id, prd.prd_sku ser_sku, prd.prd_name, prd.prd_name ser_serial_number, prd.prd_id
     FROM  ctt_products AS prd
     LEFT JOIN ctt_stores_products AS sp ON sp.prd_id = prd.prd_id
-    WHERE prd.prd_id = $prdId AND sp.stp_quantity > 0 GROUP BY prd.prd_id";
+    WHERE prd.prd_id = $prdId AND sp.stp_quantity > 0 GROUP BY prd.prd_id, prd.prd_sku";
     return $this->db->query($qry);
 }
 
@@ -148,7 +148,7 @@ public function getProdAccesoriesById($params)
     $qry = "SELECT acc.prd_parent, acc.prd_id, acc.pck_quantity quantity, prd.prd_id, prd.prd_sku, prd.prd_name
     FROM ctt_products_packages AS acc 
     INNER JOIN ctt_products AS prd ON prd.prd_id = acc.prd_id
-    WHERE acc.prd_parent = $prdId AND acc.prd_type_asigned = 'V'";
+    WHERE acc.prd_parent = $prdId AND acc.prd_type_asigned = 'PV'";
 
     return $this->db->query($qry);
 
@@ -186,7 +186,7 @@ public function listPrdAccesorios($param) // Edna
         $qry = "SELECT prd.prd_id, prd_name, prd_sku, 1 quantity
         FROM ctt_products as prd
 		  LEFT JOIN ctt_products_packages AS acc ON acc.prd_id = prd.prd_id 
-        WHERE sbc_id=$prd_id AND prd_stock>0 AND ISNULL(acc.prd_parent)";
+        WHERE sbc_id=$prd_id AND prd_stock>0 ";
     return $this->db->query($qry);
 }
 public function updateQuantityProds($param)
@@ -196,7 +196,7 @@ public function updateQuantityProds($param)
     $prd_qty           = $this->db->real_escape_string($param['prdQty']);
 
     $qry =  "UPDATE ctt_products_packages SET pck_quantity = $prd_qty 
-            WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'V';" ;
+            WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'PV';" ;
     
     $this->db->query($qry);
 
@@ -216,7 +216,7 @@ public function saveAccesorioByProducto($param)
     $countId = 1;
 
     if ($filas == 0) {
-        $qry = "UPDATE ctt_products set prd_type_asigned = 'F'
+        $qry = "UPDATE ctt_products set prd_type_asigned = 'PF'
                 where prd_id=$prdId";
         $this->db->query($qry);
     }
@@ -278,13 +278,13 @@ public function saveAccesorioProducto($param)
     VALUES ($prd_parent_id,'$quantity',$prd_id)";
     $this->db->query($qry); */
     if ($filas == 0) {
-        $qry = "UPDATE ctt_products set prd_type_asigned = 'V'
+        $qry = "UPDATE ctt_products set prd_type_asigned = 'PV'
                 where prd_id=$prd_parent_id";
         $this->db->query($qry);
     }
 
     $qry = "INSERT INTO ctt_products_packages ( prd_parent, pck_quantity, prd_id, prd_type_asigned)
-    VALUES ($prd_parent_id,'$quantity',$prd_id, 'V')";
+    VALUES ($prd_parent_id,'$quantity',$prd_id, 'PV')";
     $this->db->query($qry);
     
 
@@ -351,7 +351,7 @@ public function saveAccesorioProducto($param)
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
-        $qry =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'V';" ;
+        $qry =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'PV';" ;
         $this->db->query($qry);
 
         /* $qry = "UPDATE ctt_products SET prd_sku = CONCAT(substr(prd_sku,1,7),'XXX') WHERE prd_id = ".$prd_id.""; // Modificado por edna

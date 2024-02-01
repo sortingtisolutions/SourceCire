@@ -52,7 +52,7 @@ if ($empid == '1' || $empid == '2'){
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-        WHERE pcn.pjt_id=1 
+        WHERE pcn.pjt_id=$prdId
         ORDER BY pdt.pjtdt_id;"; // 29-01-24
 }
 else{

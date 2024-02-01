@@ -1129,7 +1129,7 @@ function putProducts(dt) {
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_category">${u.cat_name}</td>
                 <td class="col_type">${u.prd_price}</td>
-                <td class="col_type">${u.prd_level}</td>
+                <td class="col_type">${u.prd_type_asigned}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
@@ -1176,7 +1176,7 @@ function loadBudget(inx, bdgId) {
         "bdg_days_test"         : "0",
         "bdg_discount_test"     : "0",
         "bdg_insured"           : "${insurance}",
-        "bdg_prod_level"        : "${prod[inx].prd_level}",
+        "bdg_prod_level"        : "${prod[inx].prd_type_asigned}",
         "prd_id"                : "${prod[inx].prd_id}",
         "bdg_stock"             : "${prod[inx].stock}",
         "sbc_name"              : "${subct}",
@@ -1566,15 +1566,16 @@ function putProductsRelated(dt) {
     $.each(dt, function (v, u) {
         let levelProduct;
         // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        if (u.prd_level == 'P' || u.prd_level == 'S') {
+        /* if (u.prd_type_asigned != 'KP') {
             levelProduct = 'class="levelProd"';
         }else{
             levelProduct = '';
-        }
+        } */
+        levelProduct = 'class="levelProd"';
         let H = `
             <tr ${levelProduct}>
                 <td>${u.prd_sku}</td>
-                <td>${u.prd_level}</td>
+                <td>${u.prd_type_asigned}</td>
                 <td>${u.prd_name}</td>
             </tr>
         `;
@@ -1637,7 +1638,7 @@ function putProductsRelatedPk(dt){
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].prd_sku}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let levelProduct = u.prd_type_asigned != 'KP' ? 'class="levelProd"' : '';
         let cat=u.prd_sku.substring(0,2);
         let catsub=u.prd_sku.substring(0,4);
         // console.log('CATSUB-',catsub);
@@ -1649,7 +1650,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: u.prd_sku,
-                serchoose: u.prd_level,
+                serchoose: u.prd_type_asigned,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })
@@ -1660,7 +1661,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: u.prd_sku,
-                serchoose: u.prd_level,
+                serchoose: u.prd_type_asigned,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })

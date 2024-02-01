@@ -688,7 +688,7 @@ public function ProcessProjectProductFAST($request_params)
         $ttlqty = $prdexp == '2'? $quanty: 1;
         $quanty = $prdexp == '2'? 1: $quanty;
         
-        if ($lvlas == 'F'){
+        if ($lvlas == 'PF'){
             // $this->model->SettingSeriesFUN($request_params);
             for ($j=1; $j<=$quanty; $j++){
                 $params = array(
@@ -707,7 +707,7 @@ public function ProcessProjectProductFAST($request_params)
                 //
             }
 
-        }else if ($lvlas == 'V'){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
+        }else if ($lvlas == 'PV'){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
             for ($j=1; $j<=$quanty; $j++){
                 $products = $this->model->GetProducts($prodId);
 
@@ -752,7 +752,7 @@ public function ProcessProjectProductFAST($request_params)
                     } 
                 }
             }
-        }else if ($lvlas == 'K'){
+        }else if ($lvlas == 'KP'){
             for ($j=1; $j<=$quanty; $j++){
                 $products = $this->model->GetProducts($prodId);
                 while($prd = $products->fetch_assoc()){
@@ -766,7 +766,7 @@ public function ProcessProjectProductFAST($request_params)
                     
                     for ($k=1; $k<=$pkqty; $k++){
                         // Los productos pueden ser Virtuales o Fijos. 
-                        if ($type == 'V') {
+                        if ($type == 'PV') {
                             $prdctsAcc = $this->model->GetProducts($pkpdId);
 
                             $params = array(
@@ -816,7 +816,7 @@ public function ProcessProjectProductFAST($request_params)
                                     }
                                 } 
                             }
-                        }elseif ($type == 'F') {
+                        }elseif ($type == 'PF') {
                             
                             //for ($i=0; $i < $pkqty; $i++) { 
                                 $params = array(
