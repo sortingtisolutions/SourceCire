@@ -62,8 +62,8 @@
 
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <select id="txtModule"  name="txtModule"  class="form-select form-select-sm" required>
-                                        <option id='' value="" >Seleccione...</option>
+                                    <select id="txtModule"  name="txtModule"  class="form-select form-select-sm">
+                                        <option id='' value="0" >Seleccione...</option>
                                     </select>
                                     <label for="txtModule" class="form-label">Módulo</label>
                                 </div>

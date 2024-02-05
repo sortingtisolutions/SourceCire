@@ -265,6 +265,9 @@ function updateStore() {
     var txtDescription = $('#txtDescription').val();
     var txtOrder = $('#txtOrder').val();
     var txtModule = $('#txtModule').val();
+    if (txtModule == 0) {
+        txtModule=999;
+    }
     var par = `
         [{  "mnuId"        : "${mnuId}",
             "mnuParent"      : "${mnuParent}",
