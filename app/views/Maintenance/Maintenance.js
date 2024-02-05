@@ -608,10 +608,13 @@ function getReport(fi, fe, pjt){
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    window.open(
-        `${url}app/views/Maintenance/MaintenanceReport.php?p=${pjt}&fi=${fi}&fe=${fe}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
+    if (pjt > 0) {
+        window.open(
+            `${url}app/views/Maintenance/MaintenanceReport.php?p=${pjt}&fi=${fi}&fe=${fe}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );
+    }
+    
     cleanFechas();
     $('#ReportModal').addClass('overlay_hide');
 }

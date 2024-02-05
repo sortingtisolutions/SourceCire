@@ -194,7 +194,8 @@ function actionButtons() {
 function fillTableCategories(ix) {
     // console.log('PASO 2');  
     let tabla = $('#CategoriasTable').DataTable();
-    tabla.row
+    if (cats[0].cat_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${cats[ix].cat_id}"></i><i class="fas fa-times-circle kill"></i>`,
             category: cats[ix].cat_id,
@@ -204,8 +205,10 @@ function fillTableCategories(ix) {
             area: cats[ix].are_name,
         })
         .draw();
-    $('#md' + cats[ix].cat_id).parents('tr').attr('id', cats[ix].cat_id);
-    get_quantity(cats[ix].cat_id);
+        $('#md' + cats[ix].cat_id).parents('tr').attr('id', cats[ix].cat_id);
+        get_quantity(cats[ix].cat_id);
+    }
+    
     actionButtons();
     deep_loading('C');
 }
@@ -246,7 +249,9 @@ function saveCategory() {
     fillField(pagina, par, tipo, selector);
 }
 function putSaveCategory(dt) {
+    // console.log(dt);
     getCategories();
+    // console.log('CREAR NUEVO', cats);
     if (cats.length > 0) {
         let ix = goThroughCategory(dt);
         fillTableCategories(ix);

@@ -211,7 +211,7 @@ function putProducts(dt) {
 
     // $('#boxProducts').parents('.list-finder').removeClass('hide-items');
     var sl = $('#boxProducts').offset();
-
+    $('#listProducts .list-items').html('');
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-level="${u.prd_type_asigned}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}|${u.prd_id}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
         $('#listProducts .list-items').append(H);

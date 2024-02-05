@@ -154,7 +154,9 @@ function setting_table_AsignedProd() {
 
     $('#recordChgUser').unbind('click').on('click', function () {
         let prjId = $('#txtIdProject').val();
-        printOutPut(prjId);
+        if (prjId != 0) {
+            printOutPut(prjId);
+        }
      });
 
 }

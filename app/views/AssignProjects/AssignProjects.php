@@ -72,21 +72,19 @@
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
                 <h1>Selección de Proyectos</h1>
-                <div class="mvst_list tblProdMaster">
-                        <table class="display nowrap"  id="tblAsignedProd" style="width:100%; font-size: 0.7rem">
-                            <thead>
-                                <tr >
-                                    <th style="width:  20px"></th>
-                                    <th style="width:  200px">Nombre Proyecto</th>
-                                    <th style="width:  80px">No. Proyecto</th>
-									<th style="width:  80px">Tipo Proyecto</th>
-                                    <th style="width:  70px">Fecha Inicio</th>
-                                    <th style="width:  70px">Fecha Fin</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                </div>
+                    <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%; font-size: 0.7rem">
+                        <thead>
+                            <tr >
+                                <th style="width:  20px"></th>
+                                <th style="width:  200px">Nombre Proyecto</th>
+                                <th style="width:  80px">No. Proyecto</th>
+                                <th style="width:  80px">Tipo Proyecto</th>
+                                <th style="width:  70px">Fecha Inicio</th>
+                                <th style="width:  70px">Fecha Fin</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
             </div>
         </div>
     </div>

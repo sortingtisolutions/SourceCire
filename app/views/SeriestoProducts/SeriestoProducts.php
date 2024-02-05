@@ -64,7 +64,7 @@
 
 
                         <div id="selectAccesorios" style="visibility: hidden;">
-                            <div style="height:20px;"></div>
+                            <div style="height:10px;"></div>
                             <h4>Seleccion de Accesorios</h4>
 
                             <div class="row">
@@ -84,7 +84,7 @@
                                     <label for="txtSubcategoryAcce" class="form-label">Subcategoria de accesorios</label>
                                 </div>
                             </div>
-                            <div style="height:20px;"></div>
+                            <div style="height:10px;"></div>
                             <div class="row list-finder"  >
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <div class="box-items-list" id="boxProducts">Accesorios

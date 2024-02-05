@@ -407,11 +407,13 @@ function putInvoiceList(dt) {
         //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');
     });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
-        $('#listInvoice .list-items').append(H);
-    });
+    if (dt[0].doc_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
+            $('#listInvoice .list-items').append(H);
+        });
+    }
+   
 
     $('#txtInvoice').on('focus', function () {
         //$('.list-group #listInvoice').slideDown('slow');
@@ -453,11 +455,12 @@ function putSupplierList(dt) {
     $('#listSupplier').slideUp('100', function () {
         $('#listSupplier .list-items').html('');
     });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
-        $('#listSupplier .list-items').append(H);
-    });
+    if (dt[0].sup_id >0 ) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
+            $('#listSupplier .list-items').append(H);
+        });
+    }
 
     $('#txtSuppliers').on('focus', function () {
         $('#listSupplier').slideDown('fast');
@@ -503,6 +506,11 @@ function validator() {
     if ($('#txtTypeExchange').val() == 0) {
         ky = 1;
         msg += 'Debes seleccionar un tipo de movimiento';
+    }
+
+    if ($('#txtCoin').val() == 0) {
+        ky = 1;
+        msg += 'Debes seleccionar un tipo de moneda';
     }
 
     if ($('#txtStoreSource').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {

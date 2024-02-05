@@ -140,6 +140,7 @@ class MoveStoresOutController extends Controller
 		$typeExch = $request_params['typeExch'];
 		$strid = $request_params['strid'];
 		$mov = $request_params['mov'];
+		$prdlvl = $request_params['lvl'];
 
 		$existences = $this->model->getExistences($request_params);
 		$exis = $existences->fetch_object();
@@ -192,8 +193,9 @@ class MoveStoresOutController extends Controller
 				}
 				
 			}
-			
-			//$response =  $this->setProducts($request_params);
+			if ($prdlvl == 'PF') {
+				$response =  $this->setProducts($request_params);
+			}
 			$var = 1;
 		}
 		echo $var;
@@ -232,7 +234,8 @@ class MoveStoresOutController extends Controller
 	
 				$response =  $this->setAccesories($paramsacc);
 			}
-		}elseif ($prdlvl == 'PV') {
+		}
+		/* elseif ($prdlvl == 'PV') {
 			$resultado = $this->model->getProducts($prdid);
 			while($pkt = $resultado->fetch_assoc()){
                 $pkqty =  $pkt["pck_quantity"];
@@ -258,78 +261,8 @@ class MoveStoresOutController extends Controller
 				
 			}
 
-		}/* elseif ($prdlvl == 'KP') {
-			$resultado = $this->model->getProducts($prdid);
-			while($pkt = $resultado->fetch_assoc()){
-                $kprodId = $pkt["prd_id"];
-                $kpjetId = $pjetId;
-                $type =  $pkt["prd_type_asigned"];
-                $pkqty =  $pkt["pck_quantity"];
-
-				if ($type == 'PF') {
-					$resultado = $this->model->getAccesories($param);
-
-					while($row = $resultado->fetch_assoc()){
-						$prd_id = $row["prd_id"];
-						$ser_id = $row["ser_id"];
-						$strid2 = $row["str_id"];
-						//$qty = $row[''];
-						$paramsacc = array(
-							'prdid' => $prd_id,
-							'serid' => $ser_id,
-							'stridT' => $strid2,
-							'strid' => $strid1,
-							'qty' => $qty,
-							'typeExch' => $typeExch,
-							'mov' => $mov,
-						);
-			
-						$response =  $this->setAccesories($paramsacc);
-					}
-				}elseif ($type =='PV') {
-					$prd_id = $pkt["prd_id"];
-					$products = $this->model->getProducts($prd_id);
-					while($acc = $products->fetch_assoc()){
-						$pkqty =  $acc["pck_quantity"];
-						$prd_id = $acc["prd_id"];
-						$series = $this->model->getSeriesProduct($prd_id, $pkqty);
-					
-						while($serie = $series->fetch_assoc()){
-							$ser_id = $serie["ser_id"];
-							$strid2 = $serie["str_id"];
-		
-							$paramsacc = array(
-								'prdid' => $prd_id,
-								'serid' => $ser_id,
-								'stridT' => $strid2,
-								'strid' => $strid1,
-								'qty' => $qty,
-								'typeExch' => $typeExch,
-								'mov' => $mov,
-							);
-							$response =  $this->setAccesories($paramsacc);
-						}
-					}
-				}else{
-					$prd_id = $pkt["prd_id"];
-					$ser_id = $pkt["ser_id"];
-					$strid2 = $pkt["str_id"];
-					//$qty = $row[''];
-					$paramsacc = array(
-						'prdid' => $prd_id,
-						'serid' => $ser_id,
-						'stridT' => $strid2,
-						'strid' => $strid1,
-						'qty' => $qty,
-						'typeExch' => $typeExch,
-						'mov' => $mov,
-					);
-		
-					$response =  $this->setAccesories($paramsacc);
-				} 
-			}
-		}*/
-		return $ser_id;
+		} */
+		return $prdlvl;
 			
 	}
 	public function setAccesories($paramsacc){

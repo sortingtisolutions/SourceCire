@@ -138,10 +138,13 @@ function settingTable() {
 
 /** ---- Llena la lista de subcategorias ---- */
 function fillSubcategorieslst() {
-    $.each(subs, function (v, u) {
-        var H = `<option value="${u.sbc_id}">${u.cat_id} | ${u.sbc_code} - ${u.sbc_name}</option>`;
-        $('#lstSubcategory').append(H);
-    });
+    if (subs[0].sbc_id > 0) {
+        $.each(subs, function (v, u) {
+            var H = `<option value="${u.sbc_id}">${u.cat_id} | ${u.sbc_code} - ${u.sbc_name}</option>`;
+            $('#lstSubcategory').append(H);
+        });
+    }
+    
 }
 
 /** +++++  Activa la accion de eventos */

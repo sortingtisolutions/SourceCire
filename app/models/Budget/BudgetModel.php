@@ -704,7 +704,7 @@ public function saveBudgetList($params)
 
         $qry = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count  
                 FROM ctt_series WHERE prd_id = $prodId 
-                AND pjtdt_id = 0 AND prd_id_acc = 0 LIMIT 1;";  // solo trae un registro
+                AND pjtdt_id = 0 AND prd_id_acc = 0 AND ser_situation != 'M' LIMIT 1;";  // solo trae un registro
         $result =  $this->db->query($qry);
         
         $series = $result->fetch_object();
@@ -736,7 +736,7 @@ public function saveBudgetList($params)
             
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
             FROM ctt_series AS ser
-            WHERE ser.prd_id = $prodId AND prd_id_acc = 0 AND NOT EXISTS (SELECT sr.ser_id serId
+            WHERE ser.prd_id = $prodId AND prd_id_acc = 0 AND ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
             FROM ctt_series AS sr
             INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
             INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
@@ -839,7 +839,7 @@ public function saveBudgetList($params)
         $serId   = $this->db->real_escape_string($params['serId']);
 
         $serieAcc = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count  
-        FROM ctt_series WHERE pjtdt_id = 0 AND ser_id = $serId LIMIT 1";
+        FROM ctt_series WHERE pjtdt_id = 0 AND ser_id = $serId AND ser_situation != 'M' LIMIT 1";
         
         $result =  $this->db->query($serieAcc);
             
@@ -871,7 +871,7 @@ public function saveBudgetList($params)
         }else{
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
                     FROM ctt_series AS ser
-                    WHERE ser.ser_id = $serId AND NOT EXISTS (SELECT sr.ser_id serId
+                    WHERE ser.ser_id = $serId AND ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
                     FROM ctt_series AS sr
                     INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
                     INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id

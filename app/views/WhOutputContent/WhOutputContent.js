@@ -361,7 +361,7 @@ function putDetailsProds(dt) {
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
             else { valstage='#e2f8f2'; }
-            if (u.pjtcn_quantity == u.cant_ser) {
+            if (u.pjtcn_quantity <= u.cant_ser) {
                 icon = 'fas fa-regular fa-thumbs-up';
             } else{
                 icon ='fas fa-edit';
@@ -724,7 +724,7 @@ function checkSerie(pjtcnid) {
 function myCheck(dt){
     console.log(dt);
     let sku = $('#'+dt).find('.toChange').attr('data-content').split('|')[0];
-    $('#'+dt).css({"color":"#CC0000"});
+    //$('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});

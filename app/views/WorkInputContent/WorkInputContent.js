@@ -386,7 +386,7 @@ function putDetailsProds(dt) {
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
             else { valstage='#e2f8f2'; }
-            if (u.pjtcn_quantity == u.cant_ser) {
+            if (u.pjtcn_quantity <= u.cant_ser) {
                 icon = 'fas fa-regular fa-thumbs-up';
             } else{
                 icon ='fas fa-edit';
@@ -513,8 +513,10 @@ function build_modal_serie(dt) {
         //  $('#tblSerie tbody').html('');
          $.each(dt, function (v, u){
              let skufull = u.pjtdt_prod_sku;
+             let valM = 0;
+             let valA = 0;
              let sku = u.pjtdt_prod_sku.slice(0, 7);
-             if (u.ser_situation=='D'){
+             if (u.ser_situation=='D' || (u.sttd_id == 4 && u.ser_situation!='M')){
                 valstage='color:#CC0000';
                 valmant='color:#3c5777';
              } else if(u.ser_situation=='M'){
@@ -524,11 +526,15 @@ function build_modal_serie(dt) {
                 valstage='color:#3c5777';
                 valmant='color:#3c5777';
              }
-             
+             if (u.ser_situation =='M') { 
+                valM = 1;
+             }else{
+                valA = 1;
+             }
              tabla.row
                  .add({
-                     sermodif: `<i class="fas fa-wrench toChange" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.prd_id}" style="${valmant}"></i> 
-                                <i class="fas fa-check-circle toAcept" id="${u.ser_id}" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.prd_id}" style="${valstage}"></i>`,
+                     sermodif: `<i class="fas fa-wrench toChange" data-val="${valM}" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.prd_id}" style="${valmant}"></i> 
+                                <i class="fas fa-check-circle toAcept" data-val="${valA}" id="${u.ser_id}" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.prd_id}" style="${valstage}"></i>`,
                      seriesku: skufull,
                      sernumber: u.ser_serial_number,
                      sereconum: u.ser_serial_number,
@@ -590,9 +596,22 @@ function checkSerie(serId, serSku, prjid, prdId) {
 
 function myCheck(dt){
     console.log('myCheck', dt, glbcnid);
-    $('#'+dt).css({"color":"#CC0000"});
+    //$('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).find('.toAcept').css({"color":"#CC0000"});
-    $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+    //data-val
+    $('#'+dt).find('.toAcept').attr('data-val', 1);
+    //$('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+    $('#'+glbcnid).removeClass('fas fa-edit');
+    $('#'+glbcnid).addClass('fas fa-regular fa-thumbs-up');
+    //getDetailProds(prjid,em, ar);
+}
+
+function myCheckM(dt){
+    console.log('myCheck', dt, glbcnid);
+    //$('#'+dt).css({"color":"#CC0000"});
+    $('#'+dt).find('.toChange').css({"color":"#CC0000"});
+    $('#'+dt).find('.toChange').attr('data-val', 1);
+    // $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+glbcnid).removeClass('fas fa-edit');
     $('#'+glbcnid).addClass('fas fa-regular fa-thumbs-up');
     //getDetailProds(prjid,em, ar);
@@ -605,8 +624,12 @@ function readAceptTable() {
         let serId = $(this).attr('id');
         let serdata = $($(this).find('td')[1]).text();
         let prdId = $(this).attr('prd_id');
+        let serChange = $('#'+serId).find('.toChange').attr('data-val');
         console.log("readAceptTable: ", serId, serdata);
-        checkSerie(serId, serdata, prjid, prdId);
+        if (serChange != 1) {
+            checkSerie(serId, serdata, prjid, prdId);
+        }
+        
         setTimeout(function(){
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
@@ -717,7 +740,7 @@ function regMaintenance(serId,codmot,codstag) {
     var pagina = 'WorkInputContent/regMaintenance';
     // var par = `[{"serId":"${serId}"},{"codmot":"${codmot}"},{"codstag":"${codstag}"}]`;
     var tipo = 'html';
-    var selector = myCheck; 
+    var selector = myCheckM; 
     fillField(pagina, par, tipo, selector);
 }
 

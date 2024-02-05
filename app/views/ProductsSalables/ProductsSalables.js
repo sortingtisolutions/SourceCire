@@ -1,4 +1,5 @@
-let prod, proj, folio, comids = [], gblStr;
+let prod, proj, folio, comids = [];
+let gblStr = 0;
 
 $('document').ready(function () {
     url = getAbsolutePath();

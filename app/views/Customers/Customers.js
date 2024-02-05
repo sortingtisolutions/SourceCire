@@ -182,7 +182,7 @@ function fillCustomers(ft) {
 
     var cod = ft == '1' ? 'A' : '';
 
-    if (prds[0].cus_id != '0') {
+    if (prds[0].cus_id > 0) {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
             if (u.prd_level != cod) {

@@ -143,11 +143,13 @@ function putProductsList(dt) {
         $('#listProduct .list-items').html('');
     });
  */
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
-        $('#listProduct .list-items').append(H);
-    });
-
+    if (dt[0].prd_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
+            $('#listProduct .list-items').append(H);
+        });
+    }
+    
     $('#txtProducts').on('focus', function () {
         $('#listProduct').slideDown('fast');
     });

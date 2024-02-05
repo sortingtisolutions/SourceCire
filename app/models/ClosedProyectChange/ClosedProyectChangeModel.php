@@ -14,7 +14,7 @@ class ClosedProyectChangeModel extends Model
             $qry = "SELECT DISTINCT pj.pjt_id, pj.pjt_number, pj.pjt_name
                     FROM ctt_projects AS pj
                     INNER JOIN ctt_documents_closure AS dcl ON dcl.pjt_id=pj.pjt_id
-                    WHERE pjt_status in (9) ORDER BY pj.pjt_number;";
+                    WHERE pjt_status in (10) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 

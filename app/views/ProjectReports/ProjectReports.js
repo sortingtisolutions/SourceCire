@@ -769,15 +769,18 @@ function getAnalysts() {
     var selector = putAnalyst;
     fillField(pagina, par, tipo, selector);
     
-    function putAnalyst(dt) {
+    
+
+}
+function putAnalyst(dt) {
+    if (dt[0].emp_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.emp_id}">${u.emp_fullname}</option>`;
             findana.append(H);
         });
     }
-
+    
 }
-
 function getCustomers() {
     let data = [
         { pjtId: '', },
@@ -788,12 +791,16 @@ function getCustomers() {
     var selector = putCustomers;
     fillField(pagina, par, tipo, selector);
     
-    function putCustomers(dt) {
+    
+}
+function putCustomers(dt) {
+    if (dt[0].cus_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cus_id}">${u.cus_name}</option>`;
             findcli.append(H);
         });
     }
+    
 }
 function getSuppliers() {
     let data = [
@@ -805,14 +812,17 @@ function getSuppliers() {
     var selector = putSuppliers;
     fillField(pagina, par, tipo, selector);
     
-    function putSuppliers(dt) {
+    
+}
+function putSuppliers(dt) {
+    if (dt[0].sup_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
             $('#txtSupplier').append(H);
         });
     }
+    
 }
-
 function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
     let data = [
         {

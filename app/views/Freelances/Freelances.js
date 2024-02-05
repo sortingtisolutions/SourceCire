@@ -165,7 +165,7 @@ function fillFreelances(ft) {
     $('#tblFreelances tbody').html('');
     var cod = ft == '1' ? 'A' : '';
     // console.log(prds);
-    if (prds[0].free_id != '0') {
+    if (prds[0].free_id > 0) {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
                 var H = `

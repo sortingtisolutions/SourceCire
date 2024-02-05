@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="margin-top: 3px;">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="margin-top: 5px;">
                             <select id="txtProjects" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el proyecto</option></select>
                             <label for="txtProjects">Lista de proyectos</label>
                         </div>

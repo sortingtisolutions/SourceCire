@@ -115,10 +115,10 @@ CREATE VIEW ctt_vw_list_products2 AS
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
             pd.prd_insured, sb.sbc_name,cat_name,
     CASE 
-        WHEN prd_level ='K' THEN 
+        WHEN prd_type_asigned ='KP' THEN 
             (SELECT prd_stock
                     FROM ctt_products WHERE prd_id = pd.prd_id)
-        WHEN prd_level ='P' THEN 
+        WHEN (pd.prd_type_asigned ='PI' OR pd.prd_type_asigned ='PV' OR pd.prd_type_asigned ='PF') THEN 
             (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
                     FROM ctt_products WHERE prd_id = pd.prd_id)
         ELSE 

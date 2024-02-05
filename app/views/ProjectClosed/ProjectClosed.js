@@ -74,6 +74,7 @@ function inicial() {
                 prjType = 2;
             }
             printReport(pjtid,prjType, typeDes);
+            
            
          });
          if ($('#RadioConceptos1').prop('checked')) {
@@ -634,10 +635,13 @@ function printReport(verId, prjType, typeDes) {
     let h = localStorage.getItem('host');
     let v = verId;
     // console.log('Datos', v, u, n, h);
-    window.open(
-        `${url}app/views/ProjectClosed/ProjectClosedReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}&t=${prjType}&d=${typeDes}`,
-        '_blank'
-    );
+    if (verId != 0) {
+        window.open(
+            `${url}app/views/ProjectClosed/ProjectClosedReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}&t=${prjType}&d=${typeDes}`,
+            '_blank'
+        );
+    }
+    
 }
 
 function resEdtProduct(dt) {

@@ -51,7 +51,7 @@ public function listProducts()
 {
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
-            WHERE prd_status = 1;";
+            WHERE prd_status = 1 AND prd_type_asigned != 'KP';";
     return $this->db->query($qry);
 }
 
@@ -85,9 +85,9 @@ public function listProductsPack($params)
         $prd_stock          =  1; // *** Edna V2
 
         $qry = "INSERT INTO ctt_products (prd_sku, prd_name, prd_model, prd_price, prd_visibility, 
-        prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured, prd_stock) 
+        prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured, prd_stock, prd_type_asigned) 
         VALUES ('$prd_sku', UPPER('$prd_name'), '$prd_model', '$prd_price', '$prd_visibility', '$prd_comments',
-         '$prd_status', '$prd_level', '$sbc_id', '$srv_id', '$cin_id','$prd_insured','$prd_stock');
+         '$prd_status', 'P', '$sbc_id', '$srv_id', '$cin_id','$prd_insured','$prd_stock', 'KP');
         ";
          $this->db->query($qry);
         $result = $this->db->insert_id;

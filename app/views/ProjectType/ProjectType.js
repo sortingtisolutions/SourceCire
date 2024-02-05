@@ -167,7 +167,8 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
     console.log(strs);
-    tabla.row
+    if (strs[0].pjttp_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].pjttp_id}"></i><i class="fas fa-times-circle kill"></i>`,
             code: strs[ix].pjttp_name,
@@ -175,9 +176,11 @@ function fillTableStores(ix) {
             quantity: strs[ix].pjttp_max_download,
         })
         .draw();
-    $('#md' + strs[ix].pjttp_id)
-        .parents('tr')
-        .attr('id', strs[ix].pjttp_id);
+        $('#md' + strs[ix].pjttp_id)
+            .parents('tr')
+            .attr('id', strs[ix].pjttp_id);  
+    }
+    
     actionButtons();
 }
 

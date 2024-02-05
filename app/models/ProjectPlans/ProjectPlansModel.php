@@ -1541,7 +1541,7 @@ class ProjectPlansModel extends Model
         // Busca serie que se encuentre disponible y obtiene el id
         $qry1 = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count 
                  FROM ctt_series WHERE prd_id = $prodId 
-                 AND (pjtdt_id = 0 OR ISNULL(pjtdt_id)) AND prd_id_acc = 0
+                 AND (pjtdt_id = 0 OR ISNULL(pjtdt_id)) AND prd_id_acc = 0 AND ser_situation != 'M'
                  ORDER BY ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry1);
         
@@ -1578,7 +1578,7 @@ class ProjectPlansModel extends Model
             
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
             FROM ctt_series AS ser
-            WHERE ser.prd_id = '$prodId' AND prd_id_acc = 0 AND NOT EXISTS (SELECT sr.ser_id serId
+            WHERE ser.prd_id = '$prodId' AND ser.ser_situation != 'M' AND prd_id_acc = 0 AND NOT EXISTS (SELECT sr.ser_id serId
             FROM ctt_series AS sr
             INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
             INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
@@ -1684,7 +1684,7 @@ class ProjectPlansModel extends Model
         $serId   = $this->db->real_escape_string($params['serId']);
 
         $serieAcc = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count  
-        FROM ctt_series WHERE pjtdt_id = 0 AND ser_id = $serId LIMIT 1";
+        FROM ctt_series WHERE pjtdt_id = 0 AND ser_id = $serId AND ser_situation != 'M' LIMIT 1";
         
         $result =  $this->db->query($serieAcc);
             
@@ -1715,7 +1715,7 @@ class ProjectPlansModel extends Model
         }else{
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
                     FROM ctt_series AS ser
-                    WHERE ser.ser_id = $serId AND NOT EXISTS (SELECT sr.ser_id serId
+                    WHERE ser.ser_id = $serId AND ser.ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
                     FROM ctt_series AS sr
                     INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
                     INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
