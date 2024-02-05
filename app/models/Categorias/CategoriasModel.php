@@ -64,12 +64,12 @@ class CategoriasModel extends Model
 		$catId = $this->db->real_escape_string($params['catId']);
 		$areId = $this->db->real_escape_string($params['areId']);
 
-			$qry = "INSERT INTO ctt_categories(cat_id,cat_name, cat_status, str_id,are_id)
-					VALUES ('$catId', UPPER('$cat_name'),1,'$str_id','$areId')";
-			$this->db->query($qry);	
-			$cat_id = $this->db->insert_id;
+		$qry = "INSERT INTO ctt_categories(cat_id,cat_name, cat_status, str_id,are_id)
+				VALUES ('$catId', UPPER('$cat_name'),1,'$str_id','$areId')";
+		$this->db->query($qry);	
+		$cat_id = $this->db->insert_id;
 			
-		return $cat_id;
+		return $catId;
 	}
 
     //borra proveedor

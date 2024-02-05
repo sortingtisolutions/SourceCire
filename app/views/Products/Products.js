@@ -25,7 +25,7 @@ function inicial() {
         getCoins();
         getDocument();
         getInvoice();
-        //getListProducts();
+        // getListProducts();
     } else {
         setTimeout(() => {
             inicial();
@@ -1058,8 +1058,8 @@ function putSeries(dt) {
         destroy: true,
         order: [[1, 'desc']],
         lengthMenu: [
-            [50, 100, 150, -1],
-            [50, 100, 150, 'Todos'],
+            [100, 200, 500, -1],
+            [100, 200, 500, 'Todos'],
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -1081,6 +1081,7 @@ function putSeries(dt) {
             {data: 'serbrand', class: 'catalog'},
             {data: 'sernumped', class: 'catalog'},
             {data: 'sercosimp', class: 'catalog'},
+            {data: 'sercostl', class: 'catalog'},
             {data: 'sernumeco', class: 'sku'},
             {data: 'comments', class: 'comments'},
         ],
@@ -1129,6 +1130,7 @@ function build_modal_serie(dt) {
                 serbrand: u.ser_brand,
                 sernumped: u.ser_import_petition,
                 sercosimp: u.ser_cost_import,
+                sercostl: u.ser_cost,
                 sernumeco: u.ser_no_econo,
                 comments: u.ser_comments,
             })
@@ -1233,6 +1235,7 @@ function putSelectSerie(dt) {
     $('#txtDcpIdSerie').val(dt[0].dcp_id);
     /* $('#txtDcpIdSerie').val(dt[0].dcp_id); */
     $('#txtSerComments').val(dt[0].ser_comments);
+    $('#txtSerCinId').val(dt[0].cin_id);
 
     $('#btn_save_serie')
         .unbind('click')
@@ -1250,7 +1253,8 @@ function putSelectSerie(dt) {
                 "serCi"  :  "${$('#txtSerCostImp').val()}",
                 "serNe"  :  "${$('#txtSerNumEco').val()}",
                 "serCm"  :  "${$('#txtSerComments').val()}",
-                "serCost"  :  "${$('#txtSerCost').val()}"
+                "serCost"  :  "${$('#txtSerCost').val()}",
+                "cinId" :   "${$('#txtSerCinId').val()}"
             }] `;
             // console.log('Par-',par);
             var pagina = 'Products/saveEdtSeries';
@@ -1305,6 +1309,7 @@ function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     let numEco = $('#txtSerNumEco').val();
     let numPed = $('#txtSerNumPed').val();
     let costIm= $('#txtSerCostImp').val();
+    let costTl = $('#txtSerCost').val();
 
     let el = $(`#tblSerie tr td i[id="E${serId}"]`).parents('tr');
     let docInvo = `<span class="invoiceView" id="F${serDc}"><i class="fas fa-file-alt"></i></span>`;
@@ -1315,8 +1320,9 @@ function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     $(el.find('td')[9]).html(serBr);
     $(el.find('td')[10]).html(numPed);
     $(el.find('td')[11]).html(costIm);
-    $(el.find('td')[12]).html(numEco);
-    $(el.find('td')[13]).html(serCm);
+    $(el.find('td')[12]).html(costTl);
+    $(el.find('td')[13]).html(numEco);
+    $(el.find('td')[14]).html(serCm);
 
     activeIconsSerie();
     $('#ModifySerieModal .btn_close').trigger('click');

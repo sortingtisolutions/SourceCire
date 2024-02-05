@@ -68,6 +68,7 @@
                         <th style="width: 100px">Marca</th>
                         <th style="width: 100px">No. Pedimento</th>
                         <th style="width: 60px">Costo <br>Importación</th>
+                        <th style="width: 50px">Costo <br>Total</th>
                         <th style="width: 50px">Num. <br>Economico</th>
                         <th style="width: 300px">Comentarios</th>
                     </tr>

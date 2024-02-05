@@ -249,7 +249,8 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    tabla.row
+    if (strs[0].movstr_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].movstr_id}"></i><i class="fas fa-times-circle kill"></i>`,
             code: strs[ix].movstr_placas,
@@ -259,12 +260,14 @@ function fillTableStores(ix) {
             subcategory: strs[ix].sbc_name,
         })
         .draw();
-    $('#md' + strs[ix].movstr_id)
-        .parents('tr')
-        .attr('id', strs[ix].movstr_id)
-        .attr('str-id', strs[ix].str_id)
-        .attr('ser-id', strs[ix].ser_id)
-        .attr('prd-id', strs[ix].prd_id);
+        $('#md' + strs[ix].movstr_id)
+            .parents('tr')
+            .attr('id', strs[ix].movstr_id)
+            .attr('str-id', strs[ix].str_id)
+            .attr('ser-id', strs[ix].ser_id)
+            .attr('prd-id', strs[ix].prd_id);
+    }
+    
         
     actionButtons();
 }

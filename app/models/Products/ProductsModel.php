@@ -163,7 +163,7 @@ public function listInvoice()
                     , CASE WHEN se.ser_behaviour = 'R' THEN 'SUBABRRENDADO' ELSE '' END comportamiento
                     , se.ser_comments, pd.prd_sku, pd.prd_name, pd.prd_id, sp.stp_quantity, st.str_name
                     , ifnull(dc.doc_id,0) AS doc_id, dc.doc_name, dc.dot_id, se.ser_brand,se.ser_cost_import
-                    , ser_import_petition, ser_no_econo
+                    , ser_import_petition, ser_no_econo, se.cin_id
                 FROM ctt_series as se
                 INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
                 LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
@@ -331,6 +331,7 @@ public function saveEdtSeries($params)
     $serNe = $this->db->real_escape_string($params['serNe']);
     $serDc = $this->db->real_escape_string($params['serDc']);
     $serCost = $this->db->real_escape_string($params['serCost']);
+    $cinId = $this->db->real_escape_string($params['cinId']);
    
     $qry = "UPDATE ctt_series
             SET ser_serial_number   = UPPER('$serSr'),
@@ -340,6 +341,7 @@ public function saveEdtSeries($params)
                 ser_cost_import     = UPPER('$serCi'),
                 ser_no_econo        = UPPER('$serNe'),
                 ser_comments        = UPPER('$serCm'),
+                cin_id              = '$cinId',
                 ser_cost            ='$serCost'
             WHERE ser_id  = '$serId';";
     $this->db->query($qry);
@@ -413,11 +415,11 @@ public function saveEdtSeries($params)
         $qry = "INSERT INTO ctt_products (
                     prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
                     prd_model, prd_price, prd_visibility, prd_comments, prd_lonely, 
-                    prd_insured, sbc_id, srv_id, cin_id, prd_status) 
+                    prd_insured, sbc_id, srv_id, cin_id, prd_status, prd_type_asigned) 
                 VALUES (
                     '$prdSk', UPPER('$prdNm'), UPPER('$prdEn'), UPPER('$prdCd'), UPPER('$prdNp'), 
                     UPPER('$prdMd'), '$prdPr', '$prdVs', UPPER('$prdCm'), 
-                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt'
+                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt', 'PI'
                 );";
         $this->db->query($qry);
         $prdId = $this->db->insert_id;

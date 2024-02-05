@@ -168,16 +168,19 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
     // console.log(strs.length);
-    tabla.row
+    if (strs[0].dot_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].dot_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storescode: strs[ix].dot_code,
             storname: strs[ix].dot_name,
         })
         .draw();
-    $('#md' + strs[ix].dot_id)
-        .parents('tr')
-        .attr('id', strs[ix].dot_id);
+        $('#md' + strs[ix].dot_id)
+            .parents('tr')
+            .attr('id', strs[ix].dot_id);
+    }
+    
     actionButtons();
 }
 

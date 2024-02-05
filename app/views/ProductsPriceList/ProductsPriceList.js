@@ -65,8 +65,8 @@ function putPriceList(dt) {
         });
         setting_table();
         active_icons();
-        modalLoading('H');
     }
+    modalLoading('H');
 }
 
 /** +++++  configura la table de productos */

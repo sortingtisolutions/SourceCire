@@ -394,6 +394,14 @@ function active_params() {
     $('#btn_packages_cancel').addClass('hide-items');
 }
 
+function clean_params(){
+    $('#txtIdPackages').val(0);
+    $('#txtPackageName').val('');
+    $('#txtPackagePrice').val('');
+    $(`#txtCategoryPack`).val(0);
+    $(`#txtSubcategoryPack`).val(0);
+}
+
 function build_sku_product(sbcId) {
     var pagina = 'Packages/lastIdSubcategory';
     var par = `[{"sbcId":"${sbcId}"}]`;
@@ -445,6 +453,7 @@ function putNewPackage(dt) {
         $('#txtSubcategoryProduct').val(0);
         $('#txtIdPackages').val(0);
     });
+    clean_params();
 }
 
 function action_selected_packages() {

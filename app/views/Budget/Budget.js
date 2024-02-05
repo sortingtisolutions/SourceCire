@@ -1486,7 +1486,7 @@ function activeInputSelector() {
                             infoProduct(bdgId, type);
                             break;
                         case 'event_StokProduct':
-                            if(type=='K'){
+                            if(type=='K' || type=='KP'){
                                 alert('NO SE PUEDE MOSTRAR LA INFORMACION DE UN PAQUETE');
                             }else{
                                 stockProduct(bdgId);
@@ -1495,7 +1495,7 @@ function activeInputSelector() {
                             
                             break;
                         case 'event_ChangePakt':
-                            if(type!='K'){
+                            if(type!='K' && type!='KP'){
                                 alert('ESTE NO ES UN PAQUETE');
                             }else{
                                 infoPackage(bdgId, type);

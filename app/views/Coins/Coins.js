@@ -156,7 +156,8 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
     console.log(strs);
-    tabla.row
+    if (strs[0].cin_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].cin_id}"></i><i class="fas fa-times-circle kill"></i>`,
             code: strs[ix].cin_code,
@@ -164,9 +165,11 @@ function fillTableStores(ix) {
             quantity: strs[ix].cin_number,
         })
         .draw();
-    $('#md' + strs[ix].cin_id)
-        .parents('tr')
-        .attr('id', strs[ix].cin_id);
+        $('#md' + strs[ix].cin_id)
+            .parents('tr')
+            .attr('id', strs[ix].cin_id);
+    }
+    
     actionButtons();
 }
 

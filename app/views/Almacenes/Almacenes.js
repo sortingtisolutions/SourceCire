@@ -182,7 +182,8 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AlmacenesTable').DataTable();
     // console.log(strs.length);
-    tabla.row
+    if (strs[0].str_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].str_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storesid: strs[ix].str_id,
@@ -192,9 +193,11 @@ function fillTableStores(ix) {
             quantity: `<span class="toLink">${strs[ix].cantidad}</span>`,
         })
         .draw();
-    $('#md' + strs[ix].str_id)
-        .parents('tr')
-        .attr('id', strs[ix].str_id);
+        $('#md' + strs[ix].str_id)
+            .parents('tr')
+            .attr('id', strs[ix].str_id);
+    }
+    
     get_quantity(strs[ix].str_id);
     actionButtons();
 }

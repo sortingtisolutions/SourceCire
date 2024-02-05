@@ -186,7 +186,7 @@ public function listPrdAccesorios($param) // Edna
         $qry = "SELECT prd.prd_id, prd_name, prd_sku, 1 quantity
         FROM ctt_products as prd
 		  LEFT JOIN ctt_products_packages AS acc ON acc.prd_id = prd.prd_id 
-        WHERE sbc_id=$prd_id AND prd_stock>0 ";
+        WHERE sbc_id=$prd_id AND prd_stock>0 GROUP BY prd.prd_id";
     return $this->db->query($qry);
 }
 public function updateQuantityProds($param)

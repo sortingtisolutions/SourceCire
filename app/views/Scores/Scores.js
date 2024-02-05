@@ -167,17 +167,20 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    // console.log(strs.length);
-    tabla.row
+    if (strs[0].scr_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].scr_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storesid: strs[ix].scr_values,
             storname: strs[ix].scr_description,
         })
         .draw();
-    $('#md' + strs[ix].scr_id)
-        .parents('tr')
-        .attr('id', strs[ix].scr_id);
+        $('#md' + strs[ix].scr_id)
+            .parents('tr')
+            .attr('id', strs[ix].scr_id);
+    }
+    // console.log(strs.length);
+    
     actionButtons();
 }
 
