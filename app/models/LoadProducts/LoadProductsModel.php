@@ -26,46 +26,18 @@ public function SaveDocumento($request_params)
 				$aux = 0;
 				$csv_file = fopen($_FILES['file']['tmp_name'], 'r');
 				while(($LoadProducts = fgetcsv($csv_file)) !== FALSE){
-					/* if (strlen($LoadProducts[0]) <= 10 && strlen($LoadProducts[0]) >= 7 && strlen($LoadProducts[7]) == 3 && is_numeric($LoadProducts[6]) && is_numeric($LoadProducts[8]) && is_numeric($LoadProducts[9]) && ($LoadProducts[8] == '0' || $LoadProducts[8] == '1')) {
-						
-						$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct 
-							INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
-							where ct.cat_id = SUBSTR('$LoadProducts[0]',1,2) AND sb.sbc_code = SUBSTR('$LoadProducts[0]',3,2)";
-						$res = $this->db->query($qry1);
-						$rs = $res->fetch_object();
-						$acept = $rs->cant;
-
-						$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$LoadProducts[7]' UNION SELECT 0 LIMIT 1";
-						$rest = $this->db->query($qry2);
-						$rst = $rest->fetch_object();
-						$coin = $rst->cin_id;
-
-
-						if($acept > 0 && $coin>0){
-							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_price, cin_id, prd_insured, srv_id)
-									VALUES ('$LoadProducts[0]', '$LoadProducts[1]','$LoadProducts[2]', '$LoadProducts[3]', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$coin', '$LoadProducts[8]', '$LoadProducts[9]')";
-							$this->db->query($qry);
-							$cont++;
-							$estatus = strlen($LoadProducts[7]);
-						}else{
-							$aux++;
-							$estatus = 'Hubo un problema con el sku o la moneda';
-						}
-					}else{
-						$aux++;
-						$estatus = 'Los datos del sku podrian ser mayor de lo que debe, la moneda no pertenece, no es decimal el precio';
-					} */
 					
 					$sku = '';
 					$estatus = '';
 					$sbcId = 0;
+					
+					$nombre_producto = '';
 					if ($LoadProducts[6] != 'Nombre en Ingles') {
 						$typeacc = 0;
 						if (strlen($LoadProducts[0]) == 7) {
 							// REVISION DE SKU
 							$skuCsv = substr($LoadProducts[0], 5, 3);
 							$sku = strval($LoadProducts[0]);
-							$nombre_producto = '';
 							
 							// Revisar que el la categoria y subcategoria exista en la base de datos
 							$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct
@@ -77,23 +49,22 @@ public function SaveDocumento($request_params)
 							$acept = $rs->cant;
 	
 							// Revisar que el producto No exita ya en la tabla de productos
-							$qry3 = "SELECT COUNT(*) sku FROM ctt_products AS pd WHERE pd.prd_sku = '$sku'";
+							$qry3 = "SELECT COUNT(*) sku FROM ctt_products AS pd 
+									WHERE pd.prd_sku = '$sku'";
 							$resp = $this->db->query($qry3);
 							$respuesta = $resp->fetch_object();
 							$skuValido = $respuesta->sku;
 	
 							// Obtener la subcategoria a la que pertenece el producto
 							$qry4 = "SELECT sb.sbc_id FROM ctt_subcategories AS sb 
-							WHERE sb.sbc_code = SUBSTR('$sku',3,2) AND sb.cat_id = SUBSTR('$sku',1,2) Union select 0 LIMIT 1;";
+									WHERE sb.sbc_code = SUBSTR('$sku',3,2) 
+									AND sb.cat_id = SUBSTR('$sku',1,2) 
+									Union select 0 LIMIT 1;";
 							$resp = $this->db->query($qry4);
 							$respuesta = $resp->fetch_object();
 							$sbcId = $respuesta->sbc_id;
 
-							if (strpos($LoadProducts[1], "'") !== false) {
-								$nombre_producto = str_replace("'", '"', $LoadProducts[1]);
-							}else{
-								$nombre_producto = $LoadProducts[1];
-							}
+							
 							if ($acept == 0 ) {
 								//SKU
 								$estatus = $estatus. '1,';
@@ -126,9 +97,17 @@ public function SaveDocumento($request_params)
 							}
 							
 						}
+						if (strpos($LoadProducts[1], "'") !== false) {
+							$nombre_producto = str_replace("'", '"', $LoadProducts[1]);
+						}else{
+							$nombre_producto = $LoadProducts[1];
+						}
+
 						if (strlen($LoadProducts[3]) == 3) {
 							# Revision de Moneda
-							$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$LoadProducts[3]' UNION SELECT 0 LIMIT 1";
+							$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn 
+									WHERE cn.cin_code = '$LoadProducts[3]' 
+									UNION SELECT 0 LIMIT 1";
 							$rest = $this->db->query($qry2);
 							$rst = $rest->fetch_object();
 							$coin = $rst->cin_id;
@@ -166,8 +145,12 @@ public function SaveDocumento($request_params)
 						}
 						if($acept > 0 && $coin>0 && $skuValido == 0 && $typeacc == 1){
 							try {
-								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_type_asigned, sbc_id, result)
-										VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]',$sbcId, 'EXITOSO')";
+								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, 
+										prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, 
+										prd_model, prd_type_asigned, sbc_id, result)
+										VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', 
+										'$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', 
+										'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]',$sbcId, 'EXITOSO')";
 								$this->db->query($qry);
 								$cont++;
 							} catch (\Throwable $th) {
@@ -177,8 +160,12 @@ public function SaveDocumento($request_params)
 							
 						}else{
 							
-							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, prd_model, prd_type_asigned,sbc_id, result)
-									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', '$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', '$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]', $sbcId, '$estatus')";
+							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, 
+									prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, 
+									prd_model, prd_type_asigned,sbc_id, result)
+									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', 
+									'$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', 
+									'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]', $sbcId, '$estatus')";
 							$this->db->query($qry);
 							
 							$aux++;
@@ -230,7 +217,8 @@ public function SaveDocumento($request_params)
 	public function GetDocumentos()
 	{
 		$qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, ldp.prd_name_provider,
-		ldp.prd_model, ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, case when ldp.prd_insured = 1 then 'Sí' ELSE 'NO' END prd_insured,
+		ldp.prd_model, ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, 
+		case when ldp.prd_insured = 1 then 'Sí' ELSE 'NO' END prd_insured,
 		ldp.srv_id, srv.srv_name, cn.cin_code, result FROM ctt_load_products AS ldp
 		LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
 		LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
@@ -253,7 +241,8 @@ public function SaveDocumento($request_params)
 	{
 		$errores = $this->db->real_escape_string($params['errores']);
 
-		$qry = "SELECT erm.erm_id, erm.erm_title FROM ctt_error_message AS erm WHERE erm.erm_id IN($errores)";
+		$qry = "SELECT erm.erm_id, erm.erm_title FROM ctt_error_message AS erm 
+		WHERE erm.erm_id IN($errores)";
 		$result = $this->db->query($qry);
 		
 		return $result;
@@ -262,7 +251,9 @@ public function SaveDocumento($request_params)
 	// Optiene los Documentos existentes
 	public function GetDocumentosFicha()
 	{
-		$qry = "SELECT doc.doc_id, doc.doc_code, doc.doc_name, doc.doc_type, doc.dot_id, td.dot_name FROM ctt_documents as doc LEFT JOIN ctt_documents_type AS td ON td.dot_id = doc.dot_id WHERE doc.dot_id = 2";
+		$qry = "SELECT doc.doc_id, doc.doc_code, doc.doc_name, doc.doc_type, doc.dot_id, td.dot_name 
+			FROM ctt_documents as doc LEFT JOIN ctt_documents_type AS td ON td.dot_id = doc.dot_id 
+			WHERE doc.dot_id = 2";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){

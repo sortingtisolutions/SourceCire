@@ -38,7 +38,7 @@
 									<label for="NomDocumento">Nombre Documento</label>
 								</div>
 							</div>
-
+							<div style="height:3px;"></div> 
  							<div class="row">
 								<div class="col-6">
 									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarDocumento">Cargar</button>
@@ -53,12 +53,18 @@
 									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarTabla">Limpiar Tabla</button>
 								</div>
 							</div>
-
-							<div class="row mt-4 objHidden">
+							<div class="row mt-4">
+								
+								<h1></h1>
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.6rem !important;" id="DescargarEjemplo">Descargar Archivo Ejemplo</button>
+								</div>
+							</div>
+							<!-- <div class="row mt-4 objHidden">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<button type="button"  class="btn btn-secondary btn-sm btn-block" style="font-size: 0.8rem !important;" id="verMotivo">Motivo</button>
 								</div>
-							</div>
+							</div> -->
 						</form>
 					</div>
 				</div>
@@ -66,7 +72,7 @@
 
 				<!-- Start área de listado -->
 				<div class="mvst_table">
-					<h1>Productos cargados</h1>
+					<h1>Existencias o Series Cargadas</h1>
 
 					<div class="row">
 						<div class="col-12 col-md-12">		

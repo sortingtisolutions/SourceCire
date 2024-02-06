@@ -39,11 +39,15 @@ public function SaveDocumento($request_params)
 						$acept = 0;
 						$supId = '';
 						$strId = 0;
+
+						//** VALIDA LOS DATOS DEL ALMACEN POR ID O NOMBRE */
 						if (is_numeric($LoadProducts[11])) {
 							$store = intval($LoadProducts[11]);
 						}
 						else{
-							$qry2 = "SELECT st.str_id FROM ctt_stores AS st WHERE st.str_name = '$LoadProducts[11]' UNION SELECT 0 LIMIT 1";
+							$qry2 = "SELECT st.str_id FROM ctt_stores AS st 
+									WHERE st.str_name = '$LoadProducts[11]' 
+									UNION SELECT 0 LIMIT 1";
 							$rest = $this->db->query($qry2);
 							$rst = $rest->fetch_object();
 							$store = $rst->str_id;
@@ -56,14 +60,17 @@ public function SaveDocumento($request_params)
 							$proveedor = $LoadProducts[4];
 						} 
 						// Busca el id del proveedor
-						$qry2 = "SELECT sp.sup_id FROM ctt_suppliers AS sp WHERE sp.sup_business_name = '$proveedor' UNION SELECT 0 LIMIT 1";
+						$qry2 = "SELECT sp.sup_id FROM ctt_suppliers AS sp 
+								WHERE sp.sup_business_name = '$proveedor' 
+								UNION SELECT 0 LIMIT 1";
 						$rest = $this->db->query($qry2);
 						$rst = $rest->fetch_object();
 						$supplier = $rst->sup_id;
 
-
+						// VALIDA LA EXISTENCIA DEL SKU
 						if (strlen($LoadProducts[0]) == 15 || strlen($LoadProducts[0]) == 10) {
-							# Revisar que exista un producto con la categoria y subcat que se esta introduciendo a traves de su sku
+							# Revisar que exista un producto con la categoria y subcat que se esta introduciendo 
+							# a traves de su sku
 							$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct 
 							INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
 							INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id
@@ -77,7 +84,8 @@ public function SaveDocumento($request_params)
 							// Hay que verificar que los ultimos digitos son numericos
 							if (strlen($LoadProducts[0]) == 15) {
 								$skuCsv = substr($LoadProducts[0], 12, 4);
-								$qry = "SELECT COUNT(*) cant FROM ctt_load_series WHERE ser_sku = '$LoadProducts[0]'";
+								$qry = "SELECT COUNT(*) cant FROM ctt_load_series 
+										WHERE ser_sku = '$LoadProducts[0]'";
 								$res = $this->db->query($qry);
 								$rs = $res->fetch_object();
 								$ser = $rs->cant;
@@ -99,11 +107,7 @@ public function SaveDocumento($request_params)
 								}
 							}
 							// MARCA (Verificar que la marca no contenga comillas simples)
-							if (strpos($LoadProducts[1], "'") !== false) {
-								$marca = str_replace("'", '"', $LoadProducts[1]);
-							}else{
-								$marca = $LoadProducts[1];
-							}
+							
 							
 
 							if ($acept == 0) {
@@ -111,7 +115,8 @@ public function SaveDocumento($request_params)
 								$estatus = $estatus . "1,";
 							}else{
 								// verifica que no exista ya esta serie en la tabla de series
-								$qry3 = "SELECT COUNT(*) series FROM ctt_series sr WHERE sr.ser_sku = '$LoadProducts[0]'";
+								$qry3 = "SELECT COUNT(*) series FROM ctt_series sr 
+										WHERE sr.ser_sku = '$LoadProducts[0]'";
 								$rest = $this->db->query($qry3);
 								$rst = $rest->fetch_object();
 								$series = $rst->series;
@@ -122,7 +127,9 @@ public function SaveDocumento($request_params)
 									$estatus = $estatus . "2,";
 								}else{
 									// si no existe entonces se obtiene el valor del producto con el que se relaciona
-									$qry4 = "SELECT prd_id FROM ctt_products pr WHERE pr.prd_sku = SUBSTR('$LoadProducts[0]',1,7) union select 0 limit 1";
+									$qry4 = "SELECT prd_id FROM ctt_products pr 
+											WHERE pr.prd_sku = SUBSTR('$LoadProducts[0]',1,7) 
+											union select 0 limit 1";
 									$rest = $this->db->query($qry4);
 									$rst = $rest->fetch_object();
 									$prdId = $rst->prd_id;
@@ -135,6 +142,12 @@ public function SaveDocumento($request_params)
 						}else{
 							$estatus = $estatus . "1,";
 						}
+
+						if (strpos($LoadProducts[1], "'") !== false) {
+							$marca = str_replace("'", '"', $LoadProducts[1]);
+						}else{
+							$marca = $LoadProducts[1];
+						}
 						// verificar que el costo es numerico
 						if (floatval($LoadProducts[7]) || $LoadProducts[7]==0 ) {
 							# Costo
@@ -146,7 +159,9 @@ public function SaveDocumento($request_params)
 						// Verificar que el tipo de moneda exista
 						if (strlen($LoadProducts[6]) == 3) {
 							// Moneda
-							$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn WHERE cn.cin_code = '$LoadProducts[6]' UNION SELECT 0 LIMIT 1";
+							$qry2 = "SELECT cn.cin_id FROM ctt_coins AS cn 
+									WHERE cn.cin_code = '$LoadProducts[6]' 
+									UNION SELECT 0 LIMIT 1";
 							$rest = $this->db->query($qry2);
 							$rst = $rest->fetch_object();
 							$coin = $rst->cin_id;
@@ -190,8 +205,14 @@ public function SaveDocumento($request_params)
 							}else{
 								$aux++;
 							}
-							$qry = "INSERT INTO ctt_load_series(ser_sku, ser_brand, ser_serial_number, ser_date_registry, sup_id, ser_import_petition,cin_id, ser_cost, ser_cost_import, ser_sum_ctot_cimp,ser_no_econo,str_id, ser_situation, ser_stage, result, prd_id, ser_status)
-								VALUES ('$LoadProducts[0]', '$marca', '$LoadProducts[2]', '$LoadProducts[3]', '$supId', '$LoadProducts[5]', '$coin','$costo', '$LoadProducts[8]', '$LoadProducts[9]', '$LoadProducts[10]', '$strId', 'D', 'D', '$estatus', '$prdId', 1)";
+							$qry = "INSERT INTO ctt_load_series(ser_sku, ser_brand, ser_serial_number, 
+									ser_date_registry, sup_id, ser_import_petition,cin_id, ser_cost, 
+									ser_cost_import, ser_sum_ctot_cimp,ser_no_econo,str_id, 
+									ser_situation, ser_stage, result, prd_id, ser_status)
+								VALUES ('$LoadProducts[0]', '$marca', '$LoadProducts[2]', 
+									'$LoadProducts[3]', '$supId', '$LoadProducts[5]', '$coin','$costo', 
+									'$LoadProducts[8]', '$LoadProducts[9]', '$LoadProducts[10]', '$strId', 
+									'D', 'D', '$estatus', '$prdId', 1)";
 							$this->db->query($qry);
 					}
 					
@@ -331,8 +352,9 @@ public function SaveDocumento($request_params)
 	}
 
 	function vaciarLoadSeries(){
-		$qry1 = "TRUNCATE TABLE ctt_load_series;";
-		
+		//$qry1 = "TRUNCATE TABLE ctt_load_series;";
+		$qry1 = "DELETE FROM ctt_load_series
+        WHERE result = 'EXITOSO'";
 		return  $this->db->query($qry1);
 	}
 

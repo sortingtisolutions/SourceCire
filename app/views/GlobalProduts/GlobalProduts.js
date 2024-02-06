@@ -42,8 +42,8 @@ function settingTable() {
             info: false,
         },
         lengthMenu: [
-            [50, 100, 200, -1],
-            [50, 100, 200, 'Todos'],
+            [500, 1000, 2000, -1],
+            [500, 1000, 2000, 'Todos'],
         ],
         buttons: [
             {
@@ -150,8 +150,8 @@ function settingTableSub() {
         dom: 'Blfrtip',
         
         lengthMenu: [
-            [10, 20, 50, -1],
-            [10, 20, 50, 'Todos'],
+            [50, 100, 200, -1],
+            [50, 100, 200, 'Todos'],
         ],
         buttons: [
             
@@ -164,8 +164,7 @@ function settingTableSub() {
         scrollY: 'calc(70vh - 150px)',
         scrollX: true,
         fixedHeader: true,
-        columns: [
-            {data: 'editable',      class: 'edit', orderable: false},   
+        columns: [  
             {data: 'code',      class: 'supply'},        
             {data: 'subcname',      class: 'supply'},    
         ],
@@ -251,7 +250,6 @@ function putSubCategories(dt) {
         $.each(dt, function (v, u) {
             var row = tabla.row
             .add({
-                editable:'',
                 code: u.sbc_code,
                 subcname: u.sbc_name,
             })
