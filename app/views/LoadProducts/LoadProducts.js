@@ -13,7 +13,7 @@ function inicial() {
     getDocumentosTable(); 
     bsCustomFileInput.init();
     //
-    activeButtons();
+    // activeButtons();
 
     $("#cargaFiles").change(function () {
         archivo = this.files[0];
@@ -188,7 +188,7 @@ function settingTable() {
                //Aquí es donde generas el botón personalizado
                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
            },
-           {
+          /*  {
             // Boton aplicar cambios
             text: 'Descargar Ejemplo',
             footer: true,
@@ -196,7 +196,7 @@ function settingTable() {
             action: function (e, dt, node, config) {
                 VerDocumento();
             },
-            },
+            }, */
        ],
        pagingType: 'simple_numbers',
         language: {
@@ -268,7 +268,7 @@ function SaveDocumento() {
    /* data.append("CodDocumento", CodDocumento); */
    data.append("tipoDocumento", tipoDocumento);
    data.append("fechaadmision",Fechaadmision);
-   //modalLoading('S');
+   modalLoading('S');
    if(ExtDocumento == "csv"){
        $.ajax({
            type: "POST",
@@ -280,7 +280,7 @@ function SaveDocumento() {
            data:data,
            url: location,
        success: function (respuesta) {
-          //console.log(respuesta);
+          // console.log(respuesta);
           
            getDocumentosTable();
            $('#aceptados').text(respuesta.aceptados);
@@ -290,7 +290,7 @@ function SaveDocumento() {
            } */
            
            showResults();
-           //modalLoading('H');
+           modalLoading('H');
            $('#MoveFolioModal').modal('show');
             $('#btnHideModal').on('click', function () {
                 $('#MoveFolioModal').modal('hide');
@@ -390,7 +390,7 @@ function loadProcess() {
         var selector = put_load_process;
         fillField(pagina, par, tipo, selector); 
         
-        activeButtons();
+        // activeButtons();
         window.location.reload();
         $('#confirmarCargaModal').modal('hide');
         /* setTimeout(() => {
@@ -414,7 +414,7 @@ function loadProcess() {
         fillField(pagina, par, tipo, selector); 
         //console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
-        activeButtons();
+        // activeButtons();
         window.location.reload();
         //getDocumentosTable();
     });
@@ -424,13 +424,6 @@ function putFiles(dt) {
    modalLoading('S');
    pd = dt;
    datos = dt;
-   /* let largo = $('#DocumentosTable tbody tr td').html();
-   largo == 'Ningún dato disponible en esta tabla'
-       ? $('#DocumentosTable tbody tr').remove()
-       : '';
-   tabla =  $('#DocumentosTable').DataTable();
-   
-   tabla.rows().remove().draw(); */
    $('#DocumentosTable tbody').html('');
 
    if(dt[0].prd_id > 0){
@@ -446,7 +439,7 @@ function putFiles(dt) {
             }
                let H = `
                 <tr>
-                    <td><i class="${icon} show" style="${valstage}"></i></td>
+                    <td><i class="${icon} showMerror" style="${valstage}"></i></td>
                     <td>${u.result}</td>
                     <td>${u.prd_sku}</td>
                     <td>${u.prd_name}</td>
@@ -470,21 +463,18 @@ function putFiles(dt) {
     //settingTable();
    }
    activarBoton();
+   activeButtons();
    modalLoading('H');
 }
 
 function activarBoton(){
-    $('.show')
+    $('.showMerror')
     .unbind('click')
     .on('click', function(){
         var tr = $(this).closest('tr');
         var errores = tr.find('td').eq(1).text().split(',');
         var motivosError = 0;
         settingTableErrores();
-        /* $('#IdErrores').val(errores);
-        var errores = $('#IdErrores').val().split(','); */
-        //limpiarModalErrores();
-
         $.each(errores, function(v,u){
             if(u > 0){
                 motivosError = motivosError + ',' + u;
@@ -494,23 +484,17 @@ function activarBoton(){
             if (u == 'EXITOSO') {
                 motivosError = 0;
             }
-            /* console.log($('#codigo-' + u).text());
-            $('#codigo-' + u).removeClass('objHidden'); */
         });
+        if (motivosError != 0 || motivosError != '') {
+            getErrores(motivosError);
+            $('#MotivosModal').removeClass('overlay_hide');
+            $('#MotivosModal .btn_close')
+            .unbind('click')
+            .on('click', function () {
+                $('.overlay_background').addClass('overlay_hide');
+            }); 
+        }
         
-        getErrores(motivosError);
-        $('#MotivosModal').removeClass('overlay_hide');
-        $('#MotivosModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            $('.overlay_background').addClass('overlay_hide');
-        });
-        /* 
-        
-        $('#btn_hide_modal').on('click', function () {
-            $('#MotivosModal').modal('hide');
-        }); */
-        // $('#verMotivo').removeClass('objHidden');
     });
 }
 

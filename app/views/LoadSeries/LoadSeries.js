@@ -12,7 +12,7 @@ function inicial() {
     //settingTable();
     getDocumentosTable(); 
     bsCustomFileInput.init();
-    activeButtons();
+    
 
     $("#cargaFiles").change(function () {
         archivo = this.files[0];
@@ -145,7 +145,7 @@ function settingTable() {
                //Aquí es donde generas el botón personalizado
                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
            },
-           {
+           /* {
                 // Boton aplicar cambios
                 text: 'Descargar Ejemplo',
                 footer: true,
@@ -153,7 +153,7 @@ function settingTable() {
                 action: function (e, dt, node, config) {
                     VerDocumento();
                 },
-            },
+            }, */
        ],
        pagingType: 'simple_numbers',
        language: {
@@ -218,7 +218,7 @@ function SaveDocumento() {
                 $('#MoveFolioModal').modal('hide');
                 LimpiaModal();
             });
-            activeButtons();
+            // activeButtons();
         },
         error: function (EX) {console.log(EX);}
         }).done(function () {}); 
@@ -280,7 +280,7 @@ function LimpiaModal() {
     $('#titulo').text('Nuevo Documento');
 }
 function activarBoton(){
-    $('.show')
+    $('.showMerrores')
     .unbind('click')
     .on('click', function(){
         var tr = $(this).closest('tr');
@@ -292,19 +292,24 @@ function activarBoton(){
         $.each(errores, function(v,u){
             if(u > 0){
                 motivosError = motivosError + ',' + u;
-                console.log(motivosError);
+                
             }
             if (u == 'EXITOSO') {
                 motivosError = 0;
             }
         });
-        getErrores(motivosError);
-        $('#MotivosModal').removeClass('overlay_hide');
-        $('#MotivosModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            $('.overlay_background').addClass('overlay_hide');
-        });
+        console.log(motivosError);
+        if (motivosError != '' || motivosError!=0) {
+            
+            $('#MotivosModal').removeClass('overlay_hide');
+            getErrores(motivosError);
+            $('#MotivosModal .btn_close')
+            .unbind('click')
+            .on('click', function () {
+                $('.overlay_background').addClass('overlay_hide');
+            });
+        }
+        
     });
 }
 //ver Documentos
@@ -351,7 +356,7 @@ function loadProcess() {
         var selector =  getResult;
         fillField(pagina, par, tipo, selector); 
         $('#confirmarCargaModal').modal('hide');
-        activeButtons();
+        // activeButtons();
         
        
         modalLoading('H');
@@ -371,7 +376,7 @@ function loadProcess() {
         fillField(pagina, par, tipo, selector); 
         console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
-        activeButtons();
+        // activeButtons();
         
     });
  }
@@ -384,13 +389,7 @@ function putFiles(dt) {
    console.log(dt);
    pd = dt;
    datos = dt;
-   /* let largo = $('#DocumentosTable tbody tr td').html();
-   largo == 'Ningún dato disponible en esta tabla'
-       ? $('#DocumentosTable tbody tr').remove()
-       : '';
-   tabla =  $('#DocumentosTable').DataTable();
-   
-   tabla.rows().remove().draw(); */
+   modalLoading('S');
    $('#DocumentosTable tbody').html('');
    let cn = 0;
    if(dt[0].ser_id > 0){
@@ -404,32 +403,9 @@ function putFiles(dt) {
                 icon = "fas fa-exclamation-circle";
                 valstage='color:#CC0000';
             }
-           /* tabla.row
-               .add({
-                   result: `<i class="${icon}" style="${valstage}"></i>`,
-                   error: u.result,
-                   Sku: u.ser_sku,
-                   NumeroSerie: u.ser_serial_number,
-                   Costo: u.ser_cost,
-                   FechaRegistro: u.ser_date_registry,
-
-                   FechaBaja: u.ser_date_down,
-                   Marca: u.ser_brand,
-                   NumeroImportacion: u.ser_import_petition,
-                   CostoImportacion: u.ser_cost_import,
-                   CostoTotal: u.ser_sum_ctot_cimp,
-                   
-                   NumeroEconomico: u.ser_no_econo,
-                   Comentarios: u.ser_comments,
-                   Moneda: u.cin_code,
-                   Almacen: u.sup_business_name,
-                   Proveedor: u.str_name
-               }) 
-               .draw(); */
-
                let H = `
                 <tr>
-                    <td style="width: 10px"><i class="${icon} show" style="${valstage}"></i></td>
+                    <td style="width: 10px"><i class="${icon} showMerrores" style="${valstage}"></i></td>
                     <td style="width: 50px">${u.result}</td>
                     <td style="width: 80px">${u.ser_sku}</td>
                     <td style="width: 50px">${u.ser_serial_number}</td>
@@ -454,6 +430,7 @@ function putFiles(dt) {
            cn++;
        });
        settingTable();
+       activeButtons();
        activarBoton();
    }else{
     //settingTable();

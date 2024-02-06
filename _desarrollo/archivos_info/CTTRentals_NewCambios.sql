@@ -562,3 +562,39 @@ ORDER BY pd.prd_name  ;
 
 ALTER TABLE `ctt_load_products`
 	ADD COLUMN `prd_type_asigned` VARCHAR(5) NULL DEFAULT 'PI' AFTER `prd_insured`;
+
+
+--***********05febrero24******************
+
+CREATE TABLE `ctt_global_products` (
+	`prd_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'ID del producto',
+	`prd_sku` VARCHAR(15) NULL DEFAULT '' COMMENT 'SKU identificador del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_name` VARCHAR(200) NULL DEFAULT '' COMMENT 'Nombre del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_price` DECIMAL(10,2) NULL DEFAULT '0.00' COMMENT 'Precio unitario del producto',
+	`prd_visibility` VARCHAR(1) NULL DEFAULT '1' COMMENT 'Visibilidad del producto en cotización 1-visible, 0-no visible' COLLATE 'utf8mb4_general_ci',
+	`prd_status` VARCHAR(1) NULL DEFAULT '1' COMMENT 'Estatus del producto 1-Activo, 0-Inactivo' COLLATE 'utf8mb4_general_ci',
+	`prd_level` VARCHAR(1) NULL DEFAULT 'P' COMMENT 'Tipo de registro P-Producto, A-Accesorio, K-Paquete' COLLATE 'utf8mb4_general_ci',
+	`prd_lonely` VARCHAR(2) NULL DEFAULT NULL COMMENT 'Renta solo (sin accesorio)' COLLATE 'utf8mb4_general_ci',
+	`prd_insured` VARCHAR(1) NULL DEFAULT '1' COMMENT 'Cotiza seguro 1-si, 0-no' COLLATE 'utf8mb4_general_ci',
+	`prd_stock` INT(10) NULL DEFAULT '0' COMMENT 'Cantidad existente en almacenes',
+	`prd_reserved` INT(10) NULL DEFAULT '0' COMMENT 'Cantidad reservado',
+	`prd_comments` VARCHAR(300) NULL DEFAULT '' COMMENT 'Observaciones' COLLATE 'utf8mb4_general_ci',
+	`prd_model` VARCHAR(50) NULL DEFAULT '' COMMENT 'Modelo del producto' COLLATE 'utf8mb4_general_ci',
+	`prd_coin_type` VARCHAR(30) NULL DEFAULT '' COMMENT 'Tipo de moneda' COLLATE 'utf8mb4_general_ci',
+	`prd_code_provider` VARCHAR(30) NULL DEFAULT '' COMMENT 'Código del producto segun proveedor' COLLATE 'utf8mb4_general_ci',
+	`prd_english_name` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre del producto en ingles' COLLATE 'utf8mb4_general_ci',
+	`prd_name_provider` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre del producto segun proveedor' COLLATE 'utf8mb4_general_ci',
+	`prd_type_asigned` VARCHAR(5) NULL DEFAULT NULL COMMENT 'Tipo de asignacion al Producto en su relacion' COLLATE 'utf8mb4_general_ci',
+	`sbc_id` INT(10) NULL DEFAULT '0' COMMENT 'ID de la subcategoría relacion ctt_subcategories',
+	`srv_id` INT(10) NULL DEFAULT '0' COMMENT 'ID del tipo de servicio relacion ctt_services',
+	`cin_id` INT(10) NULL DEFAULT '0' COMMENT 'ID del tipo de moneda relacion ctt_coin',
+	`doc_id` INT(10) NULL DEFAULT '0' COMMENT 'Id del documento para relacionar la ficha técnica ctt_products_documents',
+	PRIMARY KEY (`prd_id`) USING BTREE,
+	INDEX `ndx_prdsku` (`prd_sku`) USING BTREE
+)
+COMMENT='Productos de la empresa.'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=DYNAMIC
+;
+

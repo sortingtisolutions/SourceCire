@@ -4,6 +4,7 @@ let prjid, serIdNew;
 let serIdAnt=0;
 let user,v,u,n,em, ar;  //datos de usuaria para impresion
 let pjtcn;
+let cont = 0;
 let colores = ["#CD6155", "#AF7AC5", "#EC7063", "#5499C7", "#48C9B0", "#34495E", "#EB984E"];
 //var prjid;
 let aux=0;

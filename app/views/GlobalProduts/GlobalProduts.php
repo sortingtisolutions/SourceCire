@@ -60,7 +60,6 @@
                 <table class="display compact nowrap"  id="tblSubcategories" style="width: 100%; left:15%;">
                     <thead>
                         <tr>
-                            <th style="width:  30px"></th>
                             <th style="width: 100px">Código</th>
                             <th style="width: 250px">Nombre</th>
                         </tr>
