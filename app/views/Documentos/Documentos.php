@@ -13,9 +13,8 @@
 				<!-- Start área de formularios -->
 				<div class="mvst_panel">
 					<div class="form-group">
-						<h4 id="titulo">Nuevo Documento</h4>  
+						<h4 id="titulo">Alta de nuevo Documento</h4>  
 						<form id="formDocumento" class="row g-3 needs-validation" novalidate>
-
 							<div class="row" hidden>
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                            			<input id="IdDocumento" name="IdDocumento" type="text" class="form-control form-control-sm" >
@@ -154,8 +153,6 @@
 					 </div>
 				</div>
 		</div>
-
-
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/bs-custom-file-input.min.js' ?>"></script>

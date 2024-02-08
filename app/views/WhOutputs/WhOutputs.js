@@ -101,7 +101,7 @@ function settingTable() {
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    console.log(dt);
+    // console.log(dt);
     let valstage='';
     let valicon='';
     let etiquetai = '';
@@ -154,21 +154,17 @@ function activeIcons() {
             let locID = $(this);
             let pjtid = locID.parents('tr').attr('id');
             let verid = locID.parents('tr').attr('data-version');
-
-            // console.log('Paso ToWork..', pjtid, verid);
             confirm_to_work(pjtid, verid);
         });
 
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            // console.log('Pasando siguiente ventana...');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
-            // console.log(pjtid);
-            Cookies.set('pjtid', pjtid, {expires:1});
 
+            Cookies.set('pjtid', pjtid, {expires:1});
             window.location = 'WhOutputContent';
         });
     $('.print')
@@ -181,7 +177,7 @@ function activeIcons() {
         let u = user[0];
         let n = user[2];
         let em = user[3];
-        // console.log('Datos', v, u, n, h);
+
         window.open(
             `${url}app/views/OutputReprint/OutputReprintContentReport.php?v=${pjtid}&u=${u}&n=${n}&h=${h}&em=${em}`,
             '_blank'
@@ -192,12 +188,10 @@ function activeIcons() {
 function confirm_to_work(pjtid, verid) {
     $('#starToWork').modal('show');
     $('#txtIdProductPack').val(pjtid);
-    //borra paquete +
     $('#btnToWork').on('click', function () {
         let Id = $('#txtIdProductPack').val();
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
-        //console.log('Datos',pjtid,Id);
         modalLoading('S');
 
         var pagina = 'WhOutputs/UpdateSeriesToWork';
@@ -205,12 +199,11 @@ function confirm_to_work(pjtid, verid) {
         var tipo = 'json';
         var selector = putToWork;
         fillField(pagina, par, tipo, selector);
-        // putToWork(pjtid);
     });
 }
 
 function putToWork(dt){
-    console.log('Resultado Update',dt)
+    // console.log('Resultado Update',dt)
     modalLoading('H');
     window.location.reload();
 }

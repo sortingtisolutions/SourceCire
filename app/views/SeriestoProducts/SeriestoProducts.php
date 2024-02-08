@@ -60,9 +60,6 @@
                             </div>
                         </div>
 
-                        
-
-
                         <div id="selectAccesorios" style="visibility: hidden;">
                             <div style="height:10px;"></div>
                             <h4>Seleccion de Accesorios</h4>

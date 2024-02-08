@@ -108,15 +108,11 @@ class PerfilUserModel extends Model
 				$qry = "INSERT into ctt_profiles ( prf_code, prf_name, prf_description, prf_mod_start,prf_status) 
 						values ('".$params['CodPerfil']."','".$params['NomPerfil']."','".$params['DesPerfil']."', 'Start',1);";
 				$this->db->query($qry);
-
-				//optiene id de perfil insertado
 				$qry = "SELECT MAX(prf_id) AS id FROM ctt_profiles;";
 				$result = $this->db->query($qry);
 				if ($row = $result->fetch_row()) {
 				    $lastid = trim($row[0]);
 				}
-
-				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
 					$qry = "INSERT into ctt_profiles_modules (prf_id,mod_id) values (".$lastid.",".$id.");";

@@ -180,7 +180,6 @@ function fillTableStores(ix) {
             .parents('tr')
             .attr('id', strs[ix].dot_id);
     }
-    
     actionButtons();
 }
 
@@ -200,6 +199,7 @@ function saveStore() {
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
 }
+
 function putSaveStore(dt) {
     getStores();
     if (strs.length > 0) {
@@ -240,7 +240,6 @@ function putUpdateStore(dt) {
         $(`#${strs[ix].dot_id}`).children('td.store-name').html(strs[ix].dot_name);
         $(`#${strs[ix].dot_id}`).children('td.codigo').html(strs[ix].dot_code);
 
-        //putQuantity(strs[ix].dot_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
         setTimeout(() => {
@@ -261,16 +260,11 @@ function editStore(strId) {
 function deleteStore(strId) {
     console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-    
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar el tipo de documento?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar tipo de documento').css({display: 'inline'});
         $('#Id').val(strId);
-
-        
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
@@ -280,7 +274,6 @@ function deleteStore(strId) {
             var selector = putDeleteStore;
             fillField(pagina, par, tipo, selector);
         });
-    
 }
 
 function putDeleteStore(dt) {

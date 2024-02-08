@@ -13,8 +13,7 @@
 				<!-- Start área de formularios -->
 				<div class="mvst_panel" style="background-color: #E8DC9F">
 					<div class="form-group">
-						<h4 id="titulo">Nuevo Usuario</h4> 
-						 
+						<h4 id="titulo">Nuevo Usuario</h4> 						 
 						<form id="formUsuario" class="row g-3 needs-validation" novalidate>
 
 							<div class="row hide">
@@ -72,8 +71,7 @@
 											<div class="input-group-append">
 												<button id="modulesUserPerfil" class="btn btn-primary btn-Edit-Perfil" type="button" data-bs-toggle="collapse" data-target="#modulesUserColapse" data-bs-target="#modulesUserColapse" aria-expanded="false" aria-controls="modulesUserColapse">Editar</button>
 											</div>
-<!-- 											<label for="selectPerfilUsuario" class="form-label">Seleccione un perfil.</label>
- -->										</div>
+										</div>
 									</div>
 							</div>
 

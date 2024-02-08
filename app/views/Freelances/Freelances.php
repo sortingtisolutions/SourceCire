@@ -53,7 +53,6 @@
             </div>
             <div class="formContent">
                 <table id="tblEditCust">
-                    
                     <tr>
                         <td class="concept"><span class="reqsign">*</span> Nombre del Freelance: </td>
                         <td class="data">
@@ -63,7 +62,6 @@
                             <span class="intructions">Nombre Principal del freelance</span>
                         </td>
                     </tr>
-                    
                     <tr>
                         <td class="concept"><span class="reqsign">*</span> Clave del Freelance: </td>
                         <td class="data">
@@ -224,7 +222,6 @@
         </div>
     </div>
 <!-- End Ventana modal ELIMINA SERIE -->
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

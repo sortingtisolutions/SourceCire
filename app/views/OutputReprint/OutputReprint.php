@@ -26,35 +26,6 @@
                             </div>
                         </div>
 
-                        <!-- <div style="height:15px;"></div> 
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="selUsrP"  name="selUsrP"  class="form-select form-select-sm">
-                                    <option value="0">Selecciona Usuario</option>
-                                </select>
-                                <label for="selUsrP" class="form-label">Analista CTT</label>
-                            </div>
-                        </div>
-                        
-                        <div style="height:15px;"></div> 
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="selUsrC"  name="selUsrC"  class="form-select form-select-sm">
-                                    <option value="0">Selecciona Usuario</option>
-                                </select>
-                                <label for="selUsrC" class="form-label">Atiende Camara</label>
-                            </div>
-                        </div>
-
-                        <div style="height:15px;"></div> 
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="selUsrA"  name="selUsrA"  class="form-select form-select-sm">
-                                    <option value="0">Selecciona Usuario</option>
-                                </select>
-                                <label for="selUsrA" class="form-label">Atiende Almacen</label>
-                            </div>
-                        </div> -->
                     </div> 
                     <div style="height:15px;"></div> 
 
@@ -63,9 +34,6 @@
                             <div class="col">
                                 <button type="button" class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordChgUser">ReImprimir</button>
                             </div>
-                            <!-- <div class="col">
-                                <button type="button" class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="cleanForm">Limpiar</button>
-                            </div> -->
                     </div>
                 </div>
             </div>

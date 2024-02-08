@@ -285,12 +285,13 @@ public function InsertComment($params, $userParam)
 
         if ($serie_futura != null) {
             $pjtdt_id  = $serie_futura->pjtdt_id;
+
             $updt4 = "UPDATE ctt_series SET ser_situation='EA', ser_stage = 'R', pjtdt_id=$pjtdt_id
                 WHERE ser_id=$serid AND pjtdt_id=$serIdOrg;";
             $this->db->query($updt4);
             
             $updtQry = "UPDATE ctt_projects_detail SET ser_id =$serid, sttd_id = 1 where pjtdt_id='$pjtdt_id'";
-            $this->db->query($updt);
+            $this->db->query($updtQry);
         }else{
             $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
                 WHERE ser_id=$serid AND pjtdt_id=$serIdOrg;";
@@ -334,9 +335,6 @@ public function InsertComment($params, $userParam)
 	{
         $stpid 		= $this->db->real_escape_string($param['stpid']);
         $quantity 	= $this->db->real_escape_string($param['stpqty']);
-		/* $idStrSrc 	= $this->db->real_escape_string($param['strid']);
-        $serid 		= $this->db->real_escape_string($param['serid']);
-        $prodId 	= $this->db->real_escape_string($param['prodId']); */
 		
 		$qry = "UPDATE ctt_stores_products 
                 SET stp_quantity = $quantity 

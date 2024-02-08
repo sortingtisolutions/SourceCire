@@ -200,12 +200,7 @@ class MoveStoresOutModel extends Model
 	public function getAccesories($param){
 		$prd_sku		= $this->db->real_escape_string($param['sku']);
 		$ser_id			= $this->db->real_escape_string($param['serid']);
-		/* $qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sp.str_id, sp.stp_quantity
-			FROM ctt_products AS prd 
-			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
-			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
-			WHERE SUBSTR(prd.prd_sku,1,7)=SUBSTR('$prd_sku',1,7) AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
-			GROUP BY prd.prd_id , prd.prd_sku, prd_name;"; */
+
 		$qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sp.str_id, sp.stp_quantity
 			FROM ctt_products AS prd 
 			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
@@ -226,14 +221,6 @@ class MoveStoresOutModel extends Model
 
     }
 	public function getSeriesProduct($prdId, $qty){
-
-		/* $qry ="SELECT * FROM ctt_series sr WHERE sr.prd_id = $prdId 
-		AND NOT EXISTS (SELECT * FROM ctt_stores_products sp WHERE sp.ser_id = sr.ser_id) LIMIT $qty;";
-		$res = $this->db->query($qry);
-
-		$result = $res->fetch_object();
-
-		if ($result == null) { */
 			$qry = "SELECT sr.ser_id, sr.prd_id, sr.prd_id_acc, sr.str_id, 1 AS stp_quantity
 			FROM ctt_products AS prd 
 			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id

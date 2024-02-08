@@ -47,15 +47,6 @@ class WorkInputModel extends Model
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
 
-       /*  $qry = "UPDATE ctt_series AS ser
-                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
-                INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id=pjd.pjtvr_id
-                INNER JOIN ctt_version AS ver ON ver.ver_id=pjv.ver_id
-                INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pjv.pjt_id
-                SET ser.ser_situation='VA' AND ser.ser_stage='V'
-                WHERE (ver.ver_active=1 AND pjt.pjt_id=$pjtid AND pjt.pjt_status=8);";
-        $upser= $this->db->query($qry); */
-
         $qry2 = "UPDATE ctt_projects as pjt
                 SET pjt.pjt_status='9'
                 WHERE pjt.pjt_id=$pjtid AND pjt.pjt_status=8;";

@@ -20,23 +20,6 @@ class CollectAccountsModel extends Model
 // Listado de Productos
     public function listProjects($params)
     {
-        //$catId = $this->db->real_escape_string($params['catId']);
-/* 
-         $qry = "SELECT clt.clt_id,clt_folio,clt.ctl_amount_payable, 
-                        date_format(clt.clt_deadline,'%d-%m-%Y') AS clt_deadline,
-                        date_format(clt.clt_date_generated,'%d-%m-%Y') AS clt_date_generated,
-                        cus.cus_id,cus.cus_name,
-                        pjt.pjt_id, pjt.pjt_name,
-                        pa.pym_amount,date_format(pa.pym_date_paid,'%d-%m-%Y') AS pym_date_paid,
-                        SUM(clt.ctl_amount_payable-pa.pym_amount) AS pendiente
-                FROM ctt_collect_accounts AS clt
-                LEFT JOIN ctt_payments_applied AS pa ON clt.clt_id = pa.clt_id
-                LEFT JOIN ctt_customers AS cus ON cus.cus_id=clt.cus_id
-                LEFT JOIN ctt_projects AS pjt ON pjt.pjt_id=clt.pjt_id
-                GROUP BY clt.clt_id, clt.clt_date_generated,clt.ctl_amount_payable, 
-                        clt.clt_deadline,cus.cus_id,cus.cus_name,
-                        pjt.pjt_id, pjt.pjt_name,pa.pym_amount,pa.pym_date_paid
-                ORDER BY clt.clt_folio,clt_deadline ASC;"; */
 
          $qry = "SELECT clt.clt_id,clt_folio,clt.ctl_amount_payable, 
                         date_format(clt.clt_deadline,'%d-%m-%Y') AS clt_deadline,
@@ -92,10 +75,6 @@ class CollectAccountsModel extends Model
         $wayPay = $this->db->real_escape_string($params['wayPay']);
         $empId = $this->db->real_escape_string($params['empId']);
 
-        /* $qry1 = "SELECT case when pya.pym_amount then cla.ctl_amount_payable - SUM(pya.pym_amount) ELSE cla.ctl_amount_payable end as payment
-                FROM ctt_payments_applied AS pya
-                LEFT JOIN ctt_collect_accounts AS cla ON cla.clt_id = pya.clt_id
-                WHERE cla.clt_id = $foldoc LIMIT 1;"; */
         $qry1 = "SELECT case when pya.pym_amount > 0 then cla.ctl_amount_payable - SUM(pya.pym_amount) ELSE cla.ctl_amount_payable end as payment
         FROM ctt_collect_accounts AS cla
         LEFT JOIN ctt_payments_applied AS pya ON cla.clt_id = pya.clt_id

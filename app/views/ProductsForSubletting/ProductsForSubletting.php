@@ -13,7 +13,6 @@
 			<div class="row mvst_group">
 				<div class="mvst_panel" style="background-color: #EDD2F5">
 					<div class="form-group">
-
 					<div class="row">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 								<select id="txtProject" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar un proyecto">

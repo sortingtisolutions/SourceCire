@@ -13,8 +13,6 @@ function inicial() {
         deep_loading('O');
         settingTable();
         getStores();
-        
-        //getCategories();
         eventsAction()
         getMovStores();
         fillStores();
@@ -34,8 +32,8 @@ function settingTable() {
         //order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -108,27 +106,9 @@ function getStores() {
     fillField(pagina, par, tipo, selector);
 }
 
-/* // Solicita el listado de almacenes
-function getSubcategories(id) {
-    var pagina = 'MobilStore/listSubcategories';
-    var par = `[{"cat_id":"${id}"}]`;
-    var tipo = 'json';
-    var selector = putSubcategories;
-    fillField(pagina, par, tipo, selector);
-}
-
-// Solicita el listado de almacenes
-function getCategories() {
-    var pagina = 'MobilStore/listCategories';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putCategories;
-    fillField(pagina, par, tipo, selector);
-} */
 function putMovStores(dt) {
     strs = dt;
 }
-
 
 // Dibuja los almacenes
 function putStores(dt) {
@@ -145,48 +125,12 @@ function putStores(dt) {
         // 
         let id = $(this).val();
         idstr=id;
-        console.log(idstr);
+        // console.log(idstr);
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
     });
 }
 
-/* // Dibuja los almacenes
-function putSubcategories(dt) {
-    $('#txtSubcategories').html('');
-    if (dt[0].sbc_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.sbc_id}">${u.sbc_name}</option>`;
-            $('#txtSubcategories').append(H);
-        });
-    }
-
-    $('#txtSubcategories').on('change', function () {
-        // 
-        let id = $(this).val();
-        $(`#txtSubcategories option`).css({display: 'block'});
-        $(`#txtSubcategories option[value="${id}"]`).css({display: 'none'});
-    });
-} */
-
-/* // Dibuja los almacenes
-function putCategories(dt) {
-    
-    if (dt[0].cat_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.cat_id}">${u.cat_name}</option>`;
-            $('#txtCategories').append(H);
-        });
-        
-    }
-    
-    $('#txtCategories').on('change', function () {
-        let id = $(this).val();
-        $(`#txtCategories option`).css({display: 'block'});
-        $(`#txtCategories option[value="${id}"]`).css({display: 'none'});
-        getSubcategories(id);
-    });
-} */
 function fillStores() {
     if (strs != null) {
         let tabla = $('#AreasTable').DataTable();
@@ -220,7 +164,6 @@ function actionButtons() {
             }
         });
     
-
     /**  ---- Acciones de Guardar categoria ----- */
     $('#GuardarAlmacen')
         .unbind('click')
@@ -277,8 +220,6 @@ function saveStore() {
     var store = $('#txtStoreSource').val();
     var products = $('#boxIdProducts').val().split('|')[1];
     var ser_id = $('#boxIdProducts').val().split('|')[0];
-    //var category = $('#txtCategories').val();
-    //var subcategory = $('#txtSubcategories').val();
     var par = `
         [{ "placas"   : "${strName}",
             "str_id"   : "${store}",
@@ -287,7 +228,7 @@ function saveStore() {
         }]`;
 
     strs = '';
-    console.log(par);
+    // console.log(par);
     var pagina = 'MobilStore/SaveMobilStore';
     var tipo = 'html';
     var selector = putSaveStore;
@@ -312,8 +253,6 @@ function updateStore() {
     var store = $('#txtStoreSource').val();
     var products = $('#boxIdProducts').val().split('|')[1];
     var ser_id = $('#boxIdProducts').val().split('|')[0];
-    /* var category = $('#txtCategories').val();
-    var subcategory = $('#txtSubcategories').val(); */
     var par = `
         [{  "movstr_id"   : "${movId}",
             "placas"   : "${strName}",
@@ -322,7 +261,7 @@ function updateStore() {
             "ser_id"   : "${ser_id}"
         }]`;
 
-    console.log(par);
+    // console.log(par);
     strs = '';
     var pagina = 'MobilStore/UpdateMobilStore';
     var tipo = 'html';
@@ -365,16 +304,11 @@ function editStore(strId) {
 function deleteStore(strId) {
     console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-  
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar la Almacen y Unidad Móvil?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar').css({display: 'inline'});
         $('#Id').val(strId);
-
-        //   $('#BorrarAlmacenModal').modal('show');
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
@@ -425,10 +359,7 @@ function sel_products(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
-            // console.log('Paso2',idstr,res);
-
                 getProducts(idstr,res);
-
         } else {
             // console.log('Paso3');
             rowCurr.css({ display: 'none' });
@@ -453,14 +384,12 @@ function sel_products(res) {
 }
 // Solicita los productos de un almacen seleccionado
 function getProducts(strId,word) {
-    
     var pagina = 'MobilStore/listProducts';
     var par = `[{"strId":"${strId}"},{"word":"${word}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
 
 function putProducts(dt) {
     var sl = $('#boxProducts').offset();
@@ -495,7 +424,6 @@ function putProducts(dt) {
 }
 
 function eventsAction() {
-
     $('#boxProducts')
     .unbind('keyup')
     .on('keyup', function () {

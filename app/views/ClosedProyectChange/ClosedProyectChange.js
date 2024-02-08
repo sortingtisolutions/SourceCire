@@ -20,7 +20,6 @@ function inicial() {
 }
 
 /** OBTENCION DE DATOS */
-/**  Obtiene el listado de almacenes */
 function get_projects() {
     var pagina = 'ClosedProyectChange/listProjects';
     var par = `[{"strId":""}]`;
@@ -162,7 +161,7 @@ function fill_purchase(dt) {
         let cloid = $(this).parents('tr').attr('id');
         let nomproy = $(`#lstProject option[value="${glbpjtid}"]`).text().split('-')[1];
         gblcloid=cloid;
-        console.log('addData',nomproy);
+        // console.log('addData',nomproy);
         let el = $(`#tbl_dynamic tr[id="${cloid}"]`);
             $('#txtProject').val($('#txtProject').val());
             let montproy=$(el.find('td')[2]).text();
@@ -195,7 +194,6 @@ function fill_purchase(dt) {
             let monttota=$(el.find('td')[7]).text();
             settingTableSeg(gblcloid);
             let id = $(this).parents('tr').attr('id');
-            // console.log('segment',id);
             // let prdNm="Segmenta valores para cobrar"
             $('#txtMontoTotSeg').val(monttota);
             $('#addSegmentModal').removeClass('overlay_hide');
@@ -223,7 +221,7 @@ function fill_purchase(dt) {
 }
 
 function activeProjectsFunctions() {
-    console.log('ACTIVA');
+    // console.log('ACTIVA');
     putSaleExpendab();
     putTotalMaintenance();
     findExtraDiesel();
@@ -299,7 +297,6 @@ function updateTotals() {
  function confirm_to_Save(pjtid) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
-
     $('#btnClosure').on('click', function () {
         $('#starClosure').modal('hide');
         // console.log('Valor CloID',pjtid);
@@ -341,14 +338,10 @@ function saveNewDocument(dt) {
 }
 
 function putToWork(dt){
-    console.log('putToWork ', dt);
+    // console.log('putToWork ', dt);
     let folio=dt;
-
     // $('#lstProject').html('');
     $('#newValuesModal .btn_close').trigger('click');
-    // inicial();
-    // get_projects();
-    // fill_dinamic_table();
     window.location.reload();
 }
 
@@ -407,7 +400,7 @@ function settingTableSeg(cloid){
             let ldatepay=$($(u).find('td')[4]).text();
 
             let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
-            console.log('TRUK ',truk);
+            // console.log('TRUK ',truk);
             build_data_structure(truk);
         });
     });

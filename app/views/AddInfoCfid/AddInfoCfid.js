@@ -51,8 +51,8 @@ function saveExtraCfdi(pr) {
 
 function putsaveExtraCfdi(dt) {
    console.log('Id Insert-',dt);
-
 }
+
 //Valida los campos seleccionado *
 function validaFormulario() {
    var valor = 1;
@@ -75,8 +75,8 @@ function putProjectsCfdi(dt) {
        order: [[1, 'asc']],
        dom: 'Blfrtip',
        lengthMenu: [
-           [25, 50, 100, -1],
-           [25, 50, 100, 'Todos'],
+           [100, 200, 300, -1],
+           [100, 200, 300, 'Todos'],
        ],
        buttons: [
            {
@@ -196,13 +196,12 @@ function  ActiveIcons(){
                 case 'modif':
                   let idproj = $(this).attr('id');
                   let nomproj = $(this).attr('data_pro');
-                  // console.log('CLickVal-',id,nomproj);
-                    editProjCfdi(idproj, nomproj);
-                    break;
+                  editProjCfdi(idproj, nomproj);
+                  break;
                 case 'kill':
                   console.log('Elimina');
-                  //   deleteCategory(catId);
-                    break;
+                  // deleteCategory(catId);
+                  break;
                 default:
             }
         });
@@ -237,7 +236,7 @@ function exchange_apply() {
            "permfed"       : "${permfed}",
            "projqty"       : "${projqty}"
        }]`;
-         //   console.log(par);
+         // console.log(par);
            fill_table(par);
    } else {
        let par = `

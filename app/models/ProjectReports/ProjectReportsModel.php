@@ -40,45 +40,6 @@ class ProjectReportsModel extends Model
         $findCli = $this->db->real_escape_string($params['findCli']);
         $bandera = $this->db->real_escape_string($params['bandera']);
 
-/*         if ($bandera == '0' ){
-            $qry = "SELECT  pjt.pjt_name, pjttp.pjttp_name,SUM(pjtcn_prod_price) AS allsum,cust.cus_name 
-                FROM ctt_projects_content AS pjc
-                INNER JOIN ctt_projects as pjt ON  pjc.pjt_id=pjt.pjt_id
-                INNER JOIN ctt_projects_type AS pjttp ON pjttp.pjttp_id=pjt.pjttp_id
-                LEFT JOIN ctt_customers_owner AS cusow ON cusow.cuo_id=pjt.cuo_id
-                LEFT JOIN ctt_customers AS cust ON cust.cus_id=cusow.cus_id
-                GROUP BY pjt.pjt_name,pjttp.pjttp_name,cust.cus_name;";
-           
-        } elseif($bandera == '1'){
-            $qry = "SELECT  pjt.pjt_name, pjttp.pjttp_name,SUM(pjtcn_prod_price) AS allsum,cust.cus_name 
-                FROM ctt_projects_content AS pjc
-                INNER JOIN ctt_projects as pjt ON  pjc.pjt_id=pjt.pjt_id
-                INNER JOIN ctt_projects_type AS pjttp ON pjttp.pjttp_id=pjt.pjttp_id
-                LEFT JOIN ctt_customers_owner AS cusow ON cusow.cuo_id=pjt.cuo_id
-                LEFT JOIN ctt_customers AS cust ON cust.cus_id=cusow.cus_id
-                WHERE pjt.pjt_date_start >= $fechaIni AND 
-                pjt.pjt_date_end <= $fechaFin
-                GROUP BY pjt.pjt_name,pjttp.pjttp_name,cust.cus_name;";
-           
-        } elseif ($bandera == '2'){
-            $qry = "SELECT  pjt.pjt_name, pjttp.pjttp_name,SUM(pjtcn_prod_price) AS allsum, cust.cus_name 
-                FROM ctt_projects_content AS pjc
-                INNER JOIN ctt_projects as pjt ON  pjc.pjt_id=pjt.pjt_id
-                INNER JOIN ctt_projects_type AS pjttp ON pjttp.pjttp_id=pjt.pjttp_id
-                LEFT JOIN ctt_customers_owner AS cusow ON cusow.cuo_id=pjt.cuo_id
-                LEFT JOIN ctt_customers AS cust ON cust.cus_id=cusow.cus_id
-                WHERE pjt.pjt_date_start >= $fechaIni 
-                AND pjt.pjt_date_end <= $fechaFin
-                GROUP BY pjt.pjt_name,pjttp.pjttp_name,cust.cus_name;";
-        }  */
-
-       /*  $qry = "SELECT dt.ser_id, dt.prd_id, dt.pjtdt_prod_sku, cn.pjtcn_prod_name, cn.pjtcn_prod_price, ifnull(sr.ser_comments,'') AS ser_comments
-                    , (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * cn.pjtcn_days_cost + (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - ((cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip) + (cn.pjtcn_prod_price * cn.pjtcn_days_test) -  (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo
-                FROM ctt_projects_detail AS dt
-                INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id AND cn.prd_id = dt.prd_id
-                LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                WHERE cn.pjt_id = $pjtId;"; */
-
             $qry = "SELECT  pjt.pjt_id, pjt.pjt_name, pjttp.pjttp_name,SUM(pjtcn_prod_price) AS allsum, cust.cus_name, cust.cus_id,
 			loc.loc_id, loc.loc_type_location, em.emp_id, em.emp_fullname, pjtt.pjttp_id, pjtt.pjttp_name,
 			pjttc.pjttc_id, pjttc.pjttc_name, pjt.pjt_location, pjttc.pjttc_name, 
@@ -404,23 +365,6 @@ public function equipoMasRentado($params)
     $findCli = $this->db->real_escape_string($params['findCli']);
     $bandera = $this->db->real_escape_string($params['bandera']);
     if($bandera == '1'){
-        /* $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, sr.ser_id, sr.ser_sku, pj.pjt_id, pj.pjt_name, 
-        lc.loc_id, lc.loc_type_location, (SELECT SUM(DATEDIFF(per.pjtpd_day_end, per.pjtpd_day_start))
-        FROM ctt_projects_periods AS per
-        INNER JOIN ctt_projects_detail AS pjdt ON pjdt.pjtdt_id = per.pjtpd_id 
-        WHERE pjdt.pjtdt_id = pdt.pjtdt_id) AS tiempo, sr.ser_reserve_count
-        FROM ctt_products AS pd
-        INNER JOIN ctt_projects_content AS pc ON pc.prd_id = pd.prd_id
-        INNER JOIN ctt_projects_detail AS pdt ON pdt.prd_id = pd.prd_id
-        INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pdt.pjtdt_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
-        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-        LEFT JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
-        LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
-         INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
-         INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-        where pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin'  AND em.are_id IN(1)
-        ORDER BY pj.pjt_id;"; */
         $qry = "SELECT ser_sku, prd.prd_name, COUNT(*) ser_reserve_count, prd.prd_id, sr.ser_sku, sr.ser_id, pjt.pjt_id
         , pjt.pjt_name, IFNULL((DATEDIFF(pd.pjtpd_day_end, pd.pjtpd_day_start)+1),0) tiempo, lc.loc_type_location
         FROM ctt_series AS sr
@@ -487,18 +431,7 @@ public function equipoMasRentado($params)
         GROUP BY ser_sku, prd.prd_name ORDER BY COUNT(*) DESC LIMIT 20;";
         //AND cu.cus_id = '$findCli' AND em.emp_id ='$findAna'
     }
-        /* $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, sr.ser_id, sr.ser_sku, pj.pjt_id, pj.pjt_name, 
-        lc.loc_id, lc.loc_type_location, (SELECT SUM(DATEDIFF(per.pjtpd_day_end, per.pjtpd_day_start))
-        FROM ctt_projects_periods AS per
-        INNER JOIN ctt_projects_detail AS pjdt ON pjdt.pjtdt_id = per.pjtpd_id 
-        WHERE pjdt.pjtdt_id = pdt.pjtdt_id) AS tiempo, sr.ser_reserve_count
-        FROM ctt_products AS pd
-        INNER JOIN ctt_projects_content AS pc ON pc.prd_id = pd.prd_id
-        INNER JOIN ctt_projects_detail AS pdt ON pdt.prd_id = pd.prd_id
-        INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pdt.pjtdt_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
-        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-        ORDER BY pj.pjt_id;"; */
+        
     return $this->db->query($qry);
 }
 public function equipoMenosRentado($params)
@@ -909,14 +842,7 @@ public function ProjectsByDeveloper($params)
                INNER JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
             WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND em.emp_id ='$findAna' AND em.are_id = 1";
     }
-   /*  $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, 
-            pjt.pjttp_name, CONCAT(DATE(pj.pjt_date_start), ' - ' ,DATE(pj.pjt_date_end)) AS dates
-            FROM ctt_projects AS pj 
-            INNER JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
-            INNER JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
-            INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
-        INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
-        LEFT JOIN ctt_employees AS em ON em.emp_id = wap.emp_id"; */
+   
     return $this->db->query($qry);
 }
 

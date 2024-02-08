@@ -7,9 +7,7 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 <style>
-    .hiddenElement {
-        visibility: hidden !important;
-    }
+    .hiddenElement {visibility: hidden !important;}
 
   #calendar {
     max-width: 600px;
@@ -33,9 +31,7 @@
                                 <div class="list-items" ></div>
                             </div>
 					</div>
-
-						<hr>
-
+					<hr>
 					</div>
 				</div>
 
@@ -91,10 +87,6 @@
 	<div class="overlay_background overlay_hide" id="CalendarModal" style="height: 600px; width:70%;left:160px;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-			<!--
-            <div class="formButtons">
-                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
-            </div>-->
             <div class="">
                 <div id="calendar"></div>
             </div>

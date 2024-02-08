@@ -26,17 +26,13 @@ class ProductAccessoryModel extends Model
 // Listado de paquetes
 public function listPackages()
 {
-    // $qry = "SELECT * FROM ctt_products WHERE prd_level ='K' AND prd_status =1;";
-    // return $this->db->query($qry);
+
 }
 
 // Listado de subcategorias
     public function lastIdSubcategory($params)
     {
-        // $sbcId = $this->db->real_escape_string($params);
-        // $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  
-        //         FROM ctt_products where sbc_id = $sbcId;";
-        // return $this->db->query($qry);
+
     }
 
     
@@ -65,12 +61,7 @@ public function listProductsById($request_params)
 // Listado de productos del paquete
 public function listProductsPack($params)
 {
-    // $prdId = $this->db->real_escape_string($params);
-    // $qry = "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent  
-    //         FROM ctt_products_packages AS pk
-    //         INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
-    //         WHERE pk.prd_parent = $prdId AND prd_status =1;";
-    // return $this->db->query($qry);
+
 }
 
 public function listSeriesProd($params) // Edna

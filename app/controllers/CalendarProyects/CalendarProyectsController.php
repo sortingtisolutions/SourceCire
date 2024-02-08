@@ -5,7 +5,6 @@
 
 	class CalendarProyectsController extends Controller
 	{
-
 		private $session;
 		public $model;
 
@@ -24,12 +23,12 @@
 		  $this->render(__CLASS__, $params);
 		}
 
-		public function GetArea($request_params)
+		/* public function GetArea($request_params)
 		{
 	      $result = $this->model->GetArea($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
-
+ */
 		public function SaveArea($request_params)
 		{
 			$params =  $this->session->get('user');
@@ -86,57 +85,4 @@
 			$strId= $request_params['are_id'];	  
             echo $strId;
 		}
-
-		/* // Obtiene encargados de almacen
-		public function GetEncargadosAlmacen($request_params)
-		{
-	      $result = $this->model->GetEncargadosAlmacen($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
-		}
-
-		// Lista las series
-		public function listSeries_old($request_params)
-		{
-			// $params =  $this->session->get('user');
-			// $result = $this->model->listSeries($request_params);
-			// $i = 0;
-			// while($row = $result->fetch_assoc()){
-			// 	$rowdata[$i] = $row;
-			// 	$i++;
-			// }
-			// if ($i>0){
-			// 	$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-			// } else {
-			// 	$res =  '[{"str_id":"0"}]';	
-			// }
-			// echo $res;
-		}
-
-		public function listSeries($request_params)
-		{
-			$params =  $this->session->get('user');
-			$result = $this->model->listSeries($request_params);
-			// print_r($result);
-			echo $result;
-
-		}
-
-		//CONTABILIZA REGISTROS
-        public function countQuantity($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->countQuantity($request_params);
-			$i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"count":"0"}]';	
-            }
-            echo $res;
-        }
- */
 	}

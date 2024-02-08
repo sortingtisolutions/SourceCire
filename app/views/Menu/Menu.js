@@ -10,6 +10,7 @@ function main() {
                 right: '0%',
             });
             cont = 0;
+            
         } else {
             cont = 1;
             $('nav').animate({

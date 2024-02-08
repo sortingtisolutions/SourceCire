@@ -53,28 +53,8 @@ function inicial() {
        
     });
 
-    /* $('#verMotivo').on('click', function () {
-       
-    }); */
-
-    /* $('#DocumentosTable tbody').on('click', 'tr', function () {
-      positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
-
-      setTimeout(() => {
-         RenglonesSelection = table.rows({ selected: true }).count();
-         if (RenglonesSelection == 0 || RenglonesSelection == 1) {
-            $('.btn-apply').addClass('hidden-field');
-         } else {
-            $('.btn-apply').removeClass('hidden-field');
-         }
-     }, 10);
-   }); */
 }
-//ver Documentos
-/* function VerDocumento() {
-    window.location.href = '/LoadSeriesCsv.php';
-} */
-//Valida los campos seleccionado *
+
 function validaFormulario() {
     var valor = 1;
     var forms = document.querySelectorAll('.needs-validation');
@@ -206,11 +186,7 @@ function SaveDocumento() {
             console.log(respuesta);
             getDocumentosTable();
             $('#aceptados').text(respuesta.aceptados);
-            $('#rechazados').text(respuesta.rechazados);
-            /* if (respuesta.rechazados > 0) {
-                 $('#estatus').text('Revisa que el sku, el codigo de la moneda, el precio, el servicio y el seguro esten correctamente');
-            } */
-            
+            $('#rechazados').text(respuesta.rechazados);            
             modalLoading('H');
             showResults();
            $('#MoveFolioModal').modal('show');
@@ -243,7 +219,7 @@ function limpiarResults(){
     $('#proveedor').text('')
 }
 function put_results(dt) {
-    console.log(dt);
+    // console.log(dt);
     limpiarResults();
     if (dt[0].results > 0) {
         if (dt[0].duplicidad > 0) {
@@ -265,7 +241,6 @@ function put_results(dt) {
             $('#proveedor').text('Por problemas con proveedor: '+ dt[0].proveedor);
         }
     }
-    
 }
 
 //Limpia datos en modal  **
@@ -346,7 +321,6 @@ function getDocumentosTable() {
 //Envia los datos almacenados a la tabla de productos *
 function loadProcess() {
     $('#confirmarCargaModal').modal('show');
-    
     $('#confirmLoad').on('click', function () {
         modalLoading('S');
         console.log('subir datos');
@@ -357,12 +331,7 @@ function loadProcess() {
         fillField(pagina, par, tipo, selector); 
         $('#confirmarCargaModal').modal('hide');
         // activeButtons();
-        
-       
         modalLoading('H');
-        /* setTimeout(() => {
-            modalLoading('H');
-        }, 100); */
     });
  }
  function eliminarDatos(){
@@ -374,19 +343,18 @@ function loadProcess() {
         var tipo = 'html';
         var selector =  getResult;
         fillField(pagina, par, tipo, selector); 
-        console.log('eliminar');
+        // console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
-        // activeButtons();
-        
+        // activeButtons(); 
     });
  }
 
  function getResult(dt){
-    console.log(dt);
+    // console.log(dt);
     window.location.reload();
  }
 function putFiles(dt) {
-   console.log(dt);
+//    console.log(dt);
    pd = dt;
    datos = dt;
    modalLoading('S');

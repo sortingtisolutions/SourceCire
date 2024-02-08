@@ -90,8 +90,6 @@ class CollectAccountsController extends Controller
         $params =  $this->session->get('user');
         $result = $this->model->insertPayAplied($request_params, $params);
         $res = $result;
-        // $pjtId  = $this->model->PromoteProject($request_params);
-
         echo $res;
     } 
 }

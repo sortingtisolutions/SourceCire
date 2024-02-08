@@ -36,7 +36,6 @@
     </div>
 </div>
 
-
 <!-- Start Ventana modal DETALLE DE VENTA -->
     <div class="overlay_background overlay_hide"id="SaleDetailModal">
         <div class="overlay_modal">

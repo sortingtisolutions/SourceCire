@@ -2,7 +2,6 @@
 <div class="row">
   <div class="col-md-12">
     <h2>Clients list</h2>
-
     <table class="table table-striped">
       <thead>
         <th>#</th>

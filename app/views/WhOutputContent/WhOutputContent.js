@@ -31,8 +31,6 @@ function inicial() {
     getFreelances(prjid);
     getAnalysts(prjid);
     getLocations(prjid);
-
-
     // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
         confirm_to_GetOut(prjid);
@@ -47,11 +45,9 @@ function inicial() {
     .unbind('click')
     .on('click', function () {
         showModalComments();
-
     });
 
 }
-
 
 function showModalComments() {
     let template = $('#commentsTemplates');
@@ -62,10 +58,6 @@ function showModalComments() {
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
-    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
-
-    console.log( $('#txtComment').val()); */
-    //console.log(prjid);
     fillComments(prjid);
 }
 /** ***** CIERRA MODALES ******* */
@@ -90,19 +82,12 @@ function automaticCloseModal() {
 }
 
 function fillComments(pjtId) {
-    console.log(pjtId);
-
-    // Agrega nuevo comentario
+    // console.log(pjtId);
     $('.comments__addNew .invoice_button')
         .unbind('click')
         .on('click', function () {
-
-            //let pjtId = $('.version_current').attr('data-project');
-
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
-
-            // console.log(comComment);
             if (comComment.length > 3) {
                 let par = `
                     [{
@@ -113,7 +98,6 @@ function fillComments(pjtId) {
                     `;
                 var pagina = 'WhOutputContent/InsertComment';
                 var tipo = 'json';
-                console.log(par);
                 var selector = addComment;
                 fillField(pagina, par, tipo, selector);
             }
@@ -165,7 +149,6 @@ function getProjects(prjid) {
 
 // Solicita los analistas
 function getAnalysts(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listAnalysts';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -182,7 +165,6 @@ function  getLocations(prjid) {
 }
 // Solicita los productos del proyecto  OK
 function getDetailProds(prjid, emp_id,areid) {
-    console.log(areid);
     var pagina = 'WhOutputContent/listDetailProds';
     var par = `[{"pjt_id":"${prjid}", "empid":"${emp_id}", "areid":"${areid}"}]`;
     var tipo = 'json';
@@ -191,7 +173,6 @@ function getDetailProds(prjid, emp_id,areid) {
 }
 
 function getFreelances(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listFreelances';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -200,7 +181,6 @@ function getFreelances(prjid) {
 }
 //Solicita las series de los productos  OK
 function getSeries(pjtcnid) {
-    // console.log('ID-Contenido Producto', pjtcnid);
     var pagina = 'WhOutputContent/listSeries';
     var par = `[{"pjtcnid":"${pjtcnid}"}]`;
     var tipo = 'json';
@@ -219,7 +199,6 @@ function getSerieDetail(serid, serorg) {
 
 // Solicita los comentarios al proyecto // 11-10-23
 function getComments_text(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listComments';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -473,7 +452,6 @@ function putSeries(dt) {
         $('#SinSerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            //console.log('Cierra Series');
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
             $('#tblSerie').DataTable().destroy;
@@ -543,61 +521,7 @@ function settingSeries(dt){
     });
 
 }
-/* 
-function settingSeriesPackage(dt){
 
-    $('#SeriePackModal').removeClass('overlay_hide');
-    $('#tblSerieP').DataTable({
-        // retrieve: true,
-        bDestroy: true,
-        // dom: 'Blfrtip',
-        order: [[1, 'asc']],
-        dom: 'Blfrtip',
-        lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
-        ],
-        buttons: [
-            {
-                // Boton imprimir contenido jjr
-                text: 'Select All OK',
-                className: 'btn-apply',
-                action: function (e, dt, node, config) {
-                    readAceptTable();
-                    // printContent(prjid);
-                },
-            },
-            
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 290px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'sermodif', class: 'edit'},
-            {data: 'seriesku', class: 'sku left'},
-            {data: 'sernumber', class: 'sku'},
-            {data: 'prodname', class: 'sku'},
-            {data: 'sertype', class: 'sku'},
-            {data: 'serfchout', class: 'sku'},
-            {data: 'serfchin', class: 'sku'},
-            {data: 'serlevel', class: 'sku'},
-        ],
-    });
-
-    $('#SeriePackModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            //console.log('Cierra Series');
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
-            $('#tblSerie').DataTable().destroy;
-    });
- 
-}*/
 function readAceptTable() {
     $('#tblSerie tbody tr').each(function (v, u) {
         // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
@@ -617,13 +541,10 @@ function readAceptTable() {
 
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
 function build_modalSeries(dt) {
-        //  console.log('build_modalSeries',dt);
          let tabla = $('#tblSerie').DataTable();
         //  $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
-
         $('.overlay_closer .title_calendar').html(dt[0].prd_name);
-
          tabla.rows().remove().draw();
          if (dt[0].ser_id > 0)
          {
@@ -638,7 +559,6 @@ function build_modalSeries(dt) {
                 }else{
                     level="Interno"
                 }
-                //console.log(dt);
                 tabla.row
                     .add({
                         sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}" data-serie ="${u.prd_name}"></i> 
@@ -667,8 +587,6 @@ function activeIconsSerie() {
             let serorg = $(this).attr('data-content').split('|')[1];
             let detIdChg = $(this).attr('data-content').split('|')[2];
             let serIdChg = $(this).attr('data-content').split('|')[3];
-
-            // console.log('Click Nivel 3', serprd, serorg, detIdChg, serIdChg);
             if (serprd != "") {
                 getSerieDetail(serprd, detIdChg);
             }
@@ -685,8 +603,6 @@ function activeIconsSerie() {
         $('#CalendarModal').draggable({
             handle: ".overlay_modal"
         });
-        //title= 'Serie';
-        //$('.overlay_closer .title_calendar').html(serSKU);
         $('#CalendarModal .btn_close')
             .unbind('click')
             .on('click', function () {
@@ -698,7 +614,6 @@ function activeIconsSerie() {
         .unbind('click')
         .on('click', function () {
         let serprd = $(this).attr('id');
-        // console.log("Para validar: "+serprd);
             checkSerie(serprd);
             let tabla = $('#tblSerie').DataTable();
             let numRows = tabla.rows().count();
@@ -709,12 +624,10 @@ function activeIconsSerie() {
                 $('#tblSerie').DataTable().destroy;
                 aux=0;
             }
-            //getDetailProds(prjid,em, ar);
         });
 }
 
 function checkSerie(pjtcnid) {
-    //console.log('ID-Producto-Check', pjtcnid);
     var pagina = 'WhOutputContent/checkSeries';
     var par = `[{"serId":"${pjtcnid}"}]`;
     var tipo = 'html';
@@ -793,7 +706,6 @@ function putSerieDetails(dt){
         settingChangeSerie();
         let locicon='';
         let tabla = $('#tblChangeSerie').DataTable();
-        // $('.overlay_closer .title').html(` ${dt[0].prd_name} - ${dt[0].prd_sku}`);
         $('#ChangeSerieModal .overlay_closer .title').html(`DISPONIBLES`);
         tabla.rows().remove().draw();
         if (dt[0].ser_id > 0) {
@@ -807,7 +719,6 @@ function putSerieDetails(dt){
 
                     })
                     .draw();
-                //$(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
             });
         }
 
@@ -826,8 +737,6 @@ function activeIconsNewSerie() {
         let serIdSel = $(this).attr('id');
         let serIdOrg = $(this).attr('seridorg');
         serIdNew=serIdSel;
-        // console.log("New Serie", serIdSel, serIdOrg );
-
         $('.sr'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
         // $('#'+serIdOrig).children(".claseElemento").cssmyCheck({"color":"#CC0000"});
         changeSerieNew(serIdSel, serIdOrg);
@@ -835,7 +744,6 @@ function activeIconsNewSerie() {
 }
 
 function changeSerieNew(serIdNew,serIdOrg) {
-    // console.log('ID-New Serie', serIdNew, serIdOrg);
     var pagina = 'WhOutputContent/changeSerieNew';
     var par = `[{"serIdNew":"${serIdNew}", "serIdOrg":"${serIdOrg}" }]`;
     var tipo = 'html';
@@ -844,7 +752,7 @@ function changeSerieNew(serIdNew,serIdOrg) {
 }
 
 function myCheckUp(dt){
-    console.log('myCheckUp-',dt);
+    // console.log('myCheckUp-',dt);
     $('#ChangeSerieModal').addClass('overlay_hide');
     //$('.overlay_closer .title').html('');
     $('#tblChangeSerie').DataTable().destroy; 
@@ -859,8 +767,7 @@ function confirm_to_GetOut(pjtid) {
 
     $('#btnClosure').on('click', function () {
         $('#starClosure').modal('hide');
-
-        console.log('Datos CLICK',pjtid);
+        // console.log('Datos CLICK',pjtid);
          modalLoading('S');
 
         var pagina = 'WhOutputContent/ProcessGetOutProject';
@@ -874,8 +781,7 @@ function confirm_to_GetOut(pjtid) {
 }
 
 function putToWork(dt){
-    console.log('TERMINO ACTUALIZAR', dt);
-    // console.log('Regreso', folio);
+    // console.log('TERMINO ACTUALIZAR', dt);
     let folio=dt;
     $('#recordOutPut').hide();
     $('.bprint').removeClass('hide-items');
@@ -904,9 +810,6 @@ function modalLoading(acc) {
 
 /**********  Impresion de la salida de un proyecto ***********/
 function printOutPut(verId) {
-    // let user = Cookies.get('user').split('|');
-    // let u = user[0];
-    // let n = user[2];
     let h = localStorage.getItem('host');
     let v = verId;
     let nameproject = $('#txtProjectName').val();
@@ -923,7 +826,6 @@ function printReports(pjtId, typrint) {
     // let user = Cookies.get('user').split('|');
     // let u = user[0];
     // let n = user[2];
-
     let v = pjtId;
     let h = localStorage.getItem('host');
     let nameproject = $('#txtProjectName').val();
@@ -935,7 +837,6 @@ function printReports(pjtId, typrint) {
                 `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
-        //   console.log("Contenido");
           break;
         case "D":  // Detalles del contenido con series
             window.open(
@@ -949,45 +850,10 @@ function printReports(pjtId, typrint) {
                 `${url}app/views/WhOutputContent/WhOutputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
-        //   console.log("Con Accesorios");
           break;
         default:
           console.log("No Hay REPORTE");
           break;
       }
 
-
-    // window.open(
-    //     `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-    //     '_blank'
-    // );
 }
-
-/**********  Impresion del contenido de un proyecto ***********/
-/* function printContent(verId) {
-    // let user = Cookies.get('user').split('|');
-    // let u = user[0];
-    // let n = user[2];
-    let v = verId;
-    let h = localStorage.getItem('host');
-    // console.log('Datos', v, u, n, h);
-    window.open(
-        `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
-} */
-
-/**********  Impresion del detalle(series) de un proyecto ***********/
-/* function printDetail(verId) {
-    // let user = Cookies.get('user').split('|');
-    let v = verId;
-    // let u = user[0];
-    // let n = user[2];
-    let h = localStorage.getItem('host');
-    window.open(
-        `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
-} */
-
-

@@ -5,6 +5,7 @@
 
 class WorkInputContentController extends Controller
 {
+    
     private $session;
     public $model;
 

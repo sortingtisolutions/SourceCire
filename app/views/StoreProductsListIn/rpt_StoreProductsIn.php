@@ -19,7 +19,6 @@ require_once '../../../vendor/autoload.php';
     $head = getHeader(); 
     $foot = getFooter(); 
     
-
     $css = file_get_contents('../../assets/css/reports.css');
     
     ob_clean();

@@ -5,6 +5,7 @@
 
 class GlobalProdutsController extends Controller
 {
+	
 	private $session;
 	public $model;
 

@@ -8,7 +8,6 @@ class CustomersModel extends Model
         parent::__construct();
     }
 
-
 // Listado de categorias   ****
 public function listCustomers()
 {
@@ -28,7 +27,6 @@ public function getSelectCustomer($params)
 
     return $this->db->query($qry);
 }
-
 
 // Listado de fichas técnicas
 public function listCustType()

@@ -5,6 +5,7 @@
 
 class PackagesController extends Controller
 {
+    
     private $session;
     public $model;
 

@@ -6,18 +6,13 @@ let gblprjname;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
-        // let temporal=Cookies.get('user');
-        // console.log(temporal);
         prjid=Cookies.get('pjtid');
         inicial();
     }
 });
 //INICIO DE PROCESOS
 function inicial() {
-    setting_table_AsignedProd();/* 
-    getUsersP();
-    getUsersA();
-    getUsersC(); */
+    setting_table_AsignedProd();
     getDetailProds();
     getCustomers();
     getProjectType();
@@ -81,7 +76,6 @@ function getLocationType() {
 }
 
 function getLocations(prjid) {
-    console.log(prjid);
     var pagina = 'ParentsProjects/getLocations';
     var par = `[{"pjtid":"${prjid}"}]`;
     var tipo = 'json';
@@ -248,16 +242,6 @@ function putDetailsProds(dt) {
                 .parents('tr')
                 .attr('id', u.pjt_id)
                 .attr('name', u.pjt_name);
-            /* var H = `
-                <tr id="${u.pjt_id}" name="${u.pjt_name}">  
-                    <td class="supply"><i class="fas fa-edit toLink" id="${u.pjt_id}"></i> <i class="fas fa-times-circle kill" id=${u.pjt_id}></i></td>
-                    <td class="pjtname">${u.pjt_name}</td>
-                    <td class="pjtnum">${u.pjt_number}</td>
-                    <td class="pjttpy">${u.pjttp_name}</td>
-                    <td class="pjtfini">${u.pjt_date_start}</td>
-                    <td class="pjtffin">${u.pjt_date_end}</td>
-                </tr>`;
-            $('#tblAsignedProd tbody').append(H); */
         });
         activeIcons();
     }
@@ -271,14 +255,12 @@ function activeIcons() {
         .on('click', function () {
             CleanCombos();
             let id = $(this).parents('tr');
-            //console.log(id);
             let pjtid = id.attr('id');
             let pjtnm = id.children('td.pjtname').text();
             gblprjid=pjtid;
             gblprjname = pjtnm;
              console.log('Cont-Producto', pjtid,pjtnm);
             if (pjtid > 0) {
-                //getUsersOnProject(pjtid);
                 limpiarDatos();
                 editProject(pjtid);
             }
@@ -292,10 +274,7 @@ function activeIcons() {
             console.log('To Kill ' + pjtid);
             if (pjtid != undefined){
             $('#delProdModal').modal('show');
-                /* $('#txtIdProduct').val(prdId); */
-                //borra paquete +
                 $('#btnDelProduct').on('click', function () {
-                    
                     $('#delProdModal').modal('hide');
 
                     var pagina = 'ParentsProjects/CancelParentsProjects';
@@ -313,10 +292,8 @@ function activeIcons() {
             if (selection == 2 || selection == 4) {
                 console.log(selection);
                 $('#txtLocationEdt').addClass('hide');
-                /* $('#addLocation').removeClass('hide'); */
             }else{
                 $('#txtLocationEdt').removeClass('hide');
-                /* $('#addLocation').addClass('hide'); */
             } 
             
         });
@@ -334,7 +311,7 @@ function editProject(pjtid,pjtnm) {
 }
 
 function putDataProject(dt){
-    console.log(dt);
+    // console.log(dt);
     $('#txtProjectId').val(dt[0].pjt_id);
     $('#txtProjectName').val(dt[0].pjt_name);
     $('#txtProjectType').val(dt[0].pjttp_id);
@@ -382,7 +359,7 @@ function limpiarDatos(){
     $('#txtHowRequired').val('');
 }
 function putUsersOnProject(dt) {
-    console.log('putUsersOnProject', dt);
+    // console.log('putUsersOnProject', dt);
     if (dt[0].whoatd_id != '0') {
         // let cinId = dt[0].usr_id;
         $.each(dt, function (v, u) {
@@ -413,12 +390,10 @@ function confirm_toChgUsr(pjtid,prjname) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
     $('#ProjectName').text(prjname+'?')
-    //borra paquete +
     $('#btnClosure')
     .unbind('click')
     .on('click', function () {
         $('#starClosure').modal('hide');
-        // console.log('Datos CLICK',pjtid);
         datasUser(pjtid);
     });
 }
@@ -487,7 +462,6 @@ function datasUser(pjtid) {
         "pjtTestTecnic"  : "${testTecnic}",
         "pjtTestLook"    : "${testLook}"
     }]`;
-    console.log(par);
     var pagina = 'ParentsProjects/UpdateProject';
     var tipo = 'html';
     var selector = loadProject;
@@ -495,12 +469,12 @@ function datasUser(pjtid) {
     
 }
 function loadProject(dt) {
-    console.log(dt);
+    // console.log(dt);
     CleanCombos();
 }
 
 function putupdateUser(dt){
-    console.log('TERMINO ACTUALIZAR', dt);
+    // console.log('TERMINO ACTUALIZAR', dt);
     CleanCombos();
     let folio=dt;
 }

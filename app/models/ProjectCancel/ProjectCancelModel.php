@@ -22,8 +22,8 @@ class ProjectCancelModel extends Model
 		LEFT JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
 		INNER JOIN ctt_projects_status AS ps ON ps.pjs_status=pj.pjt_status
 		WHERE pj.pjt_status in (6, 5);";
-        return $this->db->query($qry);
 
+        return $this->db->query($qry);
     }
     
 /** Habilita el projecto                                                           ====  */    

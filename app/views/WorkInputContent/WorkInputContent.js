@@ -47,7 +47,6 @@ function inicial() {
     
 }
 
-
 function showModalComments() {
     let template = $('#commentsTemplates');
     // let pjtId = $('.version_current').attr('data-project');
@@ -89,21 +88,18 @@ function  getLocations(prjid) {
 }
 function putLocations(dt) {
     
-    console.log('locacion: ',dt)
+    // console.log('locacion: ',dt)
     if (dt[0].locations != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.locations}"> ${u.locations}</option>`;
             $('#txtLocation').append(H);
         });
         $('#txtLocation').val(dt[0].locations); // 11-10-23
-    }
-    
-    
+    } 
 }
+
 function fillComments(pjtId) {
-    console.log(pjtId);
-    
-    // Agrega nuevo comentario
+    // console.log(pjtId);
     $('.comments__addNew .invoice_button')
         .unbind('click')
         .on('click', function () {
@@ -122,7 +118,7 @@ function fillComments(pjtId) {
                     `;
                 var pagina = 'WorkInputContent/InsertComment';
                 var tipo = 'json';
-                console.log(par);
+                // console.log(par);
                 var selector = addComment;
                 fillField(pagina, par, tipo, selector);
             }
@@ -463,14 +459,6 @@ function settingSeries(){
                     readAceptTable();
                 },
             },
-            /* {
-                // Boton imprimir detalle jjr
-                text: ' Print Detalle ',
-                className: 'btn-apply',
-                action: function (e, dt, node, config) {
-                    printDetail(prjid);;
-                },
-            }, */
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -635,9 +623,7 @@ function readAceptTable() {
             $('.overlay_closer .title').html('');
             $('#tblSerie').DataTable().destroy;
         }, 3000);
-        /* $('.overlay_background').addClass('overlay_hide');
-        $('.overlay_closer .title').html('');
-        $('#tblSerie').DataTable().destroy; */
+
     });
 }
 

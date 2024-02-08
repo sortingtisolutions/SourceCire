@@ -30,7 +30,6 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 
-
 $payform = $items[0]['sal_pay_form'];
 if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){$payform = 'TARJETA DE CRÉDITO';}
 
@@ -260,7 +259,6 @@ $mpdf->Output(
     "Cotizacion-". $items[0]['ver_code'].".pdf",
     "I"
 );
-
 
 function decodificar($dato) {
     $resultado = base64_decode($dato);

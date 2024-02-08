@@ -26,7 +26,6 @@ function inicial() {
             $('#filtroDocumentoModal').modal('show');
             $('#cargaFiles').val('');
         }
-
     });
 
     //Open modal *
@@ -39,6 +38,7 @@ function inicial() {
             SaveDocumento();        
         }
     });
+
     //borra almacen +
     $('#BorrarProveedor').on('click', function(){    
         DeleteDocumentos();
@@ -50,7 +50,6 @@ function inicial() {
 
     $('#DocumentosTable tbody').on('click', 'tr', function () {
       positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
-
       setTimeout(() => {
          RenglonesSelection = table.rows({ selected: true }).count();
          if (RenglonesSelection == 0 || RenglonesSelection == 1) {
@@ -160,7 +159,6 @@ function SaveDocumento() {
        $('#filtroDocumentoModal').modal('show');
    }
 } 
-
 //confirm para borrar **
 function ConfirmDeletDocumento(id) {
     //UnSelectRowTable();
@@ -171,7 +169,6 @@ function ConfirmDeletDocumento(id) {
 function UnSelectRowTable() {
     setTimeout(() => {table.rows().deselect();}, 10);
 }
-
 //BORRAR  * *
 function DeleteDocumentos() {
     var location = "Documentos/DeleteDocumentos";
@@ -285,8 +282,8 @@ function getDocumentosTable() {
                info: false,
             },
             lengthMenu: [
-               [50, 100, -1],
-               ['50', 100, 'Todo'],
+               [100, 200, -1],
+               ['100', 200, 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [
@@ -358,8 +355,6 @@ function getDocumentosTable() {
       },
    }).done(function () {});
 }
-
-
 
 // Optiene los tipos de documentos
 function GetTypeDocumento(id) {

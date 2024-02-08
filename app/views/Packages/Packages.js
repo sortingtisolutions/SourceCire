@@ -9,33 +9,32 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-    setting_table_products();
-    setting_table_packages();
-    getCategory();
-    getSubcategory();
-    getProducts();
-    deep_loading('O');
-    getPackages(0);
-    //console.log('PASO 1');
-    $('#txtPackageName').on('change', function () {
-        validator_part01();
-    });
-    $('#txtPackagePrice').on('change', function () {
-        validator_part01();
-    });
+        setting_table_products();
+        setting_table_packages();
+        getCategory();
+        getSubcategory();
+        getProducts();
+        deep_loading('O');
+        getPackages(0);
+        $('#txtPackageName').on('change', function () {
+            validator_part01();
+        });
+        $('#txtPackagePrice').on('change', function () {
+            validator_part01();
+        });
 
-    $('#btn_packages').on('click', function () {
-        let name = $(this).text();
-        if (name == 'Aplicar') {
-            packages_edit();
-        } else {
-            packages_apply();
-        }
-    });
+        $('#btn_packages').on('click', function () {
+            let name = $(this).text();
+            if (name == 'Aplicar') {
+                packages_edit();
+            } else {
+                packages_apply();
+            }
+        });
 
-    $('#btn_packages_cancel').on('click', function () {
-        active_params();
-    });
+        $('#btn_packages_cancel').on('click', function () {
+            active_params();
+        });
     } else {
         setTimeout(() => {
             inicial();
@@ -110,7 +109,6 @@ function setting_table_products() {
 
 // Solicita las categorias
 function getCategory() {
-   // console.log('Primer cat');
     var pagina = 'Packages/listCategories';
     var par = `[{"param":""}]`;
     var tipo = 'json';
@@ -119,7 +117,6 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    //console.log('Primer sub');
     var pagina = 'Packages/listSubCategories';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
@@ -169,14 +166,12 @@ function putCategory(dt) {
         let id = $(this).val();
         console.log('Limpia', id);
         selSubcategoryProduct(id);
-        // validator_part02();
     });
 
     $('#txtCategoryProduct')
         .unbind('click')
         .on('click', function () {
             $('.list-group').slideUp('slow');
-            //console.log('Click categoria');
         });
 
     $('#txtCategoryList').on('change', function () {
@@ -188,7 +183,7 @@ function putCategory(dt) {
 // Mantiene en memoria el set de subcategorias
 function putSubCategory(dt) {
     subcategos = dt;
-    console.log(subcategos);
+    // console.log(subcategos);
 }
 
 function putProducts(dt) {
@@ -220,7 +215,6 @@ function drawProducts(str) {
         .unbind('click')
         .on('click', function () {
             let id = $(this).parents('.list-item');
-            //console.log(id);
             product_apply(id);
         });
 }
@@ -299,12 +293,12 @@ function selSubcategoryProduct(id) {
         .unbind('click')
         .on('click', function () {
             $('.list-group').slideUp('slow');
-            //console.log('Click sucategoria');
         });
 }
 
 // Crea el paquete
 let sbccnt = 0;
+
 function packages_apply(subcat) {
     let sbcId = $('#txtSubcategoryPack option:selected').val();
     if (subcat != '' && subcat != undefined) {
@@ -419,7 +413,6 @@ function fill_table_packs(par) {
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblPackages tbody tr').remove() : '';
 
     pr = JSON.parse(par);
-
     var pagina = 'Packages/savePack';
     var par = par;
     var tipo = 'html';
@@ -435,7 +428,6 @@ function putNewPackage(dt) {
     $(`#SKU-${sku}`).text(id);
 
     let tabla = $('#tblPackages').DataTable();
-
     tabla.row
         .add({
             editable: `<i class="fas fa-pen choice pack modif" id="E-${id}"></i>
@@ -506,9 +498,7 @@ function action_selected_products() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[4];
             let prdId = $(this).attr('id');
-            //console.log($(this).attr('class').split(' '));
-            //console.log(acc);
-            console.log(prdId);
+            // console.log(prdId);
             switch (acc) {
                 case 'kill':
                     confirm_delet_product(prdId);
@@ -527,8 +517,8 @@ function action_selected_products() {
 }
 
 function put_detailPack(dt) {
-    let chc = dt[0].prd_id;
-    setTimeout(() => {
+        let chc = dt[0].prd_id;
+        setTimeout(() => {
         $('#tblPackages').DataTable().rows().deselect();
         $('#txtIdPackages').val(chc);
         $('#txtPackageName').val(dt[0].prd_name);
@@ -553,13 +543,12 @@ function select_products(prdId) {
     var pagina = 'Packages/listProductsPack';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putProductsPack;
     fillField(pagina, par, tipo, selector);
 }
 
 function putProductsPack(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].prd_id != '') {
@@ -579,7 +568,7 @@ function putProductsPack(dt) {
 }
 
 function product_apply(prId) {
-    console.log(prId);
+    // console.log(prId);
     let prod = prId.attr('data-content').split('|');
     let productId = prod[0];
     let productSKU = prod[1];
@@ -595,7 +584,7 @@ function product_apply(prId) {
 }
 
 function putNewProductsPack(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.row
         .add({
@@ -638,7 +627,6 @@ function confirm_delet_product(id) {
         let prdParent = Id.split('-')[2];
         let tabla = $('#tblProducts').DataTable();
         $('#delProdModal').modal('hide');
-
         let prdRow = $(`#${Id}`).parents('tr');
 
         tabla.row(prdRow).remove().draw();
@@ -682,7 +670,7 @@ function validator_part01() {
 function editProdAsoc(Id, prdQty) {
     let prdId = Id.split('-')[0];
     let prdParent = Id.split('-')[1];
-    console.log('Vals', prdId, prdParent, prdQty);
+    // console.log('Vals', prdId, prdParent, prdQty);
 
     var pagina = 'Packages/updateQuantityProds';
     var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","prdQty":"${prdQty}"}]`;

@@ -28,7 +28,7 @@
 								</div>
 							</div>
 
-                     <div class="row">
+                     		<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="DesPuesto" name="DesPuesto" type="text" class="form-control form-control-sm" required >
 									<label for="DesPuesto">Descripcion Puesto</label>
@@ -50,7 +50,7 @@
 
 				<!-- Start área de listado -->
 				<div class="mvst_table">
-					<h1>Puestos</h1>
+					<h1>Puestos Generados</h1>
 
 					<div class="row">
 						<div class="col-12 col-md-12">		

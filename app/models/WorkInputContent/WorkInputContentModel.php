@@ -171,12 +171,6 @@ class WorkInputContentModel extends Model
         $prjid = $this->db->real_escape_string($params['prjid']);
         $prdid = $this->db->real_escape_string($params['prdid']);
 
-       /*  $qry = "SELECT COUNT(pjd.pjtdt_id) cant FROM ctt_projects_detail AS pjd
-        WHERE pjd.prd_id = '$prdid' AND pjd.sttd_id = 3";
-        $result =  $this->db->query($qry);
-        $cant = $result->fetch_object();
-
-        $cnt = $cant->cant;  */
         $qry = "SELECT sr.ser_situation FROM ctt_series AS sr WHERE sr.ser_id =$serId";
         $result =  $this->db->query($qry);
         $situation = $result->fetch_object();

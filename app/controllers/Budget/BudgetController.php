@@ -8,7 +8,6 @@ class BudgetController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new BudgetModel();
@@ -580,7 +579,6 @@ class BudgetController extends Controller
         $user = $group[0];
         $name = $group[2];
         
-
         $result = $this->model->saveBudgetList($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
@@ -612,9 +610,7 @@ class BudgetController extends Controller
     }
 
 /** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
-
 /** +++++  PROCESO DE GENERACION DEL PROYECTO                 +++++++   */
-
 /** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
 
 // PROCESO POR PRODUCTO

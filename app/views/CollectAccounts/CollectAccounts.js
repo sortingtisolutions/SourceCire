@@ -13,7 +13,6 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         settingTable();
-        //$('.tblProdMaster').css({display: 'none'});
         getProjects();
         getWayToPay();
     }, 100);
@@ -101,7 +100,6 @@ function settingTable() {
             {data: 'clt_lastpay',   class: 'date'},
         ],
     });
-   
 }
 
 function putWayToPay(dt) {
@@ -110,11 +108,9 @@ function putWayToPay(dt) {
 
 /** +++++  coloca los productos en la tabla */
 function putProjects(dt) {
-    console.log('putProjects',dt);
+    // console.log('putProjects',dt);
     $('#tblCollets tbody').html('');
-
     if (dt[0].clt_id > 0) {
-
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.clt_id}" data_pjt="${u.pjt_id}">
@@ -131,7 +127,6 @@ function putProjects(dt) {
                 </tr>`;
             $('#tblCollets tbody').append(H);
         });
-        
         activeIcons();
     } else {
         settingTable();
@@ -148,7 +143,7 @@ function activeIcons() {
         let pjtId = $(this).parents('tr').attr('data_pjt');
         gblcloid=cltid;
         gblpjtid=pjtId;
-        console.log('Globales',gblcloid, gblpjtid );
+        // console.log('Globales',gblcloid, gblpjtid );
         confirm_to_work(cltid);
 
         });
@@ -164,7 +159,6 @@ function activeIcons() {
             $('.overlay_background').addClass('overlay_hide');
         });
 
-    
     $('#savePayed.update')
         .unbind('click')
         .on('click', function () {
@@ -191,7 +185,7 @@ function activeIcons() {
                 "empId"          : "${em}",
                 "montoRest"      : "${montoRestante}"
             }]`;
-            console.log(par);
+            // console.log(par);
             var pagina = 'CollectAccounts/insertPayAplied';
             var tipo = 'html';
             var selector = putToWork;
@@ -212,15 +206,14 @@ function confirm_to_work(cltid) {
         $('.overlay_closer .title').html(prdNm);
 
         let el = $(`#tblCollets tr[id="${cltid}"]`);
-            $('#txtNumFol').val($(el.find('td')[1]).text());
-            $('#txtProject').val($(el.find('td')[4]).text());
-            $('#txtMontoTotal').val($(el.find('td')[5]).text());
+        $('#txtNumFol').val($(el.find('td')[1]).text());
+        $('#txtProject').val($(el.find('td')[4]).text());
+        $('#txtMontoTotal').val($(el.find('td')[5]).text());
         fillContent();
     });
 }
 
 function fillContent() {
-    
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     restdate= moment().subtract(3, 'months');
@@ -259,17 +252,17 @@ function fillContent() {
             looseAlert($('#txtPeriodPayed').parent());
         }
     );
+
     $('#txtWayPay').html('');
     // Llena el selector de tipo de proyecto
     $.each(tpprd, function (v, u) {
-        
         let H = `<option value="${u.wtp_id}"> ${u.wtp_description}</option>`;
         $('#txtWayPay').append(H);
     });
 }
 
 function putToWork(dt){
-    console.log(dt)
+    // console.log(dt)
     $('#registPayModal .btn_close').trigger('click');
     getProjects();
 }
@@ -301,9 +294,7 @@ $('#savePayed.update')
             let projPeriod = $('#txtPeriodPayed').val();
             let montoTotal = parseFloat($('#txtMontoTotal').val());
             let montoRestante = (montoTotal - parseFloat(montopayed));
-
             let projDateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
-            
             let par = `
             [{
                 "projId"         : "${projId}",
@@ -317,7 +308,7 @@ $('#savePayed.update')
                 "cusParent"      : "${cusCteRel}",
             }]`;
             
-            console.log(par);
+            // console.log(par);
             var pagina = 'Budget/UpdateProject';
             var tipo = 'html';
             var selector = loadProject;
@@ -325,4 +316,3 @@ $('#savePayed.update')
             
         });
 }
-

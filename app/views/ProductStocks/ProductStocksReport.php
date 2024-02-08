@@ -25,7 +25,6 @@
     foreach ($dato as $dt){
         //  echo $dt . '<br>';
         $el = explode('|', $dt);
-
         $numProject = $el[1];
         $nameProject = $el[2];
         $version = $el[4];

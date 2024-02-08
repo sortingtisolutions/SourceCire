@@ -14,7 +14,6 @@
 				<div class="mvst_panel">
 					<div class="form-group">
 						<h4 id="titulo">Nuevo Servicio</h4> 
-						 
 						<form id="formServicio" class="row g-3 needs-validation" novalidate>
 
 							<div class="row" hidden>

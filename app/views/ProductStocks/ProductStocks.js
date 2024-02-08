@@ -1,5 +1,4 @@
 var seccion = '';
-///const folio = uuidv4();
 let folio,url;
 let pr = [];
 let link = '';
@@ -41,7 +40,6 @@ function inicial() {
 function setting_table() {
     let title = 'Salidas de Almacen';
     // let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
     $('#tblExchanges').DataTable({
         order: [[1, 'desc']],
         dom: 'Blrt',
@@ -88,7 +86,6 @@ function setting_table() {
 function setting_table_pro() {
     let title = 'Salidas de Almacen';
     // let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
     $('#tblExchangesProductos').DataTable({
         order: [[1, 'desc']],
         dom: 'Blrt',
@@ -146,19 +143,8 @@ function setting_datepicket(selector) {
         locale: {
             format: 'DD/MM/YYYY',
             daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-            monthNames: [
-                'Enero',
-                'Febrero',
-                'Marzo',
-                'Abril',
-                'Mayo',
-                'Junio',
-                'Julio',
-                'Agosto',
-                'Septiembre',
-                'Octubre',
-                'Noviembre',
-                'Diciembre',
+            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
             ],
             firstDay: 1,
         },
@@ -282,15 +268,15 @@ function getProducts() {
         isAccesorio = 1;
     }
 
-    console.log(
-        idAlmacen +
-            idCategoria +
-            idSubCategoria +
-            isConcepto +
-            isPaquete +
-            isProducto +
-            isAccesorio
-    );
+    // console.log(
+    //     idAlmacen +
+    //         idCategoria +
+    //         idSubCategoria +
+    //         isConcepto +
+    //         isPaquete +
+    //         isProducto +
+    //         isAccesorio
+    // );
 
     var pagina = 'ProductStocks/listProducts';
     var par = `[{"idAlmacen":"${idAlmacen}","idCategoria":"${idCategoria}","idSubCategoria":"${idSubCategoria}","isConcepto":"${isConcepto}","isPaquete":"${isPaquete}","isProducto":"${isProducto}","isAccesorio":"${isAccesorio}"}]`;
@@ -314,8 +300,6 @@ function putProducts(dt) {
             $.each(dt, function (v, u) {
                 fill_table_Productos(u);
             });
-
-            //console.log("entro if");
         } else {
             $('#tblExchanges_wrapper').attr('hidden', false);
             $('#tblExchangesProductos_wrapper').attr('hidden', true);
@@ -323,9 +307,7 @@ function putProducts(dt) {
             $.each(dt, function (v, u) {
                 fill_table(u);
             });
-
         }
-
         btn_apply_appears();
     }
 }
@@ -388,8 +370,6 @@ function fill_table(par, tipoDato) {
     largo == 'Ningún dato disponible en esta tabla'
         ? $('#tblExchanges tbody tr').remove()
         : '';
-    // par = JSON.parse(par);
-    //console.log(par);
     let tabla = $('#tblExchanges').DataTable();
     var rowNode = tabla.row
         .add({
@@ -425,7 +405,6 @@ function fill_table_Productos(par, tipoDato) {
 
 function btn_apply_appears() {
     $('.btn-apply').removeClass('hidden-field');
-
 }
 
 // Limpia los campos para uns nueva seleccion

@@ -60,20 +60,9 @@ function setting_datepicket(sl, di, df) {
             locale: {
                 format: 'DD/MM/YYYY',
                 daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
-                ],
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+            ],
                 firstDay: 1,
             },
             minDate: fc,
@@ -235,7 +224,6 @@ function get_changes() {
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
 function get_products(pj, em) {
-    console.log(pj);
     var pagina = 'Maintenance/listProducts';
     var par = `[{"pjtId":"${pj}","em":"${em}"}]`;
     var tipo = 'json';
@@ -268,7 +256,6 @@ function get_stores() {
     fillField(pagina, par, tipo, selector);
 }
 
-
 function get_change_reasons(pd) {
     var pagina = 'Maintenance/listChangeReasons';
     var par = `[{"prod_id":""}]`;
@@ -297,7 +284,6 @@ function put_Proyectos(dt) {
     
 }
 function put_status_mant(dt) {
-
     //console.log(dt);
     $.each(dt, function (v, u) {
         let H = `<option data_indx="${v}" value="${u.mts_id}">${u.mts_description}</option>`;
@@ -309,7 +295,6 @@ function put_status_mant(dt) {
     }); 
 }
 function put_changes(dt) {
-
     //console.log(dt);
     $.each(dt, function (v, u) {
         let H = `<option data_indx="${v}" value="${u.pjtcr_id}">${u.pjtcr_definition}</option>`;
@@ -322,7 +307,6 @@ function put_changes(dt) {
 }
 function put_change_reasons(dt){
     //console.log(dt);
-    
     let tabla = $('#tblMotivoMantenimiento').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].pjtcr_definition != undefined) {
@@ -337,6 +321,7 @@ function put_change_reasons(dt){
             
         });
     }
+
     $('#tblProductForSubletting tbody tr')
         .unbind('click')
         .on('click', function (){
@@ -348,7 +333,6 @@ function put_change_reasons(dt){
 function put_Products(dt) {
     // console.log(dt);
     pd = dt;
-    
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
         ? $('#tblProductForSubletting tbody tr').remove()
@@ -359,11 +343,6 @@ function put_Products(dt) {
     let cn = 0;
     if(dt[0].prd_id!=0){
         $.each(pd, function (v, u) {
-            
-            /* let sku = u.pjtdt_prod_sku;
-            if (sku == 'Pendiente') {
-                sku = `<span class="pending">${sku}</sku>`;
-            } */
             tabla.row
                 .add({
                     editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,
@@ -541,9 +520,8 @@ function updating_serie(acc) {
     fillField(pagina, par, tipo, selector);
 }
 function put_save_subleting(dt) { 
-    console.log(dt);
+    // console.log(dt);
     get_products(dt,em);
-
     $('#txtComments').val('');
     $('#txtDays').val('');
     $('#txtHrs').val('');
@@ -661,7 +639,6 @@ function fillContent() {
         restdate= moment().subtract(3, 'days');
     } else { restdate= moment(Date()) } 
 
-    
     let fecha = moment(Date()).format('DD/MM/YYYY');
     $('#calendar').daterangepicker(
         {
@@ -676,19 +653,8 @@ function fillContent() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -708,7 +674,6 @@ function fillContent() {
     );
 
 }
-
 
 function activeIconsSerie() {
     

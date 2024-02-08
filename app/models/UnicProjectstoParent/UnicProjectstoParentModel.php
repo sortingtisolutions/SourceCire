@@ -28,8 +28,6 @@ class UnicProjectstoParentModel extends Model
 // Listado de paquetes
 public function listPackages($params)
 {
-    /* $catId = $this->db->real_escape_string($params['catId']);
-    $condition = $catId == 0 ? '' : ' AND cat_id = ' . $catId; */
     $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, pj.pjt_date_start, pj.pjt_date_end 
             FROM ctt_projects as pj WHERE pj.pjt_status = 40 ;";
 
@@ -95,18 +93,6 @@ public function listProductsPack($params)
     {
         $prj_id            = $this->db->real_escape_string($param['prjId']);
         $prj_parent        = $this->db->real_escape_string($param['prjParent']);
-        //$prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
-
-        /* $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id) 
-                VALUES ('$prd_parent', '$prd_id');";
-
-        $this->db->query($qry);
-        $pckId = $this->db->insert_id;
-                
-        $qrr =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent, pk.pck_quantity 
-                 FROM ctt_products_packages AS pk
-                 INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
-                 WHERE pk.pck_id = $pckId;" ; */
 
         $qry =  "UPDATE ctt_projects SET pjt_parent = '$prj_parent' where pjt_id = '$prj_id'" ;
         $this->db->query($qry);

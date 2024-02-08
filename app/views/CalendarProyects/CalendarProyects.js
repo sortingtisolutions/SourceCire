@@ -11,20 +11,11 @@ $(document).ready(function () {
     }
 });
 
-    
-
 function inicial() {
     if (altr == 1) {
-        
-        /* settingTable();
-        getStores();
-        fillStores();
-        confirm_alert(); */
-        //getEvents();
         get_Proyectos();
         calendario('');
-        setTimeout(() => {
-        
+        setTimeout(() => { 
     }, 800);
           
     } else {
@@ -171,21 +162,7 @@ function put_Proyectos(dt) {
                 calendario(array);
             } 
 
-            /* $('input[type="checkbox"]:checked').each(function(){
-                prjs = prjs + "," +$(this).val() ;
-            }); */
-            
-            //console.log(this.checked,array);
         }); 
-        /* $('#txtProject').on('change', function () {
-            px = parseInt($('#txtProject option:selected').attr('data_indx'));
-            $('#txtIdProject').val($(this).val());
-            // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-            //$('.objet').addClass('objHidden');
-            //get_products($(this).val(), em);
-            console.log('Value',$(this).val());
-            getEvents($(this).val());
-        }); */
 
     }
     
@@ -230,7 +207,6 @@ function actionButtons() {
             let quant = $(this).html();
             let ctnme = $(this).parents('tr').children('td.store-name').html();
             strnme = ctnme;
-            // console.log(strId, quant, ctnme);
             if (quant > 0) {
                 setting_modalseries(strId);
             }
@@ -269,9 +245,7 @@ function fillTableStores(ix) {
             storname: strs[ix].are_name,
         })
         .draw();
-    $('#md' + strs[ix].are_id)
-        .parents('tr')
-        .attr('id', strs[ix].are_id);
+    $('#md' + strs[ix].are_id).parents('tr').attr('id', strs[ix].are_id);
     actionButtons();
 }
 
@@ -289,6 +263,7 @@ function saveStore() {
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
 }
+
 function putSaveStore(dt) {
     getStores();
     if (strs.length > 0) {
@@ -318,6 +293,7 @@ function updateStore() {
     var selector = putUpdateStore;
     fillField(pagina, par, tipo, selector);
 }
+
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
@@ -327,7 +303,6 @@ function putUpdateStore(dt) {
         $(`#${strs[ix].are_id}`).children('td.store-name').html(strs[ix].are_name);
         $(`#${strs[ix].are_id}`).children('td.store-type').html(strs[ix].are_status);
 
-        //putQuantity(strs[ix].are_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
         setTimeout(() => {
@@ -345,27 +320,23 @@ function editStore(strId) {
 }
 
 function deleteStore(strId) {
-    console.log(strId);
+    // console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
-    
-        $('#confirmModal').modal('show');
+    $('#confirmModal').modal('show');
+    $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
+    $('#N').html('Cancelar');
+    $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+    $('#Id').val(strId);
 
-        $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
-        $('#Id').val(strId);
-
-        
-        $('#IdAlmacenBorrar').val(strId);
-
-        $('#confirmButton').on('click', function () {
-            var pagina = 'CalendarProyects/DeleteArea';
-            var par = `[{"are_id":"${strId}"}]`;
-            var tipo = 'html';
-            var selector = putDeleteStore;
-            fillField(pagina, par, tipo, selector);
-        });
+    $('#IdAlmacenBorrar').val(strId);
+    $('#confirmButton').on('click', function () {
+        var pagina = 'CalendarProyects/DeleteArea';
+        var par = `[{"are_id":"${strId}"}]`;
+        var tipo = 'html';
+        var selector = putDeleteStore;
+        fillField(pagina, par, tipo, selector);
+    });
     
 }
 
@@ -399,6 +370,5 @@ function validaFormulario() {
     });
     return valor;
 }
-
 
 /// CALENDARIO ///

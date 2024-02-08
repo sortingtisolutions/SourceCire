@@ -11,7 +11,6 @@
 <div class="container-fluid">
     <div class="contenido ">
         <div class="row mvst_group">
-
         <!-- Start Panel de control lateral -->
             <div class="mvst_panel" style="background-color: #B0C4DE" >
                 <div class="form-group">

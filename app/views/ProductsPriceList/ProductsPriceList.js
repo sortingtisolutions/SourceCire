@@ -12,11 +12,9 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getCategories();
-        // deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
         modalLoading('S');
         getPriceList(0);
-        // modalLoading('H');
     }, 100);
 }
 

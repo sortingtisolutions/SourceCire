@@ -7,14 +7,8 @@
 
 </header>
 <style>
-    .hiddenElement {
-        visibility: hidden !important;
-    }
-
-  #calendar {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+    .hiddenElement { visibility: hidden !important; }
+  	#calendar { max-width: 600px; margin: 0 auto; }
 </style>
 <div class="container-fluid">
 		<div class="contenido ">
@@ -22,82 +16,21 @@
 				<div class="mvst_panel" style="background-color: #e2edf3">
 					<div class="form-group">
 						<div class="" style="display: grid; ">
-							<!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtProject" class="form-select form-select-sm " aria-label="Floating label select" data-mesage="Debes seleccionar un proyecto">
-									<option value="0" selected>Selecciona proyecto</option>
-								</select>
-								<label for="txtProject">Proyecto</label>
-							</div> -->
 							<label for="txtProject" style="font-size: 1.5em;font-weight: bold;">Proyecto</label>
 							<div style="height:15px;"></div> 
 							<div style="max-height: 480px; background-color:#ffffff;border-radius: 5px; overflow-y: scroll;">
 								<div class="" id="txtProject" style=" font-size: 1.1em; margin-bottom: 1rem; padding: 10px 15px 15px 10px; ">
 										
 								</div>
-								
 							</div>
-							
 						</div>
 						<hr>
 						<h6	class="nameProduct objet objHidden" style="font-size: 1rem; font-weight: bold; text-align: center">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
-
 						<input type="hidden" id="txtIdSerie" class="form-control">
 						<input type="hidden" id="txtIdStatus" class="form-control">
 						<input type="hidden" id="txtIdMaintain" class="form-control">
 
-						<!-- <div class="row objet objHidden">
-							<div class="row objet objHidden">
-								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<textarea class="form-control form-control-sm" id="txtComments" style="height: 120px" rows="3"></textarea>
-									<label for="txtComments">Comentarios</label>
-								</div>
-							</div>
-							
-							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
-								<input id="txtDays" type="text" class="form-control form-control-sm text-center number" data-mesage="Debes Agregar los dias para la reparacion" >
-								<label for="txtDays">Dias de reparacion</label>
-							</div>
-
-							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
-								<input id="txtHrs" type="text" class="form-control form-control-sm text-center number" data-mesage="Debes Agregar las horas de reparacion" >
-								<label for="txtHrs">Hrs de reparacion</label>
-							</div>
-
-							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating form__modal-group">
-								<input type="text" id="txtPeriod"  name="txtPeriod" class="form-control form-control-sm text-center" autocomplete="off" style="width:200px; height:38px">
-								<i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
-								<span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
-							</div>
-							<div style="height:20px;"></div>
-							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
-								<input id="txtCost" type="text" class="form-control form-control-sm text-center number" data-mesage="Debes Agregar las horas de reparacion" >
-								<label for="txtCost">Costo de Reparación</label>
-							</div>
-							
-						</div>
-						<div class="row objet objHidden">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtStatus" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
-									<option value="0" selected>Selecciona el estatus</option>
-								</select>
-								<label for="txtStatus">Estatus</label>
-							</div>
-						</div>
-						<div class="row objet objHidden">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtMotivo" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
-									<option value="0" selected>Selecciona el motivo de mantenimiento</option>
-								</select>
-								<label for="txtMotivo">Motivo de Mantenimiento</label>
-							</div>
-						</div>
-						
-						<div class="row objet objHidden">
-							<div class="col-md-8 mb-5">
-								<button type="button" class="btn btn-sm btn-primary disabled" data_accion="add" id="btn_subletting">Agregar</button>
-							</div>
-						</div> -->
 					</div>
 				</div>
 
@@ -138,7 +71,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">
@@ -187,7 +119,6 @@
             </div>
             <div class="modal-body" style="padding: 0px !important;">
 
-
             <div class="row">
                 <div class="col-12 text-center">
                     <!--<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Folio: <h3 class="resFolio">000000000000</h3></span>-->
@@ -225,6 +156,7 @@
 			</div>
         </div>
 	</div>
+	
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>

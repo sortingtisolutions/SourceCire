@@ -61,7 +61,7 @@
                     </div>
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div style="height:20px;"></div> <!-- Agregar un espacio -->
-                    <!-- Marca 6 -->
+            
                     <div class="row pos2 hide-items">
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating ">
                             <input id="txtCostInd" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
@@ -69,22 +69,19 @@
                         </div>
                     </div>
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
-                    <!-- Comentarios posición 4 -->
+                
                     <div class="row pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <textarea class="form-control form-control-sm" id="txtComments" style="height:60px; text-transform:uppercase" autocomplete="off" rows="3"></textarea>
                             <label for="txtComments">Notas a los pagos</label>
                         </div>
                     </div>
-                    <!-- Boton posición 4 -->
+                 
                     <div class="row pos3 hide-items">
                         <div class="col-md-12 mb-5">
                             <button id="btn_regist" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                             <button id="btn_regist" type="button" class="btn btn-danger btn-sm btn-block" >Limpiar</button>
                         </div>
-                        <!-- <div class="col-md-12 mb-5">
-
-                        </div> -->
                     </div>
                 </div>
             </div>

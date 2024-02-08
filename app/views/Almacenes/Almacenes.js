@@ -18,7 +18,7 @@ function inicial() {
     } else {
         setTimeout(() => {
             inicial();
-        }, 100);
+        }, 200);
     }
 }
 
@@ -120,7 +120,7 @@ function fillStores() {
     } else {
         setTimeout(() => {
             fillStores();
-        }, 100);
+        }, 200);
     }
 }
 
@@ -252,11 +252,9 @@ function updateStore() {
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
-        // console.log(dt);
         let ix = goThroughStore(dt);
         // console.log(strs[ix].str_id);
-        // console.log($(`#${strs[ix].str_id}`).children('td.store-name').html());
-
+        
         $(`#${strs[ix].str_id}`).children('td.store-name').html(strs[ix].str_name);
         $(`#${strs[ix].str_id}`).children('td.store-owner').html(strs[ix].emp_fullname);
         $(`#${strs[ix].str_id}`).children('td.store-type').html(strs[ix].str_type);
@@ -282,14 +280,13 @@ function deleteStore(strId) {
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
     if (cn != 0) {
-        // $('#NoBorrarModal').modal('show');
+        
         $('#confirmModal').modal('show');
         $('#confirmModalLevel').html('No se puede borrar el registro, porque que contiene existencias.');
         $('#N').html('Cancelar');
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);
 
-        //console.log('no borra');
     } else {
         $('#confirmModal').modal('show');
 
@@ -297,8 +294,6 @@ function deleteStore(strId) {
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
         $('#Id').val(strId);
-
-        //   $('#BorrarAlmacenModal').modal('show');
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
@@ -331,7 +326,6 @@ function putSeries(dt) {
 }
 
 function setting_modalseries(strId) {
-    // console.log(dt);
     // let fechaini = new Date();
     // console.log('Hora INI setting_modalseries', fechaini);
 

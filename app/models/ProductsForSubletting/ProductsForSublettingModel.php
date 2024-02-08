@@ -170,11 +170,6 @@ public function listProyects($store)
         $projecId 		= $this->db->real_escape_string($params['projecId']);
         $storesId 		= $this->db->real_escape_string($params['storesId']);
         $projContId 		= $this->db->real_escape_string($params['projContId']);
-
-        // Obtiene el ultimo sku registrado para el producto seleccionado
-        /* $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie,
-        ifnull(SUBSTR(max(ser_sku),9,3),0) AS last_sku_num 
-        FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';"; // *** Agrego Ed */
         
         $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie,
                     ifnull(SUBSTR(max(ser_sku),9,3),0) AS last_sku_num, pd.prd_name, pd.prd_price
@@ -183,10 +178,6 @@ public function listProyects($store)
                 WHERE sr.prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';";
         
         $result = $this->db->query($qry);
-
-        /* $qry2 = "SELECT  pjtcn_prod_level FROM ctt_projects_content AS pc 
-        where pc.pjtcn_id =  $projContId;"; // *** Agrego Ed
-        $result2 = $this->db->query($qry2); */
         $skus = $result->fetch_object();
         $sku = $skus->last_sku_num;
         $serie = $skus->last_serie;
@@ -212,20 +203,6 @@ public function listProyects($store)
 
         $newSku = $produSku . $skuNew;
         
-        /* // Agrega la nueva serie
-        $qry1 = "INSERT INTO ctt_series (
-                    ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
-                    ser_date_registry, ser_reserve_count, ser_behaviour, ser_comments, 
-                    prd_id, sup_id, cin_id, pjtdt_id
-                )
-                SELECT 
-                    '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), ifnull(sr.ser_situation,'EA'), 
-                    ifnull(sr.ser_stage, 'R'), curdate(),'1', ifnull(sr.ser_behaviour,'C'), '$comments', 
-                    pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
-                FROM ctt_series AS sr  
-                RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
-                WHERE pd.prd_id = $producId LIMIT 1;"; */
-        // Agrega la nueva serie
         $qry1 = "INSERT INTO ctt_series (
             ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
             ser_date_registry, ser_reserve_count, ser_behaviour, ser_comments, 
@@ -368,8 +345,6 @@ public function listProyects($store)
             $this->db->query($qry7);
         }
         else{
-
-            
             if ($qty > 1) {
                 // Actualiza la seccion del proyecto con la serie
                 $qry5 = "UPDATE ctt_projects_content AS pd
@@ -397,9 +372,7 @@ public function listProyects($store)
 
             }
         }
-
         return $pjDetail;
-
     }
 
     public function changeSubletting($params)

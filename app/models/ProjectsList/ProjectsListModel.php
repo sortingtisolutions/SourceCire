@@ -66,25 +66,6 @@ class ProjectsListModel extends Model
 		$custown				= 0;
         $estatus = 0;
 		
-
-/* 		$sentencia = $this->db->prepare("CALL sp_ActualizaDatosPjts( $IdPjt, $NomProjectsList, $ContactoProjectsList, 
-		$tipoProjectsId, $tipoLocationId, $tipoCustomerId, $tipoRelationtId);");
-    	$sentencia->bindParam("1", $IdPjt, PDO::PARAM_STR, 4000);
-    	$sentencia->bindParam("2", $NomProjectsList, PDO::PARAM_STR, 4000); 
-    	$sentencia->bindParam("3", $ContactoProjectsList, PDO::PARAM_STR, 4000);
-		$sentencia->bindParam("4", $tipoProjectsId, PDO::PARAM_STR, 4000); 
-		$sentencia->bindParam("5", $tipoLocationId, PDO::PARAM_STR, 4000); 
-		$sentencia->bindParam("6", $tipoCustomerId, PDO::PARAM_STR, 4000); 
-		$sentencia->bindParam("7", $tipoRelationtId, PDO::PARAM_STR, 4000); 
-
-    // llamar al procedimiento almacenado
-    	$sentencia->execute();
-
-		$qry1 = "CALL sp_ActualizaDatosPjts( $IdPjt, $NomProjectsList, $ContactoProjectsList, 
-				$tipoProjectsId, $tipoLocationId, $tipoCustomerId, $tipoRelationtId);";
-		$result = $this->db->query($qry1);
-		$result = $result->fetch_fields(); */
-
 			$qry1 = "UPDATE ctt_projects SET pjt_name = UPPER('$NomProjectsList'),
 						pjt_location = UPPER('$ContactoProjectsList'),
 						pjttp_id = $tipoProjectsId,

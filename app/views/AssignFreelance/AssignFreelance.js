@@ -14,43 +14,36 @@ $(document).ready(function () {
 //INICIO DE PROCESOS MACRO
 function inicial() {
     if (altr == 1) {
-    getlistProyect();
-    getAreas();
-    setting_table();
-    fillContent();
-    actionButtons();
-    confirm_alert();
-    $('#btn_exchange').addClass('disabled');
-    // setting_datepicket($('#txtPeriod'), Date().format('DD/MM/YYYY')   ,Date().format('DD/MM/YYYY'));
-    
-    $('#btn_exchange').on('click', function () { 
-        exchange_apply(0);
-    });
+        getlistProyect();
+        getAreas();
+        setting_table();
+        fillContent();
+        actionButtons();
+        confirm_alert();
+        $('#btn_exchange').addClass('disabled');
+        // setting_datepicket($('#txtPeriod'), Date().format('DD/MM/YYYY')   ,Date().format('DD/MM/YYYY'));
+        
+        $('#btn_exchange').on('click', function () { 
+            exchange_apply(0);
+        });
 
-    /*$('txtProject').on('blur', function () {
-        validator();
-    });*/
+        $('#txtArea').on('blur', function () {
+            validator();
+        });
 
-    $('#txtArea').on('blur', function () {
-        validator();
-    });
+        $('#txtFreelance').on('blur', function () {
+            validator();
+        });
 
-    $('#txtFreelance').on('blur', function () {
-        validator();
-    });
+        $('#txtFechaAdmision').on('blur', function () {
+            validator();
+        });
 
-    $('#txtFechaAdmision').on('blur', function () {
-        validator();
-    });
-    //
-    /*$('#txtPeriodProjectEdt').on('blur', function () {
-        validator();
-    });*/
-} else {
-    setTimeout(() => {
-        inicial();
-    }, 100);
-}
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 // Setea de la tabla
 
@@ -162,7 +155,6 @@ function get_Freelances(pj) {
 }
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
-// Dibuja los tipos de movimiento
 function putProject(dt) {
     // console.log(dt);
     if (dt[0].ext_id != 0) {
@@ -219,11 +211,8 @@ function putAreas(dt) {
 
         $('#txtArea').on('change', function () {
             let catId = $(this).val();
-            //console.log(catId);
             $('#txtFreelance').html('');
             $('#txtFreelance').val('Selecciona el freelance');
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // $('#txtProducts').val('     Cargando Informacion . . . .');
             getFreelance(catId);
             // getProducts(catId);
         });
@@ -231,7 +220,7 @@ function putAreas(dt) {
 }
 
 function putFreelance(dt) {
-    //$('#txtFreelance').empty();
+
     if (dt[0].free_id != 0) {
         $.each(dt, function (v, u) {
             if (u.free_id) {
@@ -250,8 +239,7 @@ function putFreelance(dt) {
     }
 }
 function putFreelance2(dt) {
-    //$('#txtFreelance').empty();
-
+ 
     if (dt[0].free_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.free_id}" > ${u.free_name}</option>`;
@@ -266,7 +254,6 @@ function putFreelance2(dt) {
     }
 }
 function putAssign(dt) {
-    //$('#txtFreelance').empty();
     assigns = dt;
 }
 
@@ -274,7 +261,6 @@ function putAssign(dt) {
 function putProducts(dt) {
     var ps = $('#txtProducts').offset();
     $('#listProducts .list-items').html('');
-    //console.log(dt);
     $('#listProducts').css({top: ps.top + 30 + 'px'});
     $('#listProducts').slideUp('100', function () {
         $('#listProducts .list-items').html('');
@@ -323,11 +309,8 @@ function putProducts(dt) {
 function putInvoiceList(dt) {
     var fc = $('#txtInvoice').offset();
     $('#listInvoice .list-items').html('');
-    //console.log(dt);
-    //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
     $('#listInvoice').css({top: fc.top + 30 + 'px'});
     $('#listInvoice').slideUp('100', function () {
-        //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');
     });
 
@@ -337,7 +320,6 @@ function putInvoiceList(dt) {
     });
 
     $('#txtInvoice').on('focus', function () {
-        //$('.list-group #listInvoice').slideDown('slow');
         $('#listInvoice').slideDown('slow');
     });
 
@@ -359,7 +341,6 @@ function putInvoiceList(dt) {
     $('#listInvoice .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
-        //console.log(prdId);
         $('#txtInvoice').val(prdNm);
         $('#txtIdInvoice').val(prdId);
         $('#listInvoice').slideUp(100);
@@ -371,7 +352,6 @@ function putInvoiceList(dt) {
 function putSupplierList(dt) {
     var sl = $('#txtSuppliers').offset();
     $('#listSupplier .list-items').html('');
-    //console.log(sl);
     $('#listSupplier').css({top: sl.top + 30 + 'px'}); // volver a tomar al hacer scroll.
     $('#listSupplier').slideUp('100', function () {
         $('#listSupplier .list-items').html('');
@@ -387,7 +367,6 @@ function putSupplierList(dt) {
         $('#listSupplier').slideDown('fast');
     });
 
-    //$('#listSupplier').scrollY();
     $('#txtSupplier').on('scroll', function(){
         sl = $('#txtSuppliers').offset();
         $('#listSupplier').css({top: sl.top + 30 + 'px'});
@@ -434,11 +413,6 @@ function put_Freelances(dt) {
     if(dt[0].free_id){
         $.each(pd, function (v, u) {
             
-            /* let sku = u.pjtdt_prod_sku;
-            if (sku == 'Pendiente') {
-                sku = `<span class="pending">${sku}</sku>`;
-            } */
-    
             var row= tabla.row
             .add({
                 editable: `<i class="fas fa-times-circle kill" id ="md${u.free_id}"></i>`,
@@ -484,7 +458,7 @@ function actionButtons() {
 
             switch (acc) {
                 case 'modif':
-                    //$('#txtFreelance').empty();
+                    
                     editStore(strId, data);
                     break;
                 case 'kill':
@@ -564,7 +538,7 @@ function editStore(strId, data) {
     $('#txtIdAssign').val(data.data("content").split("|")[3]);
     $('#txtFreelance').val(data.data("content").split("|")[0]);
     //goThroughStore(data.data("content").split("|")[0]);
-    //$('#txtFreelance').empty();
+    
     $('#txtFechaAdmision').val(moment(data.find('td:eq(4)').text()).format('YYYY-MM-DD'));
     $('#txtFechaFinalizacion').val(moment(data.find('td:eq(5)').text()).format('YYYY-MM-DD'));
     $('#txtComments').val(data.find('td:eq(6)').text());
@@ -572,10 +546,7 @@ function editStore(strId, data) {
 
 function putSaveStore(dt) {
     
-    if (assigns.length > 0) {
-       // let ix = goThroughStore(dt);
-        //console.log(ix);
-        
+    if (assigns.length > 0) {        
         var id_proj= $('#txtProject').val();
         get_Freelances(id_proj);
         clean_selectors();
@@ -590,7 +561,6 @@ function putSaveStore(dt) {
 function putUpdateStore(dt) {
     if (assigns.length > 0) {
         console.log(dt);
-        //let ix = goThroughStore(dt);
         var id_proj= $('#txtProject').val();
         get_Freelances(id_proj);
         clean_selectors();
@@ -613,28 +583,27 @@ function goThroughStore(strId) {
 }
 
 function deletefreelance(strId) {
-        $('#confirmModal').modal('show');
+    $('#confirmModal').modal('show');
 
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la asignacion?');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar asignacion').css({display: 'inline'});
-        $('#Id').val(strId);
-        console.log(strId);
+    $('#confirmModalLevel').html('¿Seguro que desea borrar la asignacion?');
+    $('#N').html('Cancelar');
+    $('#confirmButton').html('Borrar asignacion').css({display: 'inline'});
+    $('#Id').val(strId);
+    console.log(strId);
 
-        $('#confirmButton').on('click', function () {
-            var pagina = 'AssignFreelance/DeleteAssignFreelance';
-            var par = `[{"ass_id":"${strId}"}]`;
-            var tipo = 'html';
-            var selector = putdeletefreelance;
-            fillField(pagina, par, tipo, selector);
-        });
+    $('#confirmButton').on('click', function () {
+        var pagina = 'AssignFreelance/DeleteAssignFreelance';
+        var par = `[{"ass_id":"${strId}"}]`;
+        var tipo = 'html';
+        var selector = putdeletefreelance;
+        fillField(pagina, par, tipo, selector);
+    });
     
 }
 
 function putdeletefreelance(dt) {
-    // console.log(dt);
-        var id_proj= $('#txtProject').val();
-        get_Freelances(id_proj);
+    var id_proj= $('#txtProject').val();
+    get_Freelances(id_proj);
     $('#confirmModal').modal('hide');
 }
 
@@ -649,11 +618,7 @@ function clean_selectors() {
     $('#txtComments').val('');
 }
 
-function fillContent() {
-    // configura el calendario de seleccion de periodos
-    // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
-    // let fecha = moment(Date()).format('DD/MM/YYYY');
-    // let restdate= moment().subtract(3, 'days'); 
+function fillContent() { 
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -706,10 +671,7 @@ function fillContent() {
     );
 }
 
-function exchange_result(dt) {
-    //console.log(dt);
-    //$('.resFolio').text(refil(folio, 7));
-    
+function exchange_result(dt) {   
     $('#MoveResultModal').modal('show');
     $('#btnHideModal').on('click', function () {
         window.location = 'AssignFreelance';
@@ -721,8 +683,6 @@ function exchange_result(dt) {
 }
 
 function updated_stores(dt) {
-    // console.log(dt);
-
     $('.resFolio').text(refil(folio, 7));
     $('#MoveResultModal').modal('show');
     $('#btnHideModal').on('click', function () {

@@ -195,12 +195,6 @@ class UsuariosModel extends Model
 		$IdUsuario = $this->db->real_escape_string($params['IdUsuario']);
 		$estatus = 0;
 			try {
-				//Borra perfil
-				// $qry = "UPDATE ctt_users
-				// 		SET usr_status = 0
-				// 		WHERE usr_id in (".$params['IdUsuario'].");";
-				// $this->db->query($qry);
-
 				$qry = "DELETE FROM  ctt_users
 						WHERE usr_id in (".$params['IdUsuario'].");";
 				$this->db->query($qry);

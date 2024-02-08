@@ -118,7 +118,6 @@ function fillSales() {
 function fillSalesTbl() {
     if (sale[0].sal_id != 0) {
         $('#tblSales tbody').html('');
-
         let tabla = $('#tblSales').DataTable();
 
         $.each(sale, function (v, u) {
@@ -186,7 +185,6 @@ function putSalesDetail(dt) {
             icoRtn = `<i class="far fa-comment-dots comments"></i>`;
         }
         amount = formato_numero(amount, 2, '.', ',');
-
         let nameProd = u.sld_name.replace(/"/g, '°');
 
         let H = `
@@ -280,7 +278,7 @@ function putSalesDetail(dt) {
 }
 
 function setReturn(dt) {
-    console.log(dt);
+    // console.log(dt);
     var dat = $('#txtSale').val().split('|');
     var qty = $('#txtQuantity').val();
     var com = $('#txtComments').val();
@@ -298,7 +296,6 @@ function returnApply() {
     var dat = $('#txtSale').val().split('|');
     var qty = $('#txtQuantity').val();
     var com = $('#txtComments').val();
-    // folio = 100;
     if (folio == undefined) {
         var pagina = 'ProductsSalablesList/NextExchange';
         var par = '[{"par":""}]';
@@ -336,7 +333,7 @@ function returnApply() {
 }
 
 function putNextExchangeNumber(dt) {
-    console.log(dt);
+    // console.log(dt);
     folio = dt;
     returnApply();
 }
@@ -382,7 +379,6 @@ function settindSaleDetailTbl(salId) {
 function printReport(salId) {
     // alert('Imprime reporte ' + salId);
     var us = Cookies.get('user');
-
     let sal = salId;
     let usr = us.split('|')[0];
     let nme = us.split('|')[2];

@@ -25,7 +25,7 @@
                         <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="NomAlmacen" name="NomAlmacen" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
-                                    <label for="NomAlmacen">Nombre almacen</label>
+                                    <label for="NomAlmacen">Nombre del almacen</label>
                                 </div>
                                 <input id="IdAlmacen" name="IdAlmacen" type="hidden">
                             </div>
@@ -85,10 +85,8 @@
                     </div>
                 </div>
                 <!-- End área de listado -->
-            </div>
-           
+            </div>  
     </div>
-    
 </div>
 
 <!-- Start Ventana modal que muestra las EXISTENCIAS por serie -->
