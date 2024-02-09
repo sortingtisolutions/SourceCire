@@ -5,7 +5,6 @@
 
 	class MobilStoreController extends Controller
 	{
-
 		private $session;
 		public $model;
 
@@ -26,7 +25,7 @@
 
 		public function GetMobilStore($request_params)
 		{
-	      $result = $this->model->GetMobilStore($request_params);
+	      $result = $this->model->GetMobilStores($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 

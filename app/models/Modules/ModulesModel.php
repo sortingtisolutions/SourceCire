@@ -64,10 +64,8 @@ class ModulesModel extends Model
 	public function DeleteModule($params)
 	{
         $mod_id 	= $this->db->real_escape_string($params['mod_id']);
-		/* $qry = "UPDATE ctt_modules
-				SET are_status = 0
-				WHERE mod_id = $mod_id"; */
 		$qry = "DELETE FROM ctt_modules WHERE mod_id = $mod_id"; 
+		
         return $this->db->query($qry);
 	}
 

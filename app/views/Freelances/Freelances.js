@@ -34,15 +34,6 @@ function getFreelances() {
 }
 
 // Solicita las monedas
-// function getScores() {
-//     var pagina = 'Freelances/listScores';
-//     var par = '[{"parm":""}]';
-//     var tipo = 'json';
-//     var selector = putScores;
-//     fillField(pagina, par, tipo, selector);
-// }
-
-// Solicita las monedas
 function getCustType() {
     var pagina = 'Freelances/listAreas';
     var par = '[{"parm":""}]';
@@ -80,8 +71,7 @@ function putFreelances(dt) {
 function settingTable() {
     let title = 'Listado de Freelances';
     // $('#tblFreelances').DataTable().destroy();
-    let filename =
-        title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    let filename =title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     var tabla = $('#tblFreelances').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
@@ -165,7 +155,7 @@ function fillFreelances(ft) {
     $('#tblFreelances tbody').html('');
     var cod = ft == '1' ? 'A' : '';
     // console.log(prds);
-    if (prds[0].free_id != '0') {
+    if (prds[0].free_id > 0) {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
                 var H = `
@@ -194,17 +184,6 @@ function fillFreelances(ft) {
     }
 }
 
-
-/** +++++  coloca los tipos de calificacion */
-// function putScores(dt) {
-//     if (dt[0].scr_id != '0') {
-//         let cinId = dt[0].scr_id;
-//         $.each(dt, function (v, u) {
-//             var H = `<option value="${u.scr_values}">${u.scr_values} - ${u.scr_description}</option>`;
-//             $('#txtQualy').append(H);
-//         });
-//     }
-// }
 /** +++++  coloca los tipo productor */
 function putCustType(dt) {
     if (dt[0].are_id != '0') {
@@ -244,7 +223,7 @@ function activeIcons() {
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            console.log('To Kill ' + prdId);
+            // console.log('To Kill ' + prdId);
             if (prdId != undefined){
                 $('#delProdModal').modal('show');
                 $('#txtIdProduct').val(prdId);
@@ -287,7 +266,7 @@ function filterProduct() {
 
 function putSelectFreelance(dt) {
     //cleanProductsFields();
-    console.log('putSelectFreelance',dt);
+    // console.log('putSelectFreelance',dt);
     let freeId = dt[0].free_id;
     let freeName = dt[0].free_name;
     let freeClave = dt[0].free_cve;
@@ -401,7 +380,7 @@ function saveEditFreelance() {
                 $(el.find('td')[11]).text(freeClaUnidad);
                 $(el.find('td')[12]).text(freeAnUnidad);
 
-        console.log('EDITA ',par);
+        // console.log('EDITA ',par);
         
         var pagina = 'Freelances/saveEditFreelance';
         var tipo = 'html';
@@ -411,8 +390,7 @@ function saveEditFreelance() {
 }
 
 function resEdtProduct(dt) {
-    console.log('resEdtProduct',dt);
-    
+    // console.log('resEdtProduct',dt);
     $('#FreelanceModal .btn_close').trigger('click');
     activeIcons();
 }
@@ -420,9 +398,6 @@ function resEdtProduct(dt) {
 function createNewFreelance() {
     let prdNm = 'Alta Nuevo Freelance';
     cleanProductsFields();
-
-    //$(`#txtCatId`).attr('disabled', false);
-    //$(`#txtSbcId`).attr('disabled', false);
     $('#FreelanceModal').removeClass('overlay_hide');
     //$('#txtCusStat').html('<i class="fas fa-check-square"></i>');
     $('.overlay_closer .title').html(prdNm);
@@ -510,16 +485,14 @@ function saveNewFreelance() {
     }
 }
 function resNewProduct(dt) {
-        
-    console.log(dt);
+    // console.log(dt);
     $('#FreelanceModal .btn_close').trigger('click');
     cusIdNew=dt;
     getSelectFreelanceNew(cusIdNew);
 }
 
 function putFreelancesNew(dt) {
-    console.log('putFreelancesNew',cusIdNew);
-    
+    // console.log('putFreelancesNew',cusIdNew);
     // $('#tblFreelances tbody').html('');
     let tabla = $('#tblFreelances').DataTable();
 
@@ -546,7 +519,6 @@ function putFreelancesNew(dt) {
             $(row.node()).attr('id', u.free_id);
         });
         // settingTable();
-        
         activeIcons();
     } else {
         settingTable();
@@ -570,11 +542,7 @@ function validatorProductsFields() {
     $('.required').each(function () {
         if ($(this).val() == '' || $(this).val() == 0) {
             ky = 1;
-            $(this)
-                .addClass('fail')
-                .parent()
-                .children('.fail_note')
-                .removeClass('hide');
+            $(this).addClass('fail').parent().children('.fail_note').removeClass('hide');
         }
     });
     inactiveFocus();
@@ -585,26 +553,14 @@ function inactiveFocus() {
     $('.required')
         .unbind('focus')
         .on('focus', function () {
-            $(this)
-                .removeClass('fail')
-                .parent()
-                .children('.fail_note')
-                .addClass('hide');
+            $(this).addClass('fail').parent().children('.fail_note').removeClass('hide');
+            // $(this)
+            //     .removeClass('fail')
+            //     .parent()
+            //     .children('.fail_note')
+            //     .addClass('hide');
         });
 }
-
-// function putInvoice(dt) {
-//     if (dt[0].doc_id != '0') {
-//         $.each(dt, function (v, u) {
-//             var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
-//             $('#txtDocIdSerie').append(H);
-//         });
-//     }
-// }
-
-// function putInvoiceList(dt) {
-//     //console.log(dt);
-// }
 
 function omitirAcentos(text) {
     var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';

@@ -7,6 +7,7 @@ class ActionsModel extends Model
 	{
 		parent::__construct();
 	}
+	
 //Guarda proveedor ***
 	public function SaveActions($params)
 	{

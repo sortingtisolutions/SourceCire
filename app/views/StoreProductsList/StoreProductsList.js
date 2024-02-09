@@ -112,7 +112,6 @@ function getProducts(strId) {
 }
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
-// Dibuja los almacenes
 function putStores(dt) {
     if (dt[0].str_id != 0) {
         $.each(dt, function (v, u) {
@@ -132,7 +131,6 @@ function putStores(dt) {
 
     active_list();
 }
-
 // Coloca los productos en el selector
 function putProducts(dt) {
     if (dt[0].prd_id != '0') {
@@ -228,18 +226,15 @@ function exchange_apply() {
     let prod = prId.split('|');
     let productSKU = prod[2];
     let productSerie = prod[3];
-
     let commnets = $('#txtComments').val();
-
     let par = `
-[{  
-    "support"	: 	"${productSKU}",
-    "prodsku"	: 	"${productSKU}",
-    "prodnme"	:	"${productName}",
-    "prodser"	:	"${productSerie}",
-    "comment"	:	"${commnets}"
-}]
-            `;
+        [{  
+            "support"	: 	"${productSKU}",
+            "prodsku"	: 	"${productSKU}",
+            "prodnme"	:	"${productName}",
+            "prodser"	:	"${productSerie}",
+            "comment"	:	"${commnets}"
+        }] `;
     fill_table(par);
 }
 
@@ -248,9 +243,7 @@ function fill_table(par) {
     let largo = $('#tblExchanges tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
     par = JSON.parse(par);
-
     let tabla = $('#tblExchanges').DataTable();
-
     tabla.row
         .add({
             editable: '<i class="fas fa-times-circle kill"></i>',
@@ -261,7 +254,6 @@ function fill_table(par) {
         })
         .draw();
     btn_apply_appears();
-
     // clean_selectors();
 
     $('.edit')
@@ -311,7 +303,6 @@ function read_exchange_table() {
         chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${serinum}|${comment}@`;
     });
     chain = chain.substring(0, chain.length - 1);
-
     build_data_structure(chain);
 }
 
@@ -343,8 +334,7 @@ function omitirAcentos(text) {
 // ***********************************************************************************
 
 function send_api_detail() {
-    console.log('detail');
-
+    // console.log('send_api_detail');
     var pagina = 'StoreProductsList/listDetailProject';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
@@ -354,7 +344,6 @@ function send_api_detail() {
 
 function putlistDetailProject(dt) {
     var par = '[{"email": "cire@test.com","password":"C1r322022!"}]';
-
     $.ajax({
         url: urlapi + '/api/auth/login',
         type: 'post',

@@ -7,8 +7,6 @@ class ProductsSalablesModel extends Model
     {
         parent::__construct();
     }
-
-
 // Registra el numero de folio 
     public function NextExchange()
     {
@@ -16,7 +14,6 @@ class ProductsSalablesModel extends Model
         $this->db->query($qry);
         return $this->db->insert_id;
     }
-
 // Listado de almacenes  ****
         public function listStores($params)
         {

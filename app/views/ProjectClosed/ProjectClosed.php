@@ -11,7 +11,6 @@
 <div class="container-fluid">
     <div class="contenido">  
         <div class="row mvst_group">
-
         <!-- Sidebar -->
             <div class="mvst_panel" style="width:280px; background-color: #EAFC98">
                 <div class="form-group" >
@@ -37,7 +36,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="margin-top: 3px;">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="margin-top: 5px;">
                             <select id="txtProjects" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el proyecto</option></select>
                             <label for="txtProjects">Lista de proyectos</label>
                         </div>
@@ -179,7 +178,6 @@
                     </div>
                 </div>
                 
-                
                 <!-- Tabla de productos del proyecto -->
                     <div class="tabla__contenedor" style="height: 1000px; padding: 3rem 0px 0px 0px">
                         <table  id="tblProducts">
@@ -267,12 +265,6 @@
             
             <div class="comments__list" style="border: 1px solid var(--br-gray-soft); border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.5rem; overflow-y: scroll;">
             </div>
-            
-                <!-- <div class="comments__addNew" style="background-color: var(--br-gray-soft); padding: 0.5rem;">
-                    <label for="txtComment">Escribe comentario</label><br>
-                    <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput" ></textarea><br>
-                    <span class="invoice_button" id="newComment" style="background-color: var(--in-white) !important;"><i class="fas fa-plus"></i>guardar comentario</span>
-                </div> -->
             
         </div>
     </div>

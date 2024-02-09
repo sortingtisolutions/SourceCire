@@ -26,7 +26,7 @@
 
 		public function GetMenu($request_params)
 		{
-	      $result = $this->model->GetMenu($request_params);
+	      $result = $this->model->GetMenus($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 

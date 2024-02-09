@@ -8,7 +8,6 @@ class FreelancesModel extends Model
         parent::__construct();
     }
 
-
 // Listado de categorias   ****
 public function listFreelances()
 {

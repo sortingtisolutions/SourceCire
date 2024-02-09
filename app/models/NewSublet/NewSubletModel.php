@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class NewSubletModel extends Model
 {
-
     public function __construct()
     {
       parent::__construct();
@@ -153,8 +152,6 @@ public function NextSkuProduct($param)
         $prd  = $this->db->real_escape_string($param['prd']);
         $quantity  = $this->db->real_escape_string($param['prdqty']); // *** Ed
         
-
-        //$exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
         $ser_status         = '1';
         $ser_situation      = 'D';
         $ser_stage          = 'D';
@@ -173,7 +170,7 @@ public function NextSkuProduct($param)
                         ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments, pjtdt_id) 
                     VALUES ('$sku', '$serie', '$prc', '$ser_status', '$ser_situation', 
                     '$ser_stage', '$ser_behaviour', '$prd', '$idsup', '1', '', '', '',
-                    '', '','','$com', 0);";
+                    '', '','$str','$com', 0);";
 
             $this->db->query($qry1);
             $serId = $this->db->insert_id;
@@ -185,6 +182,13 @@ public function NextSkuProduct($param)
                     '$com', '$serId', '$idsup', '0','1','$prd');";
             $this->db->query($qry2);
             $subId = $this->db->insert_id;
+
+            $qry4 = " INSERT INTO ctt_stores_products 
+                        (stp_quantity, str_id, ser_id, prd_id) 
+                    VALUES 
+                        ('1','$str', '$serId','$prd');";
+            $this->db->query($qry4);
+            
        }else{
             $subId=0;
        }

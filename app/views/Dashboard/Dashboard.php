@@ -8,17 +8,19 @@
     <head>
         <title>Dashboard Operaciones</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
         <script type="text/javascript">
             function redirect() {
-                let newpath="<?= FOLDER_DASH_PATH ?>" + "/Dashboard";
+                let newpath="<?= DASH_PATH ?>" + "/Dashboard";
                 window.location.href = newpath;
             }
             window.onload = redirect;
         </script>
-    <script>
-            // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
-            // window.focus();
-    </script>
+        <script>
+                // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
+                // window.focus();
+        </script>
+        
     </head>
     <body>
     </body>

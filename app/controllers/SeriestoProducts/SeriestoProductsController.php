@@ -76,19 +76,6 @@ class SeriestoProductsController extends Controller
         echo $res;
     }
 
-// Lista de paquetes
-    public function listPackages()
-    {
-      
-    }
-
-// Obtiene el Id correspondiente al paquete nuevo 
-    public function lastIdSubcategory($request_params)
-    {
-      
-    }
-
-    
 // Lista los productos relacionados al paquete
     public function listProducts()
     {
@@ -125,7 +112,6 @@ public function listProductsById($request_params)
     }
     echo $res;
 }
-
 
 // Lista los productos relacionados al paquete
     public function listProductsPack($request_params)

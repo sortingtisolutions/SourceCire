@@ -184,7 +184,6 @@ function activeIcons() {
 }
 
 /** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
-/** ---- Registra la nueva subcategoria ---- */
 function saveSubcategory() {
     let subcatNm = $('#txtWtpDescription').val().toUpperCase();
     let subcatCd = $('#txtWtpCve').val().toUpperCase();
@@ -265,7 +264,6 @@ function putUpdateSubcategory(dt) {
 
 function deleteSubcategory(sbcId) {
     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
-
     if (cn != 0) {
         $('#confirmModal').modal('show');
         $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
@@ -279,7 +277,7 @@ function deleteSubcategory(sbcId) {
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar subcategoria').css({display: 'inline'});
         $('#Id').val(sbcId);
-        console.log('BORRAR REGISTRO');
+        // console.log('BORRAR REGISTRO');
         $('#confirmButton').on('click', function () {
             var pagina = 'PostCollection/DeleteSubcategory';
             var par = `[{"sbcId":"${sbcId}"}]`;
@@ -291,7 +289,7 @@ function deleteSubcategory(sbcId) {
 }
 /** ---- Elimina el registro de la subcategoria borrada ---- */
 function putDeleteSubcategory(dt) {
-    console.log('BORRAR LINEA');
+    // console.log('BORRAR LINEA');
     getCategories();
     let tabla = $('#tblSubcategory').DataTable();
     tabla
@@ -300,4 +298,3 @@ function putDeleteSubcategory(dt) {
         .draw();
     $('#confirmModal').modal('hide');
 }
-

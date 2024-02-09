@@ -66,18 +66,6 @@ function settingTable() {
             },
             {
                 text: 'Borrar seleccionados',
-                // className: 'btn-apply hidden-field',
-                // action: function () {
-                //     var selected = table.rows({selected: true}).data();
-                //     var idSelected = '';
-                //     selected.each(function (index) {
-                //         idSelected += index[1] + ',';
-                //     });
-                //     idSelected = idSelected.slice(0, -1);
-                //     if (idSelected != '') {
-                //         ConfirmDeletAlmacen(idSelected);
-                //    }
-                //},
             },
         ],
         pagingType: 'simple_numbers',
@@ -166,8 +154,9 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    console.log(strs);
-    tabla.row
+    // console.log(strs);
+    if (strs[0].pjttp_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].pjttp_id}"></i><i class="fas fa-times-circle kill"></i>`,
             code: strs[ix].pjttp_name,
@@ -175,9 +164,11 @@ function fillTableStores(ix) {
             quantity: strs[ix].pjttp_max_download,
         })
         .draw();
-    $('#md' + strs[ix].pjttp_id)
-        .parents('tr')
-        .attr('id', strs[ix].pjttp_id);
+        $('#md' + strs[ix].pjttp_id)
+            .parents('tr')
+            .attr('id', strs[ix].pjttp_id);  
+    }
+    
     actionButtons();
 }
 
@@ -222,7 +213,7 @@ function updateStore() {
             "pjttp_min_download"      : "${CoinsNumber}",
             "pjttp_max_download"      : "${CoinsCode}"
         }]`;
-    console.log(par);
+    // console.log(par);
     strs = '';
     var pagina = 'ProjectType/UpdateProjectType';
     var tipo = 'html';
@@ -246,7 +237,7 @@ function putUpdateStore(dt) {
 }
 
 function editStore(strId) {
-    console.log('Editando');
+    // console.log('Editando');
     let ix = goThroughStore(strId);
     $('#NomAlmacen').val(strs[ix].pjttp_name);
     $('#IdAlmacen').val(strs[ix].pjttp_id);
@@ -255,26 +246,22 @@ function editStore(strId) {
 }
 
 function deleteStore(strId) {
-    console.log(strId);
+    // console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-        $('#confirmModal').modal('show');
-
-        $('#confirmModalLevel').html('¿Seguro que desea borrar el tipo de proyecto?');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar tipo de proyecto').css({display: 'inline'});
-        $('#Id').val(strId);
-
-        //   $('#BorrarAlmacenModal').modal('show');
-        $('#IdAlmacenBorrar').val(strId);
-
-        $('#confirmButton').on('click', function () {
-            var pagina = 'ProjectType/DeleteProjectType';
-            var par = `[{"pjttp_id":"${strId}"}]`;
-            var tipo = 'html';
-            var selector = putDeleteStore;
-            fillField(pagina, par, tipo, selector);
-        });
+    $('#confirmModal').modal('show');
+    $('#confirmModalLevel').html('¿Seguro que desea borrar el tipo de proyecto?');
+    $('#N').html('Cancelar');
+    $('#confirmButton').html('Borrar tipo de proyecto').css({display: 'inline'});
+    $('#Id').val(strId);
+    //   $('#BorrarAlmacenModal').modal('show');
+    $('#IdAlmacenBorrar').val(strId);
+    $('#confirmButton').on('click', function () {
+        var pagina = 'ProjectType/DeleteProjectType';
+        var par = `[{"pjttp_id":"${strId}"}]`;
+        var tipo = 'html';
+        var selector = putDeleteStore;
+        fillField(pagina, par, tipo, selector);
+    });
     
 }
 
@@ -290,7 +277,7 @@ function putDeleteStore(dt) {
 
 
 function goThroughStore(strId) {
-    console.log(strs);
+    // console.log(strs);
     let inx = -1;
     $.each(strs, function (v, u) {
         if (strId == u.pjttp_id) inx = v;

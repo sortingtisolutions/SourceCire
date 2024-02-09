@@ -23,10 +23,9 @@
 
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtInvoice">Monto Expendables</label>
-                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
-                    
+                                <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
+                                <label for="txtInvoice">Monto Expendables</label>
+                                <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -36,10 +35,9 @@
 
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtInvoice">Monto Mantenimiento</label>
-                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
-                    
+                                <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
+                                <label for="txtInvoice">Monto Mantenimiento</label>
+                                <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -49,10 +47,9 @@
                     <!-- Factura posición 3 -->
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtInvoice">Descuento PosProyecto</label>
-                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
-                    
+                                <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
+                                <label for="txtInvoice">Descuento PosProyecto</label>
+                                <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -83,7 +80,6 @@
                         </div>
                 </div>
                 </div>
-
 
                 <div class="mvst_table">
                 <h1>Detalles del Proyecto</h1>
@@ -161,7 +157,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">

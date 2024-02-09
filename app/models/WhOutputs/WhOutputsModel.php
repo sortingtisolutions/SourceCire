@@ -54,11 +54,7 @@ class WhOutputsModel extends Model
 
         $chprj = $this->db->query($qry2);
 
-        /* $qry = "SELECT fun_RegistraAccesorios('$verid', '$pjtid') as bandsucess
-                FROM DUAL;";  // solo trae un registro
-        $result =  $this->db->query($qry); */
         return 1;
-
     }
 
 }

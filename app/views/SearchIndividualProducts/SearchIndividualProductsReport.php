@@ -8,18 +8,6 @@ require_once '../../../vendor/autoload.php';
 $prdId = $_GET['p'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
-/*
-$totalBase = 0;
-$totalTrip = 0;
-$totalTest = 0;
-$totalInsr = 0;         //      Total del seguro
-$totalMain = 0;
-$totalInsrGral = 0;
-
-$equipoBase = 0;
-$equipoExtra = 0;
-$equipoDias = 0;
-$equipoSubarrendo = 0;*/
 
 $conkey = decodificar($_GET['h']) ;
 
@@ -27,8 +15,6 @@ $h = explode("|",$conkey);
 
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-//echo $h[2];
-
 
 $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, 
 pd.prd_visibility, ser.ser_id, ser.ser_sku, ser.ser_serial_number, 
@@ -43,14 +29,12 @@ Left JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
 Left  JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id WHERE pd.prd_id = $prdId ORDER BY ser.ser_serial_number;";
 
 $res = $conn->query($qry);
-//$conn->close();
-
 
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
-$conn->close();
 
+$conn->close();
 
 // Cabezal de la página
 $header = '
@@ -91,16 +75,9 @@ $header = '
                                 </tr>
                             </thead>
                         <tbody>';
-                        /*
-                        $discountBaseTotal  = 0;
-                        $amountBaseTotal    = 0;
-                        $discountTripTotal   = 0;
-                        $amountTripTotal    = 0;
-                        $amountGralTotal    = 0;*/
 
                         for ($i = 0; $i<count($items); $i++){
                            
-
         $html .= '
                             <tr>
                                 
@@ -112,9 +89,6 @@ $header = '
                                 <td class="dat-figure amou">' . $items[$i]['ser_situation']       . '</td>
                             </tr>
                             ';
-                            
-                            
-
                         }
                     
         $html .= '

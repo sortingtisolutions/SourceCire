@@ -7,7 +7,7 @@ require ROOT . FOLDER_PATH . "/app/assets/header.php";
 <body>
   <div class="container text-center">
     <h1>Error 404</h1>
-    <h2>Oops! P&aacute;gina no encontrada</h2>
+    <h2>Oops!! P&aacute;gina no encontrada</h2>
     <a href="<?php echo $path_inicio ?>">Ir a inicio</a>
   </div>
 </body>

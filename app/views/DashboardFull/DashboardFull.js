@@ -61,25 +61,7 @@ $(document).ready(function () {
                     $('#tblDataSub').DataTable().destroy;
                 }); 
     });
-    /* .on('click', function(){
-        console.log('Hola report');
-        let user = Cookies.get('user').split('|');
-        let u = user[0];
-        let n = user[2];
-        let h = localStorage.getItem('host');
-        window.open(
-            `${url}DashboardFull/DashboardFullReport`,
-            '_blank'
-        );
-    });   
-    
-    window.open(
-        `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
-    */
-
-    
+        
 });
 
 //Lama a todos los KPI

@@ -8,15 +8,6 @@ class GlobalProdutsModel extends Model
         parent::__construct();
     }
 
-// Obtiene el siguiente SKU   ******
-    /* public function getNextSku($param)
-    {
-        $sbcId = $this->db->real_escape_string($param['sbcId']);
-        $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next
-                FROM ctt_products  WHERE sbc_id = $sbcId;";
-        return $this->db->query($qry);
-    }
- */
 // Listado de Productos
     public function listProducts($params)
     {
@@ -52,20 +43,7 @@ class GlobalProdutsModel extends Model
         $nxtSku = $this->db->real_escape_string($param['nxtSku']);
         $cat_name  = "";
         $sbc_name  = "";
-        /* $query = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS NEXT, SUBSTR(prd_sku,1,4) sku
-                FROM ctt_products  WHERE sbc_id = $sbcId;";
         
-        $rss = $this->db->query($query);
-        $res = $rss->fetch_object();
-        if ($res != null){
-            $Nxt  = $res->NEXT; 
-            $sku  = $res->sku;
-        }
-        $NxtId = str_pad($Nxt, 3, "0", STR_PAD_LEFT);
-        $sku .=$NxtId; 
-
-        $qry =  "UPDATE ctt_global_products SET sbc_id = '$sbcId', prd_sku = '$sku'
-        WHERE prd_id IN ($idSelected);" ; */
         $query = "SELECT CONCAT(LPAD(ct.cat_id,2,'0'),LPAD(sb.sbc_code,2, '0')) sku, ct.cat_name, sb.sbc_name
         FROM ctt_subcategories AS sb 
         INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id WHERE sb.sbc_id = $sbcId LIMIT 1;";
@@ -83,26 +61,7 @@ class GlobalProdutsModel extends Model
         WHERE prd_id = $idSelected;";
         $this->db->query($qry);
 
-
         return $idSelected .'|'. $sku .'|'. $cat_name .'|'.$sbc_name;
-
-
-        /*
-        $query = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS NEXT, SUBSTR(prd_sku,1,4) sku
-                FROM ctt_products WHERE sbc_id = $sbcId;";
-        
-        $rss = $this->db->query($query);
-        $res = $rss->fetch_object();
-        if ($res != null){
-            $Nxt  = $res->NEXT; 
-            $sku  = $res->sku;
-        }
-        $NxtId = str_pad($Nxt, 3, "0", STR_PAD_LEFT);
-        $sku .=$NxtId; 
-
-        $qry =  "UPDATE ctt_global_products SET sbc_id = '$sbcId', prd_sku = '$sku'
-        WHERE prd_id = $idSelected;" ;*/
-
     }
 
     public function getNextSku($param){

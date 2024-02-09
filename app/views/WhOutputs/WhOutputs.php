@@ -6,6 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <!-- Start Contenedor Listado de PRODUCTOS  -->
     <div class="container-fluid">
@@ -34,9 +35,6 @@
 
                 </div>
             </div>
-<!--            <div class="deep_loading">
-                <div class="flash_loading"> Cargando datos...</div>
-            </div>-->
         </div>
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->

@@ -42,8 +42,8 @@ function settingTable() {
             info: false,
         },
         lengthMenu: [
-            [50, 100, 200, -1],
-            [50, 100, 200, 'Todos'],
+            [500, 1000, 2000, -1],
+            [500, 1000, 2000, 'Todos'],
         ],
         buttons: [
             {
@@ -137,9 +137,7 @@ function settingTable() {
         });
 
 }
-function settingTableSub() {
-    //console.log('555');
-    
+function settingTableSub() {  
     $('#tblSubcategories').DataTable().destroy();
     $('#tblSubcategories').DataTable({
         bDestroy: true,
@@ -150,12 +148,10 @@ function settingTableSub() {
         dom: 'Blfrtip',
         
         lengthMenu: [
-            [10, 20, 50, -1],
-            [10, 20, 50, 'Todos'],
+            [50, 100, 200, -1],
+            [50, 100, 200, 'Todos'],
         ],
         buttons: [
-            
-
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -164,13 +160,11 @@ function settingTableSub() {
         scrollY: 'calc(70vh - 150px)',
         scrollX: true,
         fixedHeader: true,
-        columns: [
-            {data: 'editable',      class: 'edit', orderable: false},   
+        columns: [  
             {data: 'code',      class: 'supply'},        
             {data: 'subcname',      class: 'supply'},    
         ],
     });
-
 
 }
 function asignarSubcategoria() {
@@ -243,54 +237,35 @@ function putData(dt) {
 }
 function putSubCategories(dt) {
     //console.log('putSubCategories',dt);
-    
     let tabla = $('#tblSubcategories').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].sbc_id != 0) {
-        
         $.each(dt, function (v, u) {
             var row = tabla.row
             .add({
-                editable:'',
                 code: u.sbc_code,
                 subcname: u.sbc_name,
             })
             .draw();
             $(row.node()).attr('data-content', u.sbc_id);
         });
-
     }
 
     $('#tblSubcategories tbody tr')
         // .unbind('click')
         .on('click', function () {
             // console.log('Click Producto');
-            let inx = $(this).attr('data-content');
-           /*  var selected = table.rows({selected: true});
-            var idSelected = ''; */
-            
+            let inx = $(this).attr('data-content');           
             getNextSku(inx);
             setTimeout(() => {
                 var num = $('#txtNext').val(); 
                 let filas = $('#tblProyects .selected');
-                /* selected.each(function (index) {
-                    //idSelected += index['id'] + ',';
-                    updateData(inx,index['id'], num);
-                    num++;
-                }); */
                 filas.each(function(v,u){
                     var idSelected = $(this).attr('id');
                     updateData(inx,idSelected, num);
                     num++;
-                    // console.log($(this).attr('id'));
                 });
-                /* idSelected = idSelected.slice(0, -1);
-                if (idSelected != '') {
-                    updateData(inx,idSelected);
-                } */  
             }, 100);
-               
-            
         });
 }
 function getNextSku(sbcId){
@@ -302,7 +277,6 @@ function getNextSku(sbcId){
 }
 
 function putNextSku(dt){
-
     $('#txtNext').val(dt);
 }
 
@@ -311,7 +285,6 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //console.log('subir datos');
         //modalLoading('S');
         let filas = $('#tblProyects .selected');
         var idsSelected = '';
@@ -328,10 +301,6 @@ function loadProcess() {
             var selector = put_load_process;
             fillField(pagina, par, tipo, selector); 
         } 
-        
-        /* setTimeout(() => {
-            modalLoading('H');
-        }, 100); */
     });
  }
 
@@ -339,26 +308,19 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //console.log('subir datos');
-        //modalLoading('S');
-        
+        //modalLoading('S');  
         var pagina = 'GlobalProduts/loadProcessAll';
         var par = `[{"idSelected":""}]`;
         var tipo = 'json';
         var selector = put_load_process;
         fillField(pagina, par, tipo, selector); 
         
-        
-        /* setTimeout(() => {
-            modalLoading('H');
-        }, 100); */
     });
  }
  function put_load_process(dt){
     console.log(dt); 
     window.location.reload();
     $('#confirmarCargaModal').modal('hide');
-    
     //getDocumentosTable();
  }
 /** +++++  coloca los productos en la tabla */
@@ -371,23 +333,6 @@ function putProducts(dt) {
     if (dt[0].prd_id > 0) {        
         $('#tblProyects tbody').html('');
         $.each(dt, function (v, u) {
-            // <i class="fa-solid fa-dolly"></i>
-            /* if (u.pjt_status == 4)
-                { valstage='color:#008000';
-                valicon='fa fa-cog toWork'; }
-            else if (u.pjt_status == 7)
-                { valstage='color:#FFA500';
-                valicon='fa fa-solid fa-dolly detail'; }
-            else
-                { valstage='color:#CC0000';
-                valicon='fa fa-solid fa-dolly detail';
-                }
-                 //valicon='fa fa-solid fa-print detail';
-            if (u.pjt_status == 8){
-                etiquetai = '<i class="fa fa-solid fa-print print"></i>';
-            }else{
-                etiquetai = '';
-            } */
             var H = `
                 <tr id="${u.prd_id}">
                     <td class="sku"><div id="txtPrdLevel"  class="checkbox"><i id='checkPrdLevel${u.prd_id}' class="far fa-square" data_val="0"></i></div></td>
@@ -418,21 +363,17 @@ function activeIcons() {
             let locID = $(this);
             let pjtid = locID.parents('tr').attr('id');
             let verid = locID.parents('tr').attr('data-version');
-
-            // console.log('Paso ToWork..', pjtid, verid);
             confirm_to_work(pjtid, verid);
         });
 
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            // console.log('Pasando siguiente ventana...');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
             // console.log(pjtid);
             Cookies.set('pjtid', pjtid, {expires:1});
-
             window.location = 'WhOutputContent';
         });
     $('.print')
@@ -458,7 +399,6 @@ function activeIcons() {
         let id = $(this).attr('id');
         let val = $('#checkPrdLevel' + id).attr('data_val');
         let cont = 0;
-
        // $('.btn-apply').removeClass('hidden-field');
         if (val == 1) {
             $('#checkPrdLevel'+ id).attr('data_val', 0);
@@ -503,7 +443,7 @@ function confirm_to_work(pjtid, verid) {
 }
 
 function putToWork(dt){
-    console.log('Resultado Update',dt)
+    // console.log('Resultado Update',dt)
     modalLoading('H');
     window.location.reload();
 }

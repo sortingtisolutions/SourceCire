@@ -5,6 +5,7 @@
 
 class PaymentAgreementController extends Controller
 {
+    
     private $session;
     public $model;
 

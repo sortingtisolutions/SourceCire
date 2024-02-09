@@ -7,7 +7,6 @@ $(document).ready(function () {
     }
 });
 
-
 function inicial() {
     if (altr == 1) {
         deep_loading('O');
@@ -30,8 +29,8 @@ function settingTable() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
+            [200, 400, -1],
+            [200, 400, 'Todos'],
         ],
         buttons: [
             {
@@ -218,7 +217,6 @@ function putSaveStore(dt) {
 }
 
 function updateStore() {
-    
     var txtIdModule = $('#txtIdModule').val();
     var txtNamModule = $('#txtNamModule').val();
     var txtCode = $('#txtCode').val();
@@ -258,7 +256,7 @@ function putUpdateStore(dt) {
 }
 
 function editStore(strId) {
-    console.log('Editando');
+    // console.log('Editando');
     let ix = goThroughStore(strId);
     $('#txtNamModule').val(strs[ix].mod_name);
     $('#txtIdModule').val(strs[ix].mod_id);
@@ -270,16 +268,11 @@ function editStore(strId) {
 
 function deleteStore(strId) {
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-    
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar el Module?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar modulo').css({display: 'inline'});
-        $('#Id').val(strId);
-
-        
+        $('#Id').val(strId);   
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {

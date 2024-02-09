@@ -7,23 +7,21 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    // folio = getFolio();
     setting_table();
-    //getListProducts();
 
     $('#txtPrice').on('blur', function () {
         validator();
     });
+
     $('#btn_subletting').on('click', function () {
         let acc = $(this).attr('data_accion');
         updating_serie(acc);
     });
+
     $('#txtProducts')
     .unbind('keyup')
     .on('keyup', function () {
-        
         let text = $(this).val().toUpperCase();
-        //showButtonToCharge('S');
         selProduct(text);
     });
 }
@@ -39,7 +37,6 @@ function getListProducts(word) {
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
 function get_products(pj) {
-    console.log(pj);
     var pagina = 'SearchIndividualProducts/listProducts';
     var par = `[{"pjtId":"${pj}"}]`;
     var tipo = 'json';
@@ -139,15 +136,13 @@ function putProductsList(dt) {
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
     $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
-    /* $('#listProduct').slideUp('200', function () {
-        $('#listProduct .list-items').html('');
-    });
- */
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
-        $('#listProduct .list-items').append(H);
-    });
-
+    if (dt[0].prd_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
+            $('#listProduct .list-items').append(H);
+        });
+    }
+    
     $('#txtProducts').on('focus', function () {
         $('#listProduct').slideDown('fast');
     });
@@ -160,48 +155,16 @@ function putProductsList(dt) {
         $('#listProduct').slideUp('fast');
     });
 
-    /* $('#txtProducts').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
-            $('#listProduct').slideUp(100);
-        } else {
-            $('#listProduct').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_products(res);
-    }); */
-
     $('#listProduct .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
-        //console.log('selecciona elemento', prdId,'---', prdNm);
         $('#txtProducts').val(prdNm);
         $('#txtIdProducts').val(prdId);
         $('#listProduct').slideUp(100);
         get_products(prdId);
-        
-        //validator();
     });
 }
-/* function sel_products(res) {
-    //console.log('SELECC',res);
-    if (res.length < 2) {
-        $('#llistProduct .list-items div.list-item').css({display: 'block'});
-    } else {
-        $('#listProduct .list-items div.list-item').css({display: 'none'});
-    }
 
-    $('#listProduct .list-items div.list-item').each(function (index) {
-        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //            alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
-    });
-} */
 function selProduct(res) {
     
     res = res.toUpperCase();
@@ -221,10 +184,7 @@ function selProduct(res) {
                 
                 cm = omitirAcentos(cm);
                 var cr = cm.indexOf(res);
-                //console.log(cr, cm);
                 if (cr > -1) {
-                    
-                    //            alert($(this).children().html())
                     $(this).css({display: 'block'});
                 }
             });
@@ -266,7 +226,6 @@ function putEvents(dt) {
         array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : color};
         i++;
     });
-    
     calendario(array);
 }
 /**  ++++   Coloca los productos en el listado del input */
@@ -302,26 +261,6 @@ function put_Products(dt) {
                 })
                 .draw();
         });
-        /* $('.toChange')
-        .unbind('click')
-        .on('click', function () {
-            console.log($(this).attr('id'));
-            getEvents($(this).attr('id'));
-            calendario('');
-            $('#CalendarModal').removeClass('overlay_hide');
-            $('#CalendarModal').fadeIn('slow');
-            $('#CalendarModal').draggable({
-                handle: ".overlay_modal"
-            });
-            //title= 'Serie';
-            $('.overlay_closer .title').html('');
-            $('#CalendarModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('#CalendarModal').addClass('overlay_hide');
-                });
-            
-    }); */
     }
 }
 function getCalendar(id){
@@ -360,6 +299,7 @@ function calendario(cal){
     }); 
     calendar.render();
 }
+
 /*  ++++++++ Valida los campos  +++++++ */
 function validator() {
     let ky = 0;
@@ -384,7 +324,6 @@ function validator() {
     } else {
         $('#btn_subletting').addClass('disabled');
     }
-    // console.log(msg);
 }
 
 function printProduct() {

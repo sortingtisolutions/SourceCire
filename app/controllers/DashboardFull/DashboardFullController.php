@@ -106,36 +106,9 @@ class DashboardFullController extends Controller
         $params =  $this->session->get('user');
         $id =  $request_params['pjt_id'];
         $result = $this->model->changeStatus($id);
-        /*$i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"pjt_id":"0"}]';	
-        }*/
+        
         echo 1;
     }
-
-    /* public function getValueBudgets($request_params)
-    {
-        $params =  $this->session->get('user');
-        // $estatus =  $request_params['parm'];
-        $result = $this->model->getValueBudgets($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"pjtsta":"0"}]';	
-        }
-        echo $res;
-    } */
 
     // Lista proyectos contemplados
     public function getDatosBudget($request_params)

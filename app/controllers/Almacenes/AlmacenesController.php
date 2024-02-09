@@ -76,19 +76,12 @@
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 
-		// Lista las series
-		public function listSeries_old($request_params)
-		{
-
-		}
-
 		public function listSeries($request_params)
 		{
 			$params =  $this->session->get('user');
 			$result = $this->model->listSeries($request_params);
 			// print_r($result);
 			echo $result;
-
 		}
 
 		//CONTABILIZA REGISTROS

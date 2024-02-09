@@ -268,7 +268,6 @@ $html .= '
 </section>';
 /* Tabla firmas -------------------------  */
 
-
 // Pie de pagina
 $foot = '
     <footer>
@@ -308,8 +307,6 @@ $mpdf->Output(
     "Salida_Store_Content.pdf",
     \Mpdf\Output\Destination::INLINE
 );
-
-
 // "Cotizacion-". $items[0]['ver_code'].".pdf",
 
 function decodificar($dato) {

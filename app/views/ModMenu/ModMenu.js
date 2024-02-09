@@ -7,7 +7,6 @@ $(document).ready(function () {
     }
 });
 
-
 function inicial() {
     if (altr == 1) {
         deep_loading('O');
@@ -32,8 +31,8 @@ function settingTable() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
+            [200, 400, -1],
+            [200, 400, 'Todos'],
         ],
         buttons: [
             {
@@ -216,9 +215,7 @@ function fillTableStores(ix) {
             men_module: strs[ix].mod_name,
         })
         .draw();
-    $('#md' + strs[ix].mnu_id)
-        .parents('tr')
-        .attr('id', strs[ix].mnu_id);
+    $('#md' + strs[ix].mnu_id).parents('tr').attr('id', strs[ix].mnu_id);
     actionButtons();
 }
 
@@ -238,14 +235,14 @@ function saveStore() {
         }]`;
 
     strs = '';
-    console.log(par);
+    // console.log(par);
     var pagina = 'ModMenu/SaveMenu';
     var tipo = 'html';
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
 }
 function putSaveStore(dt) {
-    console.log(dt);
+    // console.log(dt);
     getStores();
     if (strs.length > 0) {
         let ix = goThroughStore(dt);
@@ -265,6 +262,9 @@ function updateStore() {
     var txtDescription = $('#txtDescription').val();
     var txtOrder = $('#txtOrder').val();
     var txtModule = $('#txtModule').val();
+    if (txtModule == 0) {
+        txtModule=999;
+    }
     var par = `
         [{  "mnuId"        : "${mnuId}",
             "mnuParent"      : "${mnuParent}",
@@ -283,7 +283,7 @@ function updateStore() {
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
-        console.log(dt);
+        // console.log(dt);
         let ix = goThroughStore(dt);
 
         $(`#${strs[ix].mnu_id}`).children('td.men-parent').html(strs[ix].mnu_parent);
@@ -301,7 +301,7 @@ function putUpdateStore(dt) {
 }
 
 function editStore(strId) {
-    console.log('Editando');
+    // console.log('Editando');
     let ix = goThroughStore(strId);
     $('#txtIdMenu').val(strs[ix].mnu_id);
     $('#mnuParent').val(strs[ix].mnu_parent);
@@ -312,18 +312,13 @@ function editStore(strId) {
 }
 
 function deleteStore(strId) {
-    console.log(strId);
+    // console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-    
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar el Menu?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar menu').css({display: 'inline'});
         $('#Id').val(strId);
-
-        
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {

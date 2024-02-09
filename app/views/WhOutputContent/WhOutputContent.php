@@ -46,12 +46,7 @@
 								<label for="txtEndDate">Fecha Final</label>
 							</div>
 						</div>
-						<!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtLocation" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
-                                <label for="txtLocation">Dirección de Locación</label>
-                            </div>
-                        </div> -->
+
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtLocation" class="form-select form-select-sm"><option value='0'></option></select>
@@ -64,12 +59,7 @@
                                 <label for="txtCustomer">Nombre Cliente</label>
                             </div>
                         </div>
-						<!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtAnalyst" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
-                                <label for="txtAnalyst">Analista de Programación</label>
-                            </div>
-                        </div> -->
+
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
@@ -90,20 +80,17 @@
                             </div>
                         </div>
                     </div>
-                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:10px;"></div> 
 
-
-                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:10px;"></div> 
                     <!-- BOTON PARA IMPRIMIR DETALLE -->
                     <div class="row">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
                             </div>
-                            <!-- <div class="col-6">
-                                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
-                            </div> -->
+         
                     </div>
-                    <div style="height:15px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:15px;"></div> 
                     <!-- BOTON PARA IMPRIMIR  -->
                     <div class="row bprint hide-items">
                             <div class="col">
@@ -225,19 +212,14 @@
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <!-- <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Selección</button> -->
-           
             <div style="height:5px;"></div> <!-- Agregar un espacio -->
-            
             <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
                 <thead>
                     <tr>
                         <th style="width:  10px"></th>
-                        <!-- <th style="width:  80px" >SKU</th>
-                        <th style="width: 200px" >Descripcion Producto</th> -->
                         <th style="width:  80px">Num Serie</th>
                         <th style="width:  10px">No. Econo</th>
                         <th style="width:  200px">Proyecto</th>
-                       <!--  <th style="width:  40px">Etapa</th> -->
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -317,7 +299,6 @@
     </div>
 <!-- End Ventana modal SERIES -->
 
-
 <!-- formulario de comentarios -->
     <div id="commentsTemplates" class="table_hidden box_template">
         <div class="comments__box" style=" width: 100%; height: 100%; padding: 1.1rem; display: grid; grid-template-rows: 1fr 170px;">
@@ -333,31 +314,30 @@
         </div>
     </div>
 
-    <!-- <div id="commentsTemplates" class="table_hidden box_template">
-        <div class="comments__box">
-            <div class="comments__list"></div>
-            <div class="comments__addNew">
-                <label for="txtComment">Escribe comentario</label><br>
-                <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
-                <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
-
-            </div>
-        </div>
-     </div> -->
-<!-- Start Ventana modal AGREGA O MODIFICA  -->
+<!-- Start Ventana modal Calendario  -->
 <div class="overlay_background overlay_hide" id="CalendarModal" style="height: 500px; width:50%;left:350px;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title_calendar" style="font-weight: bold; font-size: 1.5em;"></span><span class="btn_close">Cerrar</span></div>
-			<!--
-            <div class="formButtons">
+<!--             <div class="formButtons">
                 <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
-            </div>-->
+            </div> -->
             <div class="">
                 <div id="calendar"></div>
             </div>
         </div>
     </div>
-<!-- End Ventana modal AGREGA O MODIFICA  -->
+<!-- End Ventana modal Calendario  -->
+
+
+<!-- Start Ventana modal Rechazo Cambio de Serie  -->
+<div class="overlay_background overlay_hide" id="rChangeSerieModal" style="height: 500px; width:50%;left:350px;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title_calendar" style="font-weight: bold; font-size: 1.5em;"></span><span class="btn_close">Cerrar</span></div>
+			    <h2 style="text-align: center;margin-bottom: 20px">NO SE PUDO REALIZAR EL CAMBIO</h2>
+                <h5 style="text-align: center;margin-bottom: 20px" id="txtNoRealizacion"></h5>
+        </div>
+    </div>
+<!-- End Ventana modal echazo Cambio de Serie  -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

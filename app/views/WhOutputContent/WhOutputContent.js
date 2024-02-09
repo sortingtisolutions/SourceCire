@@ -31,7 +31,6 @@ function inicial() {
     getAnalysts(prjid);
     getLocations(prjid);
 
-
     // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
         confirm_to_GetOut(prjid);
@@ -43,10 +42,9 @@ function inicial() {
      });
       // Abre el modal de comentarios // 11-10-23
     $('.sidebar__comments .toComment')
-    .unbind('click')
-    .on('click', function () {
-        showModalComments();
-
+        .unbind('click')
+        .on('click', function () {
+            showModalComments();
     });
 
 }
@@ -55,16 +53,12 @@ function inicial() {
 function showModalComments() {
     let template = $('#commentsTemplates');
     // let pjtId = $('.version_current').attr('data-project');
-
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
-    /* $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
-
-    console.log( $('#txtComment').val()); */
-    //console.log(prjid);
+    // $('.comments__addNew .invoiceInput').val('COMENTARIO PRUEBA XXX');
     fillComments(prjid);
 }
 /** ***** CIERRA MODALES ******* */
@@ -84,24 +78,17 @@ function automaticCloseModal() {
         $('#listLocationsTable').DataTable().destroy;
         let tabla=$('#listLocationsTable').DataTable();
         tabla.rows().remove().draw();
-
     });
 }
 
 function fillComments(pjtId) {
-    console.log(pjtId);
-
-    // Agrega nuevo comentario
+    // console.log(pjtId);
     $('.comments__addNew .invoice_button')
         .unbind('click')
         .on('click', function () {
-
-            //let pjtId = $('.version_current').attr('data-project');
-
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
 
-            // console.log(comComment);
             if (comComment.length > 3) {
                 let par = `
                     [{
@@ -112,7 +99,6 @@ function fillComments(pjtId) {
                     `;
                 var pagina = 'WhOutputContent/InsertComment';
                 var tipo = 'json';
-                console.log(par);
                 var selector = addComment;
                 fillField(pagina, par, tipo, selector);
             }
@@ -125,7 +111,6 @@ function putComments(dt) {
     $('.comments__list').html('');
     if (dt[0].com_id > 0) {
         $.each(dt, function (v, u) {
-            console.log(u);
             fillCommnetElements(u);
         });
     }
@@ -133,7 +118,7 @@ function putComments(dt) {
 }
 
 function fillCommnetElements(u) {
-    console.log(u.com_comment);
+    // console.log(u.com_comment);
     let H = `
         <div class="comment__group" style="border-bottom: 1px solid var(--br-gray-soft); padding: 0.2rem; width: 100%;">
             <div class="comment__box comment__box-date" style="width: 100%;text-align: right; font-size: 0.9em; color: var(--in-oxford);"><i class="far fa-clock" style="padding: 0 0.5rem;"></i>${u.com_date}</div>
@@ -147,14 +132,13 @@ function fillCommnetElements(u) {
 }
 
 function addComment(dt) {
-    console.log(dt[0]);
+    // console.log(dt[0]);
     fillCommnetElements(dt[0]);
     $('#txtComment').val('');
 }//********** */
 
 // Solicita los paquetes  OK
 function getProjects(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listProjects';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -164,7 +148,6 @@ function getProjects(prjid) {
 
 // Solicita los analistas
 function getAnalysts(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listAnalysts';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -181,7 +164,6 @@ function  getLocations(prjid) {
 }
 // Solicita los productos del proyecto  OK
 function getDetailProds(prjid, emp_id,areid) {
-    console.log(areid);
     var pagina = 'WhOutputContent/listDetailProds';
     var par = `[{"pjt_id":"${prjid}", "empid":"${emp_id}", "areid":"${areid}"}]`;
     var tipo = 'json';
@@ -190,7 +172,6 @@ function getDetailProds(prjid, emp_id,areid) {
 }
 
 function getFreelances(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listFreelances';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -199,7 +180,6 @@ function getFreelances(prjid) {
 }
 //Solicita las series de los productos  OK
 function getSeries(pjtcnid) {
-    // console.log('ID-Contenido Producto', pjtcnid);
     var pagina = 'WhOutputContent/listSeries';
     var par = `[{"pjtcnid":"${pjtcnid}"}]`;
     var tipo = 'json';
@@ -218,7 +198,6 @@ function getSerieDetail(serid, serorg) {
 
 // Solicita los comentarios al proyecto // 11-10-23
 function getComments_text(prjid) {
-    //console.log(prjid)
     var pagina = 'WhOutputContent/listComments';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -255,7 +234,6 @@ function setting_table_AsignedProd() {
                     footer: true,
                     title: title,
                     filename: filename,
-
                     //Aquí es donde generas el botón personalizado
                     text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
                 },
@@ -265,7 +243,6 @@ function setting_table_AsignedProd() {
                     footer: true,
                     title: title,
                     filename: filename,
-
                     //Aquí es donde generas el botón personalizado
                     text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
                 },
@@ -344,9 +321,8 @@ function putLocations(dt) {
         });
         $('#txtLocation').val(dt[0].locations); // 11-10-23
     }
-
-
 }
+
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 function putDetailsProds(dt) {
     let tabla = $('#tblAsignedProd').DataTable();
@@ -361,7 +337,8 @@ function putDetailsProds(dt) {
             else if (u.section == 'Extra') { valstage='#f8e2e8'; }
             else if (u.section == 'Por dia') { valstage='#e8f8c2'; }
             else { valstage='#e2f8f2'; }
-            if (u.pjtcn_quantity == u.cant_ser) {
+
+            if (parseInt(u.pjtcn_quantity) == parseInt(u.cant_ser)) {
                 icon = 'fas fa-regular fa-thumbs-up';
             } else{
                 icon ='fas fa-edit';
@@ -369,7 +346,7 @@ function putDetailsProds(dt) {
             let skufull = String(u.pjtcn_prod_sku).slice(7, 11) == '' ? String(u.pjtcn_prod_sku).slice(0, 7) : String(u.pjtcn_prod_sku).slice(0, 7) + '-' + String(u.pjtcn_prod_sku).slice(7, 11);
             var rownode=tabla.row
                 .add({
-                    editable: `<i class="${icon} toLink" id="${u.pjtcn_id}"></i>`,
+                    editable: `<i class="${icon} toLink" id="cn-${u.pjtcn_id}"></i>`,
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
@@ -411,7 +388,7 @@ function activeIcons() {
     $('.toLink')
         .unbind('click')
         .on('click', function () {
-            let pjtcnid = $(this).attr('id');
+            let pjtcnid = $(this).attr('id').split('-')[1];
             pjtcn = pjtcnid;
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
@@ -425,6 +402,7 @@ function getEvents(serId) {
     var selector = putEvents;
     fillField(pagina, par, tipo, selector);
 }
+
 function putEvents(dt) {
     let array = [];
     let i = 0;
@@ -457,7 +435,6 @@ function calendario(cal){
     }); 
     calendar.render();
 }
-//**************  NIVEL 2 DE DATOS  *****************************************
 
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putSeries(dt) {
@@ -466,23 +443,19 @@ function putSeries(dt) {
         settingSeries(dt);
         build_modalSeries(dt);
         activeIconsSerie();
-        
     }else{
         $('#SinSerieModal').removeClass('overlay_hide');
         $('#SinSerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            //console.log('Cierra Series');
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
             $('#tblSerie').DataTable().destroy;
-    });
+        });
     }
-    
 }
 
 function settingSeries(dt){
-
     $('#SerieModal').removeClass('overlay_hide');
     $('#tblSerie').DataTable({
         // retrieve: true,
@@ -504,14 +477,6 @@ function settingSeries(dt){
                     // printContent(prjid);
                 },
             },
-            /* {
-                // Boton imprimir detalle jjr
-                text: ' Print Detalle ',
-                className: 'btn-apply',
-                action: function (e, dt, node, config) {
-                    printDetail(prjid);;
-                },
-            }, */
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -535,76 +500,18 @@ function settingSeries(dt){
     $('#SerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            //console.log('Cierra Series');
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
             $('#tblSerie').DataTable().destroy;
     });
 
 }
-/* 
-function settingSeriesPackage(dt){
 
-    $('#SeriePackModal').removeClass('overlay_hide');
-    $('#tblSerieP').DataTable({
-        // retrieve: true,
-        bDestroy: true,
-        // dom: 'Blfrtip',
-        order: [[1, 'asc']],
-        dom: 'Blfrtip',
-        lengthMenu: [
-            [100, 200, -1],
-            [100, 200, 'Todos'],
-        ],
-        buttons: [
-            {
-                // Boton imprimir contenido jjr
-                text: 'Select All OK',
-                className: 'btn-apply',
-                action: function (e, dt, node, config) {
-                    readAceptTable();
-                    // printContent(prjid);
-                },
-            },
-            
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 290px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'sermodif', class: 'edit'},
-            {data: 'seriesku', class: 'sku left'},
-            {data: 'sernumber', class: 'sku'},
-            {data: 'prodname', class: 'sku'},
-            {data: 'sertype', class: 'sku'},
-            {data: 'serfchout', class: 'sku'},
-            {data: 'serfchin', class: 'sku'},
-            {data: 'serlevel', class: 'sku'},
-        ],
-    });
-
-    $('#SeriePackModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            //console.log('Cierra Series');
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
-            $('#tblSerie').DataTable().destroy;
-    });
- 
-}*/
 function readAceptTable() {
     $('#tblSerie tbody tr').each(function (v, u) {
-        // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
         let serId = $(this).attr('id');
         let serdata = $(this).attr('data');
-        console.log("readAceptTable: ", serId);
         checkSerie(serId);
-
         setTimeout(function(){
             $('.overlay_background').addClass('overlay_hide');
                 $('.overlay_closer .title').html('');
@@ -620,12 +527,10 @@ function build_modalSeries(dt) {
          let tabla = $('#tblSerie').DataTable();
         //  $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
-
         $('.overlay_closer .title_calendar').html(dt[0].prd_name);
 
          tabla.rows().remove().draw();
-         if (dt[0].ser_id > 0)
-         {
+         if (dt[0].ser_id > 0) {
             $.each(dt, function (v, u){
                 let skufull = String(u.pjtdt_prod_sku).slice(7, 11) == '' ? String(u.pjtdt_prod_sku).slice(0, 7) : String(u.pjtdt_prod_sku).slice(0, 7) + String(u.pjtdt_prod_sku).slice(7, 11);
                 let sku = String(u.pjtdt_prod_sku).slice(0, 7);
@@ -637,7 +542,6 @@ function build_modalSeries(dt) {
                 }else{
                     level="Interno"
                 }
-                //console.log(dt);
                 tabla.row
                     .add({
                         sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}" data-serie ="${u.prd_name}"></i> 
@@ -667,7 +571,6 @@ function activeIconsSerie() {
             let detIdChg = $(this).attr('data-content').split('|')[2];
             let serIdChg = $(this).attr('data-content').split('|')[3];
 
-            // console.log('Click Nivel 3', serprd, serorg, detIdChg, serIdChg);
             if (serprd != "") {
                 getSerieDetail(serprd, detIdChg);
             }
@@ -675,7 +578,6 @@ function activeIconsSerie() {
     $('.Calendar')
     .unbind('click')
     .on('click', function () {
-        console.log($(this).attr('id'));
         let serSKU = $(this).attr('data-serie');
         getEvents($(this).attr('id'));
         calendario('');
@@ -684,20 +586,19 @@ function activeIconsSerie() {
         $('#CalendarModal').draggable({
             handle: ".overlay_modal"
         });
-        //title= 'Serie';
-        //$('.overlay_closer .title_calendar').html(serSKU);
+
         $('#CalendarModal .btn_close')
             .unbind('click')
             .on('click', function () {
                 $('#CalendarModal').addClass('overlay_hide');
             }); 
         
-});
+    });
+
     $('.toCheck')
         .unbind('click')
         .on('click', function () {
         let serprd = $(this).attr('id');
-        // console.log("Para validar: "+serprd);
             checkSerie(serprd);
             let tabla = $('#tblSerie').DataTable();
             let numRows = tabla.rows().count();
@@ -713,7 +614,6 @@ function activeIconsSerie() {
 }
 
 function checkSerie(pjtcnid) {
-    //console.log('ID-Producto-Check', pjtcnid);
     var pagina = 'WhOutputContent/checkSeries';
     var par = `[{"serId":"${pjtcnid}"}]`;
     var tipo = 'html';
@@ -722,14 +622,14 @@ function checkSerie(pjtcnid) {
 }
 
 function myCheck(dt){
-    console.log(dt);
-    let sku = $('#'+dt).find('.toChange').attr('data-content').split('|')[0];
-    $('#'+dt).css({"color":"#CC0000"});
+    // console.log(dt);
+    // let sku = $('#'+dt).find('.toChange').attr('data-content').split('|')[0];
+    //$('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
     $('#'+dt).find('.toChange').css({"color":"#3c5878"});
-    $('#'+pjtcn).removeClass('fas fa-edit');
-    $('#'+pjtcn).addClass('fas fa-regular fa-thumbs-up');
+    $('#cn-'+pjtcn).removeClass('fas fa-edit');
+    $('#cn-'+pjtcn).addClass('fas fa-regular fa-thumbs-up');
     // getDetailProds(prjid,em);
 
 }
@@ -766,12 +666,9 @@ function settingChangeSerie(){
         fixedHeader: true,
         columns: [
             {data: 'serchange', class: 'edit'},
-            /* {data: 'serdetsku', class: 'sku left'},
-            {data: 'serdetname', class: 'supply left'}, */
             {data: 'serdetnumber', class: 'supply'},
             {data: 'serdetsitu', class: 'sku'},
             {data:  'projectname', class: 'supply left'},
-          /*   {data: 'serdetstag', class: 'sku'}, */
         ],
     });
 
@@ -799,7 +696,7 @@ function putSerieDetails(dt){
             $.each(dt, function (v, u) {
                 tabla.row
                     .add({
-                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}"></i>`,
+                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}" detailId="${u.pjtdt_id}"></i>`,
                         serdetnumber: u.ser_serial_number,
                         serdetsitu: u.ser_no_econo,
                         projectname: u.pjt_name
@@ -824,31 +721,44 @@ function activeIconsNewSerie() {
     .on('click', function () {
         let serIdSel = $(this).attr('id');
         let serIdOrg = $(this).attr('seridorg');
+        let detailId = $(this).attr('detailId');
         serIdNew=serIdSel;
-        // console.log("New Serie", serIdSel, serIdOrg );
-
         $('.sr'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
         // $('#'+serIdOrig).children(".claseElemento").cssmyCheck({"color":"#CC0000"});
-        changeSerieNew(serIdSel, serIdOrg);
+        changeSerieNew(serIdSel, serIdOrg, detailId);
     });
 }
 
-function changeSerieNew(serIdNew,serIdOrg) {
-    // console.log('ID-New Serie', serIdNew, serIdOrg);
+function changeSerieNew(serIdNew,serIdOrg, detailId) {
     var pagina = 'WhOutputContent/changeSerieNew';
-    var par = `[{"serIdNew":"${serIdNew}", "serIdOrg":"${serIdOrg}" }]`;
+    var par = `[{"serIdNew":"${serIdNew}", "serIdOrg":"${serIdOrg}", "detailIdNew":"${detailId}" }]`;
     var tipo = 'html';
     var selector = myCheckUp;
     fillField(pagina, par, tipo, selector);
 }
 
 function myCheckUp(dt){
-    console.log('myCheckUp-',dt);
-    $('#ChangeSerieModal').addClass('overlay_hide');
-    //$('.overlay_closer .title').html('');
-    $('#tblChangeSerie').DataTable().destroy; 
-    getSeries(pjtcn);
+    // console.log('myCheckUp-',dt);
+    if (dt > 0) {
+        $('#ChangeSerieModal').addClass('overlay_hide');
+        //$('.overlay_closer .title').html('');
+        $('#tblChangeSerie').DataTable().destroy; 
+        getSeries(pjtcn);
+    }else{
+        $('#rChangeSerieModal').removeClass('overlay_hide');
+        if (dt == '-1') {
+            $('#txtNoRealizacion').text("La serie por la que estas intentando cambiar es la misma.");
+        }
+        if(dt == 0){
+            $('#txtNoRealizacion').text("La serie que intentas modificar podria tener series a futuro que coinciden con las fechas de uso en este proyecto");
+        }
 
+        $('#rChangeSerieModal .btn_close')
+            .unbind('click')
+            .on('click', function () {
+                $('#rChangeSerieModal').addClass('overlay_hide');
+            }); 
+    }
 }
 
 /**********  Confirma salida de equipos ***********/
@@ -858,8 +768,6 @@ function confirm_to_GetOut(pjtid) {
 
     $('#btnClosure').on('click', function () {
         $('#starClosure').modal('hide');
-
-        console.log('Datos CLICK',pjtid);
          modalLoading('S');
 
         var pagina = 'WhOutputContent/ProcessGetOutProject';
@@ -873,8 +781,7 @@ function confirm_to_GetOut(pjtid) {
 }
 
 function putToWork(dt){
-    console.log('TERMINO ACTUALIZAR', dt);
-    // console.log('Regreso', folio);
+    // console.log('TERMINO ACTUALIZAR', dt);
     let folio=dt;
     $('#recordOutPut').hide();
     $('.bprint').removeClass('hide-items');
@@ -903,14 +810,10 @@ function modalLoading(acc) {
 
 /**********  Impresion de la salida de un proyecto ***********/
 function printOutPut(verId) {
-    // let user = Cookies.get('user').split('|');
-    // let u = user[0];
-    // let n = user[2];
     let h = localStorage.getItem('host');
     let v = verId;
     let nameproject = $('#txtProjectName').val();
     let numproject = $('#txtProjectNum').val();
-    // console.log('Datos', v, u, n, h);
     window.open(
         `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}&em=${em}&np=${nameproject}&nump=${numproject}`,
         '_blank'
@@ -922,71 +825,32 @@ function printReports(pjtId, typrint) {
     // let user = Cookies.get('user').split('|');
     // let u = user[0];
     // let n = user[2];
-
     let v = pjtId;
     let h = localStorage.getItem('host');
     let nameproject = $('#txtProjectName').val();
     let numproject = $('#txtProjectNum').val();
-    // console.log('Datos', v, u, n, h);
     switch (typrint) {
         case "C":  // Contenido global
             window.open(
                 `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
-        //   console.log("Contenido");
           break;
         case "D":  // Detalles del contenido con series
             window.open(
                 `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
-        //   console.log("Detalle");
           break;
         case "A": // Detalles y Accesorios del contenido con series
             window.open(
                 `${url}app/views/WhOutputContent/WhOutputAccesoryReport.php?v=${v}&u=${u}&n=${n}&em=${em}&h=${h}&np=${nameproject}&nump=${numproject}`,
                 '_blank'
             );
-        //   console.log("Con Accesorios");
           break;
         default:
-          console.log("No Hay REPORTE");
+        //   console.log("No Hay REPORTE");
           break;
       }
 
-
-    // window.open(
-    //     `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-    //     '_blank'
-    // );
 }
-
-/**********  Impresion del contenido de un proyecto ***********/
-/* function printContent(verId) {
-    // let user = Cookies.get('user').split('|');
-    // let u = user[0];
-    // let n = user[2];
-    let v = verId;
-    let h = localStorage.getItem('host');
-    // console.log('Datos', v, u, n, h);
-    window.open(
-        `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
-} */
-
-/**********  Impresion del detalle(series) de un proyecto ***********/
-/* function printDetail(verId) {
-    // let user = Cookies.get('user').split('|');
-    let v = verId;
-    // let u = user[0];
-    // let n = user[2];
-    let h = localStorage.getItem('host');
-    window.open(
-        `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
-} */
-
-

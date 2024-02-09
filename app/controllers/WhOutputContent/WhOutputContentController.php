@@ -5,6 +5,7 @@
 
 class WhOutputContentController extends Controller
 {
+    
     private $session;
     public $model;
 

@@ -26,7 +26,7 @@
 
 		public function GetModule($request_params)
 		{
-	      $result = $this->model->GetModule($request_params);
+	      $result = $this->model->GetModules($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 

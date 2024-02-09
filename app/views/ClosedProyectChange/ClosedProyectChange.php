@@ -10,7 +10,6 @@
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido ">
-        
             <div class="block_01" style="width: 100%">
                 <div class="row" >
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 blocks" style="width: 100%">

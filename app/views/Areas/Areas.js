@@ -168,16 +168,18 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
     // console.log(strs.length);
-    tabla.row
+    if (strs[0].are_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].are_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storesid: strs[ix].are_id,
             storname: strs[ix].are_name,
         })
         .draw();
-    $('#md' + strs[ix].are_id)
-        .parents('tr')
-        .attr('id', strs[ix].are_id);
+        $('#md' + strs[ix].are_id)
+            .parents('tr')
+            .attr('id', strs[ix].are_id);
+    }
     actionButtons();
 }
 
@@ -232,7 +234,6 @@ function putUpdateStore(dt) {
 
         $(`#${strs[ix].are_id}`).children('td.store-name').html(strs[ix].are_name);
         $(`#${strs[ix].are_id}`).children('td.store-type').html(strs[ix].are_status);
-
         //putQuantity(strs[ix].are_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
@@ -252,17 +253,13 @@ function editStore(strId) {
 
 function deleteStore(strId) {
     console.log(strId);
-    let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
+        let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
-    
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar area').css({display: 'inline'});
         $('#Id').val(strId);
-
-        
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {

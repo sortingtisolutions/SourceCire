@@ -7,7 +7,6 @@ $(document).ready(function () {
     }
 });
 
-
 function inicial() {
     if (altr == 1) {
         deep_loading('O');
@@ -167,17 +166,18 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    // console.log(strs.length);
-    tabla.row
+    if (strs[0].scr_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].scr_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storesid: strs[ix].scr_values,
             storname: strs[ix].scr_description,
         })
         .draw();
-    $('#md' + strs[ix].scr_id)
-        .parents('tr')
-        .attr('id', strs[ix].scr_id);
+        $('#md' + strs[ix].scr_id)
+            .parents('tr')
+            .attr('id', strs[ix].scr_id);
+    } 
     actionButtons();
 }
 
@@ -224,6 +224,7 @@ function updateStore() {
     var selector = putUpdateStore;
     fillField(pagina, par, tipo, selector);
 }
+
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
@@ -243,7 +244,7 @@ function putUpdateStore(dt) {
 }
 
 function editStore(strId) {
-    console.log('Editando');
+    // console.log('Editando');
     let ix = goThroughStore(strId);
     $('#txtValues').val(strs[ix].scr_values);
     $('#IdScore').val(strs[ix].scr_id);
@@ -251,28 +252,21 @@ function editStore(strId) {
 }
 
 function deleteStore(strId) {
-    console.log(strId);
+    // console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-    
-        $('#confirmModal').modal('show');
-
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la calificación?');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('calificación').css({display: 'inline'});
-        $('#Id').val(strId);
-
-        
-        $('#IdAlmacenBorrar').val(strId);
-
-        $('#confirmButton').on('click', function () {
-            var pagina = 'Scores/DeleteScore';
-            var par = `[{"scr_id":"${strId}"}]`;
-            var tipo = 'html';
-            var selector = putDeleteStore;
-            fillField(pagina, par, tipo, selector);
-        });
-    
+    $('#confirmModal').modal('show');
+    $('#confirmModalLevel').html('¿Seguro que desea borrar la calificación?');
+    $('#N').html('Cancelar');
+    $('#confirmButton').html('calificación').css({display: 'inline'});
+    $('#Id').val(strId);
+    $('#IdAlmacenBorrar').val(strId);
+    $('#confirmButton').on('click', function () {
+        var pagina = 'Scores/DeleteScore';
+        var par = `[{"scr_id":"${strId}"}]`;
+        var tipo = 'html';
+        var selector = putDeleteStore;
+        fillField(pagina, par, tipo, selector);
+    });
 }
 
 function putDeleteStore(dt) {

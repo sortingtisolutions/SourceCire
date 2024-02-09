@@ -14,7 +14,6 @@
         <div class="contenido">
             <div class="row mvst_group">
                 <div class="mvst_list tblProjMaster">
-                    
                     <div class="row rowTop">
                         <h1>Proyectos</h1>
                           

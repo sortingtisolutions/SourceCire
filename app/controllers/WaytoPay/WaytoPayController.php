@@ -4,8 +4,8 @@
     require_once LIBS_ROUTE . 'Session.php';
     //require_once ROOT . PATH_ASSETS . 'serverSide.php';
 
-    class WaytoPayController extends Controller
-    {
+class WaytoPayController extends Controller
+{
 
     private $session;
     public $model;

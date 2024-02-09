@@ -38,24 +38,6 @@ class ProjectClosedModel extends Model
         $type = $this->db->real_escape_string($params['type']);
         $prjType = $this->db->real_escape_string($params['prjType']);
         if ($type == 1) {
-            /* $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku,sr.ser_situation,
-                        ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-                        cn.pjtcn_quantity,
-                        (pr.prd_price * cn.pjtcn_days_cost) - 
-                        (pr.prd_price * cn.pjtcn_discount_base) * 
-                        cn.pjtcn_days_cost + 
-                        (pr.prd_price * cn.pjtcn_days_trip) - 
-                        ( (pr.prd_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
-                        (pr.prd_price * cn.pjtcn_days_test) - 
-                        (pr.prd_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
-                        cn.ver_id as verId,
-                        ( (cn.pjtcn_insured * pr.prd_price) * cn.pjtcn_quantity) *  cn.pjtcn_days_cost  AS seguro,
-                        1 AS quantity
-                    FROM ctt_projects_detail AS dt
-                    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-                    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-                    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                    WHERE cn.pjt_id = $pjtId;"; */
                     if ($prjType == 1) {
                         $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' ELSE 'M' END ser_situation,
                             ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
@@ -104,23 +86,6 @@ class ProjectClosedModel extends Model
 
                
             }else if($type == 2){
-                /* $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku, pr.prd_sku ,sr.ser_situation,
-                        ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-                        cn.pjtcn_quantity AS quantity,
-                        (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
-                        (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
-                        cn.pjtcn_days_cost + 
-                        (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
-                        ( (cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip ) + 
-                        (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
-                        (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
-                        cn.ver_id as verId,
-                        ( (cn.pjtcn_insured * cn.pjtcn_prod_price) * cn.pjtcn_quantity) *  cn.pjtcn_days_cost  AS seguro
-                    FROM ctt_projects_detail AS dt
-                    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-                    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-                    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                    WHERE cn.pjt_id = $pjtId GROUP BY cn.pjtcn_id;";  */
                     if ($prjType == 1) {
                         $qry = "SELECT cn.pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' ELSE 'M' END ser_situation,
                             ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
@@ -199,24 +164,6 @@ class ProjectClosedModel extends Model
                         }
                     }
                 }
-                
-           /*  $qry = "SELECT * , 
-                    ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status, 
-                    cn.pjtcn_quantity,
-                    (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
-                    (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
-                    cn.pjtcn_days_cost + (cn.pjtcn_prod_price * cn.pjtcn_days_trip) - 
-                    ((cn.pjtcn_prod_price * cn.pjtcn_discount_trip) * cn.pjtcn_days_trip) + 
-                    (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
-                    (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test as costo,
-                    cn.ver_id as verId
-                FROM ctt_projects_detail AS dt
-                INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id AND cn.prd_id = dt.prd_id
-                LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-                WHERE cn.pjt_id = $pjtId;"; */
-
-                
-
         return $this->db->query($qry);
 
     }

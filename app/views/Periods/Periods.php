@@ -3,6 +3,7 @@
 	require ROOT . FOLDER_PATH . "/app/assets/header.php"; */
 ?>
 <!-- CUERPO DE LA PAGINA -->
+
 <div class="periods_content">
 <span class="invoice_button toApplyPeriods"><i class="fas fa-save"></i> guardar</span>
     <table id="periodsTable" class="periods__table" >

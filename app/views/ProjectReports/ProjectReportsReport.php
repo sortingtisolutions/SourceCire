@@ -15,36 +15,12 @@ $fechaIni = $_GET['fs'];
 $fechaFin = $_GET['fe'];
 $bandera = $_GET['ba'];
 
-/* $totalBase = 0;
-$totalTrip = 0;
-$totalTest = 0;
-$totalInsr = 0;         //      Total del seguro
-$totalMain = 0;
-$totalInsrGral = 0;
-
-$equipoBase = 0;
-$equipoExtra = 0;
-$equipoDias = 0;
-$equipoSubarrendo = 0;
- */
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-/* $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date_real,
-            CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS period
-            , vr.ver_discount_insured
-        FROM ctt_projects_version AS bg
-        INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-        INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
-        LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-        LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE bg.ver_id = $verId order by  bg.pjtvr_section, bg.pjtvr_order;";
- */
+
 if($proj == 1){
     $titulo = "Proyectos Activos";
     if ($bandera == '1') {

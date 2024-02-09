@@ -18,13 +18,6 @@
                         <h1>Condiciones del Reporte</h1>
                         <label for="txtProjects"></label>
                     </div>
-                    
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtProjects" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el proyecto</option></select>
-                            <label for="txtProjects">Lista de proyectos</label>
-                        </div>
-                    </div> -->
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -77,85 +70,8 @@
                             <label for="txtReport">Tipo de Reporte</label>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <textarea class="form-control form-control-sm" id="txtComments" style="height:5rem; text-transform:uppercase" autocomplete="off" rows="3"></textarea>
-                            <label for="txtComments">Comentarios al cierre</label>
-                        </div>
-                    </div> -->
+
                     <div style="height:20px;"></div>
-<!-- 
-                    <div class="row"><h1>Seleccionar nivel de detalles</h1></div> -->
-
-                    <!-- <div class="totales"> -->
-                        <!-- <div> -->
-
-                            <!-- <div class="totales__grupo">
-                                <div class="totales__grupo-label">Activos</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="1" id="checkBudget" ></div>
-
-                            </div>
-                            
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Patrocinios</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="2" id="checkPatrocinios"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Productividad</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="10" id="checkProductivity"></div>
-
-                            </div>
-                            
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Eq. más rentado</div>
-                                <div><input class="form-check check-box-prj" type="checkbox" value="4" id="checkPlans" ></div>
-
-                            </div> -->
-                        <!-- </div> -->
-                        <!--<div>-->
-                    <!-- 
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Proyectos trabajados</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="5" id="checkProjWorked"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Equipo menos rentado</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="6" id="checkInCall" ></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Subarrendos</div>
-                                <div><input class="form-check check-box-prj" type="checkbox" value="7" id="checkProyects" ></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Proveedores de subarrendo</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="8" id="checkSubletting"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Cierres</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="3" id="checkClosed"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Clientes nuevos</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="9" id="checkNewCustomers"></div>
-
-                            </div>
-
-                           
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Por programador</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="11" id="checkProjDevelop"></div>
-                        
-                            </div> -->
-                            
-                        <!--</div>-->
-                    <!-- <div style="height:20px;"></div> -->
-                    <!-- </div> -->
                         <div class="row pos1">
                             <div class="col-md-12 mb-5">
                                 <button id="btn_generate" type="button" class="btn btn-sm btn-primary" >Generar</button>
@@ -437,7 +353,9 @@
                                     <th style="width:  50px">Fechas</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                
+                            </tbody>
                         </table>
 
                     </div>

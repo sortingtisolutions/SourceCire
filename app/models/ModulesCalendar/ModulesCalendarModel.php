@@ -4,6 +4,7 @@ require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ModulesCalendarModel extends Model
 {
+    
     public function __construct()
     {
       parent::__construct();

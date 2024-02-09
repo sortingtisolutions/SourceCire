@@ -180,84 +180,6 @@ $res = $conn->query($qry);
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
-/* $qry = "SELECT bdg_id, bdg_section, crp_id, crp_name, bdg_prod_price, 
-bdg_quantity,bdg_days_base, bdg_days_cost, bdg_discount_base, 
-bdg_discount_insured, bdg_days_trip, bdg_discount_trip,bdg_insured, bdg_days_test,
-bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_discount_test, 
-ver_discount_insured,prd_id, pjt_name, CONCAT_WS(' - ' , date_format(pjt_date_start, '%d-%b-%Y'), date_format(pjt_date_end, '%d-%b-%Y')) AS fechas, bdg_order, pjt_number, proyname,
-pjt_date_project, pjt_date_last_motion,
-pjt_time, pjt_location, pjt_how_required, pjt_trip_go, pjt_trip_back,
-pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,cus_name,
-cus_email,cus_phone, cus_address, loc_type_location, pjttp_name, CONCAT_WS(' - ' , date_format(d_start, '%d-%b-%Y'), date_format(d_end, '%d-%b-%Y')) AS period, pjt_id
-
-FROM (SELECT bg.bdg_id, bg.bdg_section, cr.crp_id, cr.crp_name,bg.bdg_prod_price, 
-bg.bdg_quantity,bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, 
-bg.bdg_discount_insured, bg.bdg_days_trip, bg.bdg_discount_trip,bg.bdg_insured, bg.bdg_days_test,
-bg.bdg_prod_sku, bdg_prod_name, bg.bdg_discount_test, vr.ver_discount_insured,
-pd.prd_id, pj.pjt_name, 
-pj.pjt_date_start, pj.pjt_date_end, bg.bdg_order, prjt.pjt_number, prjt.pjt_name AS proyname,
- prjt.pjt_date_project, prjt.pjt_date_start AS d_start, prjt.pjt_date_end AS d_end, prjt.pjt_date_last_motion,
- prjt.pjt_time, prjt.pjt_location, prjt.pjt_how_required, prjt.pjt_trip_go, prjt.pjt_trip_back,
- prjt.pjt_to_carry_on, prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name,
- cu.cus_email, cu.cus_phone, cu.cus_address, lc.loc_type_location, pt.pjttp_name, pj.pjt_id
-FROM ctt_budget AS bg
-        INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-		  INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-        INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
-        INNER JOIN ctt_projects AS prjt ON prjt.pjt_id=pj.pjt_parent
-        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
-        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-        LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-        LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id =  (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
-FROM ctt_budget bug UNION SELECT pv.ver_id from ctt_projects_version AS pv) bg
-INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
-INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
-WHERE pjt.pjt_id = pj.pjt_id)
-UNION 
-SELECT pv.pjtvr_id, pv.pjtvr_section,cr.crp_id, cr.crp_name,pv.pjtvr_prod_price,
-pv.pjtvr_quantity,pv.pjtvr_days_base,pv.pjtvr_days_cost, pv.pjtvr_discount_base, 
-pv.pjtvr_discount_insured, pv.pjtvr_days_trip, pv.pjtvr_discount_trip, pv.pjtvr_insured, pv.pjtvr_days_test,
-pv.pjtvr_prod_sku, pjtvr_prod_name, pv.pjtvr_discount_test, 
-vr.ver_discount_insured,pd.prd_id, pj.pjt_name, 
-pj.pjt_date_start,pj.pjt_date_end, pv.pjtvr_order, prjt.pjt_number, prjt.pjt_name AS proyname,
- prjt.pjt_date_project, prjt.pjt_date_start AS d_start, prjt.pjt_date_end AS d_end, prjt.pjt_date_last_motion,
- prjt.pjt_time, prjt.pjt_location, prjt.pjt_how_required, prjt.pjt_trip_go, prjt.pjt_trip_back,
- prjt.pjt_to_carry_on, prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name,
- cu.cus_email, cu.cus_phone, cu.cus_address, lc.loc_type_location, pt.pjttp_name, pj.pjt_id
-FROM ctt_projects_version AS pv
-INNER JOIN ctt_version AS vr ON vr.ver_id = pv.ver_id
-INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-INNER JOIN ctt_projects AS prjt ON prjt.pjt_id=pj.pjt_parent
-INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-INNER JOIN ctt_products AS pd ON pd.prd_id = pv.prd_id
-LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
-LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = prjt.cuo_id
-LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-WHERE pj.pjt_id IN ($proj_ids) AND pv.ver_id =  (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
-FROM ctt_budget bug UNION SELECT pv.ver_id from ctt_projects_version AS pv) bg
-INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
-INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
-WHERE pjt.pjt_id = pj.pjt_id)) AS result
-GROUP BY prd_id, pjt_id 
-ORDER BY bdg_order, bdg_section"; */
-
-// OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
-/* $query="SELECT cr.crp_id, cr.crp_name 
-FROM ctt_subcategories AS sb 
-LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
-INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
-INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-LEFT JOIN ctt_projects_version AS pv on pv.prd_id = pd.prd_id 
-WHERE pj.pjt_id IN ($proj_ids) GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section"; */
-
 
 $rr = 0;
 while ($row2 = $res2->fetch_assoc()) {
@@ -323,28 +245,9 @@ $header = '
 
         $totalInsrGral = $items[$i]['ver_discount_insured'];
         $subtotalAmount += $totalBase + $totalTrip + $totalTest;
-/* 
-        if ($items[$i]['bdg_section'] == '1') {
-            $equipoBase = '1';
-            $contBase =$i;
-        }
-        if ($items[$i]['bdg_section'] == '2') {
-            $equipoExtra = '1';
-            $contExtra=$i;
-        }
-        if ($items[$i]['bdg_section'] == '3') {
-            $equipoDias = '1';
-            $contDias=$i;
-        }
-        if ($items[$i]['bdg_section'] == '4') {
-            $equipoSubarrendo = '1';
-            $contSub=$i;
-        } */
-        
         
     }
                 
-
 // Pie de pagina
 // <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
 $foot = '
@@ -390,9 +293,7 @@ $foot = '
                 <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
                 
             </tr>
-            
-            
-            
+                
         </table>
     </footer>
 ';
@@ -404,7 +305,6 @@ foreach ($projects as $project) {
     $html = '
         <section>
             <div class="container">
-
                 <table class="table-data bline-d tline">
                     <tr>
                         <td class="rline half">
@@ -675,7 +575,6 @@ foreach ($projects as $project) {
     }
 /* Tabla de equipo base -------------------------  */
 
-
 /* Tabla de equipo extra -------------------------  */
     if ($equipoExtra == '1' && $items[$contExtra]['pjt_id'] == $project){
         $mpdf->AddPage();
@@ -686,8 +585,7 @@ foreach ($projects as $project) {
                     <div class="" style="witdh:77m;font-size: 13pt; text-align: left;">
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contExtra]['pjt_name'] . '</span>
-                        
-                       
+                                               
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -785,9 +683,7 @@ foreach ($projects as $project) {
                                     $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                     $totalInsr         += $totalInsured;
                                     $totalEquipo += $amountGral;
-
-            
-            
+      
             $html .= '
                                 <tr>
                                     <td class="dat-figure prod">' . $product                                    . '</td>
@@ -797,9 +693,7 @@ foreach ($projects as $project) {
                                       
                                     <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
                                     <td class="dat-figure disc">' . $valdiscount . '%</td>
-                                     
-                                     
-                                     
+                                  
                                     <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                                 </tr>
                                 ';
@@ -840,9 +734,7 @@ foreach ($projects as $project) {
                             <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                         </tr>
                         ';
-                        
-    
-                    
+                                      
     $html .= '
                     </tbody>
                 </table>
@@ -855,7 +747,6 @@ foreach ($projects as $project) {
     }
 /* Tabla de equipo extra -------------------------  */
 
-
 /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1' && $items[$contDias]['pjt_id'] == $project){
         $mpdf->AddPage();
@@ -867,7 +758,6 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contDias]['pjt_name'] . '</span>
                         
-                       
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                     <span class="date" > Periodo: '.$items[$contDias]['fechas'].'</span>
@@ -973,10 +863,7 @@ foreach ($projects as $project) {
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>  
                                 <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure disc">' . $valdiscount  . '%</td>
-                                 
-                                 
-                                 
+                                <td class="dat-figure disc">' . $valdiscount  . '%</td>  
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -1007,12 +894,8 @@ foreach ($projects as $project) {
                 </tr>
             </thead>
             <tbody>';
-
-
     // Subtotal
-    
-
-                    
+             
     // Total
     $html .= '
                     <tr>
@@ -1020,9 +903,7 @@ foreach ($projects as $project) {
                         <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                     </tr>
                     ';
-                    
-
-                
+                             
     $html .= '
                 </tbody>
             </table>
@@ -1184,12 +1065,8 @@ foreach ($projects as $project) {
             </tr>
         </thead>
         <tbody>';
-
-
     // Subtotal
-
-
-            
+        
     // Total
     $html .= '
             <tr>
@@ -1197,9 +1074,7 @@ foreach ($projects as $project) {
                 <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
             </tr>
             ';
-            
-
-        
+              
     $html .= '
         </tbody>
     </table>
@@ -1262,9 +1137,7 @@ foreach ($projects as $project) {
                             <td class="tot-main amou">' . number_format($totalFull , 2,'.',',')       . '</td>
                         </tr>
                         ';
-                        
-    
-                    
+                                      
     $html .= '
                     </tbody>
                 </table>

@@ -37,7 +37,6 @@ function getCategories() {
 
 /** ---- Obtiene listado de subcategorias */
 function getSubcategories() {
-    // deep_loading('O');
     var pagina = 'Subcategories/listSubcategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
@@ -46,7 +45,6 @@ function getSubcategories() {
 }
 
 /** ---- COLOCADORES DE DATOS ---- */
-/** ---- Coloca las categorias en el selector */
 function putCategories(dt) {
     if (dt[0].cat_id != '0') {
         $.each(dt, function (v, u) {
@@ -138,10 +136,12 @@ function settingTable() {
 
 /** ---- Llena la lista de subcategorias ---- */
 function fillSubcategorieslst() {
-    $.each(subs, function (v, u) {
-        var H = `<option value="${u.sbc_id}">${u.cat_id} | ${u.sbc_code} - ${u.sbc_name}</option>`;
-        $('#lstSubcategory').append(H);
-    });
+    if (subs[0].sbc_id > 0) {
+        $.each(subs, function (v, u) {
+            var H = `<option value="${u.sbc_id}">${u.cat_id} | ${u.sbc_code} - ${u.sbc_name}</option>`;
+            $('#lstSubcategory').append(H);
+        });
+    } 
 }
 
 /** +++++  Activa la accion de eventos */
@@ -237,7 +237,7 @@ function putSaveSubcategory(dt) {
 /** ---- Start EDITA SUBCATEGORIA ---- */
 /** ---- Llena los campos del formulario para editar ---- */
 function editSubcategory(sbcId) {
-    console.log('editSubcategory', sbcId);
+    // console.log('editSubcategory', sbcId);
     let ix = goThroughSubcategory(sbcId);
     $('#txtSubcategory').val(subs[ix].sbc_name);
     $('#txtIdSubcategory').val(subs[ix].sbc_id);
@@ -288,7 +288,6 @@ function putUpdateSubcategory(dt) {
 /** ---- Start ELIMINA SUBCATEGORIA ---- */
 function deleteSubcategory(sbcId) {
     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
-
     if (cn != 0) {
         $('#confirmModal').modal('show');
         $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
@@ -314,7 +313,7 @@ function deleteSubcategory(sbcId) {
 }
 /** ---- Elimina el registro de la subcategoria borrada ---- */
 function putDeleteSubcategory(dt) {
-    console.log('BORRAR LINEA');
+    // console.log('BORRAR LINEA');
     getCategories();
     let tabla = $('#tblSubcategory').DataTable();
     tabla
@@ -337,14 +336,6 @@ function selectSeries(reg) {
         var selector = putSeries;
         fillField(pagina, par, tipo, selector);
     }
-}
-
-function putSeries_old(dt) {
-    
-}
-
-function settindStockTbl_old() {
-  
 }
 
 function putSeries(dt) {
@@ -424,7 +415,6 @@ function putSeries(dt) {
             /* let Dtable=$('#tblStock').DataTable().row().remove().draw();
             Dtable.destroy(); */
         });
-    
     build_modal_serie(dt);
 }
 
