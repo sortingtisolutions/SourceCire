@@ -86,7 +86,6 @@ SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_n
     ifnull(pjtcn_id, 0) AS pjtcn_id, ifnull(cin_id, 0) AS cin_id
 FROM  ctt_vw_subletting;
 
-
 --******* VISTAS DE APOYO PARA CONSULTAS 15-ago-23 ********************
 DROP VIEW ctt_vw_list_products;
 CREATE VIEW ctt_vw_list_products AS

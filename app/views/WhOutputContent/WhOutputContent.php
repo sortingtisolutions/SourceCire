@@ -80,17 +80,17 @@
                             </div>
                         </div>
                     </div>
-                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:10px;"></div> 
 
-
-                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:10px;"></div> 
                     <!-- BOTON PARA IMPRIMIR DETALLE -->
                     <div class="row">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
                             </div>
+         
                     </div>
-                    <div style="height:15px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:15px;"></div> 
                     <!-- BOTON PARA IMPRIMIR  -->
                     <div class="row bprint hide-items">
                             <div class="col">
@@ -212,7 +212,6 @@
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <!-- <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Selección</button> -->
-           
             <div style="height:5px;"></div> <!-- Agregar un espacio -->
             <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
                 <thead>
@@ -300,7 +299,6 @@
     </div>
 <!-- End Ventana modal SERIES -->
 
-
 <!-- formulario de comentarios -->
     <div id="commentsTemplates" class="table_hidden box_template">
         <div class="comments__box" style=" width: 100%; height: 100%; padding: 1.1rem; display: grid; grid-template-rows: 1fr 170px;">
@@ -316,16 +314,30 @@
         </div>
     </div>
 
-<!-- Start Ventana modal AGREGA O MODIFICA  -->
+<!-- Start Ventana modal Calendario  -->
 <div class="overlay_background overlay_hide" id="CalendarModal" style="height: 500px; width:50%;left:350px;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title_calendar" style="font-weight: bold; font-size: 1.5em;"></span><span class="btn_close">Cerrar</span></div>
+<!--             <div class="formButtons">
+                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
+            </div> -->
             <div class="">
                 <div id="calendar"></div>
             </div>
         </div>
     </div>
-<!-- End Ventana modal AGREGA O MODIFICA  -->
+<!-- End Ventana modal Calendario  -->
+
+
+<!-- Start Ventana modal Rechazo Cambio de Serie  -->
+<div class="overlay_background overlay_hide" id="rChangeSerieModal" style="height: 500px; width:50%;left:350px;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title_calendar" style="font-weight: bold; font-size: 1.5em;"></span><span class="btn_close">Cerrar</span></div>
+			    <h2 style="text-align: center;margin-bottom: 20px">NO SE PUDO REALIZAR EL CAMBIO</h2>
+                <h5 style="text-align: center;margin-bottom: 20px" id="txtNoRealizacion"></h5>
+        </div>
+    </div>
+<!-- End Ventana modal echazo Cambio de Serie  -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

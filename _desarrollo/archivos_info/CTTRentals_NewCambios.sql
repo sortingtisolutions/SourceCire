@@ -15,7 +15,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 AUTO_INCREMENT=3
 ;
-
+/** *****/
 CREATE TABLE `ctt_way_to_attends` (
 	`wta_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id de la forma para atender un proyecto',
 	`wta_descripcion` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Descripcion de la forma de atencion' COLLATE 'utf8mb4_general_ci',
@@ -41,6 +41,7 @@ ALTER TABLE `ctt_projects_status`
 ALTER TABLE `ctt_series`
 	ADD COLUMN `str_id` INT(11) NULL DEFAULT '0' COMMENT 'ID relacion con ctt_stores almacenes' AFTER `prd_id_acc`;
 
+/** *****/
 CREATE TABLE `ctt_infocfdi` (
 	`cfdi_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id Datos complementarios CFDI',
 	`cfdi_distancia` INT NULL COMMENT 'Distancia del Proyecto en KM',
@@ -59,6 +60,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
+/** *****/
 CREATE TABLE `ctt_suppliers` (
 	`sup_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID del proveedor',
 	`sup_business_name` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre de la empresa' COLLATE 'utf8mb4_general_ci',
@@ -113,6 +115,7 @@ ALTER TABLE `ctt_projects`
 ALTER TABLE `ctt_subcategories`
 	ADD COLUMN `sbc_order_print` INT(11) NOT NULL AFTER `cat_id`;
 
+/** *****/
 CREATE TABLE `ctt_estados_mex` (
 	`edos_id` INT(11) NOT NULL AUTO_INCREMENT,
 	`edos_name` VARCHAR(50) NULL DEFAULT NULL COMMENT 'nombre del estado' COLLATE 'utf8mb4_general_ci',

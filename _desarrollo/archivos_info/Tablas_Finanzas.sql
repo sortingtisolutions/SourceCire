@@ -30,7 +30,7 @@ VALUES ('s-prepayment', 'Prepagos', 'Modulo de Registro de Pre-pagos', 'PrePayme
 INSERT INTO ctt_menu (mnu_parent, mnu_item, mnu_description, mnu_order, mod_id) 
 VALUES (44, 'Registro Pre-Pagos', 'seccion para registrar pre-pagos', 2, 76);
 
-Insert into ctt_users_modules (usr_id, mod_id) values (1,76);
+INSERT INTO ctt_users_modules (usr_id, mod_id) values (1,76);
 
 -- Relacion de prepagos con proyectos seccion BASE
 CREATE TABLE `ctt_prepayments_recorded` (

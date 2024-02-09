@@ -59,14 +59,31 @@ class WorkInputContentModel extends Model
                  when prcn.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
                  END AS section, 
-            	case 
-            		when (SELECT COUNT(*) pndt FROM ctt_projects_detail pdt 
-						WHERE pdt.pjtdt_prod_sku = 'pendiente' AND pdt.pjtvr_id = prcn.pjtvr_id) > 0 then '0'
-						else
-							(SELECT COUNT(*) pdnt FROM ctt_projects_detail AS pd 
-							WHERE pd.pjtvr_id = prcn.pjtvr_id AND sttd_id = 4)
-						END AS cant_ser
+                 case 
+					  when prcn.pjtcn_prod_level='K' OR pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' then 
+					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
+                INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
+                WHERE pjd.sttd_id = 4 AND pcn.pjtcn_id=prcn.pjtcn_id) 
+                = 
+                (SELECT COUNT(*)
+                FROM ctt_projects_content AS pcn
+                    INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
+                    INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
+                    INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
+                    LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
+                    WHERE pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A'
+                    ORDER BY pdt.pjtdt_prod_sku) then prcn.pjtcn_quantity
+                else'0'
+                END 
+					  ELSE (SELECT COUNT(*) FROM ctt_series AS ser 
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
+                INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
+                LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
+                WHERE pjd.sttd_id = 4 AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                END AS cant_ser
             FROM ctt_projects_content AS prcn
+            INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
             WHERE prcn.pjt_id=$pjt_id ORDER BY prcn.pjtcn_section, prcn.pjtcn_prod_sku ASC;";
         }
         else{
@@ -78,7 +95,7 @@ class WorkInputContentModel extends Model
                  when pjc.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
                  END AS section, case 
-					  when pjc.pjtcn_prod_level='k' then 
+					  when prcn.pjtcn_prod_level='K' OR pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
@@ -104,6 +121,7 @@ class WorkInputContentModel extends Model
             FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
             WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid
             ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
         }
@@ -176,7 +194,7 @@ class WorkInputContentModel extends Model
         $situation = $result->fetch_object();
 
         $cnt = $situation->ser_situation;
-        if ($cnt != 'M') {
+        // if ($cnt != 'M') {
             $qry = "SELECT pjd.pjtdt_id FROM ctt_projects_detail AS pjd
             WHERE pjd.prd_id = '$prdid' AND pjd.sttd_id = 3 LIMIT 1";
         
@@ -197,8 +215,15 @@ class WorkInputContentModel extends Model
                     WHERE ser_id = $serId;";
             }
             $this->db->query($updt);
-        }
+        // }
         
+        $qry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+                INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                WHERE pd.prd_id = $prdid AND sr.ser_situation != 'D') WHERE prd_id = $prdid";
+            
+        $this->db->query($qry);
 
          return $serId;
     }
@@ -232,7 +257,6 @@ class WorkInputContentModel extends Model
             $this->db->query($query);
         }
         
-        
         // Busca si la serie esta reservada a futuro
         $qry2 = "SELECT pjd.pjtdt_id FROM ctt_projects_detail AS pjd
         INNER JOIN ctt_projects_periods AS ppd ON ppd.pjtdt_id = pjd.pjtdt_id
@@ -243,7 +267,6 @@ class WorkInputContentModel extends Model
         $result2 =  $this->db->query($qry2);
         $pjtdt = $result2->fetch_object();
         if ($pjtdt != null) {
-
             $pjtdtId = $pjtdt->pjtdt_id; 
 
             $updt = "UPDATE ctt_series 
@@ -258,15 +281,26 @@ class WorkInputContentModel extends Model
                 WHERE ser_id=$serid;";  
             $folio = $this->db->query($qry);
         }
-  
-        $qry = $this->db->query("INSERT INTO ctt_project_series_periods(pjspd_days, pjt_id, ser_id, pjtdt_id) 
-        SELECT DATEDIFF(ppd.pjtpd_day_end, ppd.pjtpd_day_start) + 1 days,  '$prjid' pjt_id,'$serid' ser_id, pjd.pjtdt_id
-        FROM ctt_projects_periods AS ppd 
-        INNER JOIN ctt_projects_detail AS pjd ON ppd.pjtdt_id = pjd.pjtdt_id
-        INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
-        INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id = pjd.pjtvr_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = pjv.pjt_id
-        WHERE pj.pjt_id = '$prjid' AND sr.ser_id = '$serid';");
+
+        $qry = $this->db->query("INSERT INTO ctt_project_series_periods(
+                            pjspd_days, pjt_id, ser_id, pjtdt_id) 
+                SELECT DATEDIFF(ppd.pjtpd_day_end, ppd.pjtpd_day_start) + 1 days,  
+                '$prjid' pjt_id,'$serid' ser_id, pjd.pjtdt_id
+                FROM ctt_projects_periods AS ppd 
+                INNER JOIN ctt_projects_detail AS pjd ON ppd.pjtdt_id = pjd.pjtdt_id
+                INNER JOIN ctt_series AS sr ON sr.ser_id = pjd.ser_id
+                INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id = pjd.pjtvr_id
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id = pjv.pjt_id
+                WHERE pj.pjt_id = '$prjid' AND sr.ser_id = '$serid';");
+
+        $qry = "UPDATE ctt_products SET prd_reserved = (
+                SELECT COUNT(*) FROM ctt_stores_products AS sp
+                INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                WHERE pd.prd_id = $prdid AND sr.ser_situation != 'D') WHERE prd_id = $prdid";
+
+        $this->db->query($qry);
 
         return $folio;
     }
@@ -336,7 +370,6 @@ class WorkInputContentModel extends Model
     public function InsertComment($params, $userParam)
     {
         $group = explode('|',$userParam);
-    
         $user   = $group[2];
         $pjtId  = $this->db->real_escape_string($params['pjtId']);
         $comSrc = $this->db->real_escape_string($params['comSrc']);
@@ -347,14 +380,8 @@ class WorkInputContentModel extends Model
                         com_action_id, 
                         com_user, 
                         com_comment, 
-                        com_status
-                ) VALUES (
-                        '$comSrc', 
-                        $pjtId, 
-                        '$user',
-                        '$comComment',
-                        1
-                );";
+                        com_status ) 
+                VALUES ('$comSrc',$pjtId,'$user','$comComment',1);";
         $this->db->query($qry1);
         $comId = $this->db->insert_id;
 
