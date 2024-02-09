@@ -26,7 +26,7 @@
 
 		public function GetLocation($request_params)
 		{
-	      $result = $this->model->GetLocation($request_params);
+	      $result = $this->model->GetLocations($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 

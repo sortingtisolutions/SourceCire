@@ -68,6 +68,7 @@
                         <th style="width: 100px">Marca</th>
                         <th style="width: 100px">No. Pedimento</th>
                         <th style="width: 60px">Costo <br>Importación</th>
+                        <th style="width: 50px">Costo <br>Total</th>
                         <th style="width: 50px">Num. <br>Economico</th>
                         <th style="width: 300px">Comentarios</th>
                     </tr>
@@ -97,14 +98,7 @@
                             <span class="intructions">Nombre correspondiente al producto</span>
                         </td>
                     </tr>
-                    <!-- <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span>Tipo Artículo: </td> 
-                        <td class="data">
-                            <div id="txtPrdLevel"  class="checkbox"><i class="far fa-square"></i> <i class="fas fa-check-square"></i></div>
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Indica si es un producto o un accesorio</span>
-                        </td>
-                    </tr> -->
+  
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Catálogo:</td>
                         <td class="data">
@@ -133,23 +127,6 @@
                             <span class="intructions">SKU del producto</span>
                         </td>
                     </tr>
-                    <!-- <tr >
-                        <td class="concept"> Producto:</td>
-                        <td class="">
-                            <div class="row list-finder pos2 ">
-                                <div class="data">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm " style="font-size: 0.8em;" data-mesage="Debes seleccionar un proveedor" autocomplete="off" disabled>
-                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
-                                </div>
-                                <div id="listProduct" class="list-group list-hide">
-                                    <div class="list-items" ></div>
-                                </div>
-                            </div>
-                            <span class="fail_note hide"></span>
-                            <span style="font-size: 0.7em; color: #999999; margin-bottom: 10px;	margin-top: 2px;" >Listado de productos para crear un accesorio</span>
-                        </td>
-                    </tr> -->
-                    <tr>
                     
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Modelo:</td>
@@ -423,7 +400,6 @@
                 <div class="modal-header ">
                 </div>
                 <div class="modal-body" style="padding: 0px !important;">
-
 
                 <div class="row">
                     <input type="hidden" class="form-control" id="txtIdSerie" aria-describedby="basic-addon3">

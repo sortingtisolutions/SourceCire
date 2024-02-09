@@ -7,9 +7,7 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 <style>
-    .hiddenElement {
-        visibility: hidden !important;
-    }
+    .hiddenElement {visibility: hidden !important;}
 
   #calendar {
     max-width: 600px;
@@ -24,18 +22,16 @@
 					<div class="form-group">
 
 					<div class="row list-finder pos2">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
-                                    <label for="txtProducts">Productos</label>
-                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
-                            </div>
-                            <div id="listProduct" class="list-group list-hide">
-                                <div class="list-items" ></div>
-                            </div>
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
+                                <label for="txtProducts">Productos</label>
+                                <input type="hidden" id="txtIdProducts" name="txtIdProducts">
+                        </div>
+                        <div id="listProduct" class="list-group list-hide">
+                            <div class="list-items" ></div>
+                        </div>
 					</div>
-
 						<hr>
-
 					</div>
 				</div>
 

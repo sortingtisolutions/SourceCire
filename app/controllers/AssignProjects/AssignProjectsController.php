@@ -125,5 +125,4 @@ class AssignProjectsController extends Controller
         }
         echo $res;
     }
-
 }

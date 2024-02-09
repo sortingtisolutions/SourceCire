@@ -67,21 +67,6 @@ function EditPuesto(id) {
     var tipo = 'json';
     var selector = putPuesto;
     fillField(pagina, par, tipo, selector);
-    /* $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data: {id: id},
-        url: location,
-        success: function (respuesta) {
-            $('#NomPuesto').val(respuesta.pos_name);
-            $('#IdPuesto').val(respuesta.pos_id);
-            $('#DesPuesto').val(respuesta.pos_description);
-            $('#PuestoModal').modal('show');
-        },
-        error: function (EX) {
-            console.log(EX);
-        },
-    }).done(function () {}); */
 }
 function putPuesto(dt){
     $('#IdPuesto').val(dt[0].pos_id);
@@ -91,7 +76,6 @@ function putPuesto(dt){
 }
 //confirm para borrar **
 function ConfirmDeletPuesto(id) {
-    //UnSelectRowTable();
     $('#BorrarPuestoModal').modal('show');
     $('#IdPuestoBorrar').val(id);
 }
@@ -146,7 +130,7 @@ function SavePuesto() {
         data: {IdPuesto: IdPuesto, NomPuesto: NomPuesto, DesPuesto: DesPuesto},
         url: location,
         success: function (respuesta) {
-            console.log('RESP ',respuesta);
+            // console.log('RESP ',respuesta);
             if (IdPuesto != '') {
                 table
                     .row(':eq(' + positionRow + ')')
@@ -154,7 +138,7 @@ function SavePuesto() {
                     .draw();
             }
             if (respuesta != 0) {
-                console.log('RESP ',respuesta);
+                // console.log('RESP ',respuesta);
                 //getAlmacenesTable();
                 var rowNode = table.row
                     .add({
@@ -179,7 +163,7 @@ function SavePuesto() {
             console.log(EX);
         },
     }).done(function () {});
-    console.log('PASO 11');
+
 }
 
 //Limpia datos en modal  **
@@ -224,8 +208,8 @@ function getPuestoTable() {
                     info: false,
                 },
                 lengthMenu: [
-                    [20, 50, 100, -1],
-                    [20, 50, 100, 'Todos'],
+                    [50, 100, -1],
+                    [50, 100, 'Todos'],
                 ],
                 dom: 'Bfrtip',
                 buttons: [

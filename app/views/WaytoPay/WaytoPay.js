@@ -17,10 +17,6 @@ function inicial() {
             inicial();
         }, 100);
     }
-
-    // setInterval(() => {
-    //     activeIcons();
-    // }, 2000);
 }
 
 /** ---- Obtiene listado de subcategorias */
@@ -88,8 +84,6 @@ function settingTable() {
             {data: 'waystat', name: 'waystat', class: 'supply center'},
         ],
     });
-    // deep_loading('C');
-   /*  activeIcons(); */
 }
 
 /** ---- Almacena las subcategorias ---- */
@@ -101,7 +95,6 @@ function putWaytoPay(dt) {
     let tabla = $('#tblWaypay').DataTable();
     tabla.rows().remove().draw();
     if (prds[0].wtp_id != '0') {
-        
         $.each(prds, function (v, u) {
             tabla.row
                 .add({
@@ -123,7 +116,6 @@ function putWaytoPay(dt) {
                 </tr>`;
             $('#tblWaypay tbody').append(H); */
         }); 
-     
         // settingTable();
         activeIcons();
     } else {
@@ -175,7 +167,7 @@ function activeIcons() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[2];
             let wayId = $(this).closest('tr').attr('id');
-            console.log('EDIT ',wayId)
+            // console.log('EDIT ',wayId)
             switch (acc) {
                 case 'modif':
                     editSubcategory(wayId);
@@ -235,7 +227,7 @@ function putSaveWaytoPay(dt) {
 
 function editSubcategory(wayId) {
     let ix = goThroughSubcategory(wayId);
-    console.log('Se', ix);
+    // console.log('Se', ix);
     $('#txtWtpDescription').val(subs[ix].wtp_description);
     $('#txtIdWayPay').val(subs[ix].wtp_id);
     $('#txtWtpCve').val(subs[ix].wtp_clave);
@@ -289,34 +281,25 @@ function putUpdateWaytoPay(dt) {
 /** -------------------------------------------------------------------------- */
 function DeleteWayPay(wayId) {
     let cn = $(`#${wayId}`).children('td.quantity').children('.toLink').html();
+    // console.log(cn);
+    $('#confirmModal').modal('show');
 
-    console.log(cn);
-    /* if (cn != 0) {
-        $('#confirmModal').modal('show');
-        $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('').css({display: 'none'});
-        $('#Id').val(0);
-    } else { */
-        $('#confirmModal').modal('show');
-
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la forma de pago?');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar').css({display: 'inline'});
-        $('#Id').val(wayId);
-        console.log('BORRAR REGISTRO', wayId);
-        $('#confirmButton').on('click', function () {
-            var pagina = 'WaytoPay/DeleteWayPay';
-            var par = `[{"wayId":"${wayId}"}]`;
-            var tipo = 'html';
-            var selector = putDeleteWayPay;
-            fillField(pagina, par, tipo, selector);
-        });
-    //}
+    $('#confirmModalLevel').html('¿Seguro que desea borrar la forma de pago?');
+    $('#N').html('Cancelar');
+    $('#confirmButton').html('Borrar').css({display: 'inline'});
+    $('#Id').val(wayId);
+    console.log('BORRAR REGISTRO', wayId);
+    $('#confirmButton').on('click', function () {
+        var pagina = 'WaytoPay/DeleteWayPay';
+        var par = `[{"wayId":"${wayId}"}]`;
+        var tipo = 'html';
+        var selector = putDeleteWayPay;
+        fillField(pagina, par, tipo, selector);
+    });
 }
 /** ---- Elimina el registro de la subcategoria borrada ---- */
 function putDeleteWayPay(dt) {
-    console.log('BORRAR LINEA');
+    // console.log('BORRAR LINEA');
     getWaytoPay();
     let tabla = $('#tblWaypay').DataTable();
     tabla

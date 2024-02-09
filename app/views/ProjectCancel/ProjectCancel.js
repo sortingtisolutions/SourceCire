@@ -178,7 +178,7 @@ function CancelProyect(pjtId) {
 }
 
 function enableProject(pjtId) {
-    console.log(pjtId);
+    // console.log(pjtId);
     modalLoading('S', 'Habilitando proyecto');
     var pagina = 'ProjectCancel/EnableProject';
     var par = `[{"pjtId":"${pjtId}"}]`;
@@ -188,8 +188,7 @@ function enableProject(pjtId) {
 }
 
 function putCancelProject(dt) {
-    console.log(dt);
-    // getProjects();
+    // console.log(dt);
     let tabla = $('#tblProjects').DataTable();
     tabla
         .row($(`#${dt}`))

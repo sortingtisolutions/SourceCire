@@ -166,16 +166,18 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
     // console.log(strs.length);
-    tabla.row
+    if (strs[0].loc_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].loc_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storesid: strs[ix].loc_id,
             storname: strs[ix].loc_type_location,
         })
         .draw();
-    $('#md' + strs[ix].loc_id)
-        .parents('tr')
-        .attr('id', strs[ix].loc_id);
+        $('#md' + strs[ix].loc_id)
+            .parents('tr')
+            .attr('id', strs[ix].loc_id);
+    }
     actionButtons();
 }
 
@@ -183,9 +185,7 @@ function saveStore() {
     var strName = $('#txtNomLocation').val();
     var strtype = $('#selectTipoAlmacen').val();
     var par = `
-        [{  "loc_type_location"   : "${strName}"
-        }]`;
-
+        [{  "loc_type_location"   : "${strName}"}]`;
     strs = '';
     var pagina = 'Locations/SaveLocation';
     var tipo = 'html';
@@ -210,7 +210,7 @@ function updateStore() {
     var strName = $('#txtNomLocation').val();
     /* var strType = $('#selectTipoAlmacen option:selected').val(); */
     var par = `
-        [{  "loc_id"        : "${strId}",
+        [{  "loc_id"                : "${strId}",
             "loc_type_location"      : "${strName}"
         }]`;
 
@@ -227,8 +227,6 @@ function putUpdateStore(dt) {
         let ix = goThroughStore(dt);
 
         $(`#${strs[ix].loc_id}`).children('td.store-name').html(strs[ix].loc_type_location);
-
-        //putQuantity(strs[ix].are_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
         setTimeout(() => {
@@ -242,22 +240,16 @@ function editStore(strId) {
     let ix = goThroughStore(strId);
     $('#txtNomLocation').val(strs[ix].loc_type_location);
     $('#IdLocation').val(strs[ix].loc_id);
-    /* $('#selectTipoAlmacen').val(strs[ix].are_status); */
 }
 
 function deleteStore(strId) {
     console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-    
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar la locacion?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar la locacion').css({display: 'inline'});
         $('#Id').val(strId);
-
-        
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {

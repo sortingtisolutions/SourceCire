@@ -11,11 +11,9 @@
 <div class="container-fluid">
     <div class="contenido ">
         <div class="row mvst_group">
-
         <!-- Start Panel de control lateral -->
             <div class="mvst_panel" style="background-color: #B0C4DE" >
-                <div class="form-group">
-                    
+                <div class="form-group">                   
                     <div class="row">
                         <h4>Nueva Forma de Pago</h4>
 
@@ -33,7 +31,6 @@
                                     <input id="txtWtpCve" name="txtWtpCve" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtWtpCve">Clave corta</label>
                                 </div>
-                                <!-- <input id="txtIdWayPay" name="txtIdWayPay" type="hidden" class="form-control form-control-sm" > -->
                             </div>
 
                             <div class="row">

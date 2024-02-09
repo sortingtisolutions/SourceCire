@@ -197,19 +197,10 @@ function putReasons(dt) {
             $('#md' + u.pjtcr_id)
             .parents('tr')
             .attr('id', u.pjtcr_id);
-                /* var H = `
-                <tr id="${u.pjtcr_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
-                    <td class="supply" data-content="${u.pjtcr_definition}">${u.pjtcr_definition}</td>
-                    <td class="supply">${u.pjtcr_description}</td>
-                    <td class="supply">${u.pjtcr_code_stage}</td>
-                </tr>`;
-                $('#tblReasonChange tbody').append(H); */
             }
         );
         // console.log('2', prds);
         activeIcons();
-        
         /* settingTable(); */
     } else {
         /* settingTable(); */

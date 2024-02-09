@@ -21,18 +21,6 @@ public function listProyects($store)
     public function listProducts($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
-        /* $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, 
-                pd.prd_visibility, ser.ser_id, ser.ser_sku, ser.ser_serial_number, 
-                ser.ser_situation, ser.ser_date_registry, ser.ser_date_down, IFNULL(pjp.pjtpd_day_start,'') AS 
-                    pjtpd_day_start, 
-                    IFNULL(pjp.pjtpd_day_end,'')
-                pjtpd_day_end, pj.pjt_name FROM ctt_products AS pd 
-                INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
-                Left JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
-                Left JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
-                Left JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
-                Left  JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id 
-                WHERE pd.prd_id = $pjtId ORDER BY ser.ser_serial_number;"; */
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, 
                 pd.prd_visibility, ser.ser_id, ser.ser_sku, ser.ser_serial_number, 
@@ -56,9 +44,6 @@ public function listProyects($store)
 public function listProducts2($param)
 {
     $word = $this->db->real_escape_string($param['word']);
-   /*  $qry = "SELECT * FROM ctt_products A 
-            WHERE A.prd_visibility=1 AND A.prd_level='P'
-            ORDER BY prd_name;"; */
     $qry = "SELECT * FROM ctt_products A 
     WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
         (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_type_asigned != 'KP'

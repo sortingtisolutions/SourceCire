@@ -5,6 +5,7 @@
 
 class ProductAccessoryController extends Controller
 {
+    
     private $session;
     public $model;
 

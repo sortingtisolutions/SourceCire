@@ -13,9 +13,7 @@ SET time_zone = "+00:00";
 
 --
 -- Base de datos: `cttrentals`
---
 
---
 -- Truncar tablas antes de insertar `ctt_employees`
 --
 
@@ -30,7 +28,6 @@ INSERT INTO `ctt_employees` (`emp_id`, `emp_number`, `emp_fullname`, `emp_area`,
 --
 -- Truncar tablas antes de insertar `ctt_menu`
 --
-
 TRUNCATE TABLE `ctt_menu`;
 INSERT INTO `ctt_menu` (`mnu_id`, `mnu_parent`, `mnu_item`, `mnu_description`, `mod_id`) VALUES
 (1, 0, 'Inventarios', 'Seccion de inventarios', 1),
@@ -42,11 +39,9 @@ INSERT INTO `ctt_menu` (`mnu_id`, `mnu_parent`, `mnu_item`, `mnu_description`, `
 (7, 3, 'Movimiento entre almacenes','Sección de movimientos entre almacenes',7),
 (8, 3, 'Listado de almacenes','Sección de edición de almacenes',8),
 
-
 --
 -- Truncar tablas antes de insertar `ctt_modules`
 --
-
 TRUNCATE TABLE `ctt_modules`;
 INSERT INTO `ctt_modules` (`mod_id`, `mod_code`, `mod_name`, `mod_description`, `mod_item`) VALUES
 (1, 'invt', 'Inventarios', 'Modulo que controla los inventarios', '#'),
@@ -57,11 +52,9 @@ INSERT INTO `ctt_modules` (`mod_id`, `mod_code`, `mod_name`, `mod_description`, 
 (6, 'users', 'Usuarios', 'Modulo de usuarios','Usuarios'),
 (7, 'mvalm', 'Movimiento de almacenes','Modulo de movimiento entre almacenes','MoveStores'),
 (8, 'mvalm', 'Lista de almacenes','Modulo de edición de almacenes','Almacenes');
-
 --
 -- Truncar tablas antes de insertar `ctt_post`
 --
-
 TRUNCATE TABLE `ctt_post`;
 --
 -- Truncar tablas antes de insertar `ctt_profiles`
@@ -71,7 +64,6 @@ TRUNCATE TABLE `ctt_profiles`;
 --
 -- Volcado de datos para la tabla `ctt_profiles`
 --
-
 INSERT INTO `ctt_profiles` (`prf_id`, `prf_code`, `prf_name`, `prf_description`, `prf_mod_start`) VALUES
 (1, 'supuser', 'Super usuario', 'Control total sobre toda la aplicación', 'Start');
 

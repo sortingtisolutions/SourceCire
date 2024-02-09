@@ -105,8 +105,7 @@ if ($equipoBase == '1'){
                                 $discountBase   = $items[$i]['ext_code'] ; //  ----------------------- Porcentaje de descuento base
                                 $daysTrip       = $items[$i]['exc_store'];  //  --------------------------- Dias de viaje
                                 $discountTrip   = $items[$i]['exc_comments'];  //  ----------------------- Porcentaje de descuento viaje
-            
-                                
+                               
         $html .= '
                             <tr>
                                 <td class="dat-figure amou">' . $product                . '</td>
@@ -195,8 +194,6 @@ $mpdf->Output(
     "Entrada_Almacen.pdf",
     \Mpdf\Output\Destination::INLINE
 );
-
-
 // "Cotizacion-". $items[0]['ver_code'].".pdf",
 
 function decodificar($dato) {

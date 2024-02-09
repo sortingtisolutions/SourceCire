@@ -22,7 +22,6 @@ class ProductsSalablesListController extends Controller
 		$params = array('user' => $this->session->get('user'));
 		$this->render(__CLASS__, $params);
 	}
-
     // OBTIENE EL LISTADO DE LAS VENTAS
     public function Sales($request_params)
     {

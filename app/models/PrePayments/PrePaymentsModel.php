@@ -238,19 +238,6 @@ public function getCustomersProj($params)
         return $this->db->query($qry);
     }
 
-
-// Actualizala cantidad de productos en un almacen destino
-    public function UpdateProducts($param)
-    {
-        
-    }
-
-// Agrega el registro de relación almacen producto
-    public function InsertProducts($param)
-     {
-    
-    }
-
 // Proceso de subarrendo
     public function checkSerie($param)
     {
@@ -335,7 +322,6 @@ public function getCustomersProj($params)
         $this->db->query($qry4);
 
         return $pjDetail;
-
     }
 
     public function changeMaintain($params)
@@ -362,8 +348,6 @@ public function getCustomersProj($params)
             $this->db->query($qry1);
         }
         
-        
-
         $qry2 = "UPDATE ctt_products_maintenance
                     SET 
                         pmt_days = '$days',
@@ -377,8 +361,6 @@ public function getCustomersProj($params)
                         pjtcr_id = '$projChange'
                     WHERE pmt_id = '$idMaintain'";
         $this->db->query($qry2);
-
-        
 
         return $idProject;
     }

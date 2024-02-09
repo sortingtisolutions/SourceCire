@@ -31,7 +31,6 @@
                             
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <!-- <button type="button" class="btn btn-sm btn-primary" id="btnSave">Buscar</button> -->
                                     <button type="button" class="btn btn-sm btn-danger"  id="btnClean">Limpiar</button>
                                 </div>
                             </div>

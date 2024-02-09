@@ -11,7 +11,7 @@ class ProductsPriceListModel extends Model
 // Listado de categorias   ****
 public function listCategories()
 {
-    $qry = "SELECT cat_id, cat_name FROM ctt_categories WHERE cat_status = 1 AND cat_id != 40;";
+    $qry = "SELECT cat_id, cat_name FROM ctt_categories WHERE cat_status = 1;";
     return $this->db->query($qry);
 }
 
@@ -23,10 +23,10 @@ public function listProducts($params)
         $num = $this->db->real_escape_string($params['num']);
         if ($catId !=0) {
             $qry = "SELECT 
-                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
-                p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
-                p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_type_asigned, 
-                IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
+            p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
+            p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
+            p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_type_asigned, 
+            IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
             FROM  ctt_products AS p
             INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
             INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
@@ -34,17 +34,17 @@ public function listProducts($params)
             LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id   AND sr.ser_situation='D'
             LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
             LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id   AND dc.dcp_source = 'P'
-            WHERE prd_status = 1 AND p.prd_visibility = 1 AND ct.cat_id=$catId
+            WHERE prd_status = 1 AND p.prd_visibility = 1 AND ct.cat_id = $catId
             GROUP BY 
                 p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                 p.prd_price, p.prd_coin_type, p.prd_english_name 
             ORDER BY p.prd_sku;";
         } else {
             $qry = "SELECT 
-                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
-                p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
-                p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_type_asigned, 
-                IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
+            p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
+            p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
+            p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_type_asigned, 
+            IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
             FROM  ctt_products AS p
             INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
             INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
@@ -94,7 +94,7 @@ public function listProducts($params)
                 INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
                 LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
                 LEFT JOIN ctt_stores As st ON st.str_id = sp.str_id 
-                WHERE se.prd_id IN ($prodId) AND se.ser_situation='D' AND sp.stp_quantity > 0
+                WHERE se.prd_id IN ($prodId) AND se.ser_situation='D' AND sp.stp_quantity > 0 AND se.prd_id_acc = 0
                 GROUP BY se.ser_id
                 ORDER BY se.prd_id, se.ser_sku;";
         return $this->db->query($qry);

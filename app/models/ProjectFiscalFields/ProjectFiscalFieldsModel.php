@@ -9,7 +9,6 @@ class ProjectFiscalFieldsModel extends Model
         parent::__construct();
     }
 
-
 // Obtiene la lista de productos   *****
     public function tableProjects($params)
     {

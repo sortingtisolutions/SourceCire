@@ -56,11 +56,7 @@
                                 <label for="txtLocationsEdt" class="form-label">Locación</label>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <button class="bn btn-add hide" id="addLocation" ></button>
-                            </div>
-                        </div> -->
+
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtCustomer" class="form-select form-select-sm required"><option value="0" selected>Selecciona Cliente</option></select>
@@ -256,8 +252,6 @@
                 <div class="row">
                     <div class="" style="width: 100%; height: 100vh; padding: 50px 10px 10px 10px; overflow: auto; padding: 4px; ">
                         <div class="row">
-                            
-                            <!-- <button class="bn btn-ok" id="addLocationEdos">Agregar</button> -->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="background-color: #ffffff; border: 2px solid #eeeeee; border-radius: 10px;">
                                 <table id="" class="table_information form-floating ">
                                     <tr>

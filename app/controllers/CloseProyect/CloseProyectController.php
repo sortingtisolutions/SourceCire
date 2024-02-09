@@ -5,6 +5,7 @@
 
 class CloseProyectController extends Controller
 {
+    
     private $session;
     public $model;
 

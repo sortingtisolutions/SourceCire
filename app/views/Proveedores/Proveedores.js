@@ -66,7 +66,7 @@ function getProveedoresTable() {
    var location = 'Proveedores/GetProveedores';
    $('#ProveedoresTable').DataTable().destroy();
    $('#tablaProveedoresRow').html('');
-   console.log('OTIENE PROVEEDORES');
+   // console.log('OTIENE PROVEEDORES');
    $.ajax({
       type: 'POST',
       dataType: 'JSON',
@@ -197,7 +197,7 @@ function getProveedoresTable() {
 function getTipoProveedor(id) {
    $('#selectRowTipoProveedor').html("");
    var location = 'Proveedores/GetTipoProveedores';
-   console.log('OBTIENE TIPO PROVEEDOR');
+   // console.log('OBTIENE TIPO PROVEEDOR');
    $.ajax({
       type: 'POST',
       dataType: 'JSON',
@@ -231,7 +231,7 @@ function EditProveedores(id) {
       data: {id: id},
       url: location,
       success: function (respuesta) {
-         console.log(respuesta);
+         // console.log(respuesta);
          $('#NomProveedor').val(respuesta.sup_business_name);
          $('#NomComercial').val(respuesta.sup_trade_name);
          $('#ContactoProveedor').val(respuesta.sup_contact);
@@ -307,9 +307,7 @@ function DeleteProveedor() {
 }
 
 function SaveProveedores() {
-
    var IdProveedor = $('#IdProveedor').val();
-
    var NomProveedor = $('#NomProveedor').val().toUpperCase().replace('&','-');
    var NomComercial = $('#NomComercial').val().toUpperCase();
    var ContactoProveedor = $('#ContactoProveedor').val().toUpperCase();
@@ -356,7 +354,7 @@ function SaveProveedores() {
            "DatoBanco"   :       "${DatoBanco}",
            "DatoClabe"   :       "${DatoClabe}"
        }]`;
-   console.log(par);
+   // console.log(par);
    var pagina = 'Proveedores/SaveProveedores';
    var tipo = 'html';
    var selector = putSaveProveedor;
@@ -364,7 +362,7 @@ function SaveProveedores() {
 }
 
 function putSaveProveedor(dt){
-   console.log('Put SaveNew', dt);
+   // console.log('Put SaveNew', dt);
    LimpiaModal();
    getProveedoresTable();
    getTipoProveedor();
@@ -375,9 +373,7 @@ function putSaveProveedor(dt){
 //Guardar Proveedores **
 function SaveProveedores_old() {
    var location = 'Proveedores/SaveProveedores';
-
    var IdProveedor = $('#IdProveedor').val();
-
    var NomProveedor = $('#NomProveedor').val().toUpperCase();
    var NomComercial = $('#NomComercial').val().toUpperCase();
    var ContactoProveedor = $('#ContactoProveedor').val().toUpperCase();
@@ -398,8 +394,7 @@ function SaveProveedores_old() {
    var selectFormaPago = $('#selectFormaPago option:selected').text();
    var DatoBanco = $('#DatoBanco').val();
    var DatoClabe = $('#DatoClabe').val();
-
-   console.log(PhoneAdicional);
+   // console.log(PhoneAdicional);
    $.ajax({
       type: 'POST',
       dataType: 'JSON',
@@ -451,7 +446,7 @@ function SaveProveedores_old() {
 
 //Limpia datos en modal  **
 function LimpiaModal() {
-   console.log('LIMPIANDO');
+   // console.log('LIMPIANDO');
    $('#NomProveedor').val('');
    $('#NomComercial').val('');
    $('#ContactoProveedor').val('');
@@ -474,7 +469,7 @@ function LimpiaModal() {
    /* $('#PhoneProveedor').val(''); */
    $('#titulo').text('Nuevo Proveedor');
    $('#formProveedor').removeClass('was-validated');
-   console.log('TERMINANDO');
+   // console.log('TERMINANDO');
 }
 
 

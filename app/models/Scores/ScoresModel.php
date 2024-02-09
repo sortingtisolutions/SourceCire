@@ -20,7 +20,6 @@ class ScoresModel extends Model
 		$this->db->query($qry);	
 		$scr_id = $this->db->insert_id;
 		return $scr_id;
-
 	}
 	
 // Optiene los Usuaios existentes

@@ -5,6 +5,7 @@
 
 class ReportsProjectController extends Controller
 {
+    
     private $session;
     public $model;
 

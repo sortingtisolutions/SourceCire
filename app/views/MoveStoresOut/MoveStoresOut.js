@@ -15,14 +15,12 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    //getCategories();
     eventsAction();
     setting_table();
 
     $('#btn_exchange').on('click', function () {
         let id = $('#boxIdProducts').val();
         let level = $('#boxLvlProducts').val();
-        // console.log('id-val', id);
         exchange_apply(id, level);
     });
 }
@@ -144,9 +142,7 @@ function setting_table() {
     });
 }
 
-
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
-// Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
@@ -186,7 +182,6 @@ function putStores(dt) {
             $('#txtStoreTarget').append(H);
         });
     }
-    // $('#boxProducts').parents('.list-finder').removeClass('hide-items');
 
     $('#txtStoreSource').on('change', function () {
         // $('#boxProducts').parents('.list-finder').addClass('hide-items');
@@ -208,10 +203,8 @@ function putStores(dt) {
 
 function putProducts(dt) {
     // console.log('putProducts',dt);
-
-    // $('#boxProducts').parents('.list-finder').removeClass('hide-items');
     var sl = $('#boxProducts').offset();
-
+    $('#listProducts .list-items').html('');
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-level="${u.prd_type_asigned}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}|${u.prd_id}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
         $('#listProducts .list-items').append(H);
@@ -242,8 +235,6 @@ function putProducts(dt) {
         //validator();
     });
 }
-
-// Almacena los registros de productos en un arreglo
 
 function xdrawProducts(str) {
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
@@ -500,13 +491,12 @@ function build_update_store_data(pr) {
         "mov"   :  "${el[8]}",
         "lvl"   :  "${el[7]}"
     }]`;
-    console.log('STORE-DATA',par);
+    // console.log('STORE-DATA',par);
     update_store(par);
 }
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
-    //   console.log(pr);
     var pagina = 'MoveStoresOut/SaveExchange';
     var par = pr;
     var tipo = 'html';
@@ -516,7 +506,6 @@ function save_exchange(pr) {
 
 function exchange_result(dt) {
     // console.log(dt);
-
     $('.resFolio').text(refil(folio, 7));
 
     $('#MoveFolioModal').modal('show');
@@ -530,7 +519,6 @@ function exchange_result(dt) {
 }
 
 function update_store(ap) {
-    // console.log(ap);
     var pagina = 'MoveStoresOut/UpdateStoresSource';
     var par = ap;
     var tipo = 'html';

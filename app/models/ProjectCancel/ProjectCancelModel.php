@@ -29,7 +29,6 @@ class ProjectCancelModel extends Model
 /** Habilita el projecto                                                           ====  */    
     public function EnableProject($params)
     {
-        /* Actualiza el estado en 4, status de proyecto   */
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qr1 = "UPDATE ctt_projects
                 SET pjt_status = '4'
@@ -60,8 +59,29 @@ class ProjectCancelModel extends Model
                 WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
                     INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
-                    WHERE pcn.pjt_id = $pjtId );";
-        return $this->db->query($qry);
+                    WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1);";
+        $this->db->query($qry);
+
+        // Hay que editar
+        $qry1 = "SELECT pd.prd_id FROM ctt_series AS sr
+        INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+        INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
+        INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
+        WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1 GROUP BY pd.prd_id;";
+
+        $result = $this->db->query($qry1);
+
+        while ($row = $result->fetch_assoc()) {
+            $prdId = $row["prd_id"];
+            $updQry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+            INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+            WHERE pd.prd_id = $prdId AND sr.ser_situation != 'D') WHERE prd_id =$prdId";
+            
+            $updt = $this->db->query($updQry);
+        }
+        return 1;
     }
 
 /** Elimina los registros del detalle del proyecto                                 ====  */
@@ -69,8 +89,8 @@ class ProjectCancelModel extends Model
     {
         $pjtId = $this->db->real_escape_string($params);
         $qry = "DELETE FROM ctt_projects_detail WHERE pjtvr_id IN  (
-                    SELECT pjtvr_id FROM ctt_projects_content WHERE pjt_id = $pjtId
-                );";
+                    SELECT pjtvr_id FROM ctt_projects_content 
+                    WHERE pjt_id = $pjtId );";
         return $this->db->query($qry);
     }
 
@@ -95,7 +115,6 @@ class ProjectCancelModel extends Model
         $qry  = "INSERT ctt_activity_log (log_date, log_event, emp_number, emp_fullname, acc_id) 
         VALUES(current_time(), 'CANCELADO','$user','$name', 2)"; // AQUI REQUIERE EL ID DE ACC_ID CORRESPONDIENTE
         $this->db->query($qry);
-
 
         return $pjtId;
     }

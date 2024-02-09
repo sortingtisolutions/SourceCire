@@ -20,23 +20,6 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 if ($empid == '1' || $empid == '2'){
-    /* $qry = "SELECT prd.prd_name, prd.prd_level, pjtcn_prod_name, pdt.pjtdt_prod_sku, 
-            sr.ser_serial_number, pj.pjt_number, 
-            pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
-                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
-                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name, 
-                CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
-            FROM ctt_projects_content AS pcn
-            INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
-            INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
-            INNER JOIN ctt_products AS prd ON prd.prd_id=sr.prd_id
-            INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
-            LEFT JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
-            LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
-            INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-            INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-            WHERE pcn.pjt_id=$prdId 
-            ORDER BY pdt.pjtdt_prod_sku;"; // 11-10-23 */
         $qry = "SELECT prd.prd_name, prd.prd_level, pjtcn_prod_name, pdt.pjtdt_prod_sku, 
         sr.ser_serial_number, pj.pjt_number, 
         pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone

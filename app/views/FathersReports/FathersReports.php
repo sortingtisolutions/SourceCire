@@ -20,8 +20,7 @@
 								<label for="txtProject">Proyecto</label>
 							</div>
 						</div>
-						<hr>
-						
+						<hr>	
 					</div>
 				</div>
 
@@ -48,7 +47,6 @@
 	</div>
 </div>
 
-
 <!-- Modal Borrar -->
 <div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -56,7 +54,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">
@@ -104,7 +101,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">

@@ -147,7 +147,8 @@ function setting_datepicket(selector) {
         locale: {
             format: 'DD/MM/YYYY',
             daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             firstDay: 1,
         },
         minDate: fecha,
@@ -192,7 +193,9 @@ function getCategorias(id) {
                 $("#selectRowCategorias option[id='" + id + "']").attr('selected', 'selected');
             }
         },
-        error: function () {},
+        error: function () {
+            console.log(jqXHR, textStatus, errorThrown);
+        },
     }).done(function () {});
 }
 
@@ -219,7 +222,9 @@ function getSubCategorias(id, idCategoria) {
                 $("#selectRowSubCategorias option[id='" + id + "']").attr('selected', 'selected');
             }
         },
-        error: function () {},
+        error: function () { 
+            console.log(jqXHR, textStatus, errorThrown);
+        },
     }).done(function () {});
 }
 
@@ -250,8 +255,7 @@ function getProducts() {
         isAccesorio = 1;
     }
 
-    console.log(idAlmacen + idCategoria + idSubCategoria + isConcepto + isPaquete + isProducto + isAccesorio);
-
+    // console.log(idAlmacen + idCategoria + idSubCategoria + isConcepto + isPaquete + isProducto + isAccesorio);
     var pagina = 'ReportsProject/listProducts';
     var par = `[{"idAlmacen":"${idAlmacen}","idCategoria":"${idCategoria}","idSubCategoria":"${idSubCategoria}","isConcepto":"${isConcepto}","isPaquete":"${isPaquete}","isProducto":"${isProducto}","isAccesorio":"${isAccesorio}"}]`;
     var tipo = 'json';
@@ -274,8 +278,6 @@ function putProducts(dt) {
             $.each(dt, function (v, u) {
                 fill_table_Productos(u);
             });
-
-            //console.log("entro if");
         } else {
             $('#tblExchanges_wrapper').attr('hidden', false);
             $('#tblExchangesProductos_wrapper').attr('hidden', true);
@@ -283,8 +285,6 @@ function putProducts(dt) {
             $.each(dt, function (v, u) {
                 fill_table(u);
             });
-
-            //console.log("entro else");
         }
 
         btn_apply_appears();
@@ -338,7 +338,7 @@ function validator() {
         $('#btn_products').removeClass('disabled');
     } else {
         $('#btn_products').addClass('disabled');
-        console.clear();
+        // console.clear();
         //console.log(msg);
     }
 }
@@ -433,7 +433,6 @@ function read_exchange_table() {
             chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${prodPrice}|${serinum}|${dateRegis}|${pos5}|${pos6}|${isConcepto}@`;
         });
     }
-
     chain = chain.substring(0, chain.length - 1);
     build_data_structure(chain);
 }

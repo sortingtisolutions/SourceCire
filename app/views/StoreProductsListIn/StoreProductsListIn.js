@@ -32,7 +32,6 @@ function inicial() {
 function setting_table() {
     let title = 'Salidas de Almacen';
     // let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
     $('#tblExchanges').DataTable({
         order: [[1, 'desc']],
         dom: 'Blrt',
@@ -81,7 +80,8 @@ function setting_datepicket(selector) {
         locale: {
             format: 'DD/MM/YYYY',
             daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             firstDay: 1,
         },
         minDate: fecha,
@@ -222,8 +222,8 @@ function validator() {
         $('#btn_products').removeClass('disabled');
     } else {
         $('#btn_products').addClass('disabled');
-        console.clear();
-        console.log(msg);
+        // console.clear();
+        // console.log(msg);
     }
 }
 // Aplica la seleccion para la tabla de reporte
@@ -234,16 +234,14 @@ function exchange_apply() {
     let productSKU = prod[2];
     let productSerie = prod[3];
     let commnets = $('#txtComments').val();
-
     let par = `
-[{  
-    "support"	: 	"${productSKU}",
-    "prodsku"	: 	"${productSKU}",
-    "prodnme"	:	"${productName}",
-    "prodser"	:	"${productSerie}",
-    "comment"	:	"${commnets}"
-}]
-            `;
+        [{  
+            "support"	: 	"${productSKU}",
+            "prodsku"	: 	"${productSKU}",
+            "prodnme"	:	"${productName}",
+            "prodser"	:	"${productSerie}",
+            "comment"	:	"${commnets}"
+        }]`;
     fill_table(par);
 }
 

@@ -23,7 +23,6 @@ class FreelancesController extends Controller
 		$this->render(__CLASS__, $params);
 	}
 
-
 // Lista las categorias
 	public function listFreelances($request_params)
 	{

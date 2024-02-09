@@ -14,26 +14,6 @@ function inicial() {
     getProducts();
     deep_loading('O');
     getPackages(0);
-    //console.log('PASO 1');
-    /* $('#txtPackageName').on('change', function () {
-        validator_part01();
-    });
-    $('#txtPackagePrice').on('change', function () {
-        validator_part01();
-    }); */
-
-    /* $('#btn_packages').on('click', function () {
-        let name = $(this).text();
-        if (name == 'Aplicar') {
-            packages_edit();
-        } else {
-            packages_apply();
-        }
-    }); */
-
-    /* $('#btn_packages_cancel').on('click', function () {
-        active_params();
-    }); */
     } else {
         setTimeout(() => {
             inicial();
@@ -153,9 +133,7 @@ function drawProducts(str) {
         .on('click', function () {
             $('.list-group').slideToggle('slow');
             $('.box-items-list i').toggleClass('rotate');
-        });
-
-    
+        });  
 }
 
 // Llena la tabla de paquetes
@@ -187,6 +165,7 @@ function putPackages(dt) {
     }
     deep_loading('C');
 }
+
 function active_params() {
     $('#txtIdPackages').val(0);
     $('#txtPackageName').val('');
@@ -216,7 +195,6 @@ function putIdSubcategory(dt) {
 function fill_table_packs(par) {
     let largo = $('#tblPackages tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblPackages tbody tr').remove() : '';
-
     pr = JSON.parse(par);
     var pagina = 'UnicProjectstoParent/savePack';
     var par = par;
@@ -231,9 +209,7 @@ function putNewPackage(dt) {
     let name = dt.split('|')[2];
     let price = dt.split('|')[3];
     $(`#SKU-${sku}`).text(id);
-
     let tabla = $('#tblPackages').DataTable();
-
     tabla.row
         .add({
             editable: `<i class="fas fa-pen choice pack modif" id="E-${id}"></i>
@@ -245,12 +221,6 @@ function putNewPackage(dt) {
         .draw();
     $(`#SKU-${sku}`).parent().parent().attr('id', id).addClass('indicator');
     action_selected_packages();
-
-    /* tabla.on('select', function (e, dt, type, i) {
-        $('#txtCategoryProduct').val(0);
-        $('#txtSubcategoryProduct').val(0);
-        $('#txtIdPackages').val(0);
-    }); */
 }
 
 function action_selected_packages() {
@@ -288,9 +258,7 @@ function action_selected_products() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[4];
             let prdId = $(this).attr('id');
-            //console.log($(this).attr('class').split(' '));
-            //console.log(acc);
-            console.log(prdId);
+ 
             switch (acc) {
                 case 'kill':
                     confirm_delet_product(prdId);
@@ -305,13 +273,12 @@ function select_products(prdId) {
     var pagina = 'UnicProjectstoParent/listProductsPack';
     var par = `[{"prjId":"${prdId}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putProductsPack;
     fillField(pagina, par, tipo, selector);
 }
 
 function putProductsPack(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].pjt_id != '') {
@@ -331,21 +298,17 @@ function putProductsPack(dt) {
 }
 
 function product_apply(prId) {
-    console.log(prId);
-   /*  let proj = prId.attr('data-content').split('|');
-    let productId = proj[0]; */
+    // console.log(prId);
     let projParent = $('#txtIdPackages').val();
-    //let productQuantity = $('#txtQtyPrds').val();
     var pagina = 'UnicProjectstoParent/SaveProject';
     var par = `[{"prjId":"${prId}","prjParent":"${projParent}"}]`;
-    console.log(par);
     var tipo = 'json';
     var selector = putNewProductsPack;
     fillField(pagina, par, tipo, selector);
 }
 
 function putNewProductsPack(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.row
         .add({
@@ -363,16 +326,13 @@ function putNewProductsPack(dt) {
 function confirm_delet_product(id) {
     $('#delProdModal').modal('show');
     $('#txtIdProductPack').val(id);
-    //borra paquete +
     $('#btnDelProduct').on('click', function () {
         let Id = $('#txtIdProductPack').val();
         let prdId = Id.split('-')[1];
         let prdParent = Id.split('-')[2];
         let tabla = $('#tblProducts').DataTable();
         $('#delProdModal').modal('hide');
-
         let prdRow = $(`#${Id}`).parents('tr');
-
         tabla.row(prdRow).remove().draw();
 
         var pagina = 'UnicProjectstoParent/deleteProduct';

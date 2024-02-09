@@ -14,8 +14,6 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getProjects();
-    // getCoins();
-    // getCategories();
     setting_table();
 
     $('#btn_regist').on('click', function () {
@@ -34,37 +32,8 @@ function inicial() {
 
     $('#btn-apply').on('click', function () {
         applyTable();
-        // exchange_apply(0);
     });
-    
-
-    // $('#txtCostImp').on('blur', function () {
-    //     let costo_import = parseInt($('#txtCostImp').val());
-    //     let cant = parseInt($('#txtQuantity').val());
-    //     let costo_uni = parseInt($('#txtCost').val());
-    //     let costoTotal = costo_import + cant + costo_uni;
-        
-    //     if (costo_import) {
             
-    //         if (costo_uni && costo_import) {
-    //             console.log(cant);
-    //             $('#txtCostTot').val((costo_import+costo_uni)*cant);
-    //         }else{
-    //             if(!costo_uni){
-    //                 $('#txtCostTot').val((costo_import)*cant);
-    //             }
-    //             if (!costo_import) {
-    //                 $('#txtCostTot').val((costo_uni)*cant);
-    //             } 
-    //         }
-    //     } else {
-    //         if (costo_uni) {
-    //             $('#txtCostTot').val(costo_uni*cant);
-    //         }else{
-    //             $('#txtCostTot').val(0);
-    //         }    
-    //     }
-        
 }
 
 function getExchange() {
@@ -159,37 +128,16 @@ function setting_table() {
         ],
     });
 
-    // $('#addButtonSegm')
-    // .unbind('click')
-    // .on('click', function () {
-    //     // console.log('Agregar a TBL');
-    //     putSegments();
-    // });
 }
 
-// Solicita los tipos de movimiento
-
-
-/*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putFrecuency(dt) {
-    // console.log(dt);
-    // if (dt[0].ext_id != 0) {
-    //     $.each(dt, function (v, u) {
-    //         if (u.ext_elements.substring(0, 1) != '0') {
-    //             let H = `<option value="${u.ext_id}" data-content="${u.ext_code}|${u.ext_type}|${u.ext_link}|${u.ext_code_a}|${u.ext_type_a}|${u.ext_elements}">${u.ext_code} - ${u.ext_description}</option>`;
-    //             $('#txtFrecuency').append(H);
-    //         }
-    //     });
-    // }
 
     $('#txtFrecuency').on('change', function () {
         let id = $(this).val();
         id == 4 ? code='1011' : code='1101';
         gblidfrec=id;
-        // console.log('CODE', code);
         setting_interface(code,id);
-
         $('#txtCostInd').val(0);
 
     });
@@ -205,12 +153,9 @@ function putProyects(dt) {
     }
 
     $('#txtProyects').on('change', function () {
-        // validator();
         let pjtId = $(this).val();
-        // console.log('PJTID-',pjtId);
         $('.pos0').removeClass('hide-items');
         getAmountProjet(pjtId);
-        // putSegments();
         fillContent();
     });
 }
@@ -296,7 +241,6 @@ function putSegments(){
     let cantFrec =$('#txtFrecuency').val();
     let cantSegm =$('#txtSegments').val();
     let frecDesc =$(`#txtFrecuency option[value="${cantFrec}"]`).text();
-    // let cantDesc =$(`#txtSegments option[value="${cantSegm}"]`).text();
     let comments =$('#txtComments').val();
     let numorder;
     let montoInd= parseFloat(MontoTot) / parseFloat(cantSegm);
@@ -332,8 +276,6 @@ function putSegments(){
                     "datepay"   : "${fechapago}",
                     "notes"     : "${comments}"
                 }]`;
-
-        // console.log(par);
         fill_tablesegm(par);
     }
 }
@@ -400,7 +342,6 @@ function fill_tablesegm(par) { //** AGREGO ED */
 }
 
 function applyTable(){
-
     let user = Cookies.get('user').split('|');
     let em = user[3];
     $('#tblPayAgree tbody tr').each(function (v, u) {
@@ -410,7 +351,7 @@ function applyTable(){
         let ldatepay=$($(u).find('td')[4]).text();
 
         let truk = `${lnumpay}|${ldatepay}|${lcantpay}|${glbpjtid}|${numcloid}|${em}`;
-        console.log('TRUK ',truk);
+        // console.log('TRUK ',truk);
         build_data_structure(truk);
     });
     
@@ -442,7 +383,6 @@ function build_data_structure(pr) {
 }
 
 function save_exchange(pr) {
-    // console.log(pr);
     var pagina = 'ClosedProyectChange/insertCollectPays';
     var par = pr;
     var tipo = 'html';
@@ -451,35 +391,10 @@ function save_exchange(pr) {
 }
 
 function exchange_result(dt) {
-    // console.log('exchange_result',dt);
     $('#listTable').DataTable().destroy; 
     $('#addSegmentModal').addClass('overlay_hide');
     
 }
-
-/* let el = $(`#tblCustomers tr[id="${cusId}"]`);
-                $(el.find('td')[1]).text(cusName);
-                $(el.find('td')[2]).text(cusEmail);
-                $(el.find('td')[3]).text(cusPhone);
-                $(el.find('td')[4]).text(cusAdrr);
-                $(el.find('td')[5]).text(cusRFC);  //5
-                $(el.find('td')[6]).text(cusQualy);
-                $(el.find('td')[7]).text(TypeProdT);
-                $(el.find('td')[8]).text(cusICod);
-                $(el.find('td')[9]).text(cusSatC);
-                $(el.find('td')[10]).text(cusStat);  //10
-                $(el.find('td')[11]).text(cusDirector);
-                $(el.find('td')[12]).text(cusLegRepre);
-                $(el.find('td')[13]).text(cusLegEmail);
-                $(el.find('td')[14]).text(cusLegPhone); 
-                $(el.find('td')[15]).text(cusCont);  //15
-                $(el.find('td')[16]).text(cusContPhone);
-                $(el.find('td')[17]).text(cusContEmail);
-                $(el.find('td')[18]).text(cusWorkC);
-                $(el.find('td')[19]).text(cusInvoi);
-
-
- */
 
 // reubica el input de los productos
 function relocation_products() {
@@ -501,33 +416,11 @@ function validator() {
         ky = 1;
         msg += 'Debes seleccionar un almacen destino';
     }
-    // COMENTADO TEMPORALMENTE POR JJR
-    /* if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
-        ky = 1;
-        msg += 'Debes seleccionar el proveedor';
-    } */
-    // COMENTADO TEMPORALMENTE POR JJR
-    /* if ($('#txtIdInvoice').val() == 0 && $('.pos3').attr('class').indexOf('hide-items') < 0) {
-        ky = 1;
-        msg += 'Debes seleccionar un producto';
-    }
- */
+
     if ($('#txtIdProducts').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes seleccionar un producto';
     }
-    // COMENTADO TEMPORALMENTE POR JJR
-    /* if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-        ky = 1;
-        msg += 'Debes indicar el tipo de moneda';
-    } */
-            //console.log(ky, msg);
-
-            // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-            //     ky = 1;
-            //     msg += 'Debes indicar el costo del producto';
-            // }
 
     //validacion de cantidad para agregar serie mayor a 1
     if ($('#txtQuantity').val() > 1) {
@@ -543,15 +436,6 @@ function validator() {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
     }
-
-            //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-            //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
-
-    // COMENTADO TEMPORALMENTE POR JJR
-    /* if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-        ky = 1;
-        msg += 'Debes indicar la serie del producto';
-    } */
 
     if (ky == 0) {
         $('#btn_regist').removeClass('disabled');
@@ -825,7 +709,7 @@ function read_exchange_table() {
             let prdidacc = $(this).attr('data-content').split('|')[7];
 
             let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}|${costtota}|${numecono}|${prdidacc}`;
-            console.log(truk);
+            // console.log(truk);
             build_data_structure(truk);
         });
     }
@@ -864,13 +748,12 @@ function build_data_structure(pr) {
         "nec" :  "${el[19]}",
         "acc" :  "${el[20]}"
     }]`;
-    console.log(' Antes de Insertar', par);
+    // console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
-    console.log(pr);
     var pagina = 'PaymentAgreement/SaveExchange';
     var par = pr;
     var tipo = 'html';
@@ -885,7 +768,6 @@ function exchange_result(dt) {
         window.location = 'PaymentAgreement';
     });
     $('#btnPrintReport').on('click', function () {
-        // $('.btn-print').trigger('click');
         printInfoGetOut(folio);
     });
 }
@@ -899,7 +781,6 @@ function updated_stores(dt) {
         window.location = 'PaymentAgreement';
     });
     $('#btnPrintReport').on('click', function () {
-        // $('.btn-print').trigger('click');
         printInfoGetOut(folio);
     });
 }
@@ -928,7 +809,6 @@ function sel_products(res) {
         cm = omitirAcentos(cm);
         var cr = cm.indexOf(res);
         if (cr > -1) {
-            //            alert($(this).children().html())
             $(this).css({display: 'block'});
         }
     });
@@ -944,7 +824,6 @@ function sel_invoice(res) {
 
     $('#listInvoice .list-items div.list-item').each(function (index) {
         var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
-
         cm = omitirAcentos(cm);
         var cr = cm.indexOf(res);
         if (cr > -1) {

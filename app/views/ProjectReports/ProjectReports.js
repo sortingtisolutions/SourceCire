@@ -34,17 +34,6 @@ function inicial() {
     if (altr == 1) {
         deep_loading('C');
         settingTable();
-        //settingTable2();
-        //settingTable3();
-        //settingTable4();
-        //settingTable5();
-        //settingTable6();
-        //settingTable7();
-        //settingTable8();
-        //settingTable9();
-        //settingTable10();
-        //settingTable11();
-        //activaCheck();
         getAnalysts();
         getCustomers();
         getSuppliers();
@@ -60,7 +49,7 @@ function inicial() {
         .unbind('click')
         .on('click', function () {
             let pjtId = '0';
-            console.log('Print');
+            // console.log('Print');
             printReport();
             // getProjectContent(pjtId);
         });
@@ -77,8 +66,6 @@ function inicial() {
                 $('#txtClient').parent().removeClass('objHidden');
             }
         });
-        
-
     } else {
         setTimeout(() => {
             inicial();
@@ -95,8 +82,8 @@ function settingTable() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -164,8 +151,8 @@ function settingTable2() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -225,8 +212,8 @@ function settingTable3() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -288,8 +275,8 @@ function settingTable4() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -347,8 +334,8 @@ function settingTable5() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -408,8 +395,8 @@ function settingTable6() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -468,8 +455,8 @@ function settingTable7() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -527,8 +514,8 @@ function settingTable8() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -588,8 +575,8 @@ function settingTable9() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -648,8 +635,8 @@ function settingTable10() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -708,8 +695,8 @@ function settingTable11() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -768,14 +755,15 @@ function getAnalysts() {
     var tipo = 'JSON';
     var selector = putAnalyst;
     fillField(pagina, par, tipo, selector);
-    
-    function putAnalyst(dt) {
+}
+
+function putAnalyst(dt) {
+    if (dt[0].emp_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.emp_id}">${u.emp_fullname}</option>`;
             findana.append(H);
         });
-    }
-
+    }   
 }
 
 function getCustomers() {
@@ -786,15 +774,19 @@ function getCustomers() {
     var par = '[{"parm":""}]';
     var tipo = 'JSON';
     var selector = putCustomers;
-    fillField(pagina, par, tipo, selector);
-    
-    function putCustomers(dt) {
+    fillField(pagina, par, tipo, selector);  
+}
+
+function putCustomers(dt) {
+    if (dt[0].cus_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cus_id}">${u.cus_name}</option>`;
             findcli.append(H);
         });
     }
+    
 }
+
 function getSuppliers() {
     let data = [
         { pjtId: '', },
@@ -803,14 +795,17 @@ function getSuppliers() {
     var par = '[{"parm":""}]';
     var tipo = 'JSON';
     var selector = putSuppliers;
-    fillField(pagina, par, tipo, selector);
-    
-    function putSuppliers(dt) {
+    fillField(pagina, par, tipo, selector); 
+}
+
+function putSuppliers(dt) {
+    if (dt[0].sup_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
             $('#txtSupplier').append(H);
         });
     }
+ 
 }
 
 function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
@@ -834,7 +829,7 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
     
 
     function putProjectContent(dt) {
-        console.log('Registros', dt);
+        // console.log('Registros', dt);
         let tabla;
 
         switch (bn) {
@@ -1230,43 +1225,8 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
             default:
                 break;
         }
-        
-        
-        
-        // widthTable(tblprod);
     }
 }
-function activaCampos(pjtId) {
-    /* $('.list-finder').removeClass('hide-items');
-    getProjectContent(pjtId); */
-}
-
-function activaCheck() {
-    // 
-    /* $('#checkIsAll').click(function () {
-        $('input[type="checkbox"]').attr('checked', $('#checkIsAll').is(':checked'));
-    }); */
-
-   /*  $('.check-box-prj').click(function(){
-        bn = $(this).val();
-        //console.log(bn);
-    }); */
-/* 
-    $('#checkBudget').click(function () {
-        console.log($('#checkBudget').is(':checked'));
-        if($('#checkBudget').is(':checked')){
-            $('#tblProducts').parents().addClass('objHidden');
-            $('#tblSecond').parents().removeClass('objHidden');
-            //
-        }else{
-            console.log('L');
-            $('#tblProducts').parents().removeClass('objHidden');
-            $('.divSecond').addClass('objHidden');
-        }
-        
-    }); */
-}
-
 
 
 function findCampos(pjtId) {
@@ -1297,9 +1257,7 @@ function findCampos(pjtId) {
     if ($('#txtSupplier').val()>0 && bn == '8') {
         bandera  = 2;
     }
-     console.log(valorfchin(fechaIni),fechaFin,findAna,findCli,bandera, bn);
-    // let projDateStart = moment(fechaIni, 'DD/MM/YYYY').format('DD/MM/YYYY');
-    //console.log(bn);
+    //  console.log(valorfchin(fechaIni),fechaFin,findAna,findCli,bandera, bn);
     if(bn >0 ){
         getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera); 
     }
@@ -1340,34 +1298,9 @@ function printReport() {
     if ($('#txtSupplier').val()>0 && bn == '8') {
         ba  = 2;
     }
-    console.log('Id-User', u, 'Name', n);
+    // console.log('Id-User', u, 'Name', n);
     window.open(
         `${url}app/views/ProjectReports/ProjectReportsReport.php?v=${v}&u=${u}&n=${n}&h=${h}&e=${e}&c=${c}&p=${p}&fs=${fs}&fe=${fe}&ba=${ba}`,
         '_blank'
     );
-}
-
-function findMaintenance(pjtId) {
-  
-}
-
-function findDiscount(pjtId) {
-   
-}
-
-function updateTotals() {
-   
-}
-
-function widthTable(tbl) {
-    /* $.each(size, (i, v) => {
-        let thcel = tbl.find('thead tr').children('th').eq(i);
-        let tdcel = tbl.find('tbody tr').children('td').eq(i);
-        thcel.css({ width: v.s + 'px' });
-        tdcel.css({ width: v.s + 'px' });
-    });
-
-    let wdt = size.reduce((acc, sz) => acc + sz.s, 0);
-    tbl.css({ width: wdt + 'px' });
-    tbl.sticky({ top: 'thead tr:first-child' }); */
 }

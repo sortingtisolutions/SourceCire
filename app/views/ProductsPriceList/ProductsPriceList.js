@@ -12,11 +12,9 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getCategories();
-        // deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
         modalLoading('S');
         getPriceList(0);
-        // modalLoading('H');
     }, 100);
 }
 
@@ -65,8 +63,8 @@ function putPriceList(dt) {
         });
         setting_table();
         active_icons();
-        modalLoading('H');
     }
+    modalLoading('H');
 }
 
 /** +++++  configura la table de productos */

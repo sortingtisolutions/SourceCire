@@ -83,8 +83,7 @@ if ($type==1) {
     LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
     INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
     WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level = 'K' GROUP BY cn.pjtcn_id";
-    }
-    
+    }   
 }else{
     if ($desgloce == 1) {
         $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku,sr.ser_situation,
@@ -296,8 +295,7 @@ $html = '
                         <td class="concept">&nbsp;</td>
                         <td class="data">&nbsp;</td>
                     </tr> 
-                </table>
-                  
+                </table>  
             </td>
         </tr> -->
         

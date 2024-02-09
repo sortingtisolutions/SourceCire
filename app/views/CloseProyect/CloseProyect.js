@@ -16,6 +16,7 @@ function inicial() {
     getCoins();
     getCategories();
     setting_table();
+
     $('#btn_exchange').on('click', function () {
         exchange_apply(0);
     });
@@ -221,7 +222,6 @@ function putCategories(dt) {
 function putProducts(dt) {
     var ps = $('#txtProducts').offset();
     $('#listProducts .list-items').html('');
-    //console.log(dt);
     $('#listProducts').css({top: ps.top + 30 + 'px'});
     $('#listProducts').slideUp('100', function () {
         $('#listProducts .list-items').html('');
@@ -270,8 +270,6 @@ function putProducts(dt) {
 function putInvoiceList(dt) {
     var fc = $('#txtInvoice').offset();
     $('#listInvoice .list-items').html('');
-    //console.log(dt);
-    //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
     $('#listInvoice').css({top: fc.top + 30 + 'px'});
     $('#listInvoice').slideUp('100', function () {
         //$('.list-group #listInvoice').slideUp('100', function () {
@@ -306,7 +304,6 @@ function putInvoiceList(dt) {
     $('#listInvoice .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
-        //console.log(prdId);
         $('#txtInvoice').val(prdNm);
         $('#txtIdInvoice').val(prdId);
         $('#listInvoice').slideUp(100);
@@ -318,7 +315,6 @@ function putInvoiceList(dt) {
 function putSupplierList(dt) {
     var sl = $('#txtSuppliers').offset();
     $('#listSupplier .list-items').html('');
-    //console.log(sl);
     $('#listSupplier').css({top: sl.top + 30 + 'px'});
     $('#listSupplier').slideUp('100', function () {
         $('#listSupplier .list-items').html('');
@@ -330,7 +326,6 @@ function putSupplierList(dt) {
     });
 
     $('#txtSuppliers').on('focus', function () {
-        
         $('#listSupplier').slideDown('fast');
     });
 
@@ -352,21 +347,18 @@ function putSupplierList(dt) {
     $('#listSupplier .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
-        //console.log('selecciona elemento', prdId,'---', prdNm);
         $('#txtSuppliers').val(prdNm);
         $('#txtIdSuppliers').val(prdId);
         $('#listSupplier').slideUp(100);
         validator();
     });
 }
-
 // reubica el input de los productos
 function relocation_products() {
     var ps = $('#txtProducts').offset();
 
     $('#listProducts').css({top: ps.top + 30 + 'px'});
 }
-
 // Valida los campos
 function validator() {
     let ky = 0;
@@ -423,8 +415,6 @@ function validator() {
         msg += 'Debes indicar la serie del producto';
     }
 
-
-
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
     } else {
@@ -462,7 +452,6 @@ function exchange_apply() {
     let serpetimp = $('#txtPedimento').val();
 
     serie++;
-    //console.log('Paso 1 ', serie);
     //update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
 
     if (quantity > 1) {
@@ -489,7 +478,6 @@ function exchange_apply() {
             "serpetimp"  : "${serpetimp}"
 
         }]`;
-            //console.log(par);
             fill_table(par);
         }
     } else {
@@ -510,7 +498,6 @@ function exchange_apply() {
             "sercostimp"  : "${sercostimp}",
             "serpetimp"  : "${serpetimp}"
         }]`;
-        //console.log(par);
         fill_table(par);
     }
     clean_selectors();
@@ -545,9 +532,7 @@ function fill_table(par) {
             comments: `<div>${par[0].comment}</div>`
         })
         .draw();
-
     $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
-
     btn_apply_appears();
 
     $('.edit')
@@ -559,7 +544,7 @@ function fill_table(par) {
 }
 
 function btn_apply_appears() {
-    console.log('Paso 4 ');
+    // console.log('Paso 4 ');
     let tabla = $('#tblExchanges').DataTable();
     let rengs = tabla.rows().count();
     if (rengs > 0) {
@@ -576,7 +561,6 @@ function clean_selectors() {
     $('#txtQuantity').val('');
     $('#txtSerie').attr('disabled', false);
     $('#txtSerie').val('');
-    
     $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
@@ -621,7 +605,7 @@ function read_exchange_table() {
             let docinvoi = $(this).attr('data-content').split('|')[6];
 
             let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}`;
-            console.log(truk);
+            // console.log(truk);
             build_data_structure(truk);
         });
     }
@@ -656,14 +640,12 @@ function build_data_structure(pr) {
     "cpe" :  "${el[16]}",
     "bra" :  "${el[17]}"
 }]`;
-    console.log(' Antes de Insertar', par);
+    // console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
 
-
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
-    //   console.log(pr);
     var pagina = 'MoveStoresIn/SaveExchange';
     var par = pr;
     var tipo = 'html';
@@ -684,7 +666,6 @@ function exchange_result(dt) {
 
 function updated_stores(dt) {
     // console.log(dt);
-
     $('.resFolio').text(refil(folio, 7));
     $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
@@ -694,8 +675,6 @@ function updated_stores(dt) {
         $('.btn-print').trigger('click');
     });
 }
-
-/* Generación del folio  */
 
 /**  ++++ Omite acentos para su facil consulta */
 function omitirAcentos(text) {

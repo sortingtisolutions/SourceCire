@@ -26,7 +26,6 @@
     <div class="invoice__section invoice__section-button invoice-border">
         <span class="invoice_button" id="newQuote"><i class="fas fa-tablet-alt"></i> Limpiar pantalla</span>
      </div>
-<!-- BOTON DE RESETEO DE PANTALLA END -->
 
 <!-- PARRILLA DE PRODUCTOS SELECCIONADOS EN LA COTIZACION START -->
     <div class="invoice__section invoice__section-grid invoice-border">
@@ -143,10 +142,8 @@
      </div>
 <!-- PARRILLA DE PRODUCTOS SELECCIONADOS EN LA COTIZACION END -->
 
-
 <!-- Totales y versiones -->
     <div class="invoice__section invoice__section-sidebar">
-
     <!-- Totales -->
         <div class="sidebar__totals invoice-border">
             <table>

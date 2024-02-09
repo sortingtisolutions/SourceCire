@@ -5,6 +5,7 @@
 
 class ProjectClosedController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -36,7 +37,6 @@ class ProjectClosedController extends Controller
         } 
         $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
         echo $res;
-
     }
 
     /* -- Listado de proyectos  ------------------------------------------------------------------ */

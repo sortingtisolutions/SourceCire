@@ -5,7 +5,6 @@
 
 class StoreProductsListController extends Controller
 {
-
     private $session;
     public $model;
 

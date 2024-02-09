@@ -5,6 +5,7 @@
 
 class CustomersController extends Controller
 {
+	
 	private $session;
 	public $model;
 

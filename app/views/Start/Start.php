@@ -31,7 +31,6 @@ function codificar($dato) {
 	}
 	$resultado = $resultado . '+' . $arrayLetras[$num];
 	$resultado = base64_encode($resultado);
-	
 	//echo "<script>console.log('Resultado: " . $resultado . "' );</script>";
 	return $resultado;
 }
