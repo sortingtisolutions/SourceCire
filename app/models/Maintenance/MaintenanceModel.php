@@ -268,6 +268,7 @@ public function listEstatusMantenimiento($params)
                     ('1','$storesId', '$serieId','$producId');";
         $this->db->query($qry4);
 
+
         return $pjDetail;
 
     }
@@ -286,16 +287,20 @@ public function listEstatusMantenimiento($params)
         $idMaintain 	= $this->db->real_escape_string($params['idMaintain']);
         $cost 	= $this->db->real_escape_string($params['cost']);
         $idProject 	= $this->db->real_escape_string($params['idProject']);
+
+        
         
         if($status == 3){
             // Obtenemos la serie actual para poner su detail en un estatus de 'usado'
-            $qry3="SELECT sr.pjtdt_id FROM ctt_series AS sr
+            $qry3="SELECT sr.pjtdt_id, sr.prd_id FROM ctt_series AS sr
             WHERE sr.ser_id = $serieId LIMIT 1;";
             $result1 =  $this->db->query($qry3);
             $serie_actual = $result1->fetch_object();
 
             if ($serie_actual != null) {
                 $pjtdt_id  = $serie_actual->pjtdt_id;
+                $producId  = $serie_actual->prd_id;
+
                 $query = "UPDATE ctt_projects_detail SET sttd_id = 4 where pjtdt_id='$pjtdt_id'";
                 $this->db->query($query);
             }
@@ -329,7 +334,7 @@ public function listEstatusMantenimiento($params)
                         WHERE ser_id = '$serieId';";
                 $this->db->query($qry1);
             }
-           
+
         }else{
             // Vemos que si existen series a futuro que inicien antes de que el mantenimiento termine entonces cambie de serie o la coloque como pendiente.
             $query = "SELECT sr.ser_id serId, sr.prd_id, pd.pjtdt_id, pd.pjtvr_id, pd.sttd_id, pjp.pjtpd_day_start, pjp.pjtpd_day_end
@@ -384,7 +389,6 @@ public function listEstatusMantenimiento($params)
             
         }
         
-
         $qry2 = "UPDATE ctt_products_maintenance
                     SET 
                         pmt_days = '$days',
@@ -399,7 +403,21 @@ public function listEstatusMantenimiento($params)
                     WHERE pmt_id = '$idMaintain'";
         $this->db->query($qry2);
 
+        $qryPrd = "SELECT sr.prd_id FROM ctt_series AS sr WHERE sr.ser_id = $serieId";
+        $result1 =  $this->db->query($qryPrd);
+        $prod = $result1->fetch_object();
         
+        if ($prod != null) {
+            $prdId = $prod->prd_id;
+
+            $qry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+                    INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+                    INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                    INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                    WHERE pd.prd_id = $prdId AND sr.ser_situation != 'D') WHERE prd_id = $prdId";
+                
+            $this->db->query($qry);
+        }
 
         return $idProject;
     }

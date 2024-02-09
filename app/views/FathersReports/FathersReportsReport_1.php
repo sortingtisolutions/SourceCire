@@ -26,10 +26,10 @@ $h = explode("|",$conkey);
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 
 $qry = "SELECT * from ctt_budget as bg
-INNER JOIN ctt_version AS vr ON vr.ver_id=bg.ver_id
-INNER JOIN ctt_projects AS pj ON pj.pjt_id=vr.pjt_id
-INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
-WHERE pj.pjt_id IN ($proj_id)";
+        INNER JOIN ctt_version AS vr ON vr.ver_id=bg.ver_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id=vr.pjt_id
+        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
+        WHERE pj.pjt_id IN ($proj_id)";
 
 $res = $conn->query($qry);
 
@@ -53,8 +53,7 @@ $header = '
             </table>
         </div>
     </header>';
-
-           
+        
 $html = '
 <section>
 <div class="container">
@@ -68,7 +67,6 @@ $html = '
     
     <!-- End Datos de identificación  -->
 ';
-
 
 $html .= '
                     
@@ -105,10 +103,7 @@ $html .= '
                        
                     </tbody>
                 </table>
-                <!-- End Tabla de costo base  -->';
-           
-
-
+                <!-- End Tabla de costo base  -->';       
 // Pie de pagina
 
 $foot = '
@@ -132,31 +127,24 @@ $foot = '
             <tr>
                 <td class="addData">
                     reservaciones@cttrentals.com, 
-                
                 </td>
                 <td class="addData">
                     presupuestos@cttrentals.com,
                 </td>
                 <td class="addData">
-                
                     proyectos@cttrentals.com,
                 </td>
                 <td class="addData">
                     cotizaciones@cttrentals.com.
                 </td>
             </tr>
-
-            
         </table>
         <table class="table-address">
             
             <tr>
-                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
-                
+                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>                
             </tr>
-            
-            
-            
+                        
         </table>
     </footer>
 ';

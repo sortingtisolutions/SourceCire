@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class AssignFreelanceModel extends Model
 {
+    
     public function __construct()
     {
       parent::__construct();
@@ -147,7 +148,6 @@ class AssignFreelanceModel extends Model
 
     public function UpdateAssignFreelance($param)
     {
-        
         $ass_id	= $this->db->real_escape_string($param['ass']);
         $pry_id	= $this->db->real_escape_string($param['pry']);
         $free_id 	= $this->db->real_escape_string($param['free']);

@@ -107,8 +107,6 @@ function settingTable() {
    /*  activeIcons(); */
 }
 
-
-
 function putlistProjects(dt) {
     console.log(dt);
     $('#lstProjects').html('');
@@ -137,19 +135,6 @@ function putPayments(dt) {
     if (prds[0].pym_id > 0) {
         
         $.each(prds, function (v, u) {
-        
-                /* var H = `
-                <tr id="${u.pym_id}">
-                <!-- <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td> -->
-                    <td class="supply">${u.pjt_name}</td>    
-                    <td class="sku" data-content="${u.pym_folio}">${u.pym_folio}</td>
-                    <td class="sku">${mkn(u.pym_amount,'n')}</td>    
-                    <td class="date">${u.pym_date_paid}</td>
-                    <td class="supply">${u.wtp_description}</td>
-                    <td class="date">${u.pym_date_done}</td>
-                    <td class="sku">${u.emp_reg}</td>
-                </tr>`;
-                $('#tblPymApplied tbody').append(H); */
                 tabla.row
                 .add({
                     //editable: `<i class='fas fa-edit toLink' id ="${u.pjt_id}"></i><i class="fas fa-times-circle kill"></i>`,
@@ -164,7 +149,6 @@ function putPayments(dt) {
                 .draw();
                 /*  */
             }
-        
         );
         // console.log('2', prds);
         activeIcons();
@@ -175,7 +159,6 @@ function putPayments(dt) {
 
 /** +++++  Activa la accion de eventos */
 function activeIcons() {
-    /**  ---- Acciones de Guardar categoria ----- */
     $('#btnSave')
         .unbind('click')
         .on('click', function () {
@@ -193,12 +176,10 @@ function activeIcons() {
         .unbind('click')
         .on('click', function () {
             $('#lstProjects').val('');
-            // settingTable();
             getPaymentsAplied();
             getlistProjects();
             
         });
-
 }
 
 function mkn(cf, tp) {
@@ -214,122 +195,4 @@ function mkn(cf, tp) {
     }
     return nm;
 }
-
-/** -------------------------------------------------------------------------- */
-// function saveSubcategory() {
-//     let subcatNm = $('#txtWtpDescription').val().toUpperCase();
-//     let subcatCd = $('#txtWtpCve').val().toUpperCase();
-//     let categyId = $('#txtWtpStatus').val();
-
-//     var par = `
-//     [{
-//         "sbcName"   : "${subcatNm}",
-//         "sbcCode"   : "${subcatCd}",
-//         "catId"     : "${categyId}"
-//     }]`;
-
-//     subs = null;
-//     var pagina = 'PaymentsApplied/SaveSubcategory';
-//     var tipo = 'html';
-//     var selector = putSaveSubcategory;
-//     fillField(pagina, par, tipo, selector);
-// }
-/** ---- Agrega el nuevo registro a la tabla ---- */
-// function putSaveSubcategory(dt) {
-//     if (subs != null) {
-//         $('#btnClean').trigger('click');
-//         let ix = goThroughSubcategory(dt);
-//         let tabla = $('#tblPymApplied').DataTable();
-//         tabla.draw();
-//     } else {
-//         setTimeout(() => {
-//             getPaymentsAplied();
-//             putSaveSubcategory(dt);
-//         }, 100);
-//     }
-// }
-/** ---- Start EDITA SUBCATEGORIA ---- */
-/** ---- Llena los campos del formulario para editar ---- */
-// function editSubcategory(sbcId) {
-//     let ix = goThroughSubcategory(sbcId);
-//     $('#txtWtpDescription').val(subs[ix].sbc_name);
-//     $('#txtIdSubcategory').val(subs[ix].sbc_id);
-//     $('#txtWtpCve').val(subs[ix].sbc_code);
-//     $('#txtWtpStatus').val(subs[ix].cat_id);
-// }
-/** ---- Actualiza la subcategoria seleccionada ---- */
-// function updateSubcategory() {
-//     var sbcId = $('#txtIdSubcategory').val();
-//     var sbcName = $('#txtWtpDescription').val();
-//     var sbcCode = $('#txtWtpCve').val();
-//     var catId = $('#txtWtpStatus').val();
-//     var par = `
-//         [{
-//             "sbcId"    : "${sbcId}",
-//             "sbcName"  : "${sbcName}",
-//             "sbcCode"  : "${sbcCode}",
-//             "catId"    : "${catId}"
-//         }]`;
-//     //console.log('Datos : ', par);
-//     subs = null;
-//     var pagina = 'PaymentsApplied/UpdateSubcategory';
-//     var tipo = 'html';
-//     var selector = putUpdateSubcategory;
-//     fillField(pagina, par, tipo, selector);
-// }
-// /** ---- Actualiza el registro en la tabla de subcategorias ---- */
-// function putUpdateSubcategory(dt) {
-//     if (subs != null) {
-//         let ix = goThroughSubcategory(dt);
-//         $('#btnClean').trigger('click');
-//         let tabla = $('#tblPymApplied').DataTable();
-//         tabla.draw();
-//         deep_loading('C');
-//     } else {
-//         setTimeout(() => {
-//             getPaymentsAplied();
-//             putUpdateSubcategory(dt);
-//         }, 100);
-//     }
-// }
-
-/** ---- Start ELIMINA SUBCATEGORIA ---- */
-/** ---- Borra la subcategorias ---- */
-// function deleteSubcategory(sbcId) {
-//     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
-
-//     if (cn != 0) {
-//         $('#confirmModal').modal('show');
-//         $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
-//         $('#N').html('Cancelar');
-//         $('#confirmButton').html('').css({display: 'none'});
-//         $('#Id').val(0);
-//     } else {
-//         $('#confirmModal').modal('show');
-
-//         $('#confirmModalLevel').html('¿Seguro que desea borrar la subcategoria?');
-//         $('#N').html('Cancelar');
-//         $('#confirmButton').html('Borrar subcategoria').css({display: 'inline'});
-//         $('#Id').val(sbcId);
-//         console.log('BORRAR REGISTRO');
-//         $('#confirmButton').on('click', function () {
-//             var pagina = 'PaymentsApplied/DeleteSubcategory';
-//             var par = `[{"sbcId":"${sbcId}"}]`;
-//             var tipo = 'html';
-//             var selector = putDeleteSubcategory;
-//             fillField(pagina, par, tipo, selector);
-//         });
-//     }
-// }
-// /** ---- Elimina el registro de la subcategoria borrada ---- */
-// function putDeleteSubcategory(dt) {
-//     console.log('BORRAR LINEA');
-//     getCategories();
-//     let tabla = $('#tblPymApplied').DataTable();
-//     tabla
-//         .row($(`#${dt}`))
-//         .remove()
-//         .draw();
-//     $('#confirmModal').modal('hide');
-// }
 

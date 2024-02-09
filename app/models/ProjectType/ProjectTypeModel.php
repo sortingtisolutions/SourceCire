@@ -4,6 +4,7 @@ require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ProjectTypeModel extends Model
 {
+	
 	public function __construct()
 	{
 		parent::__construct();

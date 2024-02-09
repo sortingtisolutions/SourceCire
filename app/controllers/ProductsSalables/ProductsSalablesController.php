@@ -5,6 +5,7 @@
 
 class ProductsSalablesController extends Controller
 {
+    
     private $session;
     public $model;
 

@@ -16,9 +16,9 @@
                 <div class="mvst_list tblProdMaster">
                     
                     <div class="row rowTop">
-                        <h1>Listado de Clientes con un Proyecto</h1>
-
+                        <h1>Listado de Clientes que han tenido un Proyecto</h1>
                     </div>
+                    
                     <div id="dvProducts"></div>
                     <table class="display nowrap"  id="tblCustomers" style="min-width: 1700px; font-size: 0.7rem">
                         <thead>

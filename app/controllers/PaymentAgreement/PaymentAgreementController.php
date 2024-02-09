@@ -5,6 +5,7 @@
 
 class PaymentAgreementController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -42,10 +43,10 @@ class PaymentAgreementController extends Controller
     }
 
 // Lista los almacenes 
-    public function listStores($request_params)
+    public function listProjects($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listStores();
+        $result = $this->model->listProjects();
             $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -55,6 +56,24 @@ class PaymentAgreementController extends Controller
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
                 $res =  '[{"str_id":"0"}]';	
+            }
+            echo $res;
+    }    
+
+    // Lista los almacenes 
+    public function getAmountProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getAmountProject($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"pjt_id":"0"}]';	
             }
             echo $res;
     }    

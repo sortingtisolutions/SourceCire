@@ -10,7 +10,6 @@ $(document).ready(function () {
 function cargaIndicadores() {
     //getTotalProyects();
     getKPIS();
-    //----
     getProyects();
     $('#projects').unbind('click')
     .on('click', function () {

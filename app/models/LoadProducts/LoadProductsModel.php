@@ -131,12 +131,7 @@ public function SaveDocumento($request_params)
 							# Seguro
 							$estatus = $estatus.'7,';
 						}
-						/* if (strlen($LoadProducts[10]) == 1) {
-							$prd_level = 1;
-						}else{
-							$prd_level = 0;
-							$estatus = $estatus.'11';
-						} */
+
 						if ($LoadProducts[10] == 'PI' || $LoadProducts[10] == 'PF' || $LoadProducts[10] == 'PV') {
 							$typeacc = 1;
 							
@@ -223,17 +218,7 @@ public function SaveDocumento($request_params)
 		LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
 		LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
 		$result = $this->db->query($qry);
-		//$lista = array();
-		/* while ($row = $result->fetch_row()){
-			$item = array("doc_id" =>$row[0],
-						"doc_code" =>$row[1],
-						"doc_name" =>$row[2],
-						"doc_type" =>$row[3],
-						"dot_id" =>$row[4],
-						"dot_name" =>$row[5],
-						"doc_admission_date" =>$row[6]);
-			array_push($lista, $item);
-		} */
+	
 		return $result;
 	}
 

@@ -5,6 +5,7 @@
 
 class SearchIndividualProductsController extends Controller
 {
+    
 	private $session;
     public $model;
 

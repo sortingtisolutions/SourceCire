@@ -22,13 +22,6 @@ function inicial() {
         $('#NomDocumento').val(filename.split('.').slice(0, -1).join('.'));
         var extenArchivo =  filename.split('.').pop().toLowerCase();
         $('#ExtDocumento').val(extenArchivo);
-
-        /* if(extenArchivo == "jpg" || extenArchivo == "pdf" || extenArchivo == "png"){
-        }else{
-            $('#filtroDocumentoModal').modal('show');
-            $('#cargaFiles').val('');
-        } */
-
     });
 
     //Open modal *
@@ -44,9 +37,7 @@ function inicial() {
 
     $('#GuardarProcess').on('click', function(){   
         loadProcess();
-    });
-    //borra almacen +
-    
+    });   
 
     $('#LimpiarFormulario').on('click', function () {
       LimpiaModal();
@@ -61,42 +52,9 @@ function inicial() {
     $('#DescargarEjemplo').on('click', function(){   
         VerDocumento();
     });
-    /* $('#verMotivo')
-    .unbind('click').on('click', function () {
-        var errores = $('#IdErrores').val().split(',');
-        limpiarModalErrores();
-        $.each(errores, function(v,u){
-            console.log($('#codigo-' + u).text());
-            $('#codigo-' + u).removeClass('objHidden');
-        });
-        $('#MotivosModal').modal('show');
-        
-        $('#btn_hide_modal').on('click', function () {
-            $('#MotivosModal').modal('hide');
-        });
-    }); */
-    /* $('#DocumentosTable tbody').on('click', 'tr', function () {
-      positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
-
-      setTimeout(() => {
-         RenglonesSelection = table.rows({ selected: true }).count();
-         if (RenglonesSelection == 0 || RenglonesSelection == 1) {
-            $('.btn-apply').addClass('hidden-field');
-         } else {
-            $('.btn-apply').removeClass('hidden-field');
-         }
-     }, 10);
-   }); */
+    
 }
-/* function limpiarModalErrores(){
-    $('#codigo-1').addClass('objHidden');
-    $('#codigo-2').addClass('objHidden');
-    $('#codigo-3').addClass('objHidden');
-    $('#codigo-4').addClass('objHidden');
-    $('#codigo-5').addClass('objHidden');
-    $('#codigo-6').addClass('objHidden');
-    $('#codigo-7').addClass('objHidden');
-} */
+
 function VerDocumento() {
     $.ajax({
         url: 'app/assets/csv_ejemplos/productos.csv',
@@ -154,8 +112,8 @@ function settingTable() {
        order: [[1, 'asc']],
        dom: 'Blfrtip',
        lengthMenu: [
-           [500, 1000, -1],
-           [500, 1000, 'Todos'],
+           [500, 1000, 2000, -1],
+           [500, 1000, 2000, 'Todos'],
        ],
        buttons: [
            {
@@ -188,15 +146,6 @@ function settingTable() {
                //Aquí es donde generas el botón personalizado
                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
            },
-          /*  {
-            // Boton aplicar cambios
-            text: 'Descargar Ejemplo',
-            footer: true,
-            className: 'btn-apply',
-            action: function (e, dt, node, config) {
-                VerDocumento();
-            },
-            }, */
        ],
        pagingType: 'simple_numbers',
         language: {
@@ -382,14 +331,12 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //console.log('subir datos');
         //modalLoading('S');
         var pagina = 'LoadProducts/loadProcess';
         var par = `[{"dot_id":""}]`;
         var tipo = 'json';
         var selector = put_load_process;
         fillField(pagina, par, tipo, selector); 
-        
         // activeButtons();
         window.location.reload();
         $('#confirmarCargaModal').modal('hide');
@@ -414,7 +361,6 @@ function loadProcess() {
         fillField(pagina, par, tipo, selector); 
         //console.log('eliminar');
         $('#BorrarDocumentosModal').modal('hide');
-        // activeButtons();
         window.location.reload();
         //getDocumentosTable();
     });
@@ -427,7 +373,6 @@ function putFiles(dt) {
    $('#DocumentosTable tbody').html('');
 
    if(dt[0].prd_id > 0){
-    
        $.each(pd, function (v, u) {
             let icon;
             if (u.result == 'EXITOSO') {
@@ -478,8 +423,6 @@ function activarBoton(){
         $.each(errores, function(v,u){
             if(u > 0){
                 motivosError = motivosError + ',' + u;
-                
-                //console.log(motivosError);
             }
             if (u == 'EXITOSO') {
                 motivosError = 0;

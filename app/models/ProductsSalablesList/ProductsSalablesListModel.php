@@ -34,7 +34,6 @@ class ProductsSalablesListModel extends Model
 // Obtiene los comentarios
     public function getComments($params)
     {
-
         $salId = $this->db->real_escape_string($params['salId']);
 
         $qry = "SELECT * FROM ctt_comments 

@@ -30,7 +30,6 @@
                                     <input id="txtCrDescription" name="txtCrDescription" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtCrDescription">Descripcion</label>
                                 </div>
-                                <!-- <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" > -->
                             </div>
                            
                             <div class="row">
@@ -38,7 +37,6 @@
                                     <input id="txtCodMotivos" name="txtCodMotivos" type="text" class="form-control form-control-sm"  maxlength="2">
                                     <label for="txtCodMotivos">Codigo asignado a la etapa</label>
                                 </div>
-                                <!-- <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" > -->
                             </div>
                             <!-- Botones -->
                             <div class="row">
@@ -47,9 +45,7 @@
                                     <button type="button" class="btn btn-sm btn-danger"  id="btnClean">Limpiar</button>
                                 </div>
                             </div>
-
                         </form>
-
                     </div>
                 </div>
             </div>

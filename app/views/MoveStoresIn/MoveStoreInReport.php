@@ -12,7 +12,7 @@ $uname = $_GET['n'];
 $totalBase = 0;
 $totalTrip = 0;
 $totalTest = 0;
-$totalInsr = 0;         //      Total del seguro
+$totalInsr = 0;         // Total del seguro
 $totalMain = 0;
 $totalInsrGral = 0;
 
@@ -158,7 +158,6 @@ $html = '
             </table>
             <!-- End Datos de identificación  -->
 ';
-
 
 /* Tabla de equipo base -------------------------  */
     if ($equipoBase == '1'){
@@ -358,7 +357,6 @@ $html = '
     }
 /* Tabla de equipo extra -------------------------  */
 
-
 /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1'){
         $html .= '
@@ -457,7 +455,6 @@ $html = '
         
     }
 /* Tabla de equipo dias -------------------------  */
-
 
 /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1'){
@@ -558,8 +555,6 @@ $html = '
     }
 /* Tabla de equipo subarrendo -------------------------  */
 
-
-
 /* Tabla totales -------------------------  */
     $html .= '
     
@@ -623,11 +618,6 @@ $html = '
 
 /* Tabla totales -------------------------  */
 
-
-
-
-
-
 // Pie de pagina
 $foot = '
     <footer>
@@ -663,7 +653,6 @@ $foot = '
 ';
 
 
-
 $css = file_get_contents('../../assets/css/reports_p.css');
 
 ob_clean();
@@ -689,8 +678,6 @@ $mpdf->Output(
     "Cotizacion.pdf",
     \Mpdf\Output\Destination::INLINE
 );
-
-
 // "Cotizacion-". $items[0]['ver_code'].".pdf",
 
 function decodificar($dato) {

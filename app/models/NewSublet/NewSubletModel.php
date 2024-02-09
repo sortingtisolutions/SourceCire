@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class NewSubletModel extends Model
 {
-
     public function __construct()
     {
       parent::__construct();
@@ -153,8 +152,6 @@ public function NextSkuProduct($param)
         $prd  = $this->db->real_escape_string($param['prd']);
         $quantity  = $this->db->real_escape_string($param['prdqty']); // *** Ed
         
-
-        //$exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
         $ser_status         = '1';
         $ser_situation      = 'D';
         $ser_stage          = 'D';

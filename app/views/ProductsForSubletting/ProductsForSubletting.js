@@ -7,7 +7,6 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    // folio = getFolio();
     setting_table();
     get_Proyectos();
     get_coins();
@@ -176,7 +175,6 @@ function setting_table() {
     });
 }
 
-
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
@@ -200,8 +198,7 @@ function put_Proyectos(dt) {
 
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
-    
-    console.log('put_Products-', dt);
+    // console.log('put_Products-', dt);
     pd = dt;
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
@@ -213,7 +210,6 @@ function put_Products(dt) {
     if (pd[0].prd_name != undefined) {
         $.each(pd, function (v, u) 
         {
-            
             let datestart = u.sub_date_start;
             let dateend = u.sub_date_end;
 
@@ -328,6 +324,7 @@ function put_coins(dt) {
         let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
         $('#txtCoinType').append(H);
     });
+
     $('#txtCoinType').on('change', function () {
         validator();
     });
@@ -338,6 +335,7 @@ function put_suppliers(dt) {
         let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
         $('#txtSupplier').append(H);
     });
+
     $('#txtSupplier').on('change', function () {
         validator();
     });
@@ -348,6 +346,7 @@ function put_stores(dt) {
         let H = `<option value="${u.str_id}">${u.str_name}</option>`;
         $('#txtStoreSource').append(H);
     });
+
     $('#txtStoreSource').on('change', function () {
         validator();
     });
@@ -390,7 +389,7 @@ function updating_serie(acc) {
         "projecId"  :   "${projecId}",
         "projContId"  :   "${projContId}"
     }]`;
-    console.log(par);
+    // console.log(par);
     if (acc == 'add') {
         var pagina = 'ProductsForSubletting/saveSubletting';
     } else {
@@ -401,7 +400,7 @@ function updating_serie(acc) {
     fillField(pagina, par, tipo, selector); 
 }
 function put_save_subleting(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tr = $('#' + dt[0].pjtdt_id);
     $($(tr[0].cells[2])).html(dt[0].pjtdt_prod_sku);
     $($(tr[0].cells[3])).html(dt[0].sub_price);

@@ -118,18 +118,15 @@ function inicial() {
 
 function showModalComments() {
     let template = $('#commentsTemplates');
-
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
-    
     fillComments(pjtgbl);
 }
 
-function fillComments(pjtId) {
-    
+function fillComments(pjtId) { 
     getComments(pjtId);
 }
 
@@ -148,23 +145,20 @@ function putComments(dt) {
             fillCommnetElements(u);
         });
     }
-    
 }
 /** ***** CIERRA MODALES ******* */
 function closeModals(table) {
     $('.invoice__modal-general .modal__header .closeModal')
         .unbind('click')
         .on('click', function () {
-            automaticCloseModal();
-            
+            automaticCloseModal();  
         });
 }
+
 function automaticCloseModal() {
-    
     $('.invoice__modal-general').slideUp(400, function () {
         $('.invoice__modalBackgound').fadeOut(400);
         $('.invoice__modal-general .modal__body').html('');
-        
     });
 }
 
@@ -176,7 +170,6 @@ function fillCommnetElements(u) {
             <div class="comment__box comment__box-user" style="text-align: left; font-size: 0.9em; color: var(--in-oxford);">${u.com_user}</div>
         </div>
     `;
-
     $('.comments__list').prepend(H);
     //getComments_text(prjid);
 }
@@ -191,8 +184,6 @@ function listChgStatus() {
 
 // Obtiene el listado de los proyectos en etapa de pryecto
 function getProjects(concept) {
-    //let data = [{  pjtId: ${concept}', }, ];
-
     var pagina = 'ProjectClosed/listProjects';
     var par = `[{"pjtId":"${concept}"}]`;
     var tipo = 'JSON';
@@ -214,18 +205,15 @@ function putProjects(dt) {
 
     pjs.unbind('change').on('change', function () {
         deep_loading('O');
-        
-        // console.log('VAL-', $(this).val());
         let pjtId = $(this).val().split('|')[0];
         let cusId = $(this).val().split('|')[1];
         pjtgbl=pjtId;
         cusgbl=cusId;
         $('#txtReport').val(1);
-        // console.log('Variables',pjtgbl, cusgbl);
         $('#txtExpendab').html('0.00');
         let radio =  $('#RadioConceptos1').prop('checked');
         let type = radio == true ? 1 : 2;
-        console.log('type: ', type,'pjt', pjtId);
+        // console.log('type: ', type,'pjt', pjtId);
         activeProjectsFunctions(pjtId, type);
 
     });
@@ -233,7 +221,6 @@ function putProjects(dt) {
 }
 
 function activeProjectsFunctions(pjtId, type) {
-    
     findExpenda(pjtId);
     findExtraDiesel(pjtId);
     findDiscount(pjtId);
@@ -250,13 +237,12 @@ function activeProjectsFunctions(pjtId, type) {
        clean();
     }
     
-
     $('.sidebar__comments .toComment')
-    .unbind('click')
-    .on('click', function () {
-        showModalComments();
-        
+        .unbind('click')
+        .on('click', function () {
+            showModalComments(); 
     });
+
     $('#txtReport')
          .unbind('change')
          .on('change', function () {
@@ -267,17 +253,14 @@ function activeProjectsFunctions(pjtId, type) {
             if ($('#RadioConceptos2').prop('checked')) {
                 prjType = 2;
             } 
-            
             getProjectContent(pjtId, $('#txtReport').val(), prjType);
-         });
+    });
+
     $('#txtIva')
          .unbind('change')
          .on('change', function () {
             changeIva($('#txtIva').val());
          });
-    /* setTimeout(() => {
-        updateTotals();
-    }, 1000); */
     deep_loading('C');
 }
 
@@ -286,9 +269,9 @@ function changeIva(iva){
     totprjIva.html(fnm(liva, 2, '.', ','));
     updateTotals();
 }
+
 function activaCampos(pjtId, type, prjType) {
     $('.list-finder').removeClass('hide-items');
-    
     getProjectContent(pjtId, type, prjType);
 }
 
@@ -296,7 +279,6 @@ function getProjectContent(pjtId, type, prjType) {
     let data = [
         {pjtId: pjtId, type: type, prjType: prjType},
         ];
-
     var pagina = 'ProjectClosed/projectContent';
     var par = JSON.stringify(data);
     var tipo = 'JSON';
@@ -306,12 +288,10 @@ function getProjectContent(pjtId, type, prjType) {
 
 function putProjectContent(dt) {
     if (dt[0].pjtdt_id > 0){
-       
         tblprod.find('tbody').html('');
         verIdgbl=dt[0].ver_id;
         $.each(dt, function (v, u) {
             let costins=parseFloat(u.costo) + parseFloat(u.seguro);
-            // console.log(costins);
             let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
                         <td class="cn"><i class='fas fa-pen modif'></i></td>
                         <td class="lf">${u.prd_sku}</td>
@@ -326,7 +306,6 @@ function putProjectContent(dt) {
         });
     }    
     widthTable(tblprod);
-
     activeIcons();
 }
 
@@ -352,7 +331,6 @@ function activeIcons() {
                     $('.overlay_background').addClass('overlay_hide');
                 });
         });
-
 }
 
 function findExpenda(pjtId) {
@@ -393,7 +371,6 @@ function putTotalMaintenance(dt){
     let cfr = 0;
     man.val(fnm(dt[0].maintenance, 2, '.', ','));
     totman.html(fnm(dt[0].maintenance, 2, '.', ','));
-
     man.unbind('keyup').on('keyup', function () {
         let val = $(this).val();
         if (val == '') {
@@ -409,12 +386,10 @@ function getTotalEquipo(pjtId, equipo, type){
     var pagina = 'ProjectClosed/totalEquipo';
     var par = `[{"pjtId":"${pjtId}", "equipo":"${equipo}", "type":"${type}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putTotalEquipo;
     fillField(pagina, par, tipo, selector); 
 }
 
-// getTotalesProyecto
 // Obtener los datos totales para el proyecto
 function getTotalesProyecto(pjtId, type){
     var pagina = 'ProjectClosed/totalesProyecto';
@@ -427,19 +402,18 @@ function putTotalEquipo(dt){
     let cfr = 0;
     if (dt[0].section == '1') {
         totBase.html(fnm(dt[0].monto, 2, '.', ','));
-
     }
+
     if (dt[0].section == '2') {
         totExtra.html(fnm(dt[0].monto, 2, '.', ','));
-
     }
+
     if (dt[0].section == '3') {
         totDias.html(fnm(dt[0].monto, 2, '.', ','));
-
     }
+
     if (dt[0].section == '4') {
         totSubarrendo.html(fnm(dt[0].monto, 2, '.', ','));
-
     }
     
 }
@@ -464,8 +438,8 @@ function getTotalPrepago(pjtId, type){
 
 function putTotalPrepago(dt){
     totPrepago.html(fnm(dt[0].prp_amount, 2, '.', ','));
-    
 }
+
 function findDiscount(pjtId) {
     let cfr = 0;
     dis.val("0.00", 2, '.', ',');
@@ -494,7 +468,6 @@ function findExtraDiesel(pjtId) {
 
 function updateTotals() {
     let total = parseFloat(totprjIva.html().replace(/,/g, ''));
-
     total += parseFloat(totexp.html().replace(/,/g, ''));
     total += parseFloat(totman.html().replace(/,/g, ''));
     total += parseFloat(totdie.html().replace(/,/g, ''));
@@ -612,8 +585,6 @@ function putChgStatus(dt) {
 }
 
 function putSelectProduct(prdId) {
-    // listChgStatus();
-
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
@@ -622,9 +593,7 @@ function putSelectProduct(prdId) {
             let tbl = $(`#tblProducts tr[id="${prdId}"]`);
             $(tbl.find('td')[6]).text(prdCmgbl);
             $('#ProductModal .btn_close').trigger('click');
-        //LIMPIA EL CAMPO DEL MODAL
             $('#txtCommentPrd').val('');
-            // saveEditProduct(prdId);
         });
 }
 function printReport(verId, prjType, typeDes) {

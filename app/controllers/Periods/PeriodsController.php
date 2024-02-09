@@ -5,6 +5,7 @@
 
 class PeriodsController extends Controller
 {
+    
     private $session;
     public $model;
 

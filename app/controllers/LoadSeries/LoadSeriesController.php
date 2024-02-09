@@ -24,7 +24,7 @@
 		//REALIZA LISTA DE DOCUMENTOS DISPONIBLES
 		public function GetDocumento($request_params)
 		{
-	      $result = $this->model->GetDocumento($request_params);
+	      $result = $this->model->GetDocumentos($request_params);
 		  $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;

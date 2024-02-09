@@ -10,7 +10,6 @@
         visibility: hidden !important;
     }
 </style>
-<!-- Comentario prueba 2 -->
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
@@ -70,8 +69,7 @@
                 <!-- End área de listado -->
             </div>
            
-    </div>
-    
+    </div>  
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

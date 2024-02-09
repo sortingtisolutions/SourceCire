@@ -43,15 +43,14 @@ $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date
 
 $res = $conn->query($qry);
 
-
 // OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
 $query="SELECT cr.crp_id, cr.crp_name
-FROM ctt_subcategories AS sb 
-LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
-INNER JOIN ctt_projects_version AS bg on bg.prd_id = pd.prd_id 
-WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bg.pjtvr_section";
+        FROM ctt_subcategories AS sb 
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
+        INNER JOIN ctt_projects_version AS bg on bg.prd_id = pd.prd_id 
+        WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bg.pjtvr_section";
 $res2 = $conn->query($query);
 
 $categories=array();

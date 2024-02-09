@@ -8,7 +8,6 @@ class PrePaymentsController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new PrePaymentsModel();

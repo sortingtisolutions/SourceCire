@@ -15,14 +15,12 @@
             <div class="mvst_panel">
                 <div class="form-group">
                 <h4 id="titulo">Productos en Existencia</h4>
-
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtStoreSource" class="form-select form-select-sm required"><option value="0" data-content="||" selected>Seleccione...</option></select>
                             <label for="txtStoreSource" class="form-label">Almacén</label>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="selectRowCategorias" class="form-select form-select-sm required"><option value="0" data-content="||" selected>Seleccione...</option></select>
@@ -60,7 +58,6 @@
                     <div class="row" style="height: 10px">
 					</div>
 
-
                     <div class="row" >
 						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 								<div class="form-check">
@@ -94,17 +91,13 @@
 						</div>
 					</div>
 
-
                     <div class="row">
                         <div class="col-md-8 mb-5">
                             <button type="button" class="btn btn-sm btn-primary" id="btn_products">Cargar Datos</button>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-
 
             <div class="mvst_table" style="text-align:left">
 
@@ -154,7 +147,6 @@
     <!-- Start Formato para impresion -->
         <div class="prepress" id="format"></div>
     <!-- End Formato para impresion -->
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

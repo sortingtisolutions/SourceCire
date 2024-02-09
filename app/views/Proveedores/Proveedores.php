@@ -16,7 +16,6 @@
 						<h5 id="titulo">Nuevo Proveedor</h4>  
 						
 						<form id="formProveedor" class="row g-3 needs-validation" novalidate>
-
 							<div class="row" hidden>
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="IdProveedor" name="IdProveedor" type="text" class="form-control form-control-sm" >
@@ -190,7 +189,6 @@
 			</div>
 	</div>
 </div>
-
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="BorrarProveedorModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

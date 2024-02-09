@@ -105,7 +105,7 @@ function putAreas(dt) {
 
         $('#AreaEmpUsuario').on('change', function () {
             let catId = $(this).val();
-            console.log($(this).val());
+            // console.log($(this).val());
         });
     }
 }
@@ -173,7 +173,6 @@ function validaFormulario() {
     }
     // console.log($('#PassUsuario').val().length);
     return valor; 
-
 }
 
 //Edita el Usuario *
@@ -193,7 +192,7 @@ function EditUsuario(id, idPerfil) {
             data: {id: id},
             url: location,
             success: function (respuesta) {
-                console.log(respuesta);
+                // console.log(respuesta);
                 $('#IdUsuario').val(respuesta.usr_id);
                 $('#NomUsuario').val(respuesta.emp_fullname);
                 $('#UserNameUsuario').val(respuesta.usr_username);
@@ -451,8 +450,8 @@ function getUsuariosTable() {
                     info: false,
                 },
                 lengthMenu: [
-                    [25, 50,  -1],
-                    ['25', '50', 'Todo'],
+                    [50, 100,  -1],
+                    ['50', '100', 'Todo'],
                 ],
                 dom: 'Blfrtip',
                 buttons: [

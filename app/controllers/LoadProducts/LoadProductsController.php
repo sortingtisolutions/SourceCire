@@ -40,11 +40,7 @@
 
 		public function SaveDocumento($request_params)
 		{
-			//if($request_params['idDocumento'] == ""){
-				$result = $this->model->SaveDocumento($request_params);	  
-			/* }else{
-				$result = $this->model->ActualizaDocumento($request_params);	  
-			} */
+			$result = $this->model->SaveDocumento($request_params);	  
 			echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 

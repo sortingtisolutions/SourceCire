@@ -7,8 +7,7 @@
 </header>
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
-    <div class="contenido">
-            
+    <div class="contenido">           
         <div class="row mvst_group">
 
             <div class="mvst_panel">
@@ -22,7 +21,6 @@
                         </div>
                     </div>
 
-                 
                     <div class="row list-finder">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >
@@ -54,11 +52,8 @@
                             <button type="button" class="btn btn-sm btn-primary" id="btn_send_detail">Detalle de proyecto</button>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-
 
             <div class="mvst_table" style="text-align:left">
 
@@ -105,16 +100,9 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-            </div>
-
-
-        
-            
+            </div>        
         </div>
-
     </div>
-
-
 </div>
 
     <!-- Start Formato para impresion -->

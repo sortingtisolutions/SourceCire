@@ -43,7 +43,7 @@
 									<option value="Si"> Si</option>
                                 	<option value="No"> No</option>
 									</select>
-									<label for="transporteCtt" class="form-label">Transporte CTT </label>
+									<label for="transporteCtt" class="form-label">Transporte de CTT </label>
 								</div>
 							</div>
 							
@@ -61,7 +61,7 @@
 								</div>
 								<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
 									<input id="txtPlacas" name="txtPlacas" type="text" class="form-control form-control-sm" maxlength="8" style="text-transform:uppercase" autocomplete="off">
-									<label for="txtPlacas">Placas</label>
+									<label for="txtPlacas">Placas de la unidad</label>
 								</div>
 							</div>
 							

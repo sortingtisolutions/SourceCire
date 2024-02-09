@@ -14,7 +14,6 @@ require_once '../../../vendor/autoload.php';
         $getFile = fgets($file);
     }
 
-
     $html = getTemplate($getFile); 
     $head = getHeader(); 
     $foot = getFooter(); 

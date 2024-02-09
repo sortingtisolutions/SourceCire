@@ -7,7 +7,6 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    // folio = getFolio();
     setting_table();
     getListProducts();
 
@@ -88,14 +87,6 @@ function setting_table() {
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
             },
-            /* {
-                // Boton aplicar cambios
-                text: 'Imprimir',
-                className: 'btn-print hidden-field',
-                action: function (e, dt, node, config) {                    
-                    printProduct();
-                },
-            }, */
             {
                 // Boton aplicar cambios
                 text: 'Calendario',
@@ -171,10 +162,9 @@ function putProductsList(dt) {
         $('#txtIdProducts').val(prdId);
         $('#listProduct').slideUp(100);
         get_products(prdId);
-        
-        //validator();
     });
 }
+
 function sel_products(res) {
     //console.log('SELECC',res);
     if (res.length < 2) {
@@ -226,7 +216,6 @@ function putEvents(dt) {
 function put_Products(dt) {
     // console.log('put_Products-', dt);
     pd = dt;
-    
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
         ? $('#tblProductForSubletting tbody tr').remove()
@@ -253,26 +242,6 @@ function put_Products(dt) {
                 })
                 .draw();
         });
-        /* $('.toChange')
-        .unbind('click')
-        .on('click', function () {
-            console.log($(this).attr('id'));
-            getEvents($(this).attr('id'));
-            calendario('');
-            $('#CalendarModal').removeClass('overlay_hide');
-            $('#CalendarModal').fadeIn('slow');
-            $('#CalendarModal').draggable({
-                handle: ".overlay_modal"
-            });
-            //title= 'Serie';
-            $('.overlay_closer .title').html('');
-            $('#CalendarModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('#CalendarModal').addClass('overlay_hide');
-                });
-            
-    }); */
     }
 }
 
@@ -345,7 +314,7 @@ function printProduct() {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    console.log(p);   
+    // console.log(p);   
     window.open(
         `${url}app/views/ModulesCalendar/ModulesCalendarReport.php?p=${p}&u=${u}&n=${n}&h=${h}`,
         '_blank'

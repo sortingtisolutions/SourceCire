@@ -6,6 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
 		<div class="contenido ">
@@ -34,11 +35,6 @@
 						<hr>
 						<h6	class="nameProduct objet objHidden" style="font-size: 1rem; font-weight: bold; text-align: center">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
-
-						<!-- <input type="hidden" id="txtIdSerie" class="form-control">
-						<input type="hidden" id="txtIdStatus" class="form-control">
-						<input type="hidden" id="txtIdMaintain" class="form-control"> -->
-
 						
 						<div class="row ">    <!-- <div class="row objet objHidden"> -->
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -88,22 +84,7 @@
 							</div>
 							
 						</div>
-						<!-- <div class="row ">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtStatus" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
-									<option value="0" selected>Selecciona el estatus</option>
-								</select>
-								<label for="txtStatus">Estatus</label>
-							</div>
-						</div>
-						<div class="row ">
-							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtMotivo" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
-									<option value="0" selected>Selecciona el motivo de mantenimiento</option>
-								</select>
-								<label for="txtMotivo">Motivo de Mantenimiento</label>
-							</div>
-						</div> -->
+						
 						<div style="height:10px;"></div>
 						<hr>
 						<div class="row ">
@@ -178,11 +159,6 @@
 											<span class="intructions">&nbsp;</span>
                                         </td>
                                     </tr>
-                                    <!-- <tr style="text-align:center;">
-                                        <td colspan=4>
-                                            <button class="bn btn-ok" id="addButtonSegm">Aplicar</button>
-                                        </td>
-                                    </tr> -->
 
                                 </table>
                             </div>

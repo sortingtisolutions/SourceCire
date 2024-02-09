@@ -16,7 +16,6 @@ class LoginController extends Controller
   {
     $this->model = new LoginModel();
     $this->session = new Session();
-
   }
 
   public function exec()

@@ -180,7 +180,6 @@ function fillTableStores(ix) {
             .parents('tr')
             .attr('id', strs[ix].are_id);
     }
-    
     actionButtons();
 }
 
@@ -235,7 +234,6 @@ function putUpdateStore(dt) {
 
         $(`#${strs[ix].are_id}`).children('td.store-name').html(strs[ix].are_name);
         $(`#${strs[ix].are_id}`).children('td.store-type').html(strs[ix].are_status);
-
         //putQuantity(strs[ix].are_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
@@ -255,17 +253,13 @@ function editStore(strId) {
 
 function deleteStore(strId) {
     console.log(strId);
-    let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
+        let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
-    
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar area').css({display: 'inline'});
         $('#Id').val(strId);
-
-        
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {

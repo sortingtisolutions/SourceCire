@@ -58,7 +58,7 @@ function validaFormulario() {
 //Edita el Proveedores *
 function EditServicios(id) {
    $('#titulo').text('Edita Servicio');
-   console.log('CLick para editar');
+   // console.log('CLick para editar');
    UnSelectRowTable();
    LimpiaModal();
    var location = 'Servicios/GetServicio';
@@ -169,8 +169,6 @@ function LimpiaModal() {
    $('#DesServicio').val('');
    $('#titulo').text('Nuevo Servicio');
 }
-
-//obtiene la informacion de tabla Proveedores *
 
 function getServiciosTable() {
    var location = 'Servicios/GetServicios';

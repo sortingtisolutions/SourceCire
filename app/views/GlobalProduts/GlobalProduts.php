@@ -13,7 +13,7 @@
             <div class="row mvst_group">
                 <div class="mvst_list tblProdMaster">
                     <div class="row rowTop">
-                        <h1>Control Salida de Proyecto</h1>
+                        <h1>Selección de productos para su asignación</h1>
                         
                      </div>
                     <table class="display compact nowrap"  id="tblProyects" style="min-width: 1400px">
@@ -36,9 +36,6 @@
 
                 </div>
             </div>
-<!--            <div class="deep_loading">
-                <div class="flash_loading"> Cargando datos...</div>
-            </div>-->
         </div>
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->
@@ -82,7 +79,6 @@
             </div>
             <div class="modal-body" style="padding: 0px !important;">
 
-
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
@@ -120,11 +116,10 @@
 					 </div>
 					 <div class="modal-body" style="padding: 0px !important;">
 
-
 					 <div class="row">
 						  <input hidden type="text" class="form-control" id="IdConfirmar" aria-describedby="basic-addon3">
 						  <div class="col-12 text-center">
-								<span class="modal-title text-center" style="font-size: 1.2rem;" id="confirmCargaLabel">¿Seguro que desea subir a productos?</span>
+							<span class="modal-title text-center" style="font-size: 1.2rem;" id="confirmCargaLabel">¿Seguro que desea subir a productos?</span>
 								
 						  </div>
 						  <div class="col-12 text-center">

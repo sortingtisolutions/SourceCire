@@ -16,7 +16,7 @@
 
                 <div class="form-group">
                 <div>
-                    <h1>PRODUCTO A REGISTRAR</h1>
+                    <h1>REGISTRO DE FREELANCE</h1>
                 </div>
                 
                     <div class="row">
@@ -27,14 +27,13 @@
 							<label for="txtProject">Proyecto</label>
 						</div>
 					</div>
-                    
                     <hr>
                     <!-- Categoria posición 4 -->
                     <input id="txtIdAssign" name="txtIdAssign" type="hidden"  class="form-control form-control-sm" style="text-transform: uppercase" >
                     <div class="row pos1 ">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtArea" class="form-select form-select-sm"><option value="0" selected>Selecciona el area</option></select>
-                            <label for="txtArea">Area</label>
+                            <label for="txtArea">Area de trabajo</label>
                         </div>
                     </div>
                     <div class="row pos1">
@@ -47,7 +46,7 @@
                     <div class="row">
 						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 							<input id="txtFechaAdmision" name="txtFechaAdmision" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
-							<label for="txtFechaAdmision">Fecha de Admision</label>
+							<label for="txtFechaAdmision">Fecha de Admision en proyecto</label>
 						</div>
 					</div>
                     <div class="row">
@@ -89,7 +88,9 @@
                             <th style="width: 200px">Comentarios</th>
                         </tr>
                     </thead>
-                    <tbody>	</tbody>
+                    <tbody>	
+
+                    </tbody>
                 </table>
             </div>        
         </div>

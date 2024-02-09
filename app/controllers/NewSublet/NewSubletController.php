@@ -8,7 +8,6 @@ class NewSubletController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new NewSubletModel();
@@ -23,7 +22,6 @@ class NewSubletController extends Controller
         $params = array('user' => $this->session->get('user'));
         $this->render(__CLASS__, $params);
     }
-
 
 // LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()

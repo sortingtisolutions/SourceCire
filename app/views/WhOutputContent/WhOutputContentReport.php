@@ -62,6 +62,7 @@ $conn->close();
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
+
 date_default_timezone_set('America/Mexico_City');
 $hoy=new DateTime();
 // Cabezal de la página

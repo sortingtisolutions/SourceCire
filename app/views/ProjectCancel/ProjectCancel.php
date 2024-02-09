@@ -17,6 +17,7 @@
                     <div class="row rowTop">
                         <h1>cancelacion de proyectos</h1>
                     </div>
+                    
                     <div id="dvProjects"></div>
                     <table class="display compact nowrap"  id="tblProjects" style="min-width: 950px">
                         <thead>

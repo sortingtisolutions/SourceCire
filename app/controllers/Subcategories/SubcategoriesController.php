@@ -6,7 +6,6 @@
 
     class SubcategoriesController extends Controller
     {
-
         private $session;
         public $model;
 

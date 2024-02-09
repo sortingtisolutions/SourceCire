@@ -5,6 +5,7 @@
 
 class MoveStoresInController extends Controller
 {
+    
     private $session;
     public $model;
 

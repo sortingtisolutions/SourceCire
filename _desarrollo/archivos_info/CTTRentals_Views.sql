@@ -86,7 +86,6 @@ SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_n
     ifnull(pjtcn_id, 0) AS pjtcn_id, ifnull(cin_id, 0) AS cin_id
 FROM  ctt_vw_subletting;
 
-
 --******* VISTAS DE APOYO PARA CONSULTAS 15-ago-23 ********************
 DROP VIEW ctt_vw_list_products;
 CREATE VIEW ctt_vw_list_products AS
@@ -113,7 +112,7 @@ ORDER BY pd.prd_name;
 DROP VIEW ctt_vw_list_products2;
 CREATE VIEW ctt_vw_list_products2 AS 
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
-            pd.prd_insured, sb.sbc_name,cat_name,
+            pd.prd_insured, sb.sbc_name,cat_name,prd_type_asigned,
     CASE 
         WHEN prd_type_asigned ='KP' THEN 
             (SELECT prd_stock

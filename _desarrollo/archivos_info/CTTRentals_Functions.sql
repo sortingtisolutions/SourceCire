@@ -5,13 +5,12 @@ DELIMITER //
 CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT
 BEGIN
 
-declare lexist	INT DEFAULT 0;
+DECLARE lexist	INT DEFAULT 0;
 	
-select count(*) into lexist from ctt_products
+SELECT count(*) into lexist from ctt_products
 WHERE prd_id=prdid;
 
 IF (lexist >= 1) THEN
-
 	UPDATE ctt_products SET prd_stock=prd_stock+1 
 	WHERE prd_id=prdid;
 

@@ -5,6 +5,7 @@
 
 class ModulesCalendarController extends Controller
 {
+    
 	private $session;
     public $model;
 

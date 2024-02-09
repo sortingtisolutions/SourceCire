@@ -92,7 +92,6 @@ function getSeriesProd(prdId, opc) {
     fillField(pagina, par, tipo, selector);
 }
 
-
 function getAccesoriesById(prdId) {
     var pagina = 'SeriestoProducts/getAccesoriesById';
     var par = `[{"prdId":"${prdId}"}]`;
@@ -173,7 +172,6 @@ function setting_table_accesorys() {
     });
 }
 
-/* LLENA LOS DATOS DE LOS ELEMENTOS */
 // llena el selector de categorias
 function putCategory(dt) {
     if (dt[0].cat_id != 0) {
@@ -232,7 +230,6 @@ function selSubcategoryPack(id) {
     deleteTablaAccesorios();
     // deleteTablaProducts();
     // console.log('selSubcategoryPack');
-
     if (subcategos[0].sbc_id != 0) {
         $.each(subcategos, function (v, u) {
             if (u.cat_id === id) {
@@ -247,15 +244,13 @@ function selSubcategoryPack(id) {
         // let id = $(this).val();
         let id = $(this).val();
         lsbc_id = id;
-        // console.log('subcategoria seleccionada-',id);
         getProducts(id);
     });
 
     $('#txtSubcategoryAcce').change(function () {
-        // let id = $(this).val();
         let id = $(this).val();
         lsbc_id = id;
-        console.log('subcategoria seleccionada-',id);
+        // console.log('subcategoria seleccionada-',id);
         // getProducts(id);
         if ($('#RadioConceptos1').prop('checked')) {
             load_Accesories(lsbc_id);
@@ -275,7 +270,7 @@ function putProducts(dt) {
 
 /* carga de accesorios por id */
 function putAccesoriesById(dt) {
-    console.log('putAccesoriesById',dt);
+    // console.log('putAccesoriesById',dt);
     deleteTablaAccesorios();
 
     if (dt[0].prd_id != '') {
@@ -287,7 +282,7 @@ function putAccesoriesById(dt) {
 
 // Llena el selector de subcategorias
 function selProductsSub(dt) {
-    console.log('selProductsSub',dt);
+    // console.log('selProductsSub',dt);
 
     $('#txtProductSubCat').html(''); // Edna
     if (dt[0].prd_id != 0) {
@@ -296,6 +291,7 @@ function selProductsSub(dt) {
                 $('#txtProductSubCat').append(H);
         });
     }
+
     $('#txtProductSubCat').change(function () {
         // let id = $(this).val();
         let id = $(this).val();
@@ -386,21 +382,16 @@ function drawProducts() {
 let sbccnt = 0;
 
 //***************************************** */
-
 function action_selected_packages() {
     $('.indicator td')
         .unbind('click')
         .on('click', function () {
             var prdId = $(this).parent().attr('id');
             var arraryPrd = prdId.split('-');
-
-            
-
             //$("#selectAccesorios").css('visibility', 'visible');;
             productoSelectId = arraryPrd[0];
             productoSelectSKU = arraryPrd[1];
             prd_id = arraryPrd[2];
-
             let tabla = $('#tblPackages').DataTable();
 
             setTimeout(() => {
@@ -419,15 +410,12 @@ function action_selected_packages() {
             if ($('#RadioConceptos2').prop('checked')) {
                 getProdAccesoriesById(productoSelectId);
             } 
-            
-            //getAccesoriesById(productoSelectSKU);
-            //select_products(prdId);
         });
 }
 
 // Llena el selector de subcategorias
 function selSubcategoryProduct(id) {
-    console.log('SELECC SUBCATE');
+    // console.log('SELECC SUBCATE');
     if (subcategos[0].sbc_id != 0) {
         $.each(subcategos, function (v, u) {
             if (u.cat_id === id) {
@@ -442,18 +430,16 @@ function selSubcategoryProduct(id) {
         .on('change', function () {
             let id = $(this).val();
             lsbc_id = id;
-            console.log(id);
+            // console.log(id);
             drawProducts(id);
         });
 }
 
 
 function saveAccesoryId(serId, filas) {
-    console.log(prd_id,productoSelectId,productoSelectSKU);
     var pagina = 'SeriestoProducts/saveAccesorioByProducto';
     var par = `[{"serId":"${serId}","parentId":"${productoSelectId}","prdId":"${prd_id}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}","filas":"${filas}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putAccesoriesRes;
     fillField(pagina, par, tipo, selector);
 }
@@ -461,13 +447,12 @@ function savePrdAccesoryId(prdId, quantity, filas){
     var pagina = 'SeriestoProducts/saveAccesorioProducto';
     var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}","quantity":"${quantity}","filas":"${filas}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putAccesoriesRes;
     fillField(pagina, par, tipo, selector);
 }
 
 function putAccesoriesRes(dt) {
-    console.log('putAccesoriesRes ', dt);
+    // console.log('putAccesoriesRes ', dt);
     accesorioExist = dt;
 }
 
@@ -478,7 +463,6 @@ function action_selected_products() {
             let edt = $(this).attr('class').indexOf('kill');
             // console.log(edt);
             let prdId = $(this).attr('id');
-            console.log('se borrara el producto = ' + prdId);
             confirm_delet_product(prdId);
         });
 
@@ -493,8 +477,6 @@ function action_selected_products() {
 function editProdAsoc(Id, prdQty) {
     let prdId = Id.split('-')[0];
     let prdParent = Id.split('-')[1];
-    console.log('Vals', prdId, prdParent, prdQty);
-
     var pagina = 'SeriestoProducts/updateQuantityProds';
     var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","prdQty":"${prdQty}"}]`;
     var tipo = 'json';
@@ -502,7 +484,7 @@ function editProdAsoc(Id, prdQty) {
     fillField(pagina, par, tipo, selector);
 } 
 function putUpdatePackages(dt) {
-    console.log('Dentro', dt);
+    // console.log('Dentro', dt);
 }
 function load_Accesories(prdId) {
     var pagina = 'SeriestoProducts/listAccesorios';
@@ -519,27 +501,6 @@ function load_prd_accesories(prdId) {
     var selector = putAccesorios;
     fillField(pagina, par, tipo, selector);
 }
-
-//valido
-/* function putAccesoriostable(dt) {
-    console.log('', dt);
-    let tabla = $('#tblProducts').DataTable();
-    tabla.rows().remove().draw();
-
-    if (dt[0].prd_id != '') {
-        $.each(dt, function (v, u) {
-            tabla.row
-                .add({
-                    editable: `<i class="fas fa-times-circle choice prod kill" id="${u.prd_id}-${u.prd_parent}"></i>`,
-                    prod_sku: `<span class="hide-support" id="SKU-${u.prd_sku}">${u.prd_id}</span>${u.prd_sku}`,
-                    prodname: u.prd_name,
-                    prodquant: 1,
-                })
-                .draw();
-        });
-        action_selected_products();
-    }
-} */
 
 //revisar aqui si no graba producto
 function product_apply(prId) {
@@ -563,23 +524,7 @@ function product_apply(prId) {
         }
     }, 500);
 }
-/* function product_accs_apply(prId, quantity) {
-    // console.log('product_apply',prId);
-    let acce = prId.attr('id').split('-');
-    let tabla = $('#tblProducts').DataTable();
-    let filas = tabla.rows().count();
 
-    
-
-    console.log('ACCE',acce[0], acce[1], acce[2], acce[3]);
-    setTimeout(() => {
-        if (accesorioExist != 0) {
-            putNewAccesorio(acce[0], acce[1], acce[2], acce[3]);
-            //$(`.list-item[data-subcateg^="accesorio 41"]`).attr("hidden",true);
-            $(`.list-item[data-subcateg^="${acce[0]}"]`).attr('hidden', true);
-        }
-    }, 500);
-} */
 function putNewAccesorio(idAccesorio, idSku, idName, quantity) {
     //inserta el renglon en base
     let tabla = $('#tblProducts').DataTable();
@@ -590,7 +535,6 @@ function putNewAccesorio(idAccesorio, idSku, idName, quantity) {
     }else{
         qty = '1';
     }
-    
     tabla.row
         .add({
             editable: `<i class="fas fa-times-circle choice prod kill" id="${idAccesorio}-${productoSelectId}"></i>`,
@@ -605,20 +549,16 @@ function putNewAccesorio(idAccesorio, idSku, idName, quantity) {
 function confirm_delet_product(id) {
     $('#delProdModal').modal('show');
     $('#txtIdProductPack').val(id);
-    //borra paquete +
     $('#btnDelProduct').on('click', function () {
         let Id = $('#txtIdProductPack').val();
-
         var arrayID = Id.split('-');
         let prdId = arrayID[0];
         let prdParent = arrayID[1];
         let opc;
-
         let tabla = $('#tblProducts').DataTable();
         $('#delProdModal').modal('hide');
 
         let prdRow = $(`#${Id}`).parents('tr');
-
         tabla.row(prdRow).remove().draw();
         if ($('#RadioConceptos1').prop('checked')) {
             opc = 1;
@@ -630,7 +570,6 @@ function confirm_delet_product(id) {
         var pagina = 'SeriestoProducts/deleteProduct';
         var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","opc":"${opc}"}]`;
         var tipo = 'json';
-        console.log(par);
         var selector = putDelPackages;
         fillField(pagina, par, tipo, selector);
     });

@@ -20,7 +20,6 @@ function inicial() {
       $(this).appendTo('#listDisponible');
    });
 
-   //Open modal
    $('#nuevoPerfil').on('click', function () {
       LimpiaModal();
       getModulesList('', 'Disp');
@@ -288,7 +287,6 @@ function getPerfilesTable() {
                   footer: true,
                   title: title,
                   filename: filename,
-
                   //Aquí es donde generas el botón personalizado
                   text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
                },

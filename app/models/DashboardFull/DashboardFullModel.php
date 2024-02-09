@@ -65,22 +65,6 @@ class DashboardFullModel extends Model
         return $this->db->query($qry);
     }
   
-    /* public function getValueBudgets($params)
-    {  
-        $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-
-        $qry = "SELECT ps.pjs_name, lc.loc_type_location ,COUNT(*) 
-                FROM ctt_projects AS pj
-                INNER JOIN ctt_projects_status ps ON ps.pjs_status=pj.pjt_status
-                INNER JOIN ctt_location lc ON lc.loc_id=pj.loc_id
-                WHERE pj.pjt_status=$pjtsta
-                GROUP BY ps.pjs_name, lc.loc_type_location";
-        //return $qry;
-
-        return $this->db->query($qry);
-    } */
-  
-
     // Listado de categoria y cantidad full
     public function getKPIS()
     {  
@@ -131,19 +115,6 @@ class DashboardFullModel extends Model
     public function getProgressData($params)
     {
         $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-
-        /* $qry = "SELECT COUNT(*) AS total,
-            SUM(CASE WHEN pj.loc_id=1 then 1 ELSE 0 END)/COUNT(*) * 100 AS pjLocal, 
-            SUM(CASE WHEN pj.loc_id=2 then 1 ELSE 0 END)/COUNT(*) * 100 AS pjForanea,
-            SUM(CASE WHEN pj.loc_id=3 then 1 ELSE 0 END)/COUNT(*) * 100 AS pjForo,
-            SUM(CASE WHEN pj.loc_id=4 then 1 ELSE 0 END)/COUNT(*) * 100 AS pjMixta 
-            FROM ctt_projects AS pj WHERE pj.pjt_status=$pjtsta;"; */
-        /* $qry = "SELECT COUNT(*) AS total,
-            SUM(CASE WHEN pj.loc_id=1 AND pj.pjt_status=$pjtsta then 1 ELSE 0 END)/COUNT(*) * 100 AS pjLocal, 
-            SUM(CASE WHEN pj.loc_id=2 AND pj.pjt_status=$pjtsta then 1 ELSE 0 END)/COUNT(*) * 100 AS pjForanea,
-            SUM(CASE WHEN pj.loc_id=3 AND pj.pjt_status=$pjtsta then 1 ELSE 0 END)/COUNT(*) * 100 AS pjForo,
-            SUM(CASE WHEN pj.loc_id=4 AND pj.pjt_status=$pjtsta then 1 ELSE 0 END)/COUNT(*) * 100 AS pjMixta 
-            FROM ctt_projects AS pj;"; */
             $qry = "SELECT pj.loc_id, COUNT(*) AS cant, (SELECT COUNT(*) FROM ctt_projects WHERE pjt_status=$pjtsta) 
             AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects WHERE pjt_status=$pjtsta) * 100 AS percent
             FROM ctt_projects AS pj WHERE pj.pjt_status=$pjtsta GROUP BY pj.loc_id";
@@ -154,14 +125,6 @@ class DashboardFullModel extends Model
     public function getSublettingData($params)
     {
         $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-
-        /* $qry = "SELECT count(*) FROM ctt_projects AS pj
-        INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
-        INNER JOIN ctt_projects_detail AS pjd ON pjd.prd_id = pc.prd_id 
-        INNER JOIN ctt_series AS sr ON sr.ser_id=pjd.ser_id
-        WHERE SUBSTR(sr.ser_sku,8,1)='R'
-        GROUP BY pj.pjt_id;"; */
-
         $qry = "SELECT COUNT(*) cantBudget, (SELECT COUNT(*) FROM ctt_subletting as sbl 
         INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = sbl.prj_id AND pjt.pjt_status IN(2,4)) AS canTotal,
         IFNULL(COUNT(*)/(SELECT COUNT(*) FROM ctt_subletting as sbl 
@@ -176,24 +139,6 @@ class DashboardFullModel extends Model
     public function getPrjTransData($params)
     {
         $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-
-        /* $qry = "SELECT count(*) FROM ctt_projects AS pj
-        INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
-        INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-        WHERE sb.cat_id = 17;"; */
-
-        /* $qry = "SELECT (SELECT COUNT(*) FROM ctt_projects AS pj
-        INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
-        INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-        WHERE sb.cat_id IN(17,18)) AS cantBudget, 
-        (SELECT COUNT(*) FROM ctt_projects) AS canTotal, 
-        (SELECT COUNT(*) FROM ctt_projects AS pj
-        INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
-        INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-        WHERE sb.cat_id IN(17,18))/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percent"; */
     
         $qry = "SELECT COUNT(*) AS cantBudget, 
             (SELECT COUNT(*) FROM ctt_projects) AS canTotal, 
@@ -242,20 +187,7 @@ class DashboardFullModel extends Model
     public function getProgressDataT($params)
     {
         $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-        /* $qry = "SELECT loc_id, COUNT(*) cant, (SELECT COUNT(*) FROM ctt_projects) 
-                AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percent
-                FROM ctt_projects AS pj
-                INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
-                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE sb.cat_id = 17 GROUP BY pj.loc_id"; */
-       /*  $qry = "SELECT loc_id, COUNT(*) AS cant, (SELECT COUNT(*) FROM ctt_projects) 
-                AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percent FROM (SELECT pj.pjt_id, pj.loc_id
-                FROM ctt_projects AS pj
-                INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
-                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE sb.cat_id IN(17,18) GROUP BY pj.pjt_id) AS proj GROUP BY loc_id;"; */
+
         $qry = "SELECT loc_id, COUNT(*) AS cant, (SELECT COUNT(*) FROM (SELECT pj.pjt_id, pj.loc_id
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_projects_content AS pc ON pc.pjt_id= pj.pjt_id
@@ -280,21 +212,7 @@ class DashboardFullModel extends Model
     public function getProgressDataD($params)
     {
         $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-        /* $qry = "SELECT loc_id, COUNT(*) cant, (SELECT COUNT(*) FROM ctt_projects) 
-            AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percent
-            FROM ctt_projects AS pj WHERE pj.pjttp_id =6 GROUP BY pj.loc_id";
- */     
-        /* $qry ="SELECT em.emp_id, em.emp_fullname, COUNT(*) cant, (SELECT COUNT(*) FROM ctt_projects) 
-                    AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percent, 
-                    SUM(case when pj.pjt_status=1 then 1 ELSE 0 END) AS cantBudget, 
-                    SUM(case when pj.pjt_status=2 then 1 ELSE 0 END) AS cantPlans, 
-                    SUM(case when pj.pjt_status=4 then 1 ELSE 0 END) AS cantDetails,
-                    SUM(case when pj.pjt_status=1 then 1 ELSE 0 END)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percentBudget, 
-                    SUM(case when pj.pjt_status=2 then 1 ELSE 0 END)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percentPlans,
-                    SUM(case when pj.pjt_status=4 then 1 ELSE 0 END)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percentDetails
-                    FROM ctt_projects AS pj 
-                    LEFT JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
-                    LEFT JOIN ctt_employees AS em ON wap.emp_id = em.emp_id where em.emp_id IN(7,9,20,21) group BY emp_id"; */
+        
         $qry ="SELECT em.emp_id, em.emp_fullname, COUNT(*) cant, (SELECT COUNT(*) FROM ctt_projects) 
                 AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects) * 100 AS percent, 
                     SUM(case when pj.pjt_status=1 then 1 ELSE 0 END) AS cantBudget, 
@@ -390,16 +308,7 @@ class DashboardFullModel extends Model
 
         return $this->db->query($qry);
     }
-    /* public function getProgressDataTypeLoc($params)
-    {
-        $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-        $qry = "SELECT loc_id, COUNT(*) cant, (SELECT COUNT(*) FROM ctt_projects WHERE pjt_status IN(8,9)) 
-        AS total, COUNT(*)/(SELECT COUNT(*) FROM ctt_projects WHERE pjt_status IN(8,9)) * 100 AS percent
-        FROM ctt_projects AS pj
-        WHERE pj.pjt_status IN($pjtsta) GROUP BY pj.loc_id";
-
-        return $this->db->query($qry);
-    } */
+    
     public function getProgressDataTypeCall($params)
     {
         $pjtsta = $this->db->real_escape_string($params['pjtsta']);

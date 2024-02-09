@@ -8,7 +8,6 @@ class FathersReportsController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new FathersReportsModel();
@@ -24,7 +23,6 @@ class FathersReportsController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-    
     // LISTA LOS PROYECTOS ACTIVOS
     public function listProyects($request_params)
     {

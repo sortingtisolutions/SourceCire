@@ -3,8 +3,8 @@
 	require_once ROOT . FOLDER_PATH . '/app/models/AddInfoCfid/AddInfoCfidModel.php';
 	require_once LIBS_ROUTE . 'Session.php';
 	
-	class AddInfoCfidController extends Controller
-	{
+class AddInfoCfidController extends Controller
+{
 		private $session;
 		public $model;
 
@@ -62,4 +62,4 @@
 		echo $res;
 	}
 
-	}
+}

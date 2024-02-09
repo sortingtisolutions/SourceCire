@@ -8,7 +8,6 @@ class MaintenanceController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new MaintenanceModel();
@@ -24,7 +23,6 @@ class MaintenanceController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-    
     // LISTA LOS PROYECTOS ACTIVOS
     public function listProyects($request_params)
     {

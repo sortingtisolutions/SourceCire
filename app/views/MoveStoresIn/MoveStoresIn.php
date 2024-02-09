@@ -145,6 +145,7 @@
                 </div>
             </div>
 
+            
             <div class="mvst_table">
                 <h1>Entradas al almacen</h1>
                 <table class="display compact nowrap"  id="tblExchanges">

@@ -71,7 +71,7 @@
 
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
-                <h1>Selección de Proyectos</h1>
+                <h1>Selección de Proyectos para asignar</h1>
                     <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%; font-size: 0.7rem">
                         <thead>
                             <tr >

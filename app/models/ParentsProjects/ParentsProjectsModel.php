@@ -154,9 +154,6 @@ public function listProjectsTypeCalled($params)
         $qry3 = "UPDATE ctt_projects SET pjt_status = 5 where pjt_parent = $pjtid AND pjt_status > 3";
         $this->db->query($qry3);
 
-        /* $qry = "UPDATE ctt_projects SET pjt_status = 5 where pjt_id = $pjtid";
-        $this->db->query($qry); */
-
         $qry  = "INSERT ctt_activity_log (log_date, log_event, emp_number, emp_fullname, acc_id) 
         VALUES(current_time(), 'PRE-CANCELADO','$user','$name', 1)"; // AQUI REQUIERE EL ID DE ACC_ID CORRESPONDIENTE
         $this->db->query($qry);

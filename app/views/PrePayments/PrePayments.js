@@ -18,11 +18,8 @@ function inicial() {
     getRegisters(u, em);
     $('#txtCost').val('0.0');
     fillContent();
-    getTypeMov();// agregado por Edna
-    
-    // activeIconsSerie();
-    
-    
+    getTypeMov();   // agregado por Edna
+        
     $('#txtCustomer').on('blur', function () {
         validator();
     });
@@ -74,7 +71,6 @@ function getTypeMov() {
 
 /**  +++++ Obtiene los datos de los productos activos +++++  */
 function getRegisters(pj, em) {
-    // console.log(pj);
     var pagina = 'PrePayments/listRegisters';
     var par = `[{"pjtId":"${pj}","em":"${em}"}]`;
     var tipo = 'json';
@@ -83,7 +79,6 @@ function getRegisters(pj, em) {
 }
 
 function getDataProyects(prpid) {
-    // console.log(pj);
     var pagina = 'PrePayments/listDataProyects';
     var par = `[{"prpid":"${prpid}"}]`;
     var tipo = 'json';
@@ -92,16 +87,12 @@ function getDataProyects(prpid) {
 }
 
 function getCustomersProj(pjtId) {
-    // console.log(pj);
     var pagina = 'PrePayments/getCustomersProj';
     var par = `[{"pjtId":"${pjtId}"}]`;
     var tipo = 'json';
     var selector = putCustomersProj;
     fillField(pagina, par, tipo, selector);
 }
-/////////////////////
-///
-////////////////////
 
 /** ++++  Setea la tabla ++++++ */
 function setting_table() {
@@ -221,7 +212,7 @@ function putCustomers(dt) {
 }
 
 function putCustomersProj(dt) {
-    console.log(dt);
+    // console.log(dt);
     $("#txtCustomer option[value='" + dt[0].cus_id + "']").attr('selected', 'selected');
 
 }
@@ -260,7 +251,7 @@ function put_changes(dt) {
 
 /**  ++++   Coloca los productos en el listado del input */
 function putRegisters(dt) {
-    console.log(dt);
+    // console.log(dt);
     pd = dt;
     
     let largo = $('#tblPrePayment tbody tr td').html('');
@@ -292,14 +283,12 @@ function putRegisters(dt) {
     }   
 }
 
-
 /**  ++++   Coloca los productos en el listado del input */
 function putDataProyects(dt) {
     // console.log(dt);
     settingTableSeg();
     putBasesVal(dt);
 }
-
 
 function InsertRegister(em) {
     let idPrj = $('#txtProject option:selected').val();
@@ -327,7 +316,7 @@ function InsertRegister(em) {
         "empid"  : "${empid}"
     }]`;
    
-    console.log(par);
+    // console.log(par);
 
     var pagina = 'PrePayments/savePrePayment';
     var tipo = 'json';
@@ -388,7 +377,6 @@ function activeIcons() {
         .on('click', function () {
             let prpId = $(this).attr('id');
             glbdata = $(this).attr('data');
-            // console.log('activeIcons-', prpId, 'Data',glbdata);
             getDataProyects(prpId);
             settingTableSeg();
             $('#txtMontoPre').val(mkn(glbdata.split('|')[1],'n'));
@@ -398,8 +386,6 @@ function activeIcons() {
     $('#btn_applyAmount')
         .unbind('click')
         .on('click', function (){
-        // console.log('Aplica Monto',glbdata);
-
         let prpId = $(this).attr('id');
         let montoasig = $('#txtMontoAsig').val();
         let referen = glbdata.split('|')[0];
@@ -424,7 +410,7 @@ function activeIcons() {
             "wayPay"         : "${wayPay}",
             "empId"          : "${em}"
         }]`;
-        console.log(par);
+        // console.log(par);
         var pagina = 'PrePayments/insertPayAplied';
         var tipo = 'html';
         var selector = putToWork;
@@ -440,7 +426,6 @@ function putToWork(dt){
 }
 
 function putBasesVal(dt){ 
-
     let tabla = $('#listTable').DataTable();
     // $('.overlay_closer .title').html(`Catalogo - ${catnme}`); ${mkn(u.ctl_amount_payable,'n')}
     tabla.rows().remove().draw();
@@ -466,11 +451,7 @@ function putBasesVal(dt){
 
 }
 
-
-
-
 function fill_table(par) { //** AGREGO ED */
-
     par = JSON.parse(par);
     let tabla = $('#listTable').DataTable();
     tabla.row
@@ -516,15 +497,7 @@ function validator() {
             ky = 1;
         }
     });
-
-    // let period = $('#txtPeriod').val().split(' - ');
-    // let a = moment(period[1], 'DD/MM/YYYY');
-    // let b = moment(period[0], 'DD/MM/YYYY');
-    // let dif = a.diff(b, 'days');
-    // if (dif < 1) {
-    //     ky = 1;
-    //     msg += 'La fecha final debe ser por lo menos de un día de diferencia';
-    // }
+    
     if (ky == 0) {
         $('#btn_register').removeClass('disabled');
     } else {

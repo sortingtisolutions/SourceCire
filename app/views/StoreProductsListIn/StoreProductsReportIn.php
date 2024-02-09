@@ -10,7 +10,6 @@
         $getFile = fgets($file);  
     }
     //INICIO DE PROCESOS
-    
     $numProject = '';
     $nameProject = '';
     $version = '';
@@ -130,8 +129,7 @@
  ';
 
     $css = file_get_contents('../../assets/css/reports.css');
-
-    
+  
     ob_clean();
     ob_get_contents();
     $mpdf= new \Mpdf\Mpdf([

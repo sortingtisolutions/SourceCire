@@ -39,14 +39,12 @@ class ProductsModel extends Model
         return $this->db->query($qry);
     }
 
-
 // Listado de fichas técnicas
     public function listDocument()
     {
         $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id = 2;";
         return $this->db->query($qry);
     }
-
     
 // Listado de facturas
 public function listInvoice()
@@ -467,7 +465,6 @@ public function saveEdtSeries($params)
         return $prdId;
     }
 
-    
 // Guarda nuevo producto
     public function deleteSerie($params)
     {
