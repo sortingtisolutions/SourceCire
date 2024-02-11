@@ -280,6 +280,7 @@ function putDeleteStore(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {

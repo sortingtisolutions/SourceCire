@@ -11,6 +11,7 @@ $uname = $_GET['n'];
 $empid = $_GET['em'];
 $type = $_GET['t'];
 $desgloce = $_GET['d'];
+$interador = 0;
 
 $conkey = decodificar($_GET['h']) ;
 
@@ -160,13 +161,15 @@ $conn->close();
 
 while($row = $res->fetch_assoc()){
     $items[] = $row;
+    $interador++;
 }
 
 date_default_timezone_set('America/Mexico_City');
 $hoy=new DateTime();
 
-// Cabezal de la página
-$header = '
+if ($interador > 0) {
+    // Cabezal de la página
+    $header = '
     <header>
         <div class="cornisa">
             <table class="table-main" border="0">
@@ -185,9 +188,9 @@ $header = '
         </div>
     </header>';
 
-$equipoBase = '1';               
+    $equipoBase = '1';               
 
-$html = '
+    $html = '
     <section>
         <div class="container">
         <table class="table-data bline-d tline">
@@ -206,7 +209,7 @@ $html = '
                     <tr>
                         <td class="concept">Quien Solicita:</td>
                         <td class="data">'. $items[0]['pjt_how_required'] .'</td>
-                     </tr>
+                    </tr>
                     <tr>
                         <td class="concept">Correo Electrónico:</td>
                         <td class="data">'. $items[0]['cus_email'] .'</td>
@@ -215,7 +218,7 @@ $html = '
                         <td class="concept">Teléfono:</td>
                         <td class="data">'. $items[0]['cus_phone'] .'</td>
                     </tr>
-                   
+                
                     <tr>
                         <td class="concept">Analista CTT:</td>
                         <td class="data">'. $uname .'</td>
@@ -282,7 +285,7 @@ $html = '
                 Impresion de contenido del Proyecto
                 </p>
             </td>
-     
+    
         </tr>
         <!--<tr>
             <td class="half">
@@ -301,9 +304,9 @@ $html = '
         
     </table>
     <!-- End Datos de identificación  -->
-';
+    ';
 
-/* Tabla de equipo base -------------------------  */
+    /* Tabla de equipo base -------------------------  */
         $html .= '
                     <!-- Start Tabla de costo base  -->
                     <h2>Lista de equipo</h2>
@@ -345,8 +348,176 @@ $html = '
                 </table>
                 <!-- End Tabla de costo base  -->';
 
+
+    /* Tabla de equipo base -------------------------  */
+
+}else{
+    // Cabezal de la página
+    $header = '
+    <header>
+        <div class="cornisa">
+            <table class="table-main" border="0">
+                <tr>
+                    <td class="box-logo side-color">
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                    </td>
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto:   # </span>
+                        <br><span style=" font-size: 8pt; color: #191970">Nombre Responsable: '. $uname .'</span>
+                    </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </header>';
+
+    $equipoBase = '1';               
+
+    $html = '
+    <section>
+        <div class="container">
+        <table class="table-data bline-d tline">
+        <tr>
+            <td class="rline half">
+                <!-- Start datos del cliente -->
+                <table class="table-data">
+                    <tr>
+                        <td class="concept">Cliente:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Domicilio:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Quien Solicita:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Correo Electrónico:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Teléfono:</td>
+                        <td class="data"></td>
+                    </tr>
+                
+                    <tr>
+                        <td class="concept">Analista CTT:</td>
+                        <td class="data">'. $uname .'</td>
+                    </tr>
+                </table>
+                <!-- End datos del cliente -->
+            </td>
+            <td class="half">
+                <!-- Start Datos del projecto -->
+                <table class="table-data">
+                
+                    <tr>
+                        <td class="concept">Fecha Cotización:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Ciudad:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="concept">Tipo de Locación:</td>
+                        <td class="data"></td>
+                    </tr> -->
+                    <tr>
+                        <td class="concept">Tipo de proyecto:</td>
+                        <td class="data"></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">Fechas de Proyecto:</td>
+                        <td class="data"></td>
+                    </tr>
+                    ';
+                    
+                    
+                    $html .='
+                    <tr>
+                        <td class="concept">&nbsp;</td>
+                        <td class="data">&nbsp;</td>
+                    </tr>
+                    
+                </table>
+                <!-- End Datos del projecto -->
+            </td>
+        </tr>
+    </table>
+    <!-- End Datos de identificación  -->
+    <table class="table-data bline tline" style="text-align: center">
+        <tr>
+            <td>
+                <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
+                Impresion de contenido del Proyecto
+                </p>
+            </td>
     
-/* Tabla de equipo base -------------------------  */
+        </tr>
+        <!--<tr>
+            <td class="half">
+                <table class="table-data">
+                    <tr>
+                        <td class="concept"><strong>Nombre Responsable:</strong></td>
+                        <td class="data"><strong>'. $uname .'</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="concept">&nbsp;</td>
+                        <td class="data">&nbsp;</td>
+                    </tr> 
+                </table>  
+            </td>
+        </tr> -->
+        
+    </table>
+    <!-- End Datos de identificación  -->
+    ';
+
+    /* Tabla de equipo base -------------------------  */
+        $html .= '
+                    <!-- Start Tabla de costo base  -->
+                    <h2>Lista de equipo</h2>
+                    <table autosize="1" style="page-break-inside:auto" class="table-data bline">
+                        <thead>
+                            <tr>
+                                <th class="tit-figure prod">SKU</th>
+                                <th class="tit-figure amou">Producto</th>
+                                <th class="tit-figure qnty">Cantidad</th>
+                                <th class="tit-figure amou">Status</th>
+                                <th class="tit-figure amou">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+
+                        
+        $html .= '
+                            <tr>
+                                <td class="dat-figure prod" style="font-size: 1.2em;"></td>
+                                <td class="dat-figure sku"></td>
+                                <td class="dat-figure sku"></td>
+                                <td class="dat-figure prod"></td>
+                                <td class="dat-figure sku"></td>
+                            </tr> '; // 11-10-23
+                           
+        $html .= '
+                        <tr>
+                            <td class="tot-figure amou" ></td>
+                            <td class="tot-figure amou"></td>
+                            <td class="tot-figure amou"></td>
+                            <td class="tot-figure amou"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- End Tabla de costo base  -->';
+
+
+    /* Tabla de equipo base -------------------------  */
+
+}
 
 $html .= '
 <!-- Start Tabla de terminos  -->

@@ -264,7 +264,10 @@ function deleteReason(pjtcrId) {
 function putdeleteReason(dt) {
     // console.log('BORRAR LINEA');
     getReasons();
-
+    $('#txtCrDescription').val('');
+    $('#txtIdDefinition').val('');
+    $('#txtCrDefinition').val('');
+    $('#txtCodMotivos').val('');
     $('#confirmModal').modal('hide');
 }
 

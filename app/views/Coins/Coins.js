@@ -271,6 +271,7 @@ function putDeleteStore(dt) {
     let tabla = $('#AreasTable').DataTable();
     tabla.row($(`#${dt}`)).remove().draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {

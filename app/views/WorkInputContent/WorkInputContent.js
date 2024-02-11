@@ -645,16 +645,20 @@ function build_modalReason(dt) {
     $('#ReasonMtModal .overlay_closer .title').html('LISTADO DE MOTIVOS:');
     let tabla = $('#tblMaintenance').DataTable();
     // tabla.rows().remove().draw();
-    $.each(dt, function (v, u) {
-        tabla.row
-            .add({
-                sermodif: `<i class='fas fa-check-circle toCheck' id="${u.pjtcr_id}" data="${u.pjtcr_definition}|${u.pjtcr_code_stage}"></i>`,
-                seriesku: u.pjtcr_definition,
-                sername: u.pjtcr_description,
-            })
-            .draw();
-        //$(`#E${u.pjtcn_id}`).parents('tr').attr('data-product', u.pjtcn_id);
-    });
+
+    if (parseInt(dt[0].pjtcr_id) > 0) {
+        $.each(dt, function (v, u) {
+            tabla.row
+                .add({
+                    sermodif: `<i class='fas fa-check-circle toCheck' id="${u.pjtcr_id}" data="${u.pjtcr_definition}|${u.pjtcr_code_stage}"></i>`,
+                    seriesku: u.pjtcr_definition,
+                    sername: u.pjtcr_description,
+                })
+                .draw();
+            //$(`#E${u.pjtcn_id}`).parents('tr').attr('data-product', u.pjtcn_id);
+        });
+    }
+    
     // activeIconsReason();
 }
 

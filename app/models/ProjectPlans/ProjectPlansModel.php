@@ -731,7 +731,7 @@ class ProjectPlansModel extends Model
                 WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
                     INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
-                    WHERE pcn.pjt_id = $pjtId
+                    WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1
                 );";
         $this->db->query($qry);
 

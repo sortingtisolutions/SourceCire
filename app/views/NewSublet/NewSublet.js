@@ -306,8 +306,8 @@ function putCategories(dt) {
 }
 
 function putSubCategories(dt) {
-    //console.log('putSubCategories',dt);
-    if (dt[0].sbc_id != 0) {
+    console.log('putSubCategories',dt);
+    if (parseInt(dt[0].sbc_id) > 0) {
         
         $.each(dt, function (v, u) {
             let idCategoria = $('#txtCategory').val();

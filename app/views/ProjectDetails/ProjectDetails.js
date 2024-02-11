@@ -306,6 +306,13 @@ function eventsAction() {
             let id = $(this).parents('.finder__box').children('.invoiceInput');
             id.val('');
             id.trigger('keyup');
+            
+            $('.finder_list-projects ul li').addClass('alive');
+            $('.finder_list-projectsParent ul li').addClass('alive');
+            $('.finder_list-projects ul li').attr('data-val',0);
+            $('.finder_list-projectsParent ul li').attr('data-val',0);
+            $('.finder_list-customer ul li').attr('data-value',0);
+            $('.finder_list-projectsParent ul li').attr('data-active',1);
         });
 
     // Limpiar la pantalla
@@ -601,7 +608,7 @@ function putProjects(dt) {
                 let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
                 $('.finder_list-projects ul').append(H);
             } else {
-                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
+                let M = ` <li id="M${u.pjt_id}" class="alive" data-val="0" data-active="1" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
                 $('.finder_list-projectsParent ul').append(M);
             }
         });
@@ -682,7 +689,7 @@ function putCustomers(dt) {
     $('.finder_list-customer ul').html('');
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = ` <li id="C${u.cus_id}" class="alive" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
+            let H = ` <li id="C${u.cus_id}" class="alive" data-value="0" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
             $('.finder_list-customer ul').append(H);
         }
     });
@@ -852,7 +859,7 @@ function selectorProjects(pjId) {
             cleanQuoteTable();
             showButtonVersion('H');
             actionSelProject($(this));     
-            modalLoading('B');
+            /* modalLoading('B'); */
             $('.projectfinder').trigger('click');
         });
 
@@ -860,13 +867,26 @@ function selectorProjects(pjId) {
         .unbind('click')
         .on('click', function () {
             let pjtParent = $(this).attr('id').substring(1, 10);
+            let val = $(this).attr('data-val');
+            let active = $(this).attr('data-active');
+            console.log(val);
+            
             $('.finder_list-projects ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (pjtParent == u.pjt_parent) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
+            if (active == 1) {
+                if (val == 0) {
+                    $.each(proj, function (v, u) {
+                        if (pjtParent == u.pjt_parent) {
+                            let pjtId = u.pjt_id;
+                            $(`#P${pjtId}`).addClass('alive');
+                        }
+                    });
+                    $(this).attr('data-val', 1);
+                }else{
+                    $('.finder_list-projects ul li').addClass('alive');
+                    $(this).attr('data-val', 0);
                 }
-            });
+            }
+            
         });
 }
 
@@ -875,6 +895,7 @@ var pj = '';
 function actionSelProject(obj) {
     let status = obj.attr('class');
     if (status == 'alive') {
+        modalLoading('B');
         let idSel = obj.parents('.dato');
         let indx = obj.data('element').split('|')[0];
         pj = proj[indx];
@@ -987,17 +1008,28 @@ function selectCustomer() {
             let indx = $(this).data('element').split('|')[0];
             let type = $(this).data('element').split('|')[1];
             let cs = cust[indx];
+            let val = $(this).attr('data-value');
+            console.log(val);
 
             $('#CustomerName').html(cs.cus_name);
             $('.finder_list-projects ul li').removeClass('alive');
             $('.finder_list-projectsParent ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (cs.cus_id == u.cus_id) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
-                    $(`#M${pjtId}`).addClass('alive');
-                }
-            });
+            $('.finder_list-projectsParent ul li').attr('data-active',0);
+            if (val == 0) {
+                $.each(proj, function (v, u) {
+                    if (cs.cus_id == u.cus_id) {
+                        let pjtId = u.pjt_id;
+                        $(`#P${pjtId}`).addClass('alive');
+                        $(`#M${pjtId}`).addClass('alive');
+                    }
+                });
+                $(this).attr('data-value', 1);
+            }else{
+                $('.finder_list-projects ul li').addClass('alive');
+                $('.finder_list-projectsParent ul li').addClass('alive');
+                $(this).attr('data-value', 0);
+                $('.finder_list-projectsParent ul li').attr('data-active',1);
+            }
         });
 }
 
