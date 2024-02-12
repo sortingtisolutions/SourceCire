@@ -722,13 +722,6 @@ public function saveBudgetList($params)
                     WHERE ser_id = $serie;"; 
             $this->db->query($qry1);
 
-            $qry2 = "UPDATE ctt_products 
-                SET 
-                    prd_reserved = prd_reserved + 1
-                WHERE prd_id = $prodId;";
-
-            $this->db->query($qry2);
-
         } else {
             
             $qry = "SELECT ser.ser_id serId, ser.ser_sku serSku 
@@ -802,6 +795,14 @@ public function saveBudgetList($params)
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
         $this->db->query($qry4);
+
+        $qry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+                INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                WHERE pd.prd_id = $prodId AND sr.ser_situation != 'D') WHERE prd_id = $prodId";
+            
+        $this->db->query($qry);
 
         return $serie;
     }
@@ -919,6 +920,14 @@ public function saveBudgetList($params)
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
         $this->db->query($qry4);
+        
+        $qry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+                INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                WHERE pd.prd_id = $prodId AND sr.ser_situation != 'D') WHERE prd_id = $prodId";
+            
+        $this->db->query($qry);
 
     return  $serId;
     }

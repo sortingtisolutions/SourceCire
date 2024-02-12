@@ -292,7 +292,7 @@ function calendario(cal){
         editable: true,
         selectable: true,
         events: cal,
-        height: 400,
+        height: 500,
         eventClick: function(calEvent, jsEvent, view){
             console.log(calEvent);
         }

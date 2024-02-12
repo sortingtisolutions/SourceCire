@@ -184,6 +184,7 @@ function asignarSubcategoria() {
     });
 
 }
+
 function getCategories() {
     var pagina = 'GlobalProduts/listCategories';
     var par = '[{"parm":""}]';
@@ -285,7 +286,6 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //modalLoading('S');
         let filas = $('#tblProyects .selected');
         var idsSelected = '';
         filas.each(function(v,u){
@@ -308,7 +308,6 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //modalLoading('S');  
         var pagina = 'GlobalProduts/loadProcessAll';
         var par = `[{"idSelected":""}]`;
         var tipo = 'json';
@@ -329,7 +328,7 @@ function putProducts(dt) {
     let valstage='';
     let valicon='';
     let etiquetai = '';
-    
+    modalLoading('S');
     if (dt[0].prd_id > 0) {        
         $('#tblProyects tbody').html('');
         $.each(dt, function (v, u) {
@@ -353,6 +352,7 @@ function putProducts(dt) {
     } else {
         settingTable();
     }
+    modalLoading('H');
 }
 
 /** +++++  Activa los iconos */
@@ -431,7 +431,6 @@ function confirm_to_work(pjtid, verid) {
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
         //console.log('Datos',pjtid,Id);
-        modalLoading('S');
 
         var pagina = 'GlobalProduts/UpdateSeriesToWork';
         var par = `[{"pjtid":"${pjtid}","verid":"${verid}"}]`;
@@ -444,7 +443,6 @@ function confirm_to_work(pjtid, verid) {
 
 function putToWork(dt){
     // console.log('Resultado Update',dt)
-    modalLoading('H');
     window.location.reload();
 }
 

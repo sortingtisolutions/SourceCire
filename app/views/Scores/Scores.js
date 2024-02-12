@@ -257,7 +257,7 @@ function deleteStore(strId) {
     $('#confirmModal').modal('show');
     $('#confirmModalLevel').html('¿Seguro que desea borrar la calificación?');
     $('#N').html('Cancelar');
-    $('#confirmButton').html('calificación').css({display: 'inline'});
+    $('#confirmButton').html('Eliminar').css({display: 'inline'});
     $('#Id').val(strId);
     $('#IdAlmacenBorrar').val(strId);
     $('#confirmButton').on('click', function () {
@@ -277,6 +277,7 @@ function putDeleteStore(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {

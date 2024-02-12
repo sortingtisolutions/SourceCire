@@ -365,7 +365,7 @@ function sel_products(res) {
             rowCurr.css({ display: 'none' });
             rowCurr.each(function (index) {
                 var cm = $(this)
-                    .data('content')
+                    .attr('data-content')
                     .toUpperCase()
                     .replace(/|/g, '');
 
@@ -373,6 +373,7 @@ function sel_products(res) {
                 var cr = cm.indexOf(res);
                 if (cr > -1) {
                     $(this).show();
+                    
                 }
             });
         }
@@ -381,6 +382,17 @@ function sel_products(res) {
         $(`#listProductsTable table tbody`).html('');
         rowCurr.addClass('oculto');
     }
+}
+
+
+/**  ++++ Omite acentos para su facil consulta */
+function omitirAcentos(text) {
+    var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
+    var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
+    for (var i = 0; i < acentos.length; i++) {
+        text = text.replace(acentos.charAt(i), original.charAt(i));
+    }
+    return text;
 }
 // Solicita los productos de un almacen seleccionado
 function getProducts(strId,word) {
@@ -395,7 +407,7 @@ function putProducts(dt) {
     var sl = $('#boxProducts').offset();
     $('#listProducts .list-items').html('');
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.prd_id}">${u.ser_sku} - ${u.prd_name}</div>`;
+        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.prd_id}|${u.ser_sku}">${u.ser_sku} - ${u.prd_name}</div>`;
         $('#listProducts .list-items').append(H);
     });
     

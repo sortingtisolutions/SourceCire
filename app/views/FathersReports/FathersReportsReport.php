@@ -176,9 +176,10 @@ if ($cant > 0) {
 }
 
 $res = $conn->query($qry);
-
+$i = 0;
 while($row = $res->fetch_assoc()){
     $items[] = $row;
+    $i++;
 }
 
 $rr = 0;
@@ -208,9 +209,9 @@ $mpdf= new \Mpdf\Mpdf([
     ]);
     
 $mpdf->shrink_tables_to_fit = 1;
-
-// Cabezal de la página
-$header = '
+if ($i > 0) {
+    // Cabezal de la página
+    $header = '
     <header>
         <div class="cornisa">
             <table class="table-main" border="0">
@@ -226,9 +227,9 @@ $header = '
                     </td>
                 </tr>
             </table>
-           
+        
         </div>
-       
+    
     </header>';
 
     $costBase = 0;
@@ -248,9 +249,9 @@ $header = '
         
     }
                 
-// Pie de pagina
-// <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
-$foot = '
+    // Pie de pagina
+    // <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
+    $foot = '
     <footer>
         <table class="table-footer">
             <tr>
@@ -296,12 +297,12 @@ $foot = '
                 
         </table>
     </footer>
-';
+    ';
 
 
-$mpdf->SetHTMLHeader($header);
-$mpdf->SetHTMLFooter($foot);
-foreach ($projects as $project) {
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetHTMLFooter($foot);
+    foreach ($projects as $project) {
     $html = '
         <section>
             <div class="container">
@@ -420,7 +421,7 @@ foreach ($projects as $project) {
         }
     }
 
-/* Tabla de equipo base -------------------------  */
+    /* Tabla de equipo base -------------------------  */
     if ($equipoBase == '1' && $items[$contBase]['pjt_id'] == $project){
         $sumaEquipo = 0;
         $totalEquipo =0;
@@ -432,7 +433,7 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contBase]['pjt_name'] . '</span>
                         
-                       
+                    
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -553,7 +554,7 @@ foreach ($projects as $project) {
                         </tr>
                     </thead>
                     <tbody>';
-             
+            
     // Total
     $html .= '
                         <tr>
@@ -568,14 +569,14 @@ foreach ($projects as $project) {
                 <!-- End Tabla de costo equipo subarrendo  -->
                 </div>
     </section>';
-    
+
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;
     }
-/* Tabla de equipo base -------------------------  */
+    /* Tabla de equipo base -------------------------  */
 
-/* Tabla de equipo extra -------------------------  */
+    /* Tabla de equipo extra -------------------------  */
     if ($equipoExtra == '1' && $items[$contExtra]['pjt_id'] == $project){
         $mpdf->AddPage();
         if ($cont >= 1) {
@@ -585,7 +586,7 @@ foreach ($projects as $project) {
                     <div class="" style="witdh:77m;font-size: 13pt; text-align: left;">
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contExtra]['pjt_name'] . '</span>
-                                               
+                                            
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -602,7 +603,7 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contExtra]['pjt_name'] . '</span>
                         
-                       
+                    
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -667,14 +668,14 @@ foreach ($projects as $project) {
                                     $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
                                     $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
                                     $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
-    
+
                                     $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
                                     $amountBaseTotal    += $subtotalBase;         //  ------------------------------- Importe total base
                                     $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
                                     $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
                                     $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
                                     $totalMain          += $amountGral;
-    
+
                                     $Insured            = $items[$i]['bdg_insured'];        //  ------------------  Porcentaje de seguro
                                     $discoInsured       = $items[$i]['bdg_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
                                     $amountinsured      = $subtotalBase * $Insured;      //  ---------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
@@ -683,17 +684,17 @@ foreach ($projects as $project) {
                                     $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                     $totalInsr         += $totalInsured;
                                     $totalEquipo += $amountGral;
-      
+    
             $html .= '
                                 <tr>
                                     <td class="dat-figure prod">' . $product                                    . '</td>
                                     <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                     <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                     <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                      
+                                    
                                     <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
                                     <td class="dat-figure disc">' . $valdiscount . '%</td>
-                                  
+                                
                                     <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                                 </tr>
                                 ';
@@ -726,7 +727,7 @@ foreach ($projects as $project) {
                         </tr>
                     </thead>
                     <tbody>';
-         
+        
     // Total
     $html .= '
                         <tr>
@@ -734,7 +735,7 @@ foreach ($projects as $project) {
                             <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                         </tr>
                         ';
-                                      
+                                    
     $html .= '
                     </tbody>
                 </table>
@@ -745,9 +746,9 @@ foreach ($projects as $project) {
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;
     }
-/* Tabla de equipo extra -------------------------  */
+    /* Tabla de equipo extra -------------------------  */
 
-/* Tabla de equipo dias -------------------------  */
+    /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1' && $items[$contDias]['pjt_id'] == $project){
         $mpdf->AddPage();
         if ($cont >= 1) {
@@ -773,7 +774,7 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contDias]['pjt_name'] . '</span>
                         
-                       
+                    
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                     <span class="date" > Periodo: '.$items[$contDias]['fechas'].'</span>
@@ -895,7 +896,7 @@ foreach ($projects as $project) {
             </thead>
             <tbody>';
     // Subtotal
-             
+            
     // Total
     $html .= '
                     <tr>
@@ -903,7 +904,7 @@ foreach ($projects as $project) {
                         <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                     </tr>
                     ';
-                             
+                            
     $html .= '
                 </tbody>
             </table>
@@ -914,10 +915,10 @@ foreach ($projects as $project) {
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;    
     }
-/* Tabla de equipo dias -------------------------  */
+    /* Tabla de equipo dias -------------------------  */
 
 
-/* Tabla de equipo subarrendo -------------------------  */
+    /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1' && $items[$contSub]['pjt_id'] == $project){
         $mpdf->AddPage();
         if ($cont >= 1) {
@@ -1074,7 +1075,7 @@ foreach ($projects as $project) {
                 <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
             </tr>
             ';
-              
+            
     $html .= '
         </tbody>
     </table>
@@ -1084,11 +1085,11 @@ foreach ($projects as $project) {
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;
     }
-/* Tabla de equipo subarrendo -------------------------  */
-    
-}
+    /* Tabla de equipo subarrendo -------------------------  */
 
-/* Tabla totales -------------------------  */
+    }
+
+    /* Tabla totales -------------------------  */
     $html = '
         <section>
             <div class="container"> 
@@ -1101,7 +1102,7 @@ foreach ($projects as $project) {
                         </tr>
                     </thead>
                     <tbody>';
-    
+
                     $totalInsr = $totalInsr - ($totalInsr * $totalInsrGral);
                     $iva  = .16;
 
@@ -1137,20 +1138,20 @@ foreach ($projects as $project) {
                             <td class="tot-main amou">' . number_format($totalFull , 2,'.',',')       . '</td>
                         </tr>
                         ';
-                                      
+                                    
     $html .= '
                     </tbody>
                 </table>
                 <!-- End Tabla de costo equipo subarrendo  -->
                 </div>
                 </section>';
-    
+
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-/* Tabla totales -------------------------  */
+    /* Tabla totales -------------------------  */
 
-/* Tabla terminos y condiciones --------------------  */
-$html = '
+    /* Tabla terminos y condiciones --------------------  */
+    $html = '
     <section>
                 <div class="container"> 
     <!-- Start Tabla de terminos  -->
@@ -1209,8 +1210,8 @@ $html = '
     </section>
     <!-- End Tabla de costo equipo subarrendo  -->';
 
-/* Tabla Terminos y condiciones -------------------------  */
-/* Tabla firmas -------------------------  */
+    /* Tabla Terminos y condiciones -------------------------  */
+    /* Tabla firmas -------------------------  */
     $html .= '
     <!-- Start Tabla de terminos  -->
     <div style="height:3px;"></div>
@@ -1236,10 +1237,92 @@ $html = '
     <!-- End Tabla de costo equipo subarrendo  -->
     </div>
     </section>';
-/* Tabla firmas -------------------------  */
+    /* Tabla firmas -------------------------  */
 
-$mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
-$mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+    $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+    $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+}else{
+    // Cabezal de la página
+    $header = '
+    <header>
+        <div class="cornisa">
+            <table class="table-main" border="0">
+                <tr>
+                    <td class="box-logo side-color">
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:48mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
+                    </td>
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto Padre:   #    </span>
+                        <br><span class="date">'.'</span>
+                    </p>
+                    </td>
+                </tr>
+            </table>
+        
+        </div>
+    
+    </header>';
+                
+    // Pie de pagina
+    // <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
+    $foot = '
+    <footer>
+        <table class="table-footer">
+            <tr>
+                <td class="side-color"></td>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <td class="td-foot foot-date" width="25%"></td>
+                            <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
+                            <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr> 
+        </table>
+        
+        <table class="table-address">
+            <tr>
+                <td class="addData">
+                    reservaciones@cttrentals.com, 
+                
+                </td>
+                <td class="addData">
+                    presupuestos@cttrentals.com,
+                </td>
+                <td class="addData">
+                
+                    proyectos@cttrentals.com,
+                </td>
+                <td class="addData">
+                    cotizaciones@cttrentals.com.
+                </td>
+            </tr>
+
+            
+        </table>
+        <table class="table-address">
+            
+            <tr>
+                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+                
+            </tr>
+                
+        </table>
+    </footer>
+    ';
+
+    $html = "";
+
+
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetHTMLFooter($foot);
+    $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+    $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+}
+
 ob_clean();
 ob_get_contents();
 

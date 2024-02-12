@@ -116,7 +116,7 @@ function putDetailsProds(dt) {
         $.each(dt, function (v, u){
             tabla.row
             .add({
-                editable: `<i class='fas fa-edit toLink' id ="${u.pjt_id}"></i><i class="fas fa-times-circle kill"></i>`,
+                editable: `<i class='fas fa-edit toLink' id ="${u.pjt_id}"></i>`,
                 pjtname: u.pjt_name,
                 pjtnum: u.pjt_number,
                 pjttpy: u.pjttp_name,

@@ -684,7 +684,6 @@ function resEdtProduct(dt) {
     $(el.find('td')[10]).text(prdCt);
     $(el.find('td')[11]).text(prdEn);
     $(el.find('td')[12]).text(prdCm);
-
     $('#ProductModal .btn_close').trigger('click');
     activeIcons();
 }
@@ -904,8 +903,8 @@ function putSeries(dt) {
             {data: 'serstore', class: 'catalog'},
             {data: 'serbrand', class: 'catalog'},
             {data: 'sernumped', class: 'catalog'},
-            {data: 'sercosimp', class: 'catalog'},
-            {data: 'sercostl', class: 'catalog'},
+            {data: 'sercosimp', class: 'catalog center'},
+            {data: 'sercostl', class: 'catalog center'},
             {data: 'sernumeco', class: 'sku'},
             {data: 'comments', class: 'comments'},
         ],
@@ -952,7 +951,7 @@ function build_modal_serie(dt) {
                 serbrand: u.ser_brand,
                 sernumped: u.ser_import_petition,
                 sercosimp: u.ser_cost_import,
-                sercostl: u.ser_cost,
+                sercostl: mkn(u.ser_cost,'n'),
                 sernumeco: u.ser_no_econo,
                 comments: u.ser_comments,
             })
@@ -967,11 +966,12 @@ function activeIconsSerie() {
         .unbind('click')
         .on('click', function () {
             var id = $(this).attr('id').slice(1, 10);
-            var pagina = 'Documentos/VerDocumento';
+            console.log(id);
+            /* var pagina = 'Documentos/VerDocumento';
             var par = `[{"id":"${id}"}]`;
             var tipo = 'json';
             var selector = putDocument;
-            fillField(pagina, par, tipo, selector);
+            fillField(pagina, par, tipo, selector); */
         });
 
     $('.serie.modif')
@@ -1129,7 +1129,7 @@ function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     let numEco = $('#txtSerNumEco').val();
     let numPed = $('#txtSerNumPed').val();
     let costIm= $('#txtSerCostImp').val();
-    let costTl = $('#txtSerCost').val();
+    let costTl = mkn($('#txtSerCost').val(),'n');
 
     let el = $(`#tblSerie tr td i[id="E${serId}"]`).parents('tr');
     let docInvo = `<span class="invoiceView" id="F${serDc}"><i class="fas fa-file-alt"></i></span>`;
@@ -1145,6 +1145,7 @@ function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     $(el.find('td')[14]).html(serCm);
 
     activeIconsSerie();
+    activeIcons();
     $('#ModifySerieModal .btn_close').trigger('click');
 }
 
@@ -1186,6 +1187,7 @@ function putInvoiceList(dt) {
     $('#listInvoice .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
+        console.log(prdNm);
         $('#txtDocIdSerie').val(prdNm);
         $('#txtDcpIdSerie').val(prdId);
         $('#listInvoice').slideUp(100);
@@ -1198,6 +1200,22 @@ function omitirAcentos(text) {
         text = text.replace(acentos.charAt(i), original.charAt(i));
     }
     return text;
+}
+
+
+// Da formato a los numero
+function mkn(cf, tp) {
+    let nm = cf;
+    switch (tp) {
+        case 'n':
+            nm = formato_numero(cf, '2', '.', ',');
+            break;
+        case 'p':
+            nm = formato_numero(cf, '1', '.', ',');
+            break;
+        default:
+    }
+    return nm;
 }
 
 function sel_invoice(res) {
