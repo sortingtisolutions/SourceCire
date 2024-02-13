@@ -369,7 +369,7 @@ function getVersion(pjtId) {
 }
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
-    var pagina = 'Budget/listProducts3';
+    var pagina = 'Budget/listProductsCombo';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -377,7 +377,7 @@ function getProducts(word, dstr, dend) {
 }
 /**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
 function getProductsInput(word, dstr, dend) {
-    var pagina = 'Budget/listProducts2';
+    var pagina = 'Budget/listProductsInput';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -1688,7 +1688,7 @@ function cleanInputs(){
     $(`#txtCustomerEdt option[value = "0"]`).attr('selected','selected');
     $(`#txtCustomerRelEdt option[value = "0"]`).attr('selected','selected');
     $('#txtHowRequired').val('');
-    $('#txtTypeLocationEdt').val(0);
+    $('#txtTypeLocationEdt').val(1);
     $('#txtProjectIdEdt').val('');
 }
 function ActiveChangePKT(){

@@ -185,7 +185,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de servicio:</td>
                         <td class="data">
-                            <select id="txtSrvId" name="txtSrvId" class="textbox" style="width:260px">
+                            <select id="txtSrvId" name="txtSrvId" class="textbox required" style="width:260px">
                                 <option value="0">Selecciona el tipo de servicio</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
@@ -255,7 +255,7 @@
                         <td class="concept"><span class="reqsign"></span> SKU:</td>
                         <td class="data">
                             <input type="hidden" id="txtSerIdSerie" name="txtSerIdSerie" >
-                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox requiredEdt" style="width:200px" disabled><!--- 11-10-23 -->
+                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox" style="width:200px" disabled><!--- 11-10-23 -->
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Código del producto</span>
                         </td>

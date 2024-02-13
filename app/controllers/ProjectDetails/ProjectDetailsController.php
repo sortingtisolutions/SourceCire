@@ -118,10 +118,10 @@ class ProjectDetailsController extends Controller
         echo $res;
     } 
     //LISTAR PRODUCTOS  ***ED
-    public function listProducts3($request_params)
+    public function listProductsCombo($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts3($request_params);
+        $result = $this->model->listProductsCombo($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;

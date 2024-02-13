@@ -536,7 +536,7 @@ function getSubCategories(catId) {
 }
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
-    var pagina = 'ProjectDetails/listProducts3';
+    var pagina = 'ProjectDetails/listProductsCombo';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;

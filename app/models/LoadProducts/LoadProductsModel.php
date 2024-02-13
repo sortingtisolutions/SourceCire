@@ -211,13 +211,15 @@ public function SaveDocumento($request_params)
 // Optiene los Documentos existentes
 	public function GetDocumentos()
 	{
-		$qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, ldp.prd_name_provider,
-		ldp.prd_model, ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, 
-		case when ldp.prd_insured = 1 then 'Sí' ELSE 'NO' END prd_insured,
-		ldp.srv_id, srv.srv_name, cn.cin_code, result FROM ctt_load_products AS ldp
-		LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
-		LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
-		$result = $this->db->query($qry);
+		$qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, 
+						ldp.prd_name_provider,ldp.prd_model, 
+						ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, 
+				CASE WHEN ldp.prd_insured = 1 THEN 'Sí' ELSE 'NO' END prd_insured,
+				ldp.srv_id, srv.srv_name, cn.cin_code, result 
+				FROM ctt_load_products AS ldp
+				LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
+				LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
+				$result = $this->db->query($qry);
 	
 		return $result;
 	}

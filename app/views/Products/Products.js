@@ -967,11 +967,11 @@ function activeIconsSerie() {
         .on('click', function () {
             var id = $(this).attr('id').slice(1, 10);
             console.log(id);
-            /* var pagina = 'Documentos/VerDocumento';
+            var pagina = 'Documentos/VerDocumento';
             var par = `[{"id":"${id}"}]`;
             var tipo = 'json';
             var selector = putDocument;
-            fillField(pagina, par, tipo, selector); */
+            fillField(pagina, par, tipo, selector);
         });
 
     $('.serie.modif')

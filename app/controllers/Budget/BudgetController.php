@@ -281,10 +281,10 @@ class BudgetController extends Controller
         echo $res;
     } 
     // LISTAR PRODUCTOS version 2 ***ED
-    public function listProducts2($request_params)
+    public function listProductsInput($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts2($request_params);
+        $result = $this->model->listProductsInput($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -298,10 +298,10 @@ class BudgetController extends Controller
         echo $res;
     } 
     //LISTAR PRODUCTOS version 3  ***ED
-    public function listProducts3($request_params)
+    public function listProductsCombo($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts3($request_params);
+        $result = $this->model->listProductsCombo($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;

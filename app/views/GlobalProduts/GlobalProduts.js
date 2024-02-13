@@ -13,7 +13,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-       
+        modalLoading('S');
         getProducts(0);
         $('.tblProyects').css({display: 'none'});  
     }, 100);
@@ -167,6 +167,7 @@ function settingTableSub() {
     });
 
 }
+
 function asignarSubcategoria() {
     getCategories();
     settingTableSub();
@@ -192,6 +193,7 @@ function getCategories() {
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
 }
+
 function getSubCategories(catId) {
     //console.log(catId);
     var pagina = 'GlobalProduts/listSubCategories';
@@ -200,6 +202,7 @@ function getSubCategories(catId) {
     var selector = putSubCategories;
     fillField(pagina, par, tipo, selector);
 }
+
 function updateData(sbcId,idSelected, num) {
     var pagina = 'GlobalProduts/updateData';
     var par = `[{"sbcId":"${sbcId}", "idSelected":"${idSelected}", "nxtSku":"${num}"}]`;
@@ -207,11 +210,13 @@ function updateData(sbcId,idSelected, num) {
     var selector = putData;
     fillField(pagina, par, tipo, selector);
 }
+
 function putCategories(dt) {
     console.log(dt);
     if (dt[0].cat_id != '0') {
         let catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
+            $('#txtCategoryList').html('');
             var H = `<option value="${u.cat_id}">${u.cat_name}</option>`;
             $('#txtCategoryList').append(H);
         });
@@ -266,7 +271,7 @@ function putSubCategories(dt) {
                     updateData(inx,idSelected, num);
                     num++;
                 });
-            }, 100);
+            }, 1000);
         });
 }
 function getNextSku(sbcId){
@@ -324,11 +329,11 @@ function loadProcess() {
  }
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    console.log(dt);
+    // console.log(dt);
     let valstage='';
     let valicon='';
     let etiquetai = '';
-    modalLoading('S');
+    
     if (dt[0].prd_id > 0) {        
         $('#tblProyects tbody').html('');
         $.each(dt, function (v, u) {
