@@ -64,7 +64,7 @@ class WorkInputContentModel extends Model
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
-                WHERE pjd.sttd_id = 4 AND pcn.pjtcn_id=prcn.pjtcn_id) 
+                WHERE (pjd.sttd_id = 4 OR ser.ser_situation='M') AND pcn.pjtcn_id=prcn.pjtcn_id) 
                 = 
                 (SELECT COUNT(*)
                 FROM ctt_projects_content AS pcn
@@ -80,7 +80,7 @@ class WorkInputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE pjd.sttd_id = 4 AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                WHERE (pjd.sttd_id = 4 OR ser.ser_situation='M') AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
                 END AS cant_ser
             FROM ctt_projects_content AS prcn
             INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
@@ -99,7 +99,7 @@ class WorkInputContentModel extends Model
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
-                WHERE pjd.sttd_id = 4 AND pcn.pjtcn_id=pjc.pjtcn_id) 
+                WHERE (pjd.sttd_id = 4 OR ser.ser_situation='M') AND pcn.pjtcn_id=pjc.pjtcn_id) 
                 = 
                 (SELECT COUNT(*)
                 FROM ctt_projects_content AS pcn
@@ -116,7 +116,7 @@ class WorkInputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE pjd.sttd_id = 4 AND pcn.pjtcn_id=pjc.pjtcn_id AND (pjd.prd_type_asigned != 'AV' OR pjd.prd_type_asigned != 'AF'))
+                WHERE (pjd.sttd_id = 4 OR ser.ser_situation='M') AND pcn.pjtcn_id=pjc.pjtcn_id AND (pjd.prd_type_asigned != 'AV' OR pjd.prd_type_asigned != 'AF'))
                 END AS cant_ser
             FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)

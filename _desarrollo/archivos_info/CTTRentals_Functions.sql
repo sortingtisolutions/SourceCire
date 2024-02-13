@@ -320,3 +320,56 @@ CLOSE cbase_content;
 
 return lconta;
 END //
+
+--***************************** FUNCION PARA OBTENER TOTALES DE UN PROYECTO ****************
+DROP FUNCTION fun_getTotalProject;
+DELIMITER //
+CREATE OR REPLACE FUNCTION fun_getTotalProject(ppjtid VARCHAR(3)) RETURNS INT
+BEGIN
+declare lexpjtid 	INT;
+declare skulong 	CHAR(15);
+declare totreg	 	DOUBLE;
+declare sumtot	 	DOUBLE;
+
+declare numerr		INT DEFAULT 0;
+
+DECLARE gettot CURSOR FOR
+SELECT ((pjc.pjtcn_prod_price * pjc.pjtcn_quantity * pjc.pjtcn_days_cost ) +
+  (pjc.pjtcn_prod_price * pjc.pjtcn_quantity * pjc.pjtcn_days_trip ) +
+  (pjc.pjtcn_prod_price * pjc.pjtcn_quantity * pjc.pjtcn_days_test )) -
+  ((pjc.pjtcn_prod_price * pjc.pjtcn_quantity * pjc.pjtcn_days_cost * pjc.pjtcn_discount_base) +
+  (pjc.pjtcn_prod_price * pjc.pjtcn_quantity * pjc.pjtcn_days_trip * pjc.pjtcn_discount_trip ) +
+  (pjc.pjtcn_prod_price * pjc.pjtcn_quantity * pjc.pjtcn_days_test * pjc.pjtcn_discount_test )) +
+  ((pjc.pjtcn_prod_price * pjc.pjtcn_quantity *  pjc.pjtcn_days_cost * pjc.pjtcn_insured )) AS total
+FROM ctt_projects_content AS pjc
+WHERE pjt_id=ppjtid;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET @hecho = TRUE;
+
+	set sumtot=0;
+	OPEN gettot;
+		loop1: LOOP
+	FETCH gettot INTO totreg;
+
+	IF @hecho THEN
+		LEAVE loop1;
+	END IF;
+	
+	set sumtot=sumtot + totreg;
+	
+	END LOOP loop1;
+	CLOSE gettot;
+	
+SELECT COUNT(*) INTO lexpjtid FROM ctt_total_project_amount
+WHERE pjt_id=ppjtid;
+
+IF (lexpjtid=0) THEN
+	INSERT INTO ctt_total_project_amount (pjt_id, tpa_amount, tpa_date_registed) 
+	VALUES (ppjtid,sumtot,CURRENT_TIMESTAMP);
+ELSE
+	UPDATE ctt_total_project_amount SET tpa_amount=sumtot, tpa_date_registed=CURRENT_TIMESTAMP
+	WHERE pjt_id=ppjtid;
+END IF;
+
+	RETURN numerr;
+END //

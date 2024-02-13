@@ -429,7 +429,7 @@ function fill_table_packs(par) {
 function putNewPackage(dt) {
     let id = dt.split('|')[0];
     let sku = dt.split('|')[1];
-    let name = dt.split('|')[2];
+    let name = (dt.split('|')[2]).toUpperCase();
     let price = dt.split('|')[3];
     $(`#SKU-${sku}`).text(id);
 
@@ -447,11 +447,11 @@ function putNewPackage(dt) {
     $(`#SKU-${sku}`).parent().parent().attr('id', id).addClass('indicator');
     action_selected_packages();
 
-    tabla.on('select', function (e, dt, type, i) {
-        $('#txtCategoryProduct').val(0);
-        $('#txtSubcategoryProduct').val(0);
-        $('#txtIdPackages').val(0);
-    });
+    // tabla.on('select', function (e, dt, type, i) {
+    //     $('#txtCategoryProduct').val(0);
+    //     $('#txtSubcategoryProduct').val(0);
+    //     $('#txtIdPackages').val(0);
+    // });
     clean_params();
 }
 

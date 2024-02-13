@@ -215,23 +215,23 @@ public function listDiscounts($params)
         return $this->db->query($qry);
     } 
 
-    public function listProducts2($params)
+    public function listProductsInput($params)
     {
         $word = $this->db->real_escape_string($params['word']);
-        $qry = "SELECT * from ctt_vw_list_products2
+        $qry = "SELECT * from ctt_vw_list_productsInput
             WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%');";
         return $this->db->query($qry);
     } 
     // Listar productos ***Ed
-    public function listProducts3($params)
+    public function listProductsCombo($params)
     {
         $word = $this->db->real_escape_string($params['word']);
         $sbc_id = $this->db->real_escape_string($params['dstr']);
         if ($word == '') {
-            $qry = "SELECT * from ctt_vw_list_products2
+            $qry = "SELECT * from ctt_vw_list_productsInput
             WHERE sbc_id = '$sbc_id';";
         }else{
-            $qry = "SELECT * from ctt_vw_list_products2
+            $qry = "SELECT * from ctt_vw_list_productsInput
             WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
         }
         return $this->db->query($qry);

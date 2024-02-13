@@ -58,12 +58,17 @@ if ($cant > 0) {
    bdg_discount_base, bdg_discount_insured,
    bdg_days_trip, bdg_discount_trip, bdg_insured,
    bdg_days_test, bdg_discount_test, bdg_prod_sku, bdg_prod_name,
-   vr.ver_discount_insured, pd.prd_id, pj.pjt_name, CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
-    bdg_order, pj.pjt_number,  prjt.pjt_name AS proyname, prjt.pjt_date_project, prjt.pjt_date_last_motion, prjt.pjt_time, prjt.pjt_location,
+   vr.ver_discount_insured, pd.prd_id, pj.pjt_name, 
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+    bdg_order, pj.pjt_number,  prjt.pjt_name AS proyname, prjt.pjt_date_project, 
+    prjt.pjt_date_last_motion, prjt.pjt_time, prjt.pjt_location,
    prjt.pjt_how_required, prjt.pjt_trip_go, prjt.pjt_trip_back, prjt.pjt_to_carry_on, 
-   prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name, cu.cus_email, cu.cus_phone,
+   prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name, 
+   cu.cus_email, cu.cus_phone,
    cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, 
-   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')), pj.pjt_id, vr.ver_code
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')), pj.pjt_id, vr.ver_code
    FROM ctt_budget AS bg
            INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
            INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
@@ -75,7 +80,8 @@ if ($cant > 0) {
            LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
            LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
            LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-           WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id =  (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
+           WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id =  
+           (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
    FROM ctt_budget bug ) bg
    INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
    INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
@@ -86,38 +92,45 @@ if ($cant > 0) {
    cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
    cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
    cn.pjtcn_days_test bdg_days_test, cn.pjtcn_discount_test bdg_discount_test, cn.pjtcn_prod_sku bdg_prod_sku, cn.pjtcn_prod_name bdg_prod_name,
-   vr.ver_discount_insured, pr.prd_id, pj.pjt_name, CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
-   cn.pjtcn_order bdg_order, pj.pjt_number,  pjtv.pjt_name AS proyname, pjtv.pjt_date_project, pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
+   vr.ver_discount_insured, pr.prd_id, pj.pjt_name, 
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+   cn.pjtcn_order bdg_order, pj.pjt_number, pjtv.pjt_name AS proyname, pjtv.pjt_date_project, 
+   pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
    pjtv.pjt_how_required, pjtv.pjt_trip_go, pjtv.pjt_trip_back, pjtv.pjt_to_carry_on, 
-   pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, cu.cus_email, cu.cus_phone,
+   pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, 
+   cu.cus_email, cu.cus_phone,
    cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, 
-   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')), pj.pjt_id, vr.ver_code
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')), pj.pjt_id, vr.ver_code
    FROM ctt_projects_detail AS dt
-   INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-   INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-   LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-   INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-   INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
-   INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-   INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-   LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
-   LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-   INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
-   LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-   LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-   WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' GROUP BY pj.pjt_id,cn.pjtcn_prod_name) 
-   ORDER BY bdg_order, bdg_section";
+        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+        INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
+        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
+        LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+        LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+        WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' GROUP BY pj.pjt_id,cn.pjtcn_prod_name) 
+        ORDER BY bdg_order, bdg_section";
    
-   $query="SELECT DISTINCT crp_id, crp_name FROM(SELECT cr.crp_id, cr.crp_name, bg.bdg_section section, sb.sbc_order_print FROM ctt_budget AS bg
-   INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-   INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-   INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
-   INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-   LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
-   LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id
-   WHERE pj.pjt_id IN ($proj_ids) AND pd.prd_level != 'A' 
+   $query="SELECT DISTINCT crp_id, crp_name FROM(SELECT cr.crp_id, cr.crp_name, bg.bdg_section section, 
+            sb.sbc_order_print FROM ctt_budget AS bg
+        INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+        INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
+        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id
+        WHERE pj.pjt_id IN ($proj_ids) AND pd.prd_level != 'A' 
    UNION 
-   SELECT cr.crp_id, cr.crp_name, cn.pjtcn_section section, sb.sbc_order_print FROM ctt_projects_detail AS dt
+   SELECT cr.crp_id, cr.crp_name, cn.pjtcn_section section, sb.sbc_order_print 
+        FROM ctt_projects_detail AS dt
        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
@@ -133,33 +146,40 @@ if ($cant > 0) {
    $categories=array();
     
 }else{
-    $qry = "SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, cn.pjtcn_prod_price bdg_prod_price,
-    cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
-    cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
-    cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
-    cn.pjtcn_days_test bdg_days_test, cn.pjtcn_discount_test bdg_discount_test, cn.pjtcn_prod_sku bdg_prod_sku, cn.pjtcn_prod_name bdg_prod_name,
-    vr.ver_discount_insured, pr.prd_id, pj.pjt_name, CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
-    cn.pjtcn_order bdg_order, pj.pjt_number,  pjtv.pjt_name AS proyname, pjtv.pjt_date_project, pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
-    pjtv.pjt_how_required, pjtv.pjt_trip_go, pjtv.pjt_trip_back, pjtv.pjt_to_carry_on, 
-    pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, cu.cus_email, cu.cus_phone,
-    cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, pj.pjt_id, 
-    CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')), vr.ver_code
+    $qry = "SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, 
+        cn.pjtcn_prod_price bdg_prod_price,
+        cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
+        cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
+        cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
+        cn.pjtcn_days_test bdg_days_test, cn.pjtcn_discount_test bdg_discount_test, cn.pjtcn_prod_sku bdg_prod_sku, cn.pjtcn_prod_name bdg_prod_name,
+        vr.ver_discount_insured, pr.prd_id, pj.pjt_name, 
+        CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+        date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+        cn.pjtcn_order bdg_order, pj.pjt_number,  pjtv.pjt_name AS proyname, 
+        pjtv.pjt_date_project, pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
+        pjtv.pjt_how_required, pjtv.pjt_trip_go, pjtv.pjt_trip_back, pjtv.pjt_to_carry_on, 
+        pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, cu.cus_email, 
+        cu.cus_phone, cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, pj.pjt_id, 
+        CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+        date_format(pj.pjt_date_end, '%d-%b-%Y')), vr.ver_code
     FROM ctt_projects_detail AS dt
-    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
-    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
-    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
-    INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-    INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
-    INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-    INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-    LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
-    LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-    INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
-    LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-    LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-    WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' GROUP BY pj.pjt_id,cn.pjtcn_prod_name 
-    ORDER BY cn.pjtcn_order, cn.pjtcn_section
-    ";
+        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+        INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
+        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
+        LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+        LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+    WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' 
+    GROUP BY pj.pjt_id,cn.pjtcn_prod_name 
+    ORDER BY cn.pjtcn_order, cn.pjtcn_section; ";
+
+
     $query="SELECT DISTINCT cr.crp_id, cr.crp_name FROM ctt_projects_detail AS dt
     INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
     INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id

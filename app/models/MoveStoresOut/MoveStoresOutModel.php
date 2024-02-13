@@ -24,7 +24,7 @@ class MoveStoresOutModel extends Model
     public function listStores()
     {
 		$qry = "SELECT * FROM ctt_stores 
-				WHERE str_name  NOT LIKE 'SUBARRENDO%'";
+				WHERE str_name  NOT LIKE 'SUBARRENDO%' AND str_status = 1";
 		return $this->db->query($qry);
     }
 

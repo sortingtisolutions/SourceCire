@@ -47,7 +47,7 @@ public function listProducts()
 {
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
-            WHERE prd_status = 1 order by prd_sku;";
+            WHERE prd_status = 1 AND prd_type_asigned !='KP' order by prd_sku;";
     return $this->db->query($qry);
 }
 
@@ -59,7 +59,7 @@ public function listProductsById($request_params)
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
             WHERE prd_status = 1 and sbc_id = $sbc_id and 
-            prd_level <> 'A' order by prd_sku;";
+            prd_level <> 'A' AND prd_type_asigned !='KP' order by prd_sku;";
     
     return $this->db->query($qry);
 }
@@ -78,7 +78,7 @@ public function listSeriesProd($params) // Edna
             FROM ctt_series AS ser
             INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
             LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = ser.ser_id
-            WHERE prd.prd_id=$prdId AND sp.stp_quantity > 0 GROUP BY ser.ser_id";
+            WHERE prd.prd_id=$prdId AND sp.stp_quantity > 0 AND prd_type_asigned !='KP' GROUP BY ser.ser_id";
     return $this->db->query($qry);
 }
 
@@ -90,7 +90,7 @@ public function list_products($params) // Edna
     $qry = "SELECT prd.prd_id ser_id, prd.prd_sku ser_sku, prd.prd_name, prd.prd_name ser_serial_number, prd.prd_id
     FROM  ctt_products AS prd
     LEFT JOIN ctt_stores_products AS sp ON sp.prd_id = prd.prd_id
-    WHERE prd.prd_id = $prdId AND sp.stp_quantity > 0 GROUP BY prd.prd_id, prd.prd_sku";
+    WHERE prd.prd_id = $prdId AND sp.stp_quantity > 0 AND prd_type_asigned !='KP' GROUP BY prd.prd_id, prd.prd_sku";
     return $this->db->query($qry);
 }
 

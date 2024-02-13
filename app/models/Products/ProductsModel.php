@@ -144,12 +144,13 @@ public function listInvoice()
                 ORDER BY p.prd_sku;";
         return $this->db->query($qry);
     }
-    public function listProducts2()
-    {
-        $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
-                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P' AND p.prd_type_asigned != 'KP';";
-        return $this->db->query($qry);
-    }
+
+    // public function listProducts2()
+    // {
+    //     $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
+    //             FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P' AND p.prd_type_asigned != 'KP';";
+    //     return $this->db->query($qry);
+    // }
     
     // Listado de Productos
     public function listSeries($params)

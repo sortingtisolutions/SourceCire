@@ -536,6 +536,9 @@ function validator() {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
     }
+    if ($('#txtTypeExchange').val()== 11 && $('#txtStoreSource').val() > 0 && $('#txtIdProducts').val() != 0) {
+        ky=0;
+    }
 
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');

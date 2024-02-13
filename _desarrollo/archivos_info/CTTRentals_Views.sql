@@ -9,15 +9,16 @@ SELECT
     pr.prd_id AS producid, pr.prd_sku AS produsku, pr.prd_name AS prodname, pr.prd_price AS prodpric,
     CONCAT('<span class="toLink">', prd_stock, '</span> ') AS prodqtty,
     pr.prd_level AS prodtype, sv.srv_name AS typeserv, cn.cin_code AS prodcoin,
-    CONCAT('<i class="fas fa-file-invoice" id="', dc.doc_id, '"></i> ') AS prddocum,
-    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme, pr.prd_name_provider AS prdprv,  ct.cat_id
+    CONCAT('<span class="invoiceView" id="F', dc.doc_id, '"><i class="fas fa-file-alt"></i></span>') AS prddocum,
+    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme, 
+    pr.prd_name_provider AS prdprv,  ct.cat_id
 FROM ctt_products AS pr
     INNER JOIN ctt_coins AS cn ON cn.cin_id = pr.cin_id
     INNER JOIN ctt_services AS sv ON sv.srv_id = pr.srv_id AND sv.srv_status = '1'
     INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id AND sc.sbc_status = '1'
     INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id AND ct.cat_status = '1'
     LEFT JOIN ctt_products_documents AS dc ON dc.prd_id = pr.prd_id AND dc.dcp_source = 'P'
-WHERE pr.prd_status = 1 AND pr.prd_level IN ('A', 'P');
+WHERE pr.prd_status = 1 AND pr.prd_level IN ('A','P');
 
 
 /* VISTA DE PROJECTOS  */
@@ -109,8 +110,8 @@ WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
 ORDER BY pd.prd_name;
 
 --******* 24-ago-23 ********************
-DROP VIEW ctt_vw_list_products2;
-CREATE VIEW ctt_vw_list_products2 AS 
+DROP VIEW ctt_vw_list_productsInput;
+CREATE VIEW ctt_vw_list_productsInput AS 
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
             pd.prd_insured, sb.sbc_name,cat_name,prd_type_asigned,
     CASE 

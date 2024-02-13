@@ -287,9 +287,17 @@ function selProductsSub(dt) {
     $('#txtProductSubCat').html(''); // Edna
     if (dt[0].prd_id != 0) {
         $.each(dt, function (v, u) {
-                let H = `<option value="${u.prd_id}" data-content="${u.prd_id}|${u.sbc_id}|${u.prd_sku}">${u.prd_sku} - ${u.prd_name}</option>`;
+                let H = <option value="${u.prd_id}" data-content="${u.prd_id}|${u.sbc_id}|${u.prd_sku}">${u.prd_sku} - ${u.prd_name}</option>;
                 $('#txtProductSubCat').append(H);
         });
+
+        if ($('#RadioConceptos1').prop('checked')) { opc = 1; } 
+        if ($('#RadioConceptos2').prop('checked')) { opc = 2; } 
+        getSeriesProd(dt[0].prd_id, opc);
+    }else{
+        if ($('#RadioConceptos1').prop('checked')) { opc = 1; } 
+        if ($('#RadioConceptos2').prop('checked')) { opc = 2; } 
+        getSeriesProd(0, opc);
     }
 
     $('#txtProductSubCat').change(function () {

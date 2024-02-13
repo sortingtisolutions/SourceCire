@@ -543,7 +543,7 @@ ALTER TABLE `ctt_projects_detail`
 
 --************************
 
-ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ctt_vw_list_products2` AS SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_type_asigned,
+ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ctt_vw_list_productsInput` AS SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_type_asigned,
             pd.prd_insured, sb.sbc_name,cat_name,
     CASE 
         WHEN pd.prd_type_asigned ='KP' THEN 
