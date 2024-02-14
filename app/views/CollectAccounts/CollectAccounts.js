@@ -12,7 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        settingTable();
+        // settingTable();
         getProjects();
         getWayToPay();
     }, 100);
@@ -127,6 +127,7 @@ function putProjects(dt) {
                 </tr>`;
             $('#tblCollets tbody').append(H);
         });
+        settingTable();
         activeIcons();
     } else {
         settingTable();
@@ -264,7 +265,8 @@ function fillContent() {
 function putToWork(dt){
     // console.log(dt)
     $('#registPayModal .btn_close').trigger('click');
-    getProjects();
+        // getProjects();
+        window.location.reload();
 }
 
 function mkn(cf, tp) {
