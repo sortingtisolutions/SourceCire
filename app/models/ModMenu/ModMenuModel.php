@@ -11,6 +11,20 @@ class ModMenuModel extends Model
 	}
 
 //Guarda proveedor  ***
+
+// Optiene los menus existentes
+public function GetMenus($params)
+{
+
+	$qry = "SELECT mnu.mnu_id, mnu.mnu_parent, mnu.mnu_item, mnu.mnu_description, 
+					mnu.mnu_order, mnu.mod_id,mdl.mod_name 
+			FROM ctt_menu AS mnu
+			INNER JOIN ctt_modules AS mdl ON mdl.mod_id = mnu.mod_id
+			ORDER BY mnu.mnu_item;";
+	return $this->db->query($qry);
+}
+
+
 	public function SaveMenu($params)
 	{
 		$mnuParent 			= $this->db->real_escape_string($params['mnuParent']);
@@ -27,17 +41,6 @@ class ModMenuModel extends Model
 
 	}
 	
-// Optiene los menus existentes
-	public function GetMenus($params)
-	{
-	
-		$qry = "SELECT mnu.mnu_id, mnu.mnu_parent, mnu.mnu_item, mnu.mnu_description, mnu.mnu_order, mnu.mod_id,
-			mdl.mod_name 
-			FROM ctt_menu AS mnu
-			INNER JOIN ctt_modules AS mdl ON mdl.mod_id = mnu.mod_id;";
-		return $this->db->query($qry);
-	}
-
 
     public function UpdateMenu($params)
 	{

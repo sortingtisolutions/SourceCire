@@ -36,7 +36,7 @@ class CategoriasModel extends Model
     public function listAreas($params)
 	{
 		$qry = "SELECT * FROM ctt_areas
-				WHERE are_id in (2,3) AND are_status = 1 ORDER BY are_id;";
+				WHERE are_status = 1 ORDER BY are_id;";
 
 		return $this->db->query($qry);
 	}

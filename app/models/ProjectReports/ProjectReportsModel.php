@@ -248,20 +248,22 @@ public function patrocinios($params)
                 INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                 INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                 INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin'";
+                WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' 
+                GROUP BY pj.pjt_id";
     }else{
         if ($bandera == 2) {
             $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, pjt.pjttp_name, 
                 CONCAT(DATE(pj.pjt_date_start), ' - ' ,DATE(pj.pjt_date_end)) AS dates, 
                 em.emp_fullname, (SELECT (SUM(pc.pjtcn_discount_base + pc.pjtcn_discount_trip + pc.pjtcn_discount_test)*100)/(COUNT(pc.pjtcn_id)) 
                     FROM ctt_projects_content pc WHERE pc.pjt_id = pj.pjt_id) AS discount
-                        FROM ctt_projects AS pj 
+                        FROM ctt_projects AS pj  
                         INNER JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
                         INNER JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
                         INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                         INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                         INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                        WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND  em.emp_id ='$findAna'";
+                        WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND  em.emp_id ='$findAna'
+                        GROUP BY pj.pjt_id";
         }else{
             if ($bandera == 3) {
                 $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, pjt.pjttp_name, 
@@ -274,7 +276,8 @@ public function patrocinios($params)
                             INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                             INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                             INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                            WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id ='$findCli'";
+                            WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id ='$findCli'
+                            GROUP BY pj.pjt_id";
             }else{
                 $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, pjt.pjttp_name, 
                     CONCAT(DATE(pj.pjt_date_start), ' - ' ,DATE(pj.pjt_date_end)) AS dates, 
@@ -286,7 +289,8 @@ public function patrocinios($params)
                             INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                             INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                             INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                            WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id ='$findCli' AND em.emp_id ='$findAna'";
+                            WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id ='$findCli' AND em.emp_id ='$findAna'
+                            GROUP BY pj.pjt_id";
             }
         }
     }
@@ -312,7 +316,7 @@ public function cierres($params)
                 INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                 INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                 INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                WHERE  em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND pj.pjt_status = 9;";
+                WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND pj.pjt_status = 9;";
     }elseif ($bandera == '2') {
         $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, 
         pjt.pjttp_name, 
@@ -325,7 +329,7 @@ public function cierres($params)
                 INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                 INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                 INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND em.emp_id ='$findAna' AND pj.pjt_status = 9;";
+                WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND em.emp_id ='$findAna' AND pj.pjt_status = 9;";
         
     }elseif ($bandera == '3') {
         $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, 
@@ -339,7 +343,7 @@ public function cierres($params)
                 INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                 INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                 INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND pj.pjt_status = 9;";
+                WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND pj.pjt_status = 9;";
         
     }elseif ($bandera == '4') {
         $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, 
@@ -353,7 +357,7 @@ public function cierres($params)
                 INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                 INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                 INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND em.emp_id ='$findAna' AND pj.pjt_status = 9;";
+                WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND em.emp_id ='$findAna' AND pj.pjt_status = 9;";
     }
     return $this->db->query($qry);
 }
@@ -517,10 +521,10 @@ public function ProyectosTrabajados($params)
                         INNER JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
                         INNER JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
                         INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
-            
-         INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
-         INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                        WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND pj.pjt_status = 99";
+                        INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
+                        INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
+                        WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND pj.pjt_status = 99 
+                        GROUP BY pj.pjt_id";
     }elseif ($bandera == '2') {
         $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, pjt.pjttp_name, 
                 CONCAT(DATE(pj.pjt_date_start), ' - ' ,DATE(pj.pjt_date_end)) AS dates, 
@@ -532,7 +536,8 @@ public function ProyectosTrabajados($params)
                         INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                         INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                         INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                        WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND em.emp_id ='$findAna' AND pj.pjt_status = 99";
+                        WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND em.emp_id ='$findAna' AND pj.pjt_status = 99 
+                        GROUP BY pj.pjt_id";
     }elseif ($bandera == '3') {
         $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, pjt.pjttp_name, 
                 CONCAT(DATE(pj.pjt_date_start), ' - ' ,DATE(pj.pjt_date_end)) AS dates, 
@@ -544,7 +549,8 @@ public function ProyectosTrabajados($params)
                         INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                         INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                         INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                        WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND pj.pjt_status = 99";
+                        WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND pj.pjt_status = 99 
+                        GROUP BY pj.pjt_id";
     }elseif ($bandera == '4') {
         $qry = "SELECT cu.cus_id, cu.cus_name, pj.pjt_id, pj.pjt_name, pjt.pjttp_id, pjt.pjttp_name, 
                 CONCAT(DATE(pj.pjt_date_start), ' - ' ,DATE(pj.pjt_date_end)) AS dates, 
@@ -556,7 +562,8 @@ public function ProyectosTrabajados($params)
                         INNER JOIN ctt_projects_type AS pjt ON pjt.pjttp_id = pj.pjttp_id
                         INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
                         INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-                        WHERE em.are_id IN(1) AND pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND em.emp_id ='$findAna' AND pj.pjt_status = 99";
+                        WHERE pj.pjt_date_start >= '$fechaIni' AND pj.pjt_date_end <= '$fechaFin' AND cu.cus_id = '$findCli' AND em.emp_id ='$findAna' AND pj.pjt_status = 99 
+                        GROUP BY pj.pjt_id";
     }
         
     return $this->db->query($qry);
