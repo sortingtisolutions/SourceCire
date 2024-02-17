@@ -23,8 +23,8 @@ if ($type==1) {
     if ($desgloce==1) {
         $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku,sr.ser_situation,
         ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-        cn.pjtcn_quantity,1 as quantity, case when (pr.prd_type_asigned != 'KP' 
-            AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then 
+        cn.pjtcn_quantity,1 as quantity, case when (pr.prd_level != 'K' 
+            AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then 
         (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
         (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
         cn.pjtcn_days_cost + 
@@ -33,7 +33,7 @@ if ($type==1) {
         (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
         (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
         cn.ver_id as verId,
-        case when (pr.prd_type_asigned != 'KP' AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
+        case when (pr.prd_level != 'K' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
             ELSE 0 END AS seguro, dt.pjtdt_id, pj.pjt_name, pj.pjt_number, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
                 , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
                 , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
@@ -89,8 +89,8 @@ if ($type==1) {
     if ($desgloce == 1) {
         $qry = "SELECT  pr.prd_name AS pjtcn_prod_name, dt.pjtdt_prod_sku as prd_sku,sr.ser_situation,
             ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
-            cn.pjtcn_quantity,1 as quantity, case when (pr.prd_type_asigned != 'KP' 
-                AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then 
+            cn.pjtcn_quantity,1 as quantity, case when (pr.prd_level != 'K' 
+                AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then 
             (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
             (cn.pjtcn_prod_price * cn.pjtcn_discount_base) * 
             cn.pjtcn_days_cost + 
@@ -99,7 +99,7 @@ if ($type==1) {
             (cn.pjtcn_prod_price * cn.pjtcn_days_test) - 
             (cn.pjtcn_prod_price * cn.pjtcn_discount_test) * cn.pjtcn_days_test ELSE 0 END  as costo,
             cn.ver_id as verId,
-            case when (pr.prd_type_asigned != 'KP' AND cn.pjtcn_prod_level = 'P') OR pr.prd_type_asigned='KP' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
+            case when (pr.prd_level != 'K' AND cn.pjtcn_prod_level = 'P') OR pr.prd_level='K' then ( (cn.pjtcn_insured * cn.pjtcn_prod_price)) *  cn.pjtcn_days_cost
                 ELSE 0 END AS seguro, dt.pjtdt_id, pjt.pjt_name, pjt.pjt_number, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
                 , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
                 , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name,  CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period

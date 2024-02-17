@@ -60,7 +60,7 @@ class WorkInputContentModel extends Model
                  else 'Subarrendo'
                  END AS section, 
                  case 
-					  when prcn.pjtcn_prod_level='K' OR pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' then 
+					  when prcn.pjtcn_prod_level='K' OR pd.prd_level = 'P' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
@@ -95,7 +95,7 @@ class WorkInputContentModel extends Model
                  when pjc.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
                  END AS section, case 
-					  when pjc.pjtcn_prod_level='K' OR pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' then 
+					  when pjc.pjtcn_prod_level='K' OR pd.prd_level = 'P' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 

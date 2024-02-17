@@ -601,3 +601,33 @@ ENGINE=InnoDB
 ROW_FORMAT=DYNAMIC
 ;
 
+
+
+
+ALTER TABLE `ctt_series`
+	ADD COLUMN `ser_type_asigned` VARCHAR(5) NULL DEFAULT 'PI' AFTER `ser_comments`;
+ALTER TABLE `ctt_products`
+	DROP COLUMN `prd_type_asigned`;
+
+DROP VIEW ctt_vw_list_productsInput;
+CREATE VIEW ctt_vw_list_productsInput AS 
+SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level,
+            pd.prd_insured, sb.sbc_name,cat_name,
+    CASE 
+        WHEN pd.prd_level ='K' THEN 
+            (SELECT prd_stock
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        WHEN pd.prd_level ='P' THEN 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        ELSE 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        END AS stock, pd.sbc_id
+FROM ctt_products AS pd
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
+WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+ORDER BY pd.prd_name;
+
+ 

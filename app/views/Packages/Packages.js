@@ -307,7 +307,7 @@ function packages_apply(subcat) {
     if (subcat != '' && subcat != undefined) {
         let catId = refil($('#txtCategoryPack option:selected').val(), 2);
         let subId = refil($('#txtSubcategoryPack option:selected').attr('data-content').split('|')[2], 2);
-        let prdsku = catId + subId + refil(subcat, 3);
+        let prdsku = catId + subId + refil(subcat, 4);
         let prdName = $('#txtPackageName').val();
         let prdModel = '';
         let prdPrice = $('#txtPackagePrice').val();

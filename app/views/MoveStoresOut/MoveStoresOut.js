@@ -207,7 +207,7 @@ function putProducts(dt) {
     $('#listProducts .list-items').html('');
     if (dt[0].ser_id > 0) {
         $.each(dt, function (v, u) {
-            let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-level="${u.prd_type_asigned}" 
+            let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-level="${u.prd_level}" 
                     data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}|${u.prd_id}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
             $('#listProducts .list-items').append(H);
         });

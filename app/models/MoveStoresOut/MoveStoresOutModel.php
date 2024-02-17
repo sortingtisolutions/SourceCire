@@ -43,7 +43,7 @@ class MoveStoresOutModel extends Model
 		$word = $this->db->real_escape_string($param['word']);
 
 		$qry ="SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
-				sr.prd_id, pr.prd_name,pr.prd_coin_type, pr.prd_type_asigned
+				sr.prd_id, pr.prd_name,pr.prd_coin_type, pr.prd_level
 				FROM ctt_products AS pr
 				INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
 				INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
@@ -237,7 +237,7 @@ class MoveStoresOutModel extends Model
 		$qry = "SELECT Count(*) as cant FROM ctt_products AS prd 
 			INNER JOIN ctt_series AS sr ON sr.prd_id = prd.prd_id
 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
-			WHERE SUBSTR(prd.prd_sku,1,7)=SUBSTR('$prd_sku',1,7) AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
+			WHERE SUBSTR(prd.prd_sku,1,8)=SUBSTR('$prd_sku',1,8) AND prd.prd_level='A' AND prd.prd_status = 1 AND prd.prd_stock > 0
 			GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
 		return $this->db->query($qry);
 	}

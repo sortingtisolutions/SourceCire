@@ -215,11 +215,13 @@ function putCategories(dt) {
     console.log(dt);
     if (dt[0].cat_id != '0') {
         let catId = dt[0].cat_id;
+        
+        $('#txtCategoryList').html('');
         $.each(dt, function (v, u) {
-            $('#txtCategoryList').html('');
             var H = `<option value="${u.cat_id}">${u.cat_name}</option>`;
             $('#txtCategoryList').append(H);
         });
+        getSubCategories(catId);
     }
 }
 
@@ -242,7 +244,6 @@ function putData(dt) {
     
 }
 function putSubCategories(dt) {
-    //console.log('putSubCategories',dt);
     let tabla = $('#tblSubcategories').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].sbc_id != 0) {
@@ -343,7 +344,7 @@ function putProducts(dt) {
                     <td class="sku">${u.prd_sku}</td>
                     <td class="supply">${u.prd_name}</td>
                     <td class="supply">${u.prd_price}</td>
-                    <td class="date">${u.prd_type_asigned}</td>
+                    <td class="date">${u.prd_level}</td>
                     <td class="date">${u.srv_name}</td>
                     <td class="date">${u.prd_insured}</td>
                     <td class="date">${u.cin_code}</td>
