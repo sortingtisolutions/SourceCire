@@ -66,7 +66,7 @@ public function SaveDocumento($request_params)
 						$supplier = $rst->sup_id;
 
 						// VALIDA LA EXISTENCIA DEL SKU
-						if (strlen($LoadProducts[0]) == 15 || strlen($LoadProducts[0]) == 10) {
+						if (strlen($LoadProducts[0]) == 15 || strlen($LoadProducts[0]) == 10 || strlen($LoadProducts[0]) == 11) {
 							# Revisar que exista un producto con la categoria y subcat que se esta introduciendo 
 							# a traves de su sku
 							$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct 
@@ -74,7 +74,7 @@ public function SaveDocumento($request_params)
 							INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id
 							where ct.cat_id = SUBSTR('$LoadProducts[0]',1,2) 
 							AND sb.sbc_code = SUBSTR('$LoadProducts[0]',3,2)
-							AND pd.prd_sku = SUBSTR('$LoadProducts[0]',1,7)";
+							AND pd.prd_sku = SUBSTR('$LoadProducts[0]',1,8)";
 							$res = $this->db->query($qry1);
 							$rs = $res->fetch_object();
 							$acept = $rs->cant;
@@ -124,7 +124,7 @@ public function SaveDocumento($request_params)
 								}else{
 									// si no existe entonces se obtiene el valor del producto con el que se relaciona
 									$qry4 = "SELECT prd_id FROM ctt_products pr 
-											WHERE pr.prd_sku = SUBSTR('$LoadProducts[0]',1,7) 
+											WHERE pr.prd_sku = SUBSTR('$LoadProducts[0]',1,8) 
 											union select 0 limit 1";
 									$rest = $this->db->query($qry4);
 									$rst = $rest->fetch_object();

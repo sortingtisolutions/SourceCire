@@ -85,7 +85,7 @@ if ($cant > 0) {
    FROM ctt_budget bug ) bg
    INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
    INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
-   WHERE pjt.pjt_id = pj.pjt_id group by pd.prd_id, pd.prd_type_asigned)
+   WHERE pjt.pjt_id = pj.pjt_id group by pd.prd_id, pd.prd_level)
    UNION 
    (SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, cn.pjtcn_prod_price bdg_prod_price,
    cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 

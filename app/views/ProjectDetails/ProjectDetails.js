@@ -365,7 +365,7 @@ function getProductsSub(word, dstr, dend) {
 }
 /**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
 function getProductsInput(word, dstr, dend) {
-    var pagina = 'Budget/listProducts2';
+    var pagina = 'ProjectDetails/listProductsInput';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -1090,9 +1090,8 @@ function selProduct(res) {
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
-    
-    let sub_id = $('#txtSubCategory').val();
 
+    let sub_id = $('#txtSubCategory').val();
     if (res.length > 3) {
         let dstr = 0;
         let dend = 0;
@@ -1101,20 +1100,16 @@ function selProduct(res) {
             
             if (subCtg>0) {
                 if (glbSec != 4) {
-                    // console.log('Normal');
                     getProducts(res.toUpperCase(), sub_id);                    
                 } else {
-                    // console.log('Subarrendo');
                     getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos                    
                 }
             } else {
                 if (glbSec != 4) {
-                    // console.log('Normal');
-                    //getProducts(res.toUpperCase(), sub_id);
                     getProductsInput(res.toUpperCase());
                 } else {
-                    // console.log('Subarrendo');
-                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos                    
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                    
                 }
             }
         } else {
@@ -1159,7 +1154,7 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_type">${u.prd_type_asigned}</td>
+                <td class="col_type">${u.prd_level}</td>
                 <td class="col_category">${u.sbc_name}</td>
                 <td class="col_category">${u.prd_price}</td>
             </tr> `;
@@ -1210,7 +1205,7 @@ function loadBudget(inx, bdgId) {
         "pjtvr_days_test"           : "0",
         "pjtvr_discount_test"       : "0",
         "pjtvr_insured"             : "${insurance}",
-        "pjtvr_prod_level"          : "${prod[inx].prd_type_asigned}",
+        "pjtvr_prod_level"          : "${prod[inx].prd_level}",
         "prd_id"                    : "${prod[inx].prd_id}",
         "pjt_id"                    : "${pjtId}",
         "ver_id"                    : "${verId}",
@@ -1784,12 +1779,12 @@ function putProductsRelated(dt) {
             }
             let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();
                       
-            if (u.prd_type_asigned != 'KP') {
+            if (u.prd_level != 'K') {
                 let H = `
                 <tr ${levelProduct}>
                     <td>${skushort}</td>
                     <td><span class="${pending}">${prod_sku}</span></td>
-                    <td>${u.prd_type_asigned}</td>
+                    <td>${u.prd_level}</td>
                     <td>${u.prd_name}</td>
                     <td>${u.cat_name}</td>
                     <td>${u.ser_comments}</td>
@@ -1852,7 +1847,7 @@ function putProductsRelatedPk(dt){
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].pjtdt_prod_sku}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_type_asigned != 'KP' ? 'class="levelProd"' : '';
+        let levelProduct = u.prd_level != 'K' ? 'class="levelProd"' : '';
         let cat=u.prd_sku.substring(0,2);
         let catsub=u.pjtdt_prod_sku.substring(0,4);
         let locsku=u.pjtdt_prod_sku.substring(0,7);
@@ -1864,7 +1859,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: locsku,
-                serchoose: u.prd_type_asigned,
+                serchoose: u.prd_level,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })
@@ -1875,7 +1870,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: u.prd_sku,
-                serchoose: u.prd_type_asigned,
+                serchoose: u.prd_level,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })
@@ -2621,9 +2616,10 @@ function printBudget(verId) {
 }
 
 function putsaveBudget(dt) {
-    // console.log('putsaveBudget',dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
+
+
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();

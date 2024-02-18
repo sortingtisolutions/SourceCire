@@ -98,7 +98,14 @@
                             <span class="intructions">Nombre correspondiente al producto</span>
                         </td>
                     </tr>
-  
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span>Tipo Artículo: </td> <!-- Accesorio -->
+                        <td class="data">
+                            <div id="txtPrdLevel"  class="checkbox"><i class="far fa-square"></i> <i class="fas fa-check-square"></i></div>
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Indica si es un producto o un accesorio</span>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Catálogo:</td>
                         <td class="data">

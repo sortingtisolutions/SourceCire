@@ -46,7 +46,7 @@ public function listProducts2($param)
     $word = $this->db->real_escape_string($param['word']);
     $qry = "SELECT * FROM ctt_products A 
     WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
-        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_type_asigned != 'KP'
+        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_level != 'K'
     ORDER BY prd_name;";
     return $this->db->query($qry);
 }
