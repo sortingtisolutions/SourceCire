@@ -34,9 +34,9 @@ public function SaveDocumento($request_params)
 					$nombre_producto = '';
 					if ($LoadProducts[6] != 'Nombre en Ingles') {
 						$typeacc = 0;
-						if (strlen($LoadProducts[0]) == 7) {
+						if (strlen($LoadProducts[0]) == 8) {
 							// REVISION DE SKU
-							$skuCsv = substr($LoadProducts[0], 5, 3);
+							$skuCsv = substr($LoadProducts[0], 5, 4);
 							$sku = strval($LoadProducts[0]);
 							
 							// Revisar que el la categoria y subcategoria exista en la base de datos
@@ -132,7 +132,7 @@ public function SaveDocumento($request_params)
 							$estatus = $estatus.'7,';
 						}
 
-						if ($LoadProducts[10] == 'PI' || $LoadProducts[10] == 'PF' || $LoadProducts[10] == 'PV') {
+						if ($LoadProducts[10] == 'P' || $LoadProducts[10] == 'A' || $LoadProducts[10] == 'K') {
 							$typeacc = 1;
 							
 						}else{
@@ -142,7 +142,7 @@ public function SaveDocumento($request_params)
 							try {
 								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, 
 										prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, 
-										prd_model, prd_type_asigned, sbc_id, result)
+										prd_model, prd_level, sbc_id, result)
 										VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', 
 										'$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', 
 										'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]',$sbcId, 'EXITOSO')";
@@ -157,7 +157,7 @@ public function SaveDocumento($request_params)
 							
 							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, 
 									prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, 
-									prd_model, prd_type_asigned,sbc_id, result)
+									prd_model, prd_level,sbc_id, result)
 									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', 
 									'$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', 
 									'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]', $sbcId, '$estatus')";
@@ -211,13 +211,15 @@ public function SaveDocumento($request_params)
 // Optiene los Documentos existentes
 	public function GetDocumentos()
 	{
-		$qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, ldp.prd_name_provider,
-		ldp.prd_model, ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, 
-		case when ldp.prd_insured = 1 then 'Sí' ELSE 'NO' END prd_insured,
-		ldp.srv_id, srv.srv_name, cn.cin_code, result FROM ctt_load_products AS ldp
-		LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
-		LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
-		$result = $this->db->query($qry);
+		$qry = "SELECT prd_id, prd_sku, prd_name, prd_english_name, ldp.prd_code_provider, 
+						ldp.prd_name_provider,ldp.prd_model, 
+						ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, 
+				CASE WHEN ldp.prd_insured = 1 THEN 'Sí' ELSE 'NO' END prd_insured,
+				ldp.srv_id, srv.srv_name, cn.cin_code, result 
+				FROM ctt_load_products AS ldp
+				LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
+				LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
+				$result = $this->db->query($qry);
 	
 		return $result;
 	}
@@ -351,8 +353,8 @@ public function SaveDocumento($request_params)
 	public function loadProcess($params)
 	{
 		$qry = "INSERT INTO ctt_global_products(
-			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id)
-	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_type_asigned, srv_id, sbc_id
+			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id)
+	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id
 	FROM ctt_load_products a WHERE a.result = 'EXITOSO';";
 		$result = $this->db->query($qry);
 		$qry1 = "TRUNCATE TABLE ctt_load_products;";

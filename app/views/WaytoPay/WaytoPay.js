@@ -134,9 +134,11 @@ function activeIcons() {
                 if ($('#txtIdWayPay').val() == '') {
                     //console.log('Save');
                     saveSubcategory();
+                    $('#btnClean').trigger('click');
                 } else {
                     //console.log('Update');
                     updateSubcategory();
+                    $('#btnClean').trigger('click');
                 }
             }
         });
@@ -307,5 +309,6 @@ function putDeleteWayPay(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#btnClean').trigger('click');
 }
 

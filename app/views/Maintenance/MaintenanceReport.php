@@ -39,153 +39,295 @@ $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.s
         WHERE pj.pjt_id='$proj_id' AND ser.ser_situation='M' AND pdm.pmt_date_register BETWEEN '$fechaIni' AND '$fechaFin'";
 
 $res = $conn->query($qry);
-
+$i = 0;
 while($row = $res->fetch_assoc()){
     $items[] = $row;
+    $i++;
 }
 
 $conn->close();
 
 // Cabezal de la página
-
-$header = '
-    <header>
-    <div class="cornisa">
-        <table class="table-main" border="0">
-            <tr>
-                <td class="box-logo side-color">
-                    <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
-                </td>
-                <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
-                <p>
-                    <span class="number">Proyecto: '. $items[0]['pjt_name'] .'</span>
-                    <br><span style=" font-size: 8pt; color: #191970">Rango: '. $fechaIni. ' - '. $fechaFin  .'</span>
-                </p>
-                </td>
-            </tr>
-        </table>
-    </div>
-    </header>';
-
-           
-$html = '
-<section>
-<div class="container">
-    
-<!-- <div style="height:20px;"></div>-->
-    <table class="table-data bline tline" style="text-align: center">
-        <tr>
-            <td>
-                <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
-                INFORME DE MANTENIMIENTO
-                </p>
-            </td>
-     
-        </tr>
-       
-        
-    </table>
-    <!-- End Datos de identificación  -->
-    
-';
-
-
-$html .= '
-                    
-     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
-         <thead>
-             <tr>
-                <th class="tit-figure prod">Producto</th>
-                 <th class="tit-figure pric">Dias de reparación</th>
-                 <th class="tit-figure qnty">Horas de reparación</th>
-                 <th class="tit-figure amou">Fecha de registro</th>
-                 <th class="tit-figure days">Inicio reparacion</th>
-                 <th class="tit-figure disc">Fin reparacion</th>
-                 <th class="tit-figure days">No. Económico</th>
-                 <th class="tit-figure amou">Comentarios</th>
-                 <th class="tit-figure amou">Motivos</th>
-                 <th class="tit-figure amou">Estatus</th>
-                 
-             </tr>
-         </thead>
-         <tbody>';
-         for ($i = 0; $i<count($items); $i++){
-            $html .= '
+if ($i > 0) {
+    $header = '
+        <header>
+        <div class="cornisa">
+            <table class="table-main" border="0">
                 <tr>
-                    <td class="dat-figure prod">' . $items[$i]['prd_name']                                    . '</td>
-                    <td class="dat-figure pric">' . $items[$i]['pmt_days']          . '</td>
-                    <td class="dat-figure qnty">' . $items[$i]['pmt_hours']                                   . '</td>
-                    <td class="dat-figure amou">' . $items[$i]['pmt_date_register']     . '</td>
-                    <td class="dat-figure days">' . $items[$i]['pmt_date_start']                                  . '</td>
-                    <td class="dat-figure disc">' . $items[$i]['pmt_date_end']  . '</td>
-                    <td class="dat-figure days">' . $items[$i]['ser_no_econo']                                   . '</td>
-                    
-                    <td class="dat-figure amou">' . $items[$i]['pmt_comments']      . '</td>
-                    <td class="dat-figure amou">' . $items[$i]['pjtcr_definition']     . '</td>
-                    <td class="dat-figure amou">' . $items[$i]['mts_description']     . '</td>
+                    <td class="box-logo side-color">
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                    </td>
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto: '. $items[0]['pjt_name'] .'</span>
+                        <br><span style=" font-size: 8pt; color: #191970">Rango: '. $fechaIni. ' - '. $fechaFin  .'</span>
+                    </p>
+                    </td>
                 </tr>
-            ';
-        }
-        $html .= '
-                       
-                    </tbody>
-                </table>
-                <!-- End Tabla de costo base  -->';
-           
+            </table>
+        </div>
+        </header>';
 
-
-// Pie de pagina
-
-$foot = '
-    <footer>
-        <table class="table-footer">
-            <tr>
-                <td class="side-color"></td>
-                <td>
-                    <table width="100%">
-                        <tr>
-                            <td class="td-foot foot-date" width="25%"></td>
-                            <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr> 
-        </table>
+            
+    $html = '
+    <section>
+    <div class="container">
         
-        <table class="table-address">
+    <!-- <div style="height:20px;"></div>-->
+        <table class="table-data bline tline" style="text-align: center">
             <tr>
-                <td class="addData">
-                    reservaciones@cttrentals.com, 
-                
+                <td>
+                    <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
+                    INFORME DE MANTENIMIENTO
+                    </p>
                 </td>
-                <td class="addData">
-                    presupuestos@cttrentals.com,
-                </td>
-                <td class="addData">
-                
-                    proyectos@cttrentals.com,
-                </td>
-                <td class="addData">
-                    cotizaciones@cttrentals.com.
-                </td>
+        
             </tr>
-
+        
             
         </table>
-        <table class="table-address">
+        <!-- End Datos de identificación  -->
+        
+    ';
+
+
+    $html .= '
+                        
+        <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+            <thead>
+                <tr>
+                    <th class="tit-figure prod">Producto</th>
+                    <th class="tit-figure pric">Dias de reparación</th>
+                    <th class="tit-figure qnty">Horas de reparación</th>
+                    <th class="tit-figure amou">Fecha de registro</th>
+                    <th class="tit-figure days">Inicio reparacion</th>
+                    <th class="tit-figure disc">Fin reparacion</th>
+                    <th class="tit-figure days">No. Económico</th>
+                    <th class="tit-figure amou">Comentarios</th>
+                    <th class="tit-figure amou">Motivos</th>
+                    <th class="tit-figure amou">Estatus</th>
+                    
+                </tr>
+            </thead>
+            <tbody>';
+            for ($i = 0; $i<count($items); $i++){
+                $html .= '
+                    <tr>
+                        <td class="dat-figure prod">' . $items[$i]['prd_name']                                    . '</td>
+                        <td class="dat-figure pric">' . $items[$i]['pmt_days']          . '</td>
+                        <td class="dat-figure qnty">' . $items[$i]['pmt_hours']                                   . '</td>
+                        <td class="dat-figure amou">' . $items[$i]['pmt_date_register']     . '</td>
+                        <td class="dat-figure days">' . $items[$i]['pmt_date_start']                                  . '</td>
+                        <td class="dat-figure disc">' . $items[$i]['pmt_date_end']  . '</td>
+                        <td class="dat-figure days">' . $items[$i]['ser_no_econo']                                   . '</td>
+                        
+                        <td class="dat-figure amou">' . $items[$i]['pmt_comments']      . '</td>
+                        <td class="dat-figure amou">' . $items[$i]['pjtcr_definition']     . '</td>
+                        <td class="dat-figure amou">' . $items[$i]['mts_description']     . '</td>
+                    </tr>
+                ';
+            }
+            $html .= '
+                        
+                        </tbody>
+                    </table>
+                    <!-- End Tabla de costo base  -->';
             
-            <tr>
-                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+
+
+    // Pie de pagina
+
+    $foot = '
+        <footer>
+            <table class="table-footer">
+                <tr>
+                    <td class="side-color"></td>
+                    <td>
+                        <table width="100%">
+                            <tr>
+                                <td class="td-foot foot-date" width="25%"></td>
+                                <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
+                                <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> 
+            </table>
+            
+            <table class="table-address">
+                <tr>
+                    <td class="addData">
+                        reservaciones@cttrentals.com, 
+                    
+                    </td>
+                    <td class="addData">
+                        presupuestos@cttrentals.com,
+                    </td>
+                    <td class="addData">
+                    
+                        proyectos@cttrentals.com,
+                    </td>
+                    <td class="addData">
+                        cotizaciones@cttrentals.com.
+                    </td>
+                </tr>
+
                 
+            </table>
+            <table class="table-address">
+                
+                <tr>
+                    <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+                    
+                </tr>
+                
+                
+                
+            </table>
+        </footer>
+    ';
+
+
+}else{
+    $header = '
+        <header>
+        <div class="cornisa">
+            <table class="table-main" border="0">
+                <tr>
+                    <td class="box-logo side-color">
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                    </td>
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto: </span>
+                        <br><span style=" font-size: 8pt; color: #191970">Rango:</span>
+                    </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </header>';
+
+            
+    $html = '
+    <section>
+    <div class="container">
+        
+    <!-- <div style="height:20px;"></div>-->
+        <table class="table-data bline tline" style="text-align: center">
+            <tr>
+                <td>
+                    <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
+                    INFORME DE MANTENIMIENTO
+                    </p>
+                </td>
+        
             </tr>
-            
-            
+        
             
         </table>
-    </footer>
-';
+        <!-- End Datos de identificación  -->
+        
+    ';
 
+
+    $html .= '
+                        
+        <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+            <thead>
+                <tr>
+                    <th class="tit-figure prod">Producto</th>
+                    <th class="tit-figure pric">Dias de reparación</th>
+                    <th class="tit-figure qnty">Horas de reparación</th>
+                    <th class="tit-figure amou">Fecha de registro</th>
+                    <th class="tit-figure days">Inicio reparacion</th>
+                    <th class="tit-figure disc">Fin reparacion</th>
+                    <th class="tit-figure days">No. Económico</th>
+                    <th class="tit-figure amou">Comentarios</th>
+                    <th class="tit-figure amou">Motivos</th>
+                    <th class="tit-figure amou">Estatus</th>
+                    
+                </tr>
+            </thead>
+            <tbody>';
+            for ($i = 0; $i<count($items); $i++){
+                $html .= '
+                    <tr>
+                        <td class="dat-figure prod"> </td>
+                        <td class="dat-figure pric"></td>
+                        <td class="dat-figure qnty"> </td>
+                        <td class="dat-figure amou"></td>
+                        <td class="dat-figure days"></td>
+                        <td class="dat-figure disc"></td>
+                        <td class="dat-figure days"> </td>
+                        
+                        <td class="dat-figure amou"></td>
+                        <td class="dat-figure amou"></td>
+                        <td class="dat-figure amou"></td>
+                    </tr>
+                ';
+            }
+            $html .= '
+                        
+                        </tbody>
+                    </table>
+                    <!-- End Tabla de costo base  -->';
+            
+
+
+    // Pie de pagina
+
+    $foot = '
+        <footer>
+            <table class="table-footer">
+                <tr>
+                    <td class="side-color"></td>
+                    <td>
+                        <table width="100%">
+                            <tr>
+                                <td class="td-foot foot-date" width="25%"></td>
+                                <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
+                                <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> 
+            </table>
+            
+            <table class="table-address">
+                <tr>
+                    <td class="addData">
+                        reservaciones@cttrentals.com, 
+                    
+                    </td>
+                    <td class="addData">
+                        presupuestos@cttrentals.com,
+                    </td>
+                    <td class="addData">
+                    
+                        proyectos@cttrentals.com,
+                    </td>
+                    <td class="addData">
+                        cotizaciones@cttrentals.com.
+                    </td>
+                </tr>
+
+                
+            </table>
+            <table class="table-address">
+                
+                <tr>
+                    <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+                    
+                </tr>
+                
+                
+                
+            </table>
+        </footer>
+    ';
+
+}
 
 $css = file_get_contents('../../assets/css/reports_p.css');
 

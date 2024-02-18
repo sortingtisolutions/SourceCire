@@ -1,16 +1,16 @@
 let pjts = null;
 let bn = 0;
-const exp = $('#txtExpendab');
-const man = $('#txtMaintenance');
-const dis = $('#txtDiscount');
-const com = $('#txtComments');
+// const exp = $('#txtExpendab');
+// const man = $('#txtMaintenance');
+// const dis = $('#txtDiscount');
+// const com = $('#txtComments');
+// const tblprod = $('#tblProducts');
 
-const tblprod = $('#tblProducts');
 const fchini = $('#fechaInitial');
 const fchfin = $('#fechaEnd');
 const findana = $('#txtAnalyst');
 const findcli = $('#txtClient');
-const totals = $('#totals');
+// const totals = $('#totals');
 
 const size = [
     { s: 20 },
@@ -30,7 +30,7 @@ $('document').ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
-    
+
     if (altr == 1) {
         deep_loading('C');
         settingTable();
@@ -763,7 +763,7 @@ function putAnalyst(dt) {
             let H = `<option value="${u.emp_id}">${u.emp_fullname}</option>`;
             findana.append(H);
         });
-    }   
+    }
 }
 
 function getCustomers() {
@@ -774,7 +774,7 @@ function getCustomers() {
     var par = '[{"parm":""}]';
     var tipo = 'JSON';
     var selector = putCustomers;
-    fillField(pagina, par, tipo, selector);  
+    fillField(pagina, par, tipo, selector);
 }
 
 function putCustomers(dt) {
@@ -784,7 +784,7 @@ function putCustomers(dt) {
             findcli.append(H);
         });
     }
-    
+
 }
 
 function getSuppliers() {
@@ -795,7 +795,7 @@ function getSuppliers() {
     var par = '[{"parm":""}]';
     var tipo = 'JSON';
     var selector = putSuppliers;
-    fillField(pagina, par, tipo, selector); 
+    fillField(pagina, par, tipo, selector);
 }
 
 function putSuppliers(dt) {
@@ -805,7 +805,7 @@ function putSuppliers(dt) {
             $('#txtSupplier').append(H);
         });
     }
- 
+
 }
 
 function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
@@ -826,7 +826,7 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
         var selector = putProjectContent;
         fillField(pagina, par, tipo, selector);
     }
-    
+
 
     function putProjectContent(dt) {
         // console.log('Registros', dt);
@@ -837,7 +837,7 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                 tabla = $('#tblProducts').DataTable();
                 tabla.rows().remove().draw();
                 if (dt[0].pjt_id > 0) {
-                $.each(dt, function (v, u) {
+                    $.each(dt, function (v, u) {
                         let discount = parseFloat(u.discount);
                         let transport;
                         let cfdi;
@@ -874,25 +874,23 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                         transports: transport,
                     })
                     .draw();
-                    
-                    $('#tblProjDevelop').parents().addClass('objHidden');
-                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
-                    $('#tblCierres').parents().addClass('objHidden');
-                    
-                    $('#tblPatrocinios').parents().addClass('objHidden');
-                    $('#tblProjWorked').parents().addClass('objHidden');
-                    $('#tblProvSubarrendo').parents().addClass('objHidden');
-                    $('#tblSubarrendos').parents().addClass('objHidden');
-                    $('#tblProductivity').parents().addClass('objHidden');
-                    
-                    $('#tblCustomers').parents().addClass('objHidden');
-                    $('#tblProducts').parents().removeClass('objHidden');
-                    }); 
-                }else{
-
+                    });
                 }
-                    break;
+                $('#tblProjDevelop').parents().addClass('objHidden');
+                $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                $('#tblCierres').parents().addClass('objHidden');
+
+                $('#tblPatrocinios').parents().addClass('objHidden');
+                $('#tblProjWorked').parents().addClass('objHidden');
+                $('#tblProvSubarrendo').parents().addClass('objHidden');
+                $('#tblSubarrendos').parents().addClass('objHidden');
+                $('#tblProductivity').parents().addClass('objHidden');
+
+                $('#tblCustomers').parents().addClass('objHidden');
+                $('#tblProducts').parents().removeClass('objHidden');
+
+                break;
                 case '2':
                     settingTable5();
                     tabla = $('#tblPatrocinios').DataTable();
@@ -909,24 +907,24 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             Programador: u.emp_fullname,
                         })
                         .draw();
-                        }); 
-                        
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                        });
 
-                        $('#tblCierres').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
 
-                        $('#tblPatrocinios').parents().removeClass('objHidden');
                     }
-                        
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+
+                    $('#tblCierres').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+
+                    $('#tblPatrocinios').parents().removeClass('objHidden');
                     break;
                 case '3':
                     settingTable6();
@@ -942,22 +940,22 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             Fechas: u.dates,
                         })
                         .draw();
-                        }); 
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
-                        
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
-                        $('#tblCierres').parents().removeClass('objHidden');
+                        });
+
                     }
-                        
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+                    $('#tblCierres').parents().removeClass('objHidden');
                     break;
                 case '4':
                     settingTable2();
@@ -975,22 +973,22 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             quantity: u.ser_reserve_count,
                         })
                         .draw();
-                        }); 
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
-                        $('#tblCierres').parents().addClass('objHidden');
-                        
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().removeClass('objHidden');
+                        });
+
                     }
-                   
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                    $('#tblCierres').parents().addClass('objHidden');
+
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().removeClass('objHidden');
                     break;
                 case '5':
                     settingTable9();
@@ -1007,22 +1005,22 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             Programador: u.emp_fullname,
                         })
                         .draw();
-                        }); 
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                        });
 
-                        $('#tblCierres').parents().addClass('objHidden');
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().removeClass('objHidden');
                     }
-                        
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+
+                    $('#tblCierres').parents().addClass('objHidden');
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().removeClass('objHidden');
                     break;
                 case '6':
                     settingTable4();
@@ -1038,23 +1036,23 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             time: u.pjt_name,
                         })
                         .draw();
-                        }); 
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblCierres').parents().addClass('objHidden');
-                        
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
-                        
-                        $('#tblEquiposMenosUsados').parents().removeClass('objHidden');
+                        });
+
                     }
-                        
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblCierres').parents().addClass('objHidden');
+
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+
+                    $('#tblEquiposMenosUsados').parents().removeClass('objHidden');
                     break;
                 case '7':
                     settingTable3();
@@ -1073,23 +1071,23 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             location: u.loc_type_location,
                         })
                         .draw();
-                        }); 
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                        });
 
-                        $('#tblCierres').parents().addClass('objHidden');
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().removeClass('objHidden');
                     }
-                        
-                    break; 
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+
+                    $('#tblCierres').parents().addClass('objHidden');
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().removeClass('objHidden');
+                    break;
                 case '8':
                     settingTable7();
                     tabla = $('#tblProvSubarrendo').DataTable();
@@ -1104,30 +1102,30 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             periodo: u.dates,
                         })
                         .draw();
-                        }); 
-                        
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                        });
 
-                        $('#tblCierres').parents().addClass('objHidden');
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().removeClass('objHidden');
+
                     }
-                        
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+
+                    $('#tblCierres').parents().addClass('objHidden');
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().removeClass('objHidden');
                     break;
                 case '9':
                     settingTable8();
                     tabla = $('#tblCustomers').DataTable();
                     tabla.rows().remove().draw();
                     if (dt[0].cus_id > 0) {
-                        
+
                         $.each(dt, function (v, u) {
                             let monto =parseFloat(u.monto);
                             let pagoTotal = '$ ' + Intl.NumberFormat('es-MX').format(monto);
@@ -1141,23 +1139,23 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             Programador: u.emp_fullname,
                         })
                         .draw();
-                        }); 
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
-                        $('#tblCierres').parents().addClass('objHidden');
+                        });
 
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().addClass('objHidden');
-                        
-                        $('#tblCustomers').parents().removeClass('objHidden');
                     }
-                        
-                    break;     
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                    $('#tblCierres').parents().addClass('objHidden');
+
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().addClass('objHidden');
+
+                    $('#tblCustomers').parents().removeClass('objHidden');
+                    break;
                 case '10':
                     settingTable10();
                     tabla = $('#tblProductivity').DataTable();
@@ -1173,24 +1171,23 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             proyecto: u.projects,
                         })
                         .draw();
-                        }); 
-                        
-                        $('#tblProducts').parents().addClass('objHidden');
-                        $('#tblProjDevelop').parents().addClass('objHidden');
-                        $('#tblEquiposMasUsados').parents().addClass('objHidden');
-                        $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+                        });
 
-                        $('#tblCierres').parents().addClass('objHidden');
-                        $('#tblPatrocinios').parents().addClass('objHidden');
-                        $('#tblProjWorked').parents().addClass('objHidden');
-                        $('#tblProvSubarrendo').parents().addClass('objHidden');
-                        $('#tblCustomers').parents().addClass('objHidden');
-
-                        $('#tblSubarrendos').parents().addClass('objHidden');
-                        $('#tblProductivity').parents().removeClass('objHidden');
                     }
-                        
-                    break; 
+                    $('#tblProducts').parents().addClass('objHidden');
+                    $('#tblProjDevelop').parents().addClass('objHidden');
+                    $('#tblEquiposMasUsados').parents().addClass('objHidden');
+                    $('#tblEquiposMenosUsados').parents().addClass('objHidden');
+
+                    $('#tblCierres').parents().addClass('objHidden');
+                    $('#tblPatrocinios').parents().addClass('objHidden');
+                    $('#tblProjWorked').parents().addClass('objHidden');
+                    $('#tblProvSubarrendo').parents().addClass('objHidden');
+                    $('#tblCustomers').parents().addClass('objHidden');
+
+                    $('#tblSubarrendos').parents().addClass('objHidden');
+                    $('#tblProductivity').parents().removeClass('objHidden');
+                    break;
                 case '11':
                     settingTable11();
                     tabla = $('#tblProjDevelop').DataTable();
@@ -1205,8 +1202,10 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
                             date: u.dates,
                         })
                         .draw();
-                        }); 
-                        $('#tblProductivity').parents().addClass('objHidden');
+                        });
+
+                    }
+                    $('#tblProductivity').parents().addClass('objHidden');
                         $('#tblProducts').parents().addClass('objHidden');
                         $('#tblEquiposMasUsados').parents().addClass('objHidden');
                         $('#tblEquiposMenosUsados').parents().addClass('objHidden');
@@ -1219,9 +1218,7 @@ function getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera) {
 
                         $('#tblSubarrendos').parents().addClass('objHidden');
                         $('#tblProjDevelop').parents().removeClass('objHidden');
-                    }
-                    
-                    break;                        
+                    break;
             default:
                 break;
         }
@@ -1234,13 +1231,13 @@ function findCampos(pjtId) {
     const valorfchin = (fechaIni) => isNaN(Date.parse(fechaIni));
     let fechaFin = fchfin.val();
     let findAna  = findana.val();
-    let findCli  = findcli.val(); 
+    let findCli  = findcli.val();
     let bandera  = 0;
     bn = $('#txtReport').val();
     if(bn == '8'){
         findAna = $('#txtSupplier').val();
     }
-    
+
     if (fechaIni && fechaFin) {
         bandera  = 1;
     }
@@ -1259,10 +1256,10 @@ function findCampos(pjtId) {
     }
     //  console.log(valorfchin(fechaIni),fechaFin,findAna,findCli,bandera, bn);
     if(bn >0 ){
-        getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera); 
+        getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera);
     }
     //
-    
+
 }
 
 function printReport() {
@@ -1276,7 +1273,7 @@ function printReport() {
     let c = findcli.val();
     let p =  $('#txtReport').val();
     let fs = fchini.val();
-    let fe = fchfin.val(); 
+    let fe = fchfin.val();
     let ba= 0;
 
     if(bn == '8'){

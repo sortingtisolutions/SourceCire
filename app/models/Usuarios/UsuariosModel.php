@@ -41,6 +41,7 @@ class UsuariosModel extends Model
 		        LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
 				where u.usr_id =  ".$params['id'].";";
 		$result = $this->db->query($qry);
+		
 		if($row = $result->fetch_row()){
 			$item = array("usr_id" =>$row[0],
 			"usr_username" =>$row[1],
@@ -214,7 +215,7 @@ class UsuariosModel extends Model
 	// Listado de Areas
     public function listAreas()
     {
-        $qry = "SELECT * FROM ctt_areas;";
+        $qry = "SELECT * FROM ctt_areas WHERE are_status = 1 ORDER BY are_id;";
         return $this->db->query($qry);
     }
 }

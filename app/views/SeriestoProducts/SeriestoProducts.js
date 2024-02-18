@@ -195,7 +195,7 @@ function putCategory(dt) {
         $('#txtSubcategoryAcce').html(ops);
         let id = $(this).val();
         lsbc_id = id;
-        selSubcategoryPack(id);
+        selSubcategoryPackAcc(id);
         //validator_part01();
     });
 
@@ -214,7 +214,7 @@ function putCategoryAcc(dt) {
         $('#txtSubcategoryAcce').html(ops);
         let id = $(this).val();
         lsbc_id = id;
-        selSubcategoryPack(id);
+        selSubcategoryPackAcc(id);
         //validator_part01();
     });
 
@@ -235,7 +235,7 @@ function selSubcategoryPack(id) {
             if (u.cat_id === id) {
                 let H = `<option value="${u.sbc_id}" data-content="${u.sbc_id}|${u.cat_id}|${u.sbc_code}">${u.sbc_code} - ${u.sbc_name}</option>`;
                 $('#txtSubcategoryProd').append(H);
-                $('#txtSubcategoryAcce').append(H);
+                
             }
         });
     }
@@ -246,6 +246,23 @@ function selSubcategoryPack(id) {
         lsbc_id = id;
         getProducts(id);
     });
+
+}
+
+// Llena el selector de subcategorias
+function selSubcategoryPackAcc(id) {
+    deleteTablaAccesorios();
+    // deleteTablaProducts();
+    // console.log('selSubcategoryPack');
+    if (subcategos[0].sbc_id != 0) {
+        $.each(subcategos, function (v, u) {
+            if (u.cat_id === id) {
+                let H = `<option value="${u.sbc_id}" data-content="${u.sbc_id}|${u.cat_id}|${u.sbc_code}">${u.sbc_code} - ${u.sbc_name}</option>`;
+                $('#txtSubcategoryAcce').append(H);
+            }
+        });
+    }
+
 
     $('#txtSubcategoryAcce').change(function () {
         let id = $(this).val();
@@ -290,6 +307,14 @@ function selProductsSub(dt) {
                 let H = `<option value="${u.prd_id}" data-content="${u.prd_id}|${u.sbc_id}|${u.prd_sku}">${u.prd_sku} - ${u.prd_name}</option>`;
                 $('#txtProductSubCat').append(H);
         });
+
+        if ($('#RadioConceptos1').prop('checked')) { opc = 1; } 
+        if ($('#RadioConceptos2').prop('checked')) { opc = 2; } 
+        getSeriesProd(dt[0].prd_id, opc);
+    }else{
+        if ($('#RadioConceptos1').prop('checked')) { opc = 1; } 
+        if ($('#RadioConceptos2').prop('checked')) { opc = 2; } 
+        getSeriesProd(0, opc);
     }
 
     $('#txtProductSubCat').change(function () {

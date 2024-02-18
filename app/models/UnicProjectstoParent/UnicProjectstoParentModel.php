@@ -38,7 +38,7 @@ public function listPackages($params)
     public function lastIdSubcategory($params)
     {
         $sbcId = $this->db->real_escape_string($params);
-        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
+        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,4), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
         return $this->db->query($qry);
     }
 

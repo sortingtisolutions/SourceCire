@@ -8,13 +8,6 @@ class WorkInputModel extends Model
         parent::__construct();
     }
 
-// Obtiene el siguiente SKU   ******
-    public function getNextSku($sbcId)
-    {
-        $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next
-                FROM ctt_products  WHERE sbc_id = $sbcId;";
-        return $this->db->query($qry);
-    }
 
 // Listado de Productos
     public function listProjects($params)

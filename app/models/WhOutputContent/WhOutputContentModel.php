@@ -47,7 +47,7 @@ class WhOutputContentModel extends Model
                  else 'Subarrendo'
                  END AS section, 
                  case 
-					  when prcn.pjtcn_prod_level='K' OR pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' then 
+					  when prcn.pjtcn_prod_level='K' OR pd.prd_level = 'P' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
@@ -83,7 +83,7 @@ class WhOutputContentModel extends Model
                  else 'Subarrendo'
                  END AS section,
                  case 
-					  when prcn.pjtcn_prod_level='K' OR pd.prd_type_asigned = 'PV' OR pd.prd_type_asigned = 'PF' then 
+					  when pjc.pjtcn_prod_level='K' OR pd.prd_level = 'P' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
@@ -109,7 +109,7 @@ class WhOutputContentModel extends Model
             FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
-            INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = pjc.prd_id
             WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid
             ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
         }

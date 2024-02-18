@@ -4,6 +4,7 @@
 ?>
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
+	
 </header>
 
 <!-- CUERPO DE LA PAGINA -->
@@ -87,7 +88,7 @@
 											<div class="row">
 												<div class="col-12 col-md-12 ">
 													<div class="col-12 text-center colorSecundario" style="font-weight: 600 !important;">
-														Disponibles
+														Disponibles para asignar
 													</div>
 													<div class="card listContainer">
 														<div class="card-body card-body-add">

@@ -122,7 +122,7 @@
                         <div class="row rowTop">
                         <h1>EQUIPO MÁS RENTADO</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblEquiposMasUsados" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblEquiposMasUsados" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Producto</th>
@@ -147,7 +147,7 @@
                         <div class="row rowTop">
                         <h1>EQUIPO MENOS RENTADO</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblEquiposMenosUsados" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblEquiposMenosUsados" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Producto</th>
@@ -170,7 +170,7 @@
                         <div class="row rowTop">
                         <h1>SUBARRENDOS</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblSubarrendos" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblSubarrendos" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  100px" >Producto</th>
@@ -196,7 +196,7 @@
                         <div class="row rowTop">
                         <h1>PROVEEDORES DE SUBARRENDO</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProvSubarrendo" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProvSubarrendo" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Proveedor</th>
@@ -219,15 +219,15 @@
                         <div class="row rowTop">
                         <h1>CLIENTES NUEVOS</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblCustomers" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblCustomers" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
-                                    <th style="width:  250px">Proyecto</th>
-                                    <th style="width:  60px">Monto</th>
+                                    <th style="width:  250px">Nombre del Proyecto</th>
+                                    <th style="width:  60px">Monto del <br>proyecto </th>
                                     <th style="width:  50px">Rango del proyecto</th>
                                     <th style="width:  40px">Contacto</th>
-                                    <th style="width:  100px">Programador</th>
+                                    <th style="width:  100px">Programador <br>responsable</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -245,7 +245,7 @@
                         <div class="row rowTop">
                         <h1>Productividad</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProductivity" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProductivity" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Programador</th>
@@ -269,7 +269,7 @@
                         <div class="row rowTop">
                         <h1>Proyectos por programador</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProjDevelop" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProjDevelop" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  150px">Programador</th>
@@ -293,7 +293,7 @@
                         <div class="row rowTop">
                         <h1>Proyectos trabajados</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProjWorked" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProjWorked" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
@@ -318,7 +318,7 @@
                         <div class="row rowTop">
                         <h1>Patrocinios</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblPatrocinios" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblPatrocinios" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
@@ -344,7 +344,7 @@
                         <div class="row rowTop">
                         <h1>CIERRES</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblCierres" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblCierres" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
@@ -364,7 +364,6 @@
         </div>
         </div>
     </div>
-    
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

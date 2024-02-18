@@ -223,7 +223,7 @@ function MaxAccesorio(prdsku) {
         $('#txtSbcId').val(subcId);
         $('#txtSrvId').val(servId);
 
-        $('#txtSrvId').attr('disabled', false);
+       // $('#txtSrvId').attr('disabled', false);
 
         $('#txtCatId').val(parseInt(prdsku.slice(0,2)));
 
@@ -611,8 +611,8 @@ function saveEditProduct() {
         let prdNp = $('#txtPrdNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        /* let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
-        let prdLv = prdLl == '1' ? 'A' : 'P'; */
+        let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
+        let prdLv = prdLl == '1' ? 'A' : 'P';
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
         let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
         let prdCt = $(`#txtCatId`).val();
@@ -641,7 +641,8 @@ function saveEditProduct() {
                     "prdCn" : "${prdCn}",
                     "prdSv" : "${prdSv}",
                     "prdDc" : "${prdDc}",
-                    "prdDi" : "${prdDi}"
+                    "prdDi" : "${prdDi}",
+                    "prdLv" : "${prdLv}"
                 }]
             `;
         // console.log('Update-P ', par);
@@ -660,7 +661,7 @@ function resEdtProduct(dt) {
     let prdPr = formato_numero($('#txtPrdPrice').val(), 2, '.', ',');
     let prdEn = $('#txtPrdEnglishName').val();
     let prdCm = $('#txtPrdComments').val();
-    // let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
+    let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
     // let prdLv = $('#txtPrdLevel').text().substring(1, 2);
     let prdCt = $(`#txtCatId option:selected`).text();
     let prdSb = $(`#txtSbcId option:selected`).text();
@@ -670,7 +671,7 @@ function resEdtProduct(dt) {
 
     let docInvo = `<span class="invoiceView" id="F${prdDi}"><i class="fas fa-file-alt"></i></span>`;
     let prdDc = prdDi == 0 ? '' : docInvo;
-    /* prdLv = prdLv == 'A' ? 'A' : 'P'; */
+    prdLv = prdLv == 'A' ? 'A' : 'P';
     console.log('ACTUALIZA JJR');
     let el = $(`#tblProducts tr[id="${prdId}"]`);
     $(el.find('td')[1]).text(prdSk);
@@ -684,7 +685,6 @@ function resEdtProduct(dt) {
     $(el.find('td')[10]).text(prdCt);
     $(el.find('td')[11]).text(prdEn);
     $(el.find('td')[12]).text(prdCm);
-
     $('#ProductModal .btn_close').trigger('click');
     activeIcons();
 }
@@ -718,13 +718,13 @@ function createNewProduct() {
                     $(`#txtCatId`).val(0);
                     $(`#txtSbcId`).val(0);
                     $(`#txtPrdSku`).val('');
-                    $(`#txtSrvId`).attr('disabled', true);
+                    // $(`#txtSrvId`).attr('disabled', true);
                     maxacc=undefined;
                 } else {
                     $(`#txtCatId`).val(0);
                     $(`#txtSbcId`).val(0);
                     $('#txtPrdSku').val('');
-                    $(`#txtSrvId`).attr('disabled', false);
+                    //$(`#txtSrvId`).attr('disabled', false);
                 }
             }
         });
@@ -759,10 +759,15 @@ function createNewProduct() {
         let prdLvl = $('#txtPrdLevel').children('i').attr('data_val');
         if (prdLvl == 1) {
             $('#txtCatId').val(40);
+            $(`#txtSbcId option`).addClass('hide');
             $(`#txtSbcId option[data_category="${40}"]`).removeClass('hide');
+            sku1 = refil(40, 2);
+            
+
         }else{
             $('#txtCatId').val(0);
             $(`#txtSbcId option[data_category="${0}"]`).removeClass('hide');
+            
         }
         
     });
@@ -797,7 +802,8 @@ function saveNewProduct() {
         let prdNp = $('#txtPrdNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        
+        let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
+        let prdLv = prdLl == '1' ? 'A' : 'P';
         prdVs = !prdVs ? 1 : prdVs;
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
         let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
@@ -826,7 +832,8 @@ function saveNewProduct() {
                     "prdCn" : "${prdCn}",
                     "prdSv" : "${prdSv}",
                     "prdDc" : "${prdDc}",
-                    "prdDi" : "${prdDi}"
+                    "prdDi" : "${prdDi}",
+                    "prdLv" : "${prdLv}"
                 }]
             `;
         // console.log(par);
@@ -904,8 +911,8 @@ function putSeries(dt) {
             {data: 'serstore', class: 'catalog'},
             {data: 'serbrand', class: 'catalog'},
             {data: 'sernumped', class: 'catalog'},
-            {data: 'sercosimp', class: 'catalog'},
-            {data: 'sercostl', class: 'catalog'},
+            {data: 'sercosimp', class: 'catalog center'},
+            {data: 'sercostl', class: 'catalog center'},
             {data: 'sernumeco', class: 'sku'},
             {data: 'comments', class: 'comments'},
         ],
@@ -928,12 +935,12 @@ function build_modal_serie(dt) {
     $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        if (glbPkt=='P'){
-            lprdsku=u.ser_sku.slice(0, 10);
+        /* if (glbPkt=='P'){
+            lprdsku=u.ser_sku.slice(0, 11);
         }else{
             lprdsku=u.ser_sku.slice(0, 15);
-        }
-
+        } */
+        lprdsku=u.ser_sku.slice(0, 12);
         let docInvo = `<span class="invoiceViewSer" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
         let invoice = u.doc_id == 0 ? '' : docInvo;
         tabla.row
@@ -952,7 +959,7 @@ function build_modal_serie(dt) {
                 serbrand: u.ser_brand,
                 sernumped: u.ser_import_petition,
                 sercosimp: u.ser_cost_import,
-                sercostl: u.ser_cost,
+                sercostl: mkn(u.ser_cost,'n'),
                 sernumeco: u.ser_no_econo,
                 comments: u.ser_comments,
             })
@@ -967,6 +974,7 @@ function activeIconsSerie() {
         .unbind('click')
         .on('click', function () {
             var id = $(this).attr('id').slice(1, 10);
+            console.log(id);
             var pagina = 'Documentos/VerDocumento';
             var par = `[{"id":"${id}"}]`;
             var tipo = 'json';
@@ -1129,7 +1137,7 @@ function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     let numEco = $('#txtSerNumEco').val();
     let numPed = $('#txtSerNumPed').val();
     let costIm= $('#txtSerCostImp').val();
-    let costTl = $('#txtSerCost').val();
+    let costTl = mkn($('#txtSerCost').val(),'n');
 
     let el = $(`#tblSerie tr td i[id="E${serId}"]`).parents('tr');
     let docInvo = `<span class="invoiceView" id="F${serDc}"><i class="fas fa-file-alt"></i></span>`;
@@ -1145,6 +1153,7 @@ function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     $(el.find('td')[14]).html(serCm);
 
     activeIconsSerie();
+    activeIcons();
     $('#ModifySerieModal .btn_close').trigger('click');
 }
 
@@ -1186,6 +1195,7 @@ function putInvoiceList(dt) {
     $('#listInvoice .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
+        console.log(prdNm);
         $('#txtDocIdSerie').val(prdNm);
         $('#txtDcpIdSerie').val(prdId);
         $('#listInvoice').slideUp(100);
@@ -1198,6 +1208,22 @@ function omitirAcentos(text) {
         text = text.replace(acentos.charAt(i), original.charAt(i));
     }
     return text;
+}
+
+
+// Da formato a los numero
+function mkn(cf, tp) {
+    let nm = cf;
+    switch (tp) {
+        case 'n':
+            nm = formato_numero(cf, '2', '.', ',');
+            break;
+        case 'p':
+            nm = formato_numero(cf, '1', '.', ',');
+            break;
+        default:
+    }
+    return nm;
 }
 
 function sel_invoice(res) {

@@ -272,6 +272,13 @@ function eventsAction() {
             let id = $(this).parents('.finder__box').children('.invoiceInput');
             id.val('');
             id.trigger('keyup');
+            
+            $('.finder_list-projects ul li').addClass('alive');
+            $('.finder_list-projectsParent ul li').addClass('alive');
+            $('.finder_list-projects ul li').attr('data-val',0);
+            $('.finder_list-projectsParent ul li').attr('data-val',0);
+            $('.finder_list-customer ul li').attr('data-value',0);
+            $('.finder_list-projectsParent ul li').attr('data-active',1);
         });
 
     // Abre el modal de comentarios
@@ -362,7 +369,7 @@ function getVersion(pjtId) {
 }
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
-    var pagina = 'Budget/listProducts3';
+    var pagina = 'Budget/listProductsCombo';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -370,7 +377,7 @@ function getProducts(word, dstr, dend) {
 }
 /**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
 function getProductsInput(word, dstr, dend) {
-    var pagina = 'Budget/listProducts2';
+    var pagina = 'Budget/listProductsInput';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -611,7 +618,7 @@ function putProjects(dt) {
                 let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}">${u.pjt_name}</li>`;
                 $('.finder_list-projects ul').append(H);
             } else {
-                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</li>`;
+                let M = ` <li id="M${u.pjt_id}" class="alive" data-val="0" data-active="1" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</li>`;
                 $('.finder_list-projectsParent ul').append(M);
             }
         });
@@ -650,7 +657,7 @@ function putCustomers(dt) {
     $('.finder_list-customer ul').html('');
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = ` <li id="C${u.cus_id}" class="alive" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
+            let H = ` <li id="C${u.cus_id}" class="alive" data-value="0" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
             $('.finder_list-customer ul').append(H);
         }
     });
@@ -809,7 +816,7 @@ function selectorProjects(pjId) {
             showButtonToPrint('H');
             showButtonToSave('H');
             
-            modalLoading('B');
+            //modalLoading('B');
             actionSelProject($(this));
             $('.projectfinder').trigger('click');
         });
@@ -818,13 +825,27 @@ function selectorProjects(pjId) {
         .unbind('click')
         .on('click', function () {
             let pjtParent = $(this).attr('id').substring(1, 10);
+            let val = $(this).attr('data-val');
+            let active = $(this).attr('data-active');
+            console.log(val);
+
             $('.finder_list-projects ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (pjtParent == u.pjt_parent) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
+            if ( active == 1) {
+                if (val == 0) {
+                    $.each(proj, function (v, u) {
+                        if (pjtParent == u.pjt_parent) {
+                            let pjtId = u.pjt_id;
+                            $(`#P${pjtId}`).addClass('alive');
+                        }
+                    });
+                    $(this).attr('data-val', 1);
+                }else{
+                    $('.finder_list-projects ul li').addClass('alive');
+                    $(this).attr('data-val', 0);
                 }
-            });
+            }
+            
+            
         });
 }
 
@@ -832,6 +853,7 @@ function actionSelProject(obj) {
     let status = obj.attr('class');
 
     if (status == 'alive') {
+        modalLoading('B');
         let idSel = obj.parents('.dato');
         let indx = obj.data('element').split('|')[0];
         let pj = proj[indx];
@@ -954,18 +976,32 @@ function selectCustomer() {
             let indx = $(this).data('element').split('|')[0];
             let type = $(this).data('element').split('|')[1];
             let cs = cust[indx];
+            let val = $(this).attr('data-value');
+            console.log(val);
 
             $('#CustomerName').html(cs.cus_name);
             $('.finder_list-projects ul li').removeClass('alive');
             $('.finder_list-projectsParent ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (cs.cus_id == u.cus_id) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
-                    $(`#M${pjtId}`).addClass('alive');
-                }
-            });
-            console.log(idSel, indx, type);
+            
+            $('.finder_list-projectsParent ul li').attr('data-active',0);
+            if (val == 0) {
+                $.each(proj, function (v, u) {
+                    if (cs.cus_id == u.cus_id) {
+                        let pjtId = u.pjt_id;
+                        $(`#P${pjtId}`).addClass('alive');
+                        $(`#M${pjtId}`).addClass('alive');
+                        $(`#M${pjtId}`).attr('data-active',1);
+                    }
+                });
+                console.log(idSel, indx, type);
+                $(this).attr('data-value', 1);
+            }else{
+                $('.finder_list-projects ul li').addClass('alive');
+                $('.finder_list-projectsParent ul li').addClass('alive');
+                $(this).attr('data-value', 0);
+                
+                $('.finder_list-projectsParent ul li').attr('data-active',1);
+            }
         });
 }
 
@@ -1097,18 +1133,18 @@ function putProducts(dt) {
     $('#listProductsTable table tbody').html('');
 
     if (dt[0].prd_id>0){  // agregado por jjr
-    $.each(dt, function (v, u) {
-        let H = `
-            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
-                <th class="col_product" title="${u.prd_name}">
-                <div class="elipsis">${u.prd_name}</div></th>
-                <td class="col_quantity">${u.stock}</td>
-                <td class="col_category">${u.cat_name}</td>
-                <td class="col_type">${u.prd_price}</td>
-                <td class="col_type">${u.prd_type_asigned}</td>
-            </tr> `;
-        $('#listProductsTable table tbody').append(H);
-    });
+        $.each(dt, function (v, u) {
+            let H = `
+                <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+                    <th class="col_product" title="${u.prd_name}">
+                    <div class="elipsis">${u.prd_name}</div></th>
+                    <td class="col_quantity">${u.stock}</td>
+                    <td class="col_category">${u.cat_name}</td>
+                    <td class="col_type">${u.prd_price}</td>
+                    <td class="col_type">${u.prd_level}</td>
+                </tr> `;
+            $('#listProductsTable table tbody').append(H);
+        });
     }
     modalLoading('H');
     $('.toCharge').addClass('hide-items');   //jjr
@@ -1151,7 +1187,7 @@ function loadBudget(inx, bdgId) {
         "bdg_days_test"         : "0",
         "bdg_discount_test"     : "0",
         "bdg_insured"           : "${insurance}",
-        "bdg_prod_level"        : "${prod[inx].prd_type_asigned}",
+        "bdg_prod_level"        : "${prod[inx].prd_level}",
         "prd_id"                : "${prod[inx].prd_id}",
         "bdg_stock"             : "${prod[inx].stock}",
         "sbc_name"              : "${subct}",
@@ -1537,7 +1573,7 @@ function putProductsRelated(dt) {
     $.each(dt, function (v, u) {
         let levelProduct;
         // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        /* if (u.prd_type_asigned != 'KP') {
+        /* if (u.prd_level != 'KP') {
             levelProduct = 'class="levelProd"';
         }else{
             levelProduct = '';
@@ -1546,7 +1582,7 @@ function putProductsRelated(dt) {
         let H = `
             <tr ${levelProduct}>
                 <td>${u.prd_sku}</td>
-                <td>${u.prd_type_asigned}</td>
+                <td>${u.prd_level}</td>
                 <td>${u.prd_name}</td>
             </tr>
         `;
@@ -1608,7 +1644,7 @@ function putProductsRelatedPk(dt){
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].prd_sku}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_type_asigned != 'KP' ? 'class="levelProd"' : '';
+        let levelProduct = u.prd_level != 'K' ? 'class="levelProd"' : '';
         let cat=u.prd_sku.substring(0,2);
         let catsub=u.prd_sku.substring(0,4);
         // console.log('CATSUB-',catsub);
@@ -1620,7 +1656,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: u.prd_sku,
-                serchoose: u.prd_type_asigned,
+                serchoose: u.prd_level,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })
@@ -1631,7 +1667,7 @@ function putProductsRelatedPk(dt){
             .add({
                 serchange: u.prd_id,
                 serdetsku: u.prd_sku,
-                serchoose: u.prd_type_asigned,
+                serchoose: u.prd_level,
                 serdetname: u.prd_name,
                 serdetstag: valicon,
             })
@@ -1652,7 +1688,7 @@ function cleanInputs(){
     $(`#txtCustomerEdt option[value = "0"]`).attr('selected','selected');
     $(`#txtCustomerRelEdt option[value = "0"]`).attr('selected','selected');
     $('#txtHowRequired').val('');
-    $('#txtTypeLocationEdt').val(0);
+    $('#txtTypeLocationEdt').val(1);
     $('#txtProjectIdEdt').val('');
 }
 function ActiveChangePKT(){
@@ -2063,6 +2099,7 @@ function loadProject(dt) {
     getProjects(dt);
     waitShowProject(dt);
     automaticCloseModal();
+    modalLoading('H');
 }
 
 function waitShowProject(pjtId) {
@@ -2285,6 +2322,7 @@ function actionNewProject() {
     $('#saveProject.insert')
         .unbind('click')
         .on('click', function () {
+            modalLoading('G');
             let ky = validatorFields($('#formProject'));
             if (ky == 0) {
                 let projId = $('#txtProjectIdEdt').val();

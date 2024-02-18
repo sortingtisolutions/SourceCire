@@ -98,7 +98,14 @@
                             <span class="intructions">Nombre correspondiente al producto</span>
                         </td>
                     </tr>
-  
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span>Tipo Artículo: </td> <!-- Accesorio -->
+                        <td class="data">
+                            <div id="txtPrdLevel"  class="checkbox"><i class="far fa-square"></i> <i class="fas fa-check-square"></i></div>
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Indica si es un producto o un accesorio</span>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Catálogo:</td>
                         <td class="data">
@@ -185,7 +192,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de servicio:</td>
                         <td class="data">
-                            <select id="txtSrvId" name="txtSrvId" class="textbox" style="width:260px">
+                            <select id="txtSrvId" name="txtSrvId" class="textbox required" style="width:260px">
                                 <option value="0">Selecciona el tipo de servicio</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
@@ -255,7 +262,7 @@
                         <td class="concept"><span class="reqsign"></span> SKU:</td>
                         <td class="data">
                             <input type="hidden" id="txtSerIdSerie" name="txtSerIdSerie" >
-                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox requiredEdt" style="width:200px" disabled><!--- 11-10-23 -->
+                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox" style="width:200px" disabled><!--- 11-10-23 -->
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Código del producto</span>
                         </td>

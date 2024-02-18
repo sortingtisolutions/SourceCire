@@ -54,16 +54,16 @@ class ProjectCancelModel extends Model
     public function restoreSeries($params)
     {
         $pjtId = $this->db->real_escape_string($params);
-        $qry = "UPDATE ctt_series 
+        /* $qry = "UPDATE ctt_series 
                 SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
                 WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
                     INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                     WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1);";
-        $this->db->query($qry);
+        $this->db->query($qry); */
 
         // Hay que editar
-        $qry1 = "SELECT pd.prd_id FROM ctt_series AS sr
+        $qry1 = "SELECT pd.prd_id, sr.pjtdt_id ser_pjtdt_id, pdt.pjtdt_id, pdt.sttd_id FROM ctt_series AS sr
         INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
         INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
         INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
@@ -73,6 +73,16 @@ class ProjectCancelModel extends Model
 
         while ($row = $result->fetch_assoc()) {
             $prdId = $row["prd_id"];
+            $serPjtdtId = $row["ser_pjtdt_id"];
+            $pjtdtId = $row["pjtdt_id"];
+            if ($serPjtdtId == $pjtdtId) {
+
+                $qry = "UPDATE ctt_series 
+                        SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
+                        WHERE pjtdt_id = $pjtdtId;";
+                $this->db->query($qry);
+            }
+
             $updQry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
             INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
             INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
@@ -80,6 +90,7 @@ class ProjectCancelModel extends Model
             WHERE pd.prd_id = $prdId AND sr.ser_situation != 'D') WHERE prd_id =$prdId";
             
             $updt = $this->db->query($updQry);
+            
         }
         return 1;
     }

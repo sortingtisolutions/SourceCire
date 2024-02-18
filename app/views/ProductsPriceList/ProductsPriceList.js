@@ -39,17 +39,17 @@ function putPriceList(dt) {
         // setting_table();
         var catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
-            pack = u.prd_type_asigned == 'KP' ? 'fas' : 'far';
+            pack = u.prd_level == 'K' ? 'fas' : 'far';
             let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
             let invoice = u.doc_id == 0 ? '' : docInvo;
             let reserved =
-                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_type_asigned}">${u.prd_reserved}</span>` : '';
+                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
             var H = `
                 <tr class="odd">
                     <td class="edit"></td>
                     <td class="sku"><span class="hide-support">${u.prd_id}</span>${u.prd_sku}</td>
                     <td class="product-name"><i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}</td>
-                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_type_asigned}">${u.prd_stock}</span></td>
+                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
                     <td class="reserved">${reserved}</td>
                     <td class="price">${u.prd_price}</td>
                     <td class="sku">${u.prd_coin_type}</td>
@@ -316,7 +316,7 @@ function build_modal_product(dt) {
     $('.overlay_closer .title').html(`${dt[0].paquete}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        pack = u.prd_type_asigned == 'KP' ? 'fas' : 'far';
+        pack = u.prd_level == 'K' ? 'fas' : 'far';
         var skufull = u.prd_sku.slice(7, 11) == '' ? '' : '-' + u.prd_sku.slice(7, 11);
         tabla.row
             .add({

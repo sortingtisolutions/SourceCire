@@ -347,11 +347,13 @@ function putProducts(dt) {
     $('#listProducts').slideUp('100', function () {
         $('#listProducts .list-items').html('');
     });
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id}">${u.prd_sku}-${u.prd_name}</div>`;
-        $('#listProducts .list-items').append(H);
-    });
+    if (dt[0].prd_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}|${u.prd_id}">${u.prd_sku}-${u.prd_name}</div>`;
+            $('#listProducts .list-items').append(H);
+        });
+    }
+    
 
     /* QUITA NOTA EN EL CAMPO DE PRODUCTOS */
     $('#txtProducts').val('');
@@ -536,6 +538,9 @@ function validator() {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
     }
+    if ($('#txtTypeExchange').val()== 11 && $('#txtStoreSource').val() > 0 && $('#txtIdProducts').val() != 0) {
+        ky=0;
+    }
 
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
@@ -582,13 +587,8 @@ function exchange_apply() {
     mthseries=quantity;
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
-            // sersku = prdSku + refil(serie++, 3);
-            if(prdSku.length==7){
-                sersku= prdSku + refil(serie++, 3);
-            }else{
-                sersku = prdSku + 'XXX' + refil(serie++, 2);
-                // console.log(sersku);
-            }
+            
+            sersku= prdSku + refil(serie++, 3);
             update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
             let par = `
             [{
@@ -615,13 +615,8 @@ function exchange_apply() {
         }
     } else {
         
-        if(prdSku.length==7){
-            sersku= prdSku + refil(serie, 3);
-        }else{
-            
-            sersku = prdSku + 'XXX' + refil(serie++, 2);
-            // console.log(sersku);
-        }
+       
+        sersku= prdSku + refil(serie, 3);
         serie++;
         let par = `
         [{
