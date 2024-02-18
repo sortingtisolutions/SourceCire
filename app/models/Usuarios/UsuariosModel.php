@@ -41,6 +41,7 @@ class UsuariosModel extends Model
 		        LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
 				where u.usr_id =  ".$params['id'].";";
 		$result = $this->db->query($qry);
+		
 		if($row = $result->fetch_row()){
 			$item = array("usr_id" =>$row[0],
 			"usr_username" =>$row[1],

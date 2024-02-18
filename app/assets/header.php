@@ -17,6 +17,9 @@
         
         <!-- fontawesome -->
         <script src="https://kit.fontawesome.com/72178fea46.js" crossorigin="anonymous"></script>
+
+        <!-- send mails -->
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
         
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
@@ -25,13 +28,11 @@
         />
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/sticky-table.css?v=1.0.0.0' ?>">
         
-        
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/periods.css?v=1.0.0.0' ?>">
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.min.css?v=1.0.0.0' ?>" />
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/reports.css?v=1.0.0.0' ?>" />
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/jquery-ui.css?v=1.0.0.0' ?>" />
         
-
         <script src="<?=  PATH_ASSETS . 'lib/jquery.js?v=1.0.0.0' ?>"></script>
 
         <script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
