@@ -104,4 +104,11 @@
         echo $res;
     } 
 
+	public function tableMenus($request_params)
+        {
+            $result = $this->model->tableMenus($request_params);
+            echo $result;
+        }
+
+
 	}
