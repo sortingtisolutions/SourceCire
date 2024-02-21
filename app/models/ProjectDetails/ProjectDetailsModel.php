@@ -783,7 +783,7 @@ public function promoteToProject($params)
     public function restoreSeries($params)
     {
         $pjtId = $this->db->real_escape_string($params);
-
+/* 
 
         $qry1 = "SELECT pd.prd_id, COUNT(*) cant FROM ctt_series AS sr
         INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
@@ -813,6 +813,36 @@ public function promoteToProject($params)
             
             $updt = $this->db->query($updQry);
             
+        } */
+
+        $qry = "UPDATE ctt_series 
+                SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
+                WHERE pjtdt_id IN (
+                    SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
+                    WHERE pcn.pjt_id = $pjtId
+                );";
+        $this->db->query($qry);
+
+        // MODIFICAMOS LA CANTIDAD EN RESERVA, QUITANDO LO QUE SE RESERVO.
+        $qry1 = "SELECT pd.prd_id, COUNT(*) cant FROM ctt_series AS sr
+        INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+        INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
+        INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
+        WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1 GROUP BY pd.prd_id;";
+
+        $result = $this->db->query($qry1);
+
+        while ($row = $result->fetch_assoc()) {
+            $reservas = $row["cant"];
+            $prdId = $row["prd_id"];
+            $updQry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+            INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+            WHERE pd.prd_id = $prdId AND sr.ser_situation != 'D') WHERE prd_id =$prdId";
+
+            $updt = $this->db->query($updQry);
         }
 
 
@@ -868,13 +898,21 @@ public function KillQuantityDetail($params)
 {
     $pjtvrId = $this->db->real_escape_string($params['pjetId']);
 
-    $qry1 = "WITH elements AS (
+    /* $qry1 = "WITH elements AS (
                 SELECT dt.*,
                     ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng, sr.ser_type_asigned 
                     FROM ctt_projects_detail AS dt
                     LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
                     WHERE pjtvr_id = $pjtvrId ORDER BY dt.pjtdt_prod_sku)
-            SELECT pjtdt_id, prd_id, ser_id, ser_type_asigned FROM elements WHERE reng =1"; 
+            SELECT pjtdt_id, prd_id, ser_id, ser_type_asigned FROM elements WHERE reng =1"; */ 
+    $qry1 = "WITH elements AS (
+                SELECT dt.*,
+                    ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng, sr.ser_type_asigned 
+                    FROM ctt_projects_detail AS dt
+                    LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
+                    LEFT JOIN ctt_products AS pd ON pd.prd_id = dt.prd_id
+                    WHERE pjtvr_id = $pjtvrId AND pd.prd_level = 'P' ORDER BY dt.pjtdt_prod_sku)
+            SELECT pjtdt_id, prd_id, ser_id, ser_type_asigned FROM elements WHERE reng =1 ";
 
     $result =  $this->db->query($qry1);
 

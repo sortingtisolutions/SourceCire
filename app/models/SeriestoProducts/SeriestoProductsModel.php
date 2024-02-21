@@ -152,11 +152,11 @@ public function updateQuantityProds($param)
     $prd_qty           = $this->db->real_escape_string($param['prdQty']);
 
     $qry =  "UPDATE ctt_products_packages SET pck_quantity = $prd_qty 
-            WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'PV';" ;
+            WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
     
     $this->db->query($qry);
 
-    return $prd_id;
+    return $prd_qty;
 }    
 
 // Registra el paquete o kit en la tabla de productos
@@ -167,7 +167,7 @@ public function saveAccesorioByProducto($param)
     $prd_parent_id              = $this->db->real_escape_string($param['parentId']);
     $prd_parent_Sku             = $this->db->real_escape_string($param['skuPrdPadre']);
     $sbc_id                     = $this->db->real_escape_string($param['lsbc_id']);
-    $filas                      = $this->db->real_escape_string($param['filas']);
+    
 
     $countId = 1;
 
@@ -177,6 +177,10 @@ public function saveAccesorioByProducto($param)
 
     $qry = "UPDATE ctt_series set ser_type_asigned = 'PF'
             where ser_id=$prd_parent_id";
+    $this->db->query($qry);
+
+    $qry = "UPDATE ctt_products SET prd_stock = prd_stock - 1 
+    WHERE pd.prd_id = (SELECT prd_id FROM ctt_series AS sr WHERE ser_id = $prd_parent_id Limit 1)";
     $this->db->query($qry);
 
     $result = $prd_parent_Sku;
@@ -191,9 +195,9 @@ public function saveAccesorioProducto($param)
     $prd_id                     = $this->db->real_escape_string($param['prdId']);
     $prd_parent_id              = $this->db->real_escape_string($param['parentId']);
     $prd_parent_Sku             = $this->db->real_escape_string($param['skuPrdPadre']);
-    $quantity                   = $this->db->real_escape_string($param['quantity']);
+    // $quantity                   = $this->db->real_escape_string($param['quantity']);
     $sbc_id                     = $this->db->real_escape_string($param['lsbc_id']);
-    $filas                      = $this->db->real_escape_string($param['filas']);
+    // $filas                      = $this->db->real_escape_string($param['filas']);
 
     
     $qry = "UPDATE ctt_series set ser_type_asigned = 'AV'
@@ -206,7 +210,7 @@ public function saveAccesorioProducto($param)
     
 
     $qry = "INSERT INTO ctt_products_packages ( prd_parent, pck_quantity, prd_id, prd_type_asigned)
-    VALUES ($prd_parent_id,'$quantity',$prd_id, 'AV')";
+    VALUES ($prd_parent_id,'1',$prd_id, 'AV')";
     $this->db->query($qry);
     
 
@@ -257,9 +261,22 @@ public function saveAccesorioProducto($param)
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
-        $qry =  "UPDATE ctt_series set prd_id_acc= 0 WHERE ser_id = $prd_id;" ;
+        $qry =  "UPDATE ctt_series set prd_id_acc= 0, ser_type_asigned = 'PI' WHERE ser_id = $prd_id;" ;
         $this->db->query($qry);
-        
+
+        $qry = "UPDATE  ctt_series SET ser_type_asigned = 'PI' 
+        WHERE ser_id = $prd_parent AND NOT EXISTS (
+        SELECT sr.ser_id FROM ctt_series AS sr WHERE sr.prd_id_acc = $prd_parent);";
+        $this->db->query($qry);
+
+        $qry = "UPDATE  ctt_series SET ser_type_asigned = 'AV' WHERE ser_id IN (SELECT sr.ser_id FROM ctt_series AS sr 
+        WHERE sr.prd_id IN (SELECT pck.prd_id FROM ctt_products_packages AS pck WHERE pck.prd_type_asigned = 'AV') AND sr.ser_id = $prd_id)";
+        $this->db->query($qry);
+
+        $qry = "UPDATE  ctt_series SET ser_type_asigned = 'PV' WHERE ser_id IN (SELECT sr.ser_id FROM ctt_series AS sr 
+        WHERE sr.prd_id IN (SELECT pck.prd_parents FROM ctt_products_packages AS pck WHERE pck.prd_type_asigned = 'PV') AND sr.ser_id = $prd_parent)";
+        $this->db->query($qry);
+
         return $prd_id;
     }    
 
@@ -270,7 +287,24 @@ public function saveAccesorioProducto($param)
 
         $qry =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
         $this->db->query($qry);
-        
+
+        /* $qry = "UPDATE  ctt_series SET ser_type_asigned = 'PI' WHERE prd_id = $prd_id";
+        $this->db->query($qry); */
+
+        /* $qry = "UPDATE ctt_series SET ser_type_asigned = 'PI' 
+        WHERE prd_id IN (SELECT pck.prd_id FROM ctt_products_packages AS pck WHERE pck.prd_parent = $prd_id)";
+        $this->db->query($qry); */
+
+        $qry = "UPDATE ctt_series SET ser_type_asigned = 'PI' 
+        WHERE prd_id = $prd_id AND ser_type_asigned = 'AV' AND NOT EXISTS (
+		  SELECT * FROM ctt_products_packages pck WHERE pck.prd_parent = $prd_parent);";
+        $this->db->query($qry);
+
+        $qry = "UPDATE ctt_series SET ser_type_asigned = 'PI' 
+        WHERE prd_id = $prd_parent AND ser_type_asigned = 'PV' 
+        AND NOT EXISTS(SELECT pck.prd_id FROM ctt_products_packages AS pck WHERE pck.prd_parent = $prd_parent);";
+        $this->db->query($qry);
+
         return $prd_id;
     }
 }

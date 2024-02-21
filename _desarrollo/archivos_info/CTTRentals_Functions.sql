@@ -30,8 +30,8 @@ declare p_idprd		INT;
 declare cur_findsku cursor for
 SELECT IFNULL(COUNT(*),0) FROM ctt_series AS sr
 INNER JOIN ctt_products AS pr ON pr.prd_id=sr.prd_id
-WHERE substr(sr.ser_sku,1,7)=lval AND pr.prd_level='P'
-AND sr.ser_situation<>'D';
+WHERE substr(sr.ser_sku,1,8)=lval AND pr.prd_level IN ('P','A')
+AND sr.ser_situation<>'D' OR sr.ser_type_asigned = 'AF';
 
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
 
