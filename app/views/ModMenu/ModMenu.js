@@ -78,6 +78,12 @@ function settingTable() {
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
+        // createdRow: function (nRow, aData, iDataIndex) {
+        //     $(nRow).attr('id', aData['mnu_id']);
+        // },
+        // processing: true,
+        // serverSide: true,
+        // ajax: {url: 'ModMenu/tableMenus', type: 'POST'},
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'men_parent', class: 'men-parent bold'},

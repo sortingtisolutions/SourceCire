@@ -661,7 +661,7 @@ public function setSeries($result)
         $ttlqty = $prdexp == '2'? $quanty: 1;
         $quanty = $prdexp == '2'? 1: $quanty;
 
-        if ( $bdglvl == 'P' ){
+        if ( $bdglvl == 'P' || $bdglvl == 'A'){
             for ($i = 1; $i<=$quanty; $i++){
                 
                 $params = array(
@@ -924,7 +924,7 @@ public function AddQuantityDetail($params)
 
         if ($servId == '1'){
             
-            if ($prdLvl == 'P' ){
+            if ($prdLvl == 'P' || $prdLvl == 'A'){
                 
                 $params = array(
                     'pjetId' => $pjetId, 
@@ -1100,7 +1100,7 @@ public function setSeries_old($result)
                     $serie = $this->model->SettingSeries($params);
 
                 }
-            } else if ( $bdglvl == 'P' || $bdglvl == 'S'){
+            } else if ( $bdglvl == 'P' || $bdglvl == 'A'){
                 for ($i = 1; $i<=$quanty; $i++){
 
                     $params = array(

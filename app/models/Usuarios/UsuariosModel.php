@@ -12,7 +12,7 @@ class UsuariosModel extends Model
 // Optiene los Usuaios existentes *****
 	public function GetUsuarios($params)
 	{
-		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, 
+		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number,emp_email, 
 					p.prf_name, u.usr_dt_registry, u.usr_dt_last_access, p.prf_id
 				FROM ctt_users as u
 				LEFT JOIN ctt_employees as e on e.emp_id = u.emp_id
@@ -76,6 +76,7 @@ class UsuariosModel extends Model
 				$IdUsuario = $this->db->real_escape_string($params['IdUsuario']);
 				$idPuesto = $this->db->real_escape_string($params['idPuesto']);
 				$EmpIdUsuario = $this->db->real_escape_string($params['EmpIdUsuario']);
+				$empEmail = $this->db->real_escape_string($params['empEmail']);
 
 				$NumEmpUsuario = $this->db->real_escape_string($params['NumEmpUsuario']);
 				$UserNameUsuario = $this->db->real_escape_string($params['UserNameUsuario']);
@@ -84,8 +85,8 @@ class UsuariosModel extends Model
 
 				$areaNombre = $this->db->real_escape_string($params['areaNombre']);
 				//Inserta Usuario-Empleado
-				$qry = "INSERT into ctt_employees(emp_number, emp_fullname, emp_area, emp_status, pos_id, emp_report_to,are_id) 
-				values('$NumEmpUsuario','$NomUsuario', '$areaNombre',1,'$idPuesto','$idUserReport','$AreaEmpUsuario');";
+				$qry = "INSERT into ctt_employees(emp_number, emp_fullname, emp_area, emp_email, emp_status, pos_id, emp_report_to,are_id) 
+				values('$NumEmpUsuario','$NomUsuario', '$areaNombre','$empEmail', 1,'$idPuesto','$idUserReport','$AreaEmpUsuario');";
 				$this->db->query($qry);
 
 				//optiene id de Usuario insertado
@@ -126,6 +127,7 @@ class UsuariosModel extends Model
 				$AreaEmpUsuario = $this->db->real_escape_string($params['AreaEmpUsuario']);
 				$EmpIdUsuario = $this->db->real_escape_string($params['EmpIdUsuario']);
 				$areaNombre = $this->db->real_escape_string($params['areaNombre']);
+				$empEmail = $this->db->real_escape_string($params['empEmail']);
 
 				$idPuesto = $this->db->real_escape_string($params['idPuesto']); // 11-10-23
 
@@ -167,6 +169,7 @@ class UsuariosModel extends Model
 						SET emp_number = '$NumEmpUsuario',
 							emp_fullname = '$NomUsuario',
 							emp_area = '$areaNombre', 
+							emp_email ='$empEmail', 
 							pos_id = '$idPuesto',
 							are_id = '$AreaEmpUsuario'
 						WHERE emp_id = $EmpIdUsuario";

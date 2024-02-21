@@ -203,6 +203,7 @@ function EditUsuario(id, idPerfil) {
                 // $('#PassUsuario').attr("placeholder", "Cambiar Contraseña");
                 $('#AreaEmpUsuario').val(respuesta.are_id);
                 $('#NumEmpUsuario').val(respuesta.emp_number);
+                $('#empEmail').val(respuesta.emp_email);
 
                 $('#lastDate').val(respuesta.usr_dt_last_access);
                 $('#userRegistry').val(respuesta.usr_dt_registry);
@@ -297,7 +298,7 @@ function getSaveUsuario() {
     let AreaNombre = $('#AreaEmpUsuario option:selected').text();
     var NumEmpUsuario = $('#NumEmpUsuario').val().trim();
     var EmpIdUsuario = $('#EmpIdUsuario').val().trim();
-
+    var empEmail = $('#empEmail').val().trim();
     var idPerfil = $('#selectPerfilUsuario').val();
     var idUserReport = $('#selectRowUserReporta option:selected').attr('id');
 
@@ -324,6 +325,7 @@ function getSaveUsuario() {
             modulesAsig: modulesAsig,
             AreaEmpUsuario: AreaEmpUsuario,
             NumEmpUsuario: NumEmpUsuario,
+            empEmail : empEmail,
             idPerfil: idPerfil,
             idUserReport: idUserReport,
             idPuesto: idPuesto,
@@ -352,10 +354,11 @@ function getSaveUsuario() {
                         [1]: respuesta,
                         [2]: NomUsuario,
                         [3]: NumEmpUsuario,
-                        [4]: NomPuesto,
-                        [5]: UserNameUsuario,
-                        [6]: fechaAcceso,
-                        [7]: fechaRegistro,
+                        [4]: empEmail,
+                        [5]: NomPuesto,
+                        [6]: UserNameUsuario,
+                        [7]: fechaAcceso,
+                        [8]: fechaRegistro,
                     })
                     .draw()
                     .node();
@@ -388,6 +391,7 @@ function LimpiaModal() {
     $('#UserNameUsuario').val('');
     $('#AreaEmpUsuario').val('');
     $('#NumEmpUsuario').val('');
+    $('#empEmail').val('');
     $('#selectPerfilUsuario').html('');
     $('#selectRowUserReporta').val(0);
     $('#selectRowPuestos').val(0);
@@ -433,6 +437,7 @@ function getUsuariosTable() {
                         "<td class='dtr-control text-center'>" + row.usr_id + '</td>' +
                         '<td>' + row.emp_fullname + '</td>' +
                         '<td >' + row.emp_number + '</td>' +
+                        '<td >' + row.emp_email + '</td>' +
                         '<td>' + row.prf_name + '</td>' +
                         '<td>' + row.usr_username + '</td>' +
                         '<td>' + row.usr_dt_last_access + '</td>' +

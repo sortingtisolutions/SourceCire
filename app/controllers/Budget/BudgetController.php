@@ -684,7 +684,7 @@ public function ProcessProjectProductFAST($request_params)
         $quanty = $prdexp == '2'? 1: $quanty;
 
 
-        if ( $bdglvl == 'P' ){
+        if ( $bdglvl == 'P' || $bdglvl == 'A'){
             for ($i = 1; $i<=$quanty; $i++){
                 
                 $params = array(

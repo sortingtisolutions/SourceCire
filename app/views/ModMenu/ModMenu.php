@@ -68,7 +68,7 @@
                                     <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.9rem !important;" id="LimpiarFormulario">Limpiar</button>
                                 </div>
                             </div>
-                            <!-- <div style="height:30px;"></div>
+                            <div style="height:30px;"></div>
 
 
                             <div >
@@ -77,7 +77,7 @@
                                     <label class="form-check-label" for="flexSwitchCheckDefault"> Encender o apagar envio</label>
                                 </div>
                             </div>
- -->
+
                         </form>
                     </div>
                 </div>
@@ -89,21 +89,21 @@
                     
                     <div class="row">
                         <div class="col-12 col-md-12">		
-                                <table id="MenuTable" class="display compact nowrap" style="width:70%">         
-                                        <thead>
-                                            <tr>
-                                                <th style="width:  20px"></th>
-                                                <th style="width:  10px">Menu Padre</th>
-                                                <th style="width: 60px">Elemento</th>
-                                                <th style="width:  200px">Descripción</th>
-                                                <th style="width: 10px">Orden</th>
-                                                <th style="width:  100px">Modulo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tablaAlmacenesRow">
-                                        </tbody>
-                                    </table>
-                            </div>
+                            <table id="MenuTable" class="display compact nowrap" style="width:70%">         
+                                <thead>
+                                    <tr>
+                                        <th style="width:  20px"></th>
+                                        <th style="width:  10px">Menu Padre</th>
+                                        <th style="width:  60px">Elemento</th>
+                                        <th style="width: 200px">Descripción</th>
+                                        <th style="width:  10px">Orden</th>
+                                        <th style="width: 100px">Modulo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaAlmacenesRow">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- End área de listado -->

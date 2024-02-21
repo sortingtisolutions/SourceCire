@@ -362,7 +362,7 @@ function packages_edit() {
         }]
     `;
 
-    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName);
+    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName.toUpperCase());
     $(`#tblPackages_wrapper #${prdId} .price`).html(prdPrice);
 
     active_params();

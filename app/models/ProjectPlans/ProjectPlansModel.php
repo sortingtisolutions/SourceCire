@@ -732,14 +732,14 @@ class ProjectPlansModel extends Model
     public function restoreSeries($params)
     {
         $pjtId = $this->db->real_escape_string($params);
-        /* $qry = "UPDATE ctt_series 
+        $qry = "UPDATE ctt_series 
                 SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
                 WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
                     INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
-                    WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1
+                    WHERE pcn.pjt_id = $pjtId
                 );";
-        $this->db->query($qry); */
+        $this->db->query($qry);
 
         // MODIFICAMOS LA CANTIDAD EN RESERVA, QUITANDO LO QUE SE RESERVO.
         $qry1 = "SELECT pd.prd_id, COUNT(*) cant FROM ctt_series AS sr
@@ -750,7 +750,7 @@ class ProjectPlansModel extends Model
 
         $result = $this->db->query($qry1);
 
-        /* while ($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             $reservas = $row["cant"];
             $prdId = $row["prd_id"];
             $updQry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
@@ -760,9 +760,9 @@ class ProjectPlansModel extends Model
             WHERE pd.prd_id = $prdId AND sr.ser_situation != 'D') WHERE prd_id =$prdId";
 
             $updt = $this->db->query($updQry);
-        } */
+        }
 
-        while ($row = $result->fetch_assoc()) {
+       /*  while ($row = $result->fetch_assoc()) {
             $prdId = $row["prd_id"];
             $serPjtdtId = $row["ser_pjtdt_id"];
             $pjtdtId = $row["pjtdt_id"];
@@ -782,7 +782,7 @@ class ProjectPlansModel extends Model
             
             $updt = $this->db->query($updQry);
             
-        }
+        } */
 
         return 1;
     }
@@ -839,7 +839,7 @@ class ProjectPlansModel extends Model
                 ROW_NUMBER() OVER (partition by dt.prd_id ORDER BY dt.pjtdt_prod_sku DESC) AS reng, sr.ser_type_asigned 
                 FROM ctt_projects_detail AS dt
                 LEFT join ctt_series as sr on sr.ser_id = dt.ser_id 
-                LEFT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                LEFT JOIN ctt_products AS pd ON pd.prd_id = dt.prd_id
                 WHERE pjtvr_id = $pjtvrId AND pd.prd_level = 'P' ORDER BY dt.pjtdt_prod_sku)
         SELECT pjtdt_id, prd_id, ser_id, ser_type_asigned FROM elements WHERE reng =1 "; 
 

@@ -167,7 +167,7 @@ public function listProductsPack($params)
         $prd_name           = $this->db->real_escape_string($param['prdName']);
         $prd_price          = $this->db->real_escape_string($param['prdPrice']);
 
-        $qry =  "UPDATE ctt_products SET prd_name = '$prd_name', prd_price = '$prd_price' 
+        $qry =  "UPDATE ctt_products SET prd_name = UPPER('$prd_name'), prd_price = '$prd_price' 
                 WHERE prd_id = '$prd_id';" ;
         
         return $this->db->query($qry);
