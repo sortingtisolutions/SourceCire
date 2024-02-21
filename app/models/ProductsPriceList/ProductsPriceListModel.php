@@ -84,7 +84,7 @@ public function listProducts($params)
                     , date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry
                     , se.ser_situation
                     , se.ser_stage
-                    , CASE WHEN se.ser_behaviour = 'R' THEN 'SUBABRRENDADO' ELSE '' END comportamiento
+                    , CASE WHEN se.ser_behaviour = 'R' THEN '' ELSE 'SUBARRENDO' END comportamiento
                     , '' AS comments
                     , pd.prd_sku 
                     , pd.prd_name

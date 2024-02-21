@@ -1775,7 +1775,7 @@ function putProductsRelated(dt) {
             if (sku_prod=='Pendiente') {
                 skushort = 'No Existe Serie';
             }else{
-                skushort=u.pjtdt_prod_sku.substring(0,7);
+                skushort=u.pjtdt_prod_sku.substring(0,8);
             }
             let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();
                       

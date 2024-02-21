@@ -63,7 +63,7 @@ class ProjectCancelModel extends Model
         $this->db->query($qry); */
 
         // Hay que editar
-        $qry1 = "SELECT pd.prd_id, sr.pjtdt_id ser_pjtdt_id, pdt.pjtdt_id, pdt.sttd_id FROM ctt_series AS sr
+        /* $qry1 = "SELECT pd.prd_id, sr.pjtdt_id ser_pjtdt_id, pdt.pjtdt_id, pdt.sttd_id FROM ctt_series AS sr
         INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
         INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
         INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
@@ -91,6 +91,35 @@ class ProjectCancelModel extends Model
             
             $updt = $this->db->query($updQry);
             
+        } */
+        $qry = "UPDATE ctt_series 
+                SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
+                WHERE pjtdt_id IN (
+                    SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
+                    WHERE pcn.pjt_id = $pjtId
+                );";
+        $this->db->query($qry);
+
+        // MODIFICAMOS LA CANTIDAD EN RESERVA, QUITANDO LO QUE SE RESERVO.
+        $qry1 = "SELECT pd.prd_id, COUNT(*) cant FROM ctt_series AS sr
+        INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+        INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
+        INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
+        WHERE pcn.pjt_id = $pjtId AND pdt.sttd_id = 1 GROUP BY pd.prd_id;";
+
+        $result = $this->db->query($qry1);
+
+        while ($row = $result->fetch_assoc()) {
+            $reservas = $row["cant"];
+            $prdId = $row["prd_id"];
+            $updQry = "UPDATE ctt_products SET prd_reserved = (SELECT COUNT(*) FROM ctt_stores_products AS sp
+            INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+            WHERE pd.prd_id = $prdId AND sr.ser_situation != 'D') WHERE prd_id =$prdId";
+
+            $updt = $this->db->query($updQry);
         }
         return 1;
     }

@@ -609,7 +609,7 @@ public function getNewProdChg($request_params)
             $quanty = $prdexp == '2'? 1: $quanty;
 
             
-            if ( $bdglvl == 'P' ){
+            if ( $bdglvl == 'P' || $bdglvl == 'A'){
                 for ($i = 1; $i<=$quanty; $i++){
                     
                     $params = array(
@@ -1191,7 +1191,7 @@ public function getNewProdChg($request_params)
                 $detlId = $this->model->SettingSeries($prdparam);
             } */
 
-            if ($prdLvl == 'P' ){
+            if ($prdLvl == 'P' || $prdLvl == 'P'){
                 
                 $params = array(
                     'pjetId' => $pjetId, 

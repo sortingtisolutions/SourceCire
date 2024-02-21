@@ -31,6 +31,7 @@ function inicial() {
     //Guardar almacen *
     $('#GuardarDocumento').on('click', function(){   
         if(validaFormulario() == 1){
+            modalLoading('S');
             SaveDocumento();        
         }
     });

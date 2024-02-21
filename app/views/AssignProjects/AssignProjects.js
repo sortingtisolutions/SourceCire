@@ -24,7 +24,10 @@ function inicial() {
         .unbind('click')
         .on('click', function () {
             console.log(gblprjid);
-            confirm_toChgUsr(gblprjid, gblprjname);
+            if (gblprjid) {
+                confirm_toChgUsr(gblprjid, gblprjname);
+            }
+            
      });
 
      $('#cleanForm')

@@ -191,6 +191,8 @@ function selProduct(res) {
         }
         // rowCurr.show();
     }else {
+        var sl = $('#txtProducts').offset();
+        $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
         $('#listProduct .list-items div.list-item').css({display: 'none'});
     }
 }
