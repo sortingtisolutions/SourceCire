@@ -111,7 +111,7 @@ ORDER BY pd.prd_name;
 
 --******* 24-ago-23 ********************
 DROP VIEW ctt_vw_list_productsInput;
-CREATE VIEW ctt_vw_list_productsInput AS 
+CREATE DEFINER =  `root`@`localhost` VIEW ctt_vw_list_productsInput AS 
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
             pd.prd_insured, sb.sbc_name,cat_name,prd_type_asigned,
     CASE 

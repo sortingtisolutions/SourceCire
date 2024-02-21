@@ -1,5 +1,6 @@
 let strs = null;
 let strnme = '';
+let glbsendmail;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -77,6 +78,12 @@ function settingTable() {
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
+        // createdRow: function (nRow, aData, iDataIndex) {
+        //     $(nRow).attr('id', aData['mnu_id']);
+        // },
+        // processing: true,
+        // serverSide: true,
+        // ajax: {url: 'ModMenu/tableMenus', type: 'POST'},
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'men_parent', class: 'men-parent bold'},
@@ -178,7 +185,7 @@ function actionButtons() {
         });
 
     /**  ---- Acciones de Guardar categoria ----- */
-    $('#GuardarAlmacen')
+    $('#GuardarMenu')
         .unbind('click')
         .on('click', function () {
             if (validaFormulario() == 1) {
@@ -188,6 +195,10 @@ function actionButtons() {
                     updateStore();
                 }
             }
+            glbsendmail=true;
+            messagemail="Sistema, ajuste en modulo menu"
+            bodymail="Se realizo un cambio en el modulo de menu que afecta a un modulo";
+            sendEmail(glbsendmail,messagemail,bodymail);
         });
     /**  ---- Lismpia los campos ----- */
     $('#LimpiarFormulario')
@@ -362,3 +373,4 @@ function validaFormulario() {
     });
     return valor;
 }
+

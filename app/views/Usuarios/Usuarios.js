@@ -36,6 +36,7 @@ function inicial() {
         .on('click', function () {
         if (validaFormulario() == 1) {
             getSaveUsuario();
+    
         } else {
             console.log('no entra');
         }
@@ -121,7 +122,7 @@ function getIdModuluesPerfiles(idPerfil) {
             if (respuesta != '') {
                 getModulesList(respuesta, 'Asig'); //Asignados
             }
-            getModulesList(respuesta, 'Disp'); //Disponibles 
+            getModulesList(respuesta, 'Disp'); //Disponibles
         },
         error: function () {},
     }).done(function () {});
@@ -130,7 +131,7 @@ function getIdModuluesPerfiles(idPerfil) {
 // Optiene los perfiles disponibles *
 function getPerfilesUsuario(idPerfil) {
     // console.log('getPerfilesUsuario',idPerfil);
-    
+
     var location = 'PerfilUser/GetPerfiles';
     $.ajax({
         type: 'POST',
@@ -164,7 +165,7 @@ function validaFormulario() {
             valor = 0;
         }
     });
-    
+
     if ($('#IdUsuario').val()=='') {
         if ($('#PassUsuario').val().length == 0) {
             $('#PassUsuario').addClass('fail');
@@ -172,7 +173,7 @@ function validaFormulario() {
         }
     }
     // console.log($('#PassUsuario').val().length);
-    return valor; 
+    return valor;
 }
 
 //Edita el Usuario *
@@ -183,7 +184,7 @@ function EditUsuario(id, idPerfil) {
     $('#EditarUsuariosModal')
         .unbind('click')
         .on('click', function () {
-        
+
         $('#titulo').text('Editar Usuarios');
         var location = 'Usuarios/GetUsuario';
         $.ajax({
@@ -202,11 +203,12 @@ function EditUsuario(id, idPerfil) {
                 // $('#PassUsuario').attr("placeholder", "Cambiar Contraseña");
                 $('#AreaEmpUsuario').val(respuesta.are_id);
                 $('#NumEmpUsuario').val(respuesta.emp_number);
+                $('#empEmail').val(respuesta.emp_email);
 
                 $('#lastDate').val(respuesta.usr_dt_last_access);
                 $('#userRegistry').val(respuesta.usr_dt_registry);
                 $('#EmpIdUsuario').val(respuesta.emp_id);
-                
+
                 getPerfilesUsuario(idPerfil);
                 getUserReport(respuesta.emp_report_to);
                 getPuestos(respuesta.pos_id);
@@ -215,17 +217,17 @@ function EditUsuario(id, idPerfil) {
                     getModulesList(respuesta.modulesAsing, 'Asig'); //Asignados
                 }
                 getModulesList(respuesta.modulesAsing, 'Disp'); //Disponibles
-                
+
                 $('#UsuariosModal').modal('show');
             },
             error: function (EX) {
                 console.log(EX);
             },
         }).done(function () {});
-        
+
         $('#EditarUsuariosModal').modal('hide');
     });
-    
+
 }
 
 //confirm para borrar *
@@ -296,7 +298,7 @@ function getSaveUsuario() {
     let AreaNombre = $('#AreaEmpUsuario option:selected').text();
     var NumEmpUsuario = $('#NumEmpUsuario').val().trim();
     var EmpIdUsuario = $('#EmpIdUsuario').val().trim();
-
+    var empEmail = $('#empEmail').val().trim();
     var idPerfil = $('#selectPerfilUsuario').val();
     var idUserReport = $('#selectRowUserReporta option:selected').attr('id');
 
@@ -323,6 +325,7 @@ function getSaveUsuario() {
             modulesAsig: modulesAsig,
             AreaEmpUsuario: AreaEmpUsuario,
             NumEmpUsuario: NumEmpUsuario,
+            empEmail : empEmail,
             idPerfil: idPerfil,
             idUserReport: idUserReport,
             idPuesto: idPuesto,
@@ -351,10 +354,11 @@ function getSaveUsuario() {
                         [1]: respuesta,
                         [2]: NomUsuario,
                         [3]: NumEmpUsuario,
-                        [4]: NomPuesto,
-                        [5]: UserNameUsuario,
-                        [6]: fechaAcceso,
-                        [7]: fechaRegistro,
+                        [4]: empEmail,
+                        [5]: NomPuesto,
+                        [6]: UserNameUsuario,
+                        [7]: fechaAcceso,
+                        [8]: fechaRegistro,
                     })
                     .draw()
                     .node();
@@ -387,6 +391,7 @@ function LimpiaModal() {
     $('#UserNameUsuario').val('');
     $('#AreaEmpUsuario').val('');
     $('#NumEmpUsuario').val('');
+    $('#empEmail').val('');
     $('#selectPerfilUsuario').html('');
     $('#selectRowUserReporta').val(0);
     $('#selectRowPuestos').val(0);
@@ -432,6 +437,7 @@ function getUsuariosTable() {
                         "<td class='dtr-control text-center'>" + row.usr_id + '</td>' +
                         '<td>' + row.emp_fullname + '</td>' +
                         '<td >' + row.emp_number + '</td>' +
+                        '<td >' + row.emp_email + '</td>' +
                         '<td>' + row.prf_name + '</td>' +
                         '<td>' + row.usr_username + '</td>' +
                         '<td>' + row.usr_dt_last_access + '</td>' +
@@ -442,7 +448,7 @@ function getUsuariosTable() {
         }
             let title = 'Usuarios';
             let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-            
+
             table = $('#usuariosTable').DataTable({
                 order: [[1, 'asc']],
                 select: {
@@ -568,6 +574,7 @@ function getPuestos(id) {
 
 //Optiene los modulos Para el Usuario *
 function getModulesList(ModUser, tipeModul) {
+    // console.log('getModulesList',ModUser,tipeModul);
     var location = 'PerfilUser/GetModules';
     $.ajax({
         type: 'POST',
@@ -594,7 +601,7 @@ function getModulesList(ModUser, tipeModul) {
                 respuesta.forEach(function (row, index) {
                     renglon =
                         '<a href="#" class="list-group-item list-group-item-action" id="' +
-                        row.mod_id + '">' + row.mod_name +  
+                        row.mod_id + '">' + row.mod_name +
                         '<br><span class="list-group-item-Text" style="font-size: 10px;">' + row.mod_description +
                         '</span></a>';
                     $('#listDisponible').append(renglon);
@@ -604,3 +611,4 @@ function getModulesList(ModUser, tipeModul) {
         error: function () {},
     }).done(function () {});
 }
+

@@ -15,7 +15,6 @@ class ModMenuModel extends Model
 // Optiene los menus existentes
 public function GetMenus($params)
 {
-
 	$qry = "SELECT mnu.mnu_id, mnu.mnu_parent, mnu.mnu_item, mnu.mnu_description, 
 					mnu.mnu_order, mnu.mod_id,mdl.mod_name 
 			FROM ctt_menu AS mnu
@@ -82,5 +81,31 @@ public function GetMenus($params)
     {
         $qry = "SELECT * FROM ctt_modules;";
         return $this->db->query($qry);
+    }
+
+	public function tableMenus($params)
+    {
+        $table = 'ctt_menu';  
+        $primaryKey = 'mnu_id';
+        $columns = array(
+            array( 'db' => 'mnu_id', 'dt' => 'editable' ),
+            array( 'db' => 'mnu_parent', 'dt' => 'men_parent' ),
+            array( 'db' => 'mnu_item', 'dt' => 'men_items' ),
+            array( 'db' => 'mnu_description', 'dt' => 'men_description' ),
+            array( 'db' => 'mnu_order', 'dt' => 'men_order' ),
+            array( 'db' => 'mod_id', 'dt' => 'men_module' ),
+        );
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+            SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+        );
+
     }
 }

@@ -332,6 +332,7 @@ function getPerfilesTable() {
 
 //Optiene los modulos
 function getModulesList(ModUser, tipeModul) {
+   // console.log('getModulesList',ModUser,tipeModul);
    var location = 'PerfilUser/GetModules';
    $.ajax({
       type: 'POST',

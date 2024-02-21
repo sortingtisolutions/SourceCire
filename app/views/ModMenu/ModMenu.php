@@ -1,6 +1,6 @@
 <?php 
-      defined('BASEPATH') or exit('No se permite acceso directo'); 
-      require ROOT . FOLDER_PATH . "/app/assets/header.php";	  
+    defined('BASEPATH') or exit('No se permite acceso directo'); 
+    require ROOT . FOLDER_PATH . "/app/assets/header.php";	  
 ?>
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
@@ -62,12 +62,22 @@
                             
                             <div class="row">
                                 <div class="col-6">
-                                    <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarAlmacen">Guardar</button>
+                                    <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.9rem !important;" id="GuardarMenu">Guardar</button>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+                                    <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.9rem !important;" id="LimpiarFormulario">Limpiar</button>
                                 </div>
                             </div>
+                            <div style="height:30px;"></div>
+
+
+                            <div >
+                                <div class="form-check form-switch" >
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" style="height: 25px; width:20%">Encender o apagar envio</input>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault"> Encender o apagar envio</label>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                 </div>
@@ -79,21 +89,21 @@
                     
                     <div class="row">
                         <div class="col-12 col-md-12">		
-                                <table id="MenuTable" class="display compact nowrap" style="width:70%">         
-                                        <thead>
-                                            <tr>
-                                                    <th style="width:  20px"></th>
-                                                    <th style="width:  10px">Menu Padre</th>
-                                                    <th style="width: 60px">Elemento</th>
-                                                    <th style="width:  200px">Descripción</th>
-                                                    <th style="width: 10px">Orden</th>
-                                                    <th style="width:  100px">Modulo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tablaAlmacenesRow">
-                                        </tbody>
-                                    </table>
-                            </div>
+                            <table id="MenuTable" class="display compact nowrap" style="width:70%">         
+                                <thead>
+                                    <tr>
+                                        <th style="width:  20px"></th>
+                                        <th style="width:  10px">Menu Padre</th>
+                                        <th style="width:  60px">Elemento</th>
+                                        <th style="width: 200px">Descripción</th>
+                                        <th style="width:  10px">Orden</th>
+                                        <th style="width: 100px">Modulo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaAlmacenesRow">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- End área de listado -->

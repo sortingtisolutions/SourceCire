@@ -280,3 +280,23 @@ function looseAlert(grp) {
 
     // console.log(grp.attr('class'));
 }
+
+function sendEmail(turnOn, subjectmess, bodymess) {
+    if (turnOn == true) {
+        Email.send({
+            Host: "smtp.elasticemail.com",
+            Username: "notificationcire@ctt-app.com",
+            Password: "36AAF404B1F0EA4FE8BB21E24EC62990528E",
+            To: 'juarezjorr@gmail.com', // notificationcire@ctt-app.com
+            From: "notificationcire@ctt-app.com",
+            Subject: subjectmess, 
+            Body: bodymess,
+          })
+            .then(function (message) {
+              alert("MAIL ENVIADO CORRECTAMENTE a....");
+            });
+    } else {
+        alert("Bandera de Correos no esta encendida OFF");
+    }
+    
+  }

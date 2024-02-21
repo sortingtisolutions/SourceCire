@@ -4,6 +4,7 @@
 ?>
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
+	
 </header>
 
 <!-- CUERPO DE LA PAGINA -->
@@ -63,6 +64,13 @@
 							</div>
 
 							<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="empEmail" name="empEmail" type="text" class="form-control form-control-sm"  autocomplete="off" required >
+									<label for="empEmail">Email del empleado</label>
+								</div>
+							</div>
+
+							<div class="row">
 									<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 										<div class="input-group">
 											<select class="form-select form-select-sm" id="selectPerfilUsuario" name="selectPerfilUsuario" required>
@@ -87,7 +95,7 @@
 											<div class="row">
 												<div class="col-12 col-md-12 ">
 													<div class="col-12 text-center colorSecundario" style="font-weight: 600 !important;">
-														Disponibles
+														Disponibles para asignar
 													</div>
 													<div class="card listContainer">
 														<div class="card-body card-body-add">
@@ -143,21 +151,22 @@
 
 				<!-- Start área de listado -->
 				<div class="mvst_table">
-					<h1>Usuarios</h1>
+					<h1>Datos principales de los usuarios</h1>
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
 								<table id="usuariosTable" class="display nowrap" style="width:100%">         
 										<thead>
 											<tr>
-													<th style="width: 30px"></th>
-													<th style="width: 30px">Id</th>
-													<th style="width: auto">Nombre Emp</th>
-                                       				<th style="width: auto">Numero Emp</th>
-													<th style="width: auto">Perfil </th>
-                                      				<th style="width: auto">User name</th>
-                                       				<th style="width: auto">Ultimo Acceso</th>
-                                     				<th style="width: auto">Ultimo Registro</th>
+												<th style="width: 30px"></th>
+												<th style="width: 30px">Id</th>
+												<th style="width: auto">Nombre Emp</th>
+												<th style="width: auto">Numero Emp</th>
+												<th style="width: auto">Email Empleado</th>
+												<th style="width: auto">Perfil </th>
+												<th style="width: auto">User name</th>
+												<th style="width: auto">Ultimo Acceso</th>
+												<th style="width: auto">Ultimo Registro</th>
 											</tr>
 										</thead>
 										<tbody id="tablaUsuariosRow">
