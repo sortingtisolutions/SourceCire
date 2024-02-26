@@ -11,14 +11,12 @@ class ProjectClosedModel extends Model
 /* -- Listado de proyectos  ------------------------------------- */    
     public function listProjects($params)
     {
-        // $qry = "SELECT pjt_id, pjt_name FROM ctt_projects 
-        //         WHERE pjt_status IN (8,9);"; /* AND pjt_date_start < curdate();"; */
-        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $liststat = $this->db->real_escape_string($params['liststat']);
         $qry = "SELECT pj.pjt_id, pj.pjt_name, ifnull(cus.cus_id , '0') as cus_id
                 FROM ctt_projects AS pj
                 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
-                WHERE pjt_status IN ($pjtId);";
+                WHERE pjt_status IN ($liststat);";
 
         return $this->db->query($qry);
     }

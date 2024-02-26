@@ -10,8 +10,9 @@ class AddInfoCfidModel extends Model
 	}
 
 	// Obtiene los proyectos con posibilidad de CFDI ****
-	public function listProjectsCfdi()
+	public function listProjects($params)
 	{
+		$liststat = $this->db->real_escape_string($params['liststat']);
 		$qry = "SELECT pj.pjt_id,pjt_name, pjt_number, pjttp_name, cus_name, cus_rfc,cus_phone,
 						cus_address,cus_email,cus_cve_cliente,cus_contact_name,cus_contact_phone,
 						pjt_location,DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
@@ -23,7 +24,7 @@ class AddInfoCfidModel extends Model
 				INNER JOIN ctt_customers_type ct ON ct.cut_id=cu.cut_id
 				INNER JOIN ctt_projects_type pt ON pt.pjttp_id=pj.pjttp_id
 				LEFT JOIN ctt_infocfdi inf ON inf.pjt_id=pj.pjt_id
-				WHERE pj.pjt_status IN (1,2,4);";
+				WHERE pj.pjt_status IN ($liststat);";
 		return $this->db->query($qry);
 	}
 

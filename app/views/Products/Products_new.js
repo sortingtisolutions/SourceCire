@@ -35,7 +35,7 @@ function inicial() {
 
 // Solicita las categorias
 function getCategories() {
-    var pagina = 'Products/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategories;
@@ -44,7 +44,7 @@ function getCategories() {
 
 // Solicita las subcategorias
 function getSubcategories() {
-    var pagina = 'Products/listSubcategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putSubcategories;
@@ -61,7 +61,7 @@ function getServices() {
 }
 // Solicita las monedas
 function getCoins() {
-    var pagina = 'Products/listCoins';
+    var pagina = 'Commons/listCoins';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCoins;

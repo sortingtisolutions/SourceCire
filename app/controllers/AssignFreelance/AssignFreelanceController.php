@@ -26,10 +26,10 @@ class AssignFreelanceController extends Controller
 
 
 // LISTA LOS TIPOS DE MOVIMIENTOS
-    public function listProyects()
+    public function listProjects($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProyects();
+        $result = $this->model->listProjects($request_params);
         $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -44,10 +44,10 @@ class AssignFreelanceController extends Controller
     }
 
 // Lista los almacenes 
-    public function listStores($request_params)
-    {
+    // public function listStores($request_params)
+    // {
         
-    }    
+    // }    
 
 // Lista los Categorias 
     public function listAreas($request_params)

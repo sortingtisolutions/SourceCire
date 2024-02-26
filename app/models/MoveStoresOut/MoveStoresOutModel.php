@@ -29,12 +29,12 @@ class MoveStoresOutModel extends Model
     }
 
 // Listado de catalogos
-	public function listCategories()
-    {
-		//$store = $this->db->real_escape_string($store);
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1";
-        return $this->db->query($qry);
-    }
+	// public function listCategories()
+    // {
+	// 	//$store = $this->db->real_escape_string($store);
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de Productos
 	public function listProducts($param)

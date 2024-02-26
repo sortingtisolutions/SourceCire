@@ -10,12 +10,12 @@ class ProductsForSublettingModel extends Model
     }
 
 // Listado de Proyectos  ****
-public function listProyects($store)
-{
-    $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,4,7,8) ;";
-    return $this->db->query($qry);
-}    
+// public function listProjects($store)
+// {
+//     $store = $this->db->real_escape_string($store);
+//     $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,4,7,8) ;";
+//     return $this->db->query($qry);
+// }    
 
 // Listado de Productos
     public function listProducts($params)
@@ -44,11 +44,11 @@ public function listProyects($store)
 
 
 // Listado de monedas
-    public function listCoins()
-    {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }   
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }   
 
 
 // Listado de Almacenes

@@ -19,11 +19,11 @@ class ProductsModel extends Model
     }
 
 // Listado de categorias
-    public function listSubcategories()
-    {
-        $qry = "SELECT cat_id, sbc_id, sbc_name, sbc_code FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listSubcategories()
+    // {
+    //     $qry = "SELECT cat_id, sbc_id, sbc_name, sbc_code FROM ctt_subcategories WHERE sbc_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de servicios
     public function listServices()
@@ -33,11 +33,11 @@ class ProductsModel extends Model
     }
 
 // Listado de tipos de moneda
-    public function listCoins()
-    {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de fichas técnicas
     public function listDocument()
@@ -307,7 +307,9 @@ public function verifyChanges($params){
     $prdId = $this->db->real_escape_string($params['prdId']);
     $result = 0;
     
-    $qry = "SELECT * FROM ctt_series AS sr WHERE sr.prd_id = $prdId AND sr.ser_situation != 'D' AND sr.ser_stage != 'D'";
+    $qry = "SELECT ser_id FROM ctt_series AS sr 
+            WHERE sr.prd_id = $prdId AND sr.ser_situation != 'D' 
+            AND sr.ser_stage != 'D'";
     $res = $this->db->query($qry);
 
     if ($res->num_rows > 0) {

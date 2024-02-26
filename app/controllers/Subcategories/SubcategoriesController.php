@@ -50,21 +50,21 @@
         }
 
     // Obtiene la lista de subcategorias activas
-        public function listSubcategories($request_params)
-        {
-            $result = $this->model->listSubcategories($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-            $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"sbc_id":"0"}]';	
-            }
-            echo $res;	
-        }
+        // public function listSubcategories($request_params)
+        // {
+        //     $result = $this->model->listSubcategories($request_params);
+        //     $i = 0;
+        //     while($row = $result->fetch_assoc()){
+        //         $rowdata[$i] = $row;
+        //     $i++;
+        //     }
+        //     if ($i>0){
+        //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        //     } else {
+        //         $res =  '[{"sbc_id":"0"}]';	
+        //     }
+        //     echo $res;	
+        // }
 
 // Obtiene la lista de series relacionadas a la subcategoria
         public function listSeries($request_params)

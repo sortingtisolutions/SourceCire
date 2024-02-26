@@ -67,6 +67,7 @@ public function GetMenus($params)
 	public function DeleteMenu($params)
 	{
         $mnuId 	= $this->db->real_escape_string($params['mnuId']);
+
 		$qry = "DELETE FROM ctt_menu WHERE mnu_id = $mnuId";
         return $this->db->query($qry);
 	}
@@ -107,5 +108,25 @@ public function GetMenus($params)
             SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
         );
 
+    }
+
+	public function ExecSp($params)
+    {
+		$catId 	= $this->db->real_escape_string($params['catId']);
+		$lval = 0;
+        $qry1 = "set @lval";
+		$this->db->query($qry1);
+		$qry2 = "CALL sp_count_stock($catId,@lval)";
+		$this->db->query($qry2);
+		$qry3 = "select @lval from dual;";
+		$serval = $this->db->query($qry3);
+		// $resultid = $this->db->query($qry);
+		// $iddetail = $resultid->fetch_object();
+
+        //      if ($iddetail != null){
+        //          $serval  = $iddetail->lval; 
+        //      } 
+
+        return $serval;
     }
 }

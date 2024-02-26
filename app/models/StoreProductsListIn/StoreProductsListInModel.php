@@ -10,11 +10,11 @@ class StoreProductsListInModel extends Model
     }
 
 // Listado de Almacenes ****
-    public function listStores()
-    {
-		$qry = "  SELECT * FROM ctt_stores";
-		return $this->db->query($qry);
-    }
+    // public function listStores()
+    // {
+	// 	$qry = "  SELECT * FROM ctt_stores";
+	// 	return $this->db->query($qry);
+    // }
 // Listado de Productos
 	public function listProducts($store)
 	{

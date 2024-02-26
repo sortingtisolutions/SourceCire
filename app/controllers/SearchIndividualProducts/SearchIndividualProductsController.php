@@ -41,22 +41,22 @@ class SearchIndividualProductsController extends Controller
             echo $res;
 		}
     // LISTA LOS PROYECTOS ACTIVOS
-    public function listProyects($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProyects($request_params['store']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"pjt_id":"0"}]';	
-        }
-        echo $res;
-    } 
+    // public function listProjects($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listProjects($request_params['store']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"pjt_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 
 // Lista los productos
     public function listProducts($request_params)
     {

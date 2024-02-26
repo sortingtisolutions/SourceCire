@@ -179,7 +179,7 @@ function getStores() {
 }
 // Solicita los provedores
 function getSuppliers() {
-    var pagina = 'MoveStoresIn/listSuppliers';
+    var pagina = 'Commons/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putSupplierList;
@@ -204,7 +204,7 @@ function getCategories() {
 }
 
 function getSubCategories(catId) {
-    var pagina = 'NewSublet/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;

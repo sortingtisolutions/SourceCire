@@ -25,8 +25,9 @@ function inicial() {
 
 /** ---- PETICIÓN DE DATOS ----*/
 function getlistProjects() {
-    var pagina = 'PaymentsApplied/listProjects';
-    var par = '[{"parm":""}]';
+    let liststat ="9,10,99";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putlistProjects;
     fillField(pagina, par, tipo, selector);

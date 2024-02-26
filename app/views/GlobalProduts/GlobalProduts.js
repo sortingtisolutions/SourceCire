@@ -196,7 +196,7 @@ function getCategories() {
 
 function getSubCategories(catId) {
     //console.log(catId);
-    var pagina = 'GlobalProduts/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;

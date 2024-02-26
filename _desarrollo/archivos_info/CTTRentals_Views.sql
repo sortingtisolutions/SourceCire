@@ -2,7 +2,7 @@
 --********** VISTAS PRINCIPALES A CREAR EN LA BASE DE DATOS **********************
 /* VISTA DE PRODUCTOS  */
 
-DROP VIEW ctt_vw_products;
+DROP VIEW IF EXISTS ctt_vw_products;
 CREATE VIEW ctt_vw_products AS
 SELECT
     CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id, '"></i> ') AS editable,
@@ -22,7 +22,7 @@ WHERE pr.prd_status = 1 AND pr.prd_level IN ('A','P');
 
 
 /* VISTA DE PROJECTOS  */
-DROP VIEW ctt_vw_projects;
+DROP VIEW IF EXISTS ctt_vw_projects;
 CREATE VIEW ctt_vw_projects AS
 SELECT
     CASE    WHEN cu.cus_fill <= 16 THEN concat('<span class="rng rng1">', cu.cus_fill,'%</span>')
@@ -47,7 +47,7 @@ FROM    ctt_projects AS pj
 WHERE pj.pjt_status IN (2, 3, 4, 5);
 
 /* VISTA DE SUBCATEGORIA  */
-DROP VIEW ctt_vw_subcategories;
+DROP VIEW IF EXISTS ctt_vw_subcategories;
 CREATE VIEW ctt_vw_subcategories AS
 SELECT CONCAT('<i class="fas fa-pen modif" data="', sc.sbc_id, '"></i><i class="fas fa-times-circle kill" data="', sc.sbc_id, '"></i>') AS editable,
   sc.sbc_id AS subcatid, sc.sbc_code AS subccode, sc.sbc_name AS subcname, ct.cat_name AS catgname, ct.cat_id AS catgcode,
@@ -58,7 +58,7 @@ WHERE sc.sbc_status = '1' AND ct.cat_status = '1'
 GROUP BY sc.sbc_id;
 
 /* VISTA DE SUBARRENDO  */
-DROP VIEW ctt_vw_subletting;
+DROP VIEW IF EXISTS ctt_vw_subletting;
 CREATE VIEW ctt_vw_subletting AS
 SELECT
   pr.cin_id, pr.doc_id, sr.emp_id, pc.pjt_id, pc.pjtcn_days_base, pc.pjtcn_days_test, pc.pjtcn_days_trip, pc.pjtcn_discount_base, pc.pjtcn_discount_test,
@@ -79,7 +79,7 @@ FROM ctt_projects_content AS pc
 WHERE ( pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4), 1) = 'R');
 
 /* VISTA DE PROYETCOS EN SUBARRENDO  */
-DROP VIEW ctt_vw_project_subletting;
+DROP VIEW IF EXISTS ctt_vw_project_subletting;
 CREATE VIEW ctt_vw_project_subletting AS
 SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id, DATE_FORMAT(sub_date_start, '%d/%m/%Y') AS sub_date_start, 
     DATE_FORMAT(sub_date_end, '%d/%m/%Y') AS sub_date_end, sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test, ifnull(prd_id, 0) AS prd_id, 
@@ -88,7 +88,7 @@ SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_n
 FROM  ctt_vw_subletting;
 
 --******* VISTAS DE APOYO PARA CONSULTAS 15-ago-23 ********************
-DROP VIEW ctt_vw_list_products;
+DROP VIEW IF EXISTS ctt_vw_list_products;
 CREATE VIEW ctt_vw_list_products AS
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
             pd.prd_insured, sb.sbc_name,cat_name,
@@ -110,8 +110,8 @@ WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
 ORDER BY pd.prd_name;
 
 --******* 24-ago-23 ********************
-DROP VIEW ctt_vw_list_productsInput;
-CREATE DEFINER =  `root`@`localhost` VIEW ctt_vw_list_productsInput AS 
+DROP VIEW IF EXISTS ctt_vw_list_productsInput;
+CREATE VIEW ctt_vw_list_productsInput AS 
 SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
             pd.prd_insured, sb.sbc_name,cat_name,prd_type_asigned,
     CASE 
@@ -132,7 +132,7 @@ WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
 ORDER BY pd.prd_name;
 
 --******* vista para series de almacenes 12sep23 ********************
-DROP VIEW ctt_vw_stores_regiter;
+DROP VIEW IF EXISTS ctt_vw_stores_regiter;
 CREATE VIEW ctt_vw_stores_regiter AS
 SELECT sp.str_id AS strId, se.ser_id as serId, prd.prd_sku as produsku, prd.prd_name as serlnumb, sum(sp.stp_quantity) as dateregs
 	FROM ctt_products as prd
@@ -141,3 +141,25 @@ SELECT sp.str_id AS strId, se.ser_id as serId, prd.prd_sku as produsku, prd.prd_
 	WHERE se.ser_status=1 AND sp.stp_quantity>0
 	group by prd.prd_sku, prd.prd_name, prd.prd_level
 	ORDER BY se.ser_sku;
+
+
+DROP VIEW IF EXISTS ctt_vw_list_productsInput;
+CREATE DEFINER =`root`@`localhost` VIEW ctt_vw_list_productsInput AS 
+SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level,
+            pd.prd_insured, sb.sbc_name,cat_name,
+    CASE 
+        WHEN pd.prd_level ='K' THEN 
+            (SELECT prd_stock
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        WHEN pd.prd_level ='P' THEN 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        ELSE 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        END AS stock, pd.sbc_id
+FROM ctt_products AS pd
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
+WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+ORDER BY pd.prd_name;

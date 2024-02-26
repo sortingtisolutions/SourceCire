@@ -101,7 +101,7 @@ function getExchange() {
 }
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'StoreProductsListIn/listStores';
+    var pagina = 'Commons/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;

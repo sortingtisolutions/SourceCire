@@ -24,8 +24,9 @@ function inicial() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'ProductsForSubletting/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="2,4,7,8";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);
@@ -42,7 +43,7 @@ function get_products(pj) {
 
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_coins() {
-    var pagina = 'ProductsForSubletting/listCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_coins;
@@ -50,7 +51,7 @@ function get_coins() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_suppliers() {
-    var pagina = 'ProductsForSubletting/listSuppliers';
+    var pagina = 'Commons/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_suppliers;
@@ -58,7 +59,7 @@ function get_suppliers() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_stores() {
-    var pagina = 'ProductsForSubletting/listStores';
+    var pagina = 'Commons/listStores';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_stores;

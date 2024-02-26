@@ -24,11 +24,11 @@
 		  $this->render(__CLASS__, $params);
 		}
 
-		public function GetProjectType($request_params)
-		{
-	      $result = $this->model->GetProjectTypes($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
-		}
+		// public function listProjectsType($request_params)
+		// {
+	    //   $result = $this->model->listProjectsType($request_params);
+		//   echo json_encode($result,JSON_UNESCAPED_UNICODE);	
+		// }
 
 		public function SaveProjectType($request_params)
 		{
@@ -45,22 +45,22 @@
 			echo $result;
 		}
 
-		public function GetProjectTypes($request_params)
-		{
-			$params =  $this->session->get('user');
-            $result = $this->model->GetProjectTypes($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"pjttp_id":"0"}]';	
-            }
-            echo $res;
-		}
+		// public function listProjectsType($request_params)
+		// {
+		// 	$params =  $this->session->get('user');
+        //     $result = $this->model->listProjectsType($request_params);
+        //     $i = 0;
+        //     while($row = $result->fetch_assoc()){
+        //         $rowdata[$i] = $row;
+        //         $i++;
+        //     }
+        //     if ($i>0){
+        //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        //     } else {
+        //         $res =  '[{"pjttp_id":"0"}]';	
+        //     }
+        //     echo $res;
+		// }
 
 		public function DeleteProjectType($request_params)
 		{

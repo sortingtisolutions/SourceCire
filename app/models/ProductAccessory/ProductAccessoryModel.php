@@ -9,19 +9,19 @@ class ProductAccessoryModel extends Model
     }
 
 // Listado de categorias   *******
-    public function listCategories()
-    {
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCategories()
+    // {
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de subcategorias
-    public function listSubCategories($params)
-    {
-        $catId = $this->db->real_escape_string($params);
-        $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listSubCategories($params)
+    // {
+    //     $catId = $this->db->real_escape_string($params);
+    //     $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de paquetes
 public function listPackages()

@@ -48,8 +48,9 @@ function inicial() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'PrePayments/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="2,4,7,8,9";
+	var pagina = 'Commons/listProjects';
+	var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);

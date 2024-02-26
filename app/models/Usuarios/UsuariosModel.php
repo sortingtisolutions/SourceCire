@@ -218,7 +218,7 @@ class UsuariosModel extends Model
 	// Listado de Areas
     public function listAreas()
     {
-        $qry = "SELECT * FROM ctt_areas WHERE are_status = 1 ORDER BY are_id;";
-        return $this->db->query($qry);
+        // $qry = "SELECT * FROM ctt_areas WHERE are_status = 1 ORDER BY are_id;";
+        // return $this->db->query($qry);
     }
 }

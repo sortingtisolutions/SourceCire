@@ -185,7 +185,7 @@ function listChgStatus() {
 // Obtiene el listado de los proyectos en etapa de pryecto
 function getProjects(concept) {
     var pagina = 'ProjectClosed/listProjects';
-    var par = `[{"pjtId":"${concept}"}]`;
+    var par = `[{"liststat":"${concept}"}]`;
     var tipo = 'JSON';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);

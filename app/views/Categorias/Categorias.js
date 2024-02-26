@@ -101,7 +101,7 @@ function getStores() {
 
 function getAreas() {
     // Solicita los productos de un almacen seleccionado
-    var pagina = 'Categorias/listAreas';
+    var pagina = 'Commons/listAreas';
     var par = `[{"are_id":""}]`;
     var tipo = 'json';
     var selector = putAreas;

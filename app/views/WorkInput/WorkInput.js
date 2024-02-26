@@ -19,8 +19,9 @@ function inicial() {
 
 /** +++++  Obtiene los proyectos de la base */
 function getProjects(catId) {
+    let liststat ="8,9";
     var pagina = 'WorkInput/listProjects';
-    var par = `[{"pjtId":""}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);

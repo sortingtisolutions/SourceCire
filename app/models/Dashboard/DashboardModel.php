@@ -97,14 +97,14 @@ class DashboardModel extends Model
 
     public function listProjects($params)
     {
-        $pjtsta = $this->db->real_escape_string($params['pjtsta']);
-        $qry = "SELECT pj.pjt_id, pj.pjt_name, DATE(pj.pjt_date_start) AS pjt_date_start, DATE(pj.pjt_date_end) AS pjt_date_end, em.emp_id, em.emp_fullname, pjtc.pjttc_id, 
-        pjtc.pjttc_name, loc.loc_id, loc.loc_type_location FROM ctt_projects AS pj 
-        INNER JOIN ctt_location AS loc ON pj.loc_id = loc.loc_id
-        INNER JOIN ctt_projects_type_called AS pjtc ON pjtc.pjttc_id = pj.pjttc_id
-        INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
-        INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
-        where em.are_id = 1 OR em.are_id=5;";
+        $qry = "SELECT pj.pjt_id, pj.pjt_name, DATE(pj.pjt_date_start) AS pjt_date_start, 
+                DATE(pj.pjt_date_end) AS pjt_date_end, em.emp_id, em.emp_fullname, pjtc.pjttc_id, 
+                pjtc.pjttc_name, loc.loc_id, loc.loc_type_location FROM ctt_projects AS pj 
+                INNER JOIN ctt_location AS loc ON pj.loc_id = loc.loc_id
+                INNER JOIN ctt_projects_type_called AS pjtc ON pjtc.pjttc_id = pj.pjttc_id
+                INNER JOIN ctt_who_attend_projects AS wap ON wap.pjt_id = pj.pjt_id
+                INNER JOIN ctt_employees AS em ON em.emp_id = wap.emp_id
+                WHERE em.are_id = 1 OR em.are_id=5;";
 
         return $this->db->query($qry);
     }

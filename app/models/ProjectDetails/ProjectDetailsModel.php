@@ -14,7 +14,7 @@ class ProjectDetailsModel extends Model
     {
         // Debe leer todos los proyectos que se encuentren en estaus 2 - Presupuesto
         $pjId = $this->db->real_escape_string($params['pjId']);
-
+        $liststat = $this->db->real_escape_string($params['liststat']);
         $qry = "SELECT 
                     pj.pjt_id  
                     , pj.pjt_number 
@@ -47,7 +47,7 @@ class ProjectDetailsModel extends Model
                 left JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 left JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status in ('3','4','40','7','8') ORDER BY pj.pjt_id DESC;  
+                WHERE pj.pjt_status in ($liststat) ORDER BY pj.pjt_id DESC;  
                 ";
         return $this->db->query($qry);
     }
@@ -155,11 +155,11 @@ class ProjectDetailsModel extends Model
 
         
 /** ====== Listado de tipos de proyecto ======================================================  */
-    public function listProjectsType($params)
-    {
-        $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
-        return $this->db->query($qry);
-    }    
+    // public function listProjectsType($params)
+    // {
+    //     $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
+    //     return $this->db->query($qry);
+    // }    
 
 /** ====== Listado de tipos de llamados ======================================================  */
     public function listProjectsTypeCalled($params)
@@ -1681,7 +1681,8 @@ public function KillQuantityDetailPackage($params)
     public function ListLocationsEdos($params){
         $pjtId = $this->db->real_escape_string($params['prj_id']);
         $qry = "SELECT * FROM ctt_locacion_estado AS ldo 
-        INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id WHERE ldo.pjt_id='$pjtId';";
+                INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id 
+                WHERE ldo.pjt_id='$pjtId';";
         return $this->db->query($qry);
     } 
     // eliminar locacion
@@ -1721,13 +1722,13 @@ public function KillQuantityDetailPackage($params)
         return $this->db->query($qry);
     }
     // Listado de subcategoria
-    public function listSubCategories($param)
-    {
-        $catId = $this->db->real_escape_string($param['catId']);
-        $qry = "SELECT * FROM ctt_subcategories 
-                WHERE sbc_status = 1 AND cat_id=$catId;";
-        return $this->db->query($qry);
-    }
+    // public function listSubCategories($param)
+    // {
+    //     $catId = $this->db->real_escape_string($param['catId']);
+    //     $qry = "SELECT * FROM ctt_subcategories 
+    //             WHERE sbc_status = 1 AND cat_id=$catId;";
+    //     return $this->db->query($qry);
+    // }
     // Guardar locaciones 
     public function SaveLocations($params){
         $loc        = $this->db->real_escape_string($params['loc']);

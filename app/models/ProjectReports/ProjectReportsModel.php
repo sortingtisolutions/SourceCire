@@ -24,12 +24,12 @@ class ProjectReportsModel extends Model
 
     }
 
-    public function listSuppliers($params)
-    {
-        $qry = "SELECT * FROM ctt_suppliers AS cu";
-        return $this->db->query($qry);
+    // public function listSuppliers($params)
+    // {
+    //     $qry = "SELECT * FROM ctt_suppliers AS cu";
+    //     return $this->db->query($qry);
 
-    }
+    // }
 
 /* -- Listado de contenido de proyecto seleccionado  -------------- */
     public function projectContent($params)

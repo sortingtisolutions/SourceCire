@@ -19,7 +19,7 @@ class WhOutputsModel extends Model
 // Listado de Productos
     public function listProjects($params)
     {
-        //$catId = $this->db->real_escape_string($params['catId']);
+        $liststat = $this->db->real_escape_string($params['liststat']);
 
         $qry = "SELECT pt.pjttp_name, pj.pjt_name, pj.pjt_number,
                 DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, 
@@ -30,7 +30,7 @@ class WhOutputsModel extends Model
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-                WHERE pj.pjt_status in ('4','7','8') ORDER BY pjt_date_start ASC;";
+                WHERE pj.pjt_status in ($liststat) ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 

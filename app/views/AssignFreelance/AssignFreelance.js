@@ -115,15 +115,16 @@ function setting_table() {
 
 // Solicita los tipos de movimiento
 function getlistProyect() {
-    var pagina = 'AssignFreelance/listProyects';
-    var par = '[{"parm":""}]';
+    let liststat ="4,7,8";
+    var pagina = 'AssignFreelance/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProject;
     fillField(pagina, par, tipo, selector);
 }
 // Solicita las categorias
 function getAreas() {
-    var pagina = 'AssignFreelance/listAreas';
+    var pagina = 'Commons/listAreas';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putAreas;

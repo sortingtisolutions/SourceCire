@@ -185,8 +185,9 @@ function setting_table() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'FathersReports/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="40";
+	var pagina = 'Commons/listProjects';
+	var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);

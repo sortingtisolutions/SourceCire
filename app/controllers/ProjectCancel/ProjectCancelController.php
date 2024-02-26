@@ -5,7 +5,6 @@
 
 class ProjectCancelController extends Controller
 {
-    
     private $session;
     public $model;
 

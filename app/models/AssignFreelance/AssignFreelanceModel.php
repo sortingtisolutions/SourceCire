@@ -10,8 +10,10 @@ class AssignFreelanceModel extends Model
     }
 
 // Listado de Tipos de movimiento  *****
-    public function listProyects()
+    public function listProjects($params)
     {
+        $liststat = $this->db->real_escape_string($params['liststat']);
+
         $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name,  
                     DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project, 
                     DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, 
@@ -22,7 +24,7 @@ class AssignFreelanceModel extends Model
                 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status IN (4,7,8)
+                WHERE pj.pjt_status IN ($liststat)
                 ORDER BY pj.pjt_id DESC;";
 
         return $this->db->query($qry);

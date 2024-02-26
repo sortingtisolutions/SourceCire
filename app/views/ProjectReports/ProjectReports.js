@@ -788,10 +788,8 @@ function putCustomers(dt) {
 }
 
 function getSuppliers() {
-    let data = [
-        { pjtId: '', },
-    ];
-    var pagina = 'ProjectReports/listSuppliers';
+    // let data = [{ pjtId: '', }];
+    var pagina = 'Commons/listSuppliers';
     var par = '[{"parm":""}]';
     var tipo = 'JSON';
     var selector = putSuppliers;

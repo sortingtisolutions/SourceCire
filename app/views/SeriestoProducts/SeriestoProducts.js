@@ -52,7 +52,7 @@ function clean(){
 }
 // Solicita las categorias
 function getCategory() {
-    var pagina = 'SeriestoProducts/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategory;
@@ -68,7 +68,7 @@ function getCategoryAcc() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    var pagina = 'SeriestoProducts/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;
@@ -369,7 +369,7 @@ function putSeriesProd(dt) {
 }
 
 function putAccesorios(dt) {
-    console.log(dt);
+    // console.log(dt);
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
     $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
@@ -632,6 +632,10 @@ function product_apply(prId) {
         }
         $('#txtProducts').val("");
         $('#txtIdProducts').val(0);
+        // $('#txtCategoryAcce').val(0);
+        // $('#txtSubcategoryAcce').val(0);
+        // $('#txtProducts').val('');
+        // $('#listProduct .list-items').html('');
 
     }, 500);
 }
@@ -688,6 +692,10 @@ function confirm_delet_product(id) {
 function putDelPackages(dt) {
     $('#delPackModal').modal('hide');
     load_Accesories(0);
+    $('#txtCategoryAcce').val(0);
+    $('#txtSubcategoryAcce').val(0);
+    $('#txtProducts').val('');
+    $('#listProduct .list-items').html('');
 }
 
 function deleteTablaAccesorios() {

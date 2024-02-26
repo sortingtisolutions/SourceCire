@@ -90,7 +90,7 @@ function addZeroNumber(number, length) {
 }
 // Enlista las areas
 function getAreas() {
-    var pagina = 'Usuarios/listAreas';
+    var pagina = 'Commons/listAreas';
     var par = `[{"":""}]`;
     var tipo = 'json';
     var selector = putAreas;

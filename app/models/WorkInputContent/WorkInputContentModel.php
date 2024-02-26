@@ -232,10 +232,10 @@ class WorkInputContentModel extends Model
         $serSku = $this->db->real_escape_string($params['serSku']);
         $prjid = $this->db->real_escape_string($params['prjid']);
         $qry = "SELECT * FROM ctt_series AS sr 
-        INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
-        INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = sr.ser_id
-        INNER JOIN ctt_projects_content AS ct ON ct.pjtvr_id=pjd.pjtvr_id
-        WHERE ct.pjt_id=$prjid and pjd.ser_id>0 AND sr.ser_sku like '$serSku%';";
+                INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = sr.ser_id
+                INNER JOIN ctt_projects_content AS ct ON ct.pjtvr_id=pjd.pjtvr_id
+                WHERE ct.pjt_id=$prjid and pjd.ser_id>0 AND sr.ser_sku like '$serSku%';";
 
        return $this->db->query($qry);
     }

@@ -10,12 +10,12 @@ class MaintenanceModel extends Model
     }
 
 // Listado de Proyectos  ****
-public function listProyects($store)
-{
-    $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 9 ;";
-    return $this->db->query($qry);
-}    
+// public function listProjects($params)
+// {
+//     $liststat = $this->db->real_escape_string($params['liststat']);
+//     $qry = "SELECT * FROM ctt_projects WHERE pjt_status IN ($liststat);";
+//     return $this->db->query($qry);
+// }    
 
 public function listEstatusMantenimiento($params)
 {
@@ -60,20 +60,20 @@ public function listEstatusMantenimiento($params)
     }    
 
 // Listado de Proveedores
-    public function listSuppliers($store)
-    {
-        $store = $this->db->real_escape_string($store);
-        $qry = "SELECT sup_id, sup_business_name FROM ctt_suppliers WHERE sup_status = 1 
-        AND sut_id in (3) ORDER BY sup_business_name;";
-        return $this->db->query($qry);
-    }   
+    // public function listSuppliers($store)
+    // {
+    //     $store = $this->db->real_escape_string($store);
+    //     $qry = "SELECT sup_id, sup_business_name FROM ctt_suppliers WHERE sup_status = 1 
+    //     AND sut_id in (3) ORDER BY sup_business_name;";
+    //     return $this->db->query($qry);
+    // }   
 
 // Listado de monedas
-    public function listCoins()
-    {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }   
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }   
 
 
 // Listado de Almacenes

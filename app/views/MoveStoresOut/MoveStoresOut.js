@@ -35,7 +35,7 @@ function getExchange() {
 }
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'MoveStoresOut/listStores';
+    var pagina = 'Commons/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;
@@ -44,7 +44,7 @@ function getStores() {
 
 function getCategories() {
     //console.log('categos');
-    var pagina = 'MoveStoresOut/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putCategories;
