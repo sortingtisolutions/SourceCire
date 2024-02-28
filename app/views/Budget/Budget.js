@@ -330,7 +330,7 @@ function getProjects(pjId) {
     swpjt = 0;
     let liststat ="1,40";
     var pagina = 'Budget/listProjects';
-    var par = `[{"pjId":"${pjId}"}, "liststat":"${liststat}"}]`;
+    var par = `[{"pjId":"${pjId}","liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -750,6 +750,7 @@ function putVersion(dt) {
 }
 /** Llena el listado de los tipos de proyecto */
 function putProjectsType(dt) {
+    // console.log('putProjectsType', dt);
     tpprd = dt;
 }
 /** Llena el listado de los tipos de proyecto */

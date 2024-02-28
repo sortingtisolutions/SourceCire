@@ -697,7 +697,7 @@ function putSerieDetails(dt){
             $.each(dt, function (v, u) {
                 tabla.row
                     .add({
-                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}" detailId="${u.pjtdt_id} prjVersion="${u.pjtvr_id}" pjVersionOrg="${u.pjvr_id_org}"></i>`,
+                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}" detailId="${u.pjtdt_id}" prjVersion="${u.pjtvr_id}" pjVersionOrg="${u.pjvr_id_org}"></i>`,
                         serdetnumber: u.ser_serial_number,
                         serdetsitu: u.ser_no_econo,
                         projectname: u.pjt_name
@@ -732,7 +732,8 @@ function activeIconsNewSerie() {
     });
 }
 
-function changeSerieNew(serIdNew,serIdOrg, detailId,prjVersion, pjVersionOrg) {
+function changeSerieNew(serIdNew,serIdOrg, detailId, prjVersion, pjVersionOrg) {
+    console.log ('changeSerieNew', serIdNew,serIdOrg,detailId,prjVersion,pjVersionOrg);
     var pagina = 'WhOutputContent/changeSerieNew';
     var par = `[{"serIdNew":"${serIdNew}", 
                 "serIdOrg":"${serIdOrg}", 

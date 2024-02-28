@@ -362,7 +362,7 @@ function getProjects(pjId) {
     swpjt = 0;
     let liststat ="2,40";
     var pagina = 'ProjectPlans/listProjects';
-    var par = `[{"pjId":"${pjId}"}, "liststat":"${liststat}"}]`;
+    var par = `[{"pjId":"${pjId}", "liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);

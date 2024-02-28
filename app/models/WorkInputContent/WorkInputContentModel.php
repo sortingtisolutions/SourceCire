@@ -72,7 +72,7 @@ class WorkInputContentModel extends Model
                     INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                     INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                     LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                    WHERE pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A'
+                    WHERE pcn.pjtcn_id=prcn.pjtcn_id
                     ORDER BY pdt.pjtdt_prod_sku) then prcn.pjtcn_quantity
                 else'0'
                 END 
@@ -80,7 +80,7 @@ class WorkInputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE (pjd.sttd_id = 4 OR ser.ser_situation='M') AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                WHERE (pjd.sttd_id = 4 OR ser.ser_situation='M') AND pcn.pjtcn_id=prcn.pjtcn_id)
                 END AS cant_ser
             FROM ctt_projects_content AS prcn
             INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
@@ -302,7 +302,7 @@ class WorkInputContentModel extends Model
 
         $this->db->query($qry);
 
-        return $folio;
+        return $serid;
     }
     public function regMaintenance($params)
     {

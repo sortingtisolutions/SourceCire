@@ -21,7 +21,7 @@ function inicial() {
 /** +++++  Obtiene los proyectos de la base */
 function getProjects() {
     var pagina = 'CollectAccounts/listProjects';
-    var par = `[{"catId":""}]`;
+    var par = `[{"pjtId":""}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);

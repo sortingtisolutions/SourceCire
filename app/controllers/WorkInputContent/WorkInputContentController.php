@@ -206,6 +206,7 @@ class WorkInputContentController extends Controller
             );
 
             $ActSeries = $this->model->ActualizaSeries($paramsdet);
+            $serie = $ActSeries;
             
         }
         echo $serie;

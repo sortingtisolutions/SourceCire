@@ -109,7 +109,7 @@ function settingTable() {
 }
 
 function putlistProjects(dt) {
-    console.log(dt);
+    // console.log('putlistProjects',dt);
     $('#lstProjects').html('');
     $.each(dt, function (v, u) {
         var H = `<option value="${u.pjt_id}">${u.pjt_id} - ${u.pjt_name}</option>`;

@@ -68,7 +68,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=prcn.pjtcn_id)
                 END AS cant_ser
             FROM ctt_projects_content AS prcn
             INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
@@ -96,7 +96,7 @@ class WhOutputContentModel extends Model
                     INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                     INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                     LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                    WHERE pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A'
+                    WHERE pcn.pjtcn_id=pjc.pjtcn_id
                     ORDER BY pdt.pjtdt_prod_sku) then pjc.pjtcn_quantity
                 else'0'
                 END 
@@ -105,7 +105,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A')
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=pjc.pjtcn_id)
                 END AS cant_ser
             FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
