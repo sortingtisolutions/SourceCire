@@ -36,7 +36,7 @@ class CollectAccountsModel extends Model
                 GROUP BY clt.clt_id, clt.clt_date_generated,clt.ctl_amount_payable, 
                         clt.clt_deadline,cus.cus_id,cus.cus_name,
                         pjt.pjt_id, pjt.pjt_name,pa.pym_amount,pa.pym_date_paid
-                ORDER BY clt.clt_folio,clt_deadline ASC;";
+                ORDER BY clt.clt_folio,clt_deadline, pa.pym_id ASC;";
         return $this->db->query($qry);
     }
 

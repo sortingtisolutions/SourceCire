@@ -85,8 +85,8 @@
 
 
 <!-- Start Ventana modal AGREGA O MODIFICA  -->
-	<div class="overlay_background overlay_hide" id="CalendarModal" style="height: 600px; width:70%;left:160px;">
-        <div class="overlay_modal">
+    <div class="overlay_background overlay_hide" id="CalendarModal" style="height: 1000px; width:60%;left:220px;">
+        <div class="overlay_modal" style="top:2%">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
 			<!--
             <div class="formButtons">

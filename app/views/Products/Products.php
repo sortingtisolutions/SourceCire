@@ -205,7 +205,7 @@
                             <select id="txtDocId" name="txtDocId" class="textbox" style="width:300px">
                                 <option value="0">Selecciona la ficha técnica</option>
                             </select>
-                            <input type="hidden" id="txtDcpId" name="txtDcpId">
+                            <input type="hidden" id="txtDcpId" name="txtDcpId" values="0">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Selecciona la ficha técnica correspondiente al producto</span>
                         </td>

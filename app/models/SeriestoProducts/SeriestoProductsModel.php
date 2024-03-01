@@ -60,7 +60,7 @@ public function listSeriesProd($params) // Edna
             FROM ctt_series AS ser
             INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
             LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = ser.ser_id
-            WHERE prd.prd_id=$prdId AND sp.stp_quantity > 0 GROUP BY ser.ser_id";
+            WHERE prd.prd_id=$prdId GROUP BY ser.ser_id";
     return $this->db->query($qry);
 }
 
@@ -68,11 +68,10 @@ public function list_products($params) // Edna
 {
     $prdId = $this->db->real_escape_string($params);
 
-
     $qry = "SELECT prd.prd_id ser_id, prd.prd_sku ser_sku, prd.prd_name, prd.prd_name ser_serial_number, prd.prd_id
     FROM  ctt_products AS prd
     LEFT JOIN ctt_stores_products AS sp ON sp.prd_id = prd.prd_id
-    WHERE prd.prd_id = $prdId AND sp.stp_quantity > 0 GROUP BY prd.prd_id, prd.prd_sku";
+    WHERE prd.prd_id = $prdId GROUP BY prd.prd_id, prd.prd_sku";
     return $this->db->query($qry);
 }
 
@@ -153,17 +152,17 @@ public function saveAccesorioByProducto($param)
 
     $countId = 1;
 
-    $qry = "UPDATE ctt_series set prd_id_acc=$prd_parent_id, ser_type_asigned = 'AF'
+    $qry1 = "UPDATE ctt_series set prd_id_acc=$prd_parent_id, ser_type_asigned = 'AF'
             where ser_id=$serId";
-    $this->db->query($qry);
+    $this->db->query($qry1);
 
-    $qry = "UPDATE ctt_series set ser_type_asigned = 'PF'
+    $qry2 = "UPDATE ctt_series set ser_type_asigned = 'PF'
             where ser_id=$prd_parent_id";
-    $this->db->query($qry);
+    $this->db->query($qry2);
 
-    $qry = "UPDATE ctt_products SET prd_stock = prd_stock - 1 
+    $qry3 = "UPDATE ctt_products SET prd_stock = prd_stock - 1 
     WHERE pd.prd_id = (SELECT prd_id FROM ctt_series AS sr WHERE ser_id = $prd_parent_id Limit 1)";
-    $this->db->query($qry);
+    $this->db->query($qry3);
 
     $result = $prd_parent_Sku;
     //$result = $this->db->insert_id;

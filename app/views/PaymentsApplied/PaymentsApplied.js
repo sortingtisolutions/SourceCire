@@ -110,11 +110,13 @@ function settingTable() {
 
 function putlistProjects(dt) {
     // console.log('putlistProjects',dt);
-    $('#lstProjects').html('');
-    $.each(dt, function (v, u) {
-        var H = `<option value="${u.pjt_id}">${u.pjt_id} - ${u.pjt_name}</option>`;
-        $('#lstProjects').append(H);
-    });
+    if (dt[0].pjt_id > 0) {
+        $('#lstProjects').html('');
+        $.each(dt, function (v, u) {
+            var H = `<option value="${u.pjt_id}">${u.pjt_id} - ${u.pjt_name}</option>`;
+            $('#lstProjects').append(H);
+        });
+    }
 
     $('#lstProjects')
     .unbind('change')

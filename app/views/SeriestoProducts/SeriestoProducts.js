@@ -370,6 +370,7 @@ function putSeriesProd(dt) {
 
 function putAccesorios(dt) {
     // console.log(dt);
+    $('#txtProducts').val('   Cargando Informacion....');
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
     $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
@@ -378,6 +379,7 @@ function putAccesorios(dt) {
             let H = `<div class="list-item" id="${u.prd_id}|${u.prd_sku}|${u.prd_name}|1" data-subcateg="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_sku} / ${u.prd_name}</div>`;
             $('#listProduct .list-items').append(H);
         });
+        $('#txtProducts').val('');
     }
     
     $('#txtProducts').on('focus', function () {

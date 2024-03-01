@@ -47,7 +47,7 @@ class ProjectDetailsModel extends Model
                 left JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 left JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status in ($liststat) ORDER BY pj.pjt_id DESC;  
+                WHERE pj.pjt_status IN ($liststat) ORDER BY pj.pjt_id DESC;  
                 ";
         return $this->db->query($qry);
     }
@@ -292,7 +292,7 @@ public function promoteToProject($params)
                 LEFT JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                 LEFT JOIN ctt_projects AS pjt ON pjt.pjt_id = pcn.pjt_id
                 LEFT JOIN ctt_projects_periods AS ped ON ped.pjtdt_id = pdt.pjtdt_id
-                WHERE ser.prd_id = $prdId AND pdt.sttd_id != 4 Order by pdt.pjtdt_prod_sku, ped.pjtpd_day_start ASC;";
+                WHERE ser.prd_id = $prdId AND (pdt.sttd_id != 4 OR ISNULL(pdt.sttd_id)) Order by pdt.pjtdt_prod_sku, ped.pjtpd_day_start ASC;";
         return $this->db->query($qry);
     } 
 

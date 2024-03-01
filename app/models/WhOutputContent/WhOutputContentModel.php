@@ -37,17 +37,17 @@ class WhOutputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $empid = $this->db->real_escape_string($params['empid']);
         $areid = $this->db->real_escape_string($params['areid']);
-
+        // AND prd.prd_level!='A'   SE QUITO LINEA 63
         if ($areid == 5){
             $qry = "SELECT prcn.pjtcn_id, prcn.pjtcn_prod_sku, prcn.pjtcn_prod_name, prcn.pjtcn_quantity, 
             prcn.pjtcn_prod_level, prcn.pjt_id, prcn.pjtcn_status, prcn.pjtcn_order, 
-             case 
+            CASE 
                  when prcn.pjtcn_section=1 then 'Base'
                  when prcn.pjtcn_section=2 then 'Extra'
                  when prcn.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
                  END AS section, 
-                 case 
+                 CASE 
 					  when prcn.pjtcn_prod_level='K' OR pd.prd_level = 'P' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
@@ -60,7 +60,7 @@ class WhOutputContentModel extends Model
                     INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                     INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                     LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                    WHERE pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A'
+                    WHERE pcn.pjtcn_id=prcn.pjtcn_id 
                     ORDER BY pdt.pjtdt_prod_sku) then prcn.pjtcn_quantity
                 else'0'
                 END 
