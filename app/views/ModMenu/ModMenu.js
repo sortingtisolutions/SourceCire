@@ -204,17 +204,19 @@ function actionButtons() {
     $('#GuardarMenu')
         .unbind('click')
         .on('click', function () {
+            
             if (validaFormulario() == 1) {
                 if ($('#txtIdMenu').val() == '') {
                     saveStore();
+                    
                 } else {
                     updateStore();
                 }
+                let areId=1;
+                let codEmail=1;
+                getSendEmails(areId,codEmail);
             }
-            glbsendmail=true;
-            messagemail="Sistema, ajuste en modulo menu"
-            bodymail="Se realizo un cambio en el modulo de menu que afecta a un modulo";
-            sendEmail(glbsendmail,messagemail,bodymail);
+           
         });
     /**  ---- Lismpia los campos ----- */
     $('#LimpiarFormulario')
@@ -228,6 +230,15 @@ function actionButtons() {
             $('#txtModule').val('');
         });
 }
+
+// function getSendEmails(){
+//     glbsendmail=true;
+//     subjectmess="PROGRAMACION: Sistema, Nuevo Proyecto"
+//     bodymail="Se realizo un cambio en el modulo de menu que afecta a un modulo y que debe de validarse por una persona autorizada";
+//     datemails='inventarios-cire@ctt-app.com,programacion-cire@ctt-app.com'
+//     sendEmail(glbsendmail,subjectmess,bodymail,datemails);
+// }
+
 
 function fillTableStores(ix) {
     let tabla = $('#MenuTable').DataTable();
@@ -243,8 +254,7 @@ function fillTableStores(ix) {
         })
         .draw();
     $('#md' + strs[ix].mnu_id).parents('tr').attr('id', strs[ix].mnu_id);
-    actionButtons();
-    
+    actionButtons();  
 }
 
 function saveStore() {

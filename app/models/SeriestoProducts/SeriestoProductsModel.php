@@ -17,7 +17,7 @@ class SeriestoProductsModel extends Model
 
     public function listCategoriesAcc()
     {
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1 AND cat_id = 40;";
+        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
         return $this->db->query($qry);
     }
 

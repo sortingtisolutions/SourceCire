@@ -34,7 +34,7 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 
-$qry2 = "SELECT * FROM ctt_projects WHERE pjt_id IN ($proj_ids)";
+$qry2 = "SELECT * FROM ctt_projects WHERE pjt_id IN($proj_ids)";
 
 $res3 = $conn->query($qry2);
 //$conn->close();
@@ -53,7 +53,7 @@ $result = $res4->fetch_object();
 $cant = $result->cant;
 
 if ($cant > 0) {
-    $qry = "SELECT bdg_id, bdg_section, cr.crp_id, cr.crp_name, bdg_prod_price,
+    $qry = "SELECT * FROM (SELECT vr.ver_id, bdg_id, bdg_section, ct.cat_id, ct.cat_name, bdg_prod_price,
     bdg_quantity, bdg_days_base, bdg_days_cost, 
    bdg_discount_base, bdg_discount_insured,
    bdg_days_trip, bdg_discount_trip, bdg_insured,
@@ -76,18 +76,13 @@ if ($cant > 0) {
            INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
            INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
            INNER JOIN ctt_projects AS prjt ON prjt.pjt_id=pj.pjt_parent
-           LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
-           LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+           INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+           INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
            LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
            LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-           WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id =  
-           (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
-   FROM ctt_budget bug ) bg
-   INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
-   INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
-   WHERE pjt.pjt_id = pj.pjt_id group by pd.prd_id, pd.prd_level)
+           WHERE pj.pjt_id IN ($proj_ids)
    UNION 
-   (SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, cn.pjtcn_prod_price bdg_prod_price,
+   (SELECT vr.ver_id,  cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, ct.cat_id, ct.cat_name, cn.pjtcn_prod_price bdg_prod_price,
    cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
    cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
    cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
@@ -111,42 +106,41 @@ if ($cant > 0) {
         INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
-        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
+        INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
         INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' GROUP BY pj.pjt_id,cn.pjtcn_prod_name) 
+        WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' AND vr.ver_active = 1 GROUP BY pj.pjt_id,cn.pjtcn_prod_name) ) AS res
+        GROUP BY prd_id, bdg_section
         ORDER BY bdg_order, bdg_section";
    
-   $query="SELECT DISTINCT crp_id, crp_name FROM(SELECT cr.crp_id, cr.crp_name, bg.bdg_section section, 
+   $query="SELECT DISTINCT cat_id, cat_name FROM(SELECT ct.cat_id, ct.cat_name, bg.bdg_section section, 
             sb.sbc_order_print FROM ctt_budget AS bg
         INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
-        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id
-        WHERE pj.pjt_id IN ($proj_ids) AND pd.prd_level != 'A' 
+        INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
+        WHERE pj.pjt_id IN ($proj_ids) AND pd.prd_level != 'A'
    UNION 
-   SELECT cr.crp_id, cr.crp_name, cn.pjtcn_section section, sb.sbc_order_print 
+   SELECT ct.cat_id, ct.cat_name, cn.pjtcn_section section, sb.sbc_order_print 
         FROM ctt_projects_detail AS dt
        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
-       INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
-       LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
-       LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-       WHERE pj.pjt_id IN($proj_ids) AND pr.prd_level != 'A' 
-       GROUP BY cn.pjtcn_prod_name ) AS res
+       INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id 
+       INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
+       WHERE pj.pjt_id IN($proj_ids) AND pr.prd_level != 'A'
+       GROUP BY cn.pjtcn_prod_name ) AS res 
    ORDER BY sbc_order_print, section";
    
    $res2 = $conn->query($query);
    $categories=array();
     
 }else{
-    $qry = "SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, 
+    $qry = "SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, ct.cat_id, ct.cat_name, 
         cn.pjtcn_prod_price bdg_prod_price,
         cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
         cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
@@ -170,24 +164,23 @@ if ($cant > 0) {
         INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
-        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
         INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
+        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
+        INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-    WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' 
+    WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' AND vr.ver_active = 1
     GROUP BY pj.pjt_id,cn.pjtcn_prod_name 
     ORDER BY cn.pjtcn_order, cn.pjtcn_section; ";
 
 
-    $query="SELECT DISTINCT cr.crp_id, cr.crp_name FROM ctt_projects_detail AS dt
+    $query="SELECT DISTINCT ct.cat_id, ct.cat_name FROM ctt_projects_detail AS dt
     INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
     INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
     LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
     INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
     INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
-    LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
-    LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+    INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
     WHERE pj.pjt_id IN($proj_ids) AND pr.prd_level != 'A' 
     GROUP BY cn.pjtcn_prod_name ORDER BY sb.sbc_order_print, cn.pjtcn_section";
     
@@ -204,8 +197,8 @@ while($row = $res->fetch_assoc()){
 
 $rr = 0;
 while ($row2 = $res2->fetch_assoc()) {
-    $categories[$rr]["crp_id"] = $row2["crp_id"];
-    $categories[$rr]["crp_name"] = $row2["crp_name"];
+    $categories[$rr]["cat_id"] = $row2["cat_id"];
+    $categories[$rr]["cat_name"] = $row2["cat_name"];
     $rr++;
 }
 
@@ -467,14 +460,14 @@ if ($i > 0) {
             $aux=0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '1' && $items[$i]['crp_id'] == $category["crp_id"] && $items[$i]['pjt_id'] == $project) {
+                if ($section == '1' && $items[$i]['cat_id'] == $category["cat_id"] && $items[$i]['pjt_id'] == $project) {
                     $aux=$aux+1;
                 }
             }
         if ($aux>0) {
         $html .= '
                     
-                    <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
@@ -496,7 +489,7 @@ if ($i > 0) {
                         $amountGralTotal    = 0;
 
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['crp_id'] ==$category["crp_id"] ) {
+                            if ($items[$i]['cat_id'] ==$category["cat_id"] ) {
                             $section        = $items[$i]['bdg_section'] ;
 
                             if ($section == '1' && $items[$i]['pjt_id'] == $project) {
@@ -640,7 +633,7 @@ if ($i > 0) {
                 $sub =0;
                 for ($i = 0; $i<count($items); $i++){
                     $section = $items[$i]['bdg_section'];
-                    if ($section == '2' && $items[$i]['crp_id'] == $category["crp_id"] && $items[$i]['pjt_id'] == $project) {
+                    if ($section == '2' && $items[$i]['cat_id'] == $category["cat_id"] && $items[$i]['pjt_id'] == $project) {
                         $aux=$aux+1;
                         $sub = $i;
                     }
@@ -648,7 +641,7 @@ if ($i > 0) {
             if ($aux>0) {
             $html .= '
             
-                        <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                        <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                         <table autosize="1" style="break-inside:void" class="table-data bline">
                             <thead>
                                 <tr>
@@ -670,7 +663,7 @@ if ($i > 0) {
                             $amountGralTotal    = 0;
             
                             for ($i = 0; $i<count($items); $i++){
-                                if ($items[$i]['crp_id'] ==$category["crp_id"]) {
+                                if ($items[$i]['cat_id'] ==$category["cat_id"]) {
                                 $section        = $items[$i]['bdg_section'] ;
             
                                 if ($section == '2'  && $items[$i]['pjt_id'] == $project) {
@@ -811,7 +804,7 @@ if ($i > 0) {
             $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '3' && $items[$i]['crp_id'] == $category["crp_id"] && $items[$i]['pjt_id'] == $project) {
+                if ($section == '3' && $items[$i]['cat_id'] == $category["cat_id"] && $items[$i]['pjt_id'] == $project) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -819,7 +812,7 @@ if ($i > 0) {
         if ($aux>0) {
         $html .= '
 
-                    <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                     <table autosize="1" style="break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
@@ -841,7 +834,7 @@ if ($i > 0) {
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['crp_id'] ==$category["crp_id"] ) {
+                            if ($items[$i]['cat_id'] ==$category["cat_id"] ) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '3' && $items[$i]['pjt_id'] == $project) {
@@ -982,7 +975,7 @@ if ($i > 0) {
         $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '4' && $items[$i]['crp_id'] == $category["crp_id"] && $items[$i]['pjt_id'] == $project) {
+                if ($section == '4' && $items[$i]['cat_id'] == $category["cat_id"] && $items[$i]['pjt_id'] == $project) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -990,7 +983,7 @@ if ($i > 0) {
     if ($aux>0) {
     $html .= '
 
-                    <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
@@ -1012,7 +1005,7 @@ if ($i > 0) {
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){ 
-                            if ($items[$i]['crp_id'] ==$category["crp_id"] ) {
+                            if ($items[$i]['cat_id'] ==$category["cat_id"] ) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '4' && $items[$i]['pjt_id'] == $project) {

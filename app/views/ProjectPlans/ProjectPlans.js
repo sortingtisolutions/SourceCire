@@ -2970,7 +2970,12 @@ function promoteProject(pjtId, verId) {
 
 function showPromoteProject(dt) {
     setTimeout(() => {
+        
         modalLoading('H');
+        let areId=1;
+        let codEmail=1;
+        getSendEmails(areId,codEmail);
+        
         setTimeout(() => {
             window.location = 'ProjectPlans';
         }, 1000);

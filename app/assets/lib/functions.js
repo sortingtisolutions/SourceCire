@@ -281,16 +281,60 @@ function looseAlert(grp) {
     // console.log(grp.attr('class'));
 }
 
-function sendEmail(turnOn, subjectmess, bodymess) {
+function getSendEmails(areId,codEmail){
+
+    // altr = '0';
+    // url = getAbsolutePath();
+    // importarScript(url + 'app/assets/lib/alerts.js?v=1.0.0.0');
+    // var galleta = Cookies.get('user');
+    console.log('getSendEmails',areId,codEmail);
+    var pagina = 'Commons/listEmails';
+    var par = `[{"are_id":"${areId}","cod_email":"${codEmail}"}]`;
+    var tipo = 'json';
+    var selector = putsendemails;
+    fillField(pagina, par, tipo, selector);
+    // return true;
+
+    // glbsendmail=true;
+    // subjectmess="PROGRAMACION: Sistema, Nuevo Proyecto"
+    // bodymail="Se realizo un cambio en el modulo de menu que afecta a un modulo y que debe de validarse por una persona autorizada";
+    // ctaemail='inventarios-cire@ctt-app.com,programacion-cire@ctt-app.com'
+    // sendEmail(glbsendmail,subjectmess,bodymail,ctaemail);
+}
+
+function putsendemails(dt) {
+    // console.log(dt);
+    if (dt[0].fem_id != "0") {
+        var turnOn=true;
+        var subjectmess=dt[0].are_name + ': ' + dt[0].fem_subject;
+        var bodymail=dt[0].fem_body;
+        var ctaemail=dt[0].are_email_main;
+        $.each(dt, function (v, u) {
+            ctaemail=ctaemail + ', ' + u.emp_email;
+        });
+    // console.log('putSendEmails-1',turnOn);
+    // console.log('putSendEmails-2', subjectmess, );
+    // console.log('putSendEmails-3', bodymail);
+    // console.log('putSendEmails-4', ctaemail);
+    sendEmail(turnOn, subjectmess, bodymail, ctaemail);
+    } 
+    else{
+        var turnOn=false;
+        sendEmail(turnOn, subjectmess, bodymail, ctaemail);
+    } 
+}
+
+function sendEmail(turnOn, subjectmess, bodymail, ctaemail) {
+
     if (turnOn == true) {
         Email.send({
             Host: "smtp.elasticemail.com",
             Username: "notificationcire@ctt-app.com",
             Password: "36AAF404B1F0EA4FE8BB21E24EC62990528E",
-            To: 'juarezjorr@gmail.com, inventarios-cire@ctt-app.com, programacion-cire@ctt-app.com', // notificationcire@ctt-app.com
+            To: ctaemail,
             From: "notificationcire@ctt-app.com",
             Subject: subjectmess, 
-            Body: bodymess,
+            Body: bodymail,
           })
             .then(function (message) {
                 noticeEmail('Mensajes de correos enviados correctamente, OK');

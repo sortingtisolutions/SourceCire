@@ -146,7 +146,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Precio:</td>
                         <td class="data">
-                            <input type="text" id="txtPrdPrice" name="txtPrdPrice" class="textbox" style="width:150px">
+                            <input type="text" id="txtPrdPrice" name="txtPrdPrice" class="textbox" style="width:150px" autocomplete="off">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Precio de renta del producto</span>
                         </td>

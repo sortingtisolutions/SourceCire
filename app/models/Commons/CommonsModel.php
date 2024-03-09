@@ -68,5 +68,18 @@ class CommonsModel extends Model
         $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
         return $this->db->query($qry);
     }
+
+    public function listEmails($params)
+    {
+        $are_id = $this->db->real_escape_string($params['are_id']);
+        $cod_email = $this->db->real_escape_string($params['cod_email']);
+
+        $qry = "SELECT DISTINCT fe.*, ar.are_name,are_email_main, emp_email, ar.are_id 
+                FROM tbl_flags_email AS fe
+                INNER JOIN ctt_areas AS ar ON ar.are_id=fe.are_id
+                INNER JOIN ctt_employees AS em ON ar.are_id=em.are_id
+                WHERE fem_code=$cod_email AND ar.are_id=1 AND emp_email != '';";
+        return $this->db->query($qry);
+    }
     
 }

@@ -537,6 +537,10 @@ function saveDocumentClosure() {
 }
 
 function resSaveClosure(dt) {
+
+    let areId=1;
+    let codEmail=3;
+    getSendEmails(areId,codEmail);
     setTimeout(() => {
         window.location.reload();
     }, 1000);

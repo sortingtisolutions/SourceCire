@@ -6,7 +6,7 @@ CREATE TABLE `tbl_flags_email` (
 	`fem_status` INT(1) NULL DEFAULT '0' COMMENT 'Encendido=1 apagado=0',
 	PRIMARY KEY (`fem_id`) USING BTREE
 )
-COMMENT='Banderas para controlar el envio de los correos'
+COMMENT='Banderas de eventos para controlar el envio de los correos'
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
@@ -18,3 +18,21 @@ ALTER TABLE `ctt_employees`
 	ADD COLUMN `emp_email` VARCHAR(50) NULL DEFAULT '' COMMENT 'Email del empleado' AFTER `emp_area`,
 	CHANGE COLUMN `emp_report_to` `emp_report_to` INT(11) NULL DEFAULT 0 COMMENT 'ID del empleado jefe inmediato relacion asi mismo' AFTER `emp_email`,
 	CHANGE COLUMN `emp_status` `emp_status` VARCHAR(1) NULL DEFAULT 1 COMMENT 'Estatus del empleado 1-Activo, 0-Inactivo' COLLATE 'utf8mb4_general_ci' AFTER `emp_report_to`;
+
+
+CREATE TABLE `tbl_flags_email` (
+	`fem_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'id de la bandera del email',
+	`fem_code` INT(2) NULL DEFAULT '0' COMMENT 'Codigo de la bandera',
+	`fem_subject` VARCHAR(100) NULL DEFAULT NULL,
+	`fem_body` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Descripcion de la bandera' COLLATE 'utf8mb4_general_ci',
+	`fem_status` INT(1) NULL DEFAULT '1' COMMENT 'Encendido=1 apagado=0',
+	`are_id` INT(2) NULL DEFAULT NULL COMMENT 'Relacion areas',
+	PRIMARY KEY (`fem_id`) USING BTREE
+)
+COMMENT='Banderas de eventos para controlar el envio de los correos'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+ALTER TABLE `ctt_areas`
+	ADD COLUMN `are_email_main` VARCHAR(100) NULL DEFAULT '' COMMENT 'Correo principal del area para las notificaciones' AFTER `are_status`;

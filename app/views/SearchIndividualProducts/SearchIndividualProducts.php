@@ -23,7 +23,7 @@
 
 					<div class="row list-finder pos2">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
+                                <input id="txtProducts" type="text" class="form-control form-control-sm required" autocomplete="off">
                                 <label for="txtProducts">Productos</label>
                                 <input type="hidden" id="txtIdProducts" name="txtIdProducts">
                         </div>

@@ -135,7 +135,8 @@ function setting_table() {
 function putProductsList(dt) {
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
-    $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
+    $('#listProduct').css({top: sl.top + 32 + 'px'});// volver a tomar al hacer scroll.
+
     if (dt[0].prd_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
@@ -149,7 +150,7 @@ function putProductsList(dt) {
 
     $('#txtProducts').on('scroll', function(){
         sl = $('#txtProducts').offset();
-        $('#listProduct').css({top: sl.top + 30 + 'px'});
+        $('#listProduct').css({top: sl.top + 32 + 'px'});
     });
     $('#listProduct').on('mouseleave', function () {
         $('#listProduct').slideUp('fast');
@@ -173,8 +174,8 @@ function selProduct(res) {
     } else {
         $('#listProduct').slideDown(400);
     }
-    if (res.length > 3) {
-        if (res.length == 4) {
+    if (res.length > 2) {
+        if (res.length == 3) {
             getListProducts(res);
             $('#listProduct .list-items div.list-item').css({display: 'block'});
         } else {
@@ -192,7 +193,7 @@ function selProduct(res) {
         // rowCurr.show();
     }else {
         var sl = $('#txtProducts').offset();
-        $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
+        $('#listProduct').css({top: sl.top + 32 + 'px'});// volver a tomar al hacer scroll.
         $('#listProduct .list-items div.list-item').css({display: 'none'});
     }
 }

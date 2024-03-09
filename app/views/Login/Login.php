@@ -42,7 +42,7 @@
 						<img src="<?=  PATH_ASSETS . 'img/logo.png' ?>" alt="logo CTT Exr & Rentals" class="img-fluid logo" />
 						<div class="row">
 							<div style="height:10px;"></div>
-							<span><small> Version Web 2.1.01</small></span>
+							<span><small> Version Web 2.2.01</small></span>
 						</div>
 					</div>
 					

@@ -23,12 +23,13 @@ class CollectAccountsModel extends Model
          $qry = "SELECT clt.clt_id,clt_folio,clt.ctl_amount_payable, 
                     date_format(clt.clt_deadline,'%d-%m-%Y') AS clt_deadline,
                     date_format(clt.clt_date_generated,'%d-%m-%Y') AS clt_date_generated,
-                    cus.cus_id,cus.cus_name,
+                    cus.cus_id, IFNULL(cus.cus_name,'') AS cus_name,
                     pjt.pjt_id, pjt.pjt_name,
-                    pa.pym_amount,date_format(pa.pym_date_paid,'%d-%m-%Y') AS pym_date_paid,
+                    pa.pym_amount, IFNULL(date_format(pa.pym_date_paid,'%d-%m-%Y'),'') AS pym_date_paid,
                     SUM(clt.ctl_amount_payable-pa.pym_amount) AS pendiente, 
                             case when pa.pym_pending then pa.pym_pending END  AS pending, 
-                            case when pa.pym_total then pa.pym_total ELSE clt.ctl_amount_payable END amount_payable
+                            case when pa.pym_total then pa.pym_total ELSE clt.ctl_amount_payable 
+                        END amount_payable
                 FROM ctt_collect_accounts AS clt
                 LEFT JOIN ctt_payments_applied AS pa ON clt.clt_id = pa.clt_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=clt.cus_id

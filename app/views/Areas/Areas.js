@@ -80,6 +80,7 @@ function settingTable() {
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'storesid', class: 'strid bold'},
             {data: 'storname', class: 'store-name'},
+            {data: 'email', class: 'email-main'},
         ],
     });
 }
@@ -94,8 +95,10 @@ function getStores() {
 }
 
 function putStores(dt) {
+    // console.log('putStores',dt);
     strs = dt;
 }
+
 function fillStores() {
     if (strs != null) {
         let tabla = $('#AreasTable').DataTable();
@@ -147,8 +150,13 @@ function actionButtons() {
         .unbind('click')
         .on('click', function () {
             if (validaFormulario() == 1) {
-                if ($('#IdAlmacen').val() == '') {
-                    saveStore();
+                if ($('#IdArea').val() == '') {
+                    if (validateEmail() == true) {
+                        saveStore();
+                    } else {
+                        alert('Formato de email NO es valido');
+                    }
+                    // saveStore();
                 } else {
                     updateStore();
                 }
@@ -158,24 +166,28 @@ function actionButtons() {
     $('#LimpiarFormulario')
         .unbind('click')
         .on('click', function () {
-            $('#NomAlmacen').val('');
-            $('#IdAlmacen').val('');
+            $('#nomArea').val('');
+            $('#IdArea').val('');
+            $('#emailArea').val('');
             $('#selectTipoAlmacen option[value="0"]').attr('selected', true);
             $('#selectRowEncargado').val('');
+            
         });
 }
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    // console.log(strs.length);
+    // console.log('fillTableStores',strs.length);
     if (strs[0].are_id > 0) {
         tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].are_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storesid: strs[ix].are_id,
             storname: strs[ix].are_name,
+            email: strs[ix].are_email_main,
         })
         .draw();
+
         $('#md' + strs[ix].are_id)
             .parents('tr')
             .attr('id', strs[ix].are_id);
@@ -184,14 +196,17 @@ function fillTableStores(ix) {
 }
 
 function saveStore() {
-    var strName = $('#NomAlmacen').val();
+    var strName = $('#nomArea').val();
+    var stremail = $('#emailArea').val();
     var strtype = $('#selectTipoAlmacen').val();
     var par = `
         [{  "are_name"   : "${strName}",
-            "are_status"   : "${strtype}"
+            "are_status"   : "${strtype}",
+            "are_email_main"   : "${stremail}"
         }]`;
 
     strs = '';
+    // console.log('par', par);
     var pagina = 'Areas/SaveArea';
     var tipo = 'html';
     var selector = putSaveStore;
@@ -211,29 +226,34 @@ function putSaveStore(dt) {
 }
 
 function updateStore() {
-    var strId = $('#IdAlmacen').val();
-    var strName = $('#NomAlmacen').val();
+    var strId = $('#IdArea').val();
+    var strName = $('#nomArea').val();
+    var stremail = $('#emailArea').val();
     var strType = $('#selectTipoAlmacen option:selected').val();
     var par = `
         [{  "are_id"        : "${strId}",
             "are_name"      : "${strName}",
-            "are_status"      : "${strType}"
+            "are_status"      : "${strType}",
+            "are_email_main"   : "${stremail}"
         }]`;
 
     strs = '';
+    // console.log('par', par);
     var pagina = 'Areas/UpdateArea';
     var tipo = 'html';
     var selector = putUpdateStore;
     fillField(pagina, par, tipo, selector);
 }
 function putUpdateStore(dt) {
+    // console.log('putUpdateStore',dt);
     getStores();
     if (strs.length > 0) {
-        console.log(dt);
+       
         let ix = goThroughStore(dt);
-
+        // console.log('XXX- ',ix, ' >>',strs[ix].are_email_main);
         $(`#${strs[ix].are_id}`).children('td.store-name').html(strs[ix].are_name);
         $(`#${strs[ix].are_id}`).children('td.store-type').html(strs[ix].are_status);
+        $(`#${strs[ix].are_id}`).children('td.email-main').html(strs[ix].are_email_main);
         //putQuantity(strs[ix].are_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
@@ -243,16 +263,27 @@ function putUpdateStore(dt) {
     }
 }
 
+function validateEmail(){    
+    var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+    // Using test we can check if the text match the pattern
+    if( validEmail.test( jQuery('#emailArea').val() ) ){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function editStore(strId) {
-    console.log('Editando');
+    // console.log('Editando');
     let ix = goThroughStore(strId);
-    $('#NomAlmacen').val(strs[ix].are_name);
-    $('#IdAlmacen').val(strs[ix].are_id);
+    $('#nomArea').val(strs[ix].are_name);
+    $('#IdArea').val(strs[ix].are_id);
+    $('#emailArea').val(strs[ix].are_email_main);
     $('#selectTipoAlmacen').val(strs[ix].are_status);
 }
 
 function deleteStore(strId) {
-    console.log(strId);
+    // console.log(strId);
         let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
         $('#confirmModal').modal('show');
@@ -260,7 +291,7 @@ function deleteStore(strId) {
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar area').css({display: 'inline'});
         $('#Id').val(strId);
-        $('#IdAlmacenBorrar').val(strId);
+        $('#IdAreaBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
             var pagina = 'Areas/DeleteArea';

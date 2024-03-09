@@ -196,6 +196,9 @@ function putCancelProject(dt) {
         .remove()
         .draw();
     modalLoading('H');
+    let areId=1;
+    let codEmail=2;
+    getSendEmails(areId,codEmail);
 }
 
 function modalLoading(acc, msg) {

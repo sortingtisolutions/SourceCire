@@ -14,9 +14,10 @@ class AreasModel extends Model
 	{
 		$are_name 	= $this->db->real_escape_string($params['are_name']);
 		$are_status 	= $this->db->real_escape_string($params['are_status']);
+		$are_email_main 	= $this->db->real_escape_string($params['are_email_main']);
 
-		$qry = "INSERT INTO ctt_areas(are_name, are_status) 
-				VALUES (UPPER('$are_name'),$are_status)";
+		$qry = "INSERT INTO ctt_areas(are_name, are_status, are_email_main) 
+				VALUES (UPPER('$are_name'),$are_status,'$are_email_main')";
 		$this->db->query($qry);	
 		$are_id = $this->db->insert_id;
 		return $are_id;
@@ -33,13 +34,15 @@ class AreasModel extends Model
     public function UpdateArea($params)
 	{
 
-		$are_id 	= $this->db->real_escape_string($params['are_id']);
-		$are_name 	= $this->db->real_escape_string($params['are_name']);
+		$are_id 		= $this->db->real_escape_string($params['are_id']);
+		$are_name 		= $this->db->real_escape_string($params['are_name']);
 		$are_status 	= $this->db->real_escape_string($params['are_status']);
+		$are_email_main 	= $this->db->real_escape_string($params['are_email_main']);
 
 		$qry = " UPDATE ctt_areas
 					SET are_name		= UPPER('$are_name'),
-						are_status 	= $are_status
+						are_status 		= $are_status,
+						are_email_main 	= '$are_email_main'
 				WHERE are_id = '$are_id';";
 		$this->db->query($qry);	
 			
