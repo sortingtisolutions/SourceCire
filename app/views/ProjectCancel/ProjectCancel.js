@@ -85,8 +85,9 @@ function settingTable() {
 
 //OBTIENE LISTA DE PROYECTOS POSIBLES PARA CANCELAR
 function getProjects() {
+    let liststat ="5,6";
     var pagina = 'ProjectCancel/listProjects';
-    var par = '[{"pjtId":""}]';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);

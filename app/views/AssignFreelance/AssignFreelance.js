@@ -115,15 +115,16 @@ function setting_table() {
 
 // Solicita los tipos de movimiento
 function getlistProyect() {
-    var pagina = 'AssignFreelance/listProyects';
-    var par = '[{"parm":""}]';
+    let liststat ="4,7,8";
+    var pagina = 'AssignFreelance/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProject;
     fillField(pagina, par, tipo, selector);
 }
 // Solicita las categorias
 function getAreas() {
-    var pagina = 'AssignFreelance/listAreas';
+    var pagina = 'Commons/listAreas';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putAreas;
@@ -176,7 +177,7 @@ function putProject(dt) {
 
 // Dibuja los almacenes
 function putStores(dt) {
-    if (dt[0].str_id != 0) {
+    if (dt[0].str_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.str_id}">${u.str_name}</option>`;
             $('#txtStoreSource').append(H);
@@ -189,7 +190,7 @@ function putStores(dt) {
 }
 
 function putCoins(dt) {
-    if (dt[0].cin_id != 0) {
+    if (dt[0].cin_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
             $('#txtCoin').append(H);
@@ -202,8 +203,8 @@ function putCoins(dt) {
 }
 
 function putAreas(dt) {
-    
-    if (dt[0].free_area_id != 0) {
+  
+    if (dt[0].free_area_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.free_area_id}"> ${u.are_name}</option>`;
             $('#txtArea').append(H);

@@ -63,8 +63,8 @@ function inicial() {
 
 /** OBTENCION DE DATOS */
 function get_stores() {
-    var pagina = 'ProductsSalables/listStores';
-    var par = `[{"strId":""}]`;
+    var pagina = 'Commons/listStores';
+    var par = `[{"parm":""}]`;
     var tipo = 'json';
     var selector = put_stores;
     caching_events('get_stores');
@@ -83,8 +83,9 @@ function get_products(strId) {
 
 /**  Obtiene el listado de proyectos */
 function get_projects() {
+    let liststat ="2,4,7,8,9";
     var pagina = 'ProductsSalables/listProjects';
-    var par = `[{"strId":""}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_projects;
     caching_events('get_projects');

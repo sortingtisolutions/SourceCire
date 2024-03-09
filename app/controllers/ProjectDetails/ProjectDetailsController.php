@@ -101,22 +101,23 @@ class ProjectDetailsController extends Controller
     } 
 
     //  ***ED
-    public function listSubCategories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSubCategories($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    } 
+    // public function listSubCategories($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listSubCategories($request_params);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"prd_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 
+    
     public function listProductsInput($request_params)
     {
         $params =  $this->session->get('user');
@@ -280,23 +281,23 @@ class ProjectDetailsController extends Controller
 
 
 // Lista los tipos de proyectos
-    public function listProjectsType($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProjectsType($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-        } else {
-            $res =  '[{"pjt_id":"0"}]';
-        }
-        echo $res;
+    // public function listProjectsType($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listProjectsType($request_params);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+    //     } else {
+    //         $res =  '[{"pjt_id":"0"}]';
+    //     }
+    //     echo $res;
 
-    }
+    // }
 
 /** ==== Lista los tipos de llamados =========================================================  */
     public function listProjectsTypeCalled($request_params)

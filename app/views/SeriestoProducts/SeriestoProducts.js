@@ -52,7 +52,7 @@ function clean(){
 }
 // Solicita las categorias
 function getCategory() {
-    var pagina = 'SeriestoProducts/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategory;
@@ -68,7 +68,7 @@ function getCategoryAcc() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    var pagina = 'SeriestoProducts/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;
@@ -369,7 +369,8 @@ function putSeriesProd(dt) {
 }
 
 function putAccesorios(dt) {
-    console.log(dt);
+    // console.log(dt);
+    $('#txtProducts').val('   Cargando Informacion....');
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
     $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
@@ -378,6 +379,7 @@ function putAccesorios(dt) {
             let H = `<div class="list-item" id="${u.prd_id}|${u.prd_sku}|${u.prd_name}|1" data-subcateg="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_sku} / ${u.prd_name}</div>`;
             $('#listProduct .list-items').append(H);
         });
+        $('#txtProducts').val('');
     }
     
     $('#txtProducts').on('focus', function () {
@@ -632,6 +634,10 @@ function product_apply(prId) {
         }
         $('#txtProducts').val("");
         $('#txtIdProducts').val(0);
+        // $('#txtCategoryAcce').val(0);
+        // $('#txtSubcategoryAcce').val(0);
+        // $('#txtProducts').val('');
+        // $('#listProduct .list-items').html('');
 
     }, 500);
 }
@@ -688,6 +694,10 @@ function confirm_delet_product(id) {
 function putDelPackages(dt) {
     $('#delPackModal').modal('hide');
     load_Accesories(0);
+    $('#txtCategoryAcce').val(0);
+    $('#txtSubcategoryAcce').val(0);
+    $('#txtProducts').val('');
+    $('#listProduct .list-items').html('');
 }
 
 function deleteTablaAccesorios() {

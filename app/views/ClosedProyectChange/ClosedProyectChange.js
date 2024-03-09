@@ -21,8 +21,9 @@ function inicial() {
 
 /** OBTENCION DE DATOS */
 function get_projects() {
+    let liststat ="10";
     var pagina = 'ClosedProyectChange/listProjects';
-    var par = `[{"strId":""}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_projects;
     caching_events('get_projects');

@@ -108,7 +108,7 @@ function getExchange() {
 }
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'MoveStoresIn/listStores';
+    var pagina = 'Commons/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;
@@ -117,7 +117,7 @@ function getStores() {
 
 // Solicita los documentos factura
 function getCoins() {
-    var pagina = 'MoveStoresIn/listCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putCoins;
@@ -126,7 +126,7 @@ function getCoins() {
 // Solicita las categorias
 function getCategories() {
     console.log('categos');
-    var pagina = 'MoveStoresIn/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putCategories;

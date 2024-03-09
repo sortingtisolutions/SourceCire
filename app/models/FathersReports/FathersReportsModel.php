@@ -9,12 +9,12 @@ class FathersReportsModel extends Model
     }
 
 // Listado de Proyectos  ****
-public function listProyects($store)
-{
-    $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 40;";
-    return $this->db->query($qry);
-}    
+// public function listProjects($store)
+// {
+//     $store = $this->db->real_escape_string($store);
+//     $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 40;";
+//     return $this->db->query($qry);
+// }    
 
 public function listEstatusMantenimiento($params)
 {
@@ -28,26 +28,27 @@ public function listEstatusMantenimiento($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qry = "SELECT * FROM ctt_projects AS pj
-        LEFT JOIN ctt_location AS lc ON lc.loc_id=pj.loc_id WHERE pjt_parent='$pjtId' ORDER BY pjt_id";
+                LEFT JOIN ctt_location AS lc ON lc.loc_id=pj.loc_id 
+                WHERE pjt_parent='$pjtId' ORDER BY pjt_id";
 
         return $this->db->query($qry);
     }    
 
 // Listado de Proveedores
-    public function listSuppliers($store)
-    {
-        $store = $this->db->real_escape_string($store);
-        $qry = "SELECT sup_id, sup_business_name FROM ctt_suppliers WHERE sup_status = 1 
-        AND sut_id in (3) ORDER BY sup_business_name;";
-        return $this->db->query($qry);
-    }   
+    // public function listSuppliers($store)
+    // {
+    //     $store = $this->db->real_escape_string($store);
+    //     $qry = "SELECT sup_id, sup_business_name FROM ctt_suppliers WHERE sup_status = 1 
+    //     AND sut_id in (3) ORDER BY sup_business_name;";
+    //     return $this->db->query($qry);
+    // }   
 
 // Listado de monedas
-    public function listCoins()
-    {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }   
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }   
 
 
 // Listado de Almacenes

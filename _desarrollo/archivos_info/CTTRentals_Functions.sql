@@ -1,6 +1,7 @@
 -- ************** FUNCIONES A CREAR ***********************
 /* v_1.2.2 */
---**************fun_addstock**********************
+
+DROP FUNCTION IF EXISTS fun_addstoc;
 DELIMITER //
 CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT
 BEGIN
@@ -19,7 +20,8 @@ END IF;
 RETURN lexist;
 END //
 
--- ************** fun_buscarentas ***********************
+
+DROP FUNCTION IF EXISTS fun_buscarentas;
 DELIMITER //
 CREATE OR REPLACE FUNCTION `fun_buscarentas`(`lval` VARCHAR(15)) RETURNS INT
 BEGIN
@@ -31,7 +33,7 @@ declare cur_findsku cursor for
 SELECT IFNULL(COUNT(*),0) FROM ctt_series AS sr
 INNER JOIN ctt_products AS pr ON pr.prd_id=sr.prd_id
 WHERE substr(sr.ser_sku,1,8)=lval AND pr.prd_level IN ('P','A')
-AND sr.ser_situation<>'D' OR sr.ser_type_asigned = 'AF';
+AND (sr.ser_situation<>'D' OR sr.ser_type_asigned = 'AF');
 
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
 
@@ -49,7 +51,8 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
     RETURN p_idprd;
 END //
 
---*****************fun_reststock*********************
+
+DROP FUNCTION IF EXISTS fun_reststock;
 DELIMITER //
 CREATE FUNCTION fun_reststock(prdid INT) RETURNS INT
 BEGIN
@@ -69,7 +72,8 @@ END IF;
 RETURN lexist;
 END //
 
--- ************** fun_updateuser ***********************
+
+DROP FUNCTION IF EXISTS fun_updateuser;
 DELIMITER //
 CREATE OR REPLACE FUNCTION `fun_updateuser`(pjtid INT, areid INT(2), empid INT, empname VARCHAR(100), usrid INT) RETURNS INT
 BEGIN
@@ -95,7 +99,7 @@ RETURN lexist;
 END //
 
 
---***************fun_buscamaxacc*************************
+DROP FUNCTION IF EXISTS fun_buscamaxacc;
 DELIMITER //
 CREATE FUNCTION fun_buscamaxacc(lval VARCHAR(15)) RETURNS VARCHAR(2)
 BEGIN
@@ -125,7 +129,7 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
     RETURN p_idprd;
 END //
 
---***************fnc_ordersection*************************
+DROP FUNCTION IF EXISTS fnc_ordersection;
 DELIMITER //
 CREATE OR REPLACE FUNCTION fnc_ordersection(valprdid INT) RETURNS INT
 BEGIN
@@ -164,7 +168,8 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
     RETURN valnew;
 END //
 
---***************fnc_maxpckts***********************
+
+DROP FUNCTION IF EXISTS fnc_maxpckts;
 DELIMITER //
 CREATE OR REPLACE FUNCTION fnc_maxpckts(valprdid INT) RETURNS INT
 BEGIN
@@ -206,10 +211,10 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
 --	UPDATE ctt_products SET prd_stock=valant
 --	WHERE prd_id=valprdid;
     RETURN valant;
-	
 END //
 
---*******************************
+
+DROP FUNCTION IF EXISTS fun_maxcontent;
 DELIMITER //
 CREATE FUNCTION `fun_maxcontent`(`pprjId` INT) RETURNS int(11)
 LANGUAGE SQL
@@ -226,7 +231,6 @@ BEGIN
 END //
 
 
---***************************** FUNCION PARA TRABAJAR LOS ACCESORIOS EN BACKEND DB ****************
 DROP FUNCTION IF EXISTS `Fun_ProcessBackAccesories`;
 DELIMITER //
 CREATE FUNCTION Fun_ProcessBackAccesories(pverid INT(4), ppjtid INT(4)) RETURNS INT(2)
@@ -322,7 +326,7 @@ return lconta;
 END //
 
 --***************************** FUNCION PARA OBTENER TOTALES DE UN PROYECTO ****************
-DROP FUNCTION fun_getTotalProject;
+DROP FUNCTION IF EXISTS fun_getTotalProject;
 DELIMITER //
 CREATE OR REPLACE FUNCTION fun_getTotalProject(ppjtid VARCHAR(3)) RETURNS INT
 BEGIN

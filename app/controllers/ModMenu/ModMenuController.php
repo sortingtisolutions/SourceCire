@@ -110,5 +110,20 @@
             echo $result;
         }
 
-
+    public function ExecSp($request_params)
+        {
+            $result = $this->model->ExecSp($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"mod_id":"0"}]';	
+            }
+            echo $res;
+            // echo $result;
+        }
 	}

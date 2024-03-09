@@ -17,6 +17,7 @@ class OutputReprintController extends Controller
             header('location: ' . FOLDER_PATH .'/Login');
     }
 
+    
     public function exec()
     {
 		$params = array('user' => $this->session->get('user'));

@@ -11,14 +11,12 @@ class ProjectClosedModel extends Model
 /* -- Listado de proyectos  ------------------------------------- */    
     public function listProjects($params)
     {
-        // $qry = "SELECT pjt_id, pjt_name FROM ctt_projects 
-        //         WHERE pjt_status IN (8,9);"; /* AND pjt_date_start < curdate();"; */
-        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $liststat = $this->db->real_escape_string($params['liststat']);
         $qry = "SELECT pj.pjt_id, pj.pjt_name, ifnull(cus.cus_id , '0') as cus_id
                 FROM ctt_projects AS pj
                 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=co.cus_id
-                WHERE pjt_status IN ($pjtId);";
+                WHERE pjt_status IN ($liststat);";
 
         return $this->db->query($qry);
     }
@@ -87,7 +85,7 @@ class ProjectClosedModel extends Model
                
             }else if($type == 2){
                     if ($prjType == 1) {
-                        $qry = "SELECT case when pr.prd_level = 'K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
+                        $qry = "SELECT case when cn.pjtcn_prod_level='K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
                             ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
                             1 as quantity,
                             (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
@@ -105,7 +103,7 @@ class ProjectClosedModel extends Model
                         LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
                         INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
                         WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level != 'K' AND pr.prd_level != 'A' 
-                        UNION SELECT case when pr.prd_level = 'K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
+                        UNION SELECT case when cn.pjtcn_prod_level='K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
                             ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
                             cn.pjtcn_quantity as quantity,
                             ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
@@ -125,7 +123,7 @@ class ProjectClosedModel extends Model
                         WHERE cn.pjt_id = $pjtId AND cn.pjtcn_prod_level = 'K' GROUP BY cn.pjtcn_id";
                     }else{
                         if ($pjtId > 0) {
-                            $qry = "SELECT case when pr.prd_level = 'K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
+                            $qry = "SELECT case when cn.pjtcn_prod_level='K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, pr.prd_name, dt.pjtdt_prod_sku as prd_sku, case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
                                 ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
                                 1 as quantity,
                                 (cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 
@@ -143,7 +141,7 @@ class ProjectClosedModel extends Model
                             LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
                             INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
                             WHERE pj.pjt_parent = $pjtId AND cn.pjtcn_prod_level != 'K'  AND pr.prd_level != 'A' 
-                            UNION SELECT case when pr.prd_level = 'K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
+                            UNION SELECT case when cn.pjtcn_prod_level='K' then pjtcn_prod_name ELSE prd_name END AS pjtcn_prod_name, cn.pjtcn_prod_name as prd_name, cn.pjtcn_prod_sku AS prd_sku,case when sr.ser_situation != 'M' then '' when ISNULL(sr.ser_situation) then 'P' ELSE 'M' END ser_situation,
                                 ifnull(sr.ser_comments,'') AS ser_comments, ifnull(sr.ser_status,'1') as ser_status,
                                 cn.pjtcn_quantity as quantity,
                                 ((cn.pjtcn_prod_price * cn.pjtcn_days_cost) - 

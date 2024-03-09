@@ -59,22 +59,22 @@ class SeriestoProductsController extends Controller
     }
 
 // Lista las categorias
-    public function listSubCategories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSubCategories($request_params['catId']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"sbc_id":"0"}]';	
-        }
-        echo $res;
-    }
+    // public function listSubCategories($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listSubCategories($request_params['catId']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"sbc_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // }
 
 // Lista los productos relacionados al paquete
     public function listProducts()

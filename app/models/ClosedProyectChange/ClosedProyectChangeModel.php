@@ -11,10 +11,12 @@ class ClosedProyectChangeModel extends Model
 // Listado de almacenes  ****
         public function listProjects($params)
         {
+            $liststat = $this->db->real_escape_string($params['liststat']);
+
             $qry = "SELECT DISTINCT pj.pjt_id, pj.pjt_number, pj.pjt_name
                     FROM ctt_projects AS pj
                     INNER JOIN ctt_documents_closure AS dcl ON dcl.pjt_id=pj.pjt_id
-                    WHERE pjt_status in (10) ORDER BY pj.pjt_number;";
+                    WHERE pjt_status IN ($liststat) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 

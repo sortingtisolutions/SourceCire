@@ -33,8 +33,9 @@ function inicial()
 }
 
 function getProjectsCfdi() {
-   var pagina = 'AddInfoCfid/listProjectsCfdi';
-   var par = `[{"cat_id":""}]`;
+   let liststat ="2,4";
+   var pagina = 'AddInfoCfid/listProjects';
+   var par = `[{"liststat":"${liststat}"}]`;
    var tipo = 'json';
    var selector = putProjectsCfdi;
    fillField(pagina, par, tipo, selector);

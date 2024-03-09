@@ -53,7 +53,7 @@ function getCustomers() {
     fillField(pagina, par, tipo, selector);
 }
 function getProjectType() {
-    var pagina = 'ParentsProjects/listProjectsType';
+    var pagina = 'Commons/listProjectsType';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = putProjectsType;

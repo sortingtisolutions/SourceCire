@@ -30,13 +30,13 @@ class GlobalProdutsModel extends Model
             
         return $this->db->query($qry);
     }
-    public function listSubCategories($param)
-    {
-        $catId = $this->db->real_escape_string($param['catId']);
-        $qry = "SELECT * FROM ctt_subcategories 
-                WHERE sbc_status = 1 AND cat_id=$catId;";
-        return $this->db->query($qry);
-    }
+    // public function listSubCategories($param)
+    // {
+    //     $catId = $this->db->real_escape_string($param['catId']);
+    //     $qry = "SELECT * FROM ctt_subcategories 
+    //             WHERE sbc_status = 1 AND cat_id=$catId;";
+    //     return $this->db->query($qry);
+    // }
     public function updateData($param){
         $sbcId = $this->db->real_escape_string($param['sbcId']);
         $idSelected = $this->db->real_escape_string($param['idSelected']);

@@ -14,10 +14,11 @@ class WhOutputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
 
         $qry = "SELECT pt.pjttp_name, pj.pjt_name, pj.pjt_number,
-                DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
-                DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
-                DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
-                pj.pjt_location, cus.cus_name, pj.pjt_id, free.free_id, wap.emp_id, wap.emp_fullname
+                    DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
+                    DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
+                    DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
+                    pj.pjt_location, cus.cus_name, pj.pjt_id, free.free_id, 
+                    wap.emp_id, wap.emp_fullname
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
@@ -36,17 +37,17 @@ class WhOutputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $empid = $this->db->real_escape_string($params['empid']);
         $areid = $this->db->real_escape_string($params['areid']);
-
+        // AND prd.prd_level!='A'   SE QUITO LINEA 63
         if ($areid == 5){
             $qry = "SELECT prcn.pjtcn_id, prcn.pjtcn_prod_sku, prcn.pjtcn_prod_name, prcn.pjtcn_quantity, 
             prcn.pjtcn_prod_level, prcn.pjt_id, prcn.pjtcn_status, prcn.pjtcn_order, 
-             case 
+            CASE 
                  when prcn.pjtcn_section=1 then 'Base'
                  when prcn.pjtcn_section=2 then 'Extra'
                  when prcn.pjtcn_section=3 then 'Por dia'
                  else 'Subarrendo'
                  END AS section, 
-                 case 
+                 CASE 
 					  when prcn.pjtcn_prod_level='K' OR pd.prd_level = 'P' then 
 					  CASE WHEN(SELECT COUNT(*) FROM ctt_series AS ser 
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
@@ -59,7 +60,7 @@ class WhOutputContentModel extends Model
                     INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                     INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                     LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                    WHERE pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A'
+                    WHERE pcn.pjtcn_id=prcn.pjtcn_id 
                     ORDER BY pdt.pjtdt_prod_sku) then prcn.pjtcn_quantity
                 else'0'
                 END 
@@ -67,7 +68,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=prcn.pjtcn_id AND prd.prd_level!='A')
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=prcn.pjtcn_id)
                 END AS cant_ser
             FROM ctt_projects_content AS prcn
             INNER JOIN ctt_products AS pd ON pd.prd_id = prcn.prd_id
@@ -95,7 +96,7 @@ class WhOutputContentModel extends Model
                     INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                     INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                     LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                    WHERE pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A'
+                    WHERE pcn.pjtcn_id=pjc.pjtcn_id
                     ORDER BY pdt.pjtdt_prod_sku) then pjc.pjtcn_quantity
                 else'0'
                 END 
@@ -104,7 +105,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id= pjd.pjtvr_id 
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
-                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=pjc.pjtcn_id AND prd.prd_level!='A')
+                WHERE ser.ser_stage IN ('TR','UP') AND pcn.pjtcn_id=pjc.pjtcn_id)
                 END AS cant_ser
             FROM ctt_projects_content AS pjc 
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
@@ -169,7 +170,7 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                 LEFT JOIN ctt_projects_periods AS per ON per.pjtdt_id=pdt.pjtdt_id
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                WHERE pcn.pjtcn_id=$pjtcnid AND prd.prd_level!='A' 
+                WHERE pcn.pjtcn_id=$pjtcnid 
                 ORDER BY pdt.pjtdt_prod_sku;";
 
        return $this->db->query($qry);
@@ -179,17 +180,18 @@ class WhOutputContentModel extends Model
    {
        $ser_id = $this->db->real_escape_string($params['serid']);
        $serorg = $this->db->real_escape_string($params['serorg']);
+       $srpjvrorg = $this->db->real_escape_string($params['srpjvrorg']);
 
-        $qry = "SELECT '$serorg' as id_orig, sr.ser_id, ser_sku, ser_serial_number, 
+        $qry = "SELECT '$serorg' as id_orig, '$srpjvrorg' pjvr_id_org,  sr.ser_id, ser_sku, ser_serial_number, 
             ser_situation, ser_stage, pr.prd_name, pr.prd_sku, sr.ser_no_econo
-            , pj.pjt_name, pdt.pjtdt_id
+            , pj.pjt_name, pdt.pjtdt_id, pdt.pjtvr_id
             FROM ctt_series AS sr
             INNER JOIN ctt_products as pr on sr.prd_id = pr.prd_id
             LEFT Join ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
             LEFT JOIN ctt_projects_version AS pv ON pv.pjtvr_id = pdt.pjtvr_id
             LEFT JOIN ctt_projects AS pj ON pj.pjt_id = pv.pjt_id
-            WHERE pr.prd_level!='A' AND (sr.ser_sku LIKE '$ser_id%')
-            AND sr.ser_status=1 AND (pdt.sttd_id !=4 OR ISNULL(pdt.sttd_id));";
+            WHERE (sr.ser_sku LIKE '$ser_id%')
+            AND sr.ser_status=1 AND (pdt.sttd_id !=4 OR ISNULL(pdt.sttd_id) AND (sr.ser_type_asigned !='AF'));";
             
        return $this->db->query($qry);
    }
@@ -240,15 +242,209 @@ public function InsertComment($params, $userParam)
         
     }
 
+    // public function changeSerieNew($params)
+    // {
+    //     $serIdNew = $this->db->real_escape_string($params['serIdNew']);
+    //     $serIdOrg = $this->db->real_escape_string($params['serIdOrg']);
+    //     $detailIdNew = $this->db->real_escape_string($params['detailIdNew']);
+    //     $joinval= 0;
+
+    //      // Busca los datos del detalle a modificar.
+    //      $qry1 = "SELECT sr.ser_id, ser_sku, sr.pjtdt_id FROM ctt_projects_detail AS pjt
+    //      INNER JOIN ctt_series AS sr ON sr.ser_id = pjt.ser_id  WHERE pjt.pjtdt_id=$serIdOrg;";
+    //      $resultid =  $this->db->query($qry1);
+    //      $iddetail = $resultid->fetch_object();
+    //          if ($iddetail != null){
+    //              $serIdOld  = $iddetail->ser_id; 
+    //              $serSkuOld  = $iddetail->ser_sku; 
+    //              $pjdtActiveOld = $iddetail->pjtdt_id;
+    //          } 
+
+    //     if ($detailIdNew != null) {
+    //         // si la serie vieja es diferente a la nueva entonces...
+    //         if ($serIdOld != $serIdNew) {
+    //             // obtener el detalle de la serie 2 a modificar
+    //             $qry ="SELECT sr.ser_sku, sr.pjtdt_id FROM ctt_series AS sr 
+    //             INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
+    //             WHERE sr.ser_id = $serIdNew AND pdt.pjtdt_id = $detailIdNew LIMIT 1"; // datos de la serie por la que se quiere cambiar
+    //             $result = $this->db->query($qry);
+
+    //             $serie = $result->fetch_object();
+
+    //             if ($serie != null) {
+    //                 $skuNew = $serie->ser_sku;
+    //                 $pjdtActiveNew = $serie->pjtdt_id;
+
+    //                 $query ="SELECT pjpd.pjtpd_day_start, pjpd.pjtpd_day_end 
+    //                     FROM ctt_projects_periods AS pjpd 
+    //                     WHERE pjpd.pjtdt_id = $serIdOrg LIMIT 1";
+
+    //                 $resultDet =  $this->db->query($query);
+    //                 $detailf = $resultDet->fetch_object();
+                    
+    //                 if ($detailf != null){
+    //                     $dtinic  = $detailf->pjtpd_day_start; 
+    //                     $dtfinl    = $detailf->pjtpd_day_end; 
+    //                 } 
+
+    //                 // Buscamos si existen series a futuro que coincidan con ese rango de fechas.
+    //                 if ($pjdtActiveNew == $detailIdNew) {
+    //                     $qry = "SELECT ser.ser_id serId, ser.ser_sku, ser.pjtdt_id
+    //                         FROM ctt_series AS ser
+    //                         WHERE ser.ser_id = $serIdNew AND ser.ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
+    //                         FROM ctt_series AS sr
+    //                         INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+    //                         INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+    //                         WHERE sr.ser_id = ser.ser_id AND pd.sttd_id = 3  AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+    //                         OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl'  
+    //                         OR '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+    //                         OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end)) LIMIT 1";  // solo trae un registro
+    //                 }else{
+    //                     $qry = "SELECT ser.ser_id serId, ser.ser_sku, ser.pjtdt_id
+    //                         FROM ctt_series AS ser
+    //                         WHERE ser.ser_id = $serIdNew AND ser.ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
+    //                         FROM ctt_series AS sr
+    //                         INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+    //                         INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+    //                         WHERE sr.ser_id = ser.ser_id AND pd.sttd_id != 4  AND (pjp.pjtpd_day_start BETWEEN '$dtinic' AND '$dtfinl' 
+    //                         OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl'  
+    //                         OR '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+    //                         OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end)) LIMIT 1"; 
+    //                 }
+
+    //                 $result =  $this->db->query($qry);
+    //                 $serie_acept = $result->fetch_object();
+
+    //                 // De igual manera buscamos las fechas del nuevo detalle
+    //                 $query ="SELECT pjpd.pjtpd_day_start, pjpd.pjtpd_day_end 
+    //                 FROM ctt_projects_periods AS pjpd 
+    //                 WHERE pjpd.pjtdt_id = $detailIdNew LIMIT 1";
+
+    //                 $resultDet =  $this->db->query($query);
+    //                 $detailf2 = $resultDet->fetch_object();
+                    
+    //                 if ($detailf != null){
+    //                     $dtinic2  = $detailf2->pjtpd_day_start; 
+    //                     $dtfinl2    = $detailf2->pjtpd_day_end; 
+    //                 } 
+                    
+    //                 if ($pjdtActiveOld == $serIdOrg) {
+    //                     // No debe coincidir con series reservadas a futuro o con la activa en la serie conciderada como "OLD"
+    //                     $qry = "SELECT ser.ser_id, ser.ser_sku, ser.pjtdt_id
+    //                         FROM ctt_series AS ser
+    //                         INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = ser.ser_id
+    //                         WHERE ser.ser_id = $serIdOld AND ser.ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
+    //                         FROM ctt_series AS sr
+    //                         INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+    //                         INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+    //                         WHERE sr.ser_id = ser.ser_id AND pd.sttd_id = 3  AND (pjp.pjtpd_day_start BETWEEN '$dtinic2' AND '$dtfinl2' 
+    //                         OR pjp.pjtpd_day_end BETWEEN '$dtinic2' AND '$dtfinl2'  
+    //                         OR '$dtinic2' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+    //                         OR '$dtfinl2' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end)) LIMIT 1";  // solo trae un registro
+    //                 }else{
+    //                     $qry = "SELECT ser.ser_id, ser.ser_sku, ser.pjtdt_id
+    //                         FROM ctt_series AS ser
+    //                         INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = ser.ser_id
+    //                         WHERE ser.ser_id = $serIdOld AND ser.ser_situation != 'M' AND NOT EXISTS (SELECT sr.ser_id serId
+    //                         FROM ctt_series AS sr
+    //                         INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+    //                         INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+    //                         WHERE sr.ser_id = ser.ser_id AND pd.sttd_id != 4  AND (pjp.pjtpd_day_start BETWEEN '$dtinic2' AND '$dtfinl2' 
+    //                         OR pjp.pjtpd_day_end BETWEEN '$dtinic2' AND '$dtfinl2'  
+    //                         OR '$dtinic2' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+    //                         OR '$dtfinl2' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end)) LIMIT 1"; 
+    //                 }
+    //                 $result =  $this->db->query($qry);
+    //                 $serie_acept2 = $result->fetch_object();
+
+    //                 // Si la primera serie no se ve afectada en las fechas con respecto a la segunda y biceversa entonces se procedera a hacer
+    //                 // el intercambio de series en los detalles.
+    //                 if ($serie_acept != null && $serie_acept2 != null) {
+
+    //                     $prodSkuNew = $serie_acept->ser_sku;
+    //                     $prodSkuOld = $serie_acept2->ser_sku;
+
+    //                     // Actualiza las tablas Detalle y Series
+    //                     $updt3 = "UPDATE ctt_projects_detail 
+    //                             SET ser_id=$serIdNew, pjtdt_prod_sku='$prodSkuNew'
+    //                             WHERE ser_id=$serIdOld AND pjtdt_id=$serIdOrg;";
+    //                     $this->db->query($updt3);
+    //                     $joinval=1;
+
+    //                     // Actualiza las tablas Detalle y Series
+    //                     $updt3 = "UPDATE ctt_projects_detail 
+    //                             SET ser_id=$serIdOld, pjtdt_prod_sku='$prodSkuOld'
+    //                             WHERE ser_id=$serIdNew AND pjtdt_id=$detailIdNew;";
+    //                     $this->db->query($updt3);
+    //                     $joinval=1;
+
+    //                     if ($pjdtActiveNew == $detailIdNew) {
+    //                         $updt5 = "UPDATE ctt_series SET ser_situation='EA', ser_stage='R',  pjtdt_id= $serIdOrg
+    //                                 WHERE ser_id=$serIdNew AND pjtdt_id=$detailIdNew; ";
+    //                         $this->db->query($updt5);
+    //                     }
+
+    //                     if ($pjdtActiveOld == $serIdOrg) {
+    //                         $updt4 = "UPDATE ctt_series SET ser_situation='EA', ser_stage = 'R', pjtdt_id=$detailIdNew
+    //                                 WHERE ser_id=$serIdOld AND pjtdt_id= $serIdOrg;";
+    //                         $this->db->query($updt4);
+    //                     }
+    //                     $joinval=1;
+    //                 }else{
+    //                     $joinval=0; // Las series cuentan con series a futuro que no son aceptables con la nueva.
+    //                 }
+    //             }else{
+    //                 $joinval='-2'; //NO se encontro el pjtdt_id con la serie indicada
+    //             }
+    //         }else{
+    //             $joinval='-1'; // Enviar un indicador que la serie es la misma
+    //         }
+    //     }else{ 
+    //         // si la nueva serie no esta en otro proyecto entonces hay que dejarla disponible.
+    //         $qry2 = "SELECT ser_sku FROM ctt_series WHERE ser_id=$serIdNew;";
+    //         $resultid2 =  $this->db->query($qry2);
+    //         $iddetail2 = $resultid2->fetch_object();
+
+    //         if ($iddetail2 != null){ 
+    //             $prodsku  = $iddetail2->ser_sku; 
+    //         } 
+            
+    //         $updt3 = "UPDATE ctt_projects_detail 
+    //                 SET ser_id=$serIdNew, pjtdt_prod_sku='$prodsku'
+    //                 WHERE ser_id=$serIdOld AND pjtdt_id=$serIdOrg;";
+    //         $this->db->query($updt3);
+    //         $joinval=1;
+
+    //         $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
+    //             WHERE ser_id=$serIdOld AND pjtdt_id=$serIdOrg;";
+    //         $this->db->query($updt4);
+
+    //         $updt5 = "UPDATE ctt_series SET ser_situation='EA', ser_stage='R',  pjtdt_id=$serIdOrg
+    //                 WHERE ser_id=$serIdNew AND pjtdt_id=0; ";
+    //         $this->db->query($updt5);
+    //         $joinval=1;
+
+    //     }
+    //     return  $joinval;
+             
+    // }
+    
+
     public function changeSerieNew($params)
     {
         $serIdNew = $this->db->real_escape_string($params['serIdNew']);
         $serIdOrg = $this->db->real_escape_string($params['serIdOrg']);
         $detailIdNew = $this->db->real_escape_string($params['detailIdNew']);
+
+        //Obtenemos el pjtvrId
+        $pjVersionNew = $this->db->real_escape_string($params['prjVersion']);
+        $pjVersionOrg = $this->db->real_escape_string($params['pjVersionOrg']);
+
         $joinval= 0;
 
          // Busca los datos del detalle a modificar.
-         $qry1 = "SELECT sr.ser_id, ser_sku, sr.pjtdt_id FROM ctt_projects_detail AS pjt
+         $qry1 = "SELECT sr.ser_id, ser_sku, sr.pjtdt_id, sr.prd_id, sr.ser_type_asigned, pjt.sttd_id
+         FROM ctt_projects_detail AS pjt
          INNER JOIN ctt_series AS sr ON sr.ser_id = pjt.ser_id  WHERE pjt.pjtdt_id=$serIdOrg;";
          $resultid =  $this->db->query($qry1);
          $iddetail = $resultid->fetch_object();
@@ -256,13 +452,16 @@ public function InsertComment($params, $userParam)
                  $serIdOld  = $iddetail->ser_id; 
                  $serSkuOld  = $iddetail->ser_sku; 
                  $pjdtActiveOld = $iddetail->pjtdt_id;
+                 $typeAsignedOld = $iddetail->ser_type_asigned;
+                 $prdIdSerOld = $iddetail->prd_id;
+                 $sttdIdOld = $iddetail->sttd_id;
              } 
 
-        if ($detailIdNew != null) {
+        if ($detailIdNew != 'null') {
             // si la serie vieja es diferente a la nueva entonces...
             if ($serIdOld != $serIdNew) {
                 // obtener el detalle de la serie 2 a modificar
-                $qry ="SELECT sr.ser_sku, sr.pjtdt_id FROM ctt_series AS sr 
+                $qry ="SELECT sr.ser_sku, sr.pjtdt_id, sr.ser_type_asigned, sr.prd_id, pdt.sttd_id FROM ctt_series AS sr 
                 INNER JOIN ctt_projects_detail AS pdt ON pdt.ser_id = sr.ser_id
                 WHERE sr.ser_id = $serIdNew AND pdt.pjtdt_id = $detailIdNew LIMIT 1"; // datos de la serie por la que se quiere cambiar
                 $result = $this->db->query($qry);
@@ -272,6 +471,9 @@ public function InsertComment($params, $userParam)
                 if ($serie != null) {
                     $skuNew = $serie->ser_sku;
                     $pjdtActiveNew = $serie->pjtdt_id;
+                    $typeAsignedNew = $serie->ser_type_asigned;
+                    $prdIdSerNew = $serie->prd_id;
+                    $sttdIdNew = $iddetail->sttd_id;
 
                     $query ="SELECT pjpd.pjtpd_day_start, pjpd.pjtpd_day_end 
                         FROM ctt_projects_periods AS pjpd 
@@ -355,7 +557,7 @@ public function InsertComment($params, $userParam)
                     $result =  $this->db->query($qry);
                     $serie_acept2 = $result->fetch_object();
 
-                    // Si la primera serie no se ve afectada en las fechas con respecto a la segunda y biceversa entonces se procedera a hacer
+                    // Si la primera serie no se ve afectada en las fechas con respecto a la segunda y viceversa entonces se procedera a hacer
                     // el intercambio de series en los detalles.
                     if ($serie_acept != null && $serie_acept2 != null) {
 
@@ -387,6 +589,210 @@ public function InsertComment($params, $userParam)
                                     WHERE ser_id=$serIdOld AND pjtdt_id= $serIdOrg;";
                             $this->db->query($updt4);
                         }
+
+                        if ($typeAsignedNew == 'PF' && $typeAsignedOld == 'PV') {
+                            // Seleccionamos los accesorios de la nueva serie que es fija
+                            $qry3 = "SELECT * FROM ctt_projects_detail AS pjdt 
+                            INNER JOIN ctt_series AS sr ON sr.ser_id = pjdt.ser_id
+                            WHERE sr.prd_id_acc = $serIdNew AND pjdt.pjtvr_id = $pjVersionNew";
+                            $resultSeriesNew =  $this->db->query($qry3);
+
+                            // Datos del paquete, para conocer cantidades por cada producto en la serie.
+                            $qry3 = "SELECT * FROM ctt_products_packages AS pck WHERE pck.prd_parent = $prdIdSerOld;";
+                            $resultSeries =  $this->db->query($qry3);
+
+                             //** AL NUEVO LE PONEMOS LA DEL ORIGINAL */
+                            while ($row = $resultSeriesNew->fetch_assoc()) {
+                                $serIdFijoNew = $row['ser_id'];
+                                $detailId = $row['pjtdt_id'];
+                                $serSkuFijoNew = $row['ser_sku'];
+                                $prdIdFijoNew =$row['prd_id'];
+
+                                // Los datos de las series fijas (Del detalle Original (Producto fijo)) le cambiamos de version para que
+                                // reconozca a la nueva version en lugar de la original.
+                                $updtDetailFijo = "UPDATE ctt_projects_detail 
+                                                    SET pjtvr_id = $pjVersionOrg
+                                                    WHERE ser_id=$serIdFijoNew AND pjtdt_id=$detailId;";
+                                $this->db->query($updtDetailFijo);
+
+                                $updtPackFijo = "UPDATE ctt_projects_periods
+                                                    SET pjtpd_day_start = '$dtinic', pjtpd_day_end = '$dtfinl'
+                                                    WHERE pjtdt_id=$detailId;";
+                                $this->db->query($updtPackFijo);
+
+                                
+                            }
+                             //** AL ORIGINAL LE PONEMOS LA DEL NUEVO */
+                            while ($row = $resultSeries->fetch_assoc()) {
+                                $qty = $row['pck_quantity'];
+                                $prdIdPack = $row['prd_id'];
+                                for ($i=0; $i < $qty; $i++) { 
+                                    // Seleccionamos los accesorios de la nueva serie que es virtual
+                                    $qrySeriesVirtuales = "SELECT sr.ser_id, pjdt.pjtdt_id, sr.ser_sku, sr.prd_id 
+                                            FROM ctt_projects_detail AS pjdt 
+                                            INNER JOIN ctt_series AS sr ON sr.ser_id = pjdt.ser_id
+                                            INNER JOIN ctt_products_packages AS ppck ON ppck.prd_id = sr.prd_id
+                                            WHERE ppck.prd_parent = '$prdIdSerNew' AND ppck.prd_id= '$prdIdPack' 
+                                            AND sr.ser_type_asigned = 'AV' AND pjdt.pjtvr_id = $pjVersionOrg 
+                                            LIMIT 1";
+                                    $resultSeriesNew =  $this->db->query($qrySeriesVirtuales);
+                                    $acceVirtual = $resultSeriesNew->fetch_object();
+
+                                    if ($acceVirtual != null) {
+                                        $serIdFijoOld = $acceVirtual->ser_id;
+                                        $detailId = $acceVirtual->pjtdt_id;
+                                        $serSkuFijoOld = $acceVirtual->ser_sku;
+                                        $prdIdFijoOld = $acceVirtual->prd_id;
+                                        // Cambiamos la version a la que pertenece los detalles para que ahora se reconozca como parte de la original
+                                        $updtDetailFijo = "UPDATE ctt_projects_detail 
+                                                            SET pjtvr_id = $pjVersionNew
+                                                            WHERE ser_id=$serIdFijoOld AND pjtdt_id=$detailId;";
+                                        $this->db->query($updtDetailFijo);
+
+                                        $updtPackFijo = "UPDATE ctt_projects_periods
+                                                            SET pjtpd_day_start = '$dtinic2', pjtpd_day_end = '$dtfinl2'
+                                                            WHERE pjtdt_id=$detailId;";
+                                        $this->db->query($updtPackFijo);
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+
+
+
+                        } elseif ($typeAsignedOld == 'PF' && $typeAsignedNew == 'PV') {
+
+                            // Seleccionamos los accesorios de la serie original que es fija
+                            $qry3 = "SELECT sr.ser_id, pjdt.pjtdt_id, sr.ser_sku, sr.prd_id 
+                                        FROM ctt_projects_detail AS pjdt 
+                                        INNER JOIN ctt_series AS sr ON sr.ser_id = pjdt.ser_id
+                                        WHERE sr.prd_id_acc = $serIdOld AND pjdt.pjtvr_id = $pjVersionOrg";
+                            $resultSeriesOld =  $this->db->query($qry3);
+
+                            // Datos del paquete, para conocer cantidades por cada producto en la serie.
+                            $qry3 = "SELECT * FROM ctt_products_packages AS pck WHERE pck.prd_parent = $prdIdSerNew;";
+                            $resultSeries =  $this->db->query($qry3);
+
+                            // Cambiamos los datos de la original a la nueva. //** AL ORIGINAL LE PONEMOS LA DEL NUEVO */
+                            while ($row = $resultSeriesOld->fetch_assoc()) {
+                                $serIdFijoOld = $row['ser_id'];
+                                $detailId = $row['pjtdt_id'];
+                                $serSkuFijoOld = $row['ser_sku'];
+                                $prdIdFijoOld = $row['prd_id'];
+
+                                // Los datos de las series fijas (Del detalle Original (Producto fijo)) le cambiamos de version para que
+                                // reconozca a la nueva version en lugar de la original.
+                                $updtDetailFijo = "UPDATE ctt_projects_detail 
+                                                    SET pjtvr_id = $pjVersionNew
+                                                    WHERE ser_id=$serIdFijoOld AND pjtdt_id=$detailId;";
+                                $this->db->query($updtDetailFijo);
+
+                                $updtPackFijo = "UPDATE ctt_projects_periods
+                                                    SET pjtpd_day_start = '$dtinic2', pjtpd_day_end = '$dtfinl2'
+                                                    WHERE pjtdt_id=$detailId;";
+                                $this->db->query($updtPackFijo);
+
+                                
+                            }
+                            // Hay que crear la relacion entre las nuevas series virtuales con el detalle original
+                            // Seleccionamos las series correspondientes por producto. //** AL NUEVO LE PONEMOS LA DEL ORIGINAL */
+                            while ($row = $resultSeries->fetch_assoc()) {
+                                $qty = $row['pck_quantity'];
+                                $prdIdPack = $row['prd_id'];
+                                for ($i=0; $i < $qty; $i++) { 
+                                    // Seleccionamos los accesorios de la nueva serie que es virtual
+                                    
+                                    $qrySeriesVirtuales = "SELECT sr.ser_id, pjdt.pjtdt_id, sr.ser_sku, sr.prd_id 
+                                            FROM ctt_projects_detail AS pjdt 
+                                            INNER JOIN ctt_series AS sr ON sr.ser_id = pjdt.ser_id
+                                            INNER JOIN ctt_products_packages AS ppck ON ppck.prd_id = sr.prd_id
+                                            WHERE ppck.prd_parent = '$prdIdSerNew' AND ppck.prd_id= '$prdIdPack' 
+                                            AND sr.ser_type_asigned = 'AV' AND pjdt.pjtvr_id = $pjVersionNew 
+                                            LIMIT 1";
+                                    $resultSeriesNew =  $this->db->query($qrySeriesVirtuales);
+                                    $acceVirtual = $resultSeriesNew->fetch_object();
+
+                                    if ($acceVirtual != null) {
+                                        $serIdFijoNew = $acceVirtual->ser_id;
+                                        $detailId = $acceVirtual->pjtdt_id;
+                                        $serSkuFijoNew = $acceVirtual->ser_sku;
+                                        $prdIdFijoNew = $acceVirtual->prd_id;
+                                        // Cambiamos la version a la que pertenece los detalles para que ahora se reconozca como parte de la original
+                                        $updtDetailFijo = "UPDATE ctt_projects_detail 
+                                                            SET pjtvr_id = $pjVersionOrg
+                                                            WHERE ser_id=$serIdFijoNew AND pjtdt_id=$detailId;";
+                                        $this->db->query($updtDetailFijo);
+
+                                        $updtPackFijo = "UPDATE ctt_projects_periods
+                                                            SET pjtpd_day_start = '$dtinic', pjtpd_day_end = '$dtfinl'
+                                                            WHERE pjtdt_id=$detailId;";
+                                        $this->db->query($updtPackFijo);
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+
+
+                        }
+                        elseif ($typeAsignedNew == 'PF' && $typeAsignedOld == 'PF') 
+                        {
+                            // Seleccionamos los accesorios de la nueva serie que es fija
+                            $qry3 = "SELECT sr.ser_id, pjdt.pjtdt_id, sr.ser_sku, sr.prd_id 
+                                    FROM ctt_projects_detail AS pjdt 
+                                    INNER JOIN ctt_series AS sr ON sr.ser_id = pjdt.ser_id
+                                    WHERE sr.prd_id_acc = $serIdNew AND pjdt.pjtvr_id = $pjVersionNew";
+                            $resultSeriesNew =  $this->db->query($qry3);
+
+                            // Primero hay que crear las nuevas series de accesorios en la version original (la que intentamos cambiar)
+                            while ($row = $resultSeriesNew->fetch_assoc()) {
+                                $serIdFijoNew = $row['ser_id'];
+                                $detailId = $row['pjtdt_id'];
+                                $serSkuFijoNew = $row['ser_sku'];
+                                $prdIdFijoNew = $row['prd_id'];
+
+                                $updtDetailFijo = "UPDATE ctt_projects_detail 
+                                                    SET pjtvr_id = $pjVersionOrg
+                                                    WHERE ser_id=$serIdFijoNew AND pjtdt_id=$detailId;";
+                                $this->db->query($updtDetailFijo);
+
+                                $updtPackFijo = "UPDATE ctt_projects_periods
+                                                    SET pjtpd_day_start = '$dtinic', pjtpd_day_end = '$dtfinl'
+                                                    WHERE pjtdt_id=$detailId;";
+                                $this->db->query($updtPackFijo);
+
+                                
+                            }
+
+                            // Seleccionamos los accesorios de la serie original que es fija
+                            $qry4 = "SELECT sr.ser_id, pjdt.pjtdt_id, sr.ser_sku, sr.prd_id 
+                                    FROM ctt_projects_detail AS pjdt 
+                                    INNER JOIN ctt_series AS sr ON sr.ser_id = pjdt.ser_id
+                                    WHERE sr.prd_id_acc = $serIdOld AND pjdt.pjtvr_id = $pjVersionOrg";
+                            $resultSeriesOld =  $this->db->query($qry4);
+                            // Despues hay que crear las series de accesorios en el detalle que estamos modificando para pasarlos al que eliminamos de nuevos
+                            while ($row = $resultSeriesOld->fetch_assoc()) {
+                                $serIdFijoOld = $row['ser_id'];
+                                $detailId = $row['pjtdt_id'];
+                                $serSkuFijoOld = $row['ser_sku'];
+                                $prdIdFijoOld = $row['prd_id'];
+
+                                $updtDetailFijo = "UPDATE ctt_projects_detail 
+                                                    SET pjtvr_id = $pjVersionNew
+                                                    WHERE ser_id=$serIdFijoOld AND pjtdt_id=$detailId;";
+                                $this->db->query($updtDetailFijo);
+
+                                $updtPackFijo = "UPDATE ctt_projects_periods
+                                                    SET pjtpd_day_start = '$dtinic2', pjtpd_day_end = '$dtfinl2'
+                                                    WHERE pjtdt_id=$detailId;";
+                                $this->db->query($updtPackFijo);
+                               
+                            }
+                        }
+                        
                         $joinval=1;
                     }else{
                         $joinval=0; // Las series cuentan con series a futuro que no son aceptables con la nueva.
@@ -399,14 +805,15 @@ public function InsertComment($params, $userParam)
             }
         }else{ 
             // si la nueva serie no esta en otro proyecto entonces hay que dejarla disponible.
-            $qry2 = "SELECT ser_sku FROM ctt_series WHERE ser_id=$serIdNew;";
+            $qry2 = "SELECT ser_sku, ser_type_asigned, prd_id FROM ctt_series WHERE ser_id=$serIdNew;";
             $resultid2 =  $this->db->query($qry2);
             $iddetail2 = $resultid2->fetch_object();
 
             if ($iddetail2 != null){ 
                 $prodsku  = $iddetail2->ser_sku; 
+                $typeAsignedNew  = $iddetail2->ser_type_asigned; 
+                $prdIdSerNew  = $iddetail2->prd_id; 
             } 
-            
             $updt3 = "UPDATE ctt_projects_detail 
                     SET ser_id=$serIdNew, pjtdt_prod_sku='$prodsku'
                     WHERE ser_id=$serIdOld AND pjtdt_id=$serIdOrg;";
@@ -422,6 +829,205 @@ public function InsertComment($params, $userParam)
             $this->db->query($updt5);
             $joinval=1;
 
+            
+
+            $query ="SELECT pjpd.pjtpd_day_start, pjpd.pjtpd_day_end 
+                    FROM ctt_projects_periods AS pjpd 
+                    WHERE pjpd.pjtdt_id = $serIdOrg LIMIT 1";
+
+            $resultDet =  $this->db->query($query);
+            $detailf = $resultDet->fetch_object();
+            
+            if ($detailf != null){
+                $dtinic  = $detailf->pjtpd_day_start; 
+                $dtfinl    = $detailf->pjtpd_day_end; 
+            } 
+
+            if ($typeAsignedOld == 'PF' || $typeAsignedNew == 'PF') {
+                // Vamos a eliminar los datos que se almacenaron respecto a los accesorios del producto original
+                // Esto debido a que la nueva serie del producto podria no tener las mismas cantidades
+                
+
+                if ($typeAsignedOld == 'PF') 
+                {
+                    $qry3 = "SELECT ser_id,ser_sku FROM ctt_series AS sr 
+                    WHERE sr.prd_id_acc = $serIdOld;";
+                    $resultSeries =  $this->db->query($qry3);
+
+                    while ($row = $resultSeries->fetch_assoc()) {
+                        $serIdFijoOld = $row['ser_id'];
+                        $serSkFijoOld = $row['ser_sku'];
+
+                        $query = "SELECT * FROM ctt_projects_detail WHERE pjtvr_id = '$pjVersionOrg' and ser_id= $serIdFijoOld LIMIT 1";
+                        $detailAccFijo = $this->db->query($query);
+                        $acceFijo = $detailAccFijo->fetch_object();
+                        if ($acceFijo != null) {
+                            $detailId = $acceFijo->pjtdt_id;
+                            $deleteDetailFijo = "DELETE FROM ctt_projects_detail
+                                            WHERE pjtvr_id = '$pjVersionOrg' and ser_id= $serIdFijoOld and pjtdt_id = $detailId";
+                            $this->db->query($deleteDetailFijo);
+
+                            $deletePackFijo = "DELETE FROM ctt_projects_periods
+                                                WHERE pjtdt_id = $detailId";
+                            $this->db->query($deletePackFijo);
+                            
+                            $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
+                                WHERE ser_id=$serIdFijoOld AND pjtdt_id=$detailId;";
+                            $this->db->query($updt4);
+                        }
+
+                    }
+                }elseif ($typeAsignedOld == 'PV') 
+                {
+                    $qry3 = "SELECT * FROM ctt_products_packages AS pck WHERE pck.prd_parent = $prdIdSerOld;";
+                    $resultSeries =  $this->db->query($qry3);
+
+                    while ($row = $resultSeries->fetch_assoc()) {
+                        $prdIdVirtual = $row['prd_id'];
+                        $quantityVirtual = $row['pck_quantity'];
+                        for ($i=0; $i < $quantityVirtual; $i++) { 
+                            $query = "SELECT * FROM ctt_projects_detail WHERE prd_id = $prdIdVirtual AND pjtvr_id = '$pjVersionOrg' LIMIT 1";
+                            $detailAccVirtual = $this->db->query($query);
+                            $acceVirtual = $detailAccVirtual->fetch_object();
+                            if ($acceVirtual != null) {
+                                $detail_id = $acceVirtual->pjtdt_id;
+                                $deleteDetailVirtual = "DELETE FROM ctt_projects_detail
+                                                    WHERE pjtdt_id = $detail_id";
+                                $this->db->query($deleteDetailVirtual); 
+
+                                $deletePackVirtual = "DELETE FROM ctt_projects_periods
+                                                    WHERE pjtdt_id = $detail_id";
+                                $this->db->query($deletePackVirtual); 
+
+                                $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
+                                    WHERE pjtdt_id=$detail_id;";
+                                $this->db->query($updt4);
+                            }
+                        }
+                        
+                    }
+                }
+
+                // De la nueva serie vamos a insertar a detalles los nuevos accesorios fijos.
+                if ($typeAsignedNew == 'PF') 
+                {
+                    $qry3 = "SELECT ser_id,ser_sku,prd_id FROM ctt_series AS sr 
+                            WHERE sr.prd_id_acc = $serIdNew;";
+
+                    $resultSeries =  $this->db->query($qry3);
+
+                    $query ="SELECT pjpd.pjtpd_day_start, pjpd.pjtpd_day_end 
+                        FROM ctt_projects_periods AS pjpd 
+                        WHERE pjpd.pjtdt_id = $serIdOrg LIMIT 1";
+
+                    $resultDet =  $this->db->query($query);
+                    $detailf = $resultDet->fetch_object();
+                    
+                    if ($detailf != null){
+                        $dtinic  = $detailf->pjtpd_day_start; 
+                        $dtfinl    = $detailf->pjtpd_day_end; 
+                    } 
+                    while ($row = $resultSeries->fetch_assoc()) {
+                        $serIdFijo = $row['ser_id'];
+                        $serSkuFijo = $row['ser_sku'];
+                        $prdIdFijo = $row['prd_id'];
+
+                        $insertDetailFijo = "INSERT INTO ctt_projects_detail(pjtdt_belongs, pjtdt_prod_sku,prd_type_asigned, ser_id,prd_id,pjtvr_id,sttd_id)
+                                            VALUES(0,'$serSkuFijo','AF','$serIdFijo', '$prdIdFijo','$pjVersionOrg', '$sttdIdOld')";
+                        $this->db->query($insertDetailFijo);
+                        $pjtdtId = $this->db->insert_id;
+
+                        $insertPeriodsFijo = "INSERT INTO ctt_projects_periods(pjtpd_day_start, pjtpd_day_end,pjtdt_id, pjtdt_belongs,pjtpd_sequence)
+                                                    VALUES('$dtinic','$dtfinl','$pjtdtId',0, '1')";
+                        $this->db->query($insertPeriodsFijo);
+                                
+                        $updt5 = "UPDATE ctt_series SET ser_situation='EA', ser_stage='R',  pjtdt_id=$pjtdtId
+                                WHERE ser_id=$serIdFijo AND pjtdt_id=0; ";
+                        $this->db->query($updt5);
+                        $joinval=1;
+
+                    }
+                }elseif ($typeAsignedNew == 'PV') 
+                {
+                    $qry3 = "SELECT prd_id,pck_quantity FROM ctt_products_packages AS pck WHERE pck.prd_parent = $prdIdSerNew;";
+                    $resultSeries =  $this->db->query($qry3);
+                    $joinval = $prdIdSerNew;
+
+                    while ($row = $resultSeries->fetch_assoc()) {
+                        $prdIdVirtual = $row['prd_id'];
+                        $quantityVirtual = $row['pck_quantity'];
+                        
+                        for ($i=0; $i < $quantityVirtual; $i++) { 
+
+                            $qrySerieNewAcc = "SELECT ser.ser_id, ser.ser_sku, ser.prd_id, pjdt.pjtdt_id FROM ctt_series AS ser
+                                        LEFT JOIN ctt_projects_detail AS pjdt ON pjdt.ser_id = ser.ser_id
+                                        LEFT JOIN ctt_projects_periods AS pjpr ON pjpr.pjtdt_id = pjdt.pjtdt_id
+                                        WHERE ser.ser_type_asigned = 'AV' AND ser.ser_situation != 'M' 
+                                        AND ser.prd_id = $prdIdVirtual AND NOT EXISTS (SELECT sr.ser_id serId
+                                        FROM ctt_series AS sr
+                                        INNER JOIN ctt_projects_detail AS pd ON pd.ser_id = sr.ser_id
+                                        INNER JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pd.pjtdt_id
+                                        WHERE sr.ser_id = ser.ser_id AND pd.sttd_id != 4  AND (pjp.pjtpd_day_start 
+                                        BETWEEN '$dtinic' AND '$dtfinl' 
+                                        OR pjp.pjtpd_day_end BETWEEN '$dtinic' AND '$dtfinl'  
+                                        OR '$dtinic' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end
+                                        OR '$dtfinl' BETWEEN pjp.pjtpd_day_start AND pjp.pjtpd_day_end)) LIMIT 1";
+
+                            $serieNewAcc = $this->db->query($qrySerieNewAcc);
+                            $serieNewAccFijo = $serieNewAcc->fetch_object();
+                            
+                            if ($serieNewAccFijo != null) {
+                                $serIdAcc = $serieNewAccFijo->ser_id;
+                                $serSkAcc = $serieNewAccFijo->ser_sku;
+                                $prdIdAcc = $serieNewAccFijo->prd_id;
+                                $sttdIdAcc = 0;
+                                $pjtdtIdAcc = $serieNewAccFijo->pjtdt_id;
+
+                                if ($pjtdtIdAcc == 0) {
+                                    $sttdIdAcc = 1;
+                                }else{
+                                    $sttdIdAcc = 3;
+                                }
+
+                                $qryAcc = "INSERT INTO ctt_projects_detail(pjtdt_belongs, pjtdt_prod_sku,prd_type_asigned, ser_id,prd_id,pjtvr_id,sttd_id)
+                                            VALUES(0,'$serSkAcc','AV','$serIdAcc', '$prdIdAcc','$pjVersionOrg','$sttdIdAcc')";
+                                $this->db->query($qryAcc);
+                                
+                                $pjtdtId = $this->db->insert_id;
+
+                                $insertPeriodsFijo = "INSERT INTO ctt_projects_periods(pjtpd_day_start, pjtpd_day_end,pjtdt_id, pjtdt_belongs,pjtpd_sequence)
+                                                            VALUES('$dtinic','$dtfinl','$pjtdtId',0, '1')";
+                                $this->db->query($insertPeriodsFijo);
+
+                                if ($pjtdtIdAcc == 0) {
+                                    $updt5 = "UPDATE ctt_series SET ser_situation='EA', ser_stage='R',  pjtdt_id=$pjtdtId
+                                            WHERE ser_id=$serIdAcc AND pjtdt_id=0; ";
+                                    $this->db->query($updt5);
+                                }
+
+                            }else{
+                                $pjtdtIdAcc =0;
+                                if ($pjtdtIdAcc == 0) {
+                                    $sttdIdAcc = 1;
+                                }else{
+                                    $sttdIdAcc = 3;
+                                }
+                                $qryAcc = "INSERT INTO ctt_projects_detail(pjtdt_belongs, pjtdt_prod_sku,prd_type_asigned, ser_id,prd_id,pjtvr_id,sttd_id)
+                                            VALUES(0,'pendiente','AV','0', ' $prdIdVirtual','$pjVersionOrg', '$sttdIdAcc'";
+                                $this->db->query($qryAcc);
+                                
+                                $pjtdtId = $this->db->insert_id;
+
+                                $insertPeriodsFijo = "INSERT INTO ctt_projects_periods(pjtpd_day_start, pjtpd_day_end,pjtdt_id, pjtdt_belongs,pjtpd_sequence)
+                                                            VALUES('$dtinic','$dtfinl','$pjtdtId',0, '1')";
+                                $this->db->query($insertPeriodsFijo);
+                            }
+
+                        }
+                    }
+                }
+            }
+            
         }
         return  $joinval;
              

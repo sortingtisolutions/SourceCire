@@ -25,8 +25,9 @@ function inicial() {
 
 /** ---- PETICIÓN DE DATOS ----*/
 function getlistProjects() {
-    var pagina = 'PaymentsApplied/listProjects';
-    var par = '[{"parm":""}]';
+    let liststat ="9,10,99";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putlistProjects;
     fillField(pagina, par, tipo, selector);
@@ -108,12 +109,14 @@ function settingTable() {
 }
 
 function putlistProjects(dt) {
-    console.log(dt);
-    $('#lstProjects').html('');
-    $.each(dt, function (v, u) {
-        var H = `<option value="${u.pjt_id}">${u.pjt_id} - ${u.pjt_name}</option>`;
-        $('#lstProjects').append(H);
-    });
+    // console.log('putlistProjects',dt);
+    if (dt[0].pjt_id > 0) {
+        $('#lstProjects').html('');
+        $.each(dt, function (v, u) {
+            var H = `<option value="${u.pjt_id}">${u.pjt_id} - ${u.pjt_name}</option>`;
+            $('#lstProjects').append(H);
+        });
+    }
 
     $('#lstProjects')
     .unbind('change')

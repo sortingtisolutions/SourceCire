@@ -110,7 +110,7 @@ function setting_table_products() {
 
 // Solicita las categorias
 function getCategory() {
-    var pagina = 'Packages/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = `[{"param":""}]`;
     var tipo = 'json';
     var selector = putCategory;
@@ -118,7 +118,7 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    var pagina = 'Packages/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;

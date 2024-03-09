@@ -360,8 +360,9 @@ function expandCollapseSection() {
 /** OBTENCION DE DATOS */
 function getProjects(pjId) {
     swpjt = 0;
+    let liststat ="2,40";
     var pagina = 'ProjectPlans/listProjects';
-    var par = `[{"pjId":"${pjId}"}]`;
+    var par = `[{"pjId":"${pjId}", "liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -474,7 +475,7 @@ function getStockProjects(prdId) {
 }
 /** Obtiene el listado de los tipos de proyecto */
 function getProjectType() {
-    var pagina = 'ProjectPlans/listProjectsType';
+    var pagina = 'Commons/listProjectsType';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = putProjectsType;
@@ -547,7 +548,7 @@ function getCategories(op) {
 }
 // ** Ed
 function getSubCategories(catId) {
-    var pagina = 'ProjectPlans/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;

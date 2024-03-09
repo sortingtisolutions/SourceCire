@@ -24,11 +24,10 @@ class AreasModel extends Model
 	}
 	
 // Optiene los Usuaios existentes
-	public function GetAreas($params)
+	public function listAreas($params)
 	{
-	
-		$qry = "SELECT * FROM ctt_areas where are_status=1 order by are_id ASC";
-		return $this->db->query($qry);
+		// $qry = "SELECT * FROM ctt_areas where are_status=1 order by are_id ASC";
+		// return $this->db->query($qry);
 	}
 
     public function UpdateArea($params)

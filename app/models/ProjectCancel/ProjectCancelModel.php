@@ -11,7 +11,8 @@ class ProjectCancelModel extends Model
     //LISTA DE PROYECTOS A CANCELAR ****
     public function listProjects($params)
     {
-        // $pjtId = $this->db->real_escape_string($params['pjtId']);    
+        $liststat = $this->db->real_escape_string($params['liststat']);
+
         $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, 
 		DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS date_regs,
 		DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS date_ini,
@@ -21,7 +22,7 @@ class ProjectCancelModel extends Model
 		LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
 		LEFT JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
 		INNER JOIN ctt_projects_status AS ps ON ps.pjs_status=pj.pjt_status
-		WHERE pj.pjt_status in (6, 5);";
+		WHERE pj.pjt_status IN ($liststat);";
         return $this->db->query($qry);
 
     }

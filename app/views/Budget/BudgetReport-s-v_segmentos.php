@@ -36,8 +36,7 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
-        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
         WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section, bdg_id;"; // ***Ed
@@ -50,19 +49,18 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 // OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
-$query="SELECT cr.crp_id, cr.crp_name, sb.sbc_name, sb.sbc_order_print 
+$query="SELECT ct.cat_id, ct.cat_name, sb.sbc_name, sb.sbc_order_print 
 FROM ctt_subcategories AS sb 
-LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
 INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
 INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
-WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section, bdg_id";
+WHERE bg.ver_id = $verId GROUP BY ct.cat_id ORDER BY sbc_order_print, bdg_section, bdg_id";
 $res2 = $conn->query($query);
 $categories=array();
 $rr = 0;
 while ($row2 = $res2->fetch_assoc()) {
-    $categories[$rr]["crp_id"] = $row2["crp_id"];
-    $categories[$rr]["crp_name"] = $row2["crp_name"];
+    $categories[$rr]["cat_id"] = $row2["cat_id"];
+    $categories[$rr]["cat_name"] = $row2["cat_name"];
     $rr++;
 }
 $conn->close();
@@ -226,7 +224,7 @@ $html = '
             $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '1' && $items[$i]['crp_id'] == $category["crp_id"]) {
+                if ($section == '1' && $items[$i]['cat_id'] == $category["cat_id"]) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -234,7 +232,7 @@ $html = '
         if ($aux>0) {
         $html .= '
                     
-                    <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
@@ -256,7 +254,7 @@ $html = '
                         $amountGralTotal    = 0;
 
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['crp_id'] ==$category["crp_id"]) {
+                            if ($items[$i]['cat_id'] ==$category["cat_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
 
                             if ($section == '1') {
@@ -366,7 +364,7 @@ $html = '
                 $sub =0;
                 for ($i = 0; $i<count($items); $i++){
                     $section = $items[$i]['bdg_section'];
-                    if ($section == '2' && $items[$i]['crp_id'] == $category["crp_id"]) {
+                    if ($section == '2' && $items[$i]['cat_id'] == $category["cat_id"]) {
                         $aux=$aux+1;
                         $sub = $i;
                     }
@@ -374,7 +372,7 @@ $html = '
             if ($aux>0) {
             $html .= '
             
-                        <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                        <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                         <table autosize="1" style="break-inside:void" class="table-data bline">
                             <thead>
                                 <tr>
@@ -396,7 +394,7 @@ $html = '
                             $amountGralTotal    = 0;
             
                             for ($i = 0; $i<count($items); $i++){
-                                if ($items[$i]['crp_id'] ==$category["crp_id"]) {
+                                if ($items[$i]['cat_id'] ==$category["cat_id"]) {
                                 $section        = $items[$i]['bdg_section'] ;
             
                                 if ($section == '2') {
@@ -508,7 +506,7 @@ $html = '
             $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '3' && $items[$i]['crp_id'] == $category["crp_id"]) {
+                if ($section == '3' && $items[$i]['cat_id'] == $category["cat_id"]) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -516,7 +514,7 @@ $html = '
         if ($aux>0) {
         $html .= '
 
-                    <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                     <table autosize="1" style="break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
@@ -538,7 +536,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['crp_id'] ==$category["crp_id"]) {
+                            if ($items[$i]['cat_id'] ==$category["cat_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '3') {
@@ -655,7 +653,7 @@ $html .= '
         $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '4' && $items[$i]['crp_id'] == $category["crp_id"]) {
+                if ($section == '4' && $items[$i]['cat_id'] == $category["cat_id"]) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -663,7 +661,7 @@ $html .= '
     if ($aux>0) {
     $html .= '
 
-                    <h3 class="" style="color:#4682B4"><dd>'.$category['crp_name'].'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['cat_name'].'</dd></h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
@@ -685,7 +683,7 @@ $html .= '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['crp_id'] ==$category["crp_id"]) {
+                            if ($items[$i]['cat_id'] ==$category["cat_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '4') {

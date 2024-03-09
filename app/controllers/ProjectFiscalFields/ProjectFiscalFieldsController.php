@@ -42,7 +42,6 @@ class ProjectFiscalFieldsController extends Controller
     {
         $result = $this->model->updateInfoCustomer($request_params);
         echo $result;
-
     }
 
 // Obtiene la información del cliente

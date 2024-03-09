@@ -48,8 +48,9 @@ function inicial() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'PrePayments/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="2,4,7,8,9";
+	var pagina = 'Commons/listProjects';
+	var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);
@@ -181,11 +182,12 @@ function setting_table() {
 function put_Proyectos(dt) {
     pj = dt;
     //console.log(pj);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
-        $('#txtProject').append(H);
-    });
-
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+            $('#txtProject').append(H);
+        });
+    }
     $('#txtProject').on('change', function () {
         $('#txtCustomer').val(0);
         // let px = parseInt($('#txtProject option:selected').attr('data_indx'));
@@ -200,11 +202,12 @@ function put_Proyectos(dt) {
 
 function putCustomers(dt) {
     //console.log(dt);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.cus_id}">${u.cus_name}</option>`;
-        $('#txtCustomer').append(H);
-    });
-
+    if (dt[0].cus_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.cus_id}">${u.cus_name}</option>`;
+            $('#txtCustomer').append(H);
+        });
+    }
     $('#txtCustomer').on('change', function () {
         px = parseInt($('#txtCustomer option:selected').attr('data_indx'));
         console.log('Chg-Cust',px);
@@ -219,10 +222,13 @@ function putCustomersProj(dt) {
 
 function putTypeMov(dt) {
     //console.log(dt);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.wtp_id}">${u.wtp_description}</option>`;
-        $('#txtTypeMov').append(H);
-    });
+    if (dt[0].wtp_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.wtp_id}">${u.wtp_description}</option>`;
+            $('#txtTypeMov').append(H);
+        });
+    }
+
     $('#txtTypeMov').on('change', function () {
         px = parseInt($('#txtTypeMov option:selected').attr('data_indx'));
         let typemov=$(this).val(); 
@@ -238,10 +244,13 @@ function putTypeMov(dt) {
 
 function put_changes(dt) {
     //console.log(dt);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjtcr_id}">${u.pjtcr_definition}</option>`;
-        $('#txtMotivo').append(H);
-    });
+    if (dt[0].pjtcr_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.pjtcr_id}">${u.pjtcr_definition}</option>`;
+            $('#txtMotivo').append(H);
+        });
+    }
+    
     $('#txtMotivo').on('change', function () {
         px = parseInt($('#txtMotivo option:selected').attr('data_indx'));
         

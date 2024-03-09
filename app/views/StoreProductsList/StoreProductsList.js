@@ -96,7 +96,7 @@ function setting_datepicket(selector) {
 
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'StoreProductsList/listStores';
+    var pagina = 'Commons/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;

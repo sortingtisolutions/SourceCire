@@ -35,7 +35,7 @@ function getFreelances() {
 
 // Solicita las monedas
 function getCustType() {
-    var pagina = 'Freelances/listAreas';
+    var pagina = 'Commons/listAreas';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCustType;
@@ -149,7 +149,6 @@ function settingTable() {
             $('#tblFreelances').DataTable().draw();
         });
 }
-
 
 function fillFreelances(ft) {
     $('#tblFreelances tbody').html('');

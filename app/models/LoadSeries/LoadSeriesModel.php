@@ -297,9 +297,12 @@ public function SaveDocumento($request_params)
 		$prdid 	    	= $this->db->real_escape_string($params['prdid']);
 		$status		    = $this->db->real_escape_string($params['status']);
 
-		$qry = "INSERT INTO ctt_series(
-			ser_sku, ser_serial_number,ser_cost, ser_situation, ser_stage, ser_brand,ser_cost_import,ser_import_petition,ser_sum_ctot_cimp, ser_no_econo, ser_comments, cin_id, str_id, sup_id, prd_id, ser_status)
-			VALUES('$sersku', '$sernum','$sercost','$situation','$stage', '$serbrand','$costimport','$imppetition','$sumctotcimp','$noecono', '$comments','$cinid','$strid','$supid','$prdid','$status');";
+		$qry = "INSERT INTO ctt_series(ser_sku, ser_serial_number,ser_cost, ser_situation, 
+				ser_stage, ser_brand,ser_cost_import,ser_import_petition,ser_sum_ctot_cimp, 
+				ser_no_econo, ser_comments, cin_id, str_id, sup_id, prd_id, ser_status)
+				VALUES('$sersku', '$sernum','$sercost','$situation','$stage', '$serbrand',
+				'$costimport','$imppetition','$sumctotcimp','$noecono', '$comments','$cinid',
+				'$strid','$supid','$prdid','$status');";
 		$res = $this->db->query($qry);
 		$serId = $this->db->insert_id;
 
@@ -309,7 +312,7 @@ public function SaveDocumento($request_params)
 
 		$result = $this->db->query($qry);
 
-		$qry = "UPDATE ctt_products SET prd_stock = prd_stock+1 WHERE prd_id = '$prdid';";
+		$qry = "UPDATE ctt_products SET prd_stock = prd_stock + 1 WHERE prd_id = '$prdid';";
 
 		$result = $this->db->query($qry);
 	}
@@ -325,7 +328,8 @@ public function SaveDocumento($request_params)
 	{
 		$errores = $this->db->real_escape_string($params['errores']);
 		
-		$qry = "SELECT erm.erm_id, erm.erm_title FROM ctt_error_message AS erm WHERE erm.erm_id IN($errores)";
+		$qry = "SELECT erm.erm_id, erm.erm_title FROM ctt_error_message AS erm 
+				WHERE erm.erm_id IN($errores)";
 		$result = $this->db->query($qry);
 		
 		return $result;

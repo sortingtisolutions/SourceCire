@@ -86,7 +86,7 @@ function settingTable() {
 
 // Solicita los productos de un almacen seleccionado
 function getStores() {
-    var pagina = 'Coins/GetCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"cin_id":""}]`;
     var tipo = 'json';
     var selector = putStores;

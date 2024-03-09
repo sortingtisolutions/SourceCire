@@ -6,6 +6,7 @@
 
     class PostCollectionController extends Controller
     {
+        
         private $session;
         public $model;
 

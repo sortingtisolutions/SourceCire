@@ -9,6 +9,7 @@ class AlmacenesModel extends Model
 		parent::__construct();
 	}
 
+	
 //Guarda proveedor  ***
 	public function SaveAlmacen($params)
 	{

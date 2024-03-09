@@ -25,7 +25,7 @@ class BudgetModel extends Model
     {
         // Debe leer todos los proyectos que se encuentren en estaus 1 - Cotización
         $pjId = $this->db->real_escape_string($params['pjId']);
-
+        $liststat = $this->db->real_escape_string($params['liststat']);
         $qry = "SELECT 
                     pj.pjt_id  
                     , pj.pjt_number , pj.pjt_name  
@@ -49,7 +49,7 @@ class BudgetModel extends Model
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
 				LEFT JOIN ctt_estados_mex AS ed ON ed.edos_id = pj.edos_id		
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status in ('1', '40') ORDER BY pj.pjt_id DESC;
+                WHERE pj.pjt_status IN ($liststat) ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
     }    
@@ -62,7 +62,8 @@ class BudgetModel extends Model
     public function ListLocationsEdos($params){
         $pjtId = $this->db->real_escape_string($params['prj_id']);
         $qry = "SELECT * FROM ctt_locacion_estado AS ldo 
-                INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id WHERE ldo.pjt_id='$pjtId';";
+                INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id 
+                WHERE ldo.pjt_id='$pjtId';";
         return $this->db->query($qry);
     } 
     // Listado de proyectos padre
@@ -76,11 +77,11 @@ class BudgetModel extends Model
     }    
   
 // Listado de tipos de proyectos
-    public function listProjectsType($params)
-    {
-        $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
-        return $this->db->query($qry);
-    }    
+    // public function listProjectsType($params)
+    // {
+    //     $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
+    //     return $this->db->query($qry);
+    // }    
     
 // Listado de tipos de llamados
     public function listProjectsTypeCalled($params)
@@ -229,10 +230,11 @@ public function listDiscounts($params)
         $sbc_id = $this->db->real_escape_string($params['dstr']);
         if ($word == '') {
             $qry = "SELECT * from ctt_vw_list_productsInput
-            WHERE sbc_id = '$sbc_id';";
+                     WHERE sbc_id = '$sbc_id';";
         }else{
             $qry = "SELECT * from ctt_vw_list_productsInput
-            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
+                    WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') 
+                    AND sbc_id = '$sbc_id';";
         }
         return $this->db->query($qry);
     } 
@@ -251,13 +253,13 @@ public function listDiscounts($params)
         return $this->db->query($qry);
     }
     // Listado de subcategoria
-    public function listSubCategories($param)
-    {
-        $catId = $this->db->real_escape_string($param['catId']);
-        $qry = "SELECT * FROM ctt_subcategories 
-                WHERE sbc_status = 1 AND cat_id=$catId order by sbc_name";
-        return $this->db->query($qry);
-    }
+    // public function listSubCategories($param)
+    // {
+    //     $catId = $this->db->real_escape_string($param['catId']);
+    //     $qry = "SELECT * FROM ctt_subcategories 
+    //             WHERE sbc_status = 1 AND cat_id=$catId order by sbc_name";
+    //     return $this->db->query($qry);
+    // }
     // Datos del proyecto padre
     public function getProjectParent($param)
     {

@@ -16,6 +16,7 @@ function inicial() {
         getMenuParents();
         getModules();
         fillStores();
+        
         confirm_alert();
     } else {
         setTimeout(() => {
@@ -118,8 +119,22 @@ function getModules() {
     var selector = putModules;
     fillField(pagina, par, tipo, selector);
 }
+
+function getSp(catId) {
+    var pagina = 'ModMenu/ExecSp';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putSp;
+    fillField(pagina, par, tipo, selector);
+}
+
 function putStores(dt) {
     strs = dt;
+}
+
+function putSp(dt) {
+    console.log('Regreso SP', dt);
+
 }
 function putMenuParents(dt) {
     if (dt[0].mnu_id != 0) {
@@ -144,6 +159,7 @@ function fillStores() {
         $.each(strs, function (v, u) {
             fillTableStores(v);
         });
+        getSp('03');
         deep_loading('C');
     } else {
         setTimeout(() => {
@@ -228,6 +244,7 @@ function fillTableStores(ix) {
         .draw();
     $('#md' + strs[ix].mnu_id).parents('tr').attr('id', strs[ix].mnu_id);
     actionButtons();
+    
 }
 
 function saveStore() {

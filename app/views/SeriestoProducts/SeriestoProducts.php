@@ -101,7 +101,7 @@
                                         <input type="hidden" id="txtIdProducts" name="txtIdProducts">
                                 </div>
                                 <div id="listProduct" class="list-group list-hide">
-                                    <div class="list-items" ></div>
+                                    <div class="list-items" style="max-height: 160px !important;"></div>
                                 </div>
                             </div>
                         </div>

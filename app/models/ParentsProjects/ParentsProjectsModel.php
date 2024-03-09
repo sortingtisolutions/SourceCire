@@ -120,11 +120,11 @@ class ParentsProjectsModel extends Model
                 WHERE cs.cus_status = 1 ORDER BY cs.cus_name;";
         return $this->db->query($qry);
     }    
-public function listProjectsType($params)
-    {
-        $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
-        return $this->db->query($qry);
-    }    
+// public function listProjectsType($params)
+//     {
+//         $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
+//         return $this->db->query($qry);
+//     }    
     
 public function listProjectsTypeCalled($params)
     {

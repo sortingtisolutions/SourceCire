@@ -41,7 +41,6 @@
 		{
 			$params =  $this->session->get('user');
             $result = $this->model->UpdateModule($request_params);
-
 			echo $result;
 		}
 

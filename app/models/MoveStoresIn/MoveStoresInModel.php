@@ -22,18 +22,18 @@ class MoveStoresInModel extends Model
     }
 
 // Listado de Almacecnes
-    public function listStores()
-    {
-        $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
-        return $this->db->query($qry);
-    }
+    // public function listStores()
+    // {
+    //     $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de proveedores
-    public function listSuppliers()
-    {
-        $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
-        return $this->db->query($qry);
-    }
+    // public function listSuppliers()
+    // {
+    //     $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+    //     return $this->db->query($qry);
+    // }
    
 // Listado de Facturas
     public function listInvoice($param)
@@ -56,11 +56,11 @@ class MoveStoresInModel extends Model
     }
       
 // Listado de categorias
-    public function listCategories()
-    {
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCategories()
+    // {
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de Productos
     public function listProducts($param)

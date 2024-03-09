@@ -168,7 +168,7 @@ function putDocuments(dt) {
 
 // Solicita los tipos de movimiento
 function getCategories() {
-    var pagina = 'ProductsPriceList/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategories;
