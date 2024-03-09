@@ -9,6 +9,7 @@ class AlmacenesModel extends Model
 		parent::__construct();
 	}
 
+	
 //Guarda proveedor  ***
 	public function SaveAlmacen($params)
 	{
@@ -147,14 +148,5 @@ class AlmacenesModel extends Model
 			SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, null, $where )
             // SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
         );
-
-		// 	$qry = "SELECT prd.prd_sku, prd.prd_name, prd.prd_level, sum(sp.stp_quantity) as cantidad
-		// 	FROM ctt_products as prd
-		// 	INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
-		// 	INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
-		// 	where sp.str_id IN ($strId) and se.ser_status=1 AND sp.stp_quantity>0
-		// 	group by prd.prd_sku, prd.prd_name, prd.prd_level
-		// 	ORDER BY se.ser_sku;";
-        // return $this->db->query($qry);
     }
 }

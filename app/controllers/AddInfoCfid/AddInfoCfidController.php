@@ -3,8 +3,8 @@
 	require_once ROOT . FOLDER_PATH . '/app/models/AddInfoCfid/AddInfoCfidModel.php';
 	require_once LIBS_ROUTE . 'Session.php';
 	
-	class AddInfoCfidController extends Controller
-	{
+class AddInfoCfidController extends Controller
+{
 		private $session;
 		public $model;
 
@@ -22,9 +22,9 @@
 		  $this->render(__CLASS__, $params);
 		}
 
-	public function listProjectsCfdi()
+	public function listProjects($request_params)
 	{
-		$result = $this->model->listProjectsCfdi();
+		$result = $this->model->listProjects($request_params);
 		$i = 0;
 		while($row = $result->fetch_assoc()){
 			$rowdata[$i] = $row;
@@ -62,4 +62,4 @@
 		echo $res;
 	}
 
-	}
+}

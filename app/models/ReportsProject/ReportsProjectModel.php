@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class ReportsProjectModel extends Model
 {
+	
     public function __construct()
     {
       parent::__construct();
@@ -20,11 +21,11 @@ class ReportsProjectModel extends Model
 	}
 
 // Listado de Almacecnes
-    public function listStores()
-    {
-		$qry = "  SELECT * FROM ctt_stores";
-		return $this->db->query($qry);
-    }
+    // public function listStores()
+    // {
+	// 	$qry = "  SELECT * FROM ctt_stores";
+	// 	return $this->db->query($qry);
+    // }
 // Listado de Productos
 	public function listProducts($request)
 	{

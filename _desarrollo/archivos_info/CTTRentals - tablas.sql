@@ -2,6 +2,7 @@
 /* v_1.2.2 */
 /* ACCESORIOS */
 /* Comentario prueba de clonacion en git - Edna*/
+
 DROP TABLE IF EXISTS `ctt_accesories`;
 CREATE TABLE IF NOT EXISTS `ctt_accesories` (
     `acr_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'ID del accesorio',
@@ -10,7 +11,6 @@ CREATE TABLE IF NOT EXISTS `ctt_accesories` (
     `prd_parent`                int(11) DEFAULT NULL                            COMMENT 'ID del producto padre',
   PRIMARY KEY (`acr_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Productos o accesorios dependientes de otros productos';
-
 
 /* ACCIONES  */
 DROP TABLE IF EXISTS `ctt_actions`;
@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `ctt_actions` (
     `mod_id`                    int(11) DEFAULT NULL                            COMMENT 'ID del modulo relacion ctt_module',
   PRIMARY KEY (`acc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla de tipos de acciones realizadas por un usuario dentro del sistema';
-
 
 /* BITACORA DE ACTIVIDAD  */
 DROP TABLE IF EXISTS `ctt_activity_log`;
@@ -35,8 +34,6 @@ CREATE TABLE IF NOT EXISTS `ctt_activity_log` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bitácora de actividades realizadas en el sistema';
 
-
-
 /* AREAS  */
 DROP TABLE IF EXISTS `ctt_areas`;
 CREATE TABLE IF NOT EXISTS `ctt_areas` (
@@ -45,8 +42,6 @@ CREATE TABLE IF NOT EXISTS `ctt_areas` (
     `are_status`                int(11) DEFAULT 1                               COMMENT 'Estatus del área 1-activo 0-inactivo',
   PRIMARY KEY (`are_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Áreas organizacionales de la empresa';
-
-
 
 /* COTIZACIONES  */
 DROP TABLE IF EXISTS `ctt_budget`;
@@ -73,8 +68,6 @@ CREATE TABLE IF NOT EXISTS `ctt_budget` (
   PRIMARY KEY (`bdg_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cotizaciones generadas';
 
-
-
 /* CATALOGOS  */
 DROP TABLE IF EXISTS `ctt_categories`;
 CREATE TABLE IF NOT EXISTS `ctt_categories` (
@@ -84,9 +77,6 @@ CREATE TABLE IF NOT EXISTS `ctt_categories` (
     `str_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del almcen relación ctt_stores',
   PRIMARY KEY (`cat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Corresponde a los catalogos de la organización.';
-
-
-
 
 /* MONEDAS  */
 DROP TABLE IF EXISTS `ctt_coins`;
@@ -98,8 +88,6 @@ CREATE TABLE IF NOT EXISTS `ctt_coins` (
     `cin_status`                int(11) DEFAULT 1                               COMMENT 'Estatus de la moneda 1-activo 0-inactivo',
   PRIMARY KEY (`cin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla catalogo de monedas';
-
-
 
 /* COMENTARIOS  */
 DROP TABLE IF EXISTS `ctt_comments`;
@@ -114,8 +102,6 @@ CREATE TABLE IF NOT EXISTS `ctt_comments` (
   PRIMARY KEY (`com_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Comentarios de las secciones del sistema';
 
-
-
 /* GENERADOR DE FOLIOS  */
 DROP TABLE IF EXISTS `ctt_counter_exchange`;
 CREATE TABLE IF NOT EXISTS `ctt_counter_exchange` (
@@ -124,9 +110,6 @@ CREATE TABLE IF NOT EXISTS `ctt_counter_exchange` (
     `con_status`                int(11) DEFAULT 1                               COMMENT 'Estatus del folio 1-activo 0-inactivo',
   PRIMARY KEY (`con_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla generador de folios';
-
-
-
 
 /* CLIENTES  */
 DROP TABLE IF EXISTS `ctt_customers`;
@@ -152,8 +135,6 @@ CREATE TABLE IF NOT EXISTS `ctt_customers` (
   PRIMARY KEY (`cus_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Clientes y prospectos de cliente';
 
-
-
 /* RELACION PRODUCTOR - CASA PRODUCTORA  */
 DROP TABLE IF EXISTS `ctt_customers_owner`;
 CREATE TABLE IF NOT EXISTS `ctt_customers_owner` (
@@ -163,8 +144,6 @@ CREATE TABLE IF NOT EXISTS `ctt_customers_owner` (
   PRIMARY KEY (`cuo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Relacion de clientes pertenecientes a otros clientes';
 
-
-
 /* TIPO DE CLIENTE  */
 DROP TABLE IF EXISTS `ctt_customers_type`;
 CREATE TABLE IF NOT EXISTS `ctt_customers_type` (
@@ -172,8 +151,6 @@ CREATE TABLE IF NOT EXISTS `ctt_customers_type` (
     `cut_name`                  varchar(50) DEFAULT NULL                        COMMENT 'Nombre del tipo de cliente',
   PRIMARY KEY (`cut_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catálogo de tipos de cliente ';
-
-
 
 /* CATALOGO DE DESCUENCTOS  */
 DROP TABLE IF EXISTS `ctt_discounts`;
@@ -185,8 +162,6 @@ CREATE TABLE IF NOT EXISTS `ctt_discounts` (
     `dis_status`                int(11) DEFAULT 1                               COMMENT 'Estatus del folio 1-activo 0-inactivo',
   PRIMARY KEY (`dis_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla de descuentos';
-
-
 
 /* DOCUMENTOS  */
 DROP TABLE IF EXISTS `ctt_documents`;
@@ -202,8 +177,6 @@ CREATE TABLE IF NOT EXISTS `ctt_documents` (
   PRIMARY KEY (`doc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Documentos de productos';
 
-
-
 /* TIPO DE DOCUMENTOS  */
 DROP TABLE IF EXISTS `ctt_documents_type`;
 CREATE TABLE IF NOT EXISTS `ctt_documents_type` (
@@ -213,8 +186,6 @@ CREATE TABLE IF NOT EXISTS `ctt_documents_type` (
     `dot_status`                varchar(1) DEFAULT '1'                          COMMENT 'Estatus del tipo de documento  1-Activo, 0-Inactivo',
   PRIMARY KEY (`dot_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tipos de documentos de productos';
-
-
 
 /* EMPLEADOS  */
 DROP TABLE IF EXISTS `ctt_employees`;
@@ -229,8 +200,6 @@ CREATE TABLE IF NOT EXISTS `ctt_employees` (
     `are_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del area relacion con ctt_areas',
   PRIMARY KEY (`emp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla de los empleados de la empresa';
-
-
 
 /* TIPO DE LOCACION  */
 DROP TABLE IF EXISTS `ctt_location`;
@@ -879,6 +848,15 @@ CREATE TABLE IF NOT EXISTS `ctt_version` (
   PRIMARY KEY (`ver_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version de docuemntos de cotización';
 
+/* TABLA AGREGADA EL 24 DE NOVIEMBRE */
+CREATE TABLE `ctt_product_accesory` (
+	`pac_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`acc_id` INT(11) NULL DEFAULT NULL,
+	`prd_id` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`pac_id`) USING BTREE
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla para relacionar producto con accesorio'
+;
 
 
 /* VISTAS  */

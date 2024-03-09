@@ -8,17 +8,19 @@
     <head>
         <title>Test</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
         <script type="text/javascript">
             function redirect() {
-                window.location.href = "http://desarrollo.com/Ciredashboard/DashboardFull";
+                let newpath="<?= DASH_PATH ?>" + "/DashboardFull";
+                window.location.href = newpath;
             }
-        window.onload = redirect;
+            window.onload = redirect;
         </script>
 
-    <script>
-            // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
-            // window.focus();
-    </script>
+        <script>
+                // var window = window.open("http://desarrollo.com/Ciredashboard/Dashboard", "_blank");
+                // window.focus();
+        </script>
     </head>
     <body>
     

@@ -134,8 +134,7 @@ function activeIcons() {
 }
 
 function freeProject(pjtId, pjtStatus) {
-    console.log(pjtId, pjtStatus);
-
+    // console.log(pjtId, pjtStatus);
     var pagina = 'ProjectFiscalFields/updateStatus';
     var par = `[{"pjtId":"${pjtId}","pjtStatus":"${pjtStatus}"}]`;
     var tipo = 'html';
@@ -150,7 +149,6 @@ function putUpdateProjects(dt) {
 function showCustomModal(cusId) {
     // console.log(cusId);
     $('#CustomerModal').removeClass('overlay_hide');
-
     $('#CustomerModal .btn_close')
         .unbind('click')
         .on('click', function () {
@@ -158,9 +156,7 @@ function showCustomModal(cusId) {
 
             let cusPerc = $('#txtCustomerPercent').val();
             let cusname = $('#txtCustomerName').val();
-
-            console.log(selectedProject);
-
+            // console.log(selectedProject);
             $(`#${selectedProject} td.custname`).html(cusname);
             let cusSpan = '';
             switch (true) {
@@ -191,13 +187,11 @@ function showCustomModal(cusId) {
             $(`#${selectedProject} td.editable`).html(cusEditable);
             activeIcons();
         });
-
     getCustomerFields(cusId);
 }
 
 function putCustomerFields(dt) {
     let cusId = dt[0].cus_id;
-
     $('#customerName').html(dt[0].cus_name);
     $('#customerAddress').html(dt[0].cus_address);
     $('#customerEmail').html(dt[0].cus_email);
@@ -224,7 +218,6 @@ function putCustomerFields(dt) {
     dt[0].cus_legal_representative == 0 || dt[0].cus_legal_representative == null ? $('#fraCustomerRepresentative').show() : $('#fraCustomerRepresentative').hide();
 
     $('#customerFieldPrecent').html(counterField());
-
     $('#btnCustomerApply').on('click', function () {
         let cusName = $('#txtCustomerName').val();
         let cusAddress = $('#txtCustomerAddress').val();

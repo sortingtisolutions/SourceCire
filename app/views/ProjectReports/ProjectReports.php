@@ -18,13 +18,6 @@
                         <h1>Condiciones del Reporte</h1>
                         <label for="txtProjects"></label>
                     </div>
-                    
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtProjects" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el proyecto</option></select>
-                            <label for="txtProjects">Lista de proyectos</label>
-                        </div>
-                    </div> -->
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -77,85 +70,8 @@
                             <label for="txtReport">Tipo de Reporte</label>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <textarea class="form-control form-control-sm" id="txtComments" style="height:5rem; text-transform:uppercase" autocomplete="off" rows="3"></textarea>
-                            <label for="txtComments">Comentarios al cierre</label>
-                        </div>
-                    </div> -->
+
                     <div style="height:20px;"></div>
-<!-- 
-                    <div class="row"><h1>Seleccionar nivel de detalles</h1></div> -->
-
-                    <!-- <div class="totales"> -->
-                        <!-- <div> -->
-
-                            <!-- <div class="totales__grupo">
-                                <div class="totales__grupo-label">Activos</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="1" id="checkBudget" ></div>
-
-                            </div>
-                            
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Patrocinios</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="2" id="checkPatrocinios"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Productividad</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="10" id="checkProductivity"></div>
-
-                            </div>
-                            
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Eq. más rentado</div>
-                                <div><input class="form-check check-box-prj" type="checkbox" value="4" id="checkPlans" ></div>
-
-                            </div> -->
-                        <!-- </div> -->
-                        <!--<div>-->
-                    <!-- 
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Proyectos trabajados</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="5" id="checkProjWorked"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Equipo menos rentado</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="6" id="checkInCall" ></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Subarrendos</div>
-                                <div><input class="form-check check-box-prj" type="checkbox" value="7" id="checkProyects" ></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Proveedores de subarrendo</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="8" id="checkSubletting"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Cierres</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="3" id="checkClosed"></div>
-
-                            </div>
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Clientes nuevos</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="9" id="checkNewCustomers"></div>
-
-                            </div>
-
-                           
-                            <div class="totales__grupo">
-                                <div class="totales__grupo-label">Por programador</div>
-                                <div><input class="form-check-input check-box-prj" type="checkbox" value="11" id="checkProjDevelop"></div>
-                        
-                            </div> -->
-                            
-                        <!--</div>-->
-                    <!-- <div style="height:20px;"></div> -->
-                    <!-- </div> -->
                         <div class="row pos1">
                             <div class="col-md-12 mb-5">
                                 <button id="btn_generate" type="button" class="btn btn-sm btn-primary" >Generar</button>
@@ -206,7 +122,7 @@
                         <div class="row rowTop">
                         <h1>EQUIPO MÁS RENTADO</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblEquiposMasUsados" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblEquiposMasUsados" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Producto</th>
@@ -231,7 +147,7 @@
                         <div class="row rowTop">
                         <h1>EQUIPO MENOS RENTADO</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblEquiposMenosUsados" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblEquiposMenosUsados" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Producto</th>
@@ -254,7 +170,7 @@
                         <div class="row rowTop">
                         <h1>SUBARRENDOS</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblSubarrendos" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblSubarrendos" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  100px" >Producto</th>
@@ -280,7 +196,7 @@
                         <div class="row rowTop">
                         <h1>PROVEEDORES DE SUBARRENDO</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProvSubarrendo" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProvSubarrendo" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Proveedor</th>
@@ -303,15 +219,15 @@
                         <div class="row rowTop">
                         <h1>CLIENTES NUEVOS</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblCustomers" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblCustomers" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
-                                    <th style="width:  250px">Proyecto</th>
-                                    <th style="width:  60px">Monto</th>
+                                    <th style="width:  250px">Nombre del Proyecto</th>
+                                    <th style="width:  60px">Monto del <br>proyecto </th>
                                     <th style="width:  50px">Rango del proyecto</th>
                                     <th style="width:  40px">Contacto</th>
-                                    <th style="width:  100px">Programador</th>
+                                    <th style="width:  100px">Programador <br>responsable</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -329,7 +245,7 @@
                         <div class="row rowTop">
                         <h1>Productividad</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProductivity" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProductivity" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Programador</th>
@@ -353,7 +269,7 @@
                         <div class="row rowTop">
                         <h1>Proyectos por programador</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProjDevelop" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProjDevelop" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  150px">Programador</th>
@@ -377,7 +293,7 @@
                         <div class="row rowTop">
                         <h1>Proyectos trabajados</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblProjWorked" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblProjWorked" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
@@ -402,7 +318,7 @@
                         <div class="row rowTop">
                         <h1>Patrocinios</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblPatrocinios" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblPatrocinios" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
@@ -428,7 +344,7 @@
                         <div class="row rowTop">
                         <h1>CIERRES</h1>
                         </div>
-                        <table class="display compact nowrap"  id="tblCierres" style="min-width: 1480px">
+                        <table class="display compact nowrap"  id="tblCierres" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  250px">Cliente</th>
@@ -437,7 +353,9 @@
                                     <th style="width:  50px">Fechas</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                
+                            </tbody>
                         </table>
 
                     </div>
@@ -446,7 +364,6 @@
         </div>
         </div>
     </div>
-    
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

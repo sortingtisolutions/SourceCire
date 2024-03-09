@@ -28,17 +28,16 @@ function inicial() {
 /** ---- PETICIÓN DE DATOS ----*/
 /** ---- Obtiene listado de categorias */
 function getCategories() {
-    var pagina = 'Subcategories/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
 }
-
 /** ---- Obtiene listado de subcategorias */
 function getSubcategories() {
     // deep_loading('O');
-    var pagina = 'Subcategories/listSubcategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putSubcategories;
@@ -199,7 +198,6 @@ function activeActions() {
 }
 
 /** -------------------------------------------------------------------------- */
-
 function saveSubcategory() {
     let subcatNm = $('#txtSubcategory').val().toUpperCase();
     let subcatCd = $('#txtSubcategoryCode').val().toUpperCase();
@@ -234,7 +232,6 @@ function putSaveSubcategory(dt) {
 }
 
 /** -------------------------------------------------------------------------- */
-
 function editSubcategory(sbcId) {
     let ix = goThroughSubcategory(sbcId);
     $('#txtSubcategory').val(subs[ix].sbc_name);
@@ -242,6 +239,7 @@ function editSubcategory(sbcId) {
     $('#txtSubcategoryCode').val(subs[ix].sbc_code);
     $('#lstCategory').val(subs[ix].cat_id);
 }
+
 /** ---- Actualiza la subcategoria seleccionada ---- */
 function updateSubcategory() {
     var sbcId = $('#txtIdSubcategory').val();
@@ -262,6 +260,7 @@ function updateSubcategory() {
     var selector = putUpdateSubcategory;
     fillField(pagina, par, tipo, selector);
 }
+
 /** ---- Actualiza el registro en la tabla de subcategorias ---- */
 function putUpdateSubcategory(dt) {
     if (subs != null) {
@@ -277,10 +276,7 @@ function putUpdateSubcategory(dt) {
         }, 100);
     }
 }
-/** ---- End EDITA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start ELIMINA SUBCATEGORIA ---- */
 /** ---- Borra la subcategorias ---- */
 function deleteSubcategory(sbcId) {
@@ -320,9 +316,7 @@ function putDeleteSubcategory(dt) {
         .draw();
     $('#confirmModal').modal('hide');
 }
-/** ---- End ELIMINA SUBCATEGORIA ---- */
 
-/** ---- Start LISTADO DE SERIES ---- */
 /** ---- Obtiene las series de la subcategoria seleccionada ---- */
 function selectSeries(reg) {
     let sbcId = reg.parents('tr').attr('id');

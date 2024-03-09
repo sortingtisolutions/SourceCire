@@ -5,6 +5,7 @@
 
 class PeriodsController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -62,7 +63,6 @@ class PeriodsController extends Controller
 /** ==== Elimina los registros de los periodos correspondientes ==============================  */
     public function deletePeriods($request_params)
     {
-
         $params =  $this->session->get('user');
         $result = $this->model->deletePeriods($request_params);
 

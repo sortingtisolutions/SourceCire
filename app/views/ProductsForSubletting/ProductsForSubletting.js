@@ -7,7 +7,6 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    // folio = getFolio();
     setting_table();
     get_Proyectos();
     get_coins();
@@ -25,8 +24,9 @@ function inicial() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'ProductsForSubletting/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="2,4,7,8";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);
@@ -43,7 +43,7 @@ function get_products(pj) {
 
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_coins() {
-    var pagina = 'ProductsForSubletting/listCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_coins;
@@ -51,7 +51,7 @@ function get_coins() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_suppliers() {
-    var pagina = 'ProductsForSubletting/listSuppliers';
+    var pagina = 'Commons/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_suppliers;
@@ -59,7 +59,7 @@ function get_suppliers() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_stores() {
-    var pagina = 'ProductsForSubletting/listStores';
+    var pagina = 'Commons/listStores';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_stores;
@@ -176,28 +176,30 @@ function setting_table() {
     });
 }
 
-
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
     //console.log(pj);
-    $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
-        $('#txtProject').append(H);
-    });
-    $('#txtProject').on('change', function () {
-        px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-        $('.objet').addClass('objHidden');
-        get_products(pj[px].pjt_id);
-    });
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+            $('#txtProject').append(H);
+        });
+        $('#txtProject').on('change', function () {
+            px = parseInt($('#txtProject option:selected').attr('data_indx'));
+            $('#txtIdProject').val(pj[px].pjt_id);
+            // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+            $('.objet').addClass('objHidden');
+            get_products(pj[px].pjt_id);
+        });
+    }
+    
+    
 }
 
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
-    
-    console.log('put_Products-', dt);
+    // console.log('put_Products-', dt);
     pd = dt;
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
@@ -209,7 +211,6 @@ function put_Products(dt) {
     if (pd[0].prd_name != undefined) {
         $.each(pd, function (v, u) 
         {
-            
             let datestart = u.sub_date_start;
             let dateend = u.sub_date_end;
 
@@ -320,30 +321,39 @@ function put_Products(dt) {
 
 /**  ++++   Coloca las monedas en el listado del input */
 function put_coins(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
-        $('#txtCoinType').append(H);
-    });
+    if (dt[0].cin_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
+            $('#txtCoinType').append(H);
+        });
+    }
+    
     $('#txtCoinType').on('change', function () {
         validator();
     });
 }
 /**  ++++   Coloca los proveedores en el listado del input */
 function put_suppliers(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
-        $('#txtSupplier').append(H);
-    });
+    if (dt[0].sup_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
+            $('#txtSupplier').append(H);
+        });
+    }
+
     $('#txtSupplier').on('change', function () {
         validator();
     });
 }
 /**  ++++   Coloca los almacenes en el listado del input */
 function put_stores(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.str_id}">${u.str_name}</option>`;
-        $('#txtStoreSource').append(H);
-    });
+    if (dt[0].str_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.str_id}">${u.str_name}</option>`;
+            $('#txtStoreSource').append(H);
+        }); 
+    }
+
     $('#txtStoreSource').on('change', function () {
         validator();
     });
@@ -386,8 +396,8 @@ function updating_serie(acc) {
         "projecId"  :   "${projecId}",
         "projContId"  :   "${projContId}"
     }]`;
-    //console.log(par);
-     if (acc == 'add') {
+    // console.log(par);
+    if (acc == 'add') {
         var pagina = 'ProductsForSubletting/saveSubletting';
     } else {
         var pagina = 'ProductsForSubletting/changeSubletting';
@@ -397,7 +407,7 @@ function updating_serie(acc) {
     fillField(pagina, par, tipo, selector); 
 }
 function put_save_subleting(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tr = $('#' + dt[0].pjtdt_id);
     $($(tr[0].cells[2])).html(dt[0].pjtdt_prod_sku);
     $($(tr[0].cells[3])).html(dt[0].sub_price);

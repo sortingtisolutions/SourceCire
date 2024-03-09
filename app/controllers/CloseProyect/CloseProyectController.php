@@ -5,6 +5,7 @@
 
 class CloseProyectController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -42,40 +43,40 @@ class CloseProyectController extends Controller
     }
 
 // Lista los almacenes 
-    public function listStores($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listStores();
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"str_id":"0"}]';	
-            }
-            echo $res;
-    }    
+    // public function listStores($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listStores();
+    //         $i = 0;
+    //         while($row = $result->fetch_assoc()){
+    //             $rowdata[$i] = $row;
+    //             $i++;
+    //         }
+    //         if ($i>0){
+    //             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //         } else {
+    //             $res =  '[{"str_id":"0"}]';	
+    //         }
+    //         echo $res;
+    // }    
 
 // Lista los Categorias 
-    public function listCategories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listCategories();
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"cat_id":"0"}]';	
-            }
-            echo $res;
-    }    
+    // public function listCategories($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listCategories();
+    //         $i = 0;
+    //         while($row = $result->fetch_assoc()){
+    //             $rowdata[$i] = $row;
+    //             $i++;
+    //         }
+    //         if ($i>0){
+    //             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //         } else {
+    //             $res =  '[{"cat_id":"0"}]';	
+    //         }
+    //         echo $res;
+    // }    
 
 // Lista los productos
     public function listProducts($request_params)
@@ -96,22 +97,22 @@ class CloseProyectController extends Controller
     } 
 
 // Lista los proveedores
-    public function listSuppliers($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSuppliers();
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"sup_id":"0"}]';	
-        }
-        echo $res;
-    } 
+    // public function listSuppliers($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listSuppliers();
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"sup_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 
 
 // Lista los Facturas
     public function listInvoice($request_params)
@@ -131,22 +132,22 @@ class CloseProyectController extends Controller
         echo $res;
     } 
 // Lista los Monedas
-    public function listCoins($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listCoins();
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"cin_id":"0"}]';	
-        }
-        echo $res;
-    } 
+    // public function listCoins($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listCoins();
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"cin_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 
 
     // Obtiene el folio del movimiento
 	public function NextExchange($request_params)

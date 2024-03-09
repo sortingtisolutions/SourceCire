@@ -12,17 +12,16 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-
-        $('.tblProdMaster').css({display: 'none'});
-        getProjects(0);
+        // settingTable();
+        getProjects();
         getWayToPay();
     }, 100);
 }
 
 /** +++++  Obtiene los proyectos de la base */
-function getProjects(catId) {
+function getProjects() {
     var pagina = 'CollectAccounts/listProjects';
-    var par = `[{"catId":"${catId}"}]`;
+    var par = `[{"pjtId":""}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -41,6 +40,7 @@ function settingTable() {
     let title = 'Control salida de proyectos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblCollets').DataTable({
+        bDestroy: true,
         order:  [[ 1, 'asc' ], [ 8, 'asc' ]],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -100,14 +100,6 @@ function settingTable() {
             {data: 'clt_lastpay',   class: 'date'},
         ],
     });
-
-    $('.tblProdMaster')
-        .delay(500)
-        .slideDown('fast', function () {
-            //$('.deep_loading').css({display: 'none'});
-            //$('#tblCollets').DataTable().draw();
-            deep_loading('C');
-    });
 }
 
 function putWayToPay(dt) {
@@ -116,12 +108,9 @@ function putWayToPay(dt) {
 
 /** +++++  coloca los productos en la tabla */
 function putProjects(dt) {
-    console.log('putProjects',dt);
+    // console.log('putProjects',dt);
     $('#tblCollets tbody').html('');
-    
-    if (dt[0].clt_id != undefined) {
-        console.log('each',dt[0].clt_id);
-        //<i class='fas fa-edit detail'>
+    if (dt[0].clt_id > 0) {
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.clt_id}" data_pjt="${u.pjt_id}">
@@ -130,9 +119,9 @@ function putProjects(dt) {
                     <td class="date">${u.clt_date_generated}</td>
                     <td class="supply">${u.cus_name}</td>
                     <td class="supply">${u.pjt_name}</td>
-                    <td class="sku">${mkn(u.ctl_amount_payable,'n')}</td> 
+                    <td class="sku">${mkn(u.amount_payable,'n')}</td> 
                     <td class="sku">${mkn(u.pym_amount,'n')}</td>
-                    <td class="sku">${mkn(u.pendiente,'n')}</td>
+                    <td class="sku">${mkn(u.pending,'n')}</td>
                     <td class="date">${u.clt_deadline}</td>
                     <td class="date">${u.pym_date_paid}</td>
                 </tr>`;
@@ -171,7 +160,6 @@ function activeIcons() {
             $('.overlay_background').addClass('overlay_hide');
         });
 
-    
     $('#savePayed.update')
         .unbind('click')
         .on('click', function () {
@@ -179,11 +167,13 @@ function activeIcons() {
             let em = user[3];
             let referen = $('#txtRefPayed').val();
             let montopayed = $('#txtMontoPayed').val();
-            let foldoc = $('#txtNumFol').val();
+            // let foldoc = $('#txtNumFol').val();
+            let foldoc = gblcloid;
             let pjtId = gblpjtid;
             let wayPay = $('#txtWayPay option:selected').val();
             let projPeriod = $('#txtPeriodPayed').val();
-
+            let montoTotal = $('#txtMontoTotal').val();
+            let montoRestante = (parseFloat(montoTotal) - parseFloat(montopayed));
             let DateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
             
             let par = `
@@ -193,7 +183,8 @@ function activeIcons() {
                 "foldoc"         : "${foldoc}",
                 "pjtId"          : "${pjtId}",
                 "wayPay"         : "${wayPay}",
-                "empId"          : "${em}"
+                "empId"          : "${em}",
+                "montoRest"      : "${montoRestante}"
             }]`;
             // console.log(par);
             var pagina = 'CollectAccounts/insertPayAplied';
@@ -216,15 +207,14 @@ function confirm_to_work(cltid) {
         $('.overlay_closer .title').html(prdNm);
 
         let el = $(`#tblCollets tr[id="${cltid}"]`);
-            $('#txtNumFol').val($(el.find('td')[1]).text());
-            $('#txtProject').val($(el.find('td')[4]).text());
-
+        $('#txtNumFol').val($(el.find('td')[1]).text());
+        $('#txtProject').val($(el.find('td')[4]).text());
+        $('#txtMontoTotal').val($(el.find('td')[5]).text());
         fillContent();
     });
 }
 
 function fillContent() {
-    
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     restdate= moment().subtract(3, 'months');
@@ -264,6 +254,7 @@ function fillContent() {
         }
     );
 
+    $('#txtWayPay').html('');
     // Llena el selector de tipo de proyecto
     $.each(tpprd, function (v, u) {
         let H = `<option value="${u.wtp_id}"> ${u.wtp_description}</option>`;
@@ -272,8 +263,10 @@ function fillContent() {
 }
 
 function putToWork(dt){
-    console.log(dt)
+    // console.log(dt)
     $('#registPayModal .btn_close').trigger('click');
+        // getProjects();
+        window.location.reload();
 }
 
 function mkn(cf, tp) {
@@ -301,9 +294,9 @@ $('#savePayed.update')
             let referen = $('#txtRefPayed').val();
             let WayPay = $('#txtWayPay option:selected').val();
             let projPeriod = $('#txtPeriodPayed').val();
-
+            let montoTotal = parseFloat($('#txtMontoTotal').val());
+            let montoRestante = (montoTotal - parseFloat(montopayed));
             let projDateStart = moment(projPeriod,'DD/MM/YYYY').format('YYYYMMDD');
-            
             let par = `
             [{
                 "projId"         : "${projId}",
@@ -317,7 +310,7 @@ $('#savePayed.update')
                 "cusParent"      : "${cusCteRel}",
             }]`;
             
-            console.log(par);
+            // console.log(par);
             var pagina = 'Budget/UpdateProject';
             var tipo = 'html';
             var selector = loadProject;
@@ -325,4 +318,3 @@ $('#savePayed.update')
             
         });
 }
-

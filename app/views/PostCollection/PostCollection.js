@@ -40,6 +40,7 @@ function settingTable() {
     let title = 'Lista de Formas de Pago';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblSubcategory').DataTable({
+        bDestroy: true,
         order: [
             [1, 'asc'],
         ],
@@ -82,7 +83,7 @@ function settingTable() {
         ],
         pagingType: 'simple_numbers',
         language: {
-            url: 'app/assets/lib/dataTable/Spanish.json',
+            url: 'app/assets/lib/dataTable/spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
@@ -103,13 +104,13 @@ function putSubcategories(dt) {
     console.log('1',dt);
     $('#tblSubcategory tbody').html('');
     var prds=dt;
-    if (prds[0].wtp_id != '0') {
+    if (prds[0].pclt_id > 0) {
         
         // var catId = prds[0].wtp_id;
         $.each(prds, function (v, u) {
             // if (u.wtp_id != '') {
                 var H = `
-                <tr id="${u.wtp_id}">
+                <tr id="${u.pclt_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
                     <td class="sku" data-content="${u.pclt_porcent}">${u.pclt_porcent}</td>
                     <td class="supply">${u.pjt_name}</td>
@@ -138,10 +139,10 @@ function activeIcons() {
             if (ValidForm() == 1) {
                 if ($('#txtIdSubcategory').val() == '') {
                     //console.log('Save');
-                    // saveSubcategory();
+                    saveSubcategory();
                 } else {
                     //console.log('Update');
-                    // updateSubcategory();
+                    updateSubcategory();
                 }
             }
         });
@@ -183,7 +184,6 @@ function activeIcons() {
 }
 
 /** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
-/** ---- Registra la nueva subcategoria ---- */
 function saveSubcategory() {
     let subcatNm = $('#txtWtpDescription').val().toUpperCase();
     let subcatCd = $('#txtWtpCve').val().toUpperCase();
@@ -264,7 +264,6 @@ function putUpdateSubcategory(dt) {
 
 function deleteSubcategory(sbcId) {
     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
-
     if (cn != 0) {
         $('#confirmModal').modal('show');
         $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
@@ -278,7 +277,7 @@ function deleteSubcategory(sbcId) {
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar subcategoria').css({display: 'inline'});
         $('#Id').val(sbcId);
-        console.log('BORRAR REGISTRO');
+        // console.log('BORRAR REGISTRO');
         $('#confirmButton').on('click', function () {
             var pagina = 'PostCollection/DeleteSubcategory';
             var par = `[{"sbcId":"${sbcId}"}]`;
@@ -290,7 +289,7 @@ function deleteSubcategory(sbcId) {
 }
 /** ---- Elimina el registro de la subcategoria borrada ---- */
 function putDeleteSubcategory(dt) {
-    console.log('BORRAR LINEA');
+    // console.log('BORRAR LINEA');
     getCategories();
     let tabla = $('#tblSubcategory').DataTable();
     tabla
@@ -299,4 +298,3 @@ function putDeleteSubcategory(dt) {
         .draw();
     $('#confirmModal').modal('hide');
 }
-

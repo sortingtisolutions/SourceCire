@@ -85,8 +85,9 @@ function settingTable() {
 
 //OBTIENE LISTA DE PROYECTOS POSIBLES PARA CANCELAR
 function getProjects() {
+    let liststat ="5,6";
     var pagina = 'ProjectCancel/listProjects';
-    var par = '[{"pjtId":""}]';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -178,7 +179,7 @@ function CancelProyect(pjtId) {
 }
 
 function enableProject(pjtId) {
-    console.log(pjtId);
+    // console.log(pjtId);
     modalLoading('S', 'Habilitando proyecto');
     var pagina = 'ProjectCancel/EnableProject';
     var par = `[{"pjtId":"${pjtId}"}]`;
@@ -188,8 +189,7 @@ function enableProject(pjtId) {
 }
 
 function putCancelProject(dt) {
-    console.log(dt);
-    // getProjects();
+    // console.log(dt);
     let tabla = $('#tblProjects').DataTable();
     tabla
         .row($(`#${dt}`))

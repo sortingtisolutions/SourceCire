@@ -34,7 +34,7 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 
-$qry2 = "SELECT * FROM ctt_projects WHERE pjt_id='$proj_id'";
+$qry2 = "SELECT * FROM ctt_projects WHERE pjt_id IN ($proj_ids)";
 
 $res3 = $conn->query($qry2);
 //$conn->close();
@@ -43,90 +43,165 @@ while($row1 = $res3->fetch_assoc()){
 }
 
 $num = $result[0]['pjt_number'];
-$qry = "SELECT bdg_id, bdg_section, crp_id, crp_name, bdg_prod_price, 
-bdg_quantity,bdg_days_base, bdg_days_cost, bdg_discount_base, 
-bdg_discount_insured, bdg_days_trip, bdg_discount_trip,bdg_insured, bdg_days_test,
-bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_discount_test, 
-ver_discount_insured,prd_id, pjt_name, CONCAT_WS(' - ' , date_format(pjt_date_start, '%d-%b-%Y'), date_format(pjt_date_end, '%d-%b-%Y')) AS fechas, bdg_order, pjt_number, proyname,
-pjt_date_project, pjt_date_last_motion,
-pjt_time, pjt_location, pjt_how_required, pjt_trip_go, pjt_trip_back,
-pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,cus_name,
-cus_email,cus_phone, cus_address, loc_type_location, pjttp_name, CONCAT_WS(' - ' , date_format(d_start, '%d-%b-%Y'), date_format(d_end, '%d-%b-%Y')) AS period, pjt_id
 
-FROM (SELECT bg.bdg_id, bg.bdg_section, cr.crp_id, cr.crp_name,bg.bdg_prod_price, 
-bg.bdg_quantity,bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, 
-bg.bdg_discount_insured, bg.bdg_days_trip, bg.bdg_discount_trip,bg.bdg_insured, bg.bdg_days_test,
-bg.bdg_prod_sku, bdg_prod_name, bg.bdg_discount_test, vr.ver_discount_insured,
-pd.prd_id, pj.pjt_name, 
-pj.pjt_date_start, pj.pjt_date_end, bg.bdg_order, prjt.pjt_number, prjt.pjt_name AS proyname,
- prjt.pjt_date_project, prjt.pjt_date_start AS d_start, prjt.pjt_date_end AS d_end, prjt.pjt_date_last_motion,
- prjt.pjt_time, prjt.pjt_location, prjt.pjt_how_required, prjt.pjt_trip_go, prjt.pjt_trip_back,
- prjt.pjt_to_carry_on, prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name,
- cu.cus_email, cu.cus_phone, cu.cus_address, lc.loc_type_location, pt.pjttp_name, pj.pjt_id
-FROM ctt_budget AS bg
-        INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-		  INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+$qry3 = "SELECT COUNT(*) cant FROM ctt_projects AS pj 
+WHERE pj.pjt_status = 1 AND pj.pjt_id IN($proj_ids);";
+
+$res4 = $conn->query($qry3);
+$result = $res4->fetch_object();
+
+$cant = $result->cant;
+
+if ($cant > 0) {
+    $qry = "SELECT bdg_id, bdg_section, cr.crp_id, cr.crp_name, bdg_prod_price,
+    bdg_quantity, bdg_days_base, bdg_days_cost, 
+   bdg_discount_base, bdg_discount_insured,
+   bdg_days_trip, bdg_discount_trip, bdg_insured,
+   bdg_days_test, bdg_discount_test, bdg_prod_sku, bdg_prod_name,
+   vr.ver_discount_insured, pd.prd_id, pj.pjt_name, 
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+    bdg_order, pj.pjt_number,  prjt.pjt_name AS proyname, prjt.pjt_date_project, 
+    prjt.pjt_date_last_motion, prjt.pjt_time, prjt.pjt_location,
+   prjt.pjt_how_required, prjt.pjt_trip_go, prjt.pjt_trip_back, prjt.pjt_to_carry_on, 
+   prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name, 
+   cu.cus_email, cu.cus_phone,
+   cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, 
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')), pj.pjt_id, vr.ver_code
+   FROM ctt_budget AS bg
+           INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
+           INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+             INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+           INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+           INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
+           INNER JOIN ctt_projects AS prjt ON prjt.pjt_id=pj.pjt_parent
+           LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
+           LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+           LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+           LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+           WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id =  
+           (SELECT MAX(verId) FROM (SELECT bug.ver_id AS 'verId'
+   FROM ctt_budget bug ) bg
+   INNER JOIN ctt_version AS ver ON ver.ver_id = bg.verId
+   INNER JOIN ctt_projects AS pjt ON pjt.pjt_id = ver.pjt_id
+   WHERE pjt.pjt_id = pj.pjt_id group by pd.prd_id, pd.prd_level)
+   UNION 
+   (SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, cn.pjtcn_prod_price bdg_prod_price,
+   cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
+   cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
+   cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
+   cn.pjtcn_days_test bdg_days_test, cn.pjtcn_discount_test bdg_discount_test, cn.pjtcn_prod_sku bdg_prod_sku, cn.pjtcn_prod_name bdg_prod_name,
+   vr.ver_discount_insured, pr.prd_id, pj.pjt_name, 
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+   cn.pjtcn_order bdg_order, pj.pjt_number, pjtv.pjt_name AS proyname, pjtv.pjt_date_project, 
+   pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
+   pjtv.pjt_how_required, pjtv.pjt_trip_go, pjtv.pjt_trip_back, pjtv.pjt_to_carry_on, 
+   pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, 
+   cu.cus_email, cu.cus_phone,
+   cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, 
+   CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+   date_format(pj.pjt_date_end, '%d-%b-%Y')), pj.pjt_id, vr.ver_code
+   FROM ctt_projects_detail AS dt
+        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+        INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-        INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
-        INNER JOIN ctt_projects AS prjt ON prjt.pjt_id=pj.pjt_parent
-        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
         LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id = (SELECT MAX(ver.ver_id) 
-		  FROM ctt_budget bug 
-INNER JOIN ctt_version AS ver ON ver.ver_id = bug.ver_id
-INNER JOIN ctt_projects AS prj ON prj.pjt_id = ver.pjt_id
-WHERE prj.pjt_id = pj.pjt_id)
-UNION 
-SELECT pv.pjtvr_id, pv.pjtvr_section,cr.crp_id, cr.crp_name,pv.pjtvr_prod_price,
-pv.pjtvr_quantity,pv.pjtvr_days_base,pv.pjtvr_days_cost, pv.pjtvr_discount_base, 
-pv.pjtvr_discount_insured, pv.pjtvr_days_trip, pv.pjtvr_discount_trip, pv.pjtvr_insured, pv.pjtvr_days_test,
-pv.pjtvr_prod_sku, pjtvr_prod_name, pv.pjtvr_discount_test, 
-vr.ver_discount_insured,pd.prd_id, pj.pjt_name, 
-pj.pjt_date_start,pj.pjt_date_end, pv.pjtvr_order, prjt.pjt_number, prjt.pjt_name AS proyname,
- prjt.pjt_date_project, prjt.pjt_date_start AS d_start, prjt.pjt_date_end AS d_end, prjt.pjt_date_last_motion,
- prjt.pjt_time, prjt.pjt_location, prjt.pjt_how_required, prjt.pjt_trip_go, prjt.pjt_trip_back,
- prjt.pjt_to_carry_on, prjt.pjt_to_carry_out, prjt.pjt_test_tecnic, prjt.pjt_test_look, cu.cus_name,
- cu.cus_email, cu.cus_phone, cu.cus_address, lc.loc_type_location, pt.pjttp_name, pj.pjt_id
-FROM ctt_projects_version AS pv
-INNER JOIN ctt_version AS vr ON vr.ver_id = pv.ver_id
-INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-INNER JOIN ctt_projects AS prjt ON prjt.pjt_id=pj.pjt_parent
-INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
-INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
-INNER JOIN ctt_products AS pd ON pd.prd_id = pv.prd_id
-LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
-LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = prjt.cuo_id
-LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-WHERE pj.pjt_id IN ($proj_ids) AND pv.ver_id = (SELECT MAX(vrs.ver_id) 
-FROM ctt_projects_version AS pv
-INNER JOIN ctt_version AS vrs ON vrs.ver_id = pv.ver_id
-INNER JOIN ctt_projects AS prj ON prj.pjt_id = vrs.pjt_id
-WHERE prj.pjt_id = pj.pjt_id)) AS result
-GROUP BY prd_id, pjt_id 
-ORDER BY bdg_order, bdg_section";
+        WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' GROUP BY pj.pjt_id,cn.pjtcn_prod_name) 
+        ORDER BY bdg_order, bdg_section";
+   
+   $query="SELECT DISTINCT crp_id, crp_name FROM(SELECT cr.crp_id, cr.crp_name, bg.bdg_section section, 
+            sb.sbc_order_print FROM ctt_budget AS bg
+        INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+        INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
+        INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pd.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id
+        WHERE pj.pjt_id IN ($proj_ids) AND pd.prd_level != 'A' 
+   UNION 
+   SELECT cr.crp_id, cr.crp_name, cn.pjtcn_section section, sb.sbc_order_print 
+        FROM ctt_projects_detail AS dt
+       INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+       INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+       LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+       INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+       INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
+       LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+       LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+       WHERE pj.pjt_id IN($proj_ids) AND pr.prd_level != 'A' 
+       GROUP BY cn.pjtcn_prod_name ) AS res
+   ORDER BY sbc_order_print, section";
+   
+   $res2 = $conn->query($query);
+   $categories=array();
+    
+}else{
+    $qry = "SELECT cn.pjtcn_id bdg_id, cn.pjtcn_section bdg_section, cr.crp_id, cr.crp_name, 
+        cn.pjtcn_prod_price bdg_prod_price,
+        cn.pjtcn_quantity bdg_quantity, cn.pjtcn_days_base bdg_days_base, cn.pjtcn_days_cost bdg_days_cost, 
+        cn.pjtcn_discount_base bdg_discount_base, cn.pjtcn_discount_insured bdg_discount_insured,
+        cn.pjtcn_days_trip bdg_days_trip, cn.pjtcn_discount_trip bdg_discount_trip, cn.pjtcn_insured bdg_insured,
+        cn.pjtcn_days_test bdg_days_test, cn.pjtcn_discount_test bdg_discount_test, cn.pjtcn_prod_sku bdg_prod_sku, cn.pjtcn_prod_name bdg_prod_name,
+        vr.ver_discount_insured, pr.prd_id, pj.pjt_name, 
+        CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+        date_format(pj.pjt_date_end, '%d-%b-%Y')) AS fechas,
+        cn.pjtcn_order bdg_order, pj.pjt_number,  pjtv.pjt_name AS proyname, 
+        pjtv.pjt_date_project, pjtv.pjt_date_last_motion, pjtv.pjt_time, pjtv.pjt_location,
+        pjtv.pjt_how_required, pjtv.pjt_trip_go, pjtv.pjt_trip_back, pjtv.pjt_to_carry_on, 
+        pjtv.pjt_to_carry_out, pjtv.pjt_test_tecnic, pjtv.pjt_test_look, cu.cus_name, cu.cus_email, 
+        cu.cus_phone, cu.cus_address, cu.cus_rfc, lc.loc_type_location, pt.pjttp_name, pj.pjt_id, 
+        CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+        date_format(pj.pjt_date_end, '%d-%b-%Y')), vr.ver_code
+    FROM ctt_projects_detail AS dt
+        INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+        INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+        LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+        INNER JOIN ctt_version AS vr ON vr.ver_id = cn.ver_id
+        INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        INNER JOIN ctt_projects AS pjtv ON pjtv.pjt_id = pj.pjt_parent
+        LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+        LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+    WHERE pj.pjt_id IN ($proj_ids) AND pr.prd_level != 'A' 
+    GROUP BY pj.pjt_id,cn.pjtcn_prod_name 
+    ORDER BY cn.pjtcn_order, cn.pjtcn_section; ";
+
+
+    $query="SELECT DISTINCT cr.crp_id, cr.crp_name FROM ctt_projects_detail AS dt
+    INNER JOIN ctt_products AS pr ON pr.prd_id=dt.prd_id
+    INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = dt.pjtvr_id
+    LEFT JOIN ctt_series AS sr ON sr.ser_id = dt.ser_id
+    INNER JOIN ctt_projects AS pj ON pj.pjt_id = cn.pjt_id
+    INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
+    LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = pr.sbc_id 
+    LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+    WHERE pj.pjt_id IN($proj_ids) AND pr.prd_level != 'A' 
+    GROUP BY cn.pjtcn_prod_name ORDER BY sb.sbc_order_print, cn.pjtcn_section";
+    
+    $res2 = $conn->query($query);
+    $categories=array();
+}
 
 $res = $conn->query($qry);
-
+$i = 0;
 while($row = $res->fetch_assoc()){
     $items[] = $row;
+    $i++;
 }
-// OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
-$query="SELECT cr.crp_id, cr.crp_name 
-FROM ctt_subcategories AS sb 
-LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
-INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
-INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
-INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-LEFT JOIN ctt_projects_version AS pv on pv.prd_id = pd.prd_id 
-WHERE pj.pjt_id IN ($proj_ids) GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section";
-$res2 = $conn->query($query);
-$categories=array();
+
 $rr = 0;
 while ($row2 = $res2->fetch_assoc()) {
     $categories[$rr]["crp_id"] = $row2["crp_id"];
@@ -154,9 +229,9 @@ $mpdf= new \Mpdf\Mpdf([
     ]);
     
 $mpdf->shrink_tables_to_fit = 1;
-
-// Cabezal de la página
-$header = '
+if ($i > 0) {
+    // Cabezal de la página
+    $header = '
     <header>
         <div class="cornisa">
             <table class="table-main" border="0">
@@ -172,9 +247,9 @@ $header = '
                     </td>
                 </tr>
             </table>
-           
+        
         </div>
-       
+    
     </header>';
 
     $costBase = 0;
@@ -191,31 +266,12 @@ $header = '
 
         $totalInsrGral = $items[$i]['ver_discount_insured'];
         $subtotalAmount += $totalBase + $totalTrip + $totalTest;
-/* 
-        if ($items[$i]['bdg_section'] == '1') {
-            $equipoBase = '1';
-            $contBase =$i;
-        }
-        if ($items[$i]['bdg_section'] == '2') {
-            $equipoExtra = '1';
-            $contExtra=$i;
-        }
-        if ($items[$i]['bdg_section'] == '3') {
-            $equipoDias = '1';
-            $contDias=$i;
-        }
-        if ($items[$i]['bdg_section'] == '4') {
-            $equipoSubarrendo = '1';
-            $contSub=$i;
-        } */
-        
         
     }
                 
-
-// Pie de pagina
-// <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
-$foot = '
+    // Pie de pagina
+    // <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
+    $foot = '
     <footer>
         <table class="table-footer">
             <tr>
@@ -258,21 +314,18 @@ $foot = '
                 <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
                 
             </tr>
-            
-            
-            
+                
         </table>
     </footer>
-';
+    ';
 
 
-$mpdf->SetHTMLHeader($header);
-$mpdf->SetHTMLFooter($foot);
-foreach ($projects as $project) {
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetHTMLFooter($foot);
+    foreach ($projects as $project) {
     $html = '
         <section>
             <div class="container">
-
                 <table class="table-data bline-d tline">
                     <tr>
                         <td class="rline half">
@@ -388,7 +441,7 @@ foreach ($projects as $project) {
         }
     }
 
-/* Tabla de equipo base -------------------------  */
+    /* Tabla de equipo base -------------------------  */
     if ($equipoBase == '1' && $items[$contBase]['pjt_id'] == $project){
         $sumaEquipo = 0;
         $totalEquipo =0;
@@ -400,7 +453,7 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contBase]['pjt_name'] . '</span>
                         
-                       
+                    
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -521,7 +574,7 @@ foreach ($projects as $project) {
                         </tr>
                     </thead>
                     <tbody>';
-             
+            
     // Total
     $html .= '
                         <tr>
@@ -536,15 +589,14 @@ foreach ($projects as $project) {
                 <!-- End Tabla de costo equipo subarrendo  -->
                 </div>
     </section>';
-    
+
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;
     }
-/* Tabla de equipo base -------------------------  */
+    /* Tabla de equipo base -------------------------  */
 
-
-/* Tabla de equipo extra -------------------------  */
+    /* Tabla de equipo extra -------------------------  */
     if ($equipoExtra == '1' && $items[$contExtra]['pjt_id'] == $project){
         $mpdf->AddPage();
         if ($cont >= 1) {
@@ -554,8 +606,7 @@ foreach ($projects as $project) {
                     <div class="" style="witdh:77m;font-size: 13pt; text-align: left;">
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contExtra]['pjt_name'] . '</span>
-                        
-                       
+                                            
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -572,7 +623,7 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contExtra]['pjt_name'] . '</span>
                         
-                       
+                    
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                         
@@ -637,14 +688,14 @@ foreach ($projects as $project) {
                                     $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
                                     $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
                                     $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
-    
+
                                     $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
                                     $amountBaseTotal    += $subtotalBase;         //  ------------------------------- Importe total base
                                     $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
                                     $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
                                     $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
                                     $totalMain          += $amountGral;
-    
+
                                     $Insured            = $items[$i]['bdg_insured'];        //  ------------------  Porcentaje de seguro
                                     $discoInsured       = $items[$i]['bdg_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
                                     $amountinsured      = $subtotalBase * $Insured;      //  ---------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
@@ -653,21 +704,17 @@ foreach ($projects as $project) {
                                     $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                     $totalInsr         += $totalInsured;
                                     $totalEquipo += $amountGral;
-
-            
-            
+    
             $html .= '
                                 <tr>
                                     <td class="dat-figure prod">' . $product                                    . '</td>
                                     <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                     <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                     <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                      
+                                    
                                     <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
                                     <td class="dat-figure disc">' . $valdiscount . '%</td>
-                                     
-                                     
-                                     
+                                
                                     <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                                 </tr>
                                 ';
@@ -700,7 +747,7 @@ foreach ($projects as $project) {
                         </tr>
                     </thead>
                     <tbody>';
-         
+        
     // Total
     $html .= '
                         <tr>
@@ -708,9 +755,7 @@ foreach ($projects as $project) {
                             <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                         </tr>
                         ';
-                        
-    
-                    
+                                    
     $html .= '
                     </tbody>
                 </table>
@@ -721,10 +766,9 @@ foreach ($projects as $project) {
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;
     }
-/* Tabla de equipo extra -------------------------  */
+    /* Tabla de equipo extra -------------------------  */
 
-
-/* Tabla de equipo dias -------------------------  */
+    /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1' && $items[$contDias]['pjt_id'] == $project){
         $mpdf->AddPage();
         if ($cont >= 1) {
@@ -735,7 +779,6 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contDias]['pjt_name'] . '</span>
                         
-                       
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                     <span class="date" > Periodo: '.$items[$contDias]['fechas'].'</span>
@@ -751,7 +794,7 @@ foreach ($projects as $project) {
                         
                         <span class="number" style="">Proyecto Adjunto: '. $items[$contDias]['pjt_name'] . '</span>
                         
-                       
+                    
                     </div>
                     <div class="" style="witdh:77m;font-size: 10pt; text-align: right;padding-right: 30px;">
                     <span class="date" > Periodo: '.$items[$contDias]['fechas'].'</span>
@@ -841,10 +884,7 @@ foreach ($projects as $project) {
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>  
                                 <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure disc">' . $valdiscount  . '%</td>
-                                 
-                                 
-                                 
+                                <td class="dat-figure disc">' . $valdiscount  . '%</td>  
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -875,12 +915,8 @@ foreach ($projects as $project) {
                 </tr>
             </thead>
             <tbody>';
-
-
     // Subtotal
-    
-
-                    
+            
     // Total
     $html .= '
                     <tr>
@@ -888,9 +924,7 @@ foreach ($projects as $project) {
                         <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                     </tr>
                     ';
-                    
-
-                
+                            
     $html .= '
                 </tbody>
             </table>
@@ -901,10 +935,10 @@ foreach ($projects as $project) {
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;    
     }
-/* Tabla de equipo dias -------------------------  */
+    /* Tabla de equipo dias -------------------------  */
 
 
-/* Tabla de equipo subarrendo -------------------------  */
+    /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1' && $items[$contSub]['pjt_id'] == $project){
         $mpdf->AddPage();
         if ($cont >= 1) {
@@ -1052,12 +1086,8 @@ foreach ($projects as $project) {
             </tr>
         </thead>
         <tbody>';
-
-
     // Subtotal
-
-
-            
+        
     // Total
     $html .= '
             <tr>
@@ -1066,8 +1096,6 @@ foreach ($projects as $project) {
             </tr>
             ';
             
-
-        
     $html .= '
         </tbody>
     </table>
@@ -1077,11 +1105,11 @@ foreach ($projects as $project) {
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $cont += 1;
     }
-/* Tabla de equipo subarrendo -------------------------  */
-    
-}
+    /* Tabla de equipo subarrendo -------------------------  */
 
-/* Tabla totales -------------------------  */
+    }
+
+    /* Tabla totales -------------------------  */
     $html = '
         <section>
             <div class="container"> 
@@ -1094,7 +1122,7 @@ foreach ($projects as $project) {
                         </tr>
                     </thead>
                     <tbody>';
-    
+
                     $totalInsr = $totalInsr - ($totalInsr * $totalInsrGral);
                     $iva  = .16;
 
@@ -1130,22 +1158,20 @@ foreach ($projects as $project) {
                             <td class="tot-main amou">' . number_format($totalFull , 2,'.',',')       . '</td>
                         </tr>
                         ';
-                        
-    
-                    
+                                    
     $html .= '
                     </tbody>
                 </table>
                 <!-- End Tabla de costo equipo subarrendo  -->
                 </div>
                 </section>';
-    
+
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-/* Tabla totales -------------------------  */
+    /* Tabla totales -------------------------  */
 
-/* Tabla terminos y condiciones --------------------  */
-$html = '
+    /* Tabla terminos y condiciones --------------------  */
+    $html = '
     <section>
                 <div class="container"> 
     <!-- Start Tabla de terminos  -->
@@ -1183,7 +1209,7 @@ $html = '
                     <td>
                     <ul style="font-size: 0.9em;">
                         <li style="font-size: 0.9em;>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
-                        <li style="font-size: 0.9em;>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
+                        <li style="font-size: 0.9em;>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa CTT Exp & Rentals y/o su personal</li>
                         <li> Los montos referidos en esta cotización tienen una vigencia de 30 dias a partir de la fecha del envio de la misma al cliente. Posteriormente a este periodo de tiempo los montos pueden variar</li>
                         <li>Las cancelaciones deberán hacerse al menos 48 horas antes de la entrega del equipo. De lo contrario, se cobrará el 30% del monto total del equipo solicitado.</li>
                         <li>La alimentacion del personal técnico cotizado durante el horario de trabajo contratado corre por cuenta del cliente</li>
@@ -1204,8 +1230,8 @@ $html = '
     </section>
     <!-- End Tabla de costo equipo subarrendo  -->';
 
-/* Tabla Terminos y condiciones -------------------------  */
-/* Tabla firmas -------------------------  */
+    /* Tabla Terminos y condiciones -------------------------  */
+    /* Tabla firmas -------------------------  */
     $html .= '
     <!-- Start Tabla de terminos  -->
     <div style="height:3px;"></div>
@@ -1231,10 +1257,92 @@ $html = '
     <!-- End Tabla de costo equipo subarrendo  -->
     </div>
     </section>';
-/* Tabla firmas -------------------------  */
+    /* Tabla firmas -------------------------  */
 
-$mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
-$mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+    $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+    $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+}else{
+    // Cabezal de la página
+    $header = '
+    <header>
+        <div class="cornisa">
+            <table class="table-main" border="0">
+                <tr>
+                    <td class="box-logo side-color">
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:48mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
+                    </td>
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto Padre:   #    </span>
+                        <br><span class="date">'.'</span>
+                    </p>
+                    </td>
+                </tr>
+            </table>
+        
+        </div>
+    
+    </header>';
+                
+    // Pie de pagina
+    // <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
+    $foot = '
+    <footer>
+        <table class="table-footer">
+            <tr>
+                <td class="side-color"></td>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <td class="td-foot foot-date" width="25%"></td>
+                            <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
+                            <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr> 
+        </table>
+        
+        <table class="table-address">
+            <tr>
+                <td class="addData">
+                    reservaciones@cttrentals.com, 
+                
+                </td>
+                <td class="addData">
+                    presupuestos@cttrentals.com,
+                </td>
+                <td class="addData">
+                
+                    proyectos@cttrentals.com,
+                </td>
+                <td class="addData">
+                    cotizaciones@cttrentals.com.
+                </td>
+            </tr>
+
+            
+        </table>
+        <table class="table-address">
+            
+            <tr>
+                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+                
+            </tr>
+                
+        </table>
+    </footer>
+    ';
+
+    $html = "";
+
+
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetHTMLFooter($foot);
+    $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+    $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+}
+
 ob_clean();
 ob_get_contents();
 

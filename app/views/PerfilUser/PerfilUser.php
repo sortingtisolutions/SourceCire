@@ -15,7 +15,6 @@
 					<div class="form-group">
 						<h4 id="titulo">Nuevo Perfil Usuario</h4>  
 						<form id="formPerfiluser" class="row g-3 needs-validation" novalidate>
-
 							<div class="row" hidden>
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="IdPerfil" name="IdPerfil" type="text" class="form-control form-control-sm" >
@@ -59,6 +58,7 @@
                                  </div>
                               </div>
                            </div>
+
                            <div class="col-12 col-md-12 ">
                               <div class="col-12 text-center colorSecundario" style="font-weight: 600 !important;">
                                  Asignados
@@ -70,11 +70,10 @@
                                  </div>
                               </div>
                            </div>
-                        </div>
+                           </div>
 
 								</div>
 							</div>
-
 
 							<div class="row">
 								<div class="col-6">
@@ -98,12 +97,11 @@
 								<table id="perfilesTable" class="display compact nowrap" style="width:100%">         
 										<thead>
 											<tr>
-													<th style="width: 30px"></th>
-													<th style="width: 30px">Id</th>
-													<th style="width: auto">Nombre</th>
-                                       <th style="width: 30px">Codigo</th>
-													<th style="width: auto">Descripcion</th>
-
+												<th style="width: 30px"></th>
+												<th style="width: 30px">Id</th>
+												<th style="width: auto">Nombre</th>
+												<th style="width: 30px">Codigo</th>
+												<th style="width: auto">Descripcion</th>
 											</tr>
 										</thead>
 										<tbody id="tablaPerfilesRow">
@@ -125,8 +123,6 @@
 					 <div class="modal-header ">
 					 </div>
 					 <div class="modal-body" style="padding: 0px !important;">
-
-
 					 <div class="row">
 						  <input hidden type="text" class="form-control" id="IdPerfilBorrrar" aria-describedby="basic-addon3">
 						  <div class="col-12 text-center">
@@ -142,8 +138,6 @@
 					 </div>
 				</div>
 		</div>
-
- 	
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

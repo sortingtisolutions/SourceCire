@@ -7,46 +7,6 @@ class OutputReprintModel extends Model
     {
       parent::__construct();
     }
-
-// Listado de usuarios de programacion   ******
-    /* public function listUsersP($params)
-    {
-        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
-
-        $qry = "SELECT usr.usr_id,emp.emp_id, emp.emp_fullname,emp.emp_number 
-                FROM ctt_users AS usr
-                RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
-                WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
-                AND are_id in (1,5);";
-
-        return $this->db->query($qry);
-    }
-//  Lista de usuarios de camara  ***********
-    public function listUsersC($params)
-    {
-        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
-
-        $qry = "SELECT usr.usr_id,emp.emp_id, emp.emp_fullname,emp.emp_number FROM ctt_users AS usr
-                RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
-                WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
-                AND are_id in (2);";
-
-        return $this->db->query($qry);
-    }
-
-    //  Lista de usuarios de almacen Iluminacion  ***********
-    public function listUsersA($params)
-    {
-        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
-
-        $qry = "SELECT usr.usr_id,emp.emp_id, emp.emp_fullname,emp.emp_number FROM ctt_users AS usr
-                RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
-                WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
-                AND are_id in (3);";
-
-        return $this->db->query($qry);
-    }
- */
    
 // Listado de Productos de Proyecto asigando
     public function listDetailProds($params)
@@ -65,31 +25,4 @@ class OutputReprintModel extends Model
         return $this->db->query($qry);
     }
     
-   /*  // Listado de Productos de Proyecto asigando
-    public function listUsersOnProj($params)
-    {
-        $pjtid = $this->db->real_escape_string($params['pjt_id']);
-
-        $qry = "SELECT whoatd_id,pjt_id,usr_id,emp_id,emp_fullname,are_id 
-                FROM ctt_who_attend_projects
-                WHERE pjt_id=$pjtid";
-        return $this->db->query($qry);
-    }
- */
-    /** ==== Obtiene el contenido del proyecto =============================================================  */
-    /* public function updateUsers($params)
-    {
-        $pjtid		= $this->db->real_escape_string($params['pjtid']);
-        $areid		= $this->db->real_escape_string($params['areid']);
-        $empid		= $this->db->real_escape_string($params['empid']);
-        $empname	= $this->db->real_escape_string($params['empname']);
-        $usrid	    = $this->db->real_escape_string($params['usrid']);
-
-        $qry = "SELECT fun_updateuser($pjtid,$areid,$empid,'$empname',$usrid) 
-                AS valresult
-                FROM DUAL;";  
-
-        return $this->db->query($qry);
-    } */
-
 }

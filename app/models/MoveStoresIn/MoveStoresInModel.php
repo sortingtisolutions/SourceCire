@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class MoveStoresInModel extends Model
 {
+    
     public function __construct()
     {
       parent::__construct();
@@ -21,18 +22,18 @@ class MoveStoresInModel extends Model
     }
 
 // Listado de Almacecnes
-    public function listStores()
-    {
-        $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
-        return $this->db->query($qry);
-    }
+    // public function listStores()
+    // {
+    //     $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de proveedores
-    public function listSuppliers()
-    {
-        $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
-        return $this->db->query($qry);
-    }
+    // public function listSuppliers()
+    // {
+    //     $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+    //     return $this->db->query($qry);
+    // }
    
 // Listado de Facturas
     public function listInvoice($param)
@@ -55,11 +56,11 @@ class MoveStoresInModel extends Model
     }
       
 // Listado de categorias
-    public function listCategories()
-    {
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCategories()
+    // {
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de Productos
     public function listProducts($param)
@@ -70,12 +71,11 @@ class MoveStoresInModel extends Model
                     (SELECT CASE when substring(ser_sku,11,1) ='A' 
                         THEN IFNULL (max(convert(substring(ser_sku,14,4), signed integer)),0) + 1
                         ELSE
-                        IFNULL(MAX(convert(substring(ser_sku,8,3), signed integer)),0) + 1
+                        IFNULL(MAX(convert(substring(ser_sku,9,3), signed integer)),0) + 1
                         END AS result
                     FROM ctt_series ser WHERE ser.prd_id =pd.prd_id) as serNext, 
-                sb.sbc_name, ct.cat_name, sr.prd_id_acc
+                sb.sbc_name, ct.cat_name
                 FROM ctt_products AS pd
-                LEFT JOIN ctt_series AS sr ON pd.prd_id=sr.prd_id
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
                 WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id =  $catId;";
@@ -114,8 +114,8 @@ public function NextExchange()
         $cpe_id             = $this->db->real_escape_string($param['cpe']);
         $bra_id             = $this->db->real_escape_string($param['bra']);
         $ctotal            = $this->db->real_escape_string($param['cto']);
-        $necono             = $this->db->real_escape_string($param['nec']);
-        $prdidacc           = $this->db->real_escape_string($param['acc']);
+        $necono             = $this->db->real_escape_string($param['nec']);/* 
+        $prdidacc           = $this->db->real_escape_string($param['acc']); */
 
         $exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
         $ser_status         = '1';
@@ -126,10 +126,10 @@ public function NextExchange()
 
 		$qry1 = "INSERT INTO ctt_series (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
                     ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
-                    ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments,prd_id_acc) 
+                    ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments) 
                 VALUES ('$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', 
                 '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id',  UPPER('$bra_id'), '$cpe_id', '$pet_id',
-                '$ctotal', '$necono','$str_id','$exc_comments','$prdidacc');";
+                '$ctotal', '$necono','$str_id','$exc_comments');";
 
         $this->db->query($qry1);
         $serId = $this->db->insert_id;

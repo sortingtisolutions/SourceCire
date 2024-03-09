@@ -32,20 +32,6 @@ class DocumentTypeModel extends Model
 		return $this->db->query($qry);
 	}
 
-    /* public function GetArea($params)
-	{
-		$qry = "SELECT str_id, str_name, str_type, emp_id, emp_fullname  FROM ctt_stores WHERE str_id = ".$params['id'].";";
-		$result = $this->db->query($qry);
-		if($row = $result->fetch_row()){
-			$item = array("str_id" =>$row[0],
-			"str_name" =>$row[1],
-			"str_type"=>$row[2],
-			"emp_id"=>$row[3],
-			"emp_fullname"=>$row[4]);
-		}
-		return $item;
-	} */
-
     public function UpdateDocumentType($params)
 	{
 

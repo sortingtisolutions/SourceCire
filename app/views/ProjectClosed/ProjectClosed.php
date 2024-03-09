@@ -11,13 +11,32 @@
 <div class="container-fluid">
     <div class="contenido">  
         <div class="row mvst_group">
-
         <!-- Sidebar -->
             <div class="mvst_panel" style="width:280px; background-color: #EAFC98">
                 <div class="form-group" >
-                    
+
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                        
+                        <label for="txtGroupProjects" style="font-size: 16px; font-weight: bold; ">Grupo de proyectos</label>
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display: flex;gap: 1rem;font-size: 13px; background: #fff;margin-top: 20px; border-radius: 4px; ">
+                            
+                            <div class="" style="margin-left: 0px; margin-top: 5px;margin-bottom: 5px;">
+                                <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos1" val="1" checked>
+                                <label class="form-check-label" for="RadioConceptos1">
+                                Proyecto individual
+                                </label>
+                            </div>
+                            <div class="" style="margin-left: 18px;margin-top: 5px;">
+                                <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos2" val="2" >
+                                <label class="form-check-label" for="RadioConceptos2">
+                                Proyecto Padre
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="margin-top: 5px;">
                             <select id="txtProjects" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el proyecto</option></select>
                             <label for="txtProjects">Lista de proyectos</label>
                         </div>
@@ -64,6 +83,16 @@
                             <label for="txtReport">Desglosar Paquetes</label>
                         </div>
                     </div>
+                    <div class="row list-finder pos1 hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+                            <select id="txtIva" class="form-select form-select-sm required">
+                                <option value="0.16" selected>16%</option>
+                                <option value="0">0%</option>
+                                <option value="0">Sin Iva</option>
+                            </select>
+                            <label for="txtIva">IVA</label>
+                        </div>
+                    </div>
 
                     <div style="height:20px;"></div>
                     <div class="row">
@@ -81,43 +110,76 @@
         <!-- contenido de operación -->
             <div class="mvst_table projectClosed">
                 <h1>Detalles del Proyecto</h1>
-
+                    <div class="sidebar__comments" style="position: absolute;right: 15px;"> 
+                        <span class="invoice_button toComment">
+                            <i class="far fa-comment-alt"></i> Comentarios del proyecto
+                        </span> 
+                    </div>
                 <!-- caja de totales del reporte -->
-                <div class="totales">
-                    
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales del proyecto</div>
-                        <div class="totales__grupo-dato tope"  id="totProject" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales Mantenimiento</div>
-                        <div class="totales__grupo-dato  tope"  id="totMaintenance" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales Expendables</div>
-                        <div class="totales__grupo-dato  tope"  id="totExpendab" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Diesel Extra</div>
-                        <div class="totales__grupo-dato  tope"  id="totDiesel" >0.00</div>
-                    </div>
-
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Descuento a aplicar</div>
-                        <div class="totales__grupo-dato  tope"  id="totDiscount" >0.00</div>
-                    </div>
-                    
-                    <div class="totales__grupo">
-                        <div class="totales__grupo-label">Totales</div>
-                        <div class="totales__grupo-dato tope"  id="totals" >0.00</div>
-                    </div>
+                <div class="totales" style="height: 150px;">
+                    <div class="" style="display: contents; ">
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Equipo Base</div>
+                            <div class="totales__grupo-dato  tope"  id="totBase" >0.00</div>
+                        </div>
                         
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Equipo Extra</div>
+                            <div class="totales__grupo-dato  tope"  id="totExtra" >0.00</div>
+                        </div>
+                        
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Equipo x Día</div>
+                            <div class="totales__grupo-dato  tope"  id="totDias" >0.00</div>
+                        </div>
+                        
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales de Subarrendos</div>
+                            <div class="totales__grupo-dato  tope"  id="totSubarrendo" >0.00</div>
+                        </div>
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales del proyecto</div>
+                            <div class="totales__grupo-dato tope"  id="totProject" >0.00</div>
+                        </div>
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales del proyecto con IVA</div>
+                            <div class="totales__grupo-dato tope"  id="totProjectIva" >0.00</div>
+                        </div>
+                        <div style="height:10px; width: 10% "></div><!-- Agregar un espacio -->
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Mantenimiento</div>
+                            <div class="totales__grupo-dato  tope"  id="totMaintenance" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Totales Expendables</div>
+                            <div class="totales__grupo-dato  tope"  id="totExpendab" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Total de Diesel Extra</div>
+                            <div class="totales__grupo-dato  tope"  id="totDiesel" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Descuento a aplicar</div>
+                            <div class="totales__grupo-dato  tope"  id="totDiscount" >0.00</div>
+                        </div>
+
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Monto de Prepago </div>
+                            <div class="totales__grupo-dato  tope"  id="totPrepago" >0.00</div>
+                        </div>
+                        
+                        <div class="totales__grupo" style="display: inline-block;">
+                            <div class="totales__grupo-label">Monto total a pagar</div>
+                            <div class="totales__grupo-dato tope"  id="totals" >0.00</div>
+                        </div>
+                    </div>
                 </div>
+                
                 <!-- Tabla de productos del proyecto -->
-                    <div class="tabla__contenedor">
+                    <div class="tabla__contenedor" style="height: 1000px; padding: 3rem 0px 0px 0px">
                         <table  id="tblProducts">
                             <thead>
                                 <tr>
@@ -126,7 +188,8 @@
                                     <th class="lf">Producto</th>
                                     <th class="cn">Cantidad</th>
                                     <th class="cn">Status</th>
-                                    <th class="rg">Precio</th>
+                                    <th class="cn">Precio</th>
+                                    <th class="rg">Proyecto</th>
                                     <th class="lf">Comentarios individuales</th>
                                 </tr>
                             </thead>
@@ -186,7 +249,25 @@
     </div>
 </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
-
+<!-- Fondo obscuro -->
+<div class="invoice__modalBackgound"></div>
+<!-- Modal General  -->
+<div class="invoice__modal-general invoice-border modalTable">
+        <div class="modal__header invoice-border">
+            <div class="modal__header-concept" style="font-weight: 700">&nbsp;Listados de productos</div>
+            <i class="far fa-window-close closeModal"></i>
+        </div>
+        <div class="modal__body">
+        </div>
+    </div>
+    <div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box" style=" width: 100%; height: 100%; padding: 1.1rem; display: grid; grid-template-rows: 1fr 170px;">
+            
+            <div class="comments__list" style="border: 1px solid var(--br-gray-soft); border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.5rem; overflow-y: scroll;">
+            </div>
+            
+        </div>
+    </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

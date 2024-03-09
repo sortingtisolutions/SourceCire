@@ -16,7 +16,6 @@ function inicial() {
     getProducts();
     deep_loading('O');
     getPackages(0);
-    //console.log('PASO 1');
     $('#txtPackageName').on('change', function () {
         validator_part01();
     });
@@ -35,6 +34,7 @@ function inicial() {
 
     $('#btn_packages_cancel').on('click', function () {
         active_params();
+        $(`#txtCategoryPack option[value="0"]`).trigger('change');
     });
     } else {
         setTimeout(() => {
@@ -110,8 +110,7 @@ function setting_table_products() {
 
 // Solicita las categorias
 function getCategory() {
-   // console.log('Primer cat');
-    var pagina = 'Packages/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = `[{"param":""}]`;
     var tipo = 'json';
     var selector = putCategory;
@@ -119,8 +118,7 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    //console.log('Primer sub');
-    var pagina = 'Packages/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;
@@ -155,7 +153,8 @@ function putCategory(dt) {
         });
     }
 
-    $('#txtCategoryPack').on('change', function () {
+    $('#txtCategoryPack').unbind('change').on('change', function () {
+        // console.log('PACK');
         let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
         $('#txtSubcategoryPack').html(ops);
         let id = $(this).val();
@@ -163,11 +162,10 @@ function putCategory(dt) {
         validator_part01();
     });
 
-    $('#txtCategoryProduct').on('change', function () {
+    $('#txtCategoryProduct').unbind('change').on('change', function () {
         let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;       
         $('#txtSubcategoryProduct').html(ops);
         let id = $(this).val();
-        console.log('Limpia', id);
         selSubcategoryProduct(id);
         // validator_part02();
     });
@@ -176,7 +174,6 @@ function putCategory(dt) {
         .unbind('click')
         .on('click', function () {
             $('.list-group').slideUp('slow');
-            //console.log('Click categoria');
         });
 
     $('#txtCategoryList').on('change', function () {
@@ -211,7 +208,7 @@ function drawProducts(str) {
         .unbind('click')
         .on('click', function () {
             $('.list-group').slideToggle('slow');
-            console.log('Click lista');
+            // console.log('Click lista');
             $('.box-items-list i').toggleClass('rotate');
         });
 
@@ -254,6 +251,7 @@ function putPackages(dt) {
 }
 // Llena el selector de subcategorias
 function selSubcategoryPack(id) {
+    // console.log(subcategos);
     if (subcategos[0].sbc_id != 0) {
         $.each(subcategos, function (v, u) {
             if (u.cat_id === id) {
@@ -309,7 +307,7 @@ function packages_apply(subcat) {
     if (subcat != '' && subcat != undefined) {
         let catId = refil($('#txtCategoryPack option:selected').val(), 2);
         let subId = refil($('#txtSubcategoryPack option:selected').attr('data-content').split('|')[2], 2);
-        let prdsku = catId + subId + refil(subcat, 3);
+        let prdsku = catId + subId + refil(subcat, 4);
         let prdName = $('#txtPackageName').val();
         let prdModel = '';
         let prdPrice = $('#txtPackagePrice').val();
@@ -364,11 +362,13 @@ function packages_edit() {
         }]
     `;
 
-    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName);
+    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName.toUpperCase());
     $(`#tblPackages_wrapper #${prdId} .price`).html(prdPrice);
 
     active_params();
 
+    $(`#txtCategoryPack option[value="0"]`).trigger('change');
+    
     let pagina = 'Packages/updatePackage';
     let tipo = 'html';
     let selector = putPackageEdit;
@@ -388,9 +388,17 @@ function active_params() {
     $(`#txtSubcategoryPack`).attr('disabled', false);
     $('#btn_packages').html('Crear paquete').addClass('disabled');
     $(`#txtCategoryPack`).val(0);
-    $(`#txtCategoryPack option[value="0"]`).trigger('change');
+    // $(`#txtCategoryPack option[value="0"]`).trigger('change');
     $(`#txtSubcategoryPack`).val(0);
     $('#btn_packages_cancel').addClass('hide-items');
+}
+
+function clean_params(){
+    $('#txtIdPackages').val(0);
+    $('#txtPackageName').val('');
+    $('#txtPackagePrice').val('');
+    $(`#txtCategoryPack`).val(0);
+    $(`#txtSubcategoryPack`).val(0);
 }
 
 function build_sku_product(sbcId) {
@@ -421,7 +429,7 @@ function fill_table_packs(par) {
 function putNewPackage(dt) {
     let id = dt.split('|')[0];
     let sku = dt.split('|')[1];
-    let name = dt.split('|')[2];
+    let name = (dt.split('|')[2]).toUpperCase();
     let price = dt.split('|')[3];
     $(`#SKU-${sku}`).text(id);
 
@@ -439,11 +447,12 @@ function putNewPackage(dt) {
     $(`#SKU-${sku}`).parent().parent().attr('id', id).addClass('indicator');
     action_selected_packages();
 
-    tabla.on('select', function (e, dt, type, i) {
-        $('#txtCategoryProduct').val(0);
-        $('#txtSubcategoryProduct').val(0);
-        $('#txtIdPackages').val(0);
-    });
+    // tabla.on('select', function (e, dt, type, i) {
+    //     $('#txtCategoryProduct').val(0);
+    //     $('#txtSubcategoryProduct').val(0);
+    //     $('#txtIdPackages').val(0);
+    // });
+    clean_params();
 }
 
 function action_selected_packages() {
@@ -496,9 +505,7 @@ function action_selected_products() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[4];
             let prdId = $(this).attr('id');
-            //console.log($(this).attr('class').split(' '));
-            //console.log(acc);
-            console.log(prdId);
+            // console.log(prdId);
             switch (acc) {
                 case 'kill':
                     confirm_delet_product(prdId);
@@ -543,13 +550,12 @@ function select_products(prdId) {
     var pagina = 'Packages/listProductsPack';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putProductsPack;
     fillField(pagina, par, tipo, selector);
 }
 
 function putProductsPack(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].prd_id != '') {
@@ -569,23 +575,23 @@ function putProductsPack(dt) {
 }
 
 function product_apply(prId) {
-    console.log(prId);
+    // console.log(prId);
     let prod = prId.attr('data-content').split('|');
     let productId = prod[0];
     let productSKU = prod[1];
     let productName = prod[3];
     let productParent = $('#txtIdPackages').val();
     //let productQuantity = $('#txtQtyPrds').val();
+
     var pagina = 'Packages/SaveProduct';
     var par = `[{"prdId":"${productId}","prdParent":"${productParent}"}]`;
-    //console.log(par);
     var tipo = 'json';
     var selector = putNewProductsPack;
     fillField(pagina, par, tipo, selector);
 }
 
 function putNewProductsPack(dt) {
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.row
         .add({
@@ -672,7 +678,7 @@ function validator_part01() {
 function editProdAsoc(Id, prdQty) {
     let prdId = Id.split('-')[0];
     let prdParent = Id.split('-')[1];
-    console.log('Vals', prdId, prdParent, prdQty);
+    // console.log('Vals', prdId, prdParent, prdQty);
 
     var pagina = 'Packages/updateQuantityProds';
     var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","prdQty":"${prdQty}"}]`;
@@ -682,5 +688,5 @@ function editProdAsoc(Id, prdQty) {
 }
 
 function putUpdatePackages(dt) {
-    console.log('Dentro', dt);
+    console.log('Dentro putUpdatePackages', dt);
 }

@@ -23,10 +23,10 @@ public function listProducts($params)
         $num = $this->db->real_escape_string($params['num']);
         if ($catId !=0) {
             $qry = "SELECT 
-                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
-                p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
-                p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, 
-                IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
+            p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
+            p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
+            p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_level, 
+            IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
             FROM  ctt_products AS p
             INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
             INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
@@ -34,17 +34,17 @@ public function listProducts($params)
             LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id   AND sr.ser_situation='D'
             LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
             LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id   AND dc.dcp_source = 'P'
-            WHERE prd_status = 1 AND p.prd_visibility = 1 AND ct.cat_id=$catId AND p.prd_level IN ('P','K')
+            WHERE prd_status = 1 AND p.prd_visibility = 1 AND ct.cat_id = $catId
             GROUP BY 
                 p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                 p.prd_price, p.prd_coin_type, p.prd_english_name 
             ORDER BY p.prd_sku;";
         } else {
             $qry = "SELECT 
-                p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
-                p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
-                p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, 
-                IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
+            p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name,  
+            p.prd_stock - p.prd_reserved as prd_stock,  p.prd_reserved,
+            p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_level, 
+            IFNULL(dc.doc_id, 0) AS doc_id, ct.cat_id 
             FROM  ctt_products AS p
             INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id 	AND sc.sbc_status = 1
             INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id 	AND ct.cat_status = 1
@@ -52,7 +52,7 @@ public function listProducts($params)
             LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id   AND sr.ser_situation='D'
             LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
             LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id   AND dc.dcp_source = 'P'
-            WHERE prd_status = 1 AND p.prd_visibility = 1 AND p.prd_level IN ('P','K')
+            WHERE prd_status = 1 AND p.prd_visibility = 1
             GROUP BY 
                 p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                 p.prd_price, p.prd_coin_type, p.prd_english_name 
@@ -84,7 +84,7 @@ public function listProducts($params)
                     , date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry
                     , se.ser_situation
                     , se.ser_stage
-                    , CASE WHEN se.ser_behaviour = 'R' THEN 'SUBABRRENDADO' ELSE '' END comportamiento
+                    , CASE WHEN se.ser_behaviour = 'R' THEN '' ELSE 'SUBARRENDO' END comportamiento
                     , '' AS comments
                     , pd.prd_sku 
                     , pd.prd_name
@@ -94,7 +94,8 @@ public function listProducts($params)
                 INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
                 LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
                 LEFT JOIN ctt_stores As st ON st.str_id = sp.str_id 
-                WHERE se.prd_id IN ($prodId) AND se.ser_situation='D' AND sp.stp_quantity > 0
+                WHERE se.prd_id IN ($prodId) AND se.ser_situation='D' AND sp.stp_quantity > 0 AND se.prd_id_acc = 0
+                GROUP BY se.ser_id
                 ORDER BY se.prd_id, se.ser_sku;";
         return $this->db->query($qry);
     }
@@ -113,7 +114,7 @@ public function listProducts($params)
                         INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id AND sr.ser_situation='D'
                         WHERE sr.prd_id= p.prd_id
                     ),0) AS quantity, 
-                    p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level
+                    p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, p.prd_level
                 FROM  ctt_products AS p
                 INNER JOIN ctt_products_packages    AS pk ON pk.prd_id = p.prd_id
                 INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id   AND sc.sbc_status = 1
@@ -136,7 +137,7 @@ public function listProducts($params)
 
 
         if ($prdLv == 'K'){
-            $qry = "SELECT '$prdNm' as name, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, pj.pjt_name, 
+            $qry = "SELECT '$prdNm' as name, sr.prd_id, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, pj.pjt_name, 
                         date_format( pj.pjt_date_start, '%Y-%m-%d') AS pjt_date_start, 
                         date_format( pj.pjt_date_end, '%Y-%m-%d') AS pjt_date_end
                     FROM ctt_products_packages as pk 
@@ -145,10 +146,10 @@ public function listProducts($params)
                     LEFT JOIN ctt_projects_detail AS dt ON dt.pjtdt_id = sr.pjtdt_id
                     LEFT JOIN ctt_projects_content AS ct ON ct.pjtcn_id = dt.pjtvr_id
                     LEFT JOIN ctt_projects AS pj ON pj.pjt_id = ct.pjt_id
-                    WHERE pk.prd_parent = $prdId  ORDER BY pd.prd_name,  pj.pjt_name DESC;
+                    WHERE pk.prd_parent = $prdId and pk.prd_level='K' group by sr.ser_id ORDER BY pd.prd_name,  pj.pjt_name DESC;
                     ";
         } else {
-            $qry = "SELECT '$prdNm' as name, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, pj.pjt_name, 
+            $qry = "SELECT '$prdNm' as name, sr.prd_id, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, pj.pjt_name, 
                         date_format( pj.pjt_date_start, '%Y-%m-%d') as pjt_date_start, 
                         date_format( pj.pjt_date_end, '%Y-%m-%d') as pjt_date_end
                     FROM ctt_products as pd 
@@ -156,7 +157,7 @@ public function listProducts($params)
                     LEFT JOIN ctt_projects_detail AS dt ON dt.pjtdt_id = sr.pjtdt_id
                     LEFT JOIN ctt_projects_content AS ct ON ct.pjtvr_id = dt.pjtvr_id
                     LEFT JOIN ctt_projects AS pj ON pj.pjt_id = ct.pjt_id
-                    WHERE pd.prd_id = $prdId AND sr.ser_situation<>'D' ORDER BY pd.prd_name,  pj.pjt_name DESC;
+                    WHERE pd.prd_id = $prdId AND sr.ser_situation<>'D' group by sr.ser_id ORDER BY pd.prd_name,  pj.pjt_name DESC;
                 ";
         }
         return $this->db->query($qry);

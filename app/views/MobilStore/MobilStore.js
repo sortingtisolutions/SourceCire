@@ -13,8 +13,6 @@ function inicial() {
         deep_loading('O');
         settingTable();
         getStores();
-        
-        //getCategories();
         eventsAction()
         getMovStores();
         fillStores();
@@ -34,8 +32,8 @@ function settingTable() {
         //order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -108,27 +106,9 @@ function getStores() {
     fillField(pagina, par, tipo, selector);
 }
 
-/* // Solicita el listado de almacenes
-function getSubcategories(id) {
-    var pagina = 'MobilStore/listSubcategories';
-    var par = `[{"cat_id":"${id}"}]`;
-    var tipo = 'json';
-    var selector = putSubcategories;
-    fillField(pagina, par, tipo, selector);
-}
-
-// Solicita el listado de almacenes
-function getCategories() {
-    var pagina = 'MobilStore/listCategories';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putCategories;
-    fillField(pagina, par, tipo, selector);
-} */
 function putMovStores(dt) {
     strs = dt;
 }
-
 
 // Dibuja los almacenes
 function putStores(dt) {
@@ -145,48 +125,12 @@ function putStores(dt) {
         // 
         let id = $(this).val();
         idstr=id;
-        console.log(idstr);
+        // console.log(idstr);
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
     });
 }
 
-/* // Dibuja los almacenes
-function putSubcategories(dt) {
-    $('#txtSubcategories').html('');
-    if (dt[0].sbc_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.sbc_id}">${u.sbc_name}</option>`;
-            $('#txtSubcategories').append(H);
-        });
-    }
-
-    $('#txtSubcategories').on('change', function () {
-        // 
-        let id = $(this).val();
-        $(`#txtSubcategories option`).css({display: 'block'});
-        $(`#txtSubcategories option[value="${id}"]`).css({display: 'none'});
-    });
-} */
-
-/* // Dibuja los almacenes
-function putCategories(dt) {
-    
-    if (dt[0].cat_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.cat_id}">${u.cat_name}</option>`;
-            $('#txtCategories').append(H);
-        });
-        
-    }
-    
-    $('#txtCategories').on('change', function () {
-        let id = $(this).val();
-        $(`#txtCategories option`).css({display: 'block'});
-        $(`#txtCategories option[value="${id}"]`).css({display: 'none'});
-        getSubcategories(id);
-    });
-} */
 function fillStores() {
     if (strs != null) {
         let tabla = $('#AreasTable').DataTable();
@@ -220,7 +164,6 @@ function actionButtons() {
             }
         });
     
-
     /**  ---- Acciones de Guardar categoria ----- */
     $('#GuardarAlmacen')
         .unbind('click')
@@ -249,7 +192,8 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    tabla.row
+    if (strs[0].movstr_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].movstr_id}"></i><i class="fas fa-times-circle kill"></i>`,
             code: strs[ix].movstr_placas,
@@ -259,12 +203,14 @@ function fillTableStores(ix) {
             subcategory: strs[ix].sbc_name,
         })
         .draw();
-    $('#md' + strs[ix].movstr_id)
-        .parents('tr')
-        .attr('id', strs[ix].movstr_id)
-        .attr('str-id', strs[ix].str_id)
-        .attr('ser-id', strs[ix].ser_id)
-        .attr('prd-id', strs[ix].prd_id);
+        $('#md' + strs[ix].movstr_id)
+            .parents('tr')
+            .attr('id', strs[ix].movstr_id)
+            .attr('str-id', strs[ix].str_id)
+            .attr('ser-id', strs[ix].ser_id)
+            .attr('prd-id', strs[ix].prd_id);
+    }
+    
         
     actionButtons();
 }
@@ -274,8 +220,6 @@ function saveStore() {
     var store = $('#txtStoreSource').val();
     var products = $('#boxIdProducts').val().split('|')[1];
     var ser_id = $('#boxIdProducts').val().split('|')[0];
-    //var category = $('#txtCategories').val();
-    //var subcategory = $('#txtSubcategories').val();
     var par = `
         [{ "placas"   : "${strName}",
             "str_id"   : "${store}",
@@ -284,7 +228,7 @@ function saveStore() {
         }]`;
 
     strs = '';
-    console.log(par);
+    // console.log(par);
     var pagina = 'MobilStore/SaveMobilStore';
     var tipo = 'html';
     var selector = putSaveStore;
@@ -309,8 +253,6 @@ function updateStore() {
     var store = $('#txtStoreSource').val();
     var products = $('#boxIdProducts').val().split('|')[1];
     var ser_id = $('#boxIdProducts').val().split('|')[0];
-    /* var category = $('#txtCategories').val();
-    var subcategory = $('#txtSubcategories').val(); */
     var par = `
         [{  "movstr_id"   : "${movId}",
             "placas"   : "${strName}",
@@ -319,7 +261,7 @@ function updateStore() {
             "ser_id"   : "${ser_id}"
         }]`;
 
-    console.log(par);
+    // console.log(par);
     strs = '';
     var pagina = 'MobilStore/UpdateMobilStore';
     var tipo = 'html';
@@ -362,16 +304,11 @@ function editStore(strId) {
 function deleteStore(strId) {
     console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-  
         $('#confirmModal').modal('show');
-
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la moneda?');
+        $('#confirmModalLevel').html('¿Seguro que desea borrar la Almacen y Unidad Móvil?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#confirmButton').html('Borrar').css({display: 'inline'});
         $('#Id').val(strId);
-
-        //   $('#BorrarAlmacenModal').modal('show');
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
@@ -422,16 +359,13 @@ function sel_products(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
-            // console.log('Paso2',idstr,res);
-
                 getProducts(idstr,res);
-
         } else {
             // console.log('Paso3');
             rowCurr.css({ display: 'none' });
             rowCurr.each(function (index) {
                 var cm = $(this)
-                    .data('content')
+                    .attr('data-content')
                     .toUpperCase()
                     .replace(/|/g, '');
 
@@ -439,6 +373,7 @@ function sel_products(res) {
                 var cr = cm.indexOf(res);
                 if (cr > -1) {
                     $(this).show();
+                    
                 }
             });
         }
@@ -448,9 +383,19 @@ function sel_products(res) {
         rowCurr.addClass('oculto');
     }
 }
+
+
+/**  ++++ Omite acentos para su facil consulta */
+function omitirAcentos(text) {
+    var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
+    var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
+    for (var i = 0; i < acentos.length; i++) {
+        text = text.replace(acentos.charAt(i), original.charAt(i));
+    }
+    return text;
+}
 // Solicita los productos de un almacen seleccionado
 function getProducts(strId,word) {
-    
     var pagina = 'MobilStore/listProducts';
     var par = `[{"strId":"${strId}"},{"word":"${word}"}]`;
     var tipo = 'json';
@@ -458,12 +403,11 @@ function getProducts(strId,word) {
     fillField(pagina, par, tipo, selector);
 }
 
-
 function putProducts(dt) {
     var sl = $('#boxProducts').offset();
     $('#listProducts .list-items').html('');
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.prd_id}">${u.ser_sku} - ${u.prd_name}</div>`;
+        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.prd_id}|${u.ser_sku}">${u.ser_sku} - ${u.prd_name}</div>`;
         $('#listProducts .list-items').append(H);
     });
     
@@ -492,7 +436,6 @@ function putProducts(dt) {
 }
 
 function eventsAction() {
-
     $('#boxProducts')
     .unbind('keyup')
     .on('keyup', function () {

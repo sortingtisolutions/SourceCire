@@ -14,7 +14,7 @@
                 <!-- Start área de formularios -->
                 <div class=" mvst_panel">
                     <div class="form-group">
-                        <h4 id="titulo">Nuevo Catalogo</h4>
+                        <h4 id="titulo">Crear nuevo Catálogo</h4>
 
                         <form id="formCategoria" class="row g-3 needs-validation" novalidate>
                             <div class="row">
@@ -66,7 +66,7 @@
 
                 <!-- Start área de listado -->
                 <div class="mvst_table">
-                    <h1>Lista de Catálogos</h1>
+                    <h1>Lista de Catálogos disponibles</h1>
 
                     <div class="row">
                         <div class="col-12 col-md-12">		

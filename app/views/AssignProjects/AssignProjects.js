@@ -6,27 +6,28 @@ let gblprjname;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
-        // let temporal=Cookies.get('user');
-        // console.log(temporal);
         prjid=Cookies.get('pjtid');
         inicial();
     }
 });
 //INICIO DE PROCESOS
 function inicial() {
-    setting_table_AsignedProd();
+    user = Cookies.get('user').split('|');
+    usrid = user[0];
     getUsersP();
     getUsersA();
     getUsersC();
     getDetailProds();
-    user = Cookies.get('user').split('|');
-    usrid = user[0];
+    
     // Boton para registrar la salida del proyecto y los productos
     $('#recordChgUser')
         .unbind('click')
         .on('click', function () {
             console.log(gblprjid);
-            confirm_toChgUsr(gblprjid, gblprjname);
+            if (gblprjid) {
+                confirm_toChgUsr(gblprjid, gblprjname);
+            }
+            
      });
 
      $('#cleanForm')
@@ -38,7 +39,6 @@ function inicial() {
 
 // Solicita los paquetes  OK
 function getUsersP() {
-    //console.log(prjid)
     var pagina = 'AssignProjects/listUsersP';
     var par = `[{"pjt_id":""}]`;
     var tipo = 'json';
@@ -47,7 +47,6 @@ function getUsersP() {
 }
 
 function getUsersA() {
-    //console.log(prjid)
     var pagina = 'AssignProjects/listUsersA';
     var par = `[{"pjt_id":""}]`;
     var tipo = 'json';
@@ -56,7 +55,6 @@ function getUsersA() {
 }
 
 function getUsersC() {
-    //console.log(prjid)
     var pagina = 'AssignProjects/listUsersC';
     var par = `[{"pjt_id":""}]`;
     var tipo = 'json';
@@ -188,7 +186,10 @@ function putDetailsProds(dt) {
                 </tr>`;
             $('#tblAsignedProd tbody').append(H);
         });
+        setting_table_AsignedProd();
         activeIcons();
+    }else{
+        setting_table_AsignedProd();
     }
 }
 
@@ -281,7 +282,6 @@ function confirm_toChgUsr(pjtid,prjname) {
     $('#starClosure').modal('show');
     $('#txtIdClosure').val(pjtid);
     $('#ProjectName').text(prjname+'?')
-    //borra paquete +
     $('#btnClosure')
     .unbind('click')
     .on('click', function () {

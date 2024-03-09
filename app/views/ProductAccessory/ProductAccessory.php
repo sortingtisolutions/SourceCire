@@ -12,7 +12,6 @@
             
         <div class="row mvst_group">
 
-
             <div class="mvst_panel">
                 <div class="form-group">
                 <div class="form_primary">
@@ -44,7 +43,6 @@
                                 <label for="txtProductSubCat" class="form-label">Productos</label>
                             </div>
                         </div>
-
 
                         <div id="selectAccesorios" style="visibility: hidden;">
                         <h4>Seleccion de Accesorios</h4>

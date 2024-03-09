@@ -1,4 +1,5 @@
-let prod, proj, folio, comids = [], gblStr;
+let prod, proj, folio, comids = [];
+let gblStr = 0;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -31,14 +32,11 @@ function inicial() {
                 .unbind('click')
                 .on('click', function () {
                 $('#MoveFolioModal').modal('hide');
-                // window.location = 'ProductsSalables';
             });
 
             $('#btnyes')
                 .unbind('click')
                 .on('click', function () {
-                // $('.btn-print').trigger('click');
-                // printInfoGetOut(folio);
                 saleApply();
             });
             
@@ -64,10 +62,9 @@ function inicial() {
 }
 
 /** OBTENCION DE DATOS */
-/**  Obtiene el listado de almacenes */
 function get_stores() {
-    var pagina = 'ProductsSalables/listStores';
-    var par = `[{"strId":""}]`;
+    var pagina = 'Commons/listStores';
+    var par = `[{"parm":""}]`;
     var tipo = 'json';
     var selector = put_stores;
     caching_events('get_stores');
@@ -86,8 +83,9 @@ function get_products(strId) {
 
 /**  Obtiene el listado de proyectos */
 function get_projects() {
+    let liststat ="2,4,7,8,9";
     var pagina = 'ProductsSalables/listProjects';
-    var par = `[{"strId":""}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_projects;
     caching_events('get_projects');
@@ -258,11 +256,9 @@ function add_boton() {
 /**  +++++ Guarda el producto en la cotización +++++ */
 function fill_purchase(pr, ix) {
     caching_events('fill_purchase');
-    // console.log(pr);
-    // console.log(ix);
+    // console.log(pr,ix);
 
     $('#Products .sel_product').text('');
-    //  let prdName = pr.prod_name.replace(/°/g, '"');
 
     let ky = registered_product(pr.ser_id);
     if (ky == 0) {
@@ -415,7 +411,7 @@ function saleApply() {
             let ky = validator();
             if (ky == 1) {
                 let pix = $('#lstProject').val();
-                console.log('saleApply',pix);
+                // console.log('saleApply',pix);
                 let payForm = $('#lstPayForm').val();
                 let invoice = $('#txtInvoice').val();
                 let customer = $('#txtCustomer').val().toUpperCase();
@@ -434,7 +430,7 @@ function saleApply() {
                         "comId"             : "${comids}"
                     }]`;
 
-                console.log(par);
+                // console.log(par);
                 clean_required();
                 let rws = $('.frame_content #tblControl tbody tr').length;
                 if (rws > 0) {
@@ -454,7 +450,7 @@ function saleApply() {
 }
 
 function putNextExchangeNumber(dt) {
-    console.log(dt);
+    // console.log(dt);
     folio = dt;
     saleApply();
 }
@@ -464,7 +460,7 @@ function saleDetailApply(dt) {
     let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
     let strId = $('#lstStore').val();
 
-    console.log('saleDetailApply',pix, pjtId, strId);
+    // console.log('saleDetailApply',pix, pjtId, strId);
 
     $('.frame_content #tblControl tbody tr').each(function (v) {
         let ix = $(this).attr('data_index');
@@ -490,7 +486,7 @@ function saleDetailApply(dt) {
                     "folio"         : "${folio}"
                 }]`;
 
-            console.log(par);
+            // console.log(par);
 
             var pagina = 'ProductsSalables/SaveSaleDetail';
             var tipo = 'html';
@@ -501,16 +497,14 @@ function saleDetailApply(dt) {
 }
 
 function setSaleDetailApply(dt) {
-    console.log(dt);
+    // console.log(dt);
     deep_loading('C');
     window.location.reload();
 }
 
 function validator() {
     var vl = 1;
-
     var form = $('#formSales .required');
-
     form.each(function () {
         var k = $(this).val();
         if (k == '') {

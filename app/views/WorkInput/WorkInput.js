@@ -12,17 +12,16 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        //settingTable();
         getProjects(0);
-        // $('.tblProyects').css({display: 'none'});
 
     }, 100);
 }
 
 /** +++++  Obtiene los proyectos de la base */
 function getProjects(catId) {
+    let liststat ="8,9";
     var pagina = 'WorkInput/listProjects';
-    var par = `[{"pjtId":""}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -32,7 +31,6 @@ function getProjects(catId) {
 function settingTable() {
     let title = 'Control salida de proyectos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    //console.log('555');
     $('#tblProyects').DataTable({
         order: [[2, 'desc']],
         dom: 'Blfrtip',
@@ -102,22 +100,22 @@ function settingTable() {
 
 /** +++++  coloca los productos en la tabla */
 function putProjects(dt) {
-    // console.log('DOS',dt);
+    // console.log('putProjects',dt);
     let valstage='';
     let valicon='';
     //let tabla = $('#tblProyects').DataTable();
-    
     if (dt[0].pjt_id != '0') {
         $('#tblProyects tbody').html('');
-                
+        console.log(dt[0].pjt_status);
         $.each(dt, function (v, u) {
+           
             if (u.pjt_status == 8)
-            { valstage='#CC0000';
+            { valstage='color: #CC0000';
               valicon='fa fa-cog toWork'; }
             else 
-             { valstage='#FFA500';
+             { valstage='color: #FFA500';
              valicon='fa fa-solid fa-edit detail'; }
-            console.log(valstage, valicon);
+            // console.log(valstage, valicon);
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>
                     <td class="sku"><i class="${valicon}"</td>
@@ -145,7 +143,9 @@ function putProjects(dt) {
         });
         settingTable();
         activeIcons();
-    } 
+    } else{
+        settingTable();
+    }
 }
 
 /** +++++  Activa los iconos */
@@ -155,8 +155,6 @@ function activeIcons() {
         .on('click', function () {
             let locID = $(this);
             let pjtid = locID.parents('tr').attr('id');
-
-            //console.log('Paso ToWork..', pjtid);
             confirm_to_work(pjtid);
         });
 
@@ -168,9 +166,7 @@ function activeIcons() {
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
 
-            console.log(pjtid);
             Cookies.set('pjtid', pjtid, {expires:1});
-
             window.location = 'WorkInputContent';
         });
 }
@@ -178,13 +174,11 @@ function activeIcons() {
 function confirm_to_work(pjtid) {
     $('#starToWork').modal('show');
     $('#txtIdProductPack').val(pjtid);
-    //borra paquete +
     $('#btnToWork').on('click', function () {
         let Id = $('#txtIdProductPack').val();
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
 
-        //console.log('Datos',pjtid,Id);
         var pagina = 'WorkInput/UpdateSeriesToWork';
         var par = `[{"pjtid":"${pjtid}"}]`;
         var tipo = 'json';
@@ -194,7 +188,7 @@ function confirm_to_work(pjtid) {
 }
 
 function putToWork(dt){
-    console.log(dt)
+    // console.log(dt)
     window.location.reload();
 }
 

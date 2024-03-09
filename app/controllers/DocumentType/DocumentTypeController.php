@@ -26,7 +26,7 @@
 
 		public function GetDocumentType($request_params)
 		{
-	      $result = $this->model->GetDocumentType($request_params);
+	      $result = $this->model->GetDocumentTypes($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 
@@ -41,7 +41,6 @@
 		{
 			$params =  $this->session->get('user');
             $result = $this->model->UpdateDocumentType($request_params);
-
 			echo $result;
 		}
 

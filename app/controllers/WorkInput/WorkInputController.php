@@ -5,7 +5,6 @@
 
 class WorkInputController extends Controller
 {
-	
 	private $session;
 	public $model;
 

@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 function inicial() {
     if (altr == 1) {
-        // console.log('PASO 1');
         deep_loading('O');
         settingTable();
         getCategories();
@@ -28,7 +27,6 @@ function inicial() {
 function settingTable() {
     let title = 'Lista de Catálogos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    // console.log('PASO 1');
     $('#CategoriasTable').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
@@ -103,7 +101,7 @@ function getStores() {
 
 function getAreas() {
     // Solicita los productos de un almacen seleccionado
-    var pagina = 'Categorias/listAreas';
+    var pagina = 'Commons/listAreas';
     var par = `[{"are_id":""}]`;
     var tipo = 'json';
     var selector = putAreas;
@@ -157,7 +155,6 @@ function actionButtons() {
                 .children('td.category-name')
                 .html();
             catnme = ctnme;
-            // console.log(catId, quant, ctnme);
             if (quant > 0) {
                 deep_loading('O');
                 var pagina = 'Categorias/listSeries';
@@ -186,15 +183,19 @@ function actionButtons() {
         .on('click', function () {
             $('#NomCategoria').val('');
             $('#IdCategoria').val('');
-            // $('#selectTipoAlmacen option[value="3"]').attr('selected', true);
+            $('#numCategoria').val('');
+            
             $('#selectRowAlmacen').val(0);
+            // $('#selectTipoAlmacen option[value="3"]').attr('selected', true);
+            $('#selectRowArea').val(0);
         });
 }
 
 function fillTableCategories(ix) {
-    // console.log('PASO 2');  
+    // console.log('fillTableCategories');  
     let tabla = $('#CategoriasTable').DataTable();
-    tabla.row
+    if (cats[0].cat_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${cats[ix].cat_id}"></i><i class="fas fa-times-circle kill"></i>`,
             category: cats[ix].cat_id,
@@ -204,8 +205,10 @@ function fillTableCategories(ix) {
             area: cats[ix].are_name,
         })
         .draw();
-    $('#md' + cats[ix].cat_id).parents('tr').attr('id', cats[ix].cat_id);
-    get_quantity(cats[ix].cat_id);
+        $('#md' + cats[ix].cat_id).parents('tr').attr('id', cats[ix].cat_id);
+        get_quantity(cats[ix].cat_id);
+    }
+    
     actionButtons();
     deep_loading('C');
 }
@@ -238,7 +241,6 @@ function saveCategory() {
             "catId"    : "${catId}",
             "areId"    : "${areId}"
         }]`;
-    // console.log('par-save',par);
     cats = '';
     var pagina = 'Categorias/SaveCategoria';
     var tipo = 'html';
@@ -246,6 +248,7 @@ function saveCategory() {
     fillField(pagina, par, tipo, selector);
 }
 function putSaveCategory(dt) {
+    // console.log('putSaveCategory',dt);
     getCategories();
     if (cats.length > 0) {
         let ix = goThroughCategory(dt);
@@ -263,15 +266,12 @@ function updateCategory() {
     var catName = $('#NomCategoria').val();
     var strId = $('#selectRowAlmacen option:selected').val();
     var areId = $('#selectRowArea option:selected').val();
-
     var par = `
         [{  "cat_id"    : "${catId}",
             "cat_name"  : "${catName}",
             "str_id"    : "${strId}",
             "areId"     : "${areId}"
         }]`;
-
-    console.log('par-up',par);
     cats = '';
     var pagina = 'Categorias/UpdateCategoria';
     var tipo = 'html';
@@ -281,10 +281,8 @@ function updateCategory() {
 function putUpdateCategory(dt) {
     getCategories();
     if (cats.length > 0) {
-        console.log(dt);
         let ix = goThroughCategory(dt);
-        console.log(cats[ix].cat_id);
-
+        // console.log(cats[ix].cat_id);
         $(`#${cats[ix].cat_id}`)
             .children('td.category-name')
             .html(cats[ix].cat_name);
@@ -315,7 +313,6 @@ function editCategory(catId) {
 
 function deleteCategory(catId) {
     let cn = $(`#${catId}`).children('td.quantity').children('.toLink').html();
-
     if (cn != 0) {
         $('#confirmModal').modal('show');
         $('#confirmModalLevel').html(
@@ -326,12 +323,10 @@ function deleteCategory(catId) {
         $('#Id').val(0);
     } else {
         $('#confirmModal').modal('show');
-
         $('#confirmModalLevel').html('¿Seguro que desea borrar el catálogo?');
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar catálogo').css({ display: 'inline' });
         $('#Id').val(catId);
-
         $('#confirmButton').on('click', function () {
             var pagina = 'Categorias/DeleteCategoria';
             var par = `[{"cat_id":"${catId}"}]`;
@@ -372,7 +367,6 @@ function putSeries(dt) {
                 footer: true,
                 title: title,
                 filename: filename,
-
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
             },
@@ -382,7 +376,6 @@ function putSeries(dt) {
                 footer: true,
                 title: title,
                 filename: filename,
-
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
             },
@@ -392,7 +385,6 @@ function putSeries(dt) {
                 footer: true,
                 title: title,
                 filename: filename,
-
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
             },

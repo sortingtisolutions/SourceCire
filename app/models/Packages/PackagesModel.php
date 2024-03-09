@@ -3,27 +3,28 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class PackagesModel extends Model
 {
+    
     public function __construct()
     {
       parent::__construct();
     }
 
 // Listado de categorias  *****
-    public function listCategories()
-    {
+    // public function listCategories()
+    // {
         
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
-        return $this->db->query($qry);
-    }
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de subcategorias
-    public function listSubCategories($params)
-    {
-        $catId = $this->db->real_escape_string($params);
+    // public function listSubCategories($params)
+    // {
+    //     $catId = $this->db->real_escape_string($params);
         
-        $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
+    //     $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de paquetes
 public function listPackages($params)
@@ -32,7 +33,7 @@ public function listPackages($params)
     $condition = $catId == 0 ? '' : ' AND cat_id = ' . $catId;
     $qry = "SELECT pd.* FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-            WHERE prd_level ='K' AND prd_status = 1 " . $condition . ";";
+            WHERE prd_level = 'K' AND prd_status = 1 " . $condition . ";";
 
     return $this->db->query($qry);
 }
@@ -41,7 +42,7 @@ public function listPackages($params)
     public function lastIdSubcategory($params)
     {
         $sbcId = $this->db->real_escape_string($params);
-        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
+        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,4), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
         return $this->db->query($qry);
     }
 
@@ -51,7 +52,7 @@ public function listProducts()
 {
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
-            WHERE prd_status = 1;";
+            WHERE prd_status = 1 AND prd_level != 'K';";
     return $this->db->query($qry);
 }
 
@@ -85,9 +86,9 @@ public function listProductsPack($params)
         $prd_stock          =  1; // *** Edna V2
 
         $qry = "INSERT INTO ctt_products (prd_sku, prd_name, prd_model, prd_price, prd_visibility, 
-        prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured, prd_stock) 
+        prd_comments, prd_status, sbc_id, srv_id, cin_id, prd_insured, prd_stock, prd_level) 
         VALUES ('$prd_sku', UPPER('$prd_name'), '$prd_model', '$prd_price', '$prd_visibility', '$prd_comments',
-         '$prd_status', '$prd_level', '$sbc_id', '$srv_id', '$cin_id','$prd_insured','$prd_stock');
+         '$prd_status', '$sbc_id', '$srv_id', '$cin_id','$prd_insured','$prd_stock', 'K');
         ";
          $this->db->query($qry);
         $result = $this->db->insert_id;
@@ -101,8 +102,8 @@ public function listProductsPack($params)
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
         //$prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
 
-        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id) 
-                VALUES ('$prd_parent', '$prd_id');";
+        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id, prd_type_asigned) 
+                VALUES ('$prd_parent', '$prd_id', 'KP');";
 
         $this->db->query($qry);
         $pckId = $this->db->insert_id;
@@ -166,7 +167,7 @@ public function listProductsPack($params)
         $prd_name           = $this->db->real_escape_string($param['prdName']);
         $prd_price          = $this->db->real_escape_string($param['prdPrice']);
 
-        $qry =  "UPDATE ctt_products SET prd_name = '$prd_name', prd_price = '$prd_price' 
+        $qry =  "UPDATE ctt_products SET prd_name = UPPER('$prd_name'), prd_price = '$prd_price' 
                 WHERE prd_id = '$prd_id';" ;
         
         return $this->db->query($qry);

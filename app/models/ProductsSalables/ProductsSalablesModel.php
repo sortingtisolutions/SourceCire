@@ -7,8 +7,6 @@ class ProductsSalablesModel extends Model
     {
         parent::__construct();
     }
-
-
 // Registra el numero de folio 
     public function NextExchange()
     {
@@ -16,7 +14,6 @@ class ProductsSalablesModel extends Model
         $this->db->query($qry);
         return $this->db->insert_id;
     }
-
 // Listado de almacenes  ****
         public function listStores($params)
         {
@@ -44,12 +41,12 @@ class ProductsSalablesModel extends Model
 
 // Listado de proyectos
         public function listProjects($params)
-        {
+        {   $liststat = $this->db->real_escape_string($params['liststat']);
             $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, if(cu.cus_name,NULL,'') AS cus_name
                     FROM ctt_projects AS pj
                     LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                     LEFT JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
-                    WHERE pjt_status in (2,4,7,8,9) ORDER BY pj.pjt_number;";
+                    WHERE pjt_status IN ($liststat) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 

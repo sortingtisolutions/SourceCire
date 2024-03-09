@@ -27,7 +27,6 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 
-
 // Cabezal de la página
 $header = '
     <header>

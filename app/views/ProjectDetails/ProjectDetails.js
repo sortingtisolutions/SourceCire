@@ -11,25 +11,25 @@ $('document').ready(function () {
     verifica_usuario();
     inicial();
 });
+
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-    stickyTable();
-    eventsAction();
-    getProjects('0');
-    getProjectsParents();
-    getCustomers();
-    getCustomersOwner();
-    getDiscounts();
-    getProjectType();
-    getProjectTypeCalled();
-    getCalendarPeriods();
-    discountInsuredEvent();
-    getLocationType();
-    getEdosRepublic();
-    // getCategories();
-    
-    confirm_alert();
+        stickyTable();
+        eventsAction();
+        getProjects('0');
+        getProjectsParents();
+        getCustomers();
+        getCustomersOwner();
+        getDiscounts();
+        getProjectType();
+        getProjectTypeCalled();
+        getCalendarPeriods();
+        discountInsuredEvent();
+        getLocationType();
+        getEdosRepublic();
+        // getCategories();
+        confirm_alert();
     }else {
         setTimeout(() => {
             inicial();
@@ -59,7 +59,6 @@ function discountInsuredEvent() {
         .unbind('click')
         .on('click', function () {
             let elm = $(this);
-
             let posLeft = elm.offset().left - 90;
             let posTop = elm.offset().top - 80;
 
@@ -82,14 +81,12 @@ function discountInsuredEvent() {
 
                         updateTotals();
                         $('.invoiceDiscSelect').fadeOut(400);
-                        // console.log(e.target.value, data, insured, dsctoInsured);
                     }
                 });
         });
 }
-
+  // Despliega la seccion de detalle de información del proyecto
 function eventsAction() {
-    // Despliega la seccion de detalle de información del proyecto
     $('.projectInformation')
         .unbind('click')
         .on('click', function () {
@@ -159,7 +156,6 @@ function eventsAction() {
             let item = $(this).attr('data-option');
             glbSec = $(this).attr('data-option');
             $(this).hide();
-
             $(`#SC${item}`).show();
         });
 
@@ -174,7 +170,6 @@ function eventsAction() {
                 .on('mouseleave', function () {
                     $(this).slideUp('slow');
                 });
-
             fillProjectsAttached();
         });
 
@@ -311,6 +306,13 @@ function eventsAction() {
             let id = $(this).parents('.finder__box').children('.invoiceInput');
             id.val('');
             id.trigger('keyup');
+            
+            $('.finder_list-projects ul li').addClass('alive');
+            $('.finder_list-projectsParent ul li').addClass('alive');
+            $('.finder_list-projects ul li').attr('data-val',0);
+            $('.finder_list-projectsParent ul li').attr('data-val',0);
+            $('.finder_list-customer ul li').attr('data-value',0);
+            $('.finder_list-projectsParent ul li').attr('data-active',1);
         });
 
     // Limpiar la pantalla
@@ -335,33 +337,21 @@ function expandCollapseSection() {
         $('.showColumns').addClass('rotate180');
         $('.coltrip').hide().children('.input_invoice').attr('disable', 'true');
         $('.coltest').hide().children('.input_invoice').attr('disable', 'true');
-        $('.showColumns')
-            .parents('table')
-            .removeAttr('class')
-            .addClass('collapsed');
+        $('.showColumns').parents('table').removeAttr('class').addClass('collapsed');
     } else {
         $('.showColumns').removeClass('rotate180');
-        $('.coltrip')
-            .show()
-            .children('.input_invoice')
-            .attr('disable', 'false');
-        $('.coltest')
-            .show()
-            .children('.input_invoice')
-            .attr('disable', 'false');
-        $('.showColumns')
-            .parents('table')
-            .removeAttr('class')
-            .addClass('expanded');
+        $('.coltrip').show().children('.input_invoice').attr('disable', 'false');
+        $('.coltest').show().children('.input_invoice').attr('disable', 'false');
+        $('.showColumns').parents('table').removeAttr('class').addClass('expanded');
     }
 }
 
 /** OBTENCION DE DATOS */
-/**  Obtiene el listado de proyectos */
 function getProjects(pjId) {
     swpjt = 0;
+    let liststat ="3,4,7,8,40";
     var pagina = 'ProjectDetails/listProjects';
-    var par = `[{"pjId":"${pjId}"}]`;
+    var par = `[{"pjId":"${pjId}", "liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -374,16 +364,14 @@ function getProductsSub(word, dstr, dend) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
 /**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
 function getProductsInput(word, dstr, dend) {
-    var pagina = 'Budget/listProducts2';
+    var pagina = 'ProjectDetails/listProductsInput';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
 /**  Obtiene el listado de proyectos padre */
 function getProjectsParents() {
     swpjt = 0;
@@ -417,8 +405,6 @@ function getVersion(pjtId) {
     var selector = putVersion;
     fillField(pagina, par, tipo, selector);
 }
-
-
 /**  Obtiene el listado de cotizaciones */
 function getBudgets(pjtId, verId) {
     var pagina = 'ProjectDetails/listBudgets';
@@ -437,11 +423,9 @@ function getDiscounts() {
 }
 /**  Obtiene el listado de relacionados al prducto*/
 function getProductsRelated(id, tp, vr,sec) {// *** Ed
-    console.log('sec: ',sec, ' Id:', id );
     var pagina = 'ProjectDetails/listProductsRelated';
     var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putProductsRelated;
     fillField(pagina, par, tipo, selector);
 }
@@ -465,7 +449,7 @@ function getStockProjects(prdId) {
 }
 /** Obtiene el listado de los tipos de proyecto */
 function getProjectType() {
-    var pagina = 'ProjectDetails/listProjectsType';
+    var pagina = 'Commons/listProjectsType';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = putProjectsType;
@@ -537,7 +521,6 @@ function getLocationsEdos(prj_id){
 }
 // ** Ed
 function getCategories(op) {
-    //console.log('categos');
     var pagina = 'ProjectDetails/listCategories';
     var par = `[{"op":"${op}"}]`;
     var tipo = 'json';
@@ -546,8 +529,7 @@ function getCategories(op) {
 }
 // ** Ed
 function getSubCategories(catId) {
-    //console.log(catId);
-    var pagina = 'ProjectDetails/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;
@@ -555,15 +537,12 @@ function getSubCategories(catId) {
 }
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
-    var pagina = 'ProjectDetails/listProducts3';
+    var pagina = 'ProjectDetails/listProductsCombo';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
-/** LLENA DE DATOS */
-/**  Llena el listado de proyectos */
 
 // ** Ed
 function putCategories(dt) {
@@ -580,7 +559,6 @@ function putCategories(dt) {
             .unbind('change')
             .on('change', function () {
                 let catId = $(this).val();
-                
                 getSubCategories(catId);
         });
     }
@@ -608,10 +586,8 @@ function putSubCategories(dt) {
             .on('change', function () {
                 let subcatId = $(this).val();
                 modalLoading('B');
-                
                 subCtg = subcatId;
                 getProducts(word,subcatId);
-            
         });
     }
 }
@@ -622,7 +598,6 @@ function putProjects(dt) {
         $('.finder_list-projects ul').html('');
         $('.finder_list-projectsParent ul').html('');
         $.each(proj, function (v, u) {
-
             if (u.pjt_status == 4)
                 { valstage='color:#008000'; }
             else if (u.pjt_status == 7)
@@ -634,7 +609,7 @@ function putProjects(dt) {
                 let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
                 $('.finder_list-projects ul').append(H);
             } else {
-                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
+                let M = ` <li id="M${u.pjt_id}" class="alive" data-val="0" data-active="1" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
                 $('.finder_list-projectsParent ul').append(M);
             }
         });
@@ -648,7 +623,7 @@ function putProjects(dt) {
 }
 
 function putLocationsEdos(dt){
-    console.log(dt);
+    // console.log(dt);
     let tabla = $('#listLocationsTable').DataTable();
     tabla.rows().remove().draw();
     if (dt[0]['loc_id']!=0) {
@@ -674,11 +649,7 @@ function putLocationsEdos(dt){
                 $('#confirmModalLevel').html('¿Seguro que desea borrar la locacion?');
                 $('#N').html('Cancelar');
                 $('#confirmButton').html('Borrar locacion').css({display: 'inline'});
-                $('#Id').val(locId); 
-    
-                //   $('#BorrarAlmacenModal').modal('show');
-                //$('#IdAlmacenBorrar').val(locId);
-    
+                $('#Id').val(locId);    
                 $('#confirmButton').on('click', function () {
                     var pagina = 'ProjectDetails/DeleteLocation';
                     var par = `[{"loc_id":"${locId}"}]`;
@@ -719,7 +690,7 @@ function putCustomers(dt) {
     $('.finder_list-customer ul').html('');
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = ` <li id="C${u.cus_id}" class="alive" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
+            let H = ` <li id="C${u.cus_id}" class="alive" data-value="0" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
             $('.finder_list-customer ul').append(H);
         }
     });
@@ -748,7 +719,6 @@ function putDiscounts(dt) {
 
 function putLocationType(dt) {
     loct =dt;
-
 }
 
 /**  Llena el listado de versiones */
@@ -789,11 +759,8 @@ function putVersion(dt) {
             .unbind('click')
             .on('click', function () {
                 let version = $(this).attr('id').substring(1, 100);
-
-                
                 let pjtId = $(this).attr('data-project');
                 vers = version;
-
                 let versionCode = $(this).data('code');
                 let versionId = $(this).attr('id').substring(1, 100);
                 let versionMaster = $(this).data('master');
@@ -830,11 +797,11 @@ function putVersion(dt) {
 
 function updateActiveVersion(verId) {
     $('.element_caret-active').html('');
-
     let li = $('#V' + verId);
     let caret = li.children('.element_caret-active');
     caret.html('<i class="fas fa-caret-right"></i>');
 }
+
 function updateMasterVersion(verId) {
     $('.element_caret-master').html('');
 
@@ -859,14 +826,11 @@ function fillProjectsAttached() {
         .unbind('click')
         .on('click', function () {
             let ido = $(this).attr('data-option');
-            console.log(ido);
+            // console.log(ido);
             modalLoading('S');
             let verCurr = lastVersionFinder();
-
             let vr = parseInt(verCurr.substring(1, 10));
-
             let verNext = 'P' + refil(vr + 1, 4);
-
             var par = `[{
                 "pjtId"      :   "${idd}",
                 "pjtIdo"     :   "${ido}",
@@ -895,11 +859,8 @@ function selectorProjects(pjId) {
         .on('click', function () {
             cleanQuoteTable();
             showButtonVersion('H');
-            // showButtonToPrint('H');
-            // showButtonToSave('H');
-            actionSelProject($(this));
-            
-            modalLoading('B');
+            actionSelProject($(this));     
+            /* modalLoading('B'); */
             $('.projectfinder').trigger('click');
         });
 
@@ -907,27 +868,39 @@ function selectorProjects(pjId) {
         .unbind('click')
         .on('click', function () {
             let pjtParent = $(this).attr('id').substring(1, 10);
+            let val = $(this).attr('data-val');
+            let active = $(this).attr('data-active');
+            console.log(val);
+            
             $('.finder_list-projects ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (pjtParent == u.pjt_parent) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
+            if (active == 1) {
+                if (val == 0) {
+                    $.each(proj, function (v, u) {
+                        if (pjtParent == u.pjt_parent) {
+                            let pjtId = u.pjt_id;
+                            $(`#P${pjtId}`).addClass('alive');
+                        }
+                    });
+                    $(this).attr('data-val', 1);
+                }else{
+                    $('.finder_list-projects ul li').addClass('alive');
+                    $(this).attr('data-val', 0);
                 }
-            });
+            }
+            
         });
 }
 
 var pj = '';
+
 function actionSelProject(obj) {
     let status = obj.attr('class');
-
     if (status == 'alive') {
+        modalLoading('B');
         let idSel = obj.parents('.dato');
         let indx = obj.data('element').split('|')[0];
         pj = proj[indx];
-
         pj.pjt_parent > 0 ? showButtonToImport('S') : showButtonToImport('H');
-
         $('.panel__name')
             .css({ visibility: 'visible' })
             .children('span')
@@ -946,7 +919,6 @@ function actionSelProject(obj) {
         getVersion(pj.pjt_id);
         getExistTrip('1', pj.pjt_id);
         // getCalendarPeriods(pj);
-
         $('.version_current').attr('data-project', pj.pjt_id);
         $('.projectInformation').attr('data-project', pj.pjt_id);
 
@@ -960,14 +932,12 @@ function actionSelProject(obj) {
                 $('#CustomerQualification').html(u.cus_qualificaton);
             }
         });
-
         $('.invoice_controlPanel .addSection').css({ visibility: 'visible' });
     }
 }
 
 function getCalendarPeriods() {
     let fecha = moment(Date()).format('DD/MM/YYYY');
-
     $('#projectPeriod').daterangepicker(
         {
             showDropdowns: true,
@@ -982,19 +952,8 @@ function getCalendarPeriods() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -1011,14 +970,13 @@ function getCalendarPeriods() {
             );
             let projDateStart = start.format('YYYYMMDD');
             let projDateEnd = end.format('YYYYMMDD');
-
             let par = `
-        [{
-            "pjtDateStart"  : "${projDateStart}",
-            "pjtDateEnd"    : "${projDateEnd}",
-            "pjtId"         : "${pj.pjt_id}"
-        }]
-        `;
+            [{
+                "pjtDateStart"  : "${projDateStart}",
+                "pjtDateEnd"    : "${projDateEnd}",
+                "pjtId"         : "${pj.pjt_id}"
+            }]
+            `;
             var pagina = 'ProjectDetails/UpdatePeriodProject';
             var tipo = 'html';
             var selector = SetUpdatePeriodProject;
@@ -1039,7 +997,6 @@ function SetUpdatePeriodProject(dt) {
             tr.children('td.daysBase').children('.input_invoice').val(topDays);
         }
     });
-
     updateTotals();
     showButtonVersion('S');
 }
@@ -1052,17 +1009,28 @@ function selectCustomer() {
             let indx = $(this).data('element').split('|')[0];
             let type = $(this).data('element').split('|')[1];
             let cs = cust[indx];
+            let val = $(this).attr('data-value');
+            console.log(val);
 
             $('#CustomerName').html(cs.cus_name);
             $('.finder_list-projects ul li').removeClass('alive');
             $('.finder_list-projectsParent ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (cs.cus_id == u.cus_id) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
-                    $(`#M${pjtId}`).addClass('alive');
-                }
-            });
+            $('.finder_list-projectsParent ul li').attr('data-active',0);
+            if (val == 0) {
+                $.each(proj, function (v, u) {
+                    if (cs.cus_id == u.cus_id) {
+                        let pjtId = u.pjt_id;
+                        $(`#P${pjtId}`).addClass('alive');
+                        $(`#M${pjtId}`).addClass('alive');
+                    }
+                });
+                $(this).attr('data-value', 1);
+            }else{
+                $('.finder_list-projects ul li').addClass('alive');
+                $('.finder_list-projectsParent ul li').addClass('alive');
+                $(this).attr('data-value', 0);
+                $('.finder_list-projectsParent ul li').attr('data-active',1);
+            }
         });
 }
 
@@ -1088,6 +1056,7 @@ function showListProducts(item) {
     $('.invoice__section-products').draggable({
         handle: ".modal__header"
     });
+
     $('#txtProductFinder')
         .unbind('keyup')
         .on('keyup', function () {
@@ -1114,8 +1083,6 @@ function limpiar_form(){
     $('#txtProductFinder').val('');
     $('#txtCategory').val(0);
     $('#txtSubCategory').val(0);
-    
-    
     $('#listProductsTable table tbody').html('');
 }
 
@@ -1124,9 +1091,8 @@ function selProduct(res) {
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
-    
-    let sub_id = $('#txtSubCategory').val();
 
+    let sub_id = $('#txtSubCategory').val();
     if (res.length > 3) {
         let dstr = 0;
         let dend = 0;
@@ -1135,21 +1101,14 @@ function selProduct(res) {
             
             if (subCtg>0) {
                 if (glbSec != 4) {
-                    // console.log('Normal');
-                    getProducts(res.toUpperCase(), sub_id);
-                    
+                    getProducts(res.toUpperCase(), sub_id);                    
                 } else {
-                    // console.log('Subarrendo');
-                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
-                    
+                    getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos                    
                 }
             } else {
                 if (glbSec != 4) {
-                    // console.log('Normal');
-                    //getProducts(res.toUpperCase(), sub_id);
                     getProductsInput(res.toUpperCase());
                 } else {
-                    // console.log('Subarrendo');
                     getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
                     
                 }
@@ -1172,8 +1131,6 @@ function selProduct(res) {
         // rowCurr.show();
     } else {
         $(`#listProductsTable table tbody`).html('');
-        
-        /* getProducts('',sub_id); */
         rowCurr.addClass('oculto');
     }
 }
@@ -1210,7 +1167,6 @@ function putProducts(dt) {
     $('#listProductsTable table tbody tr')
         // .unbind('click')
         .on('click', function () {
-            // console.log('Click Producto');
             let inx = $(this).attr('data-indx');
             fillBudget(prod[inx], vers, inx);
         });
@@ -1269,14 +1225,10 @@ function loadBudget(inx, bdgId) {
         var tipo = 'html';
         var selector = putAddProductMice;
         fillField(pagina, '[' + par + ']', tipo, selector);
-
         fillBudgetProds(par, days, stus);
     }
-
     updateTotals();
     showButtonVersion('S');
-    // showButtonToPrint('H');
-    // showButtonToSave('H');
     reOrdering();
 }
 
@@ -1286,14 +1238,10 @@ function putAddProductMice(dt) {
 
 function registeredProduct(id, section) {  // parametro de section agregado por jjr
     ky = 0;
-    
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
         let isec = $(this).attr('data-sect');  // agregado por jjr
-        // console.log('Parametros- ', id, section);
-        // console.log('Valores THIS- ', idp, isec);
         if (id == idp && section==isec) {  // modificado por jjr
-            // console.log('Agrega Cantidad');
             let qty =
                 parseInt(
                     $(this)
@@ -1315,7 +1263,6 @@ function putBudgets(dt) {
     // console.log('putBudgets-',dt)
     budg = dt;
     let days = getDaysPeriod();
-
     $('.budgetRow').remove();
 
     if (budg[0].pjtvr_id > 0) {
@@ -1329,29 +1276,10 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    modalLoading('H');
-    /* $('tbody.sections_products').sortable({
-        items: 'tr:not(tr.blocked)',
-        cursor: 'pointer',
-        axis: 'y',
-        dropOnEmpty: false,
-        start: function (e, ui) {
-            ui.item.addClass('selected');
-        },
-        stop: function (e, ui) {
-            ui.item.removeClass('selected');
-            $(this)
-                .find('tr')
-                .each(function (index) {
-                    if (index > 0) {
-                        $(this).find('i.move_item').attr('data-order', index);
-                    }
-                });
-            showButtonVersion('S');
-            OrderMice(1);
-        },
-    }); */
-
+    setTimeout(() => {
+        modalLoading('H');
+    }, 200);
+    
     reOrdering();
 }
 
@@ -1359,7 +1287,6 @@ function reOrdering() {
     $('tbody.sections_products')
         .find('tr.budgetRow')
         .each(function (index) {
-            // console.log('reOrdering', index);
             if (index >= 0) {
                 $(this)
                     .find('i.move_item')
@@ -1376,14 +1303,6 @@ function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
     
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
-            /* if (u.pjt_status == 4)
-            { valstage='color:#008000'; }
-            else if (u.pjt_status == 7)
-            { valstage='color:#FFA500'; }
-            else
-            { valstage='color:#CC0000'; }
-            console.log(valstage); */
-    
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 
@@ -1520,10 +1439,6 @@ function fillBudgetProds(jsn, days, stus) {
             .addClass('col_quantity-led col_quantity-comment')
             .attr('title', 'Comentarios al producto');// ***Edna V2
         }
-        /* $(`#bdg${pds.prd_id} .col_quantity-led`)
-            .removeAttr('class')
-            .addClass('col_quantity-led col_quantity-comment')
-            .attr('title', 'Comentarios al producto'); */
     }
 
     getCounterPending(pds.pjtvr_id, pds.prd_id);
@@ -1533,10 +1448,6 @@ function putCounterPending(dt) {
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        /* $(`#bdg${dt[0].prd_id} .col_quantity-led`)
-            .removeAttr('class')
-            .addClass('col_quantity-led col_quantity-pending')
-            .attr('title', `${word} en pendiente`); */
         $('[data-mice=' +dt[0].pjtvr_id+'] .col_quantity-led').removeAttr('class')
         .addClass('col_quantity-led col_quantity-pending')
         .attr('title', `${word} en pendiente`); // ***Edna V2
@@ -1557,9 +1468,6 @@ function activeInputSelector() {
         .unbind('blur')
         .on('blur', function () {
             updateTotals();
-            // showButtonToPrint('H');
-            // showButtonToSave('H');
-
             let bgRows = $('#invoiceTable table tbody tr.budgetRow').length;
             if (bgRows > 0) {
                 showButtonVersion('S');
@@ -1632,7 +1540,6 @@ function activeInputSelector() {
         .on('click', function () {
             let id = $(this);
             let section = id.parent().attr('class').split(' ')[2];
-
             let posLeft = id.offset().left - 90;
             let posTop = id.offset().top - 80;
             let selector = section;
@@ -1655,7 +1562,6 @@ function activeInputSelector() {
                         data = data * 100 + '<small>%</small>';
                         id.parent().children('.discData').html(data);
                     }
-
                     $('.invoiceMainSelect').fadeOut(400);
                 });
         });
@@ -1687,7 +1593,7 @@ function activeInputSelector() {
             let sec = id.parents('tr').attr('data-sect');
             let pjtv = id.parents('tr').attr('data-mice');
 			let nameProd = id.parents('tr').find('th').eq(0).find('.elipsis').text();// *** Agregado por Ed
-            console.log('Sec->',sec,bdgId,type);
+            // console.log('Sec->',sec,bdgId,type);
             if (type != 'K' && sec =='1') {
                 switch (event) {
                     case 'event_killProduct':
@@ -1821,15 +1727,19 @@ function infoProduct(bdgId, type,sec) { // *** Ed
     $('.invoice__modal-general .modal__header-concept').html(
         'Informacion de  los Productos Relacionados'
     );
+    modalLoading('B');
     closeModals();
     setTimeout(() => {
+        
         let verId = $('.version_current').attr('data-version');
         //console.log($('.version_current').attr('data-version'));
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
+        modalLoading('H');
     }, 500);
 }
 
 function infoPackage(bdgId, type, sec) {
+    modalLoading('B');
     setTimeout(() => {
         let verId = $('.version_current').attr('data-version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
@@ -1838,6 +1748,7 @@ function infoPackage(bdgId, type, sec) {
 }
 
 function infoDetallePkt(lcatsub) {
+    modalLoading('B');
     setTimeout(() => {
         // console.log('infoDetallePkt-'lcatsub);
         getChangeProd(lcatsub);
@@ -1865,7 +1776,7 @@ function putProductsRelated(dt) {
             if (sku_prod=='Pendiente') {
                 skushort = 'No Existe Serie';
             }else{
-                skushort=u.pjtdt_prod_sku.substring(0,7);
+                skushort=u.pjtdt_prod_sku.substring(0,8);
             }
             let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();
                       
@@ -1891,32 +1802,12 @@ function putProductsRelated(dt) {
     });
 }
 function putProductsRelatedSons(dt, pr) {
-    /* let H = '';
-    $.each(dt, function (v, u) {
-        if (u.prd_parent == pr) {
-            let levelProduct =
-                u.prd_level == 'A' ? 'class="levelAccesory"' : '';
-            let prodSku =
-                u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
-            let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
-            H += `
-            <tr >
-                <td>${u.prd_sku}</td>
-                <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
-                <td>${u.prd_level}</td>
-                <td ${levelProduct} >${u.prd_name}</td>
-                <td>${u.cat_name}</td>
-            </tr>
-            `;
-        }
-    });
-    return H; */
+    console.log('putProductsRelatedSons');
 }
 
 function settingChangeSerie(){
     // console.log('settingChangeSerie');
     $('#ChangeSerieModal').removeClass('overlay_hide');
-
     $('#tblChangeSerie').DataTable({
         bDestroy: true,
         order: [[1, 'asc']],
@@ -1951,18 +1842,16 @@ function settingChangeSerie(){
 }
 
 function putProductsRelatedPk(dt){
- 
     // console.log('putProductsRelatedPk', dt);
     settingChangeSerie();
     let tabla = $('#tblChangeSerie').DataTable();
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].pjtdt_prod_sku}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let levelProduct = u.prd_level != 'K' ? 'class="levelProd"' : '';
         let cat=u.prd_sku.substring(0,2);
         let catsub=u.pjtdt_prod_sku.substring(0,4);
         let locsku=u.pjtdt_prod_sku.substring(0,7);
-        // console.log('CATSUB-',catsub);
         let valicon='';
 
         if(catsub=='010N' || catsub=='010S' || catsub=='010P'){
@@ -1990,7 +1879,7 @@ function putProductsRelatedPk(dt){
             // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
         } 
     });
-
+    modalLoading('H');
   /*   $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     }); */
@@ -2005,8 +1894,6 @@ function ActiveChangePKT(){
         let id = $(this).attr('data_cat');
         gblsku = $(this).attr('data_sku');
         let lcatsub=id;
-        // console.log('THIS-', lcatsub, gblsku);
-        // settingProdChg();
         $('#SerieData').removeClass('overlay_hide');
 
             $('#SerieData .btn_close')
@@ -2029,8 +1916,8 @@ function settingProdChg(){
         dom: 'Blfrtip',
         bDestroy: true,
         lengthMenu: [
-            [50, 100, -1],
-            [50, 100, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -2057,7 +1944,6 @@ function putChangeProd(dt) {
     tablaChg.rows().remove().draw();
     if (dt[0].prd_id > 0) {
         $.each(dt, function (v, u) {
-            // console.log(u);
             tablaChg.row
              .add({
                  sermodif: `<i class="fas fa-edit toChange" id="${u.prd_id}" sku_original="${u.prd_sku}"></i>`,
@@ -2080,14 +1966,12 @@ function ApplyChangePKT(){
         // console.log($(this));
         let skuold=gblsku;
         let skunew = $(this).attr('sku_original');
-        // console.log('Val--',skuold, skunew);
         getNewProdChg(skuold, skunew);
-
     });
 }
 
 function putNewProdChg(dt) {
-    console.log('putNewProdChg',dt);
+    // console.log('putNewProdChg',dt);
     // $('#ChangeSerieModal .overlay_background').addClass('overlay_hide');
     // $('#ChangeSerieModal tblChangeSerie').DataTable().destroy;
     $('.overlay_background').addClass('overlay_hide');
@@ -2097,6 +1981,7 @@ function putNewProdChg(dt) {
 
 // Muestra el inventario de productos
 function stockProduct(bdgId,nameProd) {
+    modalLoading('B');
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -2139,6 +2024,7 @@ function putStockProjects(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 // Edita los datos del proyecto
@@ -2158,7 +2044,6 @@ function editProject(pjtId) {
 function fillContent() {
     // configura el calendario de seleccion de periodos
     let fecha = moment(Date()).format('DD/MM/YYYY');
-
     $('#calendar').daterangepicker(
         {
             autoApply: true,
@@ -2172,19 +2057,8 @@ function fillContent() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -2241,7 +2115,6 @@ function fillContent() {
 function fillData(inx) {
     $('.textbox__result').show();
     $('.project__selection').hide();
-
     let pj = proj;
     $('#txtProjectIdEdt').val(pj[inx].pjt_id);
     $('#txtProjectEdt').val(pj[inx].pjt_name);
@@ -2278,7 +2151,6 @@ function fillData(inx) {
     $('#txtCarryOut').val(pj[inx].pjt_to_carry_out);
     $('#txtTestTecnic').val(pj[inx].pjt_test_tecnic);
     $('#txtTestLook').val(pj[inx].pjt_test_look);
-
     $('#saveProject')
         .html('Guardar cambios')
         .removeAttr('class')
@@ -2289,9 +2161,7 @@ function fillData(inx) {
             $('#txtTripGo').parents('tr').removeAttr('class');
             $('#txtTripBack').parents('tr').removeAttr('class');
             $('#seeLocation').parents('tr').removeAttr('class');
-            add = 2;
-            //$('#btn_save_locations').addClass('hide');
-            
+            add = 2;            
         }
              // $('#txtEdosRepublic').parents('tr').removeAttr('class');
             $('#txtTripGo').parents('tr').removeAttr('class');
@@ -2302,7 +2172,6 @@ function fillData(inx) {
             .on('change', function () {
             let selectiontl = $(this).val();
             if (selectiontl == 2 || selectiontl == 4) {
-                //console.log('Foraneo');
                 /* $('#txtEdosRepublic').parents('tr').removeAttr('class');*/
                 $('#txtTripGo').parents('tr').removeAttr('class');
                 $('#txtTripBack').parents('tr').removeAttr('class'); 
@@ -2312,7 +2181,7 @@ function fillData(inx) {
                 //$('#btn_save_locations').addClass('hide');						
                 // $('#txtLocationEdt').val('');
             } else {
-                console.log('Otro');
+                // console.log('Otro');
                 $('#txtLocationEdt').val('CDMX');
                 /* $('#txtEdosRepublic').parents('tr').addClass('hide'); */
                 $('#txtTripGo').parents('tr').addClass('hide');
@@ -2385,7 +2254,6 @@ function fillData(inx) {
                 let toCarryOut = $('#txtCarryOut').val();
                 let testTecnic = $('#txtTestTecnic').val();
                 let testLook = $('#txtTestLook').val();
-
                 let projDateStart = moment(
                     projPeriod.split(' - ')[0],
                     'DD/MM/YYYY'
@@ -2428,7 +2296,6 @@ function fillData(inx) {
 }
 function settingTable(){
         $('#addLocationModal').removeClass('overlay_hide');
-
         $('#addLocationEdos')
         .unbind('click')
         .on('click', function () {
@@ -2470,19 +2337,18 @@ function settingTable(){
                 let edo =$(this).attr('id');
                 let  aux = $(this).attr('data-content');
                 let truk = `${loc}|${edo}`;
-                //console.log(truk);
-                console.log(aux);
+                // console.log(aux);
                 if(aux == 1){
                     build_data_structure(truk);
                 }
             });
         });
 }
+
 function putLocations(){ //** AGREGO ED */
     let loc=$('#txtLocationExtra').val();
     let edo =$('#txtEdosRepublic_2').val();
     let name_edo =$(`#txtEdosRepublic_2 option[value="${edo}"]`).text(); // por alguna razon cada que se cierra el modal principal, y se reabre para generar un nuevo proyecto se genera una repeticion de datos
-    
     par = `
             [{
                 "support"  : "${edo}",
@@ -2490,29 +2356,15 @@ function putLocations(){ //** AGREGO ED */
                 "edoRep"       : "${name_edo}"
             }]`;
     
-    console.log(par);
-    /* if (add ==2) {
-        let prjId = $('#txtProjectIdEdt').val();
-        let par = `
-        [{
-            "loc" :  "${loc}",
-            "edo" :  "${edo}",
-            "prjId" : "${prjId}"
-        }]`;
-        //save_exchange(par);
-    }else{ */
-        
+    // console.log(par);   
         fill_table(par);
-        clean_selectors();
-    //}
-    
+        clean_selectors();  
 
 }
 function fill_table(par) { //** AGREGO ED */
     let largo = $('#listLocationsTable tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#listLocationsTable tbody tr').remove() : '';
     par = JSON.parse(par);
-
     let tabla = $('#listLocationsTable').DataTable();
     
     tabla.row
@@ -2533,7 +2385,6 @@ function fill_table(par) { //** AGREGO ED */
     .on('click', function () {
         tabla.row($(this).parent('tr')).remove().draw();
     });
-
 }
 
 function build_data_structure(pr) {
@@ -2549,23 +2400,20 @@ function build_data_structure(pr) {
         }]`;
         
     }
-    console.log(' Antes de Insertar', par);
+    // console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
+
 function save_exchange(pr) {
-    //   console.log(pr);
-    
     var pagina = 'ProjectDetails/SaveLocations';
     var par = pr;
     var tipo = 'html';
     var selector = exchange_result;
-    console.log(par);
     fillField(pagina, par, tipo, selector);
     //console.log(fillField(pagina, par, tipo, selector));
 }
 
 function exchange_result(dt) {
-    console.log(dt);
     if (add ==1) {
         $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion */
         $('#addLocationModal').addClass('overlay_hide');
@@ -2575,8 +2423,7 @@ function exchange_result(dt) {
             
         getLocationsEdos(prj_id);
         clean_selectors();
-    }
-   
+    }  
 }
 
 
@@ -2617,6 +2464,7 @@ function newProject() {
     fillContent();
     actionNewProject();
 }
+
 function actionNewProject() {
     $('#saveProject.insert')
         .unbind('click')
@@ -2634,7 +2482,6 @@ function actionNewProject() {
                 let projType = $('#txtTypeProjectEdt option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
-
                 let projDateStart = moment(
                     projPeriod.split(' - ')[0],
                     'DD/MM/YYYY'
@@ -2643,14 +2490,12 @@ function actionNewProject() {
                     projPeriod.split(' - ')[1],
                     'DD/MM/YYYY'
                 ).format('YYYYMMDD');
-
                 let cuoId = 0;
                 $.each(relc, function (v, u) {
                     if (cusCte == u.cus_id && cusCteRel == u.cus_parent) {
                         cuoId = u.cuo_id;
                     }
                 });
-
                 let par = `
                 [{
                     "projId"        : "${projId}",
@@ -2679,7 +2524,6 @@ function actionNewProject() {
 function showModalComments() {
     let template = $('#commentsTemplates');
     let pjtId = $('.version_current').attr('data-project');
-
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     $('.invoice__modal-general .modal__body').append(template.html());
@@ -2687,13 +2531,13 @@ function showModalComments() {
     closeModals();
     fillComments(pjtId);
 }
+
 function fillComments(pjtId) {
     // Agrega nuevo comentario
     $('#newComment')
         .unbind('click')
         .on('click', function () {
             let pjtId = $('.version_current').attr('data-project');
-
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
 
@@ -2714,6 +2558,7 @@ function fillComments(pjtId) {
 
     getComments(pjtId);
 }
+
 function putComments(dt) {
     $('.comments__list').html('');
     if (dt[0].com_id > 0) {
@@ -2722,6 +2567,7 @@ function putComments(dt) {
         });
     }
 }
+
 function fillCommnetElements(u) {
     let H = `
         <div class="comment__group">
@@ -2730,7 +2576,6 @@ function fillCommnetElements(u) {
             <div class="comment__box comment__box-user">${u.com_user}</div>
         </div>
     `;
-
     $('.comments__list').prepend(H);
 }
 
@@ -2741,7 +2586,6 @@ function addComment(dt) {
 
 function lastVersionFinder() {
     let lstversion = [];
-
     $('.version__list ul li').each(function () {
         lstversion.push($(this).data('code'));
     });
@@ -2773,10 +2617,10 @@ function printBudget(verId) {
 }
 
 function putsaveBudget(dt) {
-    console.log('putsaveBudget',dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    
+
+
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();
@@ -2794,7 +2638,6 @@ function putSaveBudgetAs(dt) {
     // console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-
     interfase = 'MST';
     // console.log('putSaveBudgetAs-',glbpjtid);
     getVersion(glbpjtid);
@@ -2808,7 +2651,6 @@ function getDaysPeriod() {
     let start = moment(Period.split(' - ')[0], 'DD/MM/YYYY');
     let end = moment(Period.split(' - ')[1], 'DD/MM/YYYY');
     let days = end.diff(start, 'days') + 1;
-
     return days;
 }
 
@@ -2913,9 +2755,7 @@ function updateTotals() {
     $('#prodTotal').html(mkn(totlPrds, 's'));
 
     let desctot = costassu - desctins;
-
     totlCost = costbase + costtrip + costtest + desctot;
-
     $('#costTotal').html(mkn(totlCost, 'n'));
 
     getDataMice();
@@ -3063,7 +2903,6 @@ function sel_items(txt, obj) {
     } else {
         $(`#${obj} .finder_list ul li`).css({ display: 'none' });
     }
-
     $(`#${obj} .finder_list ul li`).each(function (index) {
         var cm = $(this).data('element').toUpperCase();
 
@@ -3304,7 +3143,6 @@ function getDataMice() {
  */
 function updateMice(pj, pd, fl, dt, sc, ac) {
     // console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
-
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{
         "pjtId"      :   "${pj}",
@@ -3321,7 +3159,6 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
 }
 function receiveResponseMice(dt) {
     console.log(dt);
-
 }
 
 function OrderMice(m) {
@@ -3335,7 +3172,6 @@ function OrderMice(m) {
             .attr('data-order');
         if (m == 1) {
             $(`#SC${section}`).attr('data-switch', '1');
-
             var par = `[{
             "pjtId"      :   "${pjtId}",
             "prdId"      :   "${pid}",
@@ -3357,6 +3193,7 @@ function OrderMice(m) {
 /* ************************************************************************ */
 
 function periodProduct(prd,nameProd) {
+    modalLoading('B');
     let prdId = prd.substring(3, 10);
     let pjtId = $('.version_current').attr('data-project');
 
@@ -3378,6 +3215,7 @@ function periodProduct(prd,nameProd) {
 
 function putPeriods(dt) {
     $('#periodBox').html(dt);
+    modalLoading('H');
 }
 
 function purgeInterfase() {
@@ -3405,13 +3243,11 @@ function findIndex(id, dt) {
             inx = v;
         }
     });
-
     return inx;
 }
 
 function subaccion() {
     let pjtId = $('.version_current').data('project');
     let verId = $('.version_current').attr('data-version');
-
     getBudgets(pjtId, verId); 
 }

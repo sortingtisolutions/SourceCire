@@ -110,7 +110,7 @@ function settingTable() {
         ],
         pagingType: 'simple_numbers',
         language: {
-            url: 'app/assets/lib/dataTable/Spanish.json',
+            url: 'app/assets/lib/dataTable/spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
@@ -178,29 +178,32 @@ function activeIcons() {
 
 /** ---- Almacena las subcategorias ---- */
 function putReasons(dt) {
-    // console.log('1',dt);
+    console.log('1',dt);
     subs=dt;
     var prds=dt;
-    $('#tblReasonChange tbody').html('');
-    
-    if (prds[0].pjtcr_id != '0') {
+    //$('#tblReasonChange tbody').html('');
+    let tabla = $('#tblReasonChange').DataTable();
+    tabla.rows().remove().draw();
+    if (prds[0].pjtcr_id > 0) {
         $.each(prds, function (v, u) {
-        
-                var H = `
-                <tr id="${u.pjtcr_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
-                    <td class="supply" data-content="${u.pjtcr_definition}">${u.pjtcr_definition}</td>
-                    <td class="supply">${u.pjtcr_description}</td>
-                    <td class="supply">${u.pjtcr_code_stage}</td>
-                </tr>`;
-                $('#tblReasonChange tbody').append(H);
+            tabla.row
+            .add({
+                editable: `<i class='fas fa-pen modif' id ="md${u.pjtcr_id}"></i><i class="fas fa-times-circle kill"></i>`,
+                lmaintmov: u.pjtcr_definition,
+                lmaintdes: u.pjtcr_description,
+                motmain: u.pjtcr_code_stage,
+            })
+            .draw();
+            $('#md' + u.pjtcr_id)
+            .parents('tr')
+            .attr('id', u.pjtcr_id);
             }
         );
-        // settingTable();
         // console.log('2', prds);
         activeIcons();
+        /* settingTable(); */
     } else {
-        settingTable();
+        /* settingTable(); */
     }
 }
 
@@ -261,7 +264,10 @@ function deleteReason(pjtcrId) {
 function putdeleteReason(dt) {
     // console.log('BORRAR LINEA');
     getReasons();
-
+    $('#txtCrDescription').val('');
+    $('#txtIdDefinition').val('');
+    $('#txtCrDefinition').val('');
+    $('#txtCodMotivos').val('');
     $('#confirmModal').modal('hide');
 }
 

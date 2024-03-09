@@ -16,15 +16,12 @@
 			integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
 			crossorigin="anonymous"
 		/>
-
 		<link rel="preconnect" href="https://fonts.gstatic.com" />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Titillium+Web:wght@400;600&display=swap"
 			rel="stylesheet"
 		/>
-
 		<title>CTT Exp & Rentals</title>
-
 		<link rel="stylesheet" href="<?= FOLDER_PATH . '/app/assets/css/estilos.min.css' ?>">
 
 	</head>
@@ -45,7 +42,7 @@
 						<img src="<?=  PATH_ASSETS . 'img/logo.png' ?>" alt="logo CTT Exr & Rentals" class="img-fluid logo" />
 						<div class="row">
 							<div style="height:10px;"></div>
-							<span><small> Version Web 1.2.20</small></span>
+							<span><small> Version Web 2.1.01</small></span>
 						</div>
 					</div>
 					

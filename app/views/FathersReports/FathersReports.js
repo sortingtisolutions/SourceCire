@@ -70,19 +70,8 @@ function setting_datepicket(sl, di, df) {
             locale: {
                 format: 'DD/MM/YYYY',
                 daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -191,14 +180,14 @@ function setting_table() {
             { data: 'dateend', class: 'date' },
             { data: 'time', class: 'date' },
         ],
-    });
-    
+    });  
 }
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'FathersReports/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="40";
+	var pagina = 'Commons/listProjects';
+	var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);
@@ -206,7 +195,7 @@ function get_Proyectos() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function getProjects(pj) {
-    console.log(pj);
+    // console.log(pj);
     var pagina = 'FathersReports/listProjectsForProject';
     var par = `[{"pjtId":"${pj}"}]`;
     var tipo = 'json';
@@ -216,8 +205,8 @@ function getProjects(pj) {
 
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
+    // console.log('put_Proyectos',pj);
     pj = dt;
-    console.log(pj);
     if (dt[0].pjt_id!=0) {
         $.each(dt, function (v, u) {
             let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
@@ -248,7 +237,6 @@ function putProjects(dt) {
     let cn = 0;
     if(dt[0].pjt_id!=0){
         $.each(pd, function (v, u) {
-           
             tabla.row
                 .add({
                     editable: u.pjt_id,
@@ -263,9 +251,7 @@ function putProjects(dt) {
                 .draw();
             cn++;
         });
-
-    }
-    
+    } 
 }
 
 /*  ++++++++ Valida los campos  +++++++ */
@@ -329,7 +315,6 @@ function fillContent() {
         restdate= moment().subtract(3, 'days');
     } else { restdate= moment(Date()) } 
 
-    
     let fecha = moment(Date()).format('DD/MM/YYYY');
     $('#calendar').daterangepicker(
         {
@@ -344,19 +329,8 @@ function fillContent() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -370,10 +344,7 @@ function fillContent() {
             $('#txtPeriod').val(
                 start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
             );
-            looseAlert($('#txtPeriod').parent());
-
-            
+            looseAlert($('#txtPeriod').parent());  
         }
     );
-   
 }

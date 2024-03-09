@@ -5,6 +5,7 @@
 
 class ProductsController extends Controller
 {
+	
 	private $session;
 	public $model;
 
@@ -42,22 +43,22 @@ class ProductsController extends Controller
 	}
 
 // Lista las subcategorias
-	public function listSubcategories($request_params)
-	{
-		$params =  $this->session->get('user');
-		$result = $this->model->listSubcategories($request_params);
-		$i = 0;
-		while($row = $result->fetch_assoc()){
-			$rowdata[$i] = $row;
-			$i++;
-		}
-		if ($i>0){
-			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-		} else {
-			$res =  '[{"sbc_id":"0"}]';	
-		}
-		echo $res;
-	}
+	// public function listSubcategories($request_params)
+	// {
+	// 	$params =  $this->session->get('user');
+	// 	$result = $this->model->listSubcategories($request_params);
+	// 	$i = 0;
+	// 	while($row = $result->fetch_assoc()){
+	// 		$rowdata[$i] = $row;
+	// 		$i++;
+	// 	}
+	// 	if ($i>0){
+	// 		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+	// 	} else {
+	// 		$res =  '[{"sbc_id":"0"}]';	
+	// 	}
+	// 	echo $res;
+	// }
 
 
 // Lista los servicios
@@ -79,22 +80,22 @@ class ProductsController extends Controller
 	}
 
 // Lista los tipos de monedas
-	public function listCoins($request_params)
-	{
-		$params =  $this->session->get('user');
-		$result = $this->model->listCoins($request_params);
-		$i = 0;
-		while($row = $result->fetch_assoc()){
-			$rowdata[$i] = $row;
-			$i++;
-		}
-		if ($i>0){
-			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-		} else {
-			$res =  '[{"cin_id":"0"}]';	
-		}
-		echo $res;
-	}
+	// public function listCoins($request_params)
+	// {
+	// 	$params =  $this->session->get('user');
+	// 	$result = $this->model->listCoins($request_params);
+	// 	$i = 0;
+	// 	while($row = $result->fetch_assoc()){
+	// 		$rowdata[$i] = $row;
+	// 		$i++;
+	// 	}
+	// 	if ($i>0){
+	// 		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+	// 	} else {
+	// 		$res =  '[{"cin_id":"0"}]';	
+	// 	}
+	// 	echo $res;
+	// }
 
 // Lista los documentos de fichas técnicas
 public function listDocument($request_params)
@@ -260,6 +261,14 @@ public function listDocument($request_params)
 	{
 		$params =  $this->session->get('user');
 		$result = $this->model->saveEdtProduct($request_params);
+		$res = $result ;
+		echo $res;
+	}
+
+	public function verifyChanges($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->verifyChanges($request_params);
 		$res = $result ;
 		echo $res;
 	}

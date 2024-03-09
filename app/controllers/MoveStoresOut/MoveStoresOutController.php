@@ -39,9 +39,6 @@ class MoveStoresOutController extends Controller
 				$res =  '[{"ext_id":"0"}]';	
 			}
 			echo $res;
-
-		  // $params = array('unidad' => $res);
-		  // $this->render(__CLASS__, $params);
 	}
 
 // Lista los almacenes 
@@ -63,22 +60,22 @@ class MoveStoresOutController extends Controller
 	}
 
 	// Lista los Categorias 
-    public function listCategories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listCategories();
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"cat_id":"0"}]';	
-            }
-            echo $res;
-    }    
+    // public function listCategories($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listCategories();
+    //         $i = 0;
+    //         while($row = $result->fetch_assoc()){
+    //             $rowdata[$i] = $row;
+    //             $i++;
+    //         }
+    //         if ($i>0){
+    //             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //         } else {
+    //             $res =  '[{"cat_id":"0"}]';	
+    //         }
+    //         echo $res;
+    // }    
 
 // Lista los productos
 	public function listProducts($request_params)
@@ -140,6 +137,7 @@ class MoveStoresOutController extends Controller
 		$typeExch = $request_params['typeExch'];
 		$strid = $request_params['strid'];
 		$mov = $request_params['mov'];
+		$prdlvl = $request_params['lvl'];
 
 		$existences = $this->model->getExistences($request_params);
 		$exis = $existences->fetch_object();
@@ -192,26 +190,29 @@ class MoveStoresOutController extends Controller
 				}
 				
 			}
-			
-			$response =  $this->setAccesories($request_params);
+			if ($prdlvl == 'PF') {
+				$response =  $this->setProducts($request_params);
+			}
 			$var = 1;
 		}
 		echo $var;
 		
 	} 
-	public function setAccesories($param)
+	public function setProducts($param)
 	{
-		$resultado = $this->model->getAccesories($param);
-		/* $cantAccesories = $this->model->getNumAccesories($param);
-		$cant = $cantAccesories->fetch_object();  */
 		$typeExch = $param['typeExch'];
 		$strid1 = $param['strid'];
 		$mov = $param['mov'];
 		$qty = $param['qty'];
 		$prdsku = $param['sku'];
+		$prdid = $param['prdid'];
+		
+		$prdlvl = $param['lvl'];
+
+		if ($prdlvl == 'PF') {
+			$resultado = $this->model->getAccesories($param);
 
 			while($row = $resultado->fetch_assoc()){
-				
 				$prd_id = $row["prd_id"];
 				$ser_id = $row["ser_id"];
 				$strid2 = $row["str_id"];
@@ -221,52 +222,90 @@ class MoveStoresOutController extends Controller
 					'stridT' => $strid2,
 					'strid' => $strid1,
 					'qty' => $qty,
+					'typeExch' => $typeExch,
+					'mov' => $mov,
 				);
 	
-				if($typeExch == 2){
-					if ($mov == 'S' ){
-						$result = $this->model->UpdateStoresSourceT($paramsacc);
-						$res = $result;
-						
-					}
-			
-					if ($mov == 'T' ){
-						$params =  $this->session->get('user');
-						$item = $this->model->SechingProducts($paramsacc);
-			
-						$num_items = $item->fetch_object();
-			
-						if ($num_items->exist > 0){
-							// echo 'update';
-							// actualiza la cantidad en el almacen destino
-							$result = $this->model->UpdateProducts($paramsacc);
-							
-						} else {
-							// echo 'insert';
-							//agrega la relación almacen - producto
-							$result = $this->model->InsertProducts($paramsacc);
-						}
-						$res = $result;
-						
-						echo $num_items->exist; //$res;
-					}
-				}else{
-					if ($typeExch == 3 &&  $strid1 == 30){
-					
-						$params =  $this->session->get('user');
-						$result = $this->model->UpdateStoresSourceE($paramsacc);
-						$res = $result;
-						
-					}else{
-						if ($mov == 'S' ){
-					
-							$params =  $this->session->get('user');
-							$result = $this->model->UpdateStoresSource($paramsacc);
-							$res = $result;
-						}
-					}
-					
+				$response =  $this->setAccesories($paramsacc);
+			}
+		}
+		/* elseif ($prdlvl == 'PV') {
+			$resultado = $this->model->getProducts($prdid);
+			while($pkt = $resultado->fetch_assoc()){
+                $pkqty =  $pkt["pck_quantity"];
+				$prd_id = $pkt["prd_id"];
+				$series = $this->model->getSeriesProduct($prd_id, $pkqty);
+				
+				while($serie = $series->fetch_assoc()){
+					$ser_id = $serie["ser_id"];
+					$strid2 = $serie["str_id"];
+
+					$paramsacc = array(
+						'prdid' => $prd_id,
+						'serid' => $ser_id,
+						'stridT' => $strid2,
+						'strid' => $strid1,
+						'qty' => $qty,
+						'typeExch' => $typeExch,
+						'mov' => $mov,
+					);
+					$response =  $this->setAccesories($paramsacc);
 				}
 			}
+
+		} */
+		return $prdlvl;
+			
 	}
+	public function setAccesories($paramsacc){
+		$typeExch = $paramsacc['typeExch'];
+		$mov = $paramsacc['mov'];
+		$strid1 = $paramsacc['strid'];
+		
+		if($typeExch == 2){
+			if ($mov == 'S' ){
+				$result = $this->model->UpdateStoresSourceT($paramsacc);
+				$res = $result;
+				
+			}
+	
+			if ($mov == 'T' ){
+				$params =  $this->session->get('user');
+				$item = $this->model->SechingProducts($paramsacc);
+	
+				$num_items = $item->fetch_object();
+	
+				if ($num_items->exist > 0){
+					// echo 'update';
+					// actualiza la cantidad en el almacen destino
+					$result = $this->model->UpdateProducts($paramsacc);
+					
+				} else {
+					// echo 'insert';
+					//agrega la relación almacen - producto
+					$result = $this->model->InsertProducts($paramsacc);
+				}
+				$res = $result;
+				
+				echo $num_items->exist; //$res;
+			}
+		}else{
+			if ($typeExch == 3 &&  $strid1 == 30){
+			
+				$params =  $this->session->get('user');
+				$result = $this->model->UpdateStoresSourceE($paramsacc);
+				$res = $result;
+				
+			}else{
+				if ($mov == 'S' ){
+			
+					$params =  $this->session->get('user');
+					$result = $this->model->UpdateStoresSource($paramsacc);
+					$res = $result;
+				}
+			}
+			
+		}
+	}
+	
 }

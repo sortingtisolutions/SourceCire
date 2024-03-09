@@ -6,7 +6,7 @@
 
     class PostCollectionController extends Controller
     {
-
+        
         private $session;
         public $model;
 
@@ -38,7 +38,7 @@
             if ($i>0){
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
-                $res =  '[{"sbc_id":"0"}]';	
+                $res =  '[{"pclt_id":"0"}]';	
             }
             echo $res;	
         }

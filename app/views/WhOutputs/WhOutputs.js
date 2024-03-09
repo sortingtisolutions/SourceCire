@@ -20,8 +20,9 @@ function inicial() {
 
 /** +++++  Obtiene los proyectos de la base */
 function getProjects(catId) {
+    let liststat ="4,7,8";
     var pagina = 'WhOutputs/listProjects';
-    var par = `[{"catId":"${catId}"}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
@@ -101,9 +102,10 @@ function settingTable() {
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    console.log(dt);
+    // console.log(dt);
     let valstage='';
     let valicon='';
+    let etiquetai = '';
     
     if (dt[0].pjt_id > 0) {        
         $('#tblProyects tbody').html('');
@@ -117,11 +119,17 @@ function putProducts(dt) {
                 valicon='fa fa-solid fa-dolly detail'; }
             else
                 { valstage='color:#CC0000';
-                valicon='fa fa-solid fa-dolly detail'; }
-          
+                valicon='fa fa-solid fa-dolly detail';
+                }
+                 //valicon='fa fa-solid fa-print detail';
+            if (u.pjt_status == 8){
+                etiquetai = '<i class="fa fa-solid fa-print print"></i>';
+            }else{
+                etiquetai = '';
+            }
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}' data-version='${u.ver_id}'>
-                    <td class="sku"><i class="${valicon}"></i></td>
+                    <td class="sku">${etiquetai}<i class="${valicon}"></i></td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
                     <td class="supply">${u.pjttp_name}</td>
@@ -135,7 +143,7 @@ function putProducts(dt) {
         settingTable();
         activeIcons();
     } else {
-        // settingTable();
+        settingTable();
     }
 }
 
@@ -147,34 +155,44 @@ function activeIcons() {
             let locID = $(this);
             let pjtid = locID.parents('tr').attr('id');
             let verid = locID.parents('tr').attr('data-version');
-
-            // console.log('Paso ToWork..', pjtid, verid);
             confirm_to_work(pjtid, verid);
         });
 
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            // console.log('Pasando siguiente ventana...');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
-            // console.log(pjtid);
-            Cookies.set('pjtid', pjtid, {expires:1});
 
+            Cookies.set('pjtid', pjtid, {expires:1});
             window.location = 'WhOutputContent';
         });
+    $('.print')
+    .unbind('click')
+    .on('click', function () {
+        let h = localStorage.getItem('host');
+        let sltor = $(this);
+        let pjtid = sltor.parents('tr').attr('id');
+        let user = Cookies.get('user').split('|');
+        let u = user[0];
+        let n = user[2];
+        let em = user[3];
+
+        window.open(
+            `${url}app/views/OutputReprint/OutputReprintContentReport.php?v=${pjtid}&u=${u}&n=${n}&h=${h}&em=${em}`,
+            '_blank'
+        );
+    });
 }
 
 function confirm_to_work(pjtid, verid) {
     $('#starToWork').modal('show');
     $('#txtIdProductPack').val(pjtid);
-    //borra paquete +
     $('#btnToWork').on('click', function () {
         let Id = $('#txtIdProductPack').val();
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
-        //console.log('Datos',pjtid,Id);
         modalLoading('S');
 
         var pagina = 'WhOutputs/UpdateSeriesToWork';
@@ -182,12 +200,11 @@ function confirm_to_work(pjtid, verid) {
         var tipo = 'json';
         var selector = putToWork;
         fillField(pagina, par, tipo, selector);
-        // putToWork(pjtid);
     });
 }
 
 function putToWork(dt){
-    console.log('Resultado Update',dt)
+    // console.log('Resultado Update',dt)
     modalLoading('H');
     window.location.reload();
 }

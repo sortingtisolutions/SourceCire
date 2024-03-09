@@ -7,7 +7,6 @@ $(document).ready(function () {
     }
 });
 
-
 function inicial() {
     if (altr == 1) {
         deep_loading('O');
@@ -87,7 +86,7 @@ function settingTable() {
 
 // Solicita los productos de un almacen seleccionado
 function getStores() {
-    var pagina = 'Coins/GetCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"cin_id":""}]`;
     var tipo = 'json';
     var selector = putStores;
@@ -155,8 +154,9 @@ function actionButtons() {
 
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
-    console.log(strs);
-    tabla.row
+    // console.log(strs);
+    if (strs[0].cin_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].cin_id}"></i><i class="fas fa-times-circle kill"></i>`,
             code: strs[ix].cin_code,
@@ -164,9 +164,10 @@ function fillTableStores(ix) {
             quantity: strs[ix].cin_number,
         })
         .draw();
-    $('#md' + strs[ix].cin_id)
-        .parents('tr')
-        .attr('id', strs[ix].cin_id);
+        $('#md' + strs[ix].cin_id)
+            .parents('tr')
+            .attr('id', strs[ix].cin_id);
+    }
     actionButtons();
 }
 
@@ -181,7 +182,7 @@ function saveStore() {
         }]`;
 
     strs = '';
-    console.log(par);
+    // console.log(par);
     var pagina = 'Coins/SaveCoin';
     var tipo = 'html';
     var selector = putSaveStore;
@@ -211,17 +212,18 @@ function updateStore() {
             "coin_number"      : "${CoinsNumber}",
             "coin_code"      : "${CoinsCode}"
         }]`;
-    console.log(par);
+    // console.log(par);
     strs = '';
     var pagina = 'Coins/UpdateCoin';
     var tipo = 'html';
     var selector = putUpdateStore;
     fillField(pagina, par, tipo, selector);
 }
+
 function putUpdateStore(dt) {
     getStores();
     if (strs.length > 0) {
-        console.log(dt);
+        // console.log(dt);
         let ix = goThroughStore(dt);
         $(`#${strs[ix].cin_id}`).children('td.store-name').html(strs[ix].cin_name);
         $(`#${strs[ix].cin_id}`).children('td.strid').html(strs[ix].cin_code);
@@ -235,7 +237,7 @@ function putUpdateStore(dt) {
 }
 
 function editStore(strId) {
-    console.log('Editando');
+    // console.log('Editando');
     let ix = goThroughStore(strId);
     $('#NomAlmacen').val(strs[ix].cin_name);
     $('#IdAlmacen').val(strs[ix].cin_id);
@@ -244,38 +246,32 @@ function editStore(strId) {
 }
 
 function deleteStore(strId) {
-    console.log(strId);
+    // console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
+    $('#confirmModal').modal('show');
+    $('#confirmModalLevel').html('¿Seguro que desea borrar la moneda?');
+    $('#N').html('Cancelar');
+    $('#confirmButton').html('Borrar moneda').css({display: 'inline'});
+    $('#Id').val(strId);
+    //   $('#BorrarAlmacenModal').modal('show');
+    $('#IdAlmacenBorrar').val(strId);
 
-    
-        $('#confirmModal').modal('show');
-
-        $('#confirmModalLevel').html('¿Seguro que desea borrar la moneda?');
-        $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
-        $('#Id').val(strId);
-
-        //   $('#BorrarAlmacenModal').modal('show');
-        $('#IdAlmacenBorrar').val(strId);
-
-        $('#confirmButton').on('click', function () {
-            var pagina = 'Coins/DeleteCoin';
-            var par = `[{"cin_id":"${strId}"}]`;
-            var tipo = 'html';
-            var selector = putDeleteStore;
-            fillField(pagina, par, tipo, selector);
-        });
+    $('#confirmButton').on('click', function () {
+        var pagina = 'Coins/DeleteCoin';
+        var par = `[{"cin_id":"${strId}"}]`;
+        var tipo = 'html';
+        var selector = putDeleteStore;
+        fillField(pagina, par, tipo, selector);
+    });
     
 }
 
 function putDeleteStore(dt) {
     getStores();
     let tabla = $('#AreasTable').DataTable();
-    tabla
-        .row($(`#${dt}`))
-        .remove()
-        .draw();
+    tabla.row($(`#${dt}`)).remove().draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {

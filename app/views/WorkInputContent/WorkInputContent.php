@@ -37,33 +37,19 @@
                             </div>
                         </div>
 						<div class="row">
-							<!-- <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
-								<input id="txtStartDate" type="text" class="form-control form-control-sm">
-								<label for="txtStartDate" >Fecha Incial</label>
-							</div> -->
+
 							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
 								<input id="txtEndDate" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
 								<label for="txtEndDate">Fecha Final</label>
 							</div>
 						</div>
-						<!-- <div class="row">
+
+                        <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtLocation" type="text" class="form-control form-control-sm" >
+                                <select id="txtLocation" class="form-select form-select-sm"><option value='0'></option></select>
                                 <label for="txtLocation">Dirección de Locación</label>
                             </div>
-                        </div> -->
-						<!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtCustomer" type="text" class="form-control form-control-sm" >
-                                <label for="txtCustomer">Nombre Cliente</label>
-                            </div>
-                        </div> -->
-						<!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtAnalyst" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
-                                <label for="txtAnalyst">Analista de Programación</label>
-                            </div>
-                        </div> -->
+                        </div>
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtAnalyst" class="form-select form-select-sm"><option value='0'></option></select>
@@ -76,13 +62,7 @@
                                 <label for="txtFreelance">Freelances Asignados</label>
                             </div>
                         </div>
-						<!-- <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtFreelance" type="text" class="form-control form-control-sm" >
-                                <label for="txtFreelance">Freelance Asignado</label>
-                            </div>
-                        </div> -->
-                        <!--- 11-10-23 -->
+
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <textarea class="form-control form-control-sm" id="txtComments" style="height:100px; background-color: #FFFAFF" autocomplete="off" rows="5" disabled></textarea>
@@ -96,9 +76,7 @@
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordInPut">Registrar Entrada</button>
                             </div>
-                            <!-- <div class="col-6">
-                                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
-                            </div> -->
+
                     </div>
 
                     <div class="form_secundary">
@@ -180,31 +158,6 @@
     </div>
 <!-- End Ventana modal SERIES -->
 
-<!-- Modal Borrar
-<div class="modal fade" id="delPackModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-            <div class="modal-header ">
-            </div>
-            <div class="modal-body" style="padding: 0px !important;">
-
-
-            <div class="row">
-                <input type="hidden" class="form-control" id="txtIdPackage" aria-describedby="basic-addon3">
-                <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
-                </div>
-            </div>
-
-            </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-danger" id="btnDelPackage">Borrar</button>
-                </div>
-            </div>
-    </div>
-</div>-->
-
 <!-- Start Ventana modal de motivos de mantenimiento MODAL 1 -->
 <div class="overlay_background overlay_hide" id="ReasonMtModal" style="width:45%; left:25%;">
         <div class="overlay_modal">
@@ -262,17 +215,19 @@
 
 <!-- formulario de comentarios -->
 <div id="commentsTemplates" class="table_hidden box_template">
-        <div class="comments__box">
-            <!-- Lista de comentarios -->
+        <div class="comments__box" style=" width: 100%; height: 100%; padding: 1.1rem; display: grid; grid-template-rows: 1fr 170px;">
+            
             <div class="comments__list" style="border: 1px solid var(--br-gray-soft); border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.5rem; overflow-y: scroll;"></div>
-            <!-- Captura de cumentario -->
+            
                 <div class="comments__addNew" style="background-color: var(--br-gray-soft); padding: 0.5rem;">
                     <label for="txtComment">Escribe comentario</label><br>
                     <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput" ></textarea><br>
                     <span class="invoice_button" id="newComment" style="background-color: var(--in-white) !important;"><i class="fas fa-plus"></i>guardar comentario</span>
                 </div>
+            </div>
         </div>
-</div>
+    </div>
+
 <!--- ********** -->
 <!-- Boton para confirmar entrada de productos -->
 <div class="modal fade" id="starClosure" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

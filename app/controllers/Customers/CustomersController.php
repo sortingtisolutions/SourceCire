@@ -5,6 +5,7 @@
 
 class CustomersController extends Controller
 {
+	
 	private $session;
 	public $model;
 
@@ -36,7 +37,7 @@ class CustomersController extends Controller
 		if ($i>0){
 			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
 		} else {
-			$res =  '[{"cat_id":"0"}]';	
+			$res =  '[{"cus_id":"0"}]';	
 		}
 		echo $res;
 	}

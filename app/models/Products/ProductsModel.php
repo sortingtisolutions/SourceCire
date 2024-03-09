@@ -19,11 +19,11 @@ class ProductsModel extends Model
     }
 
 // Listado de categorias
-    public function listSubcategories()
-    {
-        $qry = "SELECT cat_id, sbc_id, sbc_name, sbc_code FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listSubcategories()
+    // {
+    //     $qry = "SELECT cat_id, sbc_id, sbc_name, sbc_code FROM ctt_subcategories WHERE sbc_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de servicios
     public function listServices()
@@ -33,12 +33,11 @@ class ProductsModel extends Model
     }
 
 // Listado de tipos de moneda
-    public function listCoins()
-    {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }
-
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de fichas técnicas
     public function listDocument()
@@ -46,7 +45,6 @@ class ProductsModel extends Model
         $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id = 2;";
         return $this->db->query($qry);
     }
-
     
 // Listado de facturas
 public function listInvoice()
@@ -59,7 +57,7 @@ public function listInvoice()
 // Obtiene el siguiente SKU
     public function getNextSku($sbcId)
     {
-        $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next
+        $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,4), signed integer)),0) + 1 AS next
                 FROM ctt_products  WHERE sbc_id = $sbcId;";
         return $this->db->query($qry);
     }
@@ -127,7 +125,7 @@ public function listInvoice()
         $qry = "SELECT 
                     p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                     CASE 
-                        WHEN p.prd_level IN ('P','A') THEN  ifnull(sum(sp.stp_quantity),0)
+                        WHEN p.prd_level != 'K' THEN  ifnull(sum(sp.stp_quantity),0)
                         ELSE 0 
                     END AS quantity, 
                     p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, IFNULL(dt.doc_id, 0) AS doc_id, dt.doc_name, ct.cat_id,
@@ -146,12 +144,13 @@ public function listInvoice()
                 ORDER BY p.prd_sku;";
         return $this->db->query($qry);
     }
-    public function listProducts2()
-    {
-        $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
-                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';";
-        return $this->db->query($qry);
-    }
+
+    // public function listProducts2()
+    // {
+    //     $qry = "SELECT prd_id,prd_sku,prd_name, sbc_id, srv_id
+    //             FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P' AND p.prd_type_asigned != 'KP';";
+    //     return $this->db->query($qry);
+    // }
     
     // Listado de Productos
     public function listSeries($params)
@@ -163,7 +162,7 @@ public function listInvoice()
                     , CASE WHEN se.ser_behaviour = 'R' THEN 'SUBABRRENDADO' ELSE '' END comportamiento
                     , se.ser_comments, pd.prd_sku, pd.prd_name, pd.prd_id, sp.stp_quantity, st.str_name
                     , ifnull(dc.doc_id,0) AS doc_id, dc.doc_name, dc.dot_id, se.ser_brand,se.ser_cost_import
-                    , ser_import_petition, ser_no_econo
+                    , ser_import_petition, ser_no_econo, se.cin_id
                 FROM ctt_series as se
                 INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
                 LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
@@ -230,8 +229,8 @@ public function listInvoice()
         $prdCd = $this->db->real_escape_string($params['prdCd']);
         $prdNp = $this->db->real_escape_string($params['prdNp']);
         $prdCm = $this->db->real_escape_string($params['prdCm']);
-        $prdVs = $this->db->real_escape_string($params['prdVs']);
-        $prdLv = $this->db->real_escape_string($params['prdLv']);
+        $prdVs = $this->db->real_escape_string($params['prdVs']);/* 
+        $prdLv = $this->db->real_escape_string($params['prdLv']); */
         $prdLn = $this->db->real_escape_string($params['prdLn']);
         $prdAs = $this->db->real_escape_string($params['prdAs']);
         $prdSb = $this->db->real_escape_string($params['prdSb']);
@@ -239,6 +238,25 @@ public function listInvoice()
         $prdSv = $this->db->real_escape_string($params['prdSv']);
         $prdDc = $this->db->real_escape_string($params['prdDc']);
         $prdDi = $this->db->real_escape_string($params['prdDi']);
+
+        $prodSku = strlen($prdSk);
+
+        if ($prodSku == 4) {
+            $NxtId = "SELECT ifnull(max(convert(substring(prd_sku,5,4), signed integer)),0) + 1 AS next
+            FROM ctt_products  WHERE sbc_id = $prdSb;";
+            $rss = $this->db->query($NxtId);
+
+            if ($row = $rss->fetch_row()) {
+                $skires = trim($row[0]);
+                $NxtId = str_pad($skires, 4, "0", STR_PAD_LEFT);
+            }
+            
+            $prdSk .=  $NxtId ;
+
+            $query = "UPDATE ctt_series SET ser_sku = CONCAT('$prdSk',SUBSTR(ser_sku, 8,3)) 
+            WHERE prd_id = $prdId";
+            $result = $this->db->query($query);
+        }
 
         $qry = "UPDATE ctt_products
                 SET
@@ -282,10 +300,24 @@ public function listInvoice()
                         $this->db->query($qry1);
             } 
             
-        return $prdId .'|'. $prdDc;
+        return $prdId .'|'. $prdDc .'|'.$prdSk;
     }
 
+public function verifyChanges($params){
+    $prdId = $this->db->real_escape_string($params['prdId']);
+    $result = 0;
+    
+    $qry = "SELECT ser_id FROM ctt_series AS sr 
+            WHERE sr.prd_id = $prdId AND sr.ser_situation != 'D' 
+            AND sr.ser_stage != 'D'";
+    $res = $this->db->query($qry);
 
+    if ($res->num_rows > 0) {
+        $result = 1;
+    }
+    
+    return $result;
+}
 // Guarda los cambios de una serie
 public function saveEdtSeries($params)
 {
@@ -300,6 +332,7 @@ public function saveEdtSeries($params)
     $serNe = $this->db->real_escape_string($params['serNe']);
     $serDc = $this->db->real_escape_string($params['serDc']);
     $serCost = $this->db->real_escape_string($params['serCost']);
+    $cinId = $this->db->real_escape_string($params['cinId']);
    
     $qry = "UPDATE ctt_series
             SET ser_serial_number   = UPPER('$serSr'),
@@ -309,6 +342,7 @@ public function saveEdtSeries($params)
                 ser_cost_import     = UPPER('$serCi'),
                 ser_no_econo        = UPPER('$serNe'),
                 ser_comments        = UPPER('$serCm'),
+                cin_id              = '$cinId',
                 ser_cost            ='$serCost'
             WHERE ser_id  = '$serId';";
     $this->db->query($qry);
@@ -365,28 +399,28 @@ public function saveEdtSeries($params)
         $prdSt = '1';
         $NxtId ='';
 
-        if ($prdLv == 'P'){
+        //if ($prdLv == 'P'){
 
-            $NxtId = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next
+            $NxtId = "SELECT ifnull(max(convert(substring(prd_sku,5,4), signed integer)),0) + 1 AS next
                 FROM ctt_products  WHERE sbc_id = $prdSb;";
             $rss = $this->db->query($NxtId);
 
             if ($row = $rss->fetch_row()) {
                 $skires = trim($row[0]);
-                $NxtId = str_pad($skires, 3, "0", STR_PAD_LEFT);
+                $NxtId = str_pad($skires, 4, "0", STR_PAD_LEFT);
             }
-        }
+        //}
         
         $prdSk .=  $NxtId ;
 
         $qry = "INSERT INTO ctt_products (
                     prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-                    prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                    prd_insured, sbc_id, srv_id, cin_id, prd_status) 
+                    prd_model, prd_price, prd_visibility, prd_comments, prd_lonely, 
+                    prd_insured, sbc_id, srv_id, cin_id, prd_status, prd_level) 
                 VALUES (
                     '$prdSk', UPPER('$prdNm'), UPPER('$prdEn'), UPPER('$prdCd'), UPPER('$prdNp'), 
-                    UPPER('$prdMd'), '$prdPr', '$prdVs', UPPER('$prdCm'), '$prdLv', 
-                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt'
+                    UPPER('$prdMd'), '$prdPr', '$prdVs', UPPER('$prdCm'), 
+                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt', '$prdLv'
                 );";
         $this->db->query($qry);
         $prdId = $this->db->insert_id;
@@ -434,7 +468,6 @@ public function saveEdtSeries($params)
         return $prdId;
     }
 
-    
 // Guarda nuevo producto
     public function deleteSerie($params)
     {

@@ -260,7 +260,6 @@ function setSeries() {
         </tr>`;
         $('#periodsTable tbody').append(H);
     }
-
     fechasOrigen();
 }
 
@@ -314,6 +313,7 @@ function resizing() {
         },
     });
 }
+
 function updateCounterStatus(elm) {
     let dayStart = parseInt(elm.css('left')) / widthDay;
     let daysSelec = parseInt(elm.css('width')) / widthDay - 1;
@@ -346,7 +346,6 @@ function getFullProjectRangePeriod() {
 function putFullProjectRangePeriod(dt) {
     fechaInicial = dt[0].pjt_date_start;
     fechaFinal = dt[0].pjt_date_end;
-
     getSerieRangePeriod();
 }
 
@@ -359,6 +358,7 @@ function getSerieRangePeriod() {
     var selector = putSerieRangePeriod;
     fillField(pagina, par, tipo, selector);
 }
+
 function putSerieRangePeriod(dt) {
     if (dt[0].ser_id != '0') {
         $('.toApplyPeriods').attr('data-detail', dt[0].pjtcn_id);

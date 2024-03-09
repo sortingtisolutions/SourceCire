@@ -15,14 +15,13 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    //getCategories();
     eventsAction();
     setting_table();
 
     $('#btn_exchange').on('click', function () {
         let id = $('#boxIdProducts').val();
-        // console.log('id-val', id);
-        exchange_apply(id);
+        let level = $('#boxLvlProducts').val();
+        exchange_apply(id, level);
     });
 }
 
@@ -36,7 +35,7 @@ function getExchange() {
 }
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'MoveStoresOut/listStores';
+    var pagina = 'Commons/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;
@@ -45,7 +44,7 @@ function getStores() {
 
 function getCategories() {
     //console.log('categos');
-    var pagina = 'MoveStoresOut/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putCategories;
@@ -143,9 +142,7 @@ function setting_table() {
     });
 }
 
-
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
-// Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
@@ -185,7 +182,6 @@ function putStores(dt) {
             $('#txtStoreTarget').append(H);
         });
     }
-    // $('#boxProducts').parents('.list-finder').removeClass('hide-items');
 
     $('#txtStoreSource').on('change', function () {
         // $('#boxProducts').parents('.list-finder').addClass('hide-items');
@@ -207,15 +203,15 @@ function putStores(dt) {
 
 function putProducts(dt) {
     // console.log('putProducts',dt);
-
-    // $('#boxProducts').parents('.list-finder').removeClass('hide-items');
     var sl = $('#boxProducts').offset();
-
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}|${u.prd_id}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
-        $('#listProducts .list-items').append(H);
-    });
-
+    $('#listProducts .list-items').html('');
+    if (dt[0].ser_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-level="${u.prd_level}" 
+                    data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}|${u.prd_id}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
+            $('#listProducts .list-items').append(H);
+        });
+    }
     // console.log('Lista llena');
     $('#listProducts').css({top: sl.top + 30 + 'px'});
     $('#listProducts').show();
@@ -233,14 +229,14 @@ function putProducts(dt) {
         // console.log('Paso list');
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data-content');
+        let level = $(this).attr('data-level');
         $('#boxProducts').val(prdNm);
         $('#boxIdProducts').val(prdId);
         $('#listProducts').slideUp(100);
+        $('#boxLvlProducts').val(level);
         //validator();
     });
 }
-
-// Almacena los registros de productos en un arreglo
 
 function xdrawProducts(str) {
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
@@ -284,7 +280,7 @@ function validator(prId) {
     return ky;
 }
 // Aplica la seleccion para la tabla de movimientos
-function exchange_apply(prId) {
+function exchange_apply(prId, level) {
         //console.log('exchange_apply',prId);
     if (validator(prId) == 0) {
         let typeExchangeCodeSource = $('#txtTypeExchange option:selected').attr('data-content').split('|')[0];
@@ -307,6 +303,7 @@ function exchange_apply(prId) {
         let serId = prod[0];
         let productSKU = prod[2];
         let productName = prod[4];
+        let lvl = level;
         //let productQuantity = prId.children().children('.quantity').text();
         let productQuantity = '1';
         if(cant > 1){
@@ -321,7 +318,7 @@ function exchange_apply(prId) {
         //update_array_products(serId, productQuantity);
         let par = `
         [{
-            "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${serId}|${storeIdSource}|${storeIdTarget}|${prdId}",
+            "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${serId}|${storeIdSource}|${storeIdTarget}|${prdId}|${lvl}",
             "prodsku"	: 	"${productSKU}",
             "prodnme"	:	"${productName}",
             "prodqty"	:	"${productQuantity}",
@@ -398,6 +395,7 @@ function clean_selectors() {
     $('#txtComments').val('');
     $('#boxProducts').val('');
     $('#boxIdProducts').val('');
+    $('#boxLvlProducts').val('');
 }
 
 /** Actualiza la cantidad de cada producto dentro del arreglo */
@@ -434,12 +432,13 @@ function read_exchange_table() {
             let storeIdSource = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[5];
             let storeIdTarget = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[6];
             let prodId = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[7];
+            let lvl = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[8];
 
-            let exchstruc1 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeSource}|${comments}|${codeTypeExchangeSource}|${idTypeExchangeSource}`;
-            let exchstruc2 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeTarget}|${comments}|${codeTypeExchangeTarget}|${idTypeExchangeTarget}`;
+            let exchstruc1 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeSource}|${comments}|${codeTypeExchangeSource}|${idTypeExchangeSource}|${lvl}`;
+            let exchstruc2 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeTarget}|${comments}|${codeTypeExchangeTarget}|${idTypeExchangeTarget}|${lvl}`;
 
-            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}|${storeIdTarget}|${idTypeExchangeSource}|${sku}`;
-            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}|${storeIdSource}|${idTypeExchangeSource}|${sku}`;
+            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}|${storeIdTarget}|${idTypeExchangeSource}|${sku}|${lvl}`;
+            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}|${storeIdSource}|${idTypeExchangeSource}|${sku}|${lvl}`;
 
             if (codeTypeExchangeSource != '') { 
                 build_data_structure(exchstruc1);
@@ -473,7 +472,8 @@ function build_data_structure(pr) {
         "com" :  "${el[6]}",
         "cod" :  "${el[7]}",
         "idx" :  "${el[8]}",
-        "prj" :  ""
+        "prj" :  "",
+        "lvl" :  "${el[9]}"
     }]`;
     // console.log('STRUCTURE-',par);
     save_exchange(par);
@@ -490,15 +490,15 @@ function build_update_store_data(pr) {
         "stridT" : "${el[4]}",
         "typeExch" : "${el[5]}",
         "sku" : "${el[6]}",
-        "mov"   :  "${el[7]}"
+        "mov"   :  "${el[8]}",
+        "lvl"   :  "${el[7]}"
     }]`;
-    console.log('STORE-DATA',par);
+    // console.log('STORE-DATA',par);
     update_store(par);
 }
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
-    //   console.log(pr);
     var pagina = 'MoveStoresOut/SaveExchange';
     var par = pr;
     var tipo = 'html';
@@ -508,7 +508,6 @@ function save_exchange(pr) {
 
 function exchange_result(dt) {
     // console.log(dt);
-
     $('.resFolio').text(refil(folio, 7));
 
     $('#MoveFolioModal').modal('show');
@@ -522,7 +521,6 @@ function exchange_result(dt) {
 }
 
 function update_store(ap) {
-    // console.log(ap);
     var pagina = 'MoveStoresOut/UpdateStoresSource';
     var par = ap;
     var tipo = 'html';

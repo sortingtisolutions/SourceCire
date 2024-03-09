@@ -14,7 +14,7 @@
 
                 <div class="form-group">
                 <div>
-                    <h1>PRODUCTO A REGISTRAR</h1>
+                    <h1>PRODUCTO NUEVOS A SUBARRENDAR</h1>
                 </div>
 
                     <!-- Almacen posición 1 -->
@@ -140,7 +140,6 @@
                             <label for="txtComments">Comentarios</label>
                         </div>
                     </div>
-
 
                     <!-- Boton posición 4 -->
                         <div class="row pos1 ">

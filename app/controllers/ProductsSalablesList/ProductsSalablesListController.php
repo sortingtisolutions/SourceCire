@@ -22,7 +22,6 @@ class ProductsSalablesListController extends Controller
 		$params = array('user' => $this->session->get('user'));
 		$this->render(__CLASS__, $params);
 	}
-
     // OBTIENE EL LISTADO DE LAS VENTAS
     public function Sales($request_params)
     {
@@ -84,6 +83,7 @@ class ProductsSalablesListController extends Controller
         $res = $result;
         echo $res;
     }         
+    
 // Guarda la devolución
     public function SaveReturn($request_params)
     {

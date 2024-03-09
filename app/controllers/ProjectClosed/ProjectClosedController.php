@@ -5,6 +5,7 @@
 
 class ProjectClosedController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -36,13 +37,11 @@ class ProjectClosedController extends Controller
         } 
         $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
         echo $res;
-
     }
 
     /* -- Listado de proyectos  ------------------------------------------------------------------ */
     public function listChgStatus($request_params)
     {
-
         $result = $this->model->listChgStatus($request_params);
         $i = 0;
         while ($row = $result->fetCh_assoc())
@@ -104,6 +103,74 @@ class ProjectClosedController extends Controller
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
             $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    }
+
+    // OBTENER DATOS TOTALES PARA LOS EQUIPOS BASE, EXTRA, DIAS Y SUBARRENDOS
+    public function totalEquipo($request_params)
+    {
+        $result = $this->model->totalEquipo($request_params);	  
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    }
+    // OBTENER DATOS PAGOS TOTALES DEL PROYECTO
+    public function totalesProyecto($request_params)
+    {
+        $result = $this->model->totalesProyecto($request_params);	  
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    }
+
+    // OBTENER DATOS PAGOS TOTALES DE LOS PREPAGOS REALIZADOS POR EL CLIENTE
+    public function totalPrepago($request_params)
+    {
+        $result = $this->model->totalPrepago($request_params);	  
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    }
+
+    // LISTAR COMENTARIOS
+    public function listComments($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listComments($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"com_id":"0"}]';
         }
         echo $res;
     }

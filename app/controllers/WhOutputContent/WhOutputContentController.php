@@ -5,6 +5,7 @@
 
 class WhOutputContentController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -23,7 +24,22 @@ class WhOutputContentController extends Controller
 		$this->render(__CLASS__, $params);
     }
 
-
+    public function GetEventos($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->GetEventos($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"id":"0"}]';	
+        }
+        echo $res;
+    }
     // Lista los proyectos
     public function listProjects($request_params)
     {
@@ -93,6 +109,23 @@ class WhOutputContentController extends Controller
         }
         echo $res;
     }
+
+    public function listLocations($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listLocations($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"locations":"0"}]';
+        }
+        echo $res;
+    }
         // Lista las series
     public function listSeries($request_params)
     {
@@ -128,6 +161,27 @@ class WhOutputContentController extends Controller
         echo $res;
     }
 
+    // Guarda el comentario // 11-10-23
+    public function InsertComment($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->InsertComment($request_params, $params);
+
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"com_id":"0"}]';	
+        }
+        echo $res;
+        // **************************** //
+        
+    } 
+    
     public function checkSeries($request_params)
     {
         $params =  $this->session->get('user');

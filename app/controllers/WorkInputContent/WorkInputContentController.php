@@ -5,6 +5,7 @@
 
 class WorkInputContentController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -71,6 +72,23 @@ class WorkInputContentController extends Controller
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
             $res =  '[{"pjtpd_id":"0"}]';
+        }
+        echo $res;
+    }
+
+    public function listLocations($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listLocations($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"locations":"0"}]';
         }
         echo $res;
     }
@@ -166,21 +184,29 @@ class WorkInputContentController extends Controller
     public function checkSeries($request_params)
     {
         $params =  $this->session->get('user');
+        $prj_id = $request_params['prjid'];
         //$result = $this->model->checkSeries($request_params);
         $result = $this->model->getSeries($request_params);
         $i = 0;
         $serie=0;
         while($row = $result->fetch_assoc()){
             $serid = $row["ser_id"];
+            $ser_sku = $row["ser_sku"];
+            $prdid = $row["prd_id"];
             if($row["prd_level"]=='P'){
                 $serie=$serid;
+                $ser_sku =$ser_sku;
             }
             $paramsdet = array(
                 'serid' => $serid,
+                'prjid' => $prj_id,
+                'serSku' => $ser_sku,
+                'prdid' => $prdid
                 
             );
 
             $ActSeries = $this->model->ActualizaSeries($paramsdet);
+            $serie = $ActSeries;
             
         }
         echo $serie;

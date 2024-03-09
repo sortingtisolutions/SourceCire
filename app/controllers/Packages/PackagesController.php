@@ -5,6 +5,7 @@
 
 class PackagesController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -24,40 +25,40 @@ class PackagesController extends Controller
     }
 
     // LISTAS LAS CATEGORIAS
-    public function listCategories()
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listCategories();
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"cat_id":"0"}]';	
-        }
-        echo $res;
-    }
+    // public function listCategories()
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listCategories();
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"cat_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // }
 
 // Lista las categorias
-    public function listSubCategories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSubCategories($request_params['catId']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"sbc_id":"0"}]';	
-        }
-        echo $res;
-    }
+    // public function listSubCategories($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listSubCategories($request_params['catId']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"sbc_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // }
 
 // Lista de paquetes
     public function listPackages($request_params)

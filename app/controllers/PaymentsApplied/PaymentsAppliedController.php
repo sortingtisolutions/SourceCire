@@ -37,7 +37,7 @@
             if ($i>0){
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
-                $res =  '[{"pjt_id":"0"}]';	
+                $res =  '[{"pym_id":"0"}]';	
             }
             echo $res;	
         }
@@ -59,30 +59,5 @@
             echo $res;	
         }
 
-// Graba la nueva subcategoria
-        public function SaveSubcategory($request_params)
-        {
-            // $result = $this->model->SaveSubcategory($request_params);
-            // $res = $result;
-            // echo $res;	
-        }
-
-// Actualiza la subcategorias seleccionada
-        public function UpdateSubcategory($request_params)
-        {
-            // $params = $this->session->get('user');
-            // $result = $this->model->UpdateSubcategory($request_params);
-            // $res = $result;
-            // echo $res;
-        }
-
-// Actualiza el status de la subcategorias a eliminar
-        public function DeleteSubcategory($request_params)
-        {
-            // $params = $this->session->get('user');
-            // $result = $this->model->DeleteSubcategory($request_params);
-            // $res = $result;
-            // echo $res;
-        }
-
+        
     }

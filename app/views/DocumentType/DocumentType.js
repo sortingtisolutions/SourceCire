@@ -168,16 +168,18 @@ function actionButtons() {
 function fillTableStores(ix) {
     let tabla = $('#AreasTable').DataTable();
     // console.log(strs.length);
-    tabla.row
+    if (strs[0].dot_id > 0) {
+        tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${strs[ix].dot_id}"></i><i class="fas fa-times-circle kill"></i>`,
             storescode: strs[ix].dot_code,
             storname: strs[ix].dot_name,
         })
         .draw();
-    $('#md' + strs[ix].dot_id)
-        .parents('tr')
-        .attr('id', strs[ix].dot_id);
+        $('#md' + strs[ix].dot_id)
+            .parents('tr')
+            .attr('id', strs[ix].dot_id);
+    }
     actionButtons();
 }
 
@@ -197,6 +199,7 @@ function saveStore() {
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
 }
+
 function putSaveStore(dt) {
     getStores();
     if (strs.length > 0) {
@@ -237,7 +240,6 @@ function putUpdateStore(dt) {
         $(`#${strs[ix].dot_id}`).children('td.store-name').html(strs[ix].dot_name);
         $(`#${strs[ix].dot_id}`).children('td.codigo').html(strs[ix].dot_code);
 
-        //putQuantity(strs[ix].dot_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
         setTimeout(() => {
@@ -258,16 +260,11 @@ function editStore(strId) {
 function deleteStore(strId) {
     console.log(strId);
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
-
-    
         $('#confirmModal').modal('show');
-
-        $('#confirmModalLevel').html('¿Seguro que desea borrar el area?');
+        $('#confirmModalLevel').html('¿Seguro que desea borrar el tipo de documento?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#confirmButton').html('Borrar tipo de documento').css({display: 'inline'});
         $('#Id').val(strId);
-
-        
         $('#IdAlmacenBorrar').val(strId);
 
         $('#confirmButton').on('click', function () {
@@ -277,7 +274,6 @@ function deleteStore(strId) {
             var selector = putDeleteStore;
             fillField(pagina, par, tipo, selector);
         });
-    
 }
 
 function putDeleteStore(dt) {
@@ -288,6 +284,7 @@ function putDeleteStore(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {

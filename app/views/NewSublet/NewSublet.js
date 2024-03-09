@@ -21,15 +21,11 @@ function inicial() {
     getExchange();
     getStores();
     getSuppliers();
-    //getInvoice();
-    //getCoins();
     getCategories();
     setting_table();
     fillContent();
-    //getListProducts();
     actionButtons();
     
-
     $('#btn_exchange').addClass('disabled');
     // setting_datepicket($('#txtPeriod'), Date().format('DD/MM/YYYY')   ,Date().format('DD/MM/YYYY'));
     
@@ -44,7 +40,6 @@ function inicial() {
         validator();
     });
     $('#txtProducts').on('blur', function () {
-        //console.log($('#txtProducts').val());
         validator();
     });
     
@@ -67,28 +62,18 @@ function inicial() {
     $('#txtDeliveryTime').on('blur', function () {
         validator();
     });
-/*
-    $('#txtMarca').on('blur', function () {
-        validator();
-    });*/
 
     $('#txtSubCategory').on('blur', function () {
         validator();
-        /* let idCategoria = $('#txtCategory').val();
-        let codeSubCategoria = $('#txtSubCategory option:selected').data('code');
-
-        $('#txtSkuProduct').val(idCategoria.toString().padStart(2, '0')+codeSubCategoria); */
     });
+
     $('#txtCategory').on('blur', function () {
         validator();
-
     });
     
 }
 
 function actionButtons() {
-
-    /**  ---- Lismpia los campos ----- */
     $('#LimpiarFormulario')
         .unbind('click')
         .on('click', function () {
@@ -194,10 +179,9 @@ function getStores() {
 }
 // Solicita los provedores
 function getSuppliers() {
-    var pagina = 'MoveStoresIn/listSuppliers';
+    var pagina = 'Commons/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
-    //var selector = putSuppliers;
     var selector = putSupplierList;
     fillField(pagina, par, tipo, selector);
 }
@@ -212,7 +196,6 @@ function getInvoice(id) {
 
 // Solicita las categorias
 function getCategories() {
-    //console.log('categos');
     var pagina = 'NewSublet/listCategories';
     var par = `[{"store":""}]`;
     var tipo = 'json';
@@ -221,8 +204,7 @@ function getCategories() {
 }
 
 function getSubCategories(catId) {
-    //console.log(catId);
-    var pagina = 'NewSublet/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;
@@ -231,7 +213,6 @@ function getSubCategories(catId) {
 
 // Solicita los productos de un almacen seleccionado
 function getProducts(subCat) {
-    //console.log(subCat);
     var pagina = 'NewSublet/listProducts';
     var par = `[{"subCat":"${subCat}"}]`;
     var tipo = 'json';
@@ -239,8 +220,6 @@ function getProducts(subCat) {
     fillField(pagina, par, tipo, selector);
 }
 function getNextSkuP(code) {
-    //console.log(code);
-    
     var pagina = 'NewSublet/NextSkuProduct';
     var par = `[{"code":"${code}"}]`;
     var tipo = 'json';
@@ -249,15 +228,12 @@ function getNextSkuP(code) {
 }
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
-// Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
     // console.log(dt);
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
-            //if (u.ext_elements.substring(0, 1) != '0') {
-                let H = `<option value="${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</option>`;
-                $('#txtTypeExchange').append(H);
-            //}
+            let H = `<option value="${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</option>`;
+            $('#txtTypeExchange').append(H);
         });
     }
 
@@ -265,11 +241,11 @@ function putTypeExchange(dt) {
         let id = $(this).val();
         link = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[2];
         code = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[5];
-        // setting_interface(code,id);
         relocation_products();
         validator();
     });
 }
+
 /**  ++++++  configura la interfasede inputs requeridos */
 function setting_interface(code,id) {
     // console.log('CODE ', code);
@@ -297,7 +273,6 @@ function putStores(dt) {
     });
 }
 function putNextSku(dt) {
-    //let sku_after = $('#txtSKUproduct').val();
     if(dt[0].modelo){
         
         if ($('#txtProducts').val()) {
@@ -323,8 +298,6 @@ function putCategories(dt) {
             let catId = $(this).val();
             $('#txtSubCategory').html('');
             $('#txtSubCategory').val('Selecciona la subategoria');
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
             getProducts(271);
             getNextSkuP(271);
@@ -333,27 +306,23 @@ function putCategories(dt) {
 }
 
 function putSubCategories(dt) {
-    //console.log('putSubCategories',dt);
-    if (dt[0].sbc_id != 0) {
+    console.log('putSubCategories',dt);
+    if (parseInt(dt[0].sbc_id) > 0) {
         
         $.each(dt, function (v, u) {
             let idCategoria = $('#txtCategory').val();
             let subCat= $(`#txtCategory option[value="${idCategoria}"]`).attr('data_complement');
-           
             let H = `<option value="${u.sbc_id}" data-code="${u.sbc_code}" data_complement="${subCat.split('|')[v]}"> ${u.sbc_name}</option>`;
             $('#txtSubCategory').append(H);
         });
 
         $('#txtSubCategory').on('change', function () {
             let subcatId = $(this).val();
-            
             serSubCat = $(`#txtSubCategory option[value=`+subcatId+`]`).attr('data_complement');
-
             getNextSkuP(subcatId);
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             getProducts(subcatId);
             
-            console.log(subcatId);
+            // console.log(subcatId);
             $('#txtNproduct').val(serSubCat);
             
         });
@@ -364,73 +333,72 @@ function putSubCategories(dt) {
 function putProducts(dt) {
     if(dt[0].prd_id != 0){
         
-    console.log(dt);
-    var sl = $('#txtProducts').offset();
-    $('#listProduct .list-items').html('');
-    $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
-    $('#listProduct').slideUp('200', function () {
+        // console.log(dt);
+        var sl = $('#txtProducts').offset();
         $('#listProduct .list-items').html('');
-    });
+        $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
+        $('#listProduct').slideUp('200', function () {
+            $('#listProduct .list-items').html('');
+        });
 
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}|${u.prd_price}|${u.sup_id}|${u.sup_business_name}|${u.sub_price}|${u.prdsku}|${u.ser_serial_number}">${u.prd_name}</div>`;
-        $('#listProduct .list-items').append(H);
-    });
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}|${u.prd_price}|${u.sup_id}|${u.sup_business_name}|${u.sub_price}|${u.prdsku}|${u.ser_serial_number}">${u.prd_name}</div>`;
+            $('#listProduct .list-items').append(H);
+        });
 
-    $('#txtProducts').on('focus', function () {
-        $('#listProduct').slideDown('fast');
-    });
+        $('#txtProducts').on('focus', function () {
+            $('#listProduct').slideDown('fast');
+        });
 
-    $('#txtProducts').on('scroll', function(){
-        sl = $('#txtProducts').offset();
-        $('#listProduct').css({top: sl.top + 30 + 'px'});
-    });
-    $('#listProduct').on('mouseleave', function () {
-        $('#listProduct').slideUp('fast');
-    });
+        $('#txtProducts').on('scroll', function(){
+            sl = $('#txtProducts').offset();
+            $('#listProduct').css({top: sl.top + 30 + 'px'});
+        });
+        $('#listProduct').on('mouseleave', function () {
+            $('#listProduct').slideUp('fast');
+        });
 
-    $('#txtProducts').keyup(function (e) {
-        var res = $(this).val().toUpperCase();
-        if (res == '') {
+        $('#txtProducts').keyup(function (e) {
+            var res = $(this).val().toUpperCase();
+            if (res == '') {
+                $('#listProduct').slideUp(100);
+            } else {
+                $('#listProduct').slideDown(400);
+            }
+            res = omitirAcentos(res);
+            sel_products(res);
+        });
+
+        $('#listProduct .list-item').on('click', function () {
+            let prdNm = $(this).html();
+            let prdId = $(this).attr('id');
+            let price = $(this).attr('data_complement').split('|')[2];
+            let idSupplier = $(this).attr('data_complement').split('|')[3];
+            let supplier = $(this).attr('data_complement').split('|')[4];
+            
+            let offer = $(this).attr('data_complement').split('|')[5];
+            let prdSku = $(this).attr('data_complement').split('|')[6];
+            let serNext = $(this).attr('data_complement').split('|')[7];
+            
+            $('#txtProducts').val(prdNm);
+            $('#txtIdProducts').val(prdId);
+            $('#txtPrice').val(price);
+            
+            $('#txtOffer').val(offer);
+            $('#txtSuppliers').val(supplier);
+            $('#txtIdSuppliers').val(idSupplier);
+            $('#txtSKUproduct').val(parseInt(prdSku));
+            
+            $('#txtNproduct').val(0);
+            $('#txtNextSerie').val(serNext);
             $('#listProduct').slideUp(100);
-        } else {
-            $('#listProduct').slideDown(400);
-        }
-        res = omitirAcentos(res);
-        sel_products(res);
-    });
-
-    $('#listProduct .list-item').on('click', function () {
-        let prdNm = $(this).html();
-        let prdId = $(this).attr('id');
-        let price = $(this).attr('data_complement').split('|')[2];
-        let idSupplier = $(this).attr('data_complement').split('|')[3];
-        let supplier = $(this).attr('data_complement').split('|')[4];
-        
-        let offer = $(this).attr('data_complement').split('|')[5];
-        let prdSku = $(this).attr('data_complement').split('|')[6];
-        let serNext = $(this).attr('data_complement').split('|')[7];
-        //console.log('selecciona elemento', prdId,'---', prdNm);
-        
-        $('#txtProducts').val(prdNm);
-        $('#txtIdProducts').val(prdId);
-        $('#txtPrice').val(price);
-        
-        $('#txtOffer').val(offer);
-        $('#txtSuppliers').val(supplier);
-        $('#txtIdSuppliers').val(idSupplier);
-        $('#txtSKUproduct').val(parseInt(prdSku));
-        
-        $('#txtNproduct').val(0);
-        $('#txtNextSerie').val(serNext);
-        $('#listProduct').slideUp(100);
-        
-    });
+            
+        });
     }
    
 }
 function putProductsList(dt) {
-    console.log(dt);
+    // console.log(dt);
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
     $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
@@ -487,15 +455,13 @@ function putProductsList(dt) {
         $('#listProduct').slideUp(100);
     });
 }
+
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
 function putInvoiceList(dt) {
     var fc = $('#txtInvoice').offset();
     $('#listInvoice .list-items').html('');
-    //console.log(dt);
-    //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
     $('#listInvoice').css({top: fc.top + 30 + 'px'});
     $('#listInvoice').slideUp('100', function () {
-        //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');
     });
 
@@ -505,7 +471,6 @@ function putInvoiceList(dt) {
     });
 
     $('#txtInvoice').on('focus', function () {
-        //$('.list-group #listInvoice').slideDown('slow');
         $('#listInvoice').slideDown('slow');
     });
 
@@ -527,7 +492,6 @@ function putInvoiceList(dt) {
     $('#listInvoice .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
-        //console.log(prdId);
         $('#txtInvoice').val(prdNm);
         $('#txtIdInvoice').val(prdId);
         $('#listInvoice').slideUp(100);
@@ -539,7 +503,6 @@ function putInvoiceList(dt) {
 function putSupplierList(dt) {
     var sl = $('#txtSuppliers').offset();
     $('#listSupplier .list-items').html('');
-    //console.log(sl);
     $('#listSupplier').css({top: sl.top + 30 + 'px'}); // volver a tomar al hacer scroll.
     $('#listSupplier').slideUp('100', function () {
         $('#listSupplier .list-items').html('');
@@ -555,7 +518,6 @@ function putSupplierList(dt) {
         $('#listSupplier').slideDown('fast');
     });
 
-    //$('#listSupplier').scrollY();
     $('#txtSupplier').on('scroll', function(){
         sl = $('#txtSuppliers').offset();
         $('#listSupplier').css({top: sl.top + 30 + 'px'});
@@ -578,7 +540,6 @@ function putSupplierList(dt) {
     $('#listSupplier .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
-        //console.log('selecciona elemento', prdId,'---', prdNm);
         $('#txtSuppliers').val(prdNm);
         $('#txtIdSuppliers').val(prdId);
         $('#listSupplier').slideUp(100);
@@ -589,7 +550,6 @@ function putSupplierList(dt) {
 // reubica el input de los productos
 function relocation_products() {
     var ps = $('#txtProducts').offset();
-
     $('#listProducts').css({top: ps.top + 30 + 'px'});
 }
 
@@ -615,39 +575,35 @@ function validator() {
         ky = 1;
         msg += 'Debes seleccionar el precio';
     }
-
-
     
     if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
+       
         ky = 1;
         msg += 'Debes seleccionar el proveedor';
     }
     if ($('#txtFechaReco').val() == 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
+        
         ky = 1;
         msg += 'Debes seleccionar la fecha de recoleccion';
     }
     if ($('#xtCollectionTime').val() == 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
+        
         ky = 1;
         msg += 'Debes seleccionar la hora de recoleccion';
     }
     if ($('#txtFechaEnt').val() == 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
+
         ky = 1;
         msg += 'Debes seleccionar la fecha de entrada';
     }
     if ($('#txtDeliveryTime').val() == 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
+       
         ky = 1;
         msg += 'Debes seleccionar la hora de entrega';
     }
 
     //validacion de cantidad para agregar serie mayor a 1
     if ($('#txtQuantity').val() > 1) {
-        // && $('#txtSerie').val() == 0
-        //console.log($('#txtQuantity').val() > 1);
         $('#txtSerie').attr('disabled', true).val('');
         $('#txtSkuSerie').attr('disabled', true).val('');
         
@@ -671,8 +627,8 @@ function validator() {
 
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply() {
-    console.log($('#txtIdProducts').val());
-    console.log(parseInt($('#txtNextSerie').val()));
+    // console.log($('#txtIdProducts').val());
+    // console.log(parseInt($('#txtNextSerie').val()));
     let prdName;
     let price = $('#txtPrice').val();
     
@@ -680,8 +636,7 @@ function exchange_apply() {
     let nextprod = parseInt($('#txtNproduct').val());
     let serie = parseInt($('#txtNextSerie').val());
     let subprice = parseInt($('#txtOffer').val());
-    
-    //console.log(refil(serie+1, 3));
+
     let prdId = $('#txtIdProducts').val();
     let quantity = $('#txtQuantity').val();
     let serser = $('#txtSerie').val();
@@ -727,7 +682,6 @@ function exchange_apply() {
     let sersku = prodSku + no_serie;
     
     $(`#txtSubCategory option[value=`+idSubCategoria+`]`).attr('data_complement',serSubCat);    
-    
         $('#txtNproduct').val(nextprod);
         par = `
         [{
@@ -764,7 +718,6 @@ function exchange_apply() {
         }]`;
 
         fill_table(par);
-    //}
     clean_selectors();
 }
 
@@ -774,16 +727,13 @@ function fill_table(par) {
     let largo = $('#tblExchanges tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
     par = JSON.parse(par);
-
     let tabla = $('#tblExchanges').DataTable();
-
     tabla.row
         .add({
             editable: `<span class="hide-support" id="SKU-${par[0].prdSku}"></span><i class="fas fa-times-circle kill"></i>`,
             prodname: par[0].prdName,
             price: par[0].price,
             subprice: par[0].subprice,
-            //skuserie:  par[0].skuSerie,
             skuserie: par[0].prodqty,
             strtdate: par[0].startDate,
             enddate: par[0].endDate,
@@ -798,7 +748,6 @@ function fill_table(par) {
 
             subcategory: par[0].nameSubCategoria,
             supplier: par[0].suppliernm,
-            //proyect: par[0].proyectName,
             comments: `<div>${par[0].comment}</div>`,
             prodcant: `<span>${par[0].prodqty}</span>`
         })
@@ -871,7 +820,6 @@ function update_array_products( sr, nextprod, prdSku) {
     $('#txtNextSerie').val(sr);
     $('#txtSKUproduct').val(prdSku);
     $('#txtNproduct').val(nextprod);
-    //$(`#P-${id}`).attr('data_serie', sr);
 }
 
 function read_exchange_table() {
@@ -881,10 +829,8 @@ function read_exchange_table() {
             let productName = $($(u).find('td')[1]).text();
             let price = $($(u).find('td')[2]).text();
             let subPrice = $($(u).find('td')[3]).text();
-            /* let serSku = $($(u).find('td')[5]).text(); */
             let prdQty = $($(u).find('td')[4]).text();
-            
-            //let subQuantity = $($(u).find('td')[1]).text();
+
             let subCollectiontime = $($(u).find('td')[5]).text();
             let subDeliveryTime = $($(u).find('td')[6]).text();
             let dateStart = $($(u).find('td')[7]).text();
@@ -908,7 +854,7 @@ function read_exchange_table() {
             truk = `${prodsku}|${price}|${subPrice}|${subCollectiontime}|${subDeliveryTime}|${subLocation}|${nameProvider}|${nameProviderCtt}|${dateStart}|${dateEnd}|${store}|${id_cat}|${id_subc}|${id_supplier}|${comments}|${supplier}|${productName}|${prdId}|${prdQty}|${serie}`;
             build_data_struct_new_prod(truk);
 
-            console.log(truk);
+            // console.log(truk);
             skuProducto = prodsku;
         });
    
@@ -924,9 +870,7 @@ function putNextExchangeNumber(dt) {
 function build_data_structure(pr) {
     let el = pr.split('|');
     let par = `
-    [{
-        
-        "sku" :  "${el[0]}",
+    [{  "sku" :  "${el[0]}",
         "prc" :  "${el[1]}",
         "sprc" :  "${el[2]}",
         "sbclt" :  "${el[3]}",
@@ -950,15 +894,13 @@ function build_data_structure(pr) {
         "prdqty": "${el[18]}",
         "srsk": "${el[19]}"
     }]`;
-    console.log(' Antes de Insertar', par);
+    // console.log(' Antes de Insertar', par);
     //save_exchange(par);
 }
 function build_data_struct_new_prod(pr) {
     let el = pr.split('|');
     let par = `
-    [{
-        
-        "sku" :  "${el[0]}",
+    [{  "sku" :  "${el[0]}",
         "prc" :  "${el[1]}",
         "sprc" :  "${el[2]}",
         "sbclt" :  "${el[3]}",
@@ -982,34 +924,30 @@ function build_data_struct_new_prod(pr) {
         "prdqty": "${el[18]}",
         "srsk": "${el[19]}"
     }]`;
-    console.log(' Antes de Insertar', par);
+    // console.log(' Antes de Insertar', par);
    save_exchange2(par);
 }
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
-    console.log(pr);
     var pagina = 'NewSublet/SaveSubletting';
     var par = pr;
     var tipo = 'html';
     var selector = exchange_result;
-    //console.log(par);
     fillField(pagina, par, tipo, selector);
     //console.log(fillField(pagina, par, tipo, selector));
 }
 function save_exchange2(pr) {
-    console.log(pr);
     var pagina = 'NewSublet/SaveProduct';
     var par = pr;
     var tipo = 'html';
     var selector = exchange_result2;
-    console.log(par);
     fillField(pagina, par, tipo, selector);
     //console.log(fillField(pagina, par, tipo, selector));
 }
 
 function exchange_result(dt) {
-    console.log('exchange_result',dt,prod_id, skuProducto);
+    // console.log('exchange_result',dt,prod_id, skuProducto);
     //$('.resFolio').text(refil(folio, 7));
     $('#MoveResultModal').modal('show');
     $('#btnHideModal').on('click', function () {
@@ -1021,10 +959,10 @@ function exchange_result(dt) {
     });
 }
 function exchange_result2(dt) {
-    console.log(dt);
+    // console.log(dt);
     prod_id = dt;
     cant++;
-    console.log('exchange_result2',prod_id, skuProducto, cant);
+    // console.log('exchange_result2',prod_id, skuProducto, cant);
     
     //read_exchange_table();
     //$('.resFolio').text(refil(folio, 7));
@@ -1119,7 +1057,6 @@ function printInfoGetOut(verId) {
 }
 
 function fillContent() {
-    
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -1141,19 +1078,8 @@ function fillContent() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -1174,7 +1100,6 @@ function fillContent() {
  
 }
 
-
 function saveStore() {
     var strName = $('#id_product').val();
     var empName = $('#sku_product').val();
@@ -1191,7 +1116,6 @@ function saveStore() {
     var selector = putSaveStore;
     fillField(pagina, par, tipo, selector);
 }
-
 
 function saveNewSubletting() {
     let ky = validatorSublettingFields();

@@ -20,7 +20,6 @@ function inicial() {
       $(this).appendTo('#listDisponible');
    });
 
-   //Open modal
    $('#nuevoPerfil').on('click', function () {
       LimpiaModal();
       getModulesList('', 'Disp');
@@ -74,6 +73,8 @@ function validaFormulario() {
 function EditPerfil(id) {
    UnSelectRowTable();
    LimpiaModal();
+
+   console.log('ID--',id);
    $('#titulo').text('Editar Perfil Usuario');
 
    var location = 'PerfilUser/GetDataPerfil';
@@ -83,6 +84,7 @@ function EditPerfil(id) {
       data: {id: id},
       url: location,
       success: function (respuesta) {
+         console.log('Edit--',respuesta);
          $('#NomPerfil').val(respuesta.prf_name);
          $('#CodPerfil').val(respuesta.prf_code);
          $('#DesPerfil').val(respuesta.prf_description);
@@ -285,7 +287,6 @@ function getPerfilesTable() {
                   footer: true,
                   title: title,
                   filename: filename,
-
                   //Aquí es donde generas el botón personalizado
                   text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
                },
@@ -331,6 +332,7 @@ function getPerfilesTable() {
 
 //Optiene los modulos
 function getModulesList(ModUser, tipeModul) {
+   // console.log('getModulesList',ModUser,tipeModul);
    var location = 'PerfilUser/GetModules';
    $.ajax({
       type: 'POST',

@@ -26,7 +26,7 @@
 
 		public function GetScore($request_params)
 		{
-	      $result = $this->model->GetScore($request_params);
+	      $result = $this->model->GetScores($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 

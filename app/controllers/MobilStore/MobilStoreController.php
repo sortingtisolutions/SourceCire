@@ -5,7 +5,6 @@
 
 	class MobilStoreController extends Controller
 	{
-
 		private $session;
 		public $model;
 
@@ -26,7 +25,7 @@
 
 		public function GetMobilStore($request_params)
 		{
-	      $result = $this->model->GetMobilStore($request_params);
+	      $result = $this->model->GetMobilStores($request_params);
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 
@@ -104,37 +103,38 @@
 		echo $res;
 	}
 
-	public function listSubcategories($request_params)
-	{
-	  $params =  $this->session->get('user');
-	  $result = $this->model->listSubcategories($request_params);
-		$i = 0;
-		  while($row = $result->fetch_assoc()){
-			  $rowdata[$i] = $row;
-			  $i++;
-		  }
-		  if ($i>0){
-			  $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-		  } else {
-			  $res =  '[{"sbc_id":"0"}]';	
-		  }
-		  echo $res;
-	}
+	// public function listSubcategories($request_params)
+	// {
+	//   $params =  $this->session->get('user');
+	//   $result = $this->model->listSubcategories($request_params);
+	// 	$i = 0;
+	// 	  while($row = $result->fetch_assoc()){
+	// 		  $rowdata[$i] = $row;
+	// 		  $i++;
+	// 	  }
+	// 	  if ($i>0){
+	// 		  $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+	// 	  } else {
+	// 		  $res =  '[{"sbc_id":"0"}]';	
+	// 	  }
+	// 	  echo $res;
+	// }
 
-	public function listCategories($request_params)
-	{
-	  $params =  $this->session->get('user');
-	  $result = $this->model->listCategories();
-		$i = 0;
-		  while($row = $result->fetch_assoc()){
-			  $rowdata[$i] = $row;
-			  $i++;
-		  }
-		  if ($i>0){
-			  $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-		  } else {
-			  $res =  '[{"cat_id":"0"}]';	
-		  }
-		  echo $res;
-	}
+	// public function listCategories($request_params)
+	// {
+	//   $params =  $this->session->get('user');
+	//   $result = $this->model->listCategories();
+	// 	$i = 0;
+	// 	  while($row = $result->fetch_assoc()){
+	// 		  $rowdata[$i] = $row;
+	// 		  $i++;
+	// 	  }
+	// 	  if ($i>0){
+	// 		  $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+	// 	  } else {
+	// 		  $res =  '[{"cat_id":"0"}]';	
+	// 	  }
+	// 	  echo $res;
+	// }
+	
 	}

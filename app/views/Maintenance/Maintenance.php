@@ -12,6 +12,7 @@
 			<div class="row mvst_group">
 				<div class="mvst_panel" style="background-color: #e2edf3">
 					<div class="form-group">
+
 						<div class="row">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 								<select id="txtProject" class="form-select form-select-sm " aria-label="Floating label select" data-mesage="Debes seleccionar un proyecto">
@@ -47,11 +48,8 @@
 							</div>
 
 							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating form__modal-group">
-								<!--
-								<input id="txtPeriod" type="text" class="form-control form-control-sm text-center"  data-mesage="Debes elegir un periodo">
-								<label for="txtPeriod" >Periodo</label>-->
 								<input type="text" id="txtPeriod"  name="txtPeriod" class="form-control form-control-sm text-center" autocomplete="off" style="width:200px; height:38px">
-								<!--<label for="txtPeriodo">Periodo</label>-->
+								
 								<i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
 								<span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
 							</div>
@@ -143,10 +141,6 @@
 <div class="overlay_background overlay_hide" id="mantenimientoModal" style="height: 600px; width:600px;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-			<!--
-            <div class="formButtons">
-                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
-            </div>-->
             <div class="">
                 <table id="tblMotivoMantenimiento">
 						<thead>

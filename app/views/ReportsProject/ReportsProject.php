@@ -9,9 +9,7 @@
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
-            
         <div class="row mvst_group">
-
             <div class="mvst_panel">
                 <div class="form-group">
                 <h4 id="titulo">Reportes de Proyectos</h4>
@@ -122,9 +120,6 @@
                             <th style="width: 600px">Nombre</th>
                             <th style="width:  80px">Precio</th>
                             <th style="width:  80px">Subcategoria</th>
-
-<!--                             <th style="width:  60px" id="numeroSerieColum">No. Serie</th>
-                            <th style="width:  auto" id="fechaRegColum">Fecha registro</th> -->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -150,8 +145,6 @@
         </div>
 
     </div>
-
-
 </div>
 
     <!-- Start Formato para impresion -->

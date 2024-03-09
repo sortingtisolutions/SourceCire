@@ -10,13 +10,12 @@
         visibility: hidden !important;
     }
 </style>
-<!-- Comentario prueba 2 -->
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
         <div class="row mvst_group">
                 <!-- Start área de formularios -->
-                <div class="mvst_panel">
+                <div class="mvst_panel" style="background-color: #E8DC9F">
                     <div class="form-group">
                         <h4 id="titulo">Nueva calificación de clientes</h4>  
                         <form id="formProveedor" class="row g-3 needs-validation" novalidate>
@@ -70,8 +69,7 @@
                 <!-- End área de listado -->
             </div>
            
-    </div>
-    
+    </div>  
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

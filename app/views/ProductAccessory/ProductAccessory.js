@@ -22,7 +22,7 @@ function inicial() {
 
 // Solicita las categorias
 function getCategory() {
-    var pagina = 'ProductAccessory/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategory;
@@ -30,7 +30,7 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    var pagina = 'ProductAccessory/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;
@@ -125,7 +125,6 @@ function setting_table_accesorys() {
 }
 
 /* LLENA LOS DATOS DE LOS ELEMENTOS */
-// llena el selector de categorias
 function putCategory(dt) {
     if (dt[0].cat_id != 0) {
         $.each(dt, function (v, u) {
@@ -139,9 +138,7 @@ function putCategory(dt) {
         let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
         $('#txtSubcategoryPack').html(ops);
         let id = $(this).val();
-        //lsbc_id = id;
         selSubcategoryPack(id);
-        //validator_part01();
     });
 }
 // Mantiene en memoria el set de subcategorias
@@ -165,10 +162,8 @@ function selSubcategoryPack(id) {
         });
     }
     $('#txtSubcategoryPack').change(function () {
-        // let id = $(this).val();
         let id = $(this).val();
         lsbc_id = id;
-        // console.log('subcategoria seleccionada-',id);
         getProducts(id);
     });
 }
@@ -181,7 +176,7 @@ function putProducts(dt) {
 
 /* carga de accesorios por id */
 function putAccesoriesById(dt) {
-    console.log('putAccesoriesById',dt);
+    // console.log('putAccesoriesById',dt);
     deleteTablaAccesorios();
 
     if (dt[0].prd_id != '') {
@@ -193,7 +188,7 @@ function putAccesoriesById(dt) {
 
 // Llena el selector de subcategorias
 function selProductsSub(dt) {
-    console.log('selProductsSub',dt);
+    // console.log('selProductsSub',dt);
     $('#txtProductSubCat').html(''); // Edna 
     if (dt[0].prd_id != 0) {
         $.each(dt, function (v, u) {
@@ -202,10 +197,8 @@ function selProductsSub(dt) {
         });
     }
     $('#txtProductSubCat').change(function () {
-        // let id = $(this).val();
         let id = $(this).val();
         lsbc_id = id;
-        //console.log('GET SERIES-',id);
         getSeriesProd(id);
     });
 }
@@ -225,7 +218,6 @@ function putSeriesProd(dt) {
                 })
                 .draw()
                 .node();
-            // $(rowNode).find('td').eq(1).attr('hidden', true);
 
             $(`#SKU-${u.ser_id}`)
                 .parent()
@@ -276,7 +268,6 @@ function drawProducts() {
         .on('click', function () {
             let id = $(this).parents('.list-item');
             console.log('SE DIO' + id);
-            //console.log( $(this).parents('.list-item').attr('id'));
             product_apply(id);
         });
 }
@@ -307,18 +298,15 @@ function action_selected_packages() {
                     $('#selectAccesorios').css('visibility', 'visible');
                 }
             }, 100);
-            // console.log("se seleccione un producto");
-            console.log(productoSelectSKU);
-            // console.log(productoSelectId);
-
+            // console.log(productoSelectSKU);
             getAccesoriesById(productoSelectSKU);
-            //select_products(prdId);
+
         });
 }
 
 // Llena el selector de subcategorias
 function selSubcategoryProduct(id) {
-    console.log('SELECC SUBCATE');
+    // console.log('SELECC SUBCATE');
     if (subcategos[0].sbc_id != 0) {
         $.each(subcategos, function (v, u) {
             if (u.cat_id === id) {
@@ -340,11 +328,9 @@ function selSubcategoryProduct(id) {
 
 
 function saveAccesoryId(prdId) {
-    console.log(lsbc_id);
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
     var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}"}]`;
     var tipo = 'json';
-    console.log(par);
     var selector = putAccesoriesRes;
     fillField(pagina, par, tipo, selector);
 }
@@ -361,7 +347,6 @@ function action_selected_products() {
             let edt = $(this).attr('class').indexOf('kill');
             // console.log(edt);
             let prdId = $(this).attr('id');
-            console.log('se borrara el producto = ' + prdId);
             confirm_delet_product(prdId);
         });
 }
@@ -376,7 +361,7 @@ function load_Accesories(prdId) {
 
 //valido
 function putAccesoriostable(dt) {
-    console.log('llego a carga de accesorios');
+    // console.log('llego a carga de accesorios');
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
 
@@ -396,10 +381,9 @@ function putAccesoriostable(dt) {
 
 //revisar aqui si no graba producto
 function product_apply(prId) {
-    console.log('product_apply',prId);
+    // console.log('product_apply',prId);
     let acce = prId.attr('id').split('-');
     saveAccesoryId(acce[0]);
-    //console.log(acce[2]);
     setTimeout(() => {
         if (accesorioExist != 0) {
             putNewAccesorio(acce[0], accesorioExist, acce[2]);
@@ -411,7 +395,7 @@ function product_apply(prId) {
 
 function putNewAccesorio(idAccesorio, idSku, idName) {
     //inserta el renglon en base
-    console.log('putNewAccesorio',idAccesorio + idSku + idName);
+    // console.log('putNewAccesorio',idAccesorio + idSku + idName);
 
     let tabla = $('#tblProducts').DataTable();
     tabla.row

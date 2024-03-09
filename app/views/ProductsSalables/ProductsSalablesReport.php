@@ -29,7 +29,6 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 
-
 $payform = $items[0]['sal_pay_form'];
 if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){$payform = 'TARJETA DE CRÉDITO';}
 

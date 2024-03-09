@@ -14,21 +14,20 @@ $('document').ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
-    stickyTable();
-    eventsAction();
-    getProjects('0');
-    getProjectsParents();
-    getCustomers();
-    getCustomersOwner();
-    getDiscounts();
-    getProjectType();
-    getEdosRepublic();
-    getProjectTypeCalled();
-    discountInsuredEvent();
-    getLocationType();
-    //getCategories();
-    confirm_alert();
-    
+        stickyTable();
+        eventsAction();
+        getProjects('0');
+        getProjectsParents();
+        getCustomers();
+        getCustomersOwner();
+        getDiscounts();
+        getProjectType();
+        getEdosRepublic();
+        getProjectTypeCalled();
+        discountInsuredEvent();
+        getLocationType();
+        //getCategories();
+        confirm_alert();
     }else {
         setTimeout(() => {
             inicial();
@@ -64,6 +63,7 @@ function discountInsuredEvent() {
                 .on('mouseleave', function () {
                     $('.invoiceDiscSelect').fadeOut(400);
                 })
+
                 .unbind('change')
                 .on('change', function (e) {
                     let insured = parseFloat(
@@ -74,7 +74,6 @@ function discountInsuredEvent() {
                         let data = parseFloat(e.target.value);
                         data = data * 100 + '<small>%</small>';
                         $('#insuDesctoPrc').html(data);
-
                         updateTotals();
                         $('.invoiceDiscSelect').fadeOut(400);
                         // console.log(e.target.value, data, insured, dsctoInsured);
@@ -198,8 +197,7 @@ function eventsAction() {
                     let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
     
                     let par = `
-                    [{
-                        "pjtId"           : "${pjtId}",
+                    [{  "pjtId"           : "${pjtId}",
                         "verCode"         : "${verNext}",
                         "discount"        : "${discount}"
                     }]`;
@@ -274,6 +272,13 @@ function eventsAction() {
             let id = $(this).parents('.finder__box').children('.invoiceInput');
             id.val('');
             id.trigger('keyup');
+            
+            $('.finder_list-projects ul li').addClass('alive');
+            $('.finder_list-projectsParent ul li').addClass('alive');
+            $('.finder_list-projects ul li').attr('data-val',0);
+            $('.finder_list-projectsParent ul li').attr('data-val',0);
+            $('.finder_list-customer ul li').attr('data-value',0);
+            $('.finder_list-projectsParent ul li').attr('data-active',1);
         });
 
     // Abre el modal de comentarios
@@ -313,7 +318,6 @@ function expandCollapseSection() {
 }
 
 /**************** OBTENCION DE DATOS *****************/
-
 function getLocationsEdos(prj_id){
     var pagina = 'Budget/ListLocationsEdos';
     var par = `[{"prj_id":"${prj_id}"}]`;
@@ -321,12 +325,12 @@ function getLocationsEdos(prj_id){
     var selector = putLocationsEdos;
     fillField(pagina, par, tipo, selector);
 }
-
 /**  Obtiene el listado de proyectos */
 function getProjects(pjId) {
     swpjt = 0;
+    let liststat ="1,40";
     var pagina = 'Budget/listProjects';
-    var par = `[{"pjId":"${pjId}"}]`;
+    var par = `[{"pjId":"${pjId}","liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
@@ -366,16 +370,15 @@ function getVersion(pjtId) {
 }
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
-    var pagina = 'Budget/listProducts3';
+    var pagina = 'Budget/listProductsCombo';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
 /**  Obtiene el listado de productos desde el input */ //* Agregado por Edna V4
 function getProductsInput(word, dstr, dend) {
-    var pagina = 'Budget/listProducts2';
+    var pagina = 'Budget/listProductsInput';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -410,42 +413,12 @@ function getCategories(op) {
 // ** Ed
 function getSubCategories(catId) {
     //console.log(catId);
-    var pagina = 'Budget/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;
     fillField(pagina, par, tipo, selector);
 }
-// ** Ed
-function putSubCategories(dt) {
-    $('#txtSubCategory').html('');
-    
-    $('#txtSubCategory').append('');
-    if (dt[0].sbc_id != 0) {
-        let word = $('#txtProductFinder').val();
-        let subcatId = $('#txtSubCategory').val();
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.sbc_id}" data-code="${u.sbc_code}"> ${u.sbc_name}</option>`;
-            $('#txtSubCategory').append(H);
-            
-        });
-        
-        modalLoading('B');
-        subCtg = dt[0].sbc_id;
-        getProducts(word,dt[0].sbc_id);
-        
-        $('#txtSubCategory')
-            .unbind('change')
-            .on('change', function () {
-                let subcatId = $(this).val();
-                console.log('cambiar subcat');
-                modalLoading('B');										 
-                getProducts(word,subcatId); // AQUI al cambiar subcategoria
-                subCtg = subcatId;
-        });
-    }
-}
-
 /**  Obtiene el listado de descuentos */
 function getDiscounts() {
     var pagina = 'Budget/listDiscounts';
@@ -470,7 +443,6 @@ function getProductsRelatedPk(id, tp) {
     var selector = putProductsRelatedPk;
     fillField(pagina, par, tipo, selector);
 }
-
 /**  Obtiene el listado de projectos del producto  */
 function getStockProjects(prdId) {
     var pagina = 'Budget/stockProdcuts';
@@ -481,7 +453,7 @@ function getStockProjects(prdId) {
 }
 /** Obtiene el listado de los tipos de proyecto */
 function getProjectType() {
-    var pagina = 'Budget/listProjectsType';
+    var pagina = 'Commons/listProjectsType';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = putProjectsType;
@@ -552,6 +524,36 @@ function getProjectParent(id) {
     fillField(pagina, par, tipo, selector);
 }
 
+// ** Ed
+function putSubCategories(dt) {
+    $('#txtSubCategory').html('');
+    
+    $('#txtSubCategory').append('');
+    if (dt[0].sbc_id != 0) {
+        let word = $('#txtProductFinder').val();
+        let subcatId = $('#txtSubCategory').val();
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.sbc_id}" data-code="${u.sbc_code}"> ${u.sbc_name}</option>`;
+            $('#txtSubCategory').append(H);
+            
+        });
+        
+        modalLoading('B');
+        subCtg = dt[0].sbc_id;
+        getProducts(word,dt[0].sbc_id);
+        
+        $('#txtSubCategory')
+            .unbind('change')
+            .on('change', function () {
+                let subcatId = $(this).val();
+                console.log('cambiar subcat');
+                modalLoading('B');										 
+                getProducts(word,subcatId); // AQUI al cambiar subcategoria
+                subCtg = subcatId;
+        });
+    }
+}
+
 function putRelPrdAcc(dt){
     console.log(dt);
 }
@@ -570,17 +572,14 @@ function putCategories(dt) {
             $('#txtCategory').append(H);
         });
         //getSubCategories(1); // *** Edna V2
-
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
-            
             getSubCategories(catId);
         });
     }
     
 }
 /******************* LLENA DE DATOS **********************/
-
 function putProjectParent(dt) {
     let projType = dt[0].pjttp_id;
     let duration= dt[0].pjt_time;
@@ -620,7 +619,7 @@ function putProjects(dt) {
                 let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}">${u.pjt_name}</li>`;
                 $('.finder_list-projects ul').append(H);
             } else {
-                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</li>`;
+                let M = ` <li id="M${u.pjt_id}" class="alive" data-val="0" data-active="1" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</li>`;
                 $('.finder_list-projectsParent ul').append(M);
             }
         });
@@ -659,7 +658,7 @@ function putCustomers(dt) {
     $('.finder_list-customer ul').html('');
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = ` <li id="C${u.cus_id}" class="alive" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
+            let H = ` <li id="C${u.cus_id}" class="alive" data-value="0" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
             $('.finder_list-customer ul').append(H);
         }
     });
@@ -674,9 +673,9 @@ function putEdosRepublic(dt) {
         $('#txtEdosRepublic_2').append(H);
     });
 }
+
 function putLocationType(dt) {
     loct =dt;
-
 }		
 
 /**  Llena el listado de prductores */
@@ -749,12 +748,11 @@ function putVersion(dt) {
         modalLoading('H');
     }
 }
-
 /** Llena el listado de los tipos de proyecto */
 function putProjectsType(dt) {
+    // console.log('putProjectsType', dt);
     tpprd = dt;
 }
-
 /** Llena el listado de los tipos de proyecto */
 function putProjectsTypeCalled(dt) {
     tpcall = dt;
@@ -799,8 +797,8 @@ function putLocationsEdos(dt){
             });
         });
     }
-    
 }
+
 function putDeleteLocation(dt) {
     //getLocationsEdos();
     let tabla = $('#listLocationsTable').DataTable();
@@ -810,6 +808,7 @@ function putDeleteLocation(dt) {
         .draw();
     $('#confirmModal').modal('hide');  
 }
+
 function selectorProjects(pjId) {
     $('.finder_list-projects ul li')
         .unbind('click')
@@ -819,7 +818,7 @@ function selectorProjects(pjId) {
             showButtonToPrint('H');
             showButtonToSave('H');
             
-            modalLoading('B');
+            //modalLoading('B');
             actionSelProject($(this));
             $('.projectfinder').trigger('click');
         });
@@ -828,13 +827,27 @@ function selectorProjects(pjId) {
         .unbind('click')
         .on('click', function () {
             let pjtParent = $(this).attr('id').substring(1, 10);
+            let val = $(this).attr('data-val');
+            let active = $(this).attr('data-active');
+            console.log(val);
+
             $('.finder_list-projects ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (pjtParent == u.pjt_parent) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
+            if ( active == 1) {
+                if (val == 0) {
+                    $.each(proj, function (v, u) {
+                        if (pjtParent == u.pjt_parent) {
+                            let pjtId = u.pjt_id;
+                            $(`#P${pjtId}`).addClass('alive');
+                        }
+                    });
+                    $(this).attr('data-val', 1);
+                }else{
+                    $('.finder_list-projects ul li').addClass('alive');
+                    $(this).attr('data-val', 0);
                 }
-            });
+            }
+            
+            
         });
 }
 
@@ -842,6 +855,7 @@ function actionSelProject(obj) {
     let status = obj.attr('class');
 
     if (status == 'alive') {
+        modalLoading('B');
         let idSel = obj.parents('.dato');
         let indx = obj.data('element').split('|')[0];
         let pj = proj[indx];
@@ -876,13 +890,11 @@ function actionSelProject(obj) {
                 $('#CustomerQualification').html(u.cus_qualificaton);
             }
         });
-
         $('.invoice_controlPanel .addSection').css({ visibility: 'visible' });
     }
 }
 
 function getCalendarPeriods(pj) {
-
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -904,19 +916,8 @@ function getCalendarPeriods(pj) {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -977,18 +978,32 @@ function selectCustomer() {
             let indx = $(this).data('element').split('|')[0];
             let type = $(this).data('element').split('|')[1];
             let cs = cust[indx];
+            let val = $(this).attr('data-value');
+            console.log(val);
 
             $('#CustomerName').html(cs.cus_name);
             $('.finder_list-projects ul li').removeClass('alive');
             $('.finder_list-projectsParent ul li').removeClass('alive');
-            $.each(proj, function (v, u) {
-                if (cs.cus_id == u.cus_id) {
-                    let pjtId = u.pjt_id;
-                    $(`#P${pjtId}`).addClass('alive');
-                    $(`#M${pjtId}`).addClass('alive');
-                }
-            });
-            console.log(idSel, indx, type);
+            
+            $('.finder_list-projectsParent ul li').attr('data-active',0);
+            if (val == 0) {
+                $.each(proj, function (v, u) {
+                    if (cs.cus_id == u.cus_id) {
+                        let pjtId = u.pjt_id;
+                        $(`#P${pjtId}`).addClass('alive');
+                        $(`#M${pjtId}`).addClass('alive');
+                        $(`#M${pjtId}`).attr('data-active',1);
+                    }
+                });
+                console.log(idSel, indx, type);
+                $(this).attr('data-value', 1);
+            }else{
+                $('.finder_list-projects ul li').addClass('alive');
+                $('.finder_list-projectsParent ul li').addClass('alive');
+                $(this).attr('data-value', 0);
+                
+                $('.finder_list-projectsParent ul li').attr('data-active',1);
+            }
         });
 }
 
@@ -1017,7 +1032,6 @@ function showListProducts(item) {
     $('#txtProductFinder')
         .unbind('keyup')
         .on('keyup', function () {
-            
             let text = $(this).val().toUpperCase();
             //showButtonToCharge('S');
             selProduct(text);
@@ -1121,18 +1135,18 @@ function putProducts(dt) {
     $('#listProductsTable table tbody').html('');
 
     if (dt[0].prd_id>0){  // agregado por jjr
-    $.each(dt, function (v, u) {
-        let H = `
-            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
-                <th class="col_product" title="${u.prd_name}">
-                <div class="elipsis">${u.prd_name}</div></th>
-                <td class="col_quantity">${u.stock}</td>
-                <td class="col_category">${u.cat_name}</td>
-                <td class="col_type">${u.prd_price}</td>
-                <td class="col_type">${u.prd_level}</td>
-            </tr> `;
-        $('#listProductsTable table tbody').append(H);
-    });
+        $.each(dt, function (v, u) {
+            let H = `
+                <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+                    <th class="col_product" title="${u.prd_name}">
+                    <div class="elipsis">${u.prd_name}</div></th>
+                    <td class="col_quantity">${u.stock}</td>
+                    <td class="col_category">${u.cat_name}</td>
+                    <td class="col_type">${u.prd_price}</td>
+                    <td class="col_type">${u.prd_level}</td>
+                </tr> `;
+            $('#listProductsTable table tbody').append(H);
+        });
     }
     modalLoading('H');
     $('.toCharge').addClass('hide-items');   //jjr
@@ -1143,7 +1157,6 @@ function putProducts(dt) {
             let inx = $(this).attr('data-indx');
             fillBudget(prod[inx], vers, inx);
     });
-
 }
 
 function fillBudget(pr, vr, ix) {
@@ -1240,7 +1253,10 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    modalLoading('H');
+    setTimeout(() => {
+        modalLoading('H');
+    }, 200);
+
     $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
@@ -1300,10 +1316,7 @@ function fillBudgetProds(jsn, days) {
         pds.prd_id}"></i></th>
         <td class="wcldays col_quantity colbase quantityBase"><input type="text" class="input_invoice" value="${
             pds.bdg_quantity}" tabindex=1></td>
-        <td class="wclnumb col_price colbase priceBase">${mkn(
-            pds.bdg_prod_price,
-            'n'
-        )}</td>
+        <td class="wclnumb col_price colbase priceBase">${mkn(pds.bdg_prod_price,'n')}</td>
         <td class="wcldays col_days colbase daysBase"><input type="text" class="input_invoice" value="${
             pds.bdg_days_base
         }" tabindex=2></td>
@@ -1483,7 +1496,7 @@ function activeInputSelector() {
                             infoProduct(bdgId, type);
                             break;
                         case 'event_StokProduct':
-                            if(type=='K'){
+                            if(type=='K' || type=='KP'){
                                 alert('NO SE PUEDE MOSTRAR LA INFORMACION DE UN PAQUETE');
                             }else{
                                 stockProduct(bdgId);
@@ -1492,7 +1505,7 @@ function activeInputSelector() {
                             
                             break;
                         case 'event_ChangePakt':
-                            if(type!='K'){
+                            if(type!='K' && type!='KP'){
                                 alert('ESTE NO ES UN PAQUETE');
                             }else{
                                 infoPackage(bdgId, type);
@@ -1533,6 +1546,7 @@ function killProduct(bdgId) {
 
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
+    modalLoading('B');
     console.log('type: *', bdgId.substring(3, 20));
     getProductsRelated(bdgId.substring(3, 20), type);
 
@@ -1554,7 +1568,6 @@ function infoPackage(bdgId, type) {
 
 function infoDetallePkt(lcatsub) {
     getChangeProd(lcatsub);
-
 }
 
 // Muestra la información de productos relacionados
@@ -1562,11 +1575,12 @@ function putProductsRelated(dt) {
     $.each(dt, function (v, u) {
         let levelProduct;
         // let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        if (u.prd_level == 'P' || u.prd_level == 'S') {
+        /* if (u.prd_level != 'KP') {
             levelProduct = 'class="levelProd"';
         }else{
             levelProduct = '';
-        }
+        } */
+        levelProduct = 'class="levelProd"';
         let H = `
             <tr ${levelProduct}>
                 <td>${u.prd_sku}</td>
@@ -1580,6 +1594,7 @@ function putProductsRelated(dt) {
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 /// Muestra la información de los productos a poder cambiar
@@ -1631,7 +1646,7 @@ function putProductsRelatedPk(dt){
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].prd_sku}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let levelProduct = u.prd_level != 'K' ? 'class="levelProd"' : '';
         let cat=u.prd_sku.substring(0,2);
         let catsub=u.prd_sku.substring(0,4);
         // console.log('CATSUB-',catsub);
@@ -1662,7 +1677,6 @@ function putProductsRelatedPk(dt){
             $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub);
         }
     });
-
     ActiveChangePKT();
 }
 
@@ -1673,16 +1687,11 @@ function cleanInputs(){
     }
     $(`#txtTypeProjectEdt`).val(0);
     $('#txtTimeProject').val('');
-    $(`#txtCustomerEdt option[value = "0"]`).attr(
-            'selected',
-            'selected');
-    $(`#txtCustomerRelEdt option[value = "0"]`).attr(
-            'selected',
-            'selected');
+    $(`#txtCustomerEdt option[value = "0"]`).attr('selected','selected');
+    $(`#txtCustomerRelEdt option[value = "0"]`).attr('selected','selected');
     $('#txtHowRequired').val('');
-    $('#txtTypeLocationEdt').val(0);
+    $('#txtTypeLocationEdt').val(1);
     $('#txtProjectIdEdt').val('');
-
 }
 function ActiveChangePKT(){
 
@@ -1691,9 +1700,7 @@ function ActiveChangePKT(){
     .on('click', function () {
         let id = $(this).attr('data_cat');
         let lcatsub=id;
-
         $('#SerieData').removeClass('overlay_hide');
-
             $('#SerieData .btn_close')
                 .unbind('click')
                 .on('click', function () {
@@ -1701,7 +1708,6 @@ function ActiveChangePKT(){
                     $('#SerieData').addClass('overlay_hide');
                     $('#tblDataChg').DataTable().destroy;
                 });
-
         infoDetallePkt(lcatsub);
         // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
     });
@@ -1730,7 +1736,6 @@ function settingProdChg(){
             {data: 'sername', class: 'supply left'},
         ],
     });
-
 }
 
 function putChangeProd(dt) {
@@ -1742,7 +1747,6 @@ function putChangeProd(dt) {
     tablaChg.rows().remove().draw();
     if (dt[0].prd_id > 0) {
         $.each(dt, function (v, u) {
-            // console.log(u);
             tablaChg.row
              .add({
                  sermodif: `<i class="fas fa-edit toChange" id="${u.prd_id}" sku_original="${u.prd_sku}"></i>`,
@@ -1758,16 +1762,14 @@ function putChangeProd(dt) {
 function putChangeProd_old(dt) {
     console.log(dt);
     if(dt[0].prd_id > 0){
-    $.each(dt, function (v, u) {
-    let H = `
-        <tr data_cat=${u.prd_id}>
-            <td>${u.prd_sku}</td>
-            <td>${u.prd_name}</td>
-        </tr>
-    `;
-    $('.invoice__modal-general table tbody').append(H);
-
-    });
+        $.each(dt, function (v, u) {
+        let H = `
+            <tr data_cat=${u.prd_id}>
+                <td>${u.prd_sku}</td>
+                <td>${u.prd_name}</td>
+            </tr> `;
+            $('.invoice__modal-general table tbody').append(H);
+        });
     }
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
@@ -1776,6 +1778,7 @@ function putChangeProd_old(dt) {
 
 // Muestra el inventario de productos
 function stockProduct(bdgId, type) {
+    modalLoading('B');
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -1799,14 +1802,14 @@ function putStockProjects(dt) {
                 <td>${u.pjt_name}</td>
                 <td>${u.pjtpd_day_start}</td>
                 <td>${u.pjtpd_day_end}</td>
-            </tr>
-        `;
+            </tr> `;
         $('.invoice__modal-general table tbody').append(H);
     });
 
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
+    modalLoading('H');
 }
 
 function editProject(pjtId) {
@@ -1845,19 +1848,8 @@ function fillContent() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
                 ],
                 firstDay: 1,
             },
@@ -1875,17 +1867,18 @@ function fillContent() {
         }
     );
 
-   
     // Llena el selector de tipo de proyecto
     $.each(tpprd, function (v, u) {
         let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
         $('#txtTypeProjectEdt').append(H);
     });
+
     // Llena el selector de tipo de llamados
     $.each(tpcall, function (v, u) {
         let H = `<option value="${u.pjttc_id}"> ${u.pjttc_name}</option>`;
         $('#txtTypeCalled').append(H);
     });
+
     // Llena el selector de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
@@ -1893,6 +1886,7 @@ function fillContent() {
             $('#txtCustomerEdt').append(H);
         }
     });
+
     // Llena el selector de relacion de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 2) {
@@ -1900,13 +1894,13 @@ function fillContent() {
             $('#txtCustomerRelEdt').append(H);
         }
     });
+
     $.each(loct, function (v, u) {
         let H = `<option value="${u.loc_id}">${u.loc_type_location}</option>`;
         $('#txtTypeLocationEdt').append(H);
         $('#txtTypeLocationEdt').val(1);
     });
  
-	
     $('.textbox')
         .unbind('focus')
         .on('focus', function () {
@@ -1916,13 +1910,12 @@ function fillContent() {
 }
 
 function fillData(inx) {
-    console.log('fillData', inx);
+    // console.log('fillData', inx);
     $('.textbox__result').show();
     $('.project__selection').hide();
 
     let pj = proj;
-    console.log('loc', pj[inx].loc_id);
-
+    // console.log('loc', pj[inx].loc_id);
     $('#txtProjectIdEdt').val(pj[inx].pjt_id);
     $('#txtProjectEdt').val(pj[inx].pjt_name);
     $('#txtPeriodProjectEdt').val(
@@ -1982,7 +1975,7 @@ function fillData(inx) {
             add = 2;							
 
         } else {
-            console.log('Otro');
+            // console.log('Otro');
             $('#txtLocationEdt').val('CDMX');
             /* $('#txtEdosRepublic').parents('tr').addClass('hide'); */
             $('#txtTripGo').parents('tr').addClass('hide');
@@ -2030,7 +2023,6 @@ function fillData(inx) {
             
         });
 
-    
     $('#saveProject')
         .html('Guardar cambios')
         .removeAttr('class')
@@ -2046,8 +2038,7 @@ function fillData(inx) {
                 let projLocation = $('#txtLocationEdt').val();
                 let cuoId = $('#txtCustomerOwnerEdt').val();
                 let projLocationTypeValue = $(
-                    '#txtTypeLocationEdt option:selected'
-                ).val();
+                    '#txtTypeLocationEdt option:selected').val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
@@ -2094,10 +2085,8 @@ function fillData(inx) {
                     "pjtTestTecnic"  : "${testTecnic}",
                     "pjtTestLook"    : "${testLook}"
                 }]`;
-                /* ,
-					"edos_id"        : "${projEdosValue}" */ // Si no se usan más locacaiones esto va arriva en la linea 1899
 
-                console.log(par);
+                // console.log(par);
                 var pagina = 'Budget/UpdateProject';
                 var tipo = 'html';
                 var selector = loadProject;
@@ -2112,6 +2101,7 @@ function loadProject(dt) {
     getProjects(dt);
     waitShowProject(dt);
     automaticCloseModal();
+    modalLoading('H');
 }
 
 function waitShowProject(pjtId) {
@@ -2133,17 +2123,13 @@ function newProject() {
     $('.invoice__modal-general .modal__header-concept').html('Captura de datos para un nuevo proyecto');
 
     $('#saveProject')
-        .html('Guardar proyecto')
-        .removeAttr('class')
-        .addClass('bn btn-ok insert');
-    closeModals();
-    fillContent();
-    actionNewProject();
+        .html('Guardar proyecto').removeAttr('class').addClass('bn btn-ok insert');
+        closeModals();
+        fillContent();
+        actionNewProject();
 
 	$('#addLocation')
-        .html('Añadir Locación')
-        .removeAttr('class')
-        .addClass('bn btn-ok insert');
+        .html('Añadir Locación').removeAttr('class').addClass('bn btn-ok insert');
         $('#btn_save_locations').removeClass('hide');
     
     $('.textbox__result').hide();
@@ -2161,15 +2147,11 @@ function newProject() {
                 getProjectParent(prjId);
             } else {
                 $('#txtProjectParent').parents('tr').addClass('hide');
-                $(`#txtProjectParent option[value = "0"]`).attr(
-                    'selected',
-                    'selected'
-                );
+                $(`#txtProjectParent option[value = "0"]`).attr('selected','selected');
                 cleanInputs();
             }
         });
     
-        
         $('#txtTypeLocationEdt')
         .unbind('change')
         .on('change', function () {
@@ -2177,40 +2159,33 @@ function newProject() {
             if (selection == 2 || selection == 4) {
                 $('#txtTripGo').parents('tr').removeAttr('class');
                 $('#txtTripBack').parents('tr').removeAttr('class');
-                 
 				$('#txtLocationEdt').parents('tr').addClass('hide');
                 $('#addLocation').parents('tr').removeAttr('class');
                 add = 1;													
             } else {
-                // console.log('Otro');
                 $('#txtLocationEdt').val('CDMX');
                 /* $('#txtEdosRepublic').parents('tr').addClass('hide'); */
 				$('#addLocation').parents('tr').addClass('hide');
-
                 $('#txtTripGo').parents('tr').addClass('hide');
                 $('#txtTripBack').parents('tr').addClass('hide');
                 /* $('#txtLocationEdt').parents('tr').removeAttr('class');	 */											 
-                $(`#txtTypeLocationEdt option[value = "1"]`).attr(
-                  'selected',
-                     'selected'
-                 );
+                $(`#txtTypeLocationEdt option[value = "1"]`).attr('selected','selected' );
             }
         });
+
     $('#addLocation')
     .unbind('click')
     .on('click', function(){
 		settingTable();
 
-    });
-       
+    });  
 }
 
 function settingTable(){
         $('#addLocationModal').removeClass('overlay_hide');
-
         $('#addLocationEdos')
-        .unbind('click')
-        .on('click', function () {
+            .unbind('click')
+            .on('click', function () {
             putLocations();
         });
 
@@ -2249,7 +2224,6 @@ function settingTable(){
                 let edo =$(this).attr('id');
                 let  aux = $(this).attr('data-content');
                 let truk = `${loc}|${edo}`;
-                //console.log(truk);
                 console.log(aux);
                 if(aux == 1){
                     build_data_structure(truk);
@@ -2263,28 +2237,24 @@ function putLocations(){ //** AGREGO ED */
     let loc=$('#txtLocationExtra').val();
     let edo =$('#txtEdosRepublic_2').val();
     let name_edo =$(`#txtEdosRepublic_2 option[value="${edo}"]`).text(); // por alguna razon cada que se cierra el modal principal, y se reabre para generar un nuevo proyecto se genera una repeticion de datos
-    
     par = `
-            [{
-                "support"  : "${edo}",
+            [{  "support"  : "${edo}",
                 "loc"       : "${loc}",
                 "edoRep"       : "${name_edo}"
             }]`;
     
-    console.log(par);
+    // console.log(par);
     fill_table(par);
-    clean_selectors();
-    
+    clean_selectors();   
 }
 
 function fill_table(par) { //** AGREGO ED */
-    console.log('Paso 3');
+    // console.log('Paso 3 fill_table', par);
     let largo = $('#listLocationsTable tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#listLocationsTable tbody tr').remove() : '';
     par = JSON.parse(par);
 
     let tabla = $('#listLocationsTable').DataTable();
-    
     tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill" id ="md${par[0].support}"></i>`,
@@ -2293,14 +2263,11 @@ function fill_table(par) { //** AGREGO ED */
         })
         .draw();
 
-    $('#md' + par[0].support)
-        .parents('tr')
-        .attr('id', par[0].support)
-        .attr('data-content', 1);
+    $('#md' + par[0].support).parents('tr').attr('id', par[0].support).attr('data-content', 1);
 
     $('.edit')
-    .unbind('click')
-    .on('click', function () {
+        .unbind('click')
+        .on('click', function () {
         tabla.row($(this).parent('tr')).remove().draw();
     });
 
@@ -2311,30 +2278,26 @@ function build_data_structure(pr) {
     if (add ==2) {
         let prjId = $('#txtProjectIdEdt').val();
         par = `
-        [{
-            "loc" :  "${el[0]}",
+        [{  "loc" :  "${el[0]}",
             "edo" :  "${el[1]}",
             "prjId" : "${prjId}"
         }]`;
         
     }else{
         par = `
-        [{
-            "loc" :  "${el[0]}",
+        [{  "loc" :  "${el[0]}",
             "edo" :  "${el[1]}",
             "prjId" : "0"
         }]`;
     }
-    console.log(' Antes de Insertar', par);
+    // console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
 function save_exchange(pr) {
-    //   console.log(pr);
     var pagina = 'Budget/SaveLocations';
     var par = pr;
     var tipo = 'html';
     var selector = exchange_result;
-    console.log(par);
     fillField(pagina, par, tipo, selector);
     //console.log(fillField(pagina, par, tipo, selector));
 }
@@ -2347,13 +2310,10 @@ function exchange_result(dt) {
     
     }else{
         let prj_id = $('#txtProjectIdEdt').val();
-            
         getLocationsEdos(prj_id);
         clean_selectors();
     }
-   
 }
-
 
 function clean_selectors(){  //** AGREGO ED */
     $('#txtLocationExtra').val('');
@@ -2364,6 +2324,7 @@ function actionNewProject() {
     $('#saveProject.insert')
         .unbind('click')
         .on('click', function () {
+            modalLoading('G');
             let ky = validatorFields($('#formProject'));
             if (ky == 0) {
                 let projId = $('#txtProjectIdEdt').val();
@@ -2389,11 +2350,11 @@ function actionNewProject() {
                 let projDateStart = moment(
                     projPeriod.split(' - ')[0],
                     'DD/MM/YYYY'
-                ).format('YYYYMMDD');
+                    ).format('YYYYMMDD');
                 let projDateEnd = moment(
                     projPeriod.split(' - ')[1],
                     'DD/MM/YYYY'
-                ).format('YYYYMMDD');
+                    ).format('YYYYMMDD');
 
                 let proStatus = '';
                 let proParent = '';
@@ -2481,30 +2442,25 @@ function showModalComments() {
     closeModals();
     fillComments(pjtId);
 }
-
+// Agrega nuevo comentario
 function fillComments(pjtId) {
-    console.log(pjtId);
-    // Agrega nuevo comentario
+    // console.log(pjtId);
     $('#newComment')
         .unbind('click')
         .on('click', function () {
             console.log('Comentraios');
             let pjtId = $('.version_current').attr('data-project');
-
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
-
             if (comComment.length > 3) {
                 let par = `
-                    [{
-                        "comSrc"        : "${comSrc}",
+                    [{  "comSrc"        : "${comSrc}",
                         "comComment"    : "${comComment}",
                         "pjtId"         : "${pjtId}"
                     }]
                     `;
                 var pagina = 'Budget/InsertComment';
                 var tipo = 'json';
-                console.log(par);
                 var selector = addComment;
                 fillField(pagina, par, tipo, selector);
             }
@@ -2517,7 +2473,7 @@ function putComments(dt) {
     $('.comments__list').html('');
     if (dt[0].com_id > 0) {
         $.each(dt, function (v, u) {
-            console.log(u);
+            // console.log(u);
             fillCommnetElements(u);
         });
     }
@@ -2531,13 +2487,12 @@ function fillCommnetElements(u) {
             <div class="comment__box comment__box-text">${u.com_comment}</div>
             <div class="comment__box comment__box-user">${u.com_user}</div>
         </div>
-    `;
-
+        `;
     $('.comments__list').prepend(H);
 }
 
 function addComment(dt) {
-    console.log(dt[0]);
+    // console.log(dt[0]);
     fillCommnetElements(dt[0]);
     $('#txtComment').val('');
 }
@@ -2545,7 +2500,6 @@ function addComment(dt) {
 // *************************************************
 // imprime la cotización
 // *************************************************
-
 function printBudget(verId) {
     let user = Cookies.get('user').split('|');
     let v = verId;
@@ -2583,43 +2537,23 @@ function saveBudget(dt) {
             .children('.elipsis')
             .text()
             .replace(/\"/g, '°').replace(/\'/g, '¿');
-        let bdgQuantity = tr
-            .children('td.quantityBase')
-            .children('.input_invoice')
-            .val();
+        let bdgQuantity = tr.children('td.quantityBase').children('.input_invoice').val();
         let bdgPriceBase = tr.children('td.priceBase').text().replace(/,/g, '');
-        let bdgDaysBase = tr
-            .children('td.daysBase')
-            .children('.input_invoice')
-            .val();
-        let bdgDaysCost = tr
-            .children('td.daysCost')
-            .children('.input_invoice')
-            .val();
+        let bdgDaysBase = tr.children('td.daysBase').children('.input_invoice').val();
+        let bdgDaysCost = tr.children('td.daysCost').children('.input_invoice').val();
         let bdgDesctBase = parseFloat(tr.children('td.discountBase').text()) / 100;
         let bdgDesctInsr = parseFloat(tr.children('td.discountInsu').text()) / 100;
-        let bdgDaysTrip = tr
-            .children('td.daysTrip')
-            .children('.input_invoice')
-            .val();
+        let bdgDaysTrip = tr.children('td.daysTrip').children('.input_invoice').val();
         let bdgDescTrip = parseFloat(tr.children('td.discountTrip').text()) / 100;
-        let bdgDaysTest = tr
-            .children('td.daysTest')
-            .children('.input_invoice')
-            .val();
+        let bdgDaysTest = tr.children('td.daysTest').children('.input_invoice').val();
         let bdgDescTest = parseFloat(tr.children('td.discountTest').text()) / 100;
         let bdgInsured = tr.attr('data-insured');
         let bdgSection = tr.parents('tbody').attr('id').substring(2, 5);
-        let bdgOrder = tr
-            .children('th.col_product')
-            .children('i.move_item')
-            .data('order');
+        let bdgOrder = tr.children('th.col_product').children('i.move_item').data('order');
 
         if (bdgSku != undefined) {
-
             let par = `
-            [{
-                "bdgSku"          : "${bdgSku}",
+            [{  "bdgSku"          : "${bdgSku}",
                 "bdgLevel"        : "${bdgLevel}",
                 "bdgSection"      : "${bdgSection}",
                 "bdgProduc"       : "${bdgProduct.toUpperCase()}",
@@ -2640,7 +2574,6 @@ function saveBudget(dt) {
                 "pjtId"           : "${pjtId}"
             }]`;
             // console.log(par);
-           
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;
@@ -2656,18 +2589,14 @@ function respBudget(dt) {
     // console.log('respBudget', dt);
     let pjtId = dt.split('|')[0];
     let UserN = dt.split('|')[1];
-
 }
-
 
 function reOrderDatatbl(verId,pjtId) {
     let par = `
-    [{
-        "verId"           : "${verId}",
+    [{  "verId"           : "${verId}",
         "pjtId"           : "${pjtId}"
     }]`;
     // console.log(par);
-   
     var pagina = 'Budget/reOrdenList';
     var tipo = 'html';
     var selector = putreOrderDatatbl;
@@ -2676,7 +2605,6 @@ function reOrderDatatbl(verId,pjtId) {
 
 function putreOrderDatatbl(dt) {
     console.log('putreOrderDatatbl', dt);
-
 }
 
 /**  ++++  Obtiene los días definidos para el proyectos */
@@ -2685,7 +2613,6 @@ function getDaysPeriod() {
     let start = moment(Period.split(' - ')[0], 'DD/MM/YYYY');
     let end = moment(Period.split(' - ')[1], 'DD/MM/YYYY');
     let days = end.diff(start, 'days') + 1;
-
     return days;
 }
 
@@ -2741,8 +2668,7 @@ function updateTotals() {
         $(this).children('.costBase').html(mkn(cstbs, 'n'));
 
         let daytr = parseInt(
-            $(this).children('td.daysTrip').children('.input_invoice').val()
-        );
+            $(this).children('td.daysTrip').children('.input_invoice').val());
         let destr = parseFloat($(this).children('td.discountTrip').text());
 
         stt05 = stt01 * daytr; // Costo de Importe x dias viaje
@@ -2754,8 +2680,7 @@ function updateTotals() {
         $(this).children('.costTrip').html(mkn(csttr, 'n'));
 
         let dayts = parseInt(
-            $(this).children('td.daysTest').children('.input_invoice').val()
-        );
+            $(this).children('td.daysTest').children('.input_invoice').val());
         let dests = parseFloat($(this).children('td.discountTest').text());
 
         stt08 = stt01 * dayts; // Costo de Importe x dias prueba
@@ -2782,6 +2707,7 @@ function updateTotals() {
     let desctot = costassu - desctins;
     totlCost = costbase + costtrip + costtest + desctot;
     $('#costTotal').html(mkn(totlCost, 'n'));
+
     let ttlrws = $('#invoiceTable').find('tbody tr.budgetRow').length;
     $('#numberProducts').html(ttlrws);
 }
@@ -2889,7 +2815,6 @@ function automaticCloseModal() {
 }
 
 function modalLoading(acc) {
-
     if (acc == 'H') {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
@@ -2920,8 +2845,6 @@ function modalLoading(acc) {
         
     }
 }
-
-
 
 /**  +++ Oculta los elementos del listado que no cumplen con la cadena  */
 function sel_items(txt, obj) {
@@ -2967,12 +2890,11 @@ function validatorFields(frm) {
 function promoteProject(pjtId) {
     // console.log('TERMINO PROMO-COTIZ-1');
     let fechaini = new Date();
-    console.log('Hora click promoteProject', fechaini);
-
+    // console.log('Hora click promoteProject', fechaini);
     modalLoading('S');
-    let verId = $('.invoice_controlPanel .version_current').attr(
-        'data-version'
-    );
+    let verId = $('.invoice_controlPanel .version_current').attr('data-version');
+    // verId=parseInt(verId) + 1;
+    
     var pagina = 'Budget/ProcessProjectProductFAST';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
@@ -2991,17 +2913,17 @@ function showResult(dt) {
     // ProcessBackAccesories
     // cleanFormat();
     setTimeout(() => {
-        console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
+        // console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
 
         // var pagina = 'Budget/ProcessBackAccesories';
-        var pagina = 'Budget/ProcessFuncAccesories';
-        var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
-        var tipo = 'html';
-        var selector = showResAcc;
-        fillField(pagina, par, tipo, selector);
+        // var pagina = 'Budget/ProcessFuncAccesories';
+        // var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+        // var tipo = 'html';
+        // var selector = showResAcc;
+        // fillField(pagina, par, tipo, selector);
     
     }, 2000);
-    cleanFormat();
+        cleanFormat();
     // showResAcc(dt);
 }
 
@@ -3015,10 +2937,7 @@ function showResAcc(dt) {
 function promoteProject_old(pjtId) {
     // console.log('TERMINO PROMO-COTIZ-1');
     modalLoading('S');
-    let verId = $('.invoice_controlPanel .version_current').attr(
-        'data-version'
-    );
-
+    let verId = $('.invoice_controlPanel .version_current').attr('data-version');
     var pagina = 'Budget/ProcessProjectProduct';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
@@ -3027,7 +2946,7 @@ function promoteProject_old(pjtId) {
 }
 
 function showResult_old(dt) {
-    console.log(dt);
+    // console.log(dt);
     let pjtId = dt.split('|')[0];
     $('#P' + pjtId).remove();
     modalLoading('H');

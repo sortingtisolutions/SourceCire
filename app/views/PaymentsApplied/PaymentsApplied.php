@@ -13,7 +13,7 @@
         <div class="row mvst_group">
 
         <!-- Start Panel de control lateral -->
-            <div class="mvst_panel" style="background-color: #5F9EAB" >
+            <div class="mvst_panel" style="background-color: #B0C4DE" >
                 <div class="form-group">
                     <div class="row">
                         <h4>Busqueda de Pagos</h4>
@@ -31,7 +31,6 @@
                             
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <!-- <button type="button" class="btn btn-sm btn-primary" id="btnSave">Buscar</button> -->
                                     <button type="button" class="btn btn-sm btn-danger"  id="btnClean">Limpiar</button>
                                 </div>
                             </div>

@@ -5,6 +5,7 @@
 
 class ProductsPriceListController extends Controller
 {
+    
 	private $session;
 	public $model;
 
@@ -114,7 +115,6 @@ public function listCategories($request_params)
         }
         echo $res;
     }   
-
 
 // Lista productos del paquete
     public function listProductPackages($request_params)

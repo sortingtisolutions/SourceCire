@@ -15,17 +15,14 @@ $(document).ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
-    if (altr == 1) {
-        
-    setTimeout(() => {
-        deep_loading('O');
-        getCustomers();
-        getScores();
-        getCustType();
-        getOptionYesNo();
-    }, 100);
-    
-    
+    if (altr == 1) { 
+        setTimeout(() => {
+            deep_loading('O');
+            getCustomers();
+            getScores();
+            getCustType();
+            getOptionYesNo();
+        }, 100);
     } else {
         setTimeout(() => {
             inicial();
@@ -179,10 +176,9 @@ function settingTable() {
 
 function fillCustomers(ft) {
     $('#tblCustomers tbody').html('');
-
     var cod = ft == '1' ? 'A' : '';
 
-    if (prds[0].cus_id != '0') {
+    if (prds[0].cus_id > 0) {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
             if (u.prd_level != cod) {
@@ -222,7 +218,7 @@ function fillCustomers(ft) {
 
 /** +++++  coloca los tipos de calificacion */
 function putScores(dt) {
-    console.log('putScores',dt);
+    // console.log('putScores',dt);
     if (dt[0].scr_id != '0') {
         let cinId = dt[0].scr_id;
         $.each(dt, function (v, u) {
@@ -250,14 +246,10 @@ function activeIcons() {
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            //let cusNm = $(sltor.find('td')[2]).text();
-            //find('td')[2]).text(prdNm);
-            //(sltor.find('td')[1]).children('.data-content');
             if (prdId != undefined){
                 let prdNm = 'Modifica datos del Cliente';
                 console.log('Dato:', prdId);
                 $('#CustomerModal').removeClass('overlay_hide');
-                //$('.overlay_closer .title').html(prdNm, ':', cusNm );
                 $('.overlay_closer .title').html(prdNm);
                 getSelectCustomer(prdId);
                 $('#CustomerModal .btn_close')
@@ -273,19 +265,18 @@ function activeIcons() {
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            console.log('To Kill ' + prdId);
+            // console.log('To Kill ' + prdId);
             if (prdId != undefined){
                 $('#delProdModal').modal('show');
                 $('#txtIdProduct').val(prdId);
-                //borra paquete +
                 $('#btnDelProduct').on('click', function () {
                     let cusId = $('#txtIdProduct').val();
-                    //console.log(Id);
                     let tabla = $('#tblCustomers').DataTable();
                     $('#delProdModal').modal('hide');
 
                     let prdRow = $(`#${cusId}`);
                     tabla.row(prdRow).remove().draw();
+
                     var pagina = 'Customers/deleteCustomers';
                     var par = `[{"cusId":"${cusId}"}]`;
                     var tipo = 'html';
@@ -409,9 +400,6 @@ function saveEditCustomer() {
         let cusQualy =
             $(`#txtQualy option:selected`).val() == 0
                 ? '' : $(`#txtQualy option:selected`).text().split('-')[0];
-        // let cusQualyT =
-        //         $(`#txtQualy option:selected`).val() == 0
-        //         ? '' : $(`#txtQualy option:selected`).text().split('-')[1];
         
         let cusStat = $('#txtCusStat').children('i').attr('data_val');
         let cusICod = $('#txtCusCodI').val();
@@ -427,7 +415,6 @@ function saveEditCustomer() {
         let cusContPhone = $(`#txtContPhone`).val();
         let cusWorkC = $(`#txtWorkC option:selected`).val() == 0
                 ? '' : $(`#txtWorkC option:selected`).text().split('-')[0];
-
         let cusInvoi = $(`#txtInvoi`).val();
 
         var par = `
@@ -454,7 +441,7 @@ function saveEditCustomer() {
                     "cusInvoi" :    "${cusInvoi}"
                 }]
             `;
-            console.log('par',par);
+            // console.log('par',par);
                 // ACTUALIZA EL REGISTRO DE LA TABLA QUE SE MODIFICO
             let el = $(`#tblCustomers tr[id="${cusId}"]`);
                 $(el.find('td')[1]).text(cusName);
@@ -486,7 +473,7 @@ function saveEditCustomer() {
 }
 
 function resEdtProduct(dt) {
-    console.log('resEdtProduct',dt);
+    // console.log('resEdtProduct',dt);
     $('#CustomerModal .btn_close').trigger('click');
     activeIcons();
 }
@@ -614,14 +601,10 @@ function resNewProduct(dt) {
 }
 
 function putCustomersNew(dt) {
-    console.log('putCustomersNew',dt);
-
+    // console.log('putCustomersNew',dt);
     // $('#tblCustomers tbody').html('');
     let tabla = $('#tblCustomers').DataTable();
-
     if (cusIdNew != '0') {
-        // console.log('PASO IF',cusIdNew);
-        // var catId = prds[0].cat_id;
         $.each(dt, function (v, u) {
             tabla.row
             .add({
@@ -651,7 +634,6 @@ function putCustomersNew(dt) {
         $(`#E${u.cus_id}`).parents('tr').attr('id', u.cus_id);
         });
         // settingTable();
-        // console.log('AGREGO row');
         activeIcons();
     } else {
         settingTable();

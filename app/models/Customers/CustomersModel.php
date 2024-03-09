@@ -8,7 +8,6 @@ class CustomersModel extends Model
         parent::__construct();
     }
 
-
 // Listado de categorias   ****
 public function listCustomers()
 {
@@ -29,7 +28,6 @@ public function getSelectCustomer($params)
     return $this->db->query($qry);
 }
 
-
 // Listado de fichas técnicas
 public function listCustType()
 {
@@ -47,12 +45,12 @@ public function listScores()
 }
 
 // Obtiene el siguiente SKU
-    public function getNextSku($sbcId)
+    /* public function getNextSku($sbcId)
     {
-        $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next
+        $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,4), signed integer)),0) + 1 AS next
                 FROM ctt_products  WHERE sbc_id = $sbcId;";
         return $this->db->query($qry);
-    }
+    } */
 
 
 // Guarda los cambios de un producto

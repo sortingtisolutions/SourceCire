@@ -231,7 +231,7 @@ function addComments(scc, mid) {
     let H = `
     <div class="box_comments">
         <div class="form_comments">
-            <h1>Observaciones</h1>
+            <h1>Notificaciones</h1>
             <textarea id="txtComments"></textarea>
             <button class="bn btn-ok" id="comApply">Aceptar</button>
             <button class="bn btn-cn" id="comCancel">Cancelar</button>
@@ -247,7 +247,7 @@ function addComments(scc, mid) {
 
     $('#comApply').on('click', function () {
         let cmm = $('#txtComments').val();
-        saveComment(scc, mid, cmm);
+        // saveComment(scc, mid, cmm);
         $('.box_comments').remove();
     });
 }
@@ -279,4 +279,46 @@ function looseAlert(grp) {
     grp.children('.textAlert').css({ visibility: 'hidden' });
 
     // console.log(grp.attr('class'));
+}
+
+function sendEmail(turnOn, subjectmess, bodymess) {
+    if (turnOn == true) {
+        Email.send({
+            Host: "smtp.elasticemail.com",
+            Username: "notificationcire@ctt-app.com",
+            Password: "36AAF404B1F0EA4FE8BB21E24EC62990528E",
+            To: 'juarezjorr@gmail.com, inventarios-cire@ctt-app.com, programacion-cire@ctt-app.com', // notificationcire@ctt-app.com
+            From: "notificationcire@ctt-app.com",
+            Subject: subjectmess, 
+            Body: bodymess,
+          })
+            .then(function (message) {
+                noticeEmail('Mensajes de correos enviados correctamente, OK');
+            //   alert("MAIL ENVIADO CORRECTAMENTE a....");
+            });
+    } else {
+        noticeEmail('Mensaje de correo NO se envio');
+        // alert("Bandera de Correos no esta encendida OFF");
+    }
+    
+  }
+//   width:70%; height: 70%
+  function noticeEmail(scc) {
+    let H = `
+    <div class="box_comments" style="width:300px; height:210px; left:40%; background-color:rgba(#transparent, 0.05); align-items:flex-start;">
+        <div class="form_comments" style="height:190px; align-items:baseline;">
+            <h1>Notificaciones email</h1>
+            <label for="txtItems" style="font-size=large; font-weight:bold">${scc}</label><br><br>
+            <button class="bn btn-ok" id="comApply">Aceptar</button>
+        </div>
+    </div> `;
+
+    $('body').append(H);
+
+    $('#comApply').on('click', function () {
+    // $('#confirmButton').on('click', function () {
+        // let cmm = $('#txtComments').val();
+        // saveComment(scc, mid, cmm);
+        $('.box_comments').remove();
+    });
 }

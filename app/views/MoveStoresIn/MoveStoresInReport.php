@@ -25,7 +25,6 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 
-
 // Cabezal de la página
 $header = '
     <header>
@@ -195,8 +194,6 @@ $mpdf->Output(
     "Entrada_Almacen.pdf",
     \Mpdf\Output\Destination::INLINE
 );
-
-
 // "Cotizacion-". $items[0]['ver_code'].".pdf",
 
 function decodificar($dato) {

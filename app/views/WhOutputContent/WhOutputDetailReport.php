@@ -14,25 +14,36 @@ $nameProject =$_GET['np'];
 $numProject =  $_GET['nump'];
 
 $conkey = decodificar($_GET['h']) ;
+date_default_timezone_set('America/Mexico_City');
 
 $h = explode("|",$conkey);
 // 11-10-23
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 if ($empid == '1' || $empid == '2'){
 $qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt_number, 
-        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments
+        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo, sr.ser_comments, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name, 
+                CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
         FROM ctt_projects_content AS pcn
         INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
         INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
         INNER JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-        WHERE pcn.pjt_id=$prdId AND substr(pdt.pjtdt_prod_sku,11,1)!='A' 
+        LEFT JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
+        LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
+        WHERE pcn.pjt_id=$prdId AND pdt.prd_type_asigned != 'AF' AND pdt.prd_type_asigned != 'AV'
         ORDER BY pdt.pjtdt_prod_sku;";
 } else{
 $qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity, 
         pjc.pjt_id, '1' AS dt_cantidad, pjtcn_order, pjc.pjtcn_section,
         sr.ser_serial_number,sr.ser_no_econo,
-            pj.pjt_number, pj.pjt_name, pj.pjt_date_start, sr.ser_comments
+            pj.pjt_number, pj.pjt_name, pj.pjt_date_start, sr.ser_comments, cu.cus_id, cu.cus_name, cu.cus_email, cu.cus_phone
+                , cu.cus_address, cu.cus_rfc, pj.pjt_number, pj.pjt_date_project, pj.pjt_date_start, pj.pjt_date_end
+                , pj.pjt_how_required, pj.pjt_location, loc.loc_type_location, pt.pjttp_name, 
+                CONCAT(DATE(pj.pjt_date_start),' - ',DATE(pj.pjt_date_end)) period
         FROM ctt_projects_content AS pjc
         INNER JOIN ctt_projects_detail AS pdt ON pdt.pjtvr_id=pjc.pjtvr_id
         INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
@@ -40,7 +51,11 @@ $qry = "SELECT pjtcn_prod_name,prd.prd_name, pjtdt_prod_sku, pjtcn_quantity,
         INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
         INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
         INNER JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-        WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid AND substr(pdt.pjtdt_prod_sku,11,1)!='A'
+        LEFT JOIN ctt_customers_owner AS cuo ON cuo.cuo_id = pj.cuo_id
+        LEFT JOIN ctt_customers AS cu ON cu.cus_id = cuo.cus_id
+        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+        INNER JOIN ctt_location AS loc ON loc.loc_id = pj.loc_id
+        WHERE pjc.pjt_id=$prdId AND em.emp_id=$empid AND pdt.prd_type_asigned != 'AF' AND pdt.prd_type_asigned != 'AV'
         ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
 }
 
@@ -52,6 +67,8 @@ while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 
+date_default_timezone_set('America/Mexico_City');
+$hoy=new DateTime();
 // Cabezal de la página
 $header = '
     <header>
@@ -59,7 +76,13 @@ $header = '
             <table class="table-main" border="0">
                 <tr>
                     <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:23mm; height:10mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                    </td>
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto: '. $nameProject. '   #' . $numProject .'</span>
+                        <br><span style=" font-size: 8pt; color: #191970">Nombre Responsable: '. $uname .'</span>
+                    </p>
                     </td>
                 </tr>
             </table>
@@ -71,23 +94,81 @@ $equipoBase = '1';
 $html = '
     <section>
         <div class="container">
-            <div class="name-report">
-                <p>
-                    <span class="number">Detalle del proyecto: '. $nameProject .' </span>
-                <br>
-                    <span class="date">Fecha de salida'.  $items[0]['pjt_date_start'] .'</span>
-                </p>
-            </div>
-
-            <table class="table-data bline-d tline">
+        <div style="height:80px;"></div>
+        <table class="table-data bline-d tline">
                 <tr>
+                    <td class="rline half">
+                        <!-- Start datos del cliente -->
+                        <table class="table-data">
+                            <tr>
+                                <td class="concept">Cliente:</td>
+                                <td class="data">'. $items[0]['cus_name']  .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Domicilio:</td>
+                                <td class="data">'.  $items[0]['cus_address'] .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Quien Solicita:</td>
+                                <td class="data">'. $items[0]['pjt_how_required'] .'</td>
+                             </tr>
+                            <tr>
+                                <td class="concept">Correo Electrónico:</td>
+                                <td class="data">'. $items[0]['cus_email'] .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Teléfono:</td>
+                                <td class="data">'. $items[0]['cus_phone'] .'</td>
+                            </tr>
+                           
+                            <tr>
+                                <td class="concept">Analista CTT:</td>
+                                <td class="data">'. $uname .'</td>
+                            </tr>
+                        </table>
+                        <!-- End datos del cliente -->
+                    </td>
                     <td class="half">
                         <!-- Start Datos del projecto -->
                         <table class="table-data">
+                        
                             <tr>
-                                <td class="concept">Nombre Empleado:</td>
-                                <td class="data"><strong>'. $uname .'</strong></td>
+                                <td class="concept">Fecha Cotización:</td>
+                                <td class="data">'. $hoy->format('d/m/Y') .'</td>
                             </tr>
+                            <tr>
+                                <td class="concept">Ciudad:</td>
+                                <td class="data">'. $items[0]['pjt_location'] .'</td>
+                            </tr>
+                            <!-- <tr>
+                                <td class="concept">Tipo de Locación:</td>
+                                <td class="data">'. $items[0]['loc_type_location'] .'</td>
+                            </tr> -->
+                            <tr>
+                                <td class="concept">Tipo de proyecto:</td>
+                                <td class="data">'. $items[0]['pjttp_name'] .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Fechas de Proyecto:</td>
+                                <td class="data">'. $items[0]['period'] .'</td>
+                            </tr>
+                            ';
+                            if ($items[0]['pjt_trip_go']) {
+                                $html .='
+                                    <tr>
+                                        <td class="concept">Dias de Viaje:</td>
+                                        <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
+                                    </tr>';
+                            }
+                            if ($items[0]['pjt_test_tecnic']) {
+                                $html .='
+                                <tr>
+                                    <td class="concept">Dias de Pruebas:</td>
+                                    <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
+                                </tr>';
+                            }
+                            
+                            $html .='
                             <tr>
                                 <td class="concept">&nbsp;</td>
                                 <td class="data">&nbsp;</td>
@@ -96,6 +177,18 @@ $html = '
                         </table>
                         <!-- End Datos del projecto -->
                     </td>
+                </tr>
+            </table>
+            <!-- End Datos de identificación  -->
+
+            <table class="table-data bline tline" style="text-align: center">
+                <tr>
+                    <td>
+                        <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
+                        Impresion de detalles de salida de proyecto
+                        </p>
+                    </td>
+             
                 </tr>
             </table>
             <!-- End Datos de identificación  -->
@@ -162,10 +255,8 @@ $foot = '
                 <td>
                     <table width="100%">
                         <tr>
-                            <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
+                            <td class="td-foot foot-date" width="25%">{DATE F j, Y, g:i a}</td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $prdId .'</td>
                         </tr>
                     </table>
                 </td>
@@ -178,7 +269,7 @@ $foot = '
                 <td class="addIcon addColor01"><img class="img-logo" src="../../../app/assets/img/icon-phone.png" style="width:4mm; height:auto;" /></td>
                 <td class="addData">Av Guadalupe I. Ramírez 763,<br />Tepepan Xochimilco, 16020, CDMX</td>
                 <td class="addIcon addColor02"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:4mm; height:auto;" /></td>
-                <td class="addData">ventas@cttrentals.com<br />contacto@cttretnals.com<br />cotizaciones@cttrentals.com</td>
+                <td class="addData">reservaciones@cttrentals.com<br />presupuestos@cttrentals.com<br />cotizaciones@cttrentals.com</td>
                 <td class="addIcon addColor03"><img class="img-logo" src="../../../app/assets/img/icon-email.png"  style="width:4mm; height:auto;"/></td>
             </tr>
         </table>
@@ -198,7 +289,7 @@ $mpdf= new \Mpdf\Mpdf([
     'margin_bottom' => 30,
     'margin_header' => 10,
     'margin_footer' => 5, 
-    'orientation' => 'P'
+    'orientation' => 'L'
     ]);
 
 $mpdf->shrink_tables_to_fit = 1;

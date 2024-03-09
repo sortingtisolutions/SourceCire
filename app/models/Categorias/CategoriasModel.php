@@ -33,13 +33,13 @@ class CategoriasModel extends Model
 		return $this->db->query($qry);
 	}
 
-    public function listAreas($params)
-	{
-		$qry = "SELECT * FROM ctt_areas
-				WHERE are_id in (2,3) AND are_status = 1 ORDER BY are_id;";
+    // public function listAreas($params)
+	// {
+	// 	// $qry = "SELECT * FROM ctt_areas
+	// 	// 		WHERE are_status = 1 ORDER BY are_id;";
 
-		return $this->db->query($qry);
-	}
+	// 	// return $this->db->query($qry);
+	// }
 
     public function UpdateCategoria($params)
 	{
@@ -64,12 +64,12 @@ class CategoriasModel extends Model
 		$catId = $this->db->real_escape_string($params['catId']);
 		$areId = $this->db->real_escape_string($params['areId']);
 
-			$qry = "INSERT INTO ctt_categories(cat_id,cat_name, cat_status, str_id,are_id)
-					VALUES ('$catId', UPPER('$cat_name'),1,'$str_id','$areId')";
-			$this->db->query($qry);	
-			$cat_id = $this->db->insert_id;
+		$qry = "INSERT INTO ctt_categories(cat_id,cat_name, cat_status, str_id,are_id)
+				VALUES ('$catId', UPPER('$cat_name'),1,'$str_id','$areId')";
+		$this->db->query($qry);	
+		$cat_id = $this->db->insert_id;
 			
-		return $cat_id;
+		return $catId;
 	}
 
     //borra proveedor
@@ -100,14 +100,15 @@ class CategoriasModel extends Model
 	public function countQuantity($params)
     {
         $catId = $this->db->real_escape_string($params['catId']);
-        $qry = "SELECT '$catId' as cat_id, ifnull(sum(sp.stp_quantity),0) as cantidad 
-		FROM  ctt_stores_products AS sp
-		INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
-		INNER JOIN ctt_products				AS p ON p.prd_id = sr.prd_id
-		INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id
-		INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id
-		WHERE sr.ser_status = 1 AND p.prd_level IN ('P')
-		and ct.cat_id= $catId;";
+		
+		$qry = "SELECT '$catId' as cat_id, COUNT(*) as cantidad
+		FROM  ctt_products AS p
+		INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id   AND sc.sbc_status = 1
+		INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id  AND ct.cat_status = 1
+		INNER JOIN ctt_series                AS se ON se.prd_id = p.prd_id
+		WHERE ct.cat_id = $catId AND p.prd_level IN ('P') 
+		ORDER BY se.ser_sku;";
+		
         return $this->db->query($qry);
     }
 

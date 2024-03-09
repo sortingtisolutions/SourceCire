@@ -4,6 +4,7 @@ require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ProjectTypeModel extends Model
 {
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -25,12 +26,11 @@ class ProjectTypeModel extends Model
 	}
 	
 // Optiene los Usuaios existentes
-	public function GetProjectTypes($params)
-	{
-	
-		$qry = "SELECT * FROM ctt_projects_type order by pjttp_id ASC";
-		return $this->db->query($qry);
-	}
+	// public function listProjectsType($params)
+	// {
+	// 	$qry = "SELECT * FROM ctt_projects_type order by pjttp_id ASC";
+	// 	return $this->db->query($qry);
+	// }
 
 
     public function UpdateProjectType($params)

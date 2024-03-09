@@ -8,7 +8,6 @@ class ClosedProyectChangeController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new ClosedProyectChangeModel();
@@ -58,7 +57,7 @@ class ClosedProyectChangeController extends Controller
         }
         echo $res;
     } 
-/** */
+
     public function getMontos($request_params)
     {
         $params =  $this->session->get('user');
@@ -75,7 +74,7 @@ class ClosedProyectChangeController extends Controller
         }
         echo $res;
     } 
-/** */
+
     public function saveDocumentClosure($request_params)
     {
         $result = $this->model->saveDocumentClosure($request_params);
@@ -109,77 +108,4 @@ class ClosedProyectChangeController extends Controller
         echo $res;
     } 
 
-// Guarda la venta
-    // public function NextExchange($request_params)
-    // {
-    //     $params =  $this->session->get('user');
-    //     $result = $this->model->NextExchange($request_params);
-    //     $res = $result;
-    //     echo $res;
-    // } 
-    
-// Guarda la venta
-    // public function SaveSale($request_params)
-    // {
-    //     $params =  $this->session->get('user');
-    //     $group = explode('|',$params);
-
-    //     $user = $group[2];
-
-    //     $result = $this->model->SaveSale($request_params, $user);
-    //     $res = $result;
-    //     echo $res;
-    // } 
-    // Guarda detalle de la venta
-    // public function SaveSaleDetail($request_params)
-    // {
-    //     $params =  $this->session->get('user');
-    //     $result = $this->model->SaveSaleDetail($request_params, $params);
-    //     $res = $result;
-    //     echo $res;
-    // } 
-
-   
-
-    // Guarda Comentario
-    // public function SaveComments($request_params)
-    // {
-    //     $params =  $this->session->get('user');
-    //     $group = explode('|',$params);
-
-    //     $user = $group[2];
-    //     $result = $this->model->SaveComments($request_params, $user);
-    //     $res = $result;
-    //     echo $res;
-    // } 
-    // Guarda el archivo de venta
-    // public function saveSaleList($request_params)
-    // {
-    //     $params =  $this->session->get('user');
-    //     $group = explode('|',$params);
-
-    //     $user = $group[0];
-    //     $name = $group[2];
-
-    //     $result = $this->model->saveSaleList($request_params, $user);
-    //     $i = 0;
-    //     while($row = $result->fetch_assoc()){
-    //         $rowdata[$i] = $row;
-    //         $i++;
-    //     }
-    //     if ($i>0){
-    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-    //     } else {
-    //         $res =  '[{"prd_id":"0"}]';	
-    //     }
-    //     $dir = ROOT . FOLDER_PATH . '/app/views/ClosedProyectChange/ClosedProyectChangeFile-'. $user .'.json';
-
-    //     if (file_exists($dir)) unlink($dir);
-
-    //     $fileJson = fopen( $dir ,"w") or die("problema al escribir el archivo ");
-    //     fwrite($fileJson, $res);
-    //     fclose($fileJson);
-
-    //     echo $user . '|' . $name;
-    // } 
 }

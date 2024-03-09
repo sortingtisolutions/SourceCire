@@ -36,15 +36,11 @@
                     </div>
 
                     <div class="row list-finder hide-items">
-                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div id="boxProducts" type="text" class="box-items-list" >Productos
-                                    <i class="fas fa-angle-down"></i>
-                                </div> 
-                        </div> -->
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="boxProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
                                 <label for="boxProducts">Productos</label>
                                 <input type="hidden" id="boxIdProducts" name="boxIdProducts">
+                                <input type="hidden" id="boxLvlProducts" name="boxLvlProducts">
                             </div>
                         <div id="listProducts" class="list-group list-hide">
                             <div class="list-items" ></div>
@@ -69,11 +65,6 @@
                             <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                         </div>
                     </div>
-                    <div class="sidebar__comments"> 
-                        <span class="invoice_button toComment" id="toComment">
-                            <i class="far fa-comment-alt"></i> Comentarios
-                        </span> 
-                    </div> <!--- 11-10-23 -->
                 </div>
             </div>
 

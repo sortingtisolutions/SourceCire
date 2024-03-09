@@ -5,6 +5,7 @@
 
 class ProjectReportsController extends Controller
 {
+    
     private $session;
     public $model;
 
@@ -54,20 +55,20 @@ class ProjectReportsController extends Controller
 
     }    
 
-    public function listSuppliers($request_params)
-    {
+    // public function listSuppliers($request_params)
+    // {
 
-        $result = $this->model->listSuppliers($request_params);
-        $i = 0;
-        while ($row = $result->fetCh_assoc())
-        {
-            $rowdata[$i] = $row;
-            $i++;
-        } 
-        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
-        echo $res;
+    //     $result = $this->model->listSuppliers($request_params);
+    //     $i = 0;
+    //     while ($row = $result->fetCh_assoc())
+    //     {
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     } 
+    //     $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
+    //     echo $res;
 
-    }    
+    // }    
     
 /* -- Listado de contenido de proyecto seleccionado  ----------------------------------------- */
     public function projectContent($request_params)

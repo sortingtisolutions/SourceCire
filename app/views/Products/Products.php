@@ -68,6 +68,7 @@
                         <th style="width: 100px">Marca</th>
                         <th style="width: 100px">No. Pedimento</th>
                         <th style="width: 60px">Costo <br>Importación</th>
+                        <th style="width: 50px">Costo <br>Total</th>
                         <th style="width: 50px">Num. <br>Economico</th>
                         <th style="width: 300px">Comentarios</th>
                     </tr>
@@ -105,23 +106,26 @@
                             <span class="intructions">Indica si es un producto o un accesorio</span>
                         </td>
                     </tr>
-                    <tr >
-                        <td class="concept"> Producto:</td>
-                        <td class="">
-                            <div class="row list-finder pos2 ">
-                                <div class="data">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm " style="font-size: 0.8em;" data-mesage="Debes seleccionar un proveedor" autocomplete="off" disabled><!--- 11-10-23 -->
-                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
-                                </div>
-                                <div id="listProduct" class="list-group list-hide">
-                                    <div class="list-items" ></div>
-                                </div>
-                            </div>
-                            <span class="fail_note hide"></span>
-                            <span style="font-size: 0.7em; color: #999999; margin-bottom: 10px;	margin-top: 2px;" >Listado de productos para crear un accesorio</span>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Catálogo:</td>
+                        <td class="data">
+                            <select id="txtCatId" name="txtCatId" class="textbox " style="width:300px">
+                                <option value="0">Selecciona catálogo</option>
+                            </select>
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Selecciona el catálogo que corresponda al producto</span>
                         </td>
                     </tr>
                     <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Subcategoria:</td>
+                        <td class="data">
+                            <select id="txtSbcId" name="txtSbcId" class="textbox " style="width:300px">
+                                <option value="0">Selecciona subcategoría</option>
+                            </select>
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Selecciona la categoría que corresponda al producto</span>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="concept"><span class="reqsign">*</span> SKU:</td>
                         <td class="data">
@@ -130,6 +134,7 @@
                             <span class="intructions">SKU del producto</span>
                         </td>
                     </tr>
+                    
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Modelo:</td>
                         <td class="data">
@@ -156,26 +161,7 @@
                             <span class="intructions">Tipo de moneda aplicada al precio</span>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Catálogo:</td>
-                        <td class="data">
-                            <select id="txtCatId" name="txtCatId" class="textbox " style="width:300px">
-                                <option value="0">Selecciona catálogo</option>
-                            </select>
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">Selecciona el catálogo que corresponda al producto</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Subcategoria:</td>
-                        <td class="data">
-                            <select id="txtSbcId" name="txtSbcId" class="textbox " style="width:300px">
-                                <option value="0">Selecciona subcategoría</option>
-                            </select>
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">Selecciona la categoría que corresponda al producto</span>
-                        </td>
-                    </tr>
+                   
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Visible:</td>
                         <td class="data">
@@ -206,7 +192,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de servicio:</td>
                         <td class="data">
-                            <select id="txtSrvId" name="txtSrvId" class="textbox" style="width:260px">
+                            <select id="txtSrvId" name="txtSrvId" class="textbox required" style="width:260px">
                                 <option value="0">Selecciona el tipo de servicio</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
@@ -219,7 +205,7 @@
                             <select id="txtDocId" name="txtDocId" class="textbox" style="width:300px">
                                 <option value="0">Selecciona la ficha técnica</option>
                             </select>
-                            <input type="hidden" id="txtDcpId" name="txtDcpId">
+                            <input type="hidden" id="txtDcpId" name="txtDcpId" values="0">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Selecciona la ficha técnica correspondiente al producto</span>
                         </td>
@@ -276,7 +262,7 @@
                         <td class="concept"><span class="reqsign"></span> SKU:</td>
                         <td class="data">
                             <input type="hidden" id="txtSerIdSerie" name="txtSerIdSerie" >
-                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox requiredEdt" style="width:200px" disabled><!--- 11-10-23 -->
+                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox" style="width:200px" disabled><!--- 11-10-23 -->
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Código del producto</span>
                         </td>
@@ -422,7 +408,6 @@
                 </div>
                 <div class="modal-body" style="padding: 0px !important;">
 
-
                 <div class="row">
                     <input type="hidden" class="form-control" id="txtIdSerie" aria-describedby="basic-addon3">
                     <div class="col-12 text-center">
@@ -440,7 +425,27 @@
     </div>
 <!-- End Ventana modal ELIMINA SERIE -->
 
+<div class="modal fade" id="VerifyModal" tabindex="-1" aria-labelledby="VerifyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                <div class="modal-header ">
+                </div>
+                <div class="modal-body" style="padding: 0px !important;">
 
+                <div class="row">
+                    
+                    <div class="col-12 text-center">
+                        <span class="modal-title text-center" style="font-size: 1.2rem;" id="VerifyLabel">Para editar el sku, asegurate de no tener existencias en proyectos activos.</span>
+                    </div>
+                </div>
+
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+        </div>
+    </div>
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Products/Products.js?v=1.0.0.0' ?>"></script>

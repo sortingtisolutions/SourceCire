@@ -12,11 +12,9 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getCategories();
-        // deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
         modalLoading('S');
         getPriceList(0);
-        // modalLoading('H');
     }, 100);
 }
 
@@ -65,8 +63,8 @@ function putPriceList(dt) {
         });
         setting_table();
         active_icons();
-        modalLoading('H');
     }
+    modalLoading('H');
 }
 
 /** +++++  configura la table de productos */
@@ -170,7 +168,7 @@ function putDocuments(dt) {
 
 // Solicita los tipos de movimiento
 function getCategories() {
-    var pagina = 'ProductsPriceList/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategories;
@@ -213,7 +211,7 @@ function active_icons() {
             let pkn = $(this).attr('data-content').split('|')[1];
             console.log ('Existencias-', prd, qty, pkt, pkn );
             if (qty > 0) {
-                if (pkt == 'K') {
+                if (pkt == 'KP') {
                     getProduct(prd, pkn);
                 } else {
                     getSeries(prd);
@@ -397,23 +395,26 @@ function build_modal_serie(dt) {
 
     $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
     tabla.rows().remove().draw();
-    $.each(dt, function (v, u) {
-        lcskush = u.ser_sku.slice(0, 7);
-        lcskuhi = u.ser_sku.slice(7, 11);
-        tabla.row
-            .add({
-                produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku}`,
-                serlnumb: u.ser_serial_number,
-                dateregs: u.ser_date_registry,
-                cvstatus: u.ser_situation,
-                cvestage: u.ser_stage,
-                typeprod: u.comportamiento,
-                comments: u.comments,
-                serqntty: u.stp_quantity,
-                serstore: u.str_name,
-            })
-            .draw();
-    });
+    if (dt[0].ser_id > 0) {
+        $.each(dt, function (v, u) {
+            lcskush = u.ser_sku.slice(0, 7);
+            lcskuhi = u.ser_sku.slice(7, 11);
+            tabla.row
+                .add({
+                    produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku}`,
+                    serlnumb: u.ser_serial_number,
+                    dateregs: u.ser_date_registry,
+                    cvstatus: u.ser_situation,
+                    cvestage: u.ser_stage,
+                    typeprod: u.comportamiento,
+                    comments: u.comments,
+                    serqntty: u.stp_quantity,
+                    serstore: u.str_name,
+                })
+                .draw();
+        });
+    }
+    
 }
 
 function putProductReserve(dt) {
@@ -456,19 +457,22 @@ function putProductReserve(dt) {
 
 function build_modal_reserved(dt) {
     let tabla = $('#tblReservedList').DataTable();
-    $('.overlay_closer .title').html(`${dt[0].name}`);
     tabla.rows().remove().draw();
+    if (dt[0].prd_id > 0) {
+        $('.overlay_closer .title').html(`${dt[0].name}`);
 
-    $.each(dt, function (v, u) {
-        tabla.row
-            .add({seriesku: u.ser_sku, 
-                serinumb: u.ser_serial_number, 
-                sersitua: u.ser_situation, 
-                projname: u.pjt_name, 
-                projstar: u.pjt_date_start, 
-                projeend: u.pjt_date_end})
-            .draw();
-    });
+        $.each(dt, function (v, u) {
+            tabla.row
+                .add({seriesku: u.ser_sku, 
+                    serinumb: u.ser_serial_number, 
+                    sersitua: u.ser_situation, 
+                    projname: u.pjt_name, 
+                    projstar: u.pjt_date_start, 
+                    projeend: u.pjt_date_end})
+                .draw();
+        });
+    }
+    
 }
 
 function modalLoading(acc) {

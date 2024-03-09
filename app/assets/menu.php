@@ -7,8 +7,8 @@
 		<a href="#" class="bt_menu"><i class="fas fa-bars"></i></a>
 	</div>
 	<nav>
-		<ul class="menu"></ul>
-		<div class="sign-out"></div>
+		<ul class="menu" style="font-size: 12px;"></ul>
+		<div class="sign-out" style="font-size: 10px;"></div>
 	</nav>
 		
 

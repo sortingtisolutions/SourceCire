@@ -7,9 +7,7 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 <style>
-    .hiddenElement {
-        visibility: hidden !important;
-    }
+    .hiddenElement { visibility: hidden !important; }
 </style>
 <!-- CUERPO DE LA PAGINA -->
 <div class="invoice__container">
@@ -42,7 +40,7 @@
                     <li class="equipoBase"          data-option="1">Equipo Base</li>
                     <li class="equipoExtra"         data-option="2">Equipo Extra</li>
                     <li class="equipoPorDia"        data-option="3">Equipo por Días</li>
-                    <li class="equipoSubarrendo"    data-option="4">Equipo por subarrendo</li>
+                    <li class="equipoSubarrendo"    data-option="4">Equipo para subarrendo</li>
                 </ul>
             </div>
         </div>

@@ -48,6 +48,7 @@ ADD
 AFTER
   sld_situation;
   
+
 --AGREGADOS JORGE JUAREZ
 ALTER TABLE
   `ctt_series` CHANGE `ser_cost_import` `ser_cost_import` INT(11) NOT NULL COMMENT 'Costo individual de importacion';
@@ -92,6 +93,7 @@ ADD
   COLUMN cus_fill INT NULL DEFAULT '0' COMMENT 'Porcentaje de llenado de campos fiscales'
 AFTER
   cus_contract;
+
 
 DROP VIEW ctt_vw_projects;
 CREATE VIEW ctt_vw_projects AS
@@ -175,6 +177,8 @@ WHERE
 -- Actualizacion del 19 de MARZO 2022
   -- Paso 1
   -- Elimina el trigger que actualiza las categorias
+  
+  
   DROP TRIGGER actualiza_subcategorias;
 -- Paso 2
   -- Elimina el trigger que actualiza las los productos ( si no existe omite este paso )
@@ -205,8 +209,10 @@ SET
 WHERE
   sp.prd_id is null;
 -- Paso 6
-  -- Elimina la vista de ctt_vw_productos y creaela nuevamente
-  DROP VIEW ctt_vw_products;
+
+
+-- Elimina la vista de ctt_vw_productos y creaela nuevamente
+DROP VIEW ctt_vw_products;
 CREATE VIEW ctt_vw_products AS
 SELECT
   CONCAT(

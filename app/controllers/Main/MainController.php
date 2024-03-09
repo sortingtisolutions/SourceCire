@@ -10,7 +10,6 @@ require_once LIBS_ROUTE .'Session.php';
 class MainController extends Controller
 {
   private $session;
-
   private $model;
 
   public function __construct()
@@ -76,7 +75,6 @@ class MainController extends Controller
   {
     foreach ($request_params as $param)
       if(empty($param)) return false;
-
     return true;
   }
 

@@ -16,7 +16,7 @@
                 
                     <select id="txtCategoryList" class="topList"></select>
                 </div>
-                <table class="display compact nowrap"  id="tblPriceList">
+                <table class="display compact nowrap"  id="tblPriceList" style="width:100%">
                     <thead>
                         <tr>
                             <th style="width:  10px"></th>

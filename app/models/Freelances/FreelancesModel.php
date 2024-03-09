@@ -8,7 +8,6 @@ class FreelancesModel extends Model
         parent::__construct();
     }
 
-
 // Listado de categorias   ****
 public function listFreelances()
 {
@@ -29,11 +28,11 @@ public function getSelectFreelance($params)
 
 
 // Listado de fichas técnicas
-public function listAreas()
-{
-    $qry = "SELECT * FROM ctt_areas;";
-    return $this->db->query($qry);
-}
+// public function listAreas()
+// {
+//     // $qry = "SELECT * FROM ctt_areas WHERE are_status = 1 ORDER BY are_id;";
+//     // return $this->db->query($qry);
+// }
 
     
 // Listado de facturas
