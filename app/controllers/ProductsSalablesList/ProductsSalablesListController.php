@@ -83,6 +83,7 @@ class ProductsSalablesListController extends Controller
         $res = $result;
         echo $res;
     }         
+    
 // Guarda la devolución
     public function SaveReturn($request_params)
     {

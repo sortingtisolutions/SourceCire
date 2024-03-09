@@ -82,16 +82,27 @@
                                 </div>
                             </div>
                             <div style="height:10px;"></div>
-                            <div class="row list-finder"  >
+                            <!-- <div class="row list-finder"  >
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <div class="box-items-list" id="boxProducts">Accesorios
                                         <i class="fas fa-angle-down"></i>
                                     </div>
                                 </div>
                                 <div class="list-group list-hide">
-                                    <div class="list-items" id="listProducts"></div>
+                                    <div class="list-items" id="listProducts" style="max-height: 150px !important;"></div>
                                 </div>
                                 
+                            </div> -->
+
+                            <div class="row list-finder pos2">
+                                <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                        <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
+                                        <label for="txtProducts">Productos</label>
+                                        <input type="hidden" id="txtIdProducts" name="txtIdProducts">
+                                </div>
+                                <div id="listProduct" class="list-group list-hide">
+                                    <div class="list-items" style="max-height: 160px !important;"></div>
+                                </div>
                             </div>
                         </div>
 

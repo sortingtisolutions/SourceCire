@@ -25,18 +25,17 @@ class LocationsModel extends Model
 // Optiene los Usuaios existentes
 	public function GetLocations($params)
 	{
-	
 		$qry = "SELECT * FROM ctt_location ";
 		return $this->db->query($qry);
 	}
 
     public function UpdateLocation($params)
 	{
-
 		$loc_type_location	= $this->db->real_escape_string($params['loc_type_location']);
 		$loc_id	= $this->db->real_escape_string($params['loc_id']);
+
 		$qry = " UPDATE ctt_location
-					SET loc_type_location		= UPPER('$loc_type_location')
+					SET loc_type_location = UPPER('$loc_type_location')
 				WHERE loc_id = '$loc_id';";
 		$this->db->query($qry);	
 			

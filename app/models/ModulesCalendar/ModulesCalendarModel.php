@@ -11,12 +11,12 @@ class ModulesCalendarModel extends Model
     }
 
 // Listado de Proyectos  ****
-public function listProyects($store)
-{
-    $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (1,2,4) ;";
-    return $this->db->query($qry);
-}    
+// public function listProjects($store)
+// {
+//     $store = $this->db->real_escape_string($store);
+//     $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (1,2,4) ;";
+//     return $this->db->query($qry);
+// }    
 
 // Listado de Productos
     public function listProducts($params)

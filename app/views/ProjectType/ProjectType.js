@@ -86,7 +86,7 @@ function settingTable() {
 
 // Solicita los productos de un almacen seleccionado
 function getStores() {
-    var pagina = 'ProjectType/GetProjectTypes';
+    var pagina = 'Commons/listProjectsType';
     var par = `[{"pjttp_id":""}]`;
     var tipo = 'json';
     var selector = putStores;
@@ -273,6 +273,7 @@ function putDeleteStore(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 

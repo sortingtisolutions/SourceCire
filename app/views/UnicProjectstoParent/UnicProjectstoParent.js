@@ -104,12 +104,15 @@ function getProducts() {
 }
 function putProducts(dt) {
     $('#listProducts').html('');
-    $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="P-${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">
-                    ${u.pjt_number} - ${u.pjt_name}<div class="items-just"><i class="fas fa-arrow-circle-right toLink" id="${u.pjt_id}"></i></div>
-                </div>`;
-        $('#listProducts').append(H);
-    });
+    if (dt[0].pjt_id) {
+        $.each(dt, function (v, u) {
+            let H = `<div class="list-item" id="P-${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">
+                        ${u.pjt_number} - ${u.pjt_name}<div class="items-just"><i class="fas fa-arrow-circle-right toLink" id="${u.pjt_id}"></i></div>
+                    </div>`;
+            $('#listProducts').append(H);
+        }); 
+    }
+    
     $('.toLink')
         .unbind('click')
         .on('click', function () {

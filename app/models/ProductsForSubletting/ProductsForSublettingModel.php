@@ -172,7 +172,7 @@ public function listProyects($store)
         $projContId 		= $this->db->real_escape_string($params['projContId']);
         
         $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie,
-                    ifnull(SUBSTR(max(ser_sku),9,3),0) AS last_sku_num, pd.prd_name, pd.prd_price
+                    ifnull(SUBSTR(max(ser_sku),10,3),0) AS last_sku_num, pd.prd_name, pd.prd_price
                     FROM ctt_series AS sr
                     INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
                 WHERE sr.prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';";
@@ -206,12 +206,18 @@ public function listProyects($store)
         $qry1 = "INSERT INTO ctt_series (
             ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
             ser_date_registry, ser_reserve_count, ser_behaviour, ser_comments, 
-            prd_id, sup_id, cin_id, pjtdt_id
+            prd_id, sup_id, cin_id, pjtdt_id, ser_type_asigned
         )
         SELECT 
             '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), 'EA', 
             'R', curdate(),'1', ifnull(sr.ser_behaviour,'C'), '$comments', 
-            pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
+            pd.prd_id, '$supplier','$tpCoinId','$pjDetail',
+            case 
+                when (SELECT COUNT(*) cant FROM ctt_products_packages pck 
+                    WHERE pck.prd_parent = pd.prd_id) > 0 
+                    then 'PV' 
+                    ELSE 'PI' 
+                END AS typeAss
         FROM ctt_series AS sr  
         RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
         WHERE pd.prd_id = $producId LIMIT 1;";
@@ -220,109 +226,190 @@ public function listProyects($store)
 
         $serieId = $this->db->insert_id;
 
-        if ($lvl == 'K' || $lvl == 'A') {
-            $qryPv = "INSERT INTO ctt_projects_version (pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, 
-                pjtvr_quantity,pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
-                pjtvr_discount_insured,pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test,
-                pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, 
-                pjtvr_order, ver_id, prd_id,pjt_id)
-                        SELECT 
-                        '$produSku', '$prdName', '$prdPrice',
-                            '1',prjv.pjtvr_days_base,prjv.pjtvr_days_cost, prjv.pjtvr_discount_base,
-                                prjv.pjtvr_discount_insured, prjv.pjtvr_days_trip,prjv.pjtvr_discount_trip,
-                                prjv.pjtvr_days_test, prjv.pjtvr_discount_test, prjv.pjtvr_insured,
-                                'P', '4', prjv.pjtvr_status,
-                            fun_maxcontent($projecId)+1 AS content,prjv.ver_id,'$producId',prjv.pjt_id
-                        FROM ctt_projects_version AS prjv
-                        INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id = prjv.pjtvr_id
-                        WHERE pc.pjtcn_id = $projContId;";
-                $this->db->query($qryPv);
-                $pjtvrId = $this->db->insert_id;
+        $qryPrjVersion = "SELECT prjv.pjtvr_id FROM ctt_projects_version AS prjv
+        INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id = prjv.pjtvr_id
+        WHERE prjv.ver_id = (SELECT prjv.ver_id
+        FROM ctt_projects_version AS prjv
+        INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id = prjv.pjtvr_id
+        WHERE pc.pjtcn_id = $projContId) AND prjv.pjtvr_section = 4 AND pc.prd_id = $producId;";
+
+        $prjversion = $this->db->query($qryPrjVersion);
+        $resultVr = $prjversion->fetch_object();
+        
+        if ($resultVr != null) {
+
+            $pjtvrId = $resultVr->pjtvr_id;
+
+            if ($lvl == 'K' || $lvl == 'P') {
+                $qrySerieTpass = "SELECT sr.ser_type_asigned 
+                                    FROM ctt_series AS sr 
+                                    WHERE sr.ser_id = $serieId";
+                $respTypeAss = $this->db->query($qrySerieTpass);
+                $resultTypeAss = $respTypeAss->fetch_object();
+
+                /* if ($resultTypeAss != null) {
+                    $typeAss = $resultTypeAss->ser_type_asigned;
+                    if($typeAss == 'PV'){
+                        $qryPack = "SELECT pd.*, pk.pck_quantity 
+                                FROM ctt_products_packages AS pk 
+                                INNER JOIN ctt_products AS pd ON pd.prd_id = pk.prd_id
+                                WHERE  pk.prd_parent = $producId;";
+                        $resPackage = $this->db->query($qryPack);
+
+                        while ($row =  $resPackage->fetch_ ) {
+                            # code...
+                        }
+                    }
+                } */
+        
+                // Actualiza el detalle del proyecto con la serie
+                $qry2 = "UPDATE ctt_projects_detail AS pd
+                    INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
+                    SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1, prd_type_asigned = 'PS'
+                    WHERE pd.pjtdt_id = $pjDetail;";
+                $this->db->query($qry2);
+
+                // Agrega el nuevo registro en la tabla de subarrendos
+                $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
+                            sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
+                        SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+                            '$supplier', '$projecId', '$tpCoinId', '$producId'
+                        FROM ctt_series WHERE pjtdt_id = $pjDetail;";
+                $this->db->query($qry3);
+    
+                $qry4 = " INSERT INTO ctt_stores_products 
+                            (stp_quantity, str_id, ser_id, prd_id) 
+                        VALUES 
+                            ('1','$storesId', '$serieId','$producId');";
+                $this->db->query($qry4);
+    
+            }else{
                 
-                // Agregar el nuevo contenido a project_content
-                $qryPc = "INSERT INTO ctt_projects_content (pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity,
-                pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
-                pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section,
-                pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
-                                SELECT 
-                                '$produSku', '$prdName', '$prdPrice', 1,
-                pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
-                pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, 'P', 4,
-                pjtcn_status, fun_maxcontent($projecId)+1 AS content, ver_id, '$producId', pjt_id, '$pjtvrId'
-                                FROM ctt_projects_content AS pc where pc.pjtcn_id = $projContId;";
-                $this->db->query($qryPc);
-            // Actualiza el detalle del proyecto con la serie
-            $qry2 = "UPDATE ctt_projects_detail AS pd
-                INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
-                SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1, prd_type_asigned = 'PS'
-                WHERE pd.pjtdt_id = $pjDetail;";
-            $this->db->query($qry2);
-            // Agrega el nuevo registro en la tabla de subarrendos
-            $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
-                        sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
-                    SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
-                        '$supplier', '$projecId', '$tpCoinId', '$producId'
-                    FROM ctt_series WHERE pjtdt_id = $pjDetail;";
-            $this->db->query($qry3);
-
-            $qry4 = " INSERT INTO ctt_stores_products 
-                        (stp_quantity, str_id, ser_id, prd_id) 
-                    VALUES 
-                        ('1','$storesId', '$serieId','$producId');";
-            $this->db->query($qry4);
-
+                // Actualiza el detalle del proyecto con la serie
+                $qry2 = "UPDATE ctt_projects_detail AS pd
+                    INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
+                    SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1, prd_type_asigned = 'PS'
+                    WHERE pd.pjtdt_id = $pjDetail;";
+                $this->db->query($qry2);
+                // Agrega el nuevo registro en la tabla de subarrendos
+                $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
+                            sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
+                        SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+                            '$supplier', '$projecId', '$tpCoinId', prd_id 
+                        FROM ctt_series WHERE pjtdt_id = $pjDetail;";
+                $this->db->query($qry3);
+    
+                $qry4 = " INSERT INTO ctt_stores_products 
+                            (stp_quantity, str_id, ser_id, prd_id) 
+                        VALUES 
+                            ('1','$storesId', '$serieId','$producId');";
+                $this->db->query($qry4);
+            }
         }else{
-            $qryPv = "INSERT INTO ctt_projects_version (pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, 
-                pjtvr_quantity,pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
-                pjtvr_discount_insured,pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test,
-                pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, 
-                pjtvr_order, ver_id, prd_id,pjt_id)
-                        SELECT 
-                            prjv.pjtvr_prod_sku, prjv.pjtvr_prod_name, prjv.pjtvr_prod_price,
-                            '1',prjv.pjtvr_days_base,prjv.pjtvr_days_cost, prjv.pjtvr_discount_base,
-                                prjv.pjtvr_discount_insured, prjv.pjtvr_days_trip,prjv.pjtvr_discount_trip,
-                                prjv.pjtvr_days_test, prjv.pjtvr_discount_test, prjv.pjtvr_insured,
-                                prjv.pjtvr_prod_level, '4', prjv.pjtvr_status,
-                            fun_maxcontent($projecId)+1 AS content,prjv.ver_id,prjv.prd_id,prjv.pjt_id
-                        FROM ctt_projects_version AS prjv
-                        INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id = prjv.pjtvr_id
-                        WHERE pc.pjtcn_id = $projContId;";
-                $this->db->query($qryPv);
-                $pjtvrId = $this->db->insert_id;
+            if ($lvl == 'K' || $lvl == 'P') {
+                $qryPv = "INSERT INTO ctt_projects_version (pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, 
+                    pjtvr_quantity,pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_discount_insured,pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test,
+                    pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, 
+                    pjtvr_order, ver_id, prd_id,pjt_id)
+                            SELECT 
+                                prjv.pjtvr_prod_sku, prjv.pjtvr_prod_name, prjv.pjtvr_prod_price,
+                                '1',prjv.pjtvr_days_base,prjv.pjtvr_days_cost, prjv.pjtvr_discount_base,
+                                    prjv.pjtvr_discount_insured, prjv.pjtvr_days_trip,prjv.pjtvr_discount_trip,
+                                    prjv.pjtvr_days_test, prjv.pjtvr_discount_test, prjv.pjtvr_insured,
+                                    'P', '4', prjv.pjtvr_status,
+                                fun_maxcontent($projecId)+1 AS content,prjv.ver_id,'$producId',prjv.pjt_id
+                            FROM ctt_projects_version AS prjv
+                            INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id = prjv.pjtvr_id
+                            WHERE pc.pjtcn_id = $projContId;";
+                    $this->db->query($qryPv);
+                    $pjtvrId = $this->db->insert_id;
+                    
+                    // Agregar el nuevo contenido a project_content
+                    $qryPc = "INSERT INTO ctt_projects_content (pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity,
+                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
+                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section,
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
+                                    SELECT 
+                                    pc.pjtcn_prod_sku, pc.pjtcn_prod_name, pc.pjtcn_prod_price, 1,
+                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
+                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, 'P', 4,
+                    pjtcn_status, fun_maxcontent($projecId)+1 AS content, ver_id, '$producId', pjt_id, '$pjtvrId'
+                                    FROM ctt_projects_content AS pc where pc.pjtcn_id = $projContId;";
+                    $this->db->query($qryPc);
+                // Actualiza el detalle del proyecto con la serie
+                $qry2 = "UPDATE ctt_projects_detail AS pd
+                    INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
+                    SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1, prd_type_asigned = 'PS'
+                    WHERE pd.pjtdt_id = $pjDetail;";
+                $this->db->query($qry2);
+                // Agrega el nuevo registro en la tabla de subarrendos
+                $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
+                            sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
+                        SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+                            '$supplier', '$projecId', '$tpCoinId', '$producId'
+                        FROM ctt_series WHERE pjtdt_id = $pjDetail;";
+                $this->db->query($qry3);
+    
+                $qry4 = " INSERT INTO ctt_stores_products 
+                            (stp_quantity, str_id, ser_id, prd_id) 
+                        VALUES 
+                            ('1','$storesId', '$serieId','$producId');";
+                $this->db->query($qry4);
+    
+            }else{
+                $qryPv = "INSERT INTO ctt_projects_version (pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, 
+                    pjtvr_quantity,pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_discount_insured,pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test,
+                    pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, 
+                    pjtvr_order, ver_id, prd_id,pjt_id)
+                            SELECT 
+                                prjv.pjtvr_prod_sku, prjv.pjtvr_prod_name, prjv.pjtvr_prod_price,
+                                '1',prjv.pjtvr_days_base,prjv.pjtvr_days_cost, prjv.pjtvr_discount_base,
+                                    prjv.pjtvr_discount_insured, prjv.pjtvr_days_trip,prjv.pjtvr_discount_trip,
+                                    prjv.pjtvr_days_test, prjv.pjtvr_discount_test, prjv.pjtvr_insured,
+                                    prjv.pjtvr_prod_level, '4', prjv.pjtvr_status,
+                                fun_maxcontent($projecId)+1 AS content,prjv.ver_id,prjv.prd_id,prjv.pjt_id
+                            FROM ctt_projects_version AS prjv
+                            INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id = prjv.pjtvr_id
+                            WHERE pc.pjtcn_id = $projContId;";
+                    $this->db->query($qryPv);
+                    $pjtvrId = $this->db->insert_id;
+                    
+                    // Agregar el nuevo contenido a project_content
+                    $qryPc = "INSERT INTO ctt_projects_content (pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity,
+                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
+                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section,
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
+                                    SELECT 
+                                        pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, 1,
+                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
+                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, 4,
+                    pjtcn_status, fun_maxcontent($projecId)+1 AS content, ver_id, prd_id, pjt_id, '$pjtvrId'
+                                    FROM ctt_projects_content AS pc where pc.pjtcn_id = $projContId;";
+                    $this->db->query($qryPc);
+                // Actualiza el detalle del proyecto con la serie
+                $qry2 = "UPDATE ctt_projects_detail AS pd
+                    INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
+                    SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1, prd_type_asigned = 'PS'
+                    WHERE pd.pjtdt_id = $pjDetail;";
+                $this->db->query($qry2);
+                // Agrega el nuevo registro en la tabla de subarrendos
+                $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
+                            sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
+                        SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+                            '$supplier', '$projecId', '$tpCoinId', prd_id 
+                        FROM ctt_series WHERE pjtdt_id = $pjDetail;";
+                $this->db->query($qry3);
+    
+                $qry4 = " INSERT INTO ctt_stores_products 
+                            (stp_quantity, str_id, ser_id, prd_id) 
+                        VALUES 
+                            ('1','$storesId', '$serieId','$producId');";
+                $this->db->query($qry4);
+    
                 
-                // Agregar el nuevo contenido a project_content
-                $qryPc = "INSERT INTO ctt_projects_content (pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity,
-                pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
-                pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section,
-                pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
-                                SELECT 
-                                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, 1,
-                pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip,
-                pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, 4,
-                pjtcn_status, fun_maxcontent($projecId)+1 AS content, ver_id, prd_id, pjt_id, '$pjtvrId'
-                                FROM ctt_projects_content AS pc where pc.pjtcn_id = $projContId;";
-                $this->db->query($qryPc);
-            // Actualiza el detalle del proyecto con la serie
-            $qry2 = "UPDATE ctt_projects_detail AS pd
-                INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
-                SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id, pd.pjtvr_id = '$pjtvrId', sttd_id = 1, prd_type_asigned = 'PS'
-                WHERE pd.pjtdt_id = $pjDetail;";
-            $this->db->query($qry2);
-            // Agrega el nuevo registro en la tabla de subarrendos
-            $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
-                        sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
-                    SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
-                        '$supplier', '$projecId', '$tpCoinId', prd_id 
-                    FROM ctt_series WHERE pjtdt_id = $pjDetail;";
-            $this->db->query($qry3);
-
-            $qry4 = " INSERT INTO ctt_stores_products 
-                        (stp_quantity, str_id, ser_id, prd_id) 
-                    VALUES 
-                        ('1','$storesId', '$serieId','$producId');";
-            $this->db->query($qry4);
-
-            
+            }
         }
         $query = "SELECT pjtcn_quantity From ctt_projects_content where pjtcn_id = '$projContId' LIMIT 1";
             $res = $this->db->query($query);

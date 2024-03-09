@@ -33,12 +33,12 @@ class CalendarProyectsModel extends Model
 		return $this->db->query($qry);
 	}
 	// Listado de Proyectos  ****
-	public function listProyects($store)
-	{
-		$store = $this->db->real_escape_string($store);
-		$qry = "SELECT * FROM ctt_projects;";
-		return $this->db->query($qry);
-	}    
+	// public function listProjects($store)
+	// {
+	// 	$store = $this->db->real_escape_string($store);
+	// 	$qry = "SELECT * FROM ctt_projects;";
+	// 	return $this->db->query($qry);
+	// }    
 
     public function UpdateArea($params)
 	{

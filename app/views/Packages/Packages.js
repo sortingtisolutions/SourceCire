@@ -110,7 +110,7 @@ function setting_table_products() {
 
 // Solicita las categorias
 function getCategory() {
-    var pagina = 'Packages/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = `[{"param":""}]`;
     var tipo = 'json';
     var selector = putCategory;
@@ -118,7 +118,7 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    var pagina = 'Packages/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;
@@ -307,7 +307,7 @@ function packages_apply(subcat) {
     if (subcat != '' && subcat != undefined) {
         let catId = refil($('#txtCategoryPack option:selected').val(), 2);
         let subId = refil($('#txtSubcategoryPack option:selected').attr('data-content').split('|')[2], 2);
-        let prdsku = catId + subId + refil(subcat, 3);
+        let prdsku = catId + subId + refil(subcat, 4);
         let prdName = $('#txtPackageName').val();
         let prdModel = '';
         let prdPrice = $('#txtPackagePrice').val();
@@ -362,7 +362,7 @@ function packages_edit() {
         }]
     `;
 
-    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName);
+    $(`#tblPackages_wrapper #${prdId} .product-name`).html(prdName.toUpperCase());
     $(`#tblPackages_wrapper #${prdId} .price`).html(prdPrice);
 
     active_params();
@@ -429,7 +429,7 @@ function fill_table_packs(par) {
 function putNewPackage(dt) {
     let id = dt.split('|')[0];
     let sku = dt.split('|')[1];
-    let name = dt.split('|')[2];
+    let name = (dt.split('|')[2]).toUpperCase();
     let price = dt.split('|')[3];
     $(`#SKU-${sku}`).text(id);
 
@@ -447,11 +447,11 @@ function putNewPackage(dt) {
     $(`#SKU-${sku}`).parent().parent().attr('id', id).addClass('indicator');
     action_selected_packages();
 
-    tabla.on('select', function (e, dt, type, i) {
-        $('#txtCategoryProduct').val(0);
-        $('#txtSubcategoryProduct').val(0);
-        $('#txtIdPackages').val(0);
-    });
+    // tabla.on('select', function (e, dt, type, i) {
+    //     $('#txtCategoryProduct').val(0);
+    //     $('#txtSubcategoryProduct').val(0);
+    //     $('#txtIdPackages').val(0);
+    // });
     clean_params();
 }
 

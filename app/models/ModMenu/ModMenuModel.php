@@ -11,6 +11,19 @@ class ModMenuModel extends Model
 	}
 
 //Guarda proveedor  ***
+
+// Optiene los menus existentes
+public function GetMenus($params)
+{
+	$qry = "SELECT mnu.mnu_id, mnu.mnu_parent, mnu.mnu_item, mnu.mnu_description, 
+					mnu.mnu_order, mnu.mod_id,mdl.mod_name 
+			FROM ctt_menu AS mnu
+			INNER JOIN ctt_modules AS mdl ON mdl.mod_id = mnu.mod_id
+			ORDER BY mnu.mnu_item;";
+	return $this->db->query($qry);
+}
+
+
 	public function SaveMenu($params)
 	{
 		$mnuParent 			= $this->db->real_escape_string($params['mnuParent']);
@@ -27,17 +40,6 @@ class ModMenuModel extends Model
 
 	}
 	
-// Optiene los menus existentes
-	public function GetMenus($params)
-	{
-	
-		$qry = "SELECT mnu.mnu_id, mnu.mnu_parent, mnu.mnu_item, mnu.mnu_description, mnu.mnu_order, mnu.mod_id,
-			mdl.mod_name 
-			FROM ctt_menu AS mnu
-			INNER JOIN ctt_modules AS mdl ON mdl.mod_id = mnu.mod_id;";
-		return $this->db->query($qry);
-	}
-
 
     public function UpdateMenu($params)
 	{
@@ -65,6 +67,7 @@ class ModMenuModel extends Model
 	public function DeleteMenu($params)
 	{
         $mnuId 	= $this->db->real_escape_string($params['mnuId']);
+
 		$qry = "DELETE FROM ctt_menu WHERE mnu_id = $mnuId";
         return $this->db->query($qry);
 	}
@@ -79,5 +82,51 @@ class ModMenuModel extends Model
     {
         $qry = "SELECT * FROM ctt_modules;";
         return $this->db->query($qry);
+    }
+
+	public function tableMenus($params)
+    {
+        $table = 'ctt_menu';  
+        $primaryKey = 'mnu_id';
+        $columns = array(
+            array( 'db' => 'mnu_id', 'dt' => 'editable' ),
+            array( 'db' => 'mnu_parent', 'dt' => 'men_parent' ),
+            array( 'db' => 'mnu_item', 'dt' => 'men_items' ),
+            array( 'db' => 'mnu_description', 'dt' => 'men_description' ),
+            array( 'db' => 'mnu_order', 'dt' => 'men_order' ),
+            array( 'db' => 'mod_id', 'dt' => 'men_module' ),
+        );
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+            SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+        );
+
+    }
+
+	public function ExecSp($params)
+    {
+		$catId 	= $this->db->real_escape_string($params['catId']);
+		$lval = 0;
+        $qry1 = "set @lval";
+		$this->db->query($qry1);
+		$qry2 = "CALL sp_count_stock($catId,@lval)";
+		$this->db->query($qry2);
+		$qry3 = "select @lval from dual;";
+		$serval = $this->db->query($qry3);
+		// $resultid = $this->db->query($qry);
+		// $iddetail = $resultid->fetch_object();
+
+        //      if ($iddetail != null){
+        //          $serval  = $iddetail->lval; 
+        //      } 
+
+        return $serval;
     }
 }

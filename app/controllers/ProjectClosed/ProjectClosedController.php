@@ -42,7 +42,6 @@ class ProjectClosedController extends Controller
     /* -- Listado de proyectos  ------------------------------------------------------------------ */
     public function listChgStatus($request_params)
     {
-
         $result = $this->model->listChgStatus($request_params);
         $i = 0;
         while ($row = $result->fetCh_assoc())

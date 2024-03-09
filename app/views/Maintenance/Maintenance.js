@@ -202,8 +202,9 @@ function setting_table() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'Maintenance/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="8,9";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);
@@ -233,7 +234,7 @@ function get_products(pj, em) {
 
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_coins() {
-    var pagina = 'Maintenance/listCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_coins;
@@ -241,7 +242,7 @@ function get_coins() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_suppliers() {
-    var pagina = 'Maintenance/listSuppliers';
+    var pagina = 'Commons/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_suppliers;
@@ -249,7 +250,7 @@ function get_suppliers() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_stores() {
-    var pagina = 'Maintenance/listStores';
+    var pagina = 'Commons/listStores';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_stores;

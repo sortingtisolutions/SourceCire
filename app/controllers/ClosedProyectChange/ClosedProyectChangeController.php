@@ -57,7 +57,7 @@ class ClosedProyectChangeController extends Controller
         }
         echo $res;
     } 
-/** */
+
     public function getMontos($request_params)
     {
         $params =  $this->session->get('user');
@@ -74,7 +74,7 @@ class ClosedProyectChangeController extends Controller
         }
         echo $res;
     } 
-/** */
+
     public function saveDocumentClosure($request_params)
     {
         $result = $this->model->saveDocumentClosure($request_params);

@@ -36,7 +36,7 @@ class FreelancesController extends Controller
 		if ($i>0){
 			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
 		} else {
-			$res =  '[{"cat_id":"0"}]';	
+			$res =  '[{"free_id":"0"}]';	
 		}
 		echo $res;
 	}
@@ -61,22 +61,22 @@ class FreelancesController extends Controller
 
 
 // Lista los documentos de fichas técnicas
-	public function listAreas($request_params)
-	{
-		$params =  $this->session->get('user');
-		$result = $this->model->listAreas($request_params);
-		$i = 0;
-		while($row = $result->fetch_assoc()){
-			$rowdata[$i] = $row;
-			$i++;
-		}
-		if ($i>0){
-			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-		} else {
-			$res =  '[{"doc_id":"0"}]';	
-		}
-		echo $res;
-	}
+	// public function listAreas($request_params)
+	// {
+	// 	$params =  $this->session->get('user');
+	// 	$result = $this->model->listAreas($request_params);
+	// 	$i = 0;
+	// 	while($row = $result->fetch_assoc()){
+	// 		$rowdata[$i] = $row;
+	// 		$i++;
+	// 	}
+	// 	if ($i>0){
+	// 		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+	// 	} else {
+	// 		$res =  '[{"doc_id":"0"}]';	
+	// 	}
+	// 	echo $res;
+	// }
 
 // Lista los productos
 	public function listProducts($request_params)

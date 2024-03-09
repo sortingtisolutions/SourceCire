@@ -34,11 +34,11 @@ class NewSubletModel extends Model
     }
 
 // Listado de proveedores
-    public function listSuppliers()
-    {
-        $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
-        return $this->db->query($qry);
-    }
+    // public function listSuppliers()
+    // {
+    //     $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+    //     return $this->db->query($qry);
+    // }
    
 // Listado de Facturas
     public function listInvoice($param)
@@ -58,19 +58,19 @@ class NewSubletModel extends Model
     }
        
 // Listado de Monedas
-    public function listCoins()
-    {
-        $qry = "SELECT cin_id, cin_code, cin_name FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT cin_id, cin_code, cin_name FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }
       
 // Listado de categorias
-    public function listCategories()
-    {
-        $qry = "SELECT * FROM ctt_categories 
-                WHERE cat_status  = 1 AND cat_name NOT LIKE 'PAQUETE%' AND cat_id=30;";
-        return $this->db->query($qry);
-    }
+    // public function listCategories()
+    // {
+    //     $qry = "SELECT * FROM ctt_categories 
+    //             WHERE cat_status  = 1 AND cat_name NOT LIKE 'PAQUETE%' AND cat_id=30;";
+    //     return $this->db->query($qry);
+    // }
 
     public function listProducts2()
     {
@@ -82,13 +82,13 @@ class NewSubletModel extends Model
         return $this->db->query($qry);
     }
 
-    public function listSubCategories($param)
-    {
-        $catId = $this->db->real_escape_string($param['catId']);
-        $qry = "SELECT * FROM ctt_subcategories 
-                WHERE sbc_status = 1 AND cat_id=$catId;";
-        return $this->db->query($qry);
-    }
+    // public function listSubCategories($param)
+    // {
+    //     $catId = $this->db->real_escape_string($param['catId']);
+    //     $qry = "SELECT * FROM ctt_subcategories 
+    //             WHERE sbc_status = 1 AND cat_id=$catId;";
+    //     return $this->db->query($qry);
+    // }
 
 
 // Listado de Productos

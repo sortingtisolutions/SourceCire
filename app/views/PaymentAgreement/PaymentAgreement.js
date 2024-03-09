@@ -45,8 +45,9 @@ function getExchange() {
 }
 // Solicita el listado de almacenes
 function getProjects() {
-    var pagina = 'PaymentAgreement/listProjects';
-    var par = '[{"parm":""}]';
+    let liststat ="4,7,8,9";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProyects;
     fillField(pagina, par, tipo, selector);

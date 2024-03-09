@@ -82,13 +82,15 @@ define('DB_NAME3', 'cttapp_cire');
 /////////////////////////////////////
 
 // define('FOLDER_DASH_PATH', 'http://ctt-app.com/Ciredashboard');  /* Produccion */
-// define('FOLDER_DASH_PATH', 'http://desarrollo.com/Ciredashboard');  /* DESARROLLO */
+// define('DASH_PATH', 'http://desarrollo.com/Ciredashboard');  /* DESARROLLO */
+define('DASH_PATH', 'http://desarrollo.com/Ciredashboard');  /* DESARROLLO */
 
-define('FOLDER_DASHFULL_PATH', 'http://ctt-app.com/Ciredashboard/DashboardFull');  /* Produccion */
-define('FOLDER_DASH_PATH', 'http://ctt-app.com/Ciredashboard/Dashboard');  /* Produccion */
-define('DASH_PATH', 'http://ctt-app.com/Ciredashboard');  /* Produccion */
-// define('FOLDER_DASH_PATH', 'http://desarrollo.com/Ciredashboard');  /* DESARROLLO */
+// define('FOLDER_DASHFULL_PATH', 'http://ctt-app.com/Ciredashboard/DashboardFull');  /* Produccion */
+// define('FOLDER_DASH_PATH', 'http://ctt-app.com/Ciredashboard/Dashboard');  /* Produccion */
+// define('DASH_PATH', 'http://ctt-app.com/Ciredashboard');  /* Produccion */
 
+define('RETURN_BACK', 'http://desarrollo.com/Testeocire');  /* DESARROLLO */
+// define('RETURN_BACK', 'https://ctt-app.com/Cire');  /* Produccion */
 
 //////////////////////////////////////
 // Valores configuracion

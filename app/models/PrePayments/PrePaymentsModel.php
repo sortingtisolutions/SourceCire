@@ -10,14 +10,14 @@ class PrePaymentsModel extends Model
     }
 
 // Listado de Proyectos  ****
-public function listProyects($store)
-{
-    $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects 
-            WHERE pjt_status>='2' and pjt_status<='99'
-            ORDER BY pjt_id";
-    return $this->db->query($qry);
-}    
+// public function listProjects($store)
+// {
+//     $store = $this->db->real_escape_string($store);
+//     $qry = "SELECT * FROM ctt_projects 
+//             WHERE pjt_status>='2' and pjt_status<='99'
+//             ORDER BY pjt_id";
+//     return $this->db->query($qry);
+// }    
 
 public function listTypeMov($params)
 {
@@ -83,11 +83,11 @@ public function getCustomersProj($params)
     }   
 
 // Listado de monedas
-    public function listCoins()
-    {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
-        return $this->db->query($qry);
-    }   
+    // public function listCoins()
+    // {
+    //     $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+    //     return $this->db->query($qry);
+    // }   
 
     public function listDataProyects($params)
     {

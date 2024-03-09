@@ -20,8 +20,9 @@ function inicial() {
 
 /** +++++  Obtiene los proyectos de la base */
 function getProjects(catId) {
+    let liststat ="4,7,8";
     var pagina = 'WhOutputs/listProjects';
-    var par = `[{"catId":"${catId}"}]`;
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);

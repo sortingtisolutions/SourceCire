@@ -10,12 +10,13 @@ class SearchIndividualProductsModel extends Model
     }
 
 // Listado de Proyectos  ****
-public function listProyects($store)
-{
-    $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (1,2,4) ;";
-    return $this->db->query($qry);
-}    
+// public function listProjects($store)
+// {
+//     $store = $this->db->real_escape_string($store);
+//     $liststat="1,2,4";
+//     $qry = "SELECT * FROM ctt_projects WHERE pjt_status in ($liststat);";
+//     return $this->db->query($qry);
+// }    
 
 // Listado de Productos
     public function listProducts($params)
@@ -46,7 +47,7 @@ public function listProducts2($param)
     $word = $this->db->real_escape_string($param['word']);
     $qry = "SELECT * FROM ctt_products A 
     WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
-        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_type_asigned != 'KP'
+        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_level != 'K'
     ORDER BY prd_name;";
     return $this->db->query($qry);
 }

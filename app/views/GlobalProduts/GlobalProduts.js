@@ -13,7 +13,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-       
+        modalLoading('S');
         getProducts(0);
         $('.tblProyects').css({display: 'none'});  
     }, 100);
@@ -167,6 +167,7 @@ function settingTableSub() {
     });
 
 }
+
 function asignarSubcategoria() {
     getCategories();
     settingTableSub();
@@ -184,6 +185,7 @@ function asignarSubcategoria() {
     });
 
 }
+
 function getCategories() {
     var pagina = 'GlobalProduts/listCategories';
     var par = '[{"parm":""}]';
@@ -191,14 +193,16 @@ function getCategories() {
     var selector = putCategories;
     fillField(pagina, par, tipo, selector);
 }
+
 function getSubCategories(catId) {
     //console.log(catId);
-    var pagina = 'GlobalProduts/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesOne';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putSubCategories;
     fillField(pagina, par, tipo, selector);
 }
+
 function updateData(sbcId,idSelected, num) {
     var pagina = 'GlobalProduts/updateData';
     var par = `[{"sbcId":"${sbcId}", "idSelected":"${idSelected}", "nxtSku":"${num}"}]`;
@@ -206,14 +210,18 @@ function updateData(sbcId,idSelected, num) {
     var selector = putData;
     fillField(pagina, par, tipo, selector);
 }
+
 function putCategories(dt) {
     console.log(dt);
     if (dt[0].cat_id != '0') {
         let catId = dt[0].cat_id;
+        
+        $('#txtCategoryList').html('');
         $.each(dt, function (v, u) {
             var H = `<option value="${u.cat_id}">${u.cat_name}</option>`;
             $('#txtCategoryList').append(H);
         });
+        getSubCategories(catId);
     }
 }
 
@@ -236,7 +244,6 @@ function putData(dt) {
     
 }
 function putSubCategories(dt) {
-    //console.log('putSubCategories',dt);
     let tabla = $('#tblSubcategories').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].sbc_id != 0) {
@@ -265,7 +272,7 @@ function putSubCategories(dt) {
                     updateData(inx,idSelected, num);
                     num++;
                 });
-            }, 100);
+            }, 1000);
         });
 }
 function getNextSku(sbcId){
@@ -285,7 +292,6 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //modalLoading('S');
         let filas = $('#tblProyects .selected');
         var idsSelected = '';
         filas.each(function(v,u){
@@ -308,7 +314,6 @@ function loadProcess() {
     $('#confirmarCargaModal').modal('show');
     $('#confirmLoad')
     .unbind('click').on('click', function () {
-        //modalLoading('S');  
         var pagina = 'GlobalProduts/loadProcessAll';
         var par = `[{"idSelected":""}]`;
         var tipo = 'json';
@@ -325,7 +330,7 @@ function loadProcess() {
  }
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    console.log(dt);
+    // console.log(dt);
     let valstage='';
     let valicon='';
     let etiquetai = '';
@@ -339,7 +344,7 @@ function putProducts(dt) {
                     <td class="sku">${u.prd_sku}</td>
                     <td class="supply">${u.prd_name}</td>
                     <td class="supply">${u.prd_price}</td>
-                    <td class="date">${u.prd_type_asigned}</td>
+                    <td class="date">${u.prd_level}</td>
                     <td class="date">${u.srv_name}</td>
                     <td class="date">${u.prd_insured}</td>
                     <td class="date">${u.cin_code}</td>
@@ -353,6 +358,7 @@ function putProducts(dt) {
     } else {
         settingTable();
     }
+    modalLoading('H');
 }
 
 /** +++++  Activa los iconos */
@@ -431,7 +437,6 @@ function confirm_to_work(pjtid, verid) {
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
         //console.log('Datos',pjtid,Id);
-        modalLoading('S');
 
         var pagina = 'GlobalProduts/UpdateSeriesToWork';
         var par = `[{"pjtid":"${pjtid}","verid":"${verid}"}]`;
@@ -444,7 +449,6 @@ function confirm_to_work(pjtid, verid) {
 
 function putToWork(dt){
     // console.log('Resultado Update',dt)
-    modalLoading('H');
     window.location.reload();
 }
 

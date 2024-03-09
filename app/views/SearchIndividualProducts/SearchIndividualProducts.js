@@ -191,6 +191,8 @@ function selProduct(res) {
         }
         // rowCurr.show();
     }else {
+        var sl = $('#txtProducts').offset();
+        $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
         $('#listProduct .list-items div.list-item').css({display: 'none'});
     }
 }
@@ -292,7 +294,7 @@ function calendario(cal){
         editable: true,
         selectable: true,
         events: cal,
-        height: 400,
+        height: 500,
         eventClick: function(calEvent, jsEvent, view){
             console.log(calEvent);
         }

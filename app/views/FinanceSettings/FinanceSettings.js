@@ -28,7 +28,7 @@ function inicial() {
 /** ---- PETICIÓN DE DATOS ----*/
 /** ---- Obtiene listado de categorias */
 function getCategories() {
-    var pagina = 'Subcategories/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategories;
@@ -37,7 +37,7 @@ function getCategories() {
 /** ---- Obtiene listado de subcategorias */
 function getSubcategories() {
     // deep_loading('O');
-    var pagina = 'Subcategories/listSubcategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putSubcategories;

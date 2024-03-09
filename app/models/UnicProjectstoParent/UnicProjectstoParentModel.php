@@ -9,21 +9,21 @@ class UnicProjectstoParentModel extends Model
     }
 
 // Listado de categorias  *****
-    public function listCategories()
-    {
+    // public function listCategories()
+    // {
         
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
-        return $this->db->query($qry);
-    }
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de subcategorias
-    public function listSubCategories($params)
-    {
-        $catId = $this->db->real_escape_string($params);
+    // public function listSubCategories($params)
+    // {
+    //     $catId = $this->db->real_escape_string($params);
         
-        $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
+    //     $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de paquetes
 public function listPackages($params)
@@ -38,7 +38,7 @@ public function listPackages($params)
     public function lastIdSubcategory($params)
     {
         $sbcId = $this->db->real_escape_string($params);
-        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
+        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,4), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
         return $this->db->query($qry);
     }
 

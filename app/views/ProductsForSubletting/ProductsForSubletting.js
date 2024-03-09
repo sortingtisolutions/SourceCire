@@ -24,8 +24,9 @@ function inicial() {
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 function get_Proyectos() {
-    var pagina = 'ProductsForSubletting/listProyects';
-    var par = `[{"store":""}]`;
+    let liststat ="2,4,7,8";
+    var pagina = 'Commons/listProjects';
+    var par = `[{"liststat":"${liststat}"}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
     fillField(pagina, par, tipo, selector);
@@ -42,7 +43,7 @@ function get_products(pj) {
 
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_coins() {
-    var pagina = 'ProductsForSubletting/listCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_coins;
@@ -50,7 +51,7 @@ function get_coins() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_suppliers() {
-    var pagina = 'ProductsForSubletting/listSuppliers';
+    var pagina = 'Commons/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_suppliers;
@@ -58,7 +59,7 @@ function get_suppliers() {
 }
 /**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
 function get_stores() {
-    var pagina = 'ProductsForSubletting/listStores';
+    var pagina = 'Commons/listStores';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_stores;
@@ -320,21 +321,25 @@ function put_Products(dt) {
 
 /**  ++++   Coloca las monedas en el listado del input */
 function put_coins(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
-        $('#txtCoinType').append(H);
-    });
-
+    if (dt[0].cin_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
+            $('#txtCoinType').append(H);
+        });
+    }
+    
     $('#txtCoinType').on('change', function () {
         validator();
     });
 }
 /**  ++++   Coloca los proveedores en el listado del input */
 function put_suppliers(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
-        $('#txtSupplier').append(H);
-    });
+    if (dt[0].sup_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
+            $('#txtSupplier').append(H);
+        });
+    }
 
     $('#txtSupplier').on('change', function () {
         validator();
@@ -342,10 +347,12 @@ function put_suppliers(dt) {
 }
 /**  ++++   Coloca los almacenes en el listado del input */
 function put_stores(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.str_id}">${u.str_name}</option>`;
-        $('#txtStoreSource').append(H);
-    });
+    if (dt[0].str_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.str_id}">${u.str_name}</option>`;
+            $('#txtStoreSource').append(H);
+        }); 
+    }
 
     $('#txtStoreSource').on('change', function () {
         validator();

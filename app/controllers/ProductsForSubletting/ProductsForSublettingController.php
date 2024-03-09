@@ -25,22 +25,22 @@ class ProductsForSublettingController extends Controller
 
     
     // LISTA LOS PROYECTOS ACTIVOS
-    public function listProyects($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProyects($request_params['store']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"pjt_id":"0"}]';	
-        }
-        echo $res;
-    } 
+    // public function listProjects($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listProjects($request_params['store']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"pjt_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 
 // Lista los productos
     public function listProducts($request_params)
     {
@@ -60,58 +60,58 @@ class ProductsForSublettingController extends Controller
     } 
 
 // Lista los proveedores de subarrendo
-    public function listSuppliers($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSuppliers($request_params['store']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"sup_id":"0"}]';	
-        }
-        echo $res;
-    } 	 
+    // public function listSuppliers($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listSuppliers($request_params['store']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"sup_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 	 
 
 // Lista los monedas
-    public function listCoins($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listCoins($request_params['store']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"cin_id":"0"}]';	
-        }
-        echo $res;
-    } 	 
+    // public function listCoins($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listCoins($request_params['store']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"cin_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 	 
 
 // Lista los monedas
-    public function listStores($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listStores($request_params['store']);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"str_id":"0"}]';	
-        }
-        echo $res;
-    } 	 
+    // public function listStores($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listStores($request_params['store']);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"str_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 	 
 
 
 // Agrega los productos subarrendados

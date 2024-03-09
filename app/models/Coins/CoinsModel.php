@@ -25,12 +25,12 @@ class CoinsModel extends Model
 	}
 	
 // Optiene los Usuaios existentes
-	public function GetCoins($params)
-	{
+	// public function GetCoins($params)
+	// {
 	
-		$qry = "SELECT * FROM ctt_coins where cin_status=1 order by cin_id ASC";
-		return $this->db->query($qry);
-	}
+	// 	$qry = "SELECT * FROM ctt_coins where cin_status=1 order by cin_id ASC";
+	// 	return $this->db->query($qry);
+	// }
 
     public function UpdateCoin($params)
 	{

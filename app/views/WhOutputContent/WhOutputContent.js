@@ -188,9 +188,9 @@ function getSeries(pjtcnid) {
 }
 
 // Solicita las series disponibles
-function getSerieDetail(serid, serorg) {
+function getSerieDetail(serid, serorg, serpjtvridorg) {
     var pagina = 'WhOutputContent/listSeriesFree';
-    var par = `[{"serid":"${serid}", "serorg":"${serorg}" }]`;
+    var par = `[{"serid":"${serid}", "serorg":"${serorg}", "srpjvrorg":"${serpjtvridorg}"}]`;
     var tipo = 'json';
     var selector = putSerieDetails;
     fillField(pagina, par, tipo, selector);
@@ -532,9 +532,9 @@ function build_modalSeries(dt) {
          tabla.rows().remove().draw();
          if (dt[0].ser_id > 0) {
             $.each(dt, function (v, u){
-                let skufull = String(u.pjtdt_prod_sku).slice(7, 11) == '' ? String(u.pjtdt_prod_sku).slice(0, 7) : String(u.pjtdt_prod_sku).slice(0, 7) + String(u.pjtdt_prod_sku).slice(7, 11);
-                let sku = String(u.pjtdt_prod_sku).slice(0, 7);
-                let acc = String(u.pjtdt_prod_sku).slice(7,8) == 'A' ? skufull : sku;
+                let skufull = String(u.pjtdt_prod_sku).slice(8, 12) == '' ? String(u.pjtdt_prod_sku).slice(0, 8) : String(u.pjtdt_prod_sku).slice(0, 8) + String(u.pjtdt_prod_sku).slice(8, 12);
+                let sku = String(u.pjtdt_prod_sku).slice(0, 8);
+                let acc = String(u.pjtdt_prod_sku).slice(8,9) == 'A' ? skufull : sku;
                 let valstage = u.ser_stage == 'TR' ? 'color:#CC0000' : 'color:#3c5777';
                 let level;
                 if(u.pjtvr_section == 4){
@@ -545,7 +545,7 @@ function build_modalSeries(dt) {
                 tabla.row
                     .add({
                         sermodif: `<i class="fas fa-calendar-alt choice Calendar" id="${u.ser_id}" data-serie ="${u.prd_name}"></i> 
-                                    <i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i>
+                                    <i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}|${u.pjtvr_id}"></i>
                                     <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                         seriesku: skufull,
                         prdname: u.prd_name,
@@ -570,9 +570,10 @@ function activeIconsSerie() {
             let serorg = $(this).attr('data-content').split('|')[1];
             let detIdChg = $(this).attr('data-content').split('|')[2];
             let serIdChg = $(this).attr('data-content').split('|')[3];
+            let serPjtvrIdOrg = $(this).attr('data-content').split('|')[4];
 
             if (serprd != "") {
-                getSerieDetail(serprd, detIdChg);
+                getSerieDetail(serprd, detIdChg, serPjtvrIdOrg);
             }
     });
     $('.Calendar')
@@ -696,7 +697,7 @@ function putSerieDetails(dt){
             $.each(dt, function (v, u) {
                 tabla.row
                     .add({
-                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}" detailId="${u.pjtdt_id}"></i>`,
+                        serchange: `<i class='fas fa-check-circle toChangeSer sr${u.ser_id}' id="${u.ser_id}" seridorg="${u.id_orig}" detailId="${u.pjtdt_id}" prjVersion="${u.pjtvr_id}" pjVersionOrg="${u.pjvr_id_org}"></i>`,
                         serdetnumber: u.ser_serial_number,
                         serdetsitu: u.ser_no_econo,
                         projectname: u.pjt_name
@@ -722,16 +723,23 @@ function activeIconsNewSerie() {
         let serIdSel = $(this).attr('id');
         let serIdOrg = $(this).attr('seridorg');
         let detailId = $(this).attr('detailId');
+        let prjVersion = $(this).attr('prjVersion');
+        let pjVersionOrg = $(this).attr('pjVersionOrg');
         serIdNew=serIdSel;
         $('.sr'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
         // $('#'+serIdOrig).children(".claseElemento").cssmyCheck({"color":"#CC0000"});
-        changeSerieNew(serIdSel, serIdOrg, detailId);
+        changeSerieNew(serIdSel, serIdOrg, detailId, prjVersion, pjVersionOrg);
     });
 }
 
-function changeSerieNew(serIdNew,serIdOrg, detailId) {
+function changeSerieNew(serIdNew,serIdOrg, detailId, prjVersion, pjVersionOrg) {
+    console.log ('changeSerieNew', serIdNew,serIdOrg,detailId,prjVersion,pjVersionOrg);
     var pagina = 'WhOutputContent/changeSerieNew';
-    var par = `[{"serIdNew":"${serIdNew}", "serIdOrg":"${serIdOrg}", "detailIdNew":"${detailId}" }]`;
+    var par = `[{"serIdNew":"${serIdNew}", 
+                "serIdOrg":"${serIdOrg}", 
+                "detailIdNew":"${detailId}", 
+                "prjVersion":"${prjVersion}", 
+                "pjVersionOrg":"${pjVersionOrg}"}]`;
     var tipo = 'html';
     var selector = myCheckUp;
     fillField(pagina, par, tipo, selector);

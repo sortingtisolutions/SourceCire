@@ -1,5 +1,6 @@
 let strs = null;
 let strnme = '';
+let glbsendmail;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -15,6 +16,7 @@ function inicial() {
         getMenuParents();
         getModules();
         fillStores();
+        
         confirm_alert();
     } else {
         setTimeout(() => {
@@ -77,6 +79,12 @@ function settingTable() {
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
+        // createdRow: function (nRow, aData, iDataIndex) {
+        //     $(nRow).attr('id', aData['mnu_id']);
+        // },
+        // processing: true,
+        // serverSide: true,
+        // ajax: {url: 'ModMenu/tableMenus', type: 'POST'},
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'men_parent', class: 'men-parent bold'},
@@ -111,8 +119,22 @@ function getModules() {
     var selector = putModules;
     fillField(pagina, par, tipo, selector);
 }
+
+function getSp(catId) {
+    var pagina = 'ModMenu/ExecSp';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putSp;
+    fillField(pagina, par, tipo, selector);
+}
+
 function putStores(dt) {
     strs = dt;
+}
+
+function putSp(dt) {
+    console.log('Regreso SP', dt);
+
 }
 function putMenuParents(dt) {
     if (dt[0].mnu_id != 0) {
@@ -137,6 +159,7 @@ function fillStores() {
         $.each(strs, function (v, u) {
             fillTableStores(v);
         });
+        getSp('03');
         deep_loading('C');
     } else {
         setTimeout(() => {
@@ -178,7 +201,7 @@ function actionButtons() {
         });
 
     /**  ---- Acciones de Guardar categoria ----- */
-    $('#GuardarAlmacen')
+    $('#GuardarMenu')
         .unbind('click')
         .on('click', function () {
             if (validaFormulario() == 1) {
@@ -188,6 +211,10 @@ function actionButtons() {
                     updateStore();
                 }
             }
+            glbsendmail=true;
+            messagemail="Sistema, ajuste en modulo menu"
+            bodymail="Se realizo un cambio en el modulo de menu que afecta a un modulo";
+            sendEmail(glbsendmail,messagemail,bodymail);
         });
     /**  ---- Lismpia los campos ----- */
     $('#LimpiarFormulario')
@@ -217,6 +244,7 @@ function fillTableStores(ix) {
         .draw();
     $('#md' + strs[ix].mnu_id).parents('tr').attr('id', strs[ix].mnu_id);
     actionButtons();
+    
 }
 
 function saveStore() {
@@ -339,6 +367,7 @@ function putDeleteStore(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {
@@ -361,3 +390,4 @@ function validaFormulario() {
     });
     return valor;
 }
+

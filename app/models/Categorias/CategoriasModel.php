@@ -33,13 +33,13 @@ class CategoriasModel extends Model
 		return $this->db->query($qry);
 	}
 
-    public function listAreas($params)
-	{
-		$qry = "SELECT * FROM ctt_areas
-				WHERE are_id in (2,3) AND are_status = 1 ORDER BY are_id;";
+    // public function listAreas($params)
+	// {
+	// 	// $qry = "SELECT * FROM ctt_areas
+	// 	// 		WHERE are_status = 1 ORDER BY are_id;";
 
-		return $this->db->query($qry);
-	}
+	// 	// return $this->db->query($qry);
+	// }
 
     public function UpdateCategoria($params)
 	{

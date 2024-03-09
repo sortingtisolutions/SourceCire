@@ -13,8 +13,8 @@ class PaymentsAppliedModel extends Model
 // Obtiene el listado de las subcategorias activas
     public function listProjects($params)
     {
-        $qry = "SELECT * FROM ctt_projects WHERE pjt_status>='9'
-                ORDER BY 1 DESC;";
+        $liststat = $this->db->real_escape_string($params['liststat']);
+        $qry = "SELECT * FROM ctt_projects WHERE pjt_status IN ($liststat);";
 
         return $this->db->query($qry);
     }

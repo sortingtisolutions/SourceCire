@@ -86,7 +86,7 @@ function settingTable() {
 
 // Solicita los productos de un almacen seleccionado
 function getStores() {
-    var pagina = 'Areas/GetAreas';
+    var pagina = 'Commons/listAreas';
     var par = `[{"are_id":""}]`;
     var tipo = 'json';
     var selector = putStores;
@@ -280,6 +280,7 @@ function putDeleteStore(dt) {
         .remove()
         .draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {

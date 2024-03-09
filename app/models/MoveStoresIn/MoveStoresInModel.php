@@ -22,18 +22,18 @@ class MoveStoresInModel extends Model
     }
 
 // Listado de Almacecnes
-    public function listStores()
-    {
-        $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
-        return $this->db->query($qry);
-    }
+    // public function listStores()
+    // {
+    //     $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de proveedores
-    public function listSuppliers()
-    {
-        $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
-        return $this->db->query($qry);
-    }
+    // public function listSuppliers()
+    // {
+    //     $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+    //     return $this->db->query($qry);
+    // }
    
 // Listado de Facturas
     public function listInvoice($param)
@@ -56,11 +56,11 @@ class MoveStoresInModel extends Model
     }
       
 // Listado de categorias
-    public function listCategories()
-    {
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCategories()
+    // {
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
+    //     return $this->db->query($qry);
+    // }
 
 // Listado de Productos
     public function listProducts($param)
@@ -71,14 +71,14 @@ class MoveStoresInModel extends Model
                     (SELECT CASE when substring(ser_sku,11,1) ='A' 
                         THEN IFNULL (max(convert(substring(ser_sku,14,4), signed integer)),0) + 1
                         ELSE
-                        IFNULL(MAX(convert(substring(ser_sku,8,3), signed integer)),0) + 1
+                        IFNULL(MAX(convert(substring(ser_sku,9,3), signed integer)),0) + 1
                         END AS result
                     FROM ctt_series ser WHERE ser.prd_id =pd.prd_id) as serNext, 
                 sb.sbc_name, ct.cat_name
                 FROM ctt_products AS pd
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND pd.prd_type_asigned != 'KP' AND ct.cat_id =  $catId;";
+                WHERE pd.prd_status = '1' AND pd.prd_level IN ('P', 'A') AND ct.cat_id =  $catId;";
         return $this->db->query($qry);
     }	
 

@@ -22,7 +22,7 @@ function inicial() {
 
 // Solicita las categorias
 function getCategory() {
-    var pagina = 'ProductAccessory/listCategories';
+    var pagina = 'Commons/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategory;
@@ -30,7 +30,7 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
-    var pagina = 'ProductAccessory/listSubCategories';
+    var pagina = 'Commons/listSubCategoriesAll';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
     var selector = putSubCategory;

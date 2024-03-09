@@ -79,23 +79,23 @@ class BudgetController extends Controller
 
     
 // Lista los tipos de proyectos
-    public function listProjectsType($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProjectsType($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"pjt_id":"0"}]';	
-        }
-        echo $res;
+    // public function listProjectsType($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listProjectsType($request_params);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"pjt_id":"0"}]';	
+    //     }
+    //     echo $res;
 
-    } 
+    // } 
     
 // Lista los tipos de llamados
     public function listProjectsTypeCalled($request_params)
@@ -281,10 +281,10 @@ class BudgetController extends Controller
         echo $res;
     } 
     // LISTAR PRODUCTOS version 2 ***ED
-    public function listProducts2($request_params)
+    public function listProductsInput($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts2($request_params);
+        $result = $this->model->listProductsInput($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -298,10 +298,10 @@ class BudgetController extends Controller
         echo $res;
     } 
     //LISTAR PRODUCTOS version 3  ***ED
-    public function listProducts3($request_params)
+    public function listProductsCombo($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts3($request_params);
+        $result = $this->model->listProductsCombo($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -333,22 +333,22 @@ class BudgetController extends Controller
     } 
 
     //  ***ED
-    public function listSubCategories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listSubCategories($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    } 
+    // public function listSubCategories($request_params)
+    // {
+    //     $params =  $this->session->get('user');
+    //     $result = $this->model->listSubCategories($request_params);
+    //     $i = 0;
+    //     while($row = $result->fetch_assoc()){
+    //         $rowdata[$i] = $row;
+    //         $i++;
+    //     }
+    //     if ($i>0){
+    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    //     } else {
+    //         $res =  '[{"prd_id":"0"}]';	
+    //     }
+    //     echo $res;
+    // } 
     // Datos del proyecto padre ***ED
     public function getProjectParent($request_params)
     {
@@ -677,14 +677,65 @@ public function ProcessProjectProductFAST($request_params)
         $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
 
         $bdglvl = $row["pjtcn_prod_level"];
-        $lvlas = $row["prd_type_asigned"];
         $prdexp = $row["srv_id"];
         $versId = $row["ver_id"];
 
         $ttlqty = $prdexp == '2'? $quanty: 1;
         $quanty = $prdexp == '2'? 1: $quanty;
+
+
+        if ( $bdglvl == 'P' || $bdglvl == 'A'){
+            for ($i = 1; $i<=$quanty; $i++){
+                
+                $params = array(
+                    'pjetId' => $pjetId, 
+                    'prodId' => $prodId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl,
+                    'versId' => $versId,
+                    'detlId' => 0,
+                );
+                $serie = $this->model->SettingSeries($params);
+                $typeAsigned = $this->model->getTypeAsignedSerie($serie);
+                if ($typeAsigned == 'PF' && $serie != 0) {
+                    $accesorios = $this->ProcessSeriesAccesoriesFijos($params, $serie);
+                }elseif ($typeAsigned == 'PV' && $serie != 0) {
+                    $accesorios = $this->ProcessSeriesAccesoriesVirtuales($params);
+                }
+            }
+        } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
+            for ($i = 1; $i<=$quanty; $i++){
+                $products = $this->model->GetProducts($prodId);
+                while($acc = $products->fetch_assoc()){
+
+                    $pkpdId =  $acc["prd_id"];
+                    $pkpdNm =  $acc["prd_name"];
+                    $pkpdPc =  $acc["prd_price"];
+                    $pkqty =  $acc["pck_quantity"];
+
+                    if($pkqty>0){
+                        for ($j=0; $j < $pkqty; $j++) { 
+                            $prodparams = array(
+                                'pjetId' => $pjetId, 
+                                'prodId' => $pkpdId, 
+                                'dtinic' => $dtinic, 
+                                'dtfinl' => $dtfinl,
+                                'detlId' => 0,
+                            );
+                            $serie = $this->model->SettingSeries($prodparams);
+                            $typeAsigned = $this->model->getTypeAsignedSerie($serie);
+                            if ($typeAsigned == 'PF' && $serie != 0) {
+                                $accesorios = $this->ProcessSeriesAccesoriesFijos($prodparams, $serie);
+                            }elseif ($typeAsigned == 'PV' && $serie != 0) {
+                                $accesorios = $this->ProcessSeriesAccesoriesVirtuales($prodparams);
+                            }
+                        }
+                    } 
+                }
+            }
+        }
         
-        if ($lvlas == 'PF'){
+        /* if ($lvlas == 'PF'){
             // $this->model->SettingSeriesFUN($request_params);
             for ($j=1; $j<=$quanty; $j++){
                 $params = array(
@@ -862,8 +913,6 @@ public function ProcessProjectProductFAST($request_params)
                         
                     }
                     
-
-                    /*  */
                 }
             }
         }else{
@@ -880,7 +929,7 @@ public function ProcessProjectProductFAST($request_params)
                 );
                 $detlId = $this->model->SettingSeries($params);
             }
-        }
+        } */
     }
 
     $pjtId  = $this->model->PromoteProject($request_params);
@@ -888,7 +937,7 @@ public function ProcessProjectProductFAST($request_params)
     echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
 
 } 
-public function ProcessSeriesAccesories($params, $serie){
+public function ProcessSeriesAccesoriesFijos($params, $serie){
     $result = $this->model->getAccesorios($serie);
     while($row = $result->fetch_assoc()){
         $serId      = $row["ser_id"];
@@ -908,6 +957,38 @@ public function ProcessSeriesAccesories($params, $serie){
             'type_asigned' => 'A',
         );
         $seriesAcc  = $this->model->SettingSeriesAcce($accesoryData);
+    }
+    return 1;
+}
+
+public function ProcessSeriesAccesoriesVirtuales($params){
+    $prdId      = $params["prodId"];
+    $dtinic     = $params["dtinic"];
+    $dtfinl     = $params["dtfinl"];
+    $pjetId     = $params["pjetId"];
+
+   $products = $this->model->GetProducts($prdId);
+
+    while($acc = $products->fetch_assoc()){
+
+        $pkpdId =  $acc["prd_id"];
+        $pkpdNm =  $acc["prd_name"];
+        $pkpdPc =  $acc["prd_price"];
+        $pkqty =  $acc["pck_quantity"];
+
+        if($pkqty>0){
+            for ($k=0; $k < $pkqty; $k++) { 
+                $prodparams = array(
+                    'pjetId' => $pjetId, 
+                    'prodId' => $pkpdId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl,
+                    'detlId' => 0,
+                    'type_asigned' => 'AV',
+                );
+                $detlId = $this->model->SettingSeries($prodparams);
+            }
+        } 
     }
     return 1;
 }

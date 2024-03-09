@@ -23,11 +23,11 @@
 		  $this->render(__CLASS__, $params);
 		}
 
-		public function GetCoin($request_params)
-		{
-	      $result = $this->model->GetCoins($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
-		}
+		// public function GetCoin($request_params)
+		// {
+	    //   $result = $this->model->GetCoins($request_params);
+		//   echo json_encode($result,JSON_UNESCAPED_UNICODE);	
+		// }
 
 		public function SaveCoin($request_params)
 		{
@@ -44,22 +44,22 @@
 			echo $result;
 		}
 
-		public function GetCoins($request_params)
-		{
-			$params =  $this->session->get('user');
-            $result = $this->model->GetCoins($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-            } else {
-                $res =  '[{"cin_id":"0"}]';	
-            }
-            echo $res;
-		}
+		// public function GetCoins($request_params)
+		// {
+		// 	$params =  $this->session->get('user');
+        //     $result = $this->model->GetCoins($request_params);
+        //     $i = 0;
+        //     while($row = $result->fetch_assoc()){
+        //         $rowdata[$i] = $row;
+        //         $i++;
+        //     }
+        //     if ($i>0){
+        //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        //     } else {
+        //         $res =  '[{"cin_id":"0"}]';	
+        //     }
+        //     echo $res;
+		// }
 
 		public function DeleteCoin($request_params)
 		{

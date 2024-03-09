@@ -9,11 +9,11 @@ class SeriestoProductsModel extends Model
     }
 
 // Listado de categorias   *******
-    public function listCategories()
-    {
-        $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
-        return $this->db->query($qry);
-    }
+    // public function listCategories()
+    // {
+    //     $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
     public function listCategoriesAcc()
     {
@@ -22,24 +22,12 @@ class SeriestoProductsModel extends Model
     }
 
 // Listado de subcategorias
-    public function listSubCategories($params)
-    {
-        $catId = $this->db->real_escape_string($params);
-        $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
-
-// Listado de paquetes
-public function listPackages()
-{
-
-}
-
-// Listado de subcategorias
-    public function lastIdSubcategory($params)
-    {
-     
-    }
+    // public function listSubCategories($params)
+    // {
+    //     $catId = $this->db->real_escape_string($params);
+    //     $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
+    //     return $this->db->query($qry);
+    // }
 
     
 // Listado de productos   ******
@@ -47,7 +35,7 @@ public function listProducts()
 {
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
-            WHERE prd_status = 1 order by prd_sku;";
+            WHERE prd_status = 1 AND prd_level != 'K' order by prd_sku;";
     return $this->db->query($qry);
 }
 
@@ -59,15 +47,9 @@ public function listProductsById($request_params)
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
             WHERE prd_status = 1 and sbc_id = $sbc_id and 
-            prd_level <> 'A' order by prd_sku;";
+            prd_level <> 'A' AND prd_level != 'K' order by prd_sku;";
     
     return $this->db->query($qry);
-}
-
-// Listado de productos del paquete
-public function listProductsPack($params)
-{
-  
 }
 
 public function listSeriesProd($params) // Edna
@@ -78,7 +60,7 @@ public function listSeriesProd($params) // Edna
             FROM ctt_series AS ser
             INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
             LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = ser.ser_id
-            WHERE prd.prd_id=$prdId AND sp.stp_quantity > 0 GROUP BY ser.ser_id";
+            WHERE prd.prd_id=$prdId GROUP BY ser.ser_id";
     return $this->db->query($qry);
 }
 
@@ -86,11 +68,10 @@ public function list_products($params) // Edna
 {
     $prdId = $this->db->real_escape_string($params);
 
-
     $qry = "SELECT prd.prd_id ser_id, prd.prd_sku ser_sku, prd.prd_name, prd.prd_name ser_serial_number, prd.prd_id
     FROM  ctt_products AS prd
     LEFT JOIN ctt_stores_products AS sp ON sp.prd_id = prd.prd_id
-    WHERE prd.prd_id = $prdId AND sp.stp_quantity > 0 GROUP BY prd.prd_id, prd.prd_sku";
+    WHERE prd.prd_id = $prdId GROUP BY prd.prd_id, prd.prd_sku";
     return $this->db->query($qry);
 }
 
@@ -116,7 +97,7 @@ public function getProdAccesoriesById($params)
     $qry = "SELECT acc.prd_parent, acc.prd_id, acc.pck_quantity quantity, prd.prd_id, prd.prd_sku, prd.prd_name
     FROM ctt_products_packages AS acc 
     INNER JOIN ctt_products AS prd ON prd.prd_id = acc.prd_id
-    WHERE acc.prd_parent = $prdId AND acc.prd_type_asigned = 'PV'";
+    WHERE acc.prd_parent = $prdId";
 
     return $this->db->query($qry);
 
@@ -152,11 +133,11 @@ public function updateQuantityProds($param)
     $prd_qty           = $this->db->real_escape_string($param['prdQty']);
 
     $qry =  "UPDATE ctt_products_packages SET pck_quantity = $prd_qty 
-            WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'PV';" ;
+            WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
     
     $this->db->query($qry);
 
-    return $prd_id;
+    return $prd_qty;
 }    
 
 // Registra el paquete o kit en la tabla de productos
@@ -167,19 +148,21 @@ public function saveAccesorioByProducto($param)
     $prd_parent_id              = $this->db->real_escape_string($param['parentId']);
     $prd_parent_Sku             = $this->db->real_escape_string($param['skuPrdPadre']);
     $sbc_id                     = $this->db->real_escape_string($param['lsbc_id']);
-    $filas                      = $this->db->real_escape_string($param['filas']);
+    
 
     $countId = 1;
 
-    if ($filas == 0) {
-        $qry = "UPDATE ctt_products set prd_type_asigned = 'PF'
-                where prd_id=$prdId";
-        $this->db->query($qry);
-    }
-
-    $qry = "UPDATE ctt_series set prd_id_acc=$prd_parent_id
+    $qry1 = "UPDATE ctt_series set prd_id_acc=$prd_parent_id, ser_type_asigned = 'AF'
             where ser_id=$serId";
-    $this->db->query($qry);
+    $this->db->query($qry1);
+
+    $qry2 = "UPDATE ctt_series set ser_type_asigned = 'PF'
+            where ser_id=$prd_parent_id";
+    $this->db->query($qry2);
+
+    $qry3 = "UPDATE ctt_products SET prd_stock = prd_stock - 1 
+    WHERE pd.prd_id = (SELECT prd_id FROM ctt_series AS sr WHERE ser_id = $prd_parent_id Limit 1)";
+    $this->db->query($qry3);
 
     $result = $prd_parent_Sku;
     //$result = $this->db->insert_id;
@@ -188,29 +171,32 @@ public function saveAccesorioByProducto($param)
 }
 
 // Registra el paquete o kit en la tabla de productos
-public function saveAccesorioProducto($param)
-{
-    $prd_id                     = $this->db->real_escape_string($param['prdId']);
-    $prd_parent_id              = $this->db->real_escape_string($param['parentId']);
-    $prd_parent_Sku             = $this->db->real_escape_string($param['skuPrdPadre']);
-    $quantity                   = $this->db->real_escape_string($param['quantity']);
-    $sbc_id                     = $this->db->real_escape_string($param['lsbc_id']);
-    $filas                      = $this->db->real_escape_string($param['filas']);
+    public function saveAccesorioProducto($param)
+    {
+        $prd_id                     = $this->db->real_escape_string($param['prdId']);
+        $prd_parent_id              = $this->db->real_escape_string($param['parentId']);
+        $prd_parent_Sku             = $this->db->real_escape_string($param['skuPrdPadre']);
+        // $quantity                   = $this->db->real_escape_string($param['quantity']);
+        $sbc_id                     = $this->db->real_escape_string($param['lsbc_id']);
+        // $filas                      = $this->db->real_escape_string($param['filas']);
 
-    if ($filas == 0) {
-        $qry = "UPDATE ctt_products set prd_type_asigned = 'PV'
-                where prd_id=$prd_parent_id";
-        $this->db->query($qry);
+        $qry1 = "UPDATE ctt_series set ser_type_asigned = 'AV'
+                WHERE prd_id = $prd_id AND prd_id_acc=0";
+        $this->db->query($qry1);
+
+        $qry2 = "UPDATE ctt_series SET ser_type_asigned = 'PV'
+                WHERE prd_id = $prd_parent_id 
+                AND ser_type_asigned != 'PF'";
+        $this->db->query($qry2);
+        
+        $qry3 = "INSERT INTO ctt_products_packages ( prd_parent, pck_quantity, prd_id, prd_type_asigned)
+                VALUES ($prd_parent_id,'1',$prd_id, 'AV')";
+        $this->db->query($qry3);
+        
+        $result = $prd_parent_Sku;
+
+        return $result ;
     }
-
-    $qry = "INSERT INTO ctt_products_packages ( prd_parent, pck_quantity, prd_id, prd_type_asigned)
-    VALUES ($prd_parent_id,'$quantity',$prd_id, 'PV')";
-    $this->db->query($qry);
-    
-
-    $result = $prd_parent_Sku;
-    return $result ;
-}
 // Registra el producto al paquete
     public function SaveProduct($param)
     {
@@ -255,20 +241,55 @@ public function saveAccesorioProducto($param)
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
-        $qry =  "UPDATE ctt_series set prd_id_acc= 0 WHERE ser_id = $prd_id;" ;
-        $this->db->query($qry);
+        $qry1 =  "UPDATE ctt_series SET prd_id_acc= 0, ser_type_asigned = case 
+                        when prd_id IN 
+                            (SELECT pck.prd_id FROM ctt_products_packages AS pck 
+                            WHERE pck.prd_type_asigned = 'AV') then 'AV'
+                        ELSE 'PI'
+                        
+                    END
+                    WHERE ser_id = $prd_id;" ;
+
+        $this->db->query($qry1);
+
+        $qry2 = "UPDATE ctt_series SET ser_type_asigned = case 
+                        WHEN (SELECT sr.ser_id FROM ctt_series AS sr WHERE sr.prd_id_acc = $prd_parent) then 'PF'
+                        when prd_id IN 
+                            (SELECT pck.prd_id FROM ctt_products_packages AS pck 
+                            WHERE pck.prd_type_asigned = 'AV') then 'PV'
+                        
+                        ELSE 'PI' 
+                    END
+                WHERE ser_id = $prd_parent;";
+        $this->db->query($qry2);
+
         
+
         return $prd_id;
     }    
+
 
     public function deleteProduct($param)
     {
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
-        $qry =  "DELETE FROM ctt_products_packages WHERE prd_parent = $prd_parent AND prd_id = $prd_id AND prd_type_asigned = 'PV';" ;
-        $this->db->query($qry);
-        
+        $qry1 =  "DELETE FROM ctt_products_packages 
+                WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
+        $this->db->query($qry1);
+
+        $qry2 = "UPDATE ctt_series SET ser_type_asigned = 'PI' 
+                WHERE prd_id = $prd_id AND ser_type_asigned = 'AV' AND NOT EXISTS (
+                    SELECT * FROM ctt_products_packages pck WHERE pck.prd_id = $prd_id);";
+        $this->db->query($qry2);
+
+        $qry3 = "UPDATE ctt_series SET ser_type_asigned = 'PI' 
+                WHERE prd_id = $prd_parent AND ser_type_asigned = 'PV' 
+                AND NOT EXISTS(SELECT pck.prd_id FROM ctt_products_packages AS pck 
+                        WHERE pck.prd_parent = $prd_parent);";
+        $this->db->query($qry3);
+
         return $prd_id;
+
     }
 }

@@ -86,7 +86,7 @@ function settingTable() {
 
 // Solicita los productos de un almacen seleccionado
 function getStores() {
-    var pagina = 'Coins/GetCoins';
+    var pagina = 'Commons/listCoins';
     var par = `[{"cin_id":""}]`;
     var tipo = 'json';
     var selector = putStores;
@@ -271,6 +271,7 @@ function putDeleteStore(dt) {
     let tabla = $('#AreasTable').DataTable();
     tabla.row($(`#${dt}`)).remove().draw();
     $('#confirmModal').modal('hide');
+    $('#LimpiarFormulario').trigger('click');
 }
 
 function goThroughStore(strId) {
