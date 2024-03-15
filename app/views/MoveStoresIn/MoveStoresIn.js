@@ -17,6 +17,7 @@ function inicial() {
     getCoins();
     getCategories();
     setting_table();
+    putTypeProd();
 
     $('#btn_exchange').on('click', function () {
         exchange_apply(0);
@@ -222,7 +223,7 @@ function getSuppliers() {
 }
 // Solicita los documentos factura
 function getInvoice(id) {
-    console.log(id);
+    // console.log(id);
     var pagina = 'MoveStoresIn/listInvoice';
     var par = `[{"extId":"${id}"}]`;
     var tipo = 'json';
@@ -239,7 +240,7 @@ function getCoins() {
 }
 // Solicita las categorias
 function getCategories() {
-    console.log('categos');
+    // console.log('categorias');
     var pagina = 'Commons/listCategories';
     var par = `[{"store":""}]`;
     var tipo = 'json';
@@ -319,6 +320,34 @@ function putCoins(dt) {
 
     $('#txtCoin').on('change', function () {
         validator();
+    });
+}
+
+function putTypeProd() {
+    let valtext='';
+    for (let index = 0; index < 2; index++) {
+        
+        valtext = index == 0 ? "Producto serializado" : "Bolsa de Productos";
+    
+        let H = `<option value="${index}">${valtext}</option>`;
+        $('#txtTypeProd').append(H); 
+    }
+    // $.each(dt, function (v, u) {
+    //     let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
+    //     $('#txtCoin').append(H);
+    // });
+   
+
+    $('#txtTypeProd').on('change', function () {
+        if ($('#txtTypeProd').val() == 0) {
+            console.log('0');
+            $('#txtSerie').attr('disabled', false).val('');
+            $('#txtNoEco').attr('disabled', false).val('');
+        } else {
+            console.log('1');
+            $('#txtSerie').attr('disabled', true).val('');
+            $('#txtNoEco').attr('disabled', true).val('');
+        }
     });
 }
 

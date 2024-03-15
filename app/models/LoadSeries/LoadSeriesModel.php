@@ -37,6 +37,7 @@ public function SaveDocumento($request_params)
 						$acept = 0;
 						$supId = '';
 						$strId = 0;
+						$bulk = 0;
 
 						//** VALIDA LOS DATOS DEL ALMACEN POR ID O NOMBRE */
 						if (is_numeric($LoadProducts[11])) {
@@ -65,16 +66,21 @@ public function SaveDocumento($request_params)
 						$rst = $rest->fetch_object();
 						$supplier = $rst->sup_id;
 
+						// VALIDA LA PRODUCTO-SERIE P BOLSA GRAL
+						if (strlen($LoadProducts[0]) == 8 && strlen($LoadProducts[12]) >=2) {
+							$bulk=intval($LoadProducts[12]);
+						}
+
 						// VALIDA LA EXISTENCIA DEL SKU
 						if (strlen($LoadProducts[0]) == 15 || strlen($LoadProducts[0]) == 10 || strlen($LoadProducts[0]) == 11) {
 							# Revisar que exista un producto con la categoria y subcat que se esta introduciendo 
 							# a traves de su sku
 							$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct 
-							INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
-							INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id
-							where ct.cat_id = SUBSTR('$LoadProducts[0]',1,2) 
-							AND sb.sbc_code = SUBSTR('$LoadProducts[0]',3,2)
-							AND pd.prd_sku = SUBSTR('$LoadProducts[0]',1,8)";
+									INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
+									INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id
+									where ct.cat_id = SUBSTR('$LoadProducts[0]',1,2) 
+									AND sb.sbc_code = SUBSTR('$LoadProducts[0]',3,2)
+									AND pd.prd_sku = SUBSTR('$LoadProducts[0]',1,8)";
 							$res = $this->db->query($qry1);
 							$rs = $res->fetch_object();
 							$acept = $rs->cant;
@@ -297,24 +303,23 @@ public function SaveDocumento($request_params)
 		$prdid 	    	= $this->db->real_escape_string($params['prdid']);
 		$status		    = $this->db->real_escape_string($params['status']);
 
-		$qry = "INSERT INTO ctt_series(ser_sku, ser_serial_number,ser_cost, ser_situation, 
+		$qry1 = "INSERT INTO ctt_series(ser_sku, ser_serial_number,ser_cost, ser_situation, 
 				ser_stage, ser_brand,ser_cost_import,ser_import_petition,ser_sum_ctot_cimp, 
 				ser_no_econo, ser_comments, cin_id, str_id, sup_id, prd_id, ser_status)
 				VALUES('$sersku', '$sernum','$sercost','$situation','$stage', '$serbrand',
 				'$costimport','$imppetition','$sumctotcimp','$noecono', '$comments','$cinid',
 				'$strid','$supid','$prdid','$status');";
-		$res = $this->db->query($qry);
+		$res = $this->db->query($qry1);
 		$serId = $this->db->insert_id;
 
-		$qry = "INSERT INTO ctt_stores_products(
+		$qry2 = "INSERT INTO ctt_stores_products(
 						stp_quantity, str_id,ser_id, prd_id)
 				VALUES(1, '$strid', '$serId', '$prdid');";
+		$result = $this->db->query($qry2);
 
-		$result = $this->db->query($qry);
-
-		$qry = "UPDATE ctt_products SET prd_stock = prd_stock + 1 WHERE prd_id = '$prdid';";
-
-		$result = $this->db->query($qry);
+		$qry3 = "UPDATE ctt_products SET prd_stock = prd_stock + 1 
+				WHERE prd_id = '$prdid';";
+		$result = $this->db->query($qry3);
 	}
 
 	function vaciarLoadSeries(){
@@ -334,4 +339,25 @@ public function SaveDocumento($request_params)
 		
 		return $result;
 	}
+
+
+	public function saveBulk($params){
+		$sersku 	    = $this->db->real_escape_string($params['sersku']);
+		$sernum			= $this->db->real_escape_string($params['sernum']);
+		$sercost 	    = $this->db->real_escape_string($params['sercost']);
+		$situation		= $this->db->real_escape_string($params['situation']);
+		$stage 	   		= $this->db->real_escape_string($params['stage']);
+
+		$serbrand 	    = $this->db->real_escape_string($params['serbrand']);
+	
+		$strid	    	= $this->db->real_escape_string($params['strid']);
+		$supid 	    	= $this->db->real_escape_string($params['supid']);
+		$prdid 	    	= $this->db->real_escape_string($params['prdid']);
+		$status		    = $this->db->real_escape_string($params['status']);
+
+		$qry3 = "UPDATE ctt_products SET prd_stock = prd_stock + 1 
+				WHERE prd_id = '$prdid';";
+		$result = $this->db->query($qry3);
+	}
+
 }

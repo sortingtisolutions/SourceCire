@@ -21,8 +21,9 @@
                             <tr>
                                 <th style="width:  30px"></th>
                                 <th style="width:  60px">SKU</th>
-                                <th style="width: 200px">Nombre Producto</th>
-                                <th style="width: 100px">Precio</th>
+                                <th style="width:  250px">Nombre Producto</th>
+                                <th style="width:  40px">Stock</th>
+                                <th style="width:  50px">Precio</th>
                                 <th style="width:  40px">Tipo</th>
                                 <th style="width:  40px">Servicio</th>
                                 <th style="width:  40px">Seguro</th>

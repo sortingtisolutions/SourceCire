@@ -40,28 +40,12 @@ class SearchIndividualProductsController extends Controller
             }
             echo $res;
 		}
-    // LISTA LOS PROYECTOS ACTIVOS
-    // public function listProjects($request_params)
-    // {
-    //     $params =  $this->session->get('user');
-    //     $result = $this->model->listProjects($request_params['store']);
-    //     $i = 0;
-    //     while($row = $result->fetch_assoc()){
-    //         $rowdata[$i] = $row;
-    //         $i++;
-    //     }
-    //     if ($i>0){
-    //         $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-    //     } else {
-    //         $res =  '[{"pjt_id":"0"}]';	
-    //     }
-    //     echo $res;
-    // } 
+    
 // Lista los productos
-    public function listProducts($request_params)
+    public function listSeriesProd($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts($request_params);
+        $result = $this->model->listSeriesProd($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -74,10 +58,10 @@ class SearchIndividualProductsController extends Controller
         }
         echo $res;
     } 
-	public function listProducts2($request_params)
+	public function listProductsWord($request_params)
 	{
 		$params =  $this->session->get('user');
-        $result = $this->model->listProducts2($request_params);
+        $result = $this->model->listProductsWord($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -90,5 +74,21 @@ class SearchIndividualProductsController extends Controller
         }
         echo $res;
     }
-
+// LISTA LOS PROYECTOS ACTIVOS
+    public function listRelation($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listRelation($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
 }

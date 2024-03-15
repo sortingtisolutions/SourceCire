@@ -8,6 +8,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setting_table();
+    
 
     $('#txtPrice').on('blur', function () {
         validator();
@@ -29,7 +30,7 @@ function inicial() {
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 
 function getListProducts(word) {
-    var pagina = 'SearchIndividualProducts/listProducts2';
+    var pagina = 'SearchIndividualProducts/listProductsWord';
     var par = `[{"word":"${word}"}]`;
     var tipo = 'json';
     var selector = putProductsList;
@@ -37,10 +38,18 @@ function getListProducts(word) {
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
 function get_products(pj) {
-    var pagina = 'SearchIndividualProducts/listProducts';
+    var pagina = 'SearchIndividualProducts/listSeriesProd';
     var par = `[{"pjtId":"${pj}"}]`;
     var tipo = 'json';
     var selector = put_Products;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getListRelation(serid, type) {
+    var pagina = 'SearchIndividualProducts/listRelation';
+    var par = `[{"prdId":"${serid}", "type":"${type}"}]`;
+    var tipo = 'json';
+    var selector = putListRelation;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -164,6 +173,7 @@ function putProductsList(dt) {
         $('#listProduct').slideUp(100);
         get_products(prdId);
     });
+    activeList();
 }
 
 function selProduct(res) {
@@ -251,8 +261,9 @@ function put_Products(dt) {
             let serId = u.ser_id;
             tabla.row
                 .add({ // <i class="fa-solid fa-calendar-days"></i>
-                    // editable: `<i class="fas fa-calendar-alt choice toChange" id="${u.ser_id}"></i>`,
-                    editable: '',
+                    editable: `<i class="fas fa-solid fa-clipboard toList" id="${u.ser_id}"  
+                        data-element="${u.ser_type_asigned}|${u.prd_id}|${u.prd_name}|${u.prd_sku}|${u.ser_sku}"></i>`,
+                    // editable: '',
                     prodname:   u.prd_name,
                     prod_sku:   u.ser_sku,
                     serie:      u.ser_serial_number,
@@ -264,10 +275,10 @@ function put_Products(dt) {
                 })
                 .draw();
         });
+        activeList();
     }
 }
 function getCalendar(id){
-    
     getEvents(id);
     $('#CalendarModal').removeClass('overlay_hide');
     $('#CalendarModal').fadeIn('slow');
@@ -282,6 +293,7 @@ function getCalendar(id){
             $('#CalendarModal').addClass('overlay_hide');
         });
 }
+
 function calendario(cal){
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -342,3 +354,120 @@ function printProduct() {
     );
     
 }
+
+function activeList(){
+    $('.toList')
+    .unbind('click')
+    .on('click', function () {
+
+        let serid = $(this).attr('id');
+        let type = $(this).attr('data-element').split('|')[0];
+        let prdID = $(this).attr('data-element').split('|')[1];
+       
+        if (type == 'PV') {
+            console.log('VIRTUAL -', type, prdID);
+            getListRelation(prdID, type);
+        } else {
+            console.log('FIJO -', serid, type);
+            getListRelation(serid, type);
+        }
+        
+
+
+        // $('#SerieData').removeClass('overlay_hide');
+        //     $('#SerieData .btn_close')
+        //         .unbind('click')
+        //         .on('click', function () {
+        //             // console.log('Click Close 2');
+        //             $('#SerieData').addClass('overlay_hide');
+        //             $('#tblDataChg').DataTable().destroy;
+        //         });
+        // infoDetallePkt(lcatsub);
+        // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
+    });
+}
+
+function settingTblRelations(){
+    // console.log('settingTblRelations');
+    $('#relationModal').removeClass('overlay_hide');
+
+    $('#tblrelations').DataTable({
+        bDestroy: true,
+        order: [[0, 'asc']],
+        lengthMenu: [
+            [50, 100, -1],
+            [50, 100, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            // {data: 'serchange', class: 'edit'},
+            {data: 'serdetsku', class: 'sku left'},
+            {data: 'serchoose', class: 'supply left'},
+            {data: 'serdetname', class: 'sku left'},
+            // {data: 'serdetstag', class: 'sku'},
+        ],
+    });
+
+    $('#relationModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+           $('.overlay_background').addClass('overlay_hide');
+           $('.overlay_closer .title').html('');
+           $('#tblrelations').DataTable().destroy;
+        });
+}
+
+function putListRelation(dt){
+    console.log('putListRelation', dt);
+    if (dt[0].prd_id != '0') {
+        settingTblRelations();
+        let product_name = dt[0].pname;
+        let relation = dt[0].vtype == 'PV' ? 'vIRTUAL' : 'FIJA';
+        // let situation = u.ser_situation != 'D' ? 'class="levelSituation rw' + pending + '"' : 'class="rw' + pending + '"';
+        let tabla = $('#tblrelations').DataTable();
+        $('.overlay_closer .title').html(`RELACION DE ACCESORIOS : ${relation}`);
+        tabla.rows().remove().draw();
+        $.each(dt, function (v, u) {
+            // let catsub=u.sku.substring(0,4);
+            // let locsku=u.sku.substring(0,8);
+            // let valicon='';
+
+            // if(catsub=='010A' || catsub=='010B' || catsub=='010C'){
+            // valicon=`<i class='fas fa-edit changePk' data_cat="${catsub}" data_sku="${locsku}" ></i>`
+            tabla.row
+                .add({
+                    // serchange: u.ser_id,
+                    serdetsku: u.sku,
+                    serchoose: u.pname,
+                    serdetname: u.pck_quantity,
+                    // serdetstag: valicon,
+                })
+                .draw();
+                // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
+            // }else{
+            // tabla.row
+            //     .add({
+            //         // serchange: u.ser_id,
+            //         serdetsku: locsku,
+            //         serchoose: u.prd_name,
+            //         serdetname: u.pck_quantity,
+            //         // serdetstag: valicon,
+            //     })
+            //     .draw();
+            //     // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
+            // } 
+        });
+    }
+    else{
+        alert('NO HAY UNA RELACION CON ESTA SERIE')
+    }
+    // ActiveChangePKT();
+    // modalLoading('H');
+}
+

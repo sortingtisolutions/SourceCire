@@ -196,7 +196,17 @@ function activeActions() {
         .unbind('click')
         .on('click', function () {
             selectSeries($(this));
-        });
+    });
+
+    // $('#txtSubcategoryCode').on('blur', function(){
+    //     let long=$('#txtSubcategoryCode').val().length;
+    //     if (long < 2) {
+    //         // alert("Este valor del campo es menor a los requerido ejemplo");
+    //         console.log('Este valor es menor a lo requerido', long);
+    //     } else{
+    //         console.log('Este valor es ACORDE a lo requerido', long); 
+    //     }
+    // });
 }
 
 /** ---- Registra la nueva subcategoria ---- */

@@ -30,9 +30,9 @@ public function SaveDocumento($request_params)
 					$sku = '';
 					$estatus = '';
 					$sbcId = 0;
-					
 					$nombre_producto = '';
-					if ($LoadProducts[6] != 'Nombre en Ingles') {
+
+					if ($LoadProducts[6] != 'NOMBRE EN INGLES') {
 						$typeacc = 0;
 						if (strlen($LoadProducts[0]) == 8) {
 							// REVISION DE SKU
@@ -41,9 +41,9 @@ public function SaveDocumento($request_params)
 							
 							// Revisar que el la categoria y subcategoria exista en la base de datos
 							$qry1 = "SELECT COUNT(*) cant FROM ctt_categories AS ct
-							INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
-							WHERE ct.cat_id = SUBSTR('$sku',1,2) AND sb.sbc_code = SUBSTR('$sku',3,2);";
-							
+									INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id
+									WHERE ct.cat_id = SUBSTR('$sku',1,2) 
+									AND sb.sbc_code = SUBSTR('$sku',3,2);";
 							$res = $this->db->query($qry1);
 							$rs = $res->fetch_object();
 							$acept = $rs->cant;
@@ -64,7 +64,6 @@ public function SaveDocumento($request_params)
 							$respuesta = $resp->fetch_object();
 							$sbcId = $respuesta->sbc_id;
 
-							
 							if ($acept == 0 ) {
 								//SKU
 								$estatus = $estatus. '1,';
@@ -83,6 +82,13 @@ public function SaveDocumento($request_params)
 								$estatus = $estatus. '1,';
 								$acept =0;
 							}
+							// VALIDA SI ES UN PRODUCTO CON SERIE O DE BOLSA BULK
+							if (strval($LoadProducts[11]) > 0 ) { 
+								$bulk=strval($LoadProducts[11]);
+							}else{
+								$bulk=0;
+							}
+
 						}else{
 							if ($LoadProducts[0] == '') {
 								$acept = 1;
@@ -142,25 +148,24 @@ public function SaveDocumento($request_params)
 							try {
 								$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, 
 										prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, 
-										prd_model, prd_level, sbc_id, result)
+										prd_model, prd_level, sbc_id, result, prd_stock)
 										VALUES ('$sku', '$nombre_producto','$LoadProducts[2]', '$coin', 
 										'$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', 
-										'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]',$sbcId, 'EXITOSO')";
+										'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]',$sbcId, 'EXITOSO', '$bulk')";
 								$this->db->query($qry);
 								$cont++;
 							} catch (\Throwable $th) {
 								$estatus = 'ERROR';
 							}
 							
-							
 						}else{
 							
 							$qry = "INSERT INTO ctt_load_products(prd_sku, prd_name, prd_price, cin_id, 
 									prd_insured, srv_id, prd_english_name, prd_code_provider, prd_name_provider, 
-									prd_model, prd_level,sbc_id, result)
+									prd_model, prd_level,sbc_id, result, prd_stock)
 									VALUES ('$sku', '$LoadProducts[1]','$LoadProducts[2]', '$coin', 
 									'$LoadProducts[4]', '$LoadProducts[5]', '$LoadProducts[6]', '$LoadProducts[7]', 
-									'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]', $sbcId, '$estatus')";
+									'$LoadProducts[8]', '$LoadProducts[9]','$LoadProducts[10]', $sbcId, '$estatus', '$bulk')";
 							$this->db->query($qry);
 							
 							$aux++;
@@ -192,22 +197,23 @@ public function SaveDocumento($request_params)
 	];
 	return $resultados;
 }
+
 	public function validarDatos(){
 		
 	}
-	// Listado de Proyectos  ****
-	public function listResults($store)
-	{
-		$qry = "SELECT SUM(case when ldp.result LIKE '%2,%' then 1 ELSE 0 END) duplicidad, 
-		SUM(case when ldp.result LIKE '%1,%' then 1 ELSE 0 END) SKU,
-		SUM(case when ldp.result LIKE '%4,%' then 1 ELSE 0 END) moneda,
-		SUM(case when ldp.result LIKE '%5,%' then 1 ELSE 0 END) costo,
-		SUM(case when ldp.result LIKE '%6,%' then 1 ELSE 0 END) servicio,
-		SUM(case when ldp.result LIKE '%7%' then 1 ELSE 0 END) seguro,
-		SUM(case when ldp.result LIKE '%3%' then 1 ELSE 0 END) categoria, 1 as results
-		FROM ctt_load_products AS ldp";
-		return $this->db->query($qry);
-	}
+// Listado de Proyectos  ****
+public function listResults($store)
+{
+	$qry = "SELECT SUM(case when ldp.result LIKE '%2,%' then 1 ELSE 0 END) duplicidad, 
+	SUM(case when ldp.result LIKE '%1,%' then 1 ELSE 0 END) SKU,
+	SUM(case when ldp.result LIKE '%4,%' then 1 ELSE 0 END) moneda,
+	SUM(case when ldp.result LIKE '%5,%' then 1 ELSE 0 END) costo,
+	SUM(case when ldp.result LIKE '%6,%' then 1 ELSE 0 END) servicio,
+	SUM(case when ldp.result LIKE '%7%' then 1 ELSE 0 END) seguro,
+	SUM(case when ldp.result LIKE '%3%' then 1 ELSE 0 END) categoria, 1 as results
+	FROM ctt_load_products AS ldp";
+	return $this->db->query($qry);
+}
 // Optiene los Documentos existentes
 	public function GetDocumentos()
 	{
@@ -215,7 +221,7 @@ public function SaveDocumento($request_params)
 						ldp.prd_name_provider,ldp.prd_model, 
 						ldp.prd_price, ldp.prd_coin_type, ldp.prd_visibility, 
 				CASE WHEN ldp.prd_insured = 1 THEN 'Sí' ELSE 'NO' END prd_insured,
-				ldp.srv_id, srv.srv_name, cn.cin_code, result 
+				ldp.srv_id, srv.srv_name, cn.cin_code, result, ldp.prd_stock  
 				FROM ctt_load_products AS ldp
 				LEFT JOIN ctt_services AS srv ON srv.srv_id = ldp.srv_id
 				LEFT JOIN ctt_coins AS cn ON cn.cin_id = ldp.cin_id";
@@ -352,10 +358,12 @@ public function SaveDocumento($request_params)
 
 	public function loadProcess($params)
 	{
-		$qry = "INSERT INTO ctt_global_products(
-			prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id)
-	SELECT  prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id
-	FROM ctt_load_products a WHERE a.result = 'EXITOSO';";
+		$qry = "INSERT INTO ctt_global_products(prd_sku, prd_name, prd_english_name, 
+				prd_code_provider, prd_model, prd_price, cin_id, prd_insured, 
+				prd_level, srv_id, sbc_id, prd_stock)
+				SELECT prd_sku, prd_name,prd_english_name, prd_code_provider, prd_model, 
+				prd_price, cin_id, prd_insured, prd_level, srv_id, sbc_id, prd_stock
+				FROM ctt_load_products a WHERE a.result = 'EXITOSO';";
 		$result = $this->db->query($qry);
 		$qry1 = "TRUNCATE TABLE ctt_load_products;";
         $this->db->query($qry1);

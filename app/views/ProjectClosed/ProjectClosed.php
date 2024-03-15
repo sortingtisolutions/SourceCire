@@ -16,17 +16,16 @@
                 <div class="form-group" >
 
                     <div class="row">
-                        
                         <label for="txtGroupProjects" style="font-size: 16px; font-weight: bold; ">Grupo de proyectos</label>
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display: flex;gap: 1rem;font-size: 13px; background: #fff;margin-top: 20px; border-radius: 4px; ">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display:flex; gap:1rem; font-size:12px; margin-top:10px; border-radius:4px; ">
                             
-                            <div class="" style="margin-left: 0px; margin-top: 5px;margin-bottom: 5px;">
+                            <div class="" style="margin-left:5px; margin-top:5px; margin-bottom:15px;">
                                 <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos1" val="1" checked>
                                 <label class="form-check-label" for="RadioConceptos1">
                                 Proyecto individual
                                 </label>
                             </div>
-                            <div class="" style="margin-left: 18px;margin-top: 5px;">
+                            <div class="" style="margin-left:15px; margin-top:5px; margin-bottom:15px;">
                                 <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos2" val="2" >
                                 <label class="form-check-label" for="RadioConceptos2">
                                 Proyecto Padre

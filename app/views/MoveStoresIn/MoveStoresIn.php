@@ -80,7 +80,29 @@
                             <label for="txtCoin">Moneda</label>
                         </div>
                     </div>
-
+                    <div class="row pos6 hide-items">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                            <select id="txtTypeProd" class="form-select form-select-sm">
+                                <!-- <option value="0" selected>Producto Serial</option>
+                                <option value="1" >Bolsa de Productos</option> -->
+                            </select>
+                            <label for="txtTypeProd">Tipo de Producto</label>
+                        </div>
+                    </div>
+                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display:flex; gap:1rem; font-size:12px; margin-top: 10px; border-radius: 4px; ">
+                            <div class="" style="margin-left:0px; margin-top:5px; margin-bottom:15px;">
+                                <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos1" val="1" checked>
+                                <label class="form-check-label" for="RadioConceptos1">
+                                Producto individual
+                                </label>
+                            </div>
+                            <div class="" style="margin-left:18px; margin-top:5px; margin-bottom:15px;">
+                                <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos2" val="2" >
+                                <label class="form-check-label" for="RadioConceptos2">
+                                Bolsa de Productos
+                                </label>
+                            </div>
+                        </div> -->
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div class="row">
                        <!--  <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">

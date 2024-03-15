@@ -19,36 +19,42 @@ class SearchIndividualProductsModel extends Model
 // }    
 
 // Listado de Productos
-    public function listProducts($params)
+    public function listSeriesProd($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, 
-                pd.prd_visibility, ser.ser_id, ser.ser_sku, ser.ser_serial_number, 
+                pd.prd_visibility, ser.ser_id, ser.ser_sku, 
+                ser.ser_serial_number,ser.ser_type_asigned, 
                 ser.ser_situation, ser.ser_date_registry, ser.ser_date_down, 
-					 IFNULL(pjp.pjtpd_day_start,'') AS pjtpd_day_start, 
+				IFNULL(pjp.pjtpd_day_start,'') AS pjtpd_day_start, 
                 IFNULL(pjp.pjtpd_day_end,'')pjtpd_day_end, pj.pjt_name,
                 (SELECT IFNULL(SUM(psp.pjspd_days), 0) totalDays
-                FROM ctt_project_series_periods as psp WHERE psp.ser_id = ser.ser_id) total_days
-					 FROM ctt_products AS pd 
+                    FROM ctt_project_series_periods as psp WHERE psp.ser_id = ser.ser_id) total_days
+					FROM ctt_products AS pd 
                 INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
                 Left JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
                 Left JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
                 Left JOIN ctt_projects_periods AS pjp ON pjp.pjtdt_id = pjd.pjtdt_id
                 Left  JOIN ctt_projects AS pj ON pj.pjt_id = pjc.pjt_id 
-                WHERE pd.prd_id = $pjtId AND prd_id_acc = 0 group by ser.ser_id ORDER BY ser.ser_serial_number;";
+                WHERE pd.prd_id = $pjtId AND prd_id_acc = 0 group by ser.ser_id 
+                ORDER BY ser.ser_serial_number;";
                 
         return $this->db->query($qry);
     }    
 
 // Listar los productos2
-public function listProducts2($param)
+public function listProductsWord($param)
 {
     $word = $this->db->real_escape_string($param['word']);
+    // $qry = "SELECT * FROM ctt_products A 
+    //     WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
+    //         (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_level != 'K'
+    //     ORDER BY prd_name;";
     $qry = "SELECT * FROM ctt_products A 
-    WHERE A.prd_visibility=1 AND A.prd_level='P' AND 
-        (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%' ) AND A.prd_level != 'K'
-    ORDER BY prd_name;";
+            WHERE (A.prd_sku LIKE '$word%' OR A.prd_name LIKE '%$word%') 
+            AND A.prd_level != 'K' AND A.prd_visibility=1  
+            ORDER BY prd_name, a.prd_id;";
     return $this->db->query($qry);
 }
 
@@ -78,7 +84,29 @@ public function listProducts2($param)
 		return $this->db->query($qry);
 	}
 
-    
+    public function listRelation($params)
+    {
+        $id = $this->db->real_escape_string($params['prdId']);
+        $type = $this->db->real_escape_string($params['type']);
+        
+        if ($type=='PV') {
+            $qry = "SELECT prd_sku as sku, prd_name as pname, pck_quantity, '$type' as vtype
+                FROM ctt_products_packages AS pk
+                INNER JOIN ctt_products AS prd ON prd.prd_id=pk.prd_id
+                WHERE pk.prd_parent= $id;";  
+            // return $this->db->query($qry);
+        } elseif ($type=='PF') {
+            $qry = "SELECT ser_sku as sku, prd_name as pname,'1' as pck_quantity, '$type' as vtype
+                    FROM ctt_series AS ser
+                    INNER JOIN ctt_products AS pd ON pd.prd_id=ser.prd_id
+                    WHERE ser.prd_id_acc=$id;";  
+           
+        }
+        return $this->db->query($qry);
+        
+    }
+
+// AND ser_type_asigned='PV'
 }
 
 

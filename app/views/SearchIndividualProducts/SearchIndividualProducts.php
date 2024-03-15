@@ -99,6 +99,28 @@
     </div>
 <!-- End Ventana modal AGREGA O MODIFICA  -->
 
+<div class="overlay_background overlay_hide" id="relationModal" style="width: 50%; left:20%">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+           <!--  <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            <div style="height:15px;"></div>  -->
+            <table class="display compact nowrap"  id="tblrelations" style="width: 90%">
+                <thead>
+                    <tr>
+                        <!-- <th style="width:  10px"></th> -->
+                        <th style="width:  80px">SKU</th>
+                        <th style="width:  auto">Descripcion Producto</th>
+                        <th style="width:  40px">Cantidad</th>
+                       
+                        <!-- <th style="width:  40px">Cambio por:</th> -->
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/fullcalendar/core/index.global.min.js' ?>"></script><!-- Agregador por Edna-->

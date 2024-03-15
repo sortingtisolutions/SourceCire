@@ -1,5 +1,5 @@
 let pj, px, pd;
-let colores = ["#CD615","#AF7AC5","#EC7063", "#5499C7", "#48C9B0", "#EB984E"];
+let colores = ["#CD6155", "#AF7AC5", "#EC7063", "#5499C7", "#48C9B0", "#34495E", "#EB984E"];
 $(document).ready(function () {
     if (verifica_usuario()) {
         inicial();
@@ -7,36 +7,32 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
+    // folio = getFolio();
     setting_table();
+    getListProducts();
 
     $('#txtPrice').on('blur', function () {
         validator();
     });
-
     $('#btn_subletting').on('click', function () {
         let acc = $(this).attr('data_accion');
         updating_serie(acc);
     });
-
-    $('#txtProducts')
-    .unbind('keyup')
-    .on('keyup', function () {
-        let text = $(this).val().toUpperCase();
-        selProduct(text);
-    });
+    
 }
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
 
-function getListProducts(word) {
+function getListProducts() {
     var pagina = 'SearchIndividualProducts/listProducts2';
-    var par = `[{"word":"${word}"}]`;
+    var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putProductsList;
-    fillField(pagina, par, tipo, selector); 
+    fillField(pagina, par, tipo, selector);
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
 function get_products(pj) {
+    console.log(pj);
     var pagina = 'SearchIndividualProducts/listProducts';
     var par = `[{"pjtId":"${pj}"}]`;
     var tipo = 'json';
@@ -135,68 +131,71 @@ function setting_table() {
 function putProductsList(dt) {
     var sl = $('#txtProducts').offset();
     $('#listProduct .list-items').html('');
-    $('#listProduct').css({top: sl.top + 32 + 'px'});// volver a tomar al hacer scroll.
+    $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
+    $('#listProduct').slideUp('200', function () {
+        $('#listProduct .list-items').html('');
+    });
 
-    if (dt[0].prd_id > 0) {
-        $.each(dt, function (v, u) {
-            let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_sku}|${u.prd_id}|${u.prd_name.replace(/"/g, '')}">${u.prd_name}</div>`;
-            $('#listProduct .list-items').append(H);
-        });
-    }
-    
+    $.each(dt, function (v, u) {
+        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}">${u.prd_name}</div>`;
+        $('#listProduct .list-items').append(H);
+    });
+
     $('#txtProducts').on('focus', function () {
         $('#listProduct').slideDown('fast');
     });
 
     $('#txtProducts').on('scroll', function(){
         sl = $('#txtProducts').offset();
-        $('#listProduct').css({top: sl.top + 32 + 'px'});
+        $('#listProduct').css({top: sl.top + 30 + 'px'});
     });
     $('#listProduct').on('mouseleave', function () {
         $('#listProduct').slideUp('fast');
     });
 
+    $('#txtProducts').keyup(function (e) {
+        var res = $(this).val().toUpperCase();
+        if (res == '') {
+            $('#listProduct').slideUp(100);
+        } else {
+            $('#listProduct').slideDown(400);
+        }
+        res = omitirAcentos(res);
+        sel_products(res);
+    });
+
     $('#listProduct .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id');
+        //console.log('selecciona elemento', prdId,'---', prdNm);
         $('#txtProducts').val(prdNm);
         $('#txtIdProducts').val(prdId);
         $('#listProduct').slideUp(100);
         get_products(prdId);
+        
+        //validator();
+    });
+}
+function sel_products(res) {
+    //console.log('SELECC',res);
+    if (res.length < 2) {
+        $('#llistProduct .list-items div.list-item').css({display: 'block'});
+    } else {
+        $('#listProduct .list-items div.list-item').css({display: 'none'});
+    }
+
+    $('#listProduct .list-items div.list-item').each(function (index) {
+        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
+
+        cm = omitirAcentos(cm);
+        var cr = cm.indexOf(res);
+        if (cr > -1) {
+            //            alert($(this).children().html())
+            $(this).css({display: 'block'});
+        }
     });
 }
 
-function selProduct(res) {
-    
-    res = res.toUpperCase();
-    if (res == '') {
-        $('#listProduct').slideUp(100);
-    } else {
-        $('#listProduct').slideDown(400);
-    }
-    if (res.length > 2) {
-        if (res.length == 3) {
-            getListProducts(res);
-            $('#listProduct .list-items div.list-item').css({display: 'block'});
-        } else {
-            $('#listProduct .list-items div.list-item').css({display: 'none'});
-            $('#listProduct .list-items div.list-item').each(function (index) {
-                var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
-                
-                cm = omitirAcentos(cm);
-                var cr = cm.indexOf(res);
-                if (cr > -1) {
-                    $(this).css({display: 'block'});
-                }
-            });
-        }
-        // rowCurr.show();
-    }else {
-        var sl = $('#txtProducts').offset();
-        $('#listProduct').css({top: sl.top + 32 + 'px'});// volver a tomar al hacer scroll.
-        $('#listProduct .list-items div.list-item').css({display: 'none'});
-    }
-}
 /**  ++++ Omite acentos para su facil consulta */
 function omitirAcentos(text) {
     var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
@@ -217,18 +216,11 @@ function putEvents(dt) {
     let array = [];
     let i = 0;
     dt.forEach(element => {
-        // let x = Math.floor(Math.random()*colores.length);
-        let color ='';
-        if (element.sttd_id == 4) {
-            color = "#34495E";
-        }else{
-            let x = Math.floor(Math.random()*colores.length);
-            color =  colores[x];
-        }
-        //array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : colores[x]};
-        array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : color};
+        let x = Math.floor(Math.random()*colores.length);
+        array[i]={"id": element.id, "title": element.title, "start": element.start, "end": element.end,"color" : colores[x]};
         i++;
     });
+    
     calendario(array);
 }
 /**  ++++   Coloca los productos en el listado del input */
@@ -251,8 +243,8 @@ function put_Products(dt) {
             let serId = u.ser_id;
             tabla.row
                 .add({ // <i class="fa-solid fa-calendar-days"></i>
-                    editable: `<i class="fas fa-solid fa-clipboard choice toChange" id="${u.ser_id}"></i>`,
-                    // editable: '',
+                    // editable: `<i class="fas fa-calendar-alt choice toChange" id="${u.ser_id}"></i>`,
+                    editable: '',
                     prodname:   u.prd_name,
                     prod_sku:   u.ser_sku,
                     serie:      u.ser_serial_number,
@@ -264,6 +256,26 @@ function put_Products(dt) {
                 })
                 .draw();
         });
+        /* $('.toChange')
+        .unbind('click')
+        .on('click', function () {
+            console.log($(this).attr('id'));
+            getEvents($(this).attr('id'));
+            calendario('');
+            $('#CalendarModal').removeClass('overlay_hide');
+            $('#CalendarModal').fadeIn('slow');
+            $('#CalendarModal').draggable({
+                handle: ".overlay_modal"
+            });
+            //title= 'Serie';
+            $('.overlay_closer .title').html('');
+            $('#CalendarModal .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    $('#CalendarModal').addClass('overlay_hide');
+                });
+            
+    }); */
     }
 }
 function getCalendar(id){
@@ -295,14 +307,13 @@ function calendario(cal){
         editable: true,
         selectable: true,
         events: cal,
-        height: 500,
+        height: 400,
         eventClick: function(calEvent, jsEvent, view){
             console.log(calEvent);
         }
     }); 
     calendar.render();
 }
-
 /*  ++++++++ Valida los campos  +++++++ */
 function validator() {
     let ky = 0;
@@ -327,6 +338,7 @@ function validator() {
     } else {
         $('#btn_subletting').addClass('disabled');
     }
+    // console.log(msg);
 }
 
 function printProduct() {

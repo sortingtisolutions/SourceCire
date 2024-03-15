@@ -47,11 +47,10 @@
                                 <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" >
                             </div>
 
-
                             <!-- Código de la subcategoria -->
                             <div class="row">
                                 <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
-                                    <input id="txtSubcategoryCode" name="txtSubcategoryCode" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
+                                    <input id="txtSubcategoryCode" name="txtSubcategoryCode" type="text" class="form-control form-control-sm" style="text-transform:uppercase"  minlength="2" maxlength="2" required >
                                     <label for="txtSubcategoryCode">Código Subcategoria</label>
                                 </div>
                             </div>
@@ -128,5 +127,6 @@
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Subcategories/Subcategories.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

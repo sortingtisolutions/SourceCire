@@ -155,19 +155,18 @@ function settingTable() {
         scrollX: true,
         fixedHeader: true,
        columns: [
-            {data: 'result',        class: 'result'},
-            {data: 'error',         class: 'Producto'},
-            {data: 'SKU',           class: 'SKU bold'},
-            {data: 'Producto',      class: 'Producto'},
-            {data: 'Stock',         class: 'sku'},
-            {data: 'Precio',        class: 'Precio'},
-            {data: 'Moneda',        class: 'Moneda'},
-            {data: 'Seguro',        class: 'Seguro'},
-            {data: 'Servicio',      class: 'Servicio'},
-            {data: 'NombreIngles',  class: 'NombreIngles'},
-            {data: 'CodigoProveedor', class: 'CodigoProveedor'},
-            {data: 'NombreProveedor', class: 'NombreProveedor'},
-            {data: 'Modelo',        class: 'Modelo'},
+            {data: 'result', class: 'result'},
+            {data: 'error', class: 'Producto'},
+           {data: 'SKU', class: 'SKU bold'},
+           {data: 'Producto', class: 'Producto'},
+           {data: 'NombreIngles', class: 'NombreIngles'},
+           {data: 'CodigoProveedor', class: 'CodigoProveedor'},
+           {data: 'NombreProveedor', class: 'NombreProveedor'},
+           {data: 'Modelo', class: 'Modelo'},
+           {data: 'Precio', class: 'Precio'},
+           {data: 'Moneda', class: 'Moneda'},
+           {data: 'Seguro', class: 'Seguro'},
+           {data: 'Servicio', class: 'Servicio'},
        ],
    });
 }
@@ -327,7 +326,6 @@ function getDocumentosTable() {
    var selector = putFiles;
    fillField(pagina, par, tipo, selector);
 }
-
 //Envia los datos almacenados a la tabla de productos *
 function loadProcess() {
     $('#confirmarCargaModal').modal('show');
@@ -368,7 +366,7 @@ function loadProcess() {
     });
  }
 function putFiles(dt) {
-//    console.log(dt);
+   console.log(dt);
    modalLoading('S');
    pd = dt;
    datos = dt;
@@ -390,15 +388,14 @@ function putFiles(dt) {
                     <td>${u.result}</td>
                     <td>${u.prd_sku}</td>
                     <td>${u.prd_name}</td>
-                    <td>${u.prd_stock}</td>
-                    <td>${u.prd_price}</td>
-                    <td>${u.cin_code}</td>
-                    <td>${u.prd_insured}</td>
-                    <td>${u.srv_id}</td>
                     <td>${u.prd_english_name}</td>
                     <td>${u.prd_code_provider}</td>
                     <td>${u.prd_name_provider}</td>
                     <td>${u.prd_model}</td>
+                    <td>${u.prd_price}</td>
+                    <td>${u.cin_code}</td>
+                    <td>${u.prd_insured}</td>
+                    <td>${u.srv_id}</td>
                 </tr>
             `;
             $('#DocumentosTable tbody').append(H);

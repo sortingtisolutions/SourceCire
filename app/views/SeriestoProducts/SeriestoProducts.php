@@ -17,19 +17,15 @@
                 <div class="form_primary">
                     <h4 class="mainTitle">RELACIÓN PRODUCTO-ACCESORIO</h4>
                         <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display: flex;gap: 1rem;font-size: 13px; background: #fff;margin-top: 20px; border-radius: 4px; ">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating" style="display: flex;gap: 1rem;font-size: 13px; margin-top:10px; margin-bottom:25px; border-radius:15px; ">
                                 
-                                <div class="" style="margin-left: 0px; margin-top: 5px;margin-bottom: 5px;">
+                                <div class="" style="margin-left:5px; margin-bottom:10px;">
                                     <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos1" val="1" checked>
-                                    <label class="form-check-label" for="RadioConceptos1">
-                                    Accesorios Fijos
-                                    </label>
+                                    <label class="form-check-label" for="RadioConceptos1">Accesorios Fijos</label>
                                 </div>
-                                <div class="" style="margin-left: 18px;margin-top: 5px;">
+                                <div class="" style="margin-left: 13px; margin-bottom:10px;">
                                     <input class="form-check-input checkTipe" type="radio" name="RadioConceptos" id="RadioConceptos2" val="2" >
-                                    <label class="form-check-label" for="RadioConceptos2">
-                                    Accesorios Virtuales
-                                    </label>
+                                    <label class="form-check-label" for="RadioConceptos2">Accesorios Virtuales</label>
                                 </div>
                             </div>
                         </div>

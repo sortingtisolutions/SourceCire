@@ -28,6 +28,31 @@ function getProducts(catId) {
     fillField(pagina, par, tipo, selector);
 }
 
+function getCategories() {
+    var pagina = 'GlobalProduts/listCategories';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putCategories;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getSubCategories(catId) {
+    //console.log(catId);
+    var pagina = 'Commons/listSubCategoriesOne';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putSubCategories;
+    fillField(pagina, par, tipo, selector);
+}
+
+function updateData(sbcId,idSelected, num) {
+    var pagina = 'GlobalProduts/updateData';
+    var par = `[{"sbcId":"${sbcId}", "idSelected":"${idSelected}", "nxtSku":"${num}"}]`;
+    var tipo = 'html';
+    var selector = putData;
+    fillField(pagina, par, tipo, selector);
+}
+
 /** +++++  configura la table de productos */
 function settingTable() {
     let title = 'Control salida de proyectos';
@@ -35,7 +60,7 @@ function settingTable() {
     //console.log('555');
     table = $('#tblProyects').DataTable({
         bDestroy: true,
-        order: [[2, 'desc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         select: {
             style: 'multi',
@@ -81,7 +106,6 @@ function settingTable() {
                 text: 'Subir Todos los Datos',
                 className: 'btn-apply submit',
                 action: function (e, dt, node, config) {  
-                    
                     loadProcessAll();         
                     // printProduct();
                 },
@@ -118,14 +142,15 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable',      class: 'edit', orderable: false},          
-            {data: 'sku',      class: 'supply'},    
+            {data: 'sku',           class: 'supply'},    
             {data: 'pjt_name',      class: 'supply'},
-            {data: 'Precio',    class: 'sku'},
-            {data: 'Tipo',    class: 'supply'},
-            {data: 'Servicio', class: 'date'},
-            {data: 'Seguro',  class: 'date'},
-            {data: 'Moneda', class: 'date'},
-            {data: 'Categoria',  class: 'supply'},
+            {data: 'Stock',         class: 'sku center'},
+            {data: 'Precio',        class: 'sku'},
+            {data: 'Tipo',          class: 'supply'},
+            {data: 'Servicio',      class: 'date'},
+            {data: 'Seguro',        class: 'date'},
+            {data: 'Moneda',        class: 'date'},
+            {data: 'Categoria',     class: 'supply'},
             {data: 'Subcategoria',  class: 'supply'},
         ],
     });
@@ -186,30 +211,7 @@ function asignarSubcategoria() {
 
 }
 
-function getCategories() {
-    var pagina = 'GlobalProduts/listCategories';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putCategories;
-    fillField(pagina, par, tipo, selector);
-}
 
-function getSubCategories(catId) {
-    //console.log(catId);
-    var pagina = 'Commons/listSubCategoriesOne';
-    var par = `[{"catId":"${catId}"}]`;
-    var tipo = 'json';
-    var selector = putSubCategories;
-    fillField(pagina, par, tipo, selector);
-}
-
-function updateData(sbcId,idSelected, num) {
-    var pagina = 'GlobalProduts/updateData';
-    var par = `[{"sbcId":"${sbcId}", "idSelected":"${idSelected}", "nxtSku":"${num}"}]`;
-    var tipo = 'html';
-    var selector = putData;
-    fillField(pagina, par, tipo, selector);
-}
 
 function putCategories(dt) {
     console.log(dt);
@@ -343,6 +345,7 @@ function putProducts(dt) {
                     <td class="sku"><div id="txtPrdLevel"  class="checkbox"><i id='checkPrdLevel${u.prd_id}' class="far fa-square" data_val="0"></i></div></td>
                     <td class="sku">${u.prd_sku}</td>
                     <td class="supply">${u.prd_name}</td>
+                    <td class="supply">${u.prd_stock}</td>
                     <td class="supply">${u.prd_price}</td>
                     <td class="date">${u.prd_level}</td>
                     <td class="date">${u.srv_name}</td>
